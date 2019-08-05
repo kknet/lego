@@ -1,0 +1,46 @@
+syntax = "proto2";
+
+package lego.transport.protobuf;
+
+message BroadcastParam {
+	optional uint32 type = 1;
+	optional uint32 neighbor_count = 2;
+	optional uint32 stop_times = 3;
+	optional uint32 hop_limit = 4;
+	optional uint64 layer_left = 5;
+	optional uint64 layer_right = 6;
+	optional float overlap = 7;
+	optional uint32 hop_to_layer = 8;
+	optional bytes header = 9;
+	optional bytes body = 10;
+	optional bool net_crossed = 11;
+	repeated uint64 bloomfilter = 12;
+	optional float evil_rate = 13;
+	optional uint32 ign_bloomfilter_hop = 14;
+}
+
+message Header {
+	optional bytes src_dht_key = 1;
+	optional bytes des_dht_key = 2;
+	optional bytes src_node_id = 3;
+	optional bytes des_node_id = 4;
+	optional uint32 hop_count = 5;
+	optional bytes data = 6;
+	optional uint32 priority = 7;
+	optional bytes debug = 8;
+	optional bytes from_ip = 9;  // will clear before transport send, not use
+	optional uint32 from_port = 10;  // will clear before transport send, not use
+	optional bytes to_ip = 11;  // will clear before transport send, not use
+	optional uint32 to_port = 12;  // will clear before transport send, not use
+	optional uint32 id = 13;
+	optional uint64 hash = 14;
+	optional uint32 type = 15;
+	optional bool client = 16;
+	optional bool universal = 17;
+	optional BroadcastParam broadcast = 18;
+	optional bool handled = 19;
+	optional uint64 des_dht_key_hash = 20;
+	optional bytes pubkey = 21;
+	optional bytes sign = 22;
+	optional bool local = 23;
+}

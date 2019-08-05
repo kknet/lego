@@ -1,0 +1,83 @@
+syntax = "proto2";
+
+package lego.bft.protobuf;
+
+message TxInfo {
+	optional uint32 version = 1;
+	optional bytes gid = 2;
+	optional bytes from = 3;
+	optional bytes from_pubkey = 4;
+	optional bytes from_sign = 5;
+	optional bytes to = 6;
+	optional uint64 amount = 7;
+	optional uint64 gas_limit = 8;
+    optional uint64 gas_used = 9;
+    optional uint64 gas_price = 10;
+	optional uint64 balance = 11;
+	optional bool to_add = 12;
+}
+
+message TxBlock {
+    optional bytes prehash = 1;
+    optional uint32 version = 2;
+    optional uint32 elect_ver = 3;
+	optional bytes rc_hash = 4;
+	repeated uint64 bitmap = 5;
+	optional bytes agg_pubkey = 6;
+	optional bytes agg_sign = 7;
+    optional uint64 tx_id = 8;
+    optional bytes tx_hash = 9;
+    optional bytes tx_root_hash = 10;
+    repeated TxInfo tx_list = 11;
+	optional uint32 network_id = 12;
+}
+
+message Block {
+    optional bytes hash = 1;
+	optional uint64 height = 2;
+	optional TxBlock tx_block = 3;
+}
+
+message TxPrepareItem {
+	optional bytes acc_addr = 1;
+	optional bytes gid = 2;
+}
+
+message LeaderTxPrepare {
+	repeated TxPrepareItem txs = 1;
+	optional Block block = 2;
+}
+
+message BackupTxPrepare {
+	optional int32 status = 1;
+}
+
+message LeaderTxPreCommit {
+	optional int32 status = 1;
+}
+
+message BackupTxPreCommit {
+	optional int32 status = 1;
+}
+
+message LeaderTxCommit {
+	optional int32 status = 1;
+}
+
+message NewTx {
+	optional bytes gid = 1;
+	optional bytes from_acc_addr = 2;
+	optional bytes from_pubkey = 3;
+	optional bytes from_sign = 4;
+	optional bytes to_acc_addr = 5;
+	optional uint64 lego_count = 6;
+}
+
+message TxBft {
+	optional NewTx new_tx = 1;
+	optional LeaderTxPrepare ltx_prepare = 2;
+	optional BackupTxPrepare btx_prepare = 3;
+	optional LeaderTxPreCommit ltx_precommit = 4;
+	optional BackupTxPreCommit btx_precommit = 5;
+	optional LeaderTxCommit ltx_commit = 6;
+}
