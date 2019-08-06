@@ -35,6 +35,7 @@ public:
         detection_req->set_id(local_node->id);
         detection_req->set_nat_type(local_node->nat_type);
         detection_req->set_dht_key(local_node->dht_key);
+        detection_req->set_client(local_node->client_mode);
         msg.set_data(nat_msg.SerializeAsString());
 #ifdef LEGO_TRACE_MESSAGE
         msg.set_debug(std::string("DetectionRequest:") +

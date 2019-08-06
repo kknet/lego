@@ -132,7 +132,7 @@ void Detection::HandleDetectionRequest(
             nat_msg.detection_req().id(),
             nat_msg.detection_req().dht_key(),
             nat_msg.detection_req().nat_type(),
-            false,
+            nat_msg.detection_req().client(),
             nat_msg.detection_req().public_ip(),
             nat_msg.detection_req().public_port(),
             nat_msg.detection_req().local_ip(),
