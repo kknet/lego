@@ -53,7 +53,12 @@ void NetworkProto::CreateGetNetworkNodesResponse(
     msg.set_priority(transport::kTransportPriorityHighest);
     msg.set_id(header.id());
     msg.set_type(common::kNetworkMessage);
-    msg.set_client(local_node->client_mode);
+    if (header.client()) {
+        msg.set_client(header.client());
+        msg.set_client_relayed(true);
+        msg.set_client_proxy(header.client_proxy());
+        msg.set_des_dht_key(header.client_dht_key());
+    }
     msg.set_hop_count(0);
     msg.set_des_dht_key_hash(common::Hash::Hash64(header.src_dht_key()));
     network::protobuf::NetworkMessage net_msg;
