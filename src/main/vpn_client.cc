@@ -18,6 +18,6 @@ int main(int argc, char** argv) {
         std::cout << "init cmd failed!" << std::endl;
         return 1;
     }
-
+    cmd.Run();
     return 0;
 }

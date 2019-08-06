@@ -69,7 +69,7 @@ int VpnClient::GetVpnServerNodes(
 int VpnClient::GetVpnNodes(
         const std::vector<dht::NodePtr>& nodes,
         std::vector<VpnServerNodePtr>& vpn_nodes) {
-
+    return kClientSuccess;
 }
 
 int VpnClient::InitTransport() {
