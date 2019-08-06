@@ -54,6 +54,7 @@ void DhtProto::CreateBootstrapResponse(
     if (header.client()) {
         msg.set_client(header.client());
         msg.set_client_relayed(true);
+        msg.set_des_dht_key(header.client_dht_key());
     }
     msg.set_pubkey(security::Schnorr::Instance()->str_pubkey());
     // TODO(tt): add sign
@@ -130,6 +131,7 @@ void DhtProto::CreateRefreshNeighborsResponse(
     if (header.client()) {
         msg.set_client(header.client());
         msg.set_client_relayed(true);
+        msg.set_des_dht_key(header.client_dht_key());
     }
     msg.set_hop_count(0);
     msg.set_pubkey(security::Schnorr::Instance()->str_pubkey());
@@ -199,6 +201,7 @@ void DhtProto::CreateHeatbeatResponse(
     if (header.client()) {
         msg.set_client(header.client());
         msg.set_client_relayed(true);
+        msg.set_des_dht_key(header.client_dht_key());
     }
     msg.set_hop_count(0);
     dht::protobuf::DhtMessage dht_msg;
