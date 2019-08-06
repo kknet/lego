@@ -2,6 +2,8 @@
 
 #include "common/tick.h"
 #include "init/network_init.h"
+#include "network/shard_network.h"
+#include "services/vpn_svr_proxy/proxy_dht.h"
 
 namespace lego {
 
@@ -16,6 +18,9 @@ struct ShadowsocksConf {
     uint32_t pid;
 };
 typedef std::shared_ptr<ShadowsocksConf> ShadowsocksConfPtr;
+
+typedef network::ShardNetwork<ProxyDht> VpnProxyNode;
+typedef std::shared_ptr<VpnProxyNode> VpnProxyNodePtr;
 
 class ShadowsocksProxy : public init::NetworkInit {
 public:
@@ -32,6 +37,7 @@ private:
     int RunCommand(const std::string& cmd, const std::string& succ_res);
     void CheckVpnStatus();
     void ShiftVpnPeriod();
+    int CreateVpnProxyNetwork();
 
     static const uint32_t kMaxShadowsocksCount = 3u;
     static const int64_t kShowdowsocksShiftPeriod = 3600ll * 1000ll * 1000ll;
@@ -42,6 +48,7 @@ private:
     common::Tick tick_;
     common::Tick tick_status_;
     std::mutex socks_mutex_;
+    VpnProxyNodePtr vpn_proxy_{ nullptr };
 
     DISALLOW_COPY_AND_ASSIGN(ShadowsocksProxy);
 };

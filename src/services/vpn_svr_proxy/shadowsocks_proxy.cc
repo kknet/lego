@@ -76,6 +76,11 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
         return kProxyError;
     }
 
+    if (CreateVpnProxyNetwork() != kProxySuccess) {
+        PROXY_ERROR("create vpn proxy network failed!");
+        return kProxyError;
+    }
+
     if (InitCommand() != kProxySuccess) {
         PROXY_ERROR("InitNetworkSingleton failed!");
         return kProxyError;
@@ -235,6 +240,17 @@ void ShadowsocksProxy::ShiftVpnPeriod() {
     tick_.CutOff(
             kShowdowsocksShiftPeriod,
             std::bind(&ShadowsocksProxy::ShiftVpnPeriod, this));
+}
+
+int ShadowsocksProxy::CreateVpnProxyNetwork() {
+    vpn_proxy_ = std::make_shared<VpnProxyNode>(network::kVpnNetworkId);
+    if (vpn_proxy_->Init() != network::kNetworkSuccess) {
+        vpn_proxy_ = nullptr;
+        PROXY_ERROR("node join network [%u] failed!", network::kVpnNetworkId);
+        return kProxyError;
+    }
+
+    return kProxySuccess;
 }
 
 }  // namespace vpn
