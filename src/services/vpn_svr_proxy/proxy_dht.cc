@@ -77,11 +77,7 @@ void ProxyDht::HandleGetSocksRequest(
     vpn_res->set_passwd(enc_passwd);
     transport::protobuf::Header res_msg;
     service::ServiceProto::CreateGetVpnInfoRes(local_node(), svr_msg, msg, res_msg);
-    if (msg.client_proxy()) {
-        transport_->Send(msg.from_ip(), msg.from_port(), 0, res_msg);
-    } else {
-        SendToClosestNode(res_msg);
-    }
+    SendToClosestNode(res_msg);
 }
 
 }  // namespace vpn
