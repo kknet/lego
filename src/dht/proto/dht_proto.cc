@@ -51,6 +51,7 @@ void DhtProto::CreateBootstrapResponse(
     msg.set_id(header.id());
     msg.set_type(common::kDhtMessage);
     msg.set_hop_count(0);
+    msg.set_client(header.client());
     msg.set_pubkey(security::Schnorr::Instance()->str_pubkey());
     // TODO(tt): add sign
     dht::protobuf::DhtMessage res_dht_msg;

@@ -647,6 +647,10 @@ int BaseDht::CheckJoin(NodePtr& node) {
 }
 
 bool BaseDht::CheckDestination(const std::string& des_dht_key, bool check_closest) {
+    if (local_node_->client_mode) {
+        return true;
+    }
+
     if (des_dht_key == local_node_->dht_key) {
         return true;
     }
