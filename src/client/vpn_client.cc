@@ -213,6 +213,13 @@ int VpnClient::InitNetworkSingleton() {
     network::DhtManager::Instance()->Init();
     network::UniversalManager::Instance()->Init();
     network::Route::Instance()->Init();
+    if (network::UniversalManager::Instance()->CreateUniversalNetwork(
+            conf_,
+            transport_) != network::kNetworkSuccess) {
+        CLIENT_ERROR("create universal network failed!");
+        return kClientError;
+    }
+
     return CreateClientUniversalNetwork();
 }
 
