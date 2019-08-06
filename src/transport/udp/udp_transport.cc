@@ -12,6 +12,7 @@
 #include "common/log.h"
 #include "common/hash.h"
 #include "common/encode.h"
+#include "common/global_info.h"
 #include "transport/transport_utils.h"
 #include "transport/multi_thread.h"
 
@@ -206,6 +207,10 @@ int UdpTransport::Send(
     proto.clear_client_proxy();
     if (!proto.has_hash()) {
         proto.set_hash(GetMessageHash(proto));
+    }
+
+    if (!proto.has_src_node_id()) {
+        proto.set_src_node_id(common::GlobalInfo::Instance()->id());
     }
     auto message = proto.SerializeAsString();
     assert(message.size() <= 6500);
