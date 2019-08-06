@@ -679,13 +679,6 @@ class Header : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   bool client_proxy() const;
   void set_client_proxy(bool value);
 
-  // optional bool client_dht_key = 26;
-  bool has_client_dht_key() const;
-  void clear_client_dht_key();
-  static const int kClientDhtKeyFieldNumber = 26;
-  bool client_dht_key() const;
-  void set_client_dht_key(bool value);
-
   // optional uint64 des_dht_key_hash = 21;
   bool has_des_dht_key_hash() const;
   void clear_des_dht_key_hash();
@@ -745,8 +738,6 @@ class Header : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   void clear_has_local();
   void set_has_client_proxy();
   void clear_has_client_proxy();
-  void set_has_client_dht_key();
-  void clear_has_client_dht_key();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
@@ -775,7 +766,6 @@ class Header : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   bool handled_;
   bool local_;
   bool client_proxy_;
-  bool client_dht_key_;
   ::google::protobuf::uint64 des_dht_key_hash_;
   friend struct ::protobuf_transport_2eproto::TableStruct;
 };
@@ -2072,13 +2062,13 @@ inline void Header::set_handled(bool value) {
 
 // optional uint64 des_dht_key_hash = 21;
 inline bool Header::has_des_dht_key_hash() const {
-  return (_has_bits_[0] & 0x02000000u) != 0;
+  return (_has_bits_[0] & 0x01000000u) != 0;
 }
 inline void Header::set_has_des_dht_key_hash() {
-  _has_bits_[0] |= 0x02000000u;
+  _has_bits_[0] |= 0x01000000u;
 }
 inline void Header::clear_has_des_dht_key_hash() {
-  _has_bits_[0] &= ~0x02000000u;
+  _has_bits_[0] &= ~0x01000000u;
 }
 inline void Header::clear_des_dht_key_hash() {
   des_dht_key_hash_ = GOOGLE_ULONGLONG(0);
@@ -2272,30 +2262,6 @@ inline void Header::set_client_proxy(bool value) {
   set_has_client_proxy();
   client_proxy_ = value;
   // @@protoc_insertion_point(field_set:lego.transport.protobuf.Header.client_proxy)
-}
-
-// optional bool client_dht_key = 26;
-inline bool Header::has_client_dht_key() const {
-  return (_has_bits_[0] & 0x01000000u) != 0;
-}
-inline void Header::set_has_client_dht_key() {
-  _has_bits_[0] |= 0x01000000u;
-}
-inline void Header::clear_has_client_dht_key() {
-  _has_bits_[0] &= ~0x01000000u;
-}
-inline void Header::clear_client_dht_key() {
-  client_dht_key_ = false;
-  clear_has_client_dht_key();
-}
-inline bool Header::client_dht_key() const {
-  // @@protoc_insertion_point(field_get:lego.transport.protobuf.Header.client_dht_key)
-  return client_dht_key_;
-}
-inline void Header::set_client_dht_key(bool value) {
-  set_has_client_dht_key();
-  client_dht_key_ = value;
-  // @@protoc_insertion_point(field_set:lego.transport.protobuf.Header.client_dht_key)
 }
 
 #ifdef __GNUC__

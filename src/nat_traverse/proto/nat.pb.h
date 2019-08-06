@@ -244,6 +244,13 @@ class DetectionRequest : public ::google::protobuf::Message /* @@protoc_insertio
   ::google::protobuf::int32 nat_type() const;
   void set_nat_type(::google::protobuf::int32 value);
 
+  // optional bool client = 8;
+  bool has_client() const;
+  void clear_client();
+  static const int kClientFieldNumber = 8;
+  bool client() const;
+  void set_client(bool value);
+
   // @@protoc_insertion_point(class_scope:lego.nat.protobuf.DetectionRequest)
  private:
   void set_has_public_ip();
@@ -260,6 +267,8 @@ class DetectionRequest : public ::google::protobuf::Message /* @@protoc_insertio
   void clear_has_nat_type();
   void set_has_dht_key();
   void clear_has_dht_key();
+  void set_has_client();
+  void clear_has_client();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
@@ -271,6 +280,7 @@ class DetectionRequest : public ::google::protobuf::Message /* @@protoc_insertio
   ::google::protobuf::int32 public_port_;
   ::google::protobuf::int32 local_port_;
   ::google::protobuf::int32 nat_type_;
+  bool client_;
   friend struct ::protobuf_nat_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
@@ -737,6 +747,30 @@ inline void DetectionRequest::set_allocated_dht_key(::std::string* dht_key) {
   }
   dht_key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), dht_key);
   // @@protoc_insertion_point(field_set_allocated:lego.nat.protobuf.DetectionRequest.dht_key)
+}
+
+// optional bool client = 8;
+inline bool DetectionRequest::has_client() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void DetectionRequest::set_has_client() {
+  _has_bits_[0] |= 0x00000080u;
+}
+inline void DetectionRequest::clear_has_client() {
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline void DetectionRequest::clear_client() {
+  client_ = false;
+  clear_has_client();
+}
+inline bool DetectionRequest::client() const {
+  // @@protoc_insertion_point(field_get:lego.nat.protobuf.DetectionRequest.client)
+  return client_;
+}
+inline void DetectionRequest::set_client(bool value) {
+  set_has_client();
+  client_ = value;
+  // @@protoc_insertion_point(field_set:lego.nat.protobuf.DetectionRequest.client)
 }
 
 // -------------------------------------------------------------------

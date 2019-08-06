@@ -88,6 +88,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::nat::protobuf::DetectionRequest, id_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::nat::protobuf::DetectionRequest, nat_type_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::nat::protobuf::DetectionRequest, dht_key_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::nat::protobuf::DetectionRequest, client_),
   0,
   4,
   1,
@@ -95,6 +96,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   2,
   6,
   3,
+  7,
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::nat::protobuf::NatMessage, _has_bits_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::nat::protobuf::NatMessage, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -104,8 +106,8 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   0,
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, 12, sizeof(::lego::nat::protobuf::DetectionRequest)},
-  { 19, 25, sizeof(::lego::nat::protobuf::NatMessage)},
+  { 0, 13, sizeof(::lego::nat::protobuf::DetectionRequest)},
+  { 21, 27, sizeof(::lego::nat::protobuf::NatMessage)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -134,16 +136,16 @@ void protobuf_RegisterTypes(const ::std::string&) {
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-      "\n\tnat.proto\022\021lego.nat.protobuf\"\217\001\n\020Detec"
+      "\n\tnat.proto\022\021lego.nat.protobuf\"\237\001\n\020Detec"
       "tionRequest\022\021\n\tpublic_ip\030\001 \001(\014\022\023\n\013public"
       "_port\030\002 \001(\005\022\020\n\010local_ip\030\003 \001(\014\022\022\n\nlocal_p"
       "ort\030\004 \001(\005\022\n\n\002id\030\005 \001(\014\022\020\n\010nat_type\030\006 \001(\005\022"
-      "\017\n\007dht_key\030\007 \001(\014\"H\n\nNatMessage\022:\n\rdetect"
-      "ion_req\030\001 \001(\0132#.lego.nat.protobuf.Detect"
-      "ionRequest"
+      "\017\n\007dht_key\030\007 \001(\014\022\016\n\006client\030\010 \001(\010\"H\n\nNatM"
+      "essage\022:\n\rdetection_req\030\001 \001(\0132#.lego.nat"
+      ".protobuf.DetectionRequest"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 250);
+      descriptor, 266);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "nat.proto", &protobuf_RegisterTypes);
 }
@@ -175,6 +177,7 @@ const int DetectionRequest::kLocalPortFieldNumber;
 const int DetectionRequest::kIdFieldNumber;
 const int DetectionRequest::kNatTypeFieldNumber;
 const int DetectionRequest::kDhtKeyFieldNumber;
+const int DetectionRequest::kClientFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 DetectionRequest::DetectionRequest()
@@ -206,8 +209,8 @@ DetectionRequest::DetectionRequest(const DetectionRequest& from)
     dht_key_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.dht_key_);
   }
   ::memcpy(&public_port_, &from.public_port_,
-    static_cast<size_t>(reinterpret_cast<char*>(&nat_type_) -
-    reinterpret_cast<char*>(&public_port_)) + sizeof(nat_type_));
+    static_cast<size_t>(reinterpret_cast<char*>(&client_) -
+    reinterpret_cast<char*>(&public_port_)) + sizeof(client_));
   // @@protoc_insertion_point(copy_constructor:lego.nat.protobuf.DetectionRequest)
 }
 
@@ -217,8 +220,8 @@ void DetectionRequest::SharedCtor() {
   id_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   dht_key_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&public_port_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&nat_type_) -
-      reinterpret_cast<char*>(&public_port_)) + sizeof(nat_type_));
+      reinterpret_cast<char*>(&client_) -
+      reinterpret_cast<char*>(&public_port_)) + sizeof(client_));
 }
 
 DetectionRequest::~DetectionRequest() {
@@ -268,10 +271,10 @@ void DetectionRequest::Clear() {
       dht_key_.ClearNonDefaultToEmptyNoArena();
     }
   }
-  if (cached_has_bits & 112u) {
+  if (cached_has_bits & 240u) {
     ::memset(&public_port_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&nat_type_) -
-        reinterpret_cast<char*>(&public_port_)) + sizeof(nat_type_));
+        reinterpret_cast<char*>(&client_) -
+        reinterpret_cast<char*>(&public_port_)) + sizeof(client_));
   }
   _has_bits_.Clear();
   _internal_metadata_.Clear();
@@ -377,6 +380,20 @@ bool DetectionRequest::MergePartialFromCodedStream(
         break;
       }
 
+      // optional bool client = 8;
+      case 8: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(64u /* 64 & 0xFF */)) {
+          set_has_client();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &client_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -443,6 +460,11 @@ void DetectionRequest::SerializeWithCachedSizes(
       7, this->dht_key(), output);
   }
 
+  // optional bool client = 8;
+  if (cached_has_bits & 0x00000080u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(8, this->client(), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -501,6 +523,11 @@ void DetectionRequest::SerializeWithCachedSizes(
         7, this->dht_key(), target);
   }
 
+  // optional bool client = 8;
+  if (cached_has_bits & 0x00000080u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(8, this->client(), target);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
@@ -518,7 +545,7 @@ size_t DetectionRequest::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         _internal_metadata_.unknown_fields());
   }
-  if (_has_bits_[0 / 32] & 127u) {
+  if (_has_bits_[0 / 32] & 255u) {
     // optional bytes public_ip = 1;
     if (has_public_ip()) {
       total_size += 1 +
@@ -568,6 +595,11 @@ size_t DetectionRequest::ByteSizeLong() const {
           this->nat_type());
     }
 
+    // optional bool client = 8;
+    if (has_client()) {
+      total_size += 1 + 1;
+    }
+
   }
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   SetCachedSize(cached_size);
@@ -597,7 +629,7 @@ void DetectionRequest::MergeFrom(const DetectionRequest& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 127u) {
+  if (cached_has_bits & 255u) {
     if (cached_has_bits & 0x00000001u) {
       set_has_public_ip();
       public_ip_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.public_ip_);
@@ -622,6 +654,9 @@ void DetectionRequest::MergeFrom(const DetectionRequest& from) {
     }
     if (cached_has_bits & 0x00000040u) {
       nat_type_ = from.nat_type_;
+    }
+    if (cached_has_bits & 0x00000080u) {
+      client_ = from.client_;
     }
     _has_bits_[0] |= cached_has_bits;
   }
@@ -662,6 +697,7 @@ void DetectionRequest::InternalSwap(DetectionRequest* other) {
   swap(public_port_, other->public_port_);
   swap(local_port_, other->local_port_);
   swap(nat_type_, other->nat_type_);
+  swap(client_, other->client_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   _internal_metadata_.Swap(&other->_internal_metadata_);
 }
