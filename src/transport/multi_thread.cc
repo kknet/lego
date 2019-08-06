@@ -191,7 +191,7 @@ int MultiThreadHandler::HandleClientMessage(
         uint16_t from_port) {
 #ifdef ENABLE_CLIENT_MODE
     if (!message_ptr->client_relayed()) {
-        ClientRelay::Instance()->AddClient(message_ptr->src_node_id(), from_ip, from_port);
+        ClientRelay::Instance()->AddClient(message_ptr->src_dht_key(), from_ip, from_port);
         dht::BaseDhtPtr dht = nullptr;
         uint32_t net_id = dht::DhtKeyManager::DhtKeyGetNetId(message_ptr->des_dht_key());
         if (message_ptr->universal()) {
@@ -208,11 +208,12 @@ int MultiThreadHandler::HandleClientMessage(
             assert(dht != nullptr);
             return kTransportError;
         }
+        message_ptr->set_client_dht_key(message_ptr->src_dht_key());
         message_ptr->set_src_dht_key(dht->local_node()->dht_key);
         message_ptr->set_client_relayed(true);
         message_ptr->set_client_proxy(true);
     } else {
-        auto client_node = ClientRelay::Instance()->GetClient(message_ptr->des_node_id());
+        auto client_node = ClientRelay::Instance()->GetClient(message_ptr->client_dht_key());
         if (client_node != nullptr) {
             auto& msg = *message_ptr;
             transport_->Send(client_node->ip, client_node->port, 0, msg);

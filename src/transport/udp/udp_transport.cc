@@ -209,9 +209,6 @@ int UdpTransport::Send(
         proto.set_hash(GetMessageHash(proto));
     }
 
-    if (!proto.has_src_node_id()) {
-        proto.set_src_node_id(common::GlobalInfo::Instance()->id());
-    }
     auto message = proto.SerializeAsString();
     assert(message.size() <= 6500);
     static const uint32_t kSendBufCount = 2u;
