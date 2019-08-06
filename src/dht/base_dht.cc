@@ -46,7 +46,6 @@ int BaseDht::Init() {
     heartbeat_tick_.CutOff(
             kHeartbeatPeriod,
             std::bind(&BaseDht::Heartbeat, shared_from_this()));
-    std::cout << "now start base dht heartbeat." << std::endl;
     uint32_t net_id;
     uint8_t country;
     GetNetIdAndCountry(net_id, country);
@@ -348,18 +347,23 @@ void BaseDht::ProcessBootstrapResponse(
     }
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("2 end", header);
     // check sign
+
     auto pubkey_ptr = std::make_shared<security::PublicKey>(header.pubkey());
     NodePtr node = std::make_shared<Node>(
             dht_msg.bootstrap_res().node_id(),
             header.src_dht_key(),
             dht_msg.bootstrap_res().nat_type(),
-            header.client(),
+            false,
             header.from_ip(),
             static_cast<uint16_t>(header.from_port()),
             dht_msg.bootstrap_res().local_ip(),
             static_cast<uint16_t>(dht_msg.bootstrap_res().local_port()),
             pubkey_ptr);
-    Join(node);
+    if (Join(node) != kDhtSuccess) {
+        DHT_ERROR("join node failed!");
+        return;
+    }
+
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("3 end", header);
     std::lock_guard<std::mutex> guard(join_res_mutex_);
     if (joined_) {

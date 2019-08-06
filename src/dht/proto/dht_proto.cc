@@ -51,7 +51,10 @@ void DhtProto::CreateBootstrapResponse(
     msg.set_id(header.id());
     msg.set_type(common::kDhtMessage);
     msg.set_hop_count(0);
-    msg.set_client(header.client());
+    if (header.client()) {
+        msg.set_client(header.client());
+        msg.set_client_relayed(true);
+    }
     msg.set_pubkey(security::Schnorr::Instance()->str_pubkey());
     // TODO(tt): add sign
     dht::protobuf::DhtMessage res_dht_msg;
@@ -124,7 +127,10 @@ void DhtProto::CreateRefreshNeighborsResponse(
     msg.set_priority(transport::kTransportPriorityHighest);
     msg.set_id(header.id());
     msg.set_type(common::kDhtMessage);
-    msg.set_client(local_node->client_mode);
+    if (header.client()) {
+        msg.set_client(header.client());
+        msg.set_client_relayed(true);
+    }
     msg.set_hop_count(0);
     msg.set_pubkey(security::Schnorr::Instance()->str_pubkey());
     // TODO(tt): add sign
@@ -190,7 +196,10 @@ void DhtProto::CreateHeatbeatResponse(
     msg.set_priority(transport::kTransportPriorityHighest);
     msg.set_id(header.id());
     msg.set_type(common::kDhtMessage);
-    msg.set_client(local_node->client_mode);
+    if (header.client()) {
+        msg.set_client(header.client());
+        msg.set_client_relayed(true);
+    }
     msg.set_hop_count(0);
     dht::protobuf::DhtMessage dht_msg;
     auto heartbeat_res = dht_msg.mutable_heartbeat_res();
