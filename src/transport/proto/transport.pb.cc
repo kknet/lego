@@ -131,6 +131,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::transport::protobuf::Header, type_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::transport::protobuf::Header, client_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::transport::protobuf::Header, client_relayed_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::transport::protobuf::Header, client_proxy_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::transport::protobuf::Header, universal_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::transport::protobuf::Header, broadcast_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::transport::protobuf::Header, handled_),
@@ -138,7 +139,6 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::transport::protobuf::Header, pubkey_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::transport::protobuf::Header, sign_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::transport::protobuf::Header, local_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::transport::protobuf::Header, client_proxy_),
   0,
   1,
   2,
@@ -157,12 +157,12 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   18,
   19,
   20,
-  10,
   21,
+  10,
+  22,
   24,
   8,
   9,
-  22,
   23,
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
@@ -212,11 +212,11 @@ void AddDescriptorsImpl() {
       "from_port\030\n \001(\r\022\r\n\005to_ip\030\013 \001(\014\022\017\n\007to_por"
       "t\030\014 \001(\r\022\n\n\002id\030\r \001(\r\022\014\n\004hash\030\016 \001(\004\022\014\n\004typ"
       "e\030\017 \001(\r\022\016\n\006client\030\020 \001(\010\022\026\n\016client_relaye"
-      "d\030\021 \001(\010\022\021\n\tuniversal\030\022 \001(\010\022:\n\tbroadcast\030"
-      "\023 \001(\0132\'.lego.transport.protobuf.Broadcas"
-      "tParam\022\017\n\007handled\030\024 \001(\010\022\030\n\020des_dht_key_h"
-      "ash\030\025 \001(\004\022\016\n\006pubkey\030\026 \001(\014\022\014\n\004sign\030\027 \001(\014\022"
-      "\r\n\005local\030\030 \001(\010\022\024\n\014client_proxy\030\031 \001(\010"
+      "d\030\021 \001(\010\022\024\n\014client_proxy\030\022 \001(\010\022\021\n\tunivers"
+      "al\030\023 \001(\010\022:\n\tbroadcast\030\024 \001(\0132\'.lego.trans"
+      "port.protobuf.BroadcastParam\022\017\n\007handled\030"
+      "\025 \001(\010\022\030\n\020des_dht_key_hash\030\026 \001(\004\022\016\n\006pubke"
+      "y\030\027 \001(\014\022\014\n\004sign\030\030 \001(\014\022\r\n\005local\030\031 \001(\010"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
       descriptor, 836);
@@ -1011,6 +1011,7 @@ const int Header::kHashFieldNumber;
 const int Header::kTypeFieldNumber;
 const int Header::kClientFieldNumber;
 const int Header::kClientRelayedFieldNumber;
+const int Header::kClientProxyFieldNumber;
 const int Header::kUniversalFieldNumber;
 const int Header::kBroadcastFieldNumber;
 const int Header::kHandledFieldNumber;
@@ -1018,7 +1019,6 @@ const int Header::kDesDhtKeyHashFieldNumber;
 const int Header::kPubkeyFieldNumber;
 const int Header::kSignFieldNumber;
 const int Header::kLocalFieldNumber;
-const int Header::kClientProxyFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Header::Header()
@@ -1185,8 +1185,8 @@ void Header::Clear() {
   }
   if (cached_has_bits & 16711680u) {
     ::memset(&id_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&client_proxy_) -
-        reinterpret_cast<char*>(&id_)) + sizeof(client_proxy_));
+        reinterpret_cast<char*>(&local_) -
+        reinterpret_cast<char*>(&id_)) + sizeof(local_));
   }
   des_dht_key_hash_ = GOOGLE_ULONGLONG(0);
   _has_bits_.Clear();
@@ -1425,10 +1425,24 @@ bool Header::MergePartialFromCodedStream(
         break;
       }
 
-      // optional bool universal = 18;
+      // optional bool client_proxy = 18;
       case 18: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(144u /* 144 & 0xFF */)) {
+          set_has_client_proxy();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &client_proxy_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bool universal = 19;
+      case 19: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(152u /* 152 & 0xFF */)) {
           set_has_universal();
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -1439,10 +1453,10 @@ bool Header::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .lego.transport.protobuf.BroadcastParam broadcast = 19;
-      case 19: {
+      // optional .lego.transport.protobuf.BroadcastParam broadcast = 20;
+      case 20: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(154u /* 154 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(162u /* 162 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
                input, mutable_broadcast()));
         } else {
@@ -1451,10 +1465,10 @@ bool Header::MergePartialFromCodedStream(
         break;
       }
 
-      // optional bool handled = 20;
-      case 20: {
+      // optional bool handled = 21;
+      case 21: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(160u /* 160 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(168u /* 168 & 0xFF */)) {
           set_has_handled();
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -1465,10 +1479,10 @@ bool Header::MergePartialFromCodedStream(
         break;
       }
 
-      // optional uint64 des_dht_key_hash = 21;
-      case 21: {
+      // optional uint64 des_dht_key_hash = 22;
+      case 22: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(168u /* 168 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(176u /* 176 & 0xFF */)) {
           set_has_des_dht_key_hash();
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
@@ -1479,10 +1493,10 @@ bool Header::MergePartialFromCodedStream(
         break;
       }
 
-      // optional bytes pubkey = 22;
-      case 22: {
+      // optional bytes pubkey = 23;
+      case 23: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(178u /* 178 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(186u /* 186 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_pubkey()));
         } else {
@@ -1491,10 +1505,10 @@ bool Header::MergePartialFromCodedStream(
         break;
       }
 
-      // optional bytes sign = 23;
-      case 23: {
+      // optional bytes sign = 24;
+      case 24: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(186u /* 186 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(194u /* 194 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_sign()));
         } else {
@@ -1503,28 +1517,14 @@ bool Header::MergePartialFromCodedStream(
         break;
       }
 
-      // optional bool local = 24;
-      case 24: {
+      // optional bool local = 25;
+      case 25: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(192u /* 192 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(200u /* 200 & 0xFF */)) {
           set_has_local();
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
                  input, &local_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // optional bool client_proxy = 25;
-      case 25: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(200u /* 200 & 0xFF */)) {
-          set_has_client_proxy();
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &client_proxy_)));
         } else {
           goto handle_unusual;
         }
@@ -1651,47 +1651,47 @@ void Header::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteBool(17, this->client_relayed(), output);
   }
 
-  // optional bool universal = 18;
+  // optional bool client_proxy = 18;
   if (cached_has_bits & 0x00100000u) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(18, this->universal(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(18, this->client_proxy(), output);
   }
 
-  // optional .lego.transport.protobuf.BroadcastParam broadcast = 19;
+  // optional bool universal = 19;
+  if (cached_has_bits & 0x00200000u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(19, this->universal(), output);
+  }
+
+  // optional .lego.transport.protobuf.BroadcastParam broadcast = 20;
   if (cached_has_bits & 0x00000400u) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      19, this->_internal_broadcast(), output);
+      20, this->_internal_broadcast(), output);
   }
 
-  // optional bool handled = 20;
-  if (cached_has_bits & 0x00200000u) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(20, this->handled(), output);
+  // optional bool handled = 21;
+  if (cached_has_bits & 0x00400000u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(21, this->handled(), output);
   }
 
-  // optional uint64 des_dht_key_hash = 21;
+  // optional uint64 des_dht_key_hash = 22;
   if (cached_has_bits & 0x01000000u) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt64(21, this->des_dht_key_hash(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(22, this->des_dht_key_hash(), output);
   }
 
-  // optional bytes pubkey = 22;
+  // optional bytes pubkey = 23;
   if (cached_has_bits & 0x00000100u) {
     ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      22, this->pubkey(), output);
+      23, this->pubkey(), output);
   }
 
-  // optional bytes sign = 23;
+  // optional bytes sign = 24;
   if (cached_has_bits & 0x00000200u) {
     ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      23, this->sign(), output);
+      24, this->sign(), output);
   }
 
-  // optional bool local = 24;
-  if (cached_has_bits & 0x00400000u) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(24, this->local(), output);
-  }
-
-  // optional bool client_proxy = 25;
+  // optional bool local = 25;
   if (cached_has_bits & 0x00800000u) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(25, this->client_proxy(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(25, this->local(), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -1810,50 +1810,50 @@ void Header::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(17, this->client_relayed(), target);
   }
 
-  // optional bool universal = 18;
+  // optional bool client_proxy = 18;
   if (cached_has_bits & 0x00100000u) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(18, this->universal(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(18, this->client_proxy(), target);
   }
 
-  // optional .lego.transport.protobuf.BroadcastParam broadcast = 19;
+  // optional bool universal = 19;
+  if (cached_has_bits & 0x00200000u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(19, this->universal(), target);
+  }
+
+  // optional .lego.transport.protobuf.BroadcastParam broadcast = 20;
   if (cached_has_bits & 0x00000400u) {
     target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessageToArray(
-        19, this->_internal_broadcast(), deterministic, target);
+        20, this->_internal_broadcast(), deterministic, target);
   }
 
-  // optional bool handled = 20;
-  if (cached_has_bits & 0x00200000u) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(20, this->handled(), target);
+  // optional bool handled = 21;
+  if (cached_has_bits & 0x00400000u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(21, this->handled(), target);
   }
 
-  // optional uint64 des_dht_key_hash = 21;
+  // optional uint64 des_dht_key_hash = 22;
   if (cached_has_bits & 0x01000000u) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(21, this->des_dht_key_hash(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(22, this->des_dht_key_hash(), target);
   }
 
-  // optional bytes pubkey = 22;
+  // optional bytes pubkey = 23;
   if (cached_has_bits & 0x00000100u) {
     target =
       ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
-        22, this->pubkey(), target);
+        23, this->pubkey(), target);
   }
 
-  // optional bytes sign = 23;
+  // optional bytes sign = 24;
   if (cached_has_bits & 0x00000200u) {
     target =
       ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
-        23, this->sign(), target);
+        24, this->sign(), target);
   }
 
-  // optional bool local = 24;
-  if (cached_has_bits & 0x00400000u) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(24, this->local(), target);
-  }
-
-  // optional bool client_proxy = 25;
+  // optional bool local = 25;
   if (cached_has_bits & 0x00800000u) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(25, this->client_proxy(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(25, this->local(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -1932,21 +1932,21 @@ size_t Header::ByteSizeLong() const {
 
   }
   if (_has_bits_[8 / 32] & 65280u) {
-    // optional bytes pubkey = 22;
+    // optional bytes pubkey = 23;
     if (has_pubkey()) {
       total_size += 2 +
         ::google::protobuf::internal::WireFormatLite::BytesSize(
           this->pubkey());
     }
 
-    // optional bytes sign = 23;
+    // optional bytes sign = 24;
     if (has_sign()) {
       total_size += 2 +
         ::google::protobuf::internal::WireFormatLite::BytesSize(
           this->sign());
     }
 
-    // optional .lego.transport.protobuf.BroadcastParam broadcast = 19;
+    // optional .lego.transport.protobuf.BroadcastParam broadcast = 20;
     if (has_broadcast()) {
       total_size += 2 +
         ::google::protobuf::internal::WireFormatLite::MessageSize(
@@ -2014,28 +2014,28 @@ size_t Header::ByteSizeLong() const {
       total_size += 2 + 1;
     }
 
-    // optional bool universal = 18;
-    if (has_universal()) {
-      total_size += 2 + 1;
-    }
-
-    // optional bool handled = 20;
-    if (has_handled()) {
-      total_size += 2 + 1;
-    }
-
-    // optional bool local = 24;
-    if (has_local()) {
-      total_size += 2 + 1;
-    }
-
-    // optional bool client_proxy = 25;
+    // optional bool client_proxy = 18;
     if (has_client_proxy()) {
       total_size += 2 + 1;
     }
 
+    // optional bool universal = 19;
+    if (has_universal()) {
+      total_size += 2 + 1;
+    }
+
+    // optional bool handled = 21;
+    if (has_handled()) {
+      total_size += 2 + 1;
+    }
+
+    // optional bool local = 25;
+    if (has_local()) {
+      total_size += 2 + 1;
+    }
+
   }
-  // optional uint64 des_dht_key_hash = 21;
+  // optional uint64 des_dht_key_hash = 22;
   if (has_des_dht_key_hash()) {
     total_size += 2 +
       ::google::protobuf::internal::WireFormatLite::UInt64Size(
@@ -2147,16 +2147,16 @@ void Header::MergeFrom(const Header& from) {
       client_relayed_ = from.client_relayed_;
     }
     if (cached_has_bits & 0x00100000u) {
-      universal_ = from.universal_;
+      client_proxy_ = from.client_proxy_;
     }
     if (cached_has_bits & 0x00200000u) {
-      handled_ = from.handled_;
+      universal_ = from.universal_;
     }
     if (cached_has_bits & 0x00400000u) {
-      local_ = from.local_;
+      handled_ = from.handled_;
     }
     if (cached_has_bits & 0x00800000u) {
-      client_proxy_ = from.client_proxy_;
+      local_ = from.local_;
     }
     _has_bits_[0] |= cached_has_bits;
   }
@@ -2219,10 +2219,10 @@ void Header::InternalSwap(Header* other) {
   swap(type_, other->type_);
   swap(client_, other->client_);
   swap(client_relayed_, other->client_relayed_);
+  swap(client_proxy_, other->client_proxy_);
   swap(universal_, other->universal_);
   swap(handled_, other->handled_);
   swap(local_, other->local_);
-  swap(client_proxy_, other->client_proxy_);
   swap(des_dht_key_hash_, other->des_dht_key_hash_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   _internal_metadata_.Swap(&other->_internal_metadata_);

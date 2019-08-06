@@ -546,10 +546,10 @@ class Header : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   ::std::string* release_to_ip();
   void set_allocated_to_ip(::std::string* to_ip);
 
-  // optional bytes pubkey = 22;
+  // optional bytes pubkey = 23;
   bool has_pubkey() const;
   void clear_pubkey();
-  static const int kPubkeyFieldNumber = 22;
+  static const int kPubkeyFieldNumber = 23;
   const ::std::string& pubkey() const;
   void set_pubkey(const ::std::string& value);
   #if LANG_CXX11
@@ -561,10 +561,10 @@ class Header : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   ::std::string* release_pubkey();
   void set_allocated_pubkey(::std::string* pubkey);
 
-  // optional bytes sign = 23;
+  // optional bytes sign = 24;
   bool has_sign() const;
   void clear_sign();
-  static const int kSignFieldNumber = 23;
+  static const int kSignFieldNumber = 24;
   const ::std::string& sign() const;
   void set_sign(const ::std::string& value);
   #if LANG_CXX11
@@ -576,10 +576,10 @@ class Header : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   ::std::string* release_sign();
   void set_allocated_sign(::std::string* sign);
 
-  // optional .lego.transport.protobuf.BroadcastParam broadcast = 19;
+  // optional .lego.transport.protobuf.BroadcastParam broadcast = 20;
   bool has_broadcast() const;
   void clear_broadcast();
-  static const int kBroadcastFieldNumber = 19;
+  static const int kBroadcastFieldNumber = 20;
   private:
   const ::lego::transport::protobuf::BroadcastParam& _internal_broadcast() const;
   public:
@@ -651,38 +651,38 @@ class Header : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   bool client_relayed() const;
   void set_client_relayed(bool value);
 
-  // optional bool universal = 18;
-  bool has_universal() const;
-  void clear_universal();
-  static const int kUniversalFieldNumber = 18;
-  bool universal() const;
-  void set_universal(bool value);
-
-  // optional bool handled = 20;
-  bool has_handled() const;
-  void clear_handled();
-  static const int kHandledFieldNumber = 20;
-  bool handled() const;
-  void set_handled(bool value);
-
-  // optional bool local = 24;
-  bool has_local() const;
-  void clear_local();
-  static const int kLocalFieldNumber = 24;
-  bool local() const;
-  void set_local(bool value);
-
-  // optional bool client_proxy = 25;
+  // optional bool client_proxy = 18;
   bool has_client_proxy() const;
   void clear_client_proxy();
-  static const int kClientProxyFieldNumber = 25;
+  static const int kClientProxyFieldNumber = 18;
   bool client_proxy() const;
   void set_client_proxy(bool value);
 
-  // optional uint64 des_dht_key_hash = 21;
+  // optional bool universal = 19;
+  bool has_universal() const;
+  void clear_universal();
+  static const int kUniversalFieldNumber = 19;
+  bool universal() const;
+  void set_universal(bool value);
+
+  // optional bool handled = 21;
+  bool has_handled() const;
+  void clear_handled();
+  static const int kHandledFieldNumber = 21;
+  bool handled() const;
+  void set_handled(bool value);
+
+  // optional bool local = 25;
+  bool has_local() const;
+  void clear_local();
+  static const int kLocalFieldNumber = 25;
+  bool local() const;
+  void set_local(bool value);
+
+  // optional uint64 des_dht_key_hash = 22;
   bool has_des_dht_key_hash() const;
   void clear_des_dht_key_hash();
-  static const int kDesDhtKeyHashFieldNumber = 21;
+  static const int kDesDhtKeyHashFieldNumber = 22;
   ::google::protobuf::uint64 des_dht_key_hash() const;
   void set_des_dht_key_hash(::google::protobuf::uint64 value);
 
@@ -722,6 +722,8 @@ class Header : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   void clear_has_client();
   void set_has_client_relayed();
   void clear_has_client_relayed();
+  void set_has_client_proxy();
+  void clear_has_client_proxy();
   void set_has_universal();
   void clear_has_universal();
   void set_has_broadcast();
@@ -736,8 +738,6 @@ class Header : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   void clear_has_sign();
   void set_has_local();
   void clear_has_local();
-  void set_has_client_proxy();
-  void clear_has_client_proxy();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
@@ -762,10 +762,10 @@ class Header : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   ::google::protobuf::uint32 type_;
   bool client_;
   bool client_relayed_;
+  bool client_proxy_;
   bool universal_;
   bool handled_;
   bool local_;
-  bool client_proxy_;
   ::google::protobuf::uint64 des_dht_key_hash_;
   friend struct ::protobuf_transport_2eproto::TableStruct;
 };
@@ -1954,15 +1954,39 @@ inline void Header::set_client_relayed(bool value) {
   // @@protoc_insertion_point(field_set:lego.transport.protobuf.Header.client_relayed)
 }
 
-// optional bool universal = 18;
-inline bool Header::has_universal() const {
+// optional bool client_proxy = 18;
+inline bool Header::has_client_proxy() const {
   return (_has_bits_[0] & 0x00100000u) != 0;
 }
-inline void Header::set_has_universal() {
+inline void Header::set_has_client_proxy() {
   _has_bits_[0] |= 0x00100000u;
 }
-inline void Header::clear_has_universal() {
+inline void Header::clear_has_client_proxy() {
   _has_bits_[0] &= ~0x00100000u;
+}
+inline void Header::clear_client_proxy() {
+  client_proxy_ = false;
+  clear_has_client_proxy();
+}
+inline bool Header::client_proxy() const {
+  // @@protoc_insertion_point(field_get:lego.transport.protobuf.Header.client_proxy)
+  return client_proxy_;
+}
+inline void Header::set_client_proxy(bool value) {
+  set_has_client_proxy();
+  client_proxy_ = value;
+  // @@protoc_insertion_point(field_set:lego.transport.protobuf.Header.client_proxy)
+}
+
+// optional bool universal = 19;
+inline bool Header::has_universal() const {
+  return (_has_bits_[0] & 0x00200000u) != 0;
+}
+inline void Header::set_has_universal() {
+  _has_bits_[0] |= 0x00200000u;
+}
+inline void Header::clear_has_universal() {
+  _has_bits_[0] &= ~0x00200000u;
 }
 inline void Header::clear_universal() {
   universal_ = false;
@@ -1978,7 +2002,7 @@ inline void Header::set_universal(bool value) {
   // @@protoc_insertion_point(field_set:lego.transport.protobuf.Header.universal)
 }
 
-// optional .lego.transport.protobuf.BroadcastParam broadcast = 19;
+// optional .lego.transport.protobuf.BroadcastParam broadcast = 20;
 inline bool Header::has_broadcast() const {
   return (_has_bits_[0] & 0x00000400u) != 0;
 }
@@ -2036,15 +2060,15 @@ inline void Header::set_allocated_broadcast(::lego::transport::protobuf::Broadca
   // @@protoc_insertion_point(field_set_allocated:lego.transport.protobuf.Header.broadcast)
 }
 
-// optional bool handled = 20;
+// optional bool handled = 21;
 inline bool Header::has_handled() const {
-  return (_has_bits_[0] & 0x00200000u) != 0;
+  return (_has_bits_[0] & 0x00400000u) != 0;
 }
 inline void Header::set_has_handled() {
-  _has_bits_[0] |= 0x00200000u;
+  _has_bits_[0] |= 0x00400000u;
 }
 inline void Header::clear_has_handled() {
-  _has_bits_[0] &= ~0x00200000u;
+  _has_bits_[0] &= ~0x00400000u;
 }
 inline void Header::clear_handled() {
   handled_ = false;
@@ -2060,7 +2084,7 @@ inline void Header::set_handled(bool value) {
   // @@protoc_insertion_point(field_set:lego.transport.protobuf.Header.handled)
 }
 
-// optional uint64 des_dht_key_hash = 21;
+// optional uint64 des_dht_key_hash = 22;
 inline bool Header::has_des_dht_key_hash() const {
   return (_has_bits_[0] & 0x01000000u) != 0;
 }
@@ -2084,7 +2108,7 @@ inline void Header::set_des_dht_key_hash(::google::protobuf::uint64 value) {
   // @@protoc_insertion_point(field_set:lego.transport.protobuf.Header.des_dht_key_hash)
 }
 
-// optional bytes pubkey = 22;
+// optional bytes pubkey = 23;
 inline bool Header::has_pubkey() const {
   return (_has_bits_[0] & 0x00000100u) != 0;
 }
@@ -2150,7 +2174,7 @@ inline void Header::set_allocated_pubkey(::std::string* pubkey) {
   // @@protoc_insertion_point(field_set_allocated:lego.transport.protobuf.Header.pubkey)
 }
 
-// optional bytes sign = 23;
+// optional bytes sign = 24;
 inline bool Header::has_sign() const {
   return (_has_bits_[0] & 0x00000200u) != 0;
 }
@@ -2216,15 +2240,15 @@ inline void Header::set_allocated_sign(::std::string* sign) {
   // @@protoc_insertion_point(field_set_allocated:lego.transport.protobuf.Header.sign)
 }
 
-// optional bool local = 24;
+// optional bool local = 25;
 inline bool Header::has_local() const {
-  return (_has_bits_[0] & 0x00400000u) != 0;
+  return (_has_bits_[0] & 0x00800000u) != 0;
 }
 inline void Header::set_has_local() {
-  _has_bits_[0] |= 0x00400000u;
+  _has_bits_[0] |= 0x00800000u;
 }
 inline void Header::clear_has_local() {
-  _has_bits_[0] &= ~0x00400000u;
+  _has_bits_[0] &= ~0x00800000u;
 }
 inline void Header::clear_local() {
   local_ = false;
@@ -2238,30 +2262,6 @@ inline void Header::set_local(bool value) {
   set_has_local();
   local_ = value;
   // @@protoc_insertion_point(field_set:lego.transport.protobuf.Header.local)
-}
-
-// optional bool client_proxy = 25;
-inline bool Header::has_client_proxy() const {
-  return (_has_bits_[0] & 0x00800000u) != 0;
-}
-inline void Header::set_has_client_proxy() {
-  _has_bits_[0] |= 0x00800000u;
-}
-inline void Header::clear_has_client_proxy() {
-  _has_bits_[0] &= ~0x00800000u;
-}
-inline void Header::clear_client_proxy() {
-  client_proxy_ = false;
-  clear_has_client_proxy();
-}
-inline bool Header::client_proxy() const {
-  // @@protoc_insertion_point(field_get:lego.transport.protobuf.Header.client_proxy)
-  return client_proxy_;
-}
-inline void Header::set_client_proxy(bool value) {
-  set_has_client_proxy();
-  client_proxy_ = value;
-  // @@protoc_insertion_point(field_set:lego.transport.protobuf.Header.client_proxy)
 }
 
 #ifdef __GNUC__
