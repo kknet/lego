@@ -37,12 +37,12 @@ message Header {
 	optional uint32 type = 15;
 	optional bool client = 16;
 	optional bool client_relayed =  17;
-	optional bool universal = 18;
-	optional BroadcastParam broadcast = 19;
-	optional bool handled = 20;
-	optional uint64 des_dht_key_hash = 21;
-	optional bytes pubkey = 22;
-	optional bytes sign = 23;
-	optional bool local = 24;
-	optional bool client_proxy = 25;
+	optional bool client_proxy = 18;  // for local node to handle client message and direct send back
+	optional bool universal = 19;
+	optional BroadcastParam broadcast = 20;
+	optional bool handled = 21;
+	optional uint64 des_dht_key_hash = 22;
+	optional bytes pubkey = 23;
+	optional bytes sign = 24;
+	optional bool local = 25;
 }

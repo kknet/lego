@@ -531,8 +531,6 @@ void BaseDht::ProcessHeartbeatResponse(
         if (iter != node_map_.end()) {
             iter->second->heartbeat_alive_times = kHeartbeatDefaultAliveTimes;
             iter->second->heartbeat_send_times = 0;
-        } else {
-            std::cout << "find dht key hash failed!" << std::endl;
         }
     }
 }
