@@ -119,6 +119,7 @@ link_directories(
 # bin/lib
 add_executable(lego ${MAIN_DIR}/main.cc)
 add_executable(vpn_proxy ${MAIN_DIR}/vpn_proxy.cc)
+add_executable(vpn_client ${MAIN_DIR}/vpn_client.cc)
 
 set(LINK_ARGS
     services
@@ -148,8 +149,36 @@ set(LINK_ARGS
     ${CFLIB}
 )
 
+
+set(CLIENT_LINK_ARGS
+    client
+    init
+    bft
+    vss
+    network
+    sync
+    broadcast
+    dht
+    nat_traverse
+    transport
+    bz2
+    db
+    security
+    common
+    protobuf
+    uv
+    pthread
+    tcmalloc
+    ${LINK_PTHREAD}
+    ${LINK_DL}
+    ${LINK_RT}
+    ${LINK_ANDROID_LOG}
+    ${CFLIB}
+)
+
 target_link_libraries(lego ${LINK_ARGS})
 target_link_libraries(vpn_proxy ${LINK_ARGS})
+target_link_libraries(vpn_client ${CLIENT_LINK_ARGS})
 
 include_directories(SYSTEM ${SRC_DIR})
 
@@ -170,6 +199,7 @@ else()
     add_subdirectory(${SRC_DIR}/vss vss)
     add_subdirectory(${SRC_DIR}/init init)
     add_subdirectory(${SRC_DIR}/services services)
+    add_subdirectory(${SRC_DIR}/client client)
 
     if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
         add_subdirectory(${SRC_DIR}/common/tests common_test)
