@@ -35,8 +35,12 @@ int Uniersal::Init() {
         AddNetworkId(net_id);
     } else {
         dht::BaseDhtPtr dht = UniversalManager::Instance()->GetUniversal(kUniversalNetworkId);
-        auto universal_dht = std::dynamic_pointer_cast<Uniersal>(dht);
-        universal_dht->AddNetworkId(net_id);
+        if (dht) {
+            auto universal_dht = std::dynamic_pointer_cast<Uniersal>(dht);
+            if (universal_dht) {
+                universal_dht->AddNetworkId(net_id);
+            }
+        }
     }
     return kNetworkSuccess;
 }
