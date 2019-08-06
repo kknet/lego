@@ -13,6 +13,9 @@ int main(int argc, char** argv) {
         return 1;
     }
 
+    std::vector<lego::client::VpnServerNodePtr> nodes;
+    client.GetVpnServerNodes("US", 2, nodes);
+    std::cout << "get vpn_nodes size: " << nodes.size() << std::endl;
     lego::init::Command cmd;
     if (!cmd.Init(false, true)) {
         std::cout << "init cmd failed!" << std::endl;
