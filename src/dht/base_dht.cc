@@ -8,7 +8,7 @@
 #include "common/hash.h"
 #include "common/encode.h"
 #include "common/bloom_filter.h"
-#include "transport/multi_thread/processor.h"
+#include "transport/processor.h"
 #include "transport/transport_utils.h"
 #include "broadcast/broadcast_utils.h"
 #include "nat_traverse/detection.h"
@@ -46,6 +46,7 @@ int BaseDht::Init() {
     heartbeat_tick_.CutOff(
             kHeartbeatPeriod,
             std::bind(&BaseDht::Heartbeat, shared_from_this()));
+    std::cout << "now start base dht heartbeat." << std::endl;
     uint32_t net_id;
     uint8_t country;
     GetNetIdAndCountry(net_id, country);
@@ -595,6 +596,10 @@ bool BaseDht::NodeJoined(NodePtr& node) {
 }
 
 int BaseDht::CheckJoin(NodePtr& node) {
+    if (node->client_mode) {
+        return kDhtError;
+    }
+
     if (node->nat_type == kNatTypeUnknown) {
         DHT_WARN("invalid node nat type.");
         return kDhtInvalidNat;

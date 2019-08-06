@@ -54,6 +54,7 @@ enum MessageType {
     kSyncMessage = 3,
     kBftMessage = 4,
     kElectMessage = 5,
+    kServiceMessage = 6,
 
     kUdpDemoTestMessage,
     // max message type

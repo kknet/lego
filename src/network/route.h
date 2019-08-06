@@ -27,6 +27,7 @@ public:
     void UnRegisterMessage(uint32_t type);
     void Init();
     void Destroy();
+    dht::BaseDhtPtr GetDht(const std::string& dht_key, bool universal);
 
 private:
     Route();
@@ -34,7 +35,6 @@ private:
     void HandleMessage(transport::protobuf::Header& header);
     void HandleDhtMessage(transport::protobuf::Header& header);
     void Broadcast(transport::protobuf::Header& header);
-    dht::BaseDhtPtr GetDht(const std::string& dht_key, bool universal);
     void RouteByUniversal(transport::protobuf::Header& header);
 
     transport::MessageProcessor message_processor_[common::kLegoMaxMessageTypeCount];

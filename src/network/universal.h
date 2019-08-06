@@ -26,6 +26,14 @@ public:
     bool HasNetworkId(uint32_t network_id);
     std::vector<dht::NodePtr> LocalGetNetworkNodes(uint32_t network_id, uint32_t count);
     std::vector<dht::NodePtr> RemoteGetNetworkNodes(uint32_t network_id, uint32_t count);
+    std::vector<dht::NodePtr> LocalGetNetworkNodes(
+            uint32_t network_id,
+            uint32_t country,
+            uint32_t count);
+    std::vector<dht::NodePtr> RemoteGetNetworkNodes(
+            uint32_t network_id,
+            uint32_t country,
+            uint32_t count);
 
 private:
     void ProcessGetNetworkNodesRequest(

@@ -50,8 +50,6 @@ uint32_t BftManager::GetMemberIndex(uint32_t network_id, const std::string& node
 }
 
 void BftManager::HandleMessage(transport::protobuf::Header& header) {
-    std::lock_guard<std::mutex> guard(all_test_mutex_);
-
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("HandleMessage", header);
     assert(header.type() == common::kBftMessage);
     bft::protobuf::BftMessage bft_msg;

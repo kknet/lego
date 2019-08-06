@@ -16,6 +16,11 @@ namespace network {
 enum NetworkErrorCode {
     kNetworkSuccess = 0,
     kNetworkError = 1,
+    kNetworkJoinUniversalError = 2,
+    kNetworkJoinShardFailed = 3,
+    kNetworkNoBootstrapNodes = 4,
+    kNetworkNetworkJoined = 5,
+    kNetworkNetworkNotJoined = 6,
 };
 
 // consensus shard 3 - 4097
@@ -34,6 +39,9 @@ static const uint32_t kConsensusShardNetworkCount = (
 static const uint32_t kServiceShardBeginNetworkId = kConsensusShardEndNetworkId;  // eq
 static const uint32_t kServiceShardEndNetworkId = kNetworkMaxDhtCount;  // less
 
+enum ServiceNetworkType {
+    kVpnNetworkId = kServiceShardBeginNetworkId,
+};
 
 inline static uint32_t GetConsensusShardNetworkId(const std::string& account_address) {
     return 4u;

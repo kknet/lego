@@ -1,5 +1,6 @@
 #include "common/tick/thread_pool.h"
 
+#include <set>
 #include <iostream>
 
 namespace lego {
@@ -54,21 +55,27 @@ void TickThreadPool::Ticking() {
         uint32_t now_idx = std::numeric_limits<uint32_t>::max();
         auto tick_item = Get(first_idx);
         std::vector<std::shared_ptr<Item>> getted_items;
+        std::set<uint32_t> handled_timer;
         while (tick_item || now_idx != first_idx) {
             if (!tick_item) {
                 break;
             }
-
-            auto tick_now = std::chrono::steady_clock::now();
-            if (tick_item->cutoff_time <= tick_now) {
-                RemoveTick(tick_item->idx);
-                tick_item->callback();
+            
+            auto iter = handled_timer.find(tick_item->idx);
+            if (iter == handled_timer.end()) {
+                auto tick_now = std::chrono::steady_clock::now();
+                if (tick_item->cutoff_time <= tick_now) {
+                    RemoveTick(tick_item->idx);
+                    tick_item->callback();
+                } else {
+                    getted_items.push_back(tick_item);
+                }
             } else {
                 getted_items.push_back(tick_item);
             }
+            handled_timer.insert(tick_item->idx);
             tick_item = Get(now_idx);
         }
-
         std::this_thread::sleep_for(std::chrono::microseconds(50000ull));
         for (auto iter = getted_items.begin(); iter != getted_items.end(); ++iter) {
             (*iter)->hold = false;

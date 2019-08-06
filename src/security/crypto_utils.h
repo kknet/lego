@@ -15,6 +15,11 @@ namespace lego {
 
 namespace security {
 
+enum SecurityErrorCode {
+    kSecuritySuccess = 0,
+    kSecurityError = 1,
+};
+
 typedef std::vector<uint8_t> bytes;
 static const uint32_t kPublicCompresssedSizeBytes = 33u;
 static const uint32_t kCommitPointHashSize = 32u;

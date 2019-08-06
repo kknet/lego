@@ -12,6 +12,7 @@ public:
     static void CreateGetNetworkNodesRequest(
             const dht::NodePtr& local_node,
             uint32_t network_id,
+            uint32_t country,
             uint32_t count,
             transport::protobuf::Header& msg);
     static void CreateGetNetworkNodesResponse(

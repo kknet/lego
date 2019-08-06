@@ -36,11 +36,13 @@ message Header {
 	optional uint64 hash = 14;
 	optional uint32 type = 15;
 	optional bool client = 16;
-	optional bool universal = 17;
-	optional BroadcastParam broadcast = 18;
-	optional bool handled = 19;
-	optional uint64 des_dht_key_hash = 20;
-	optional bytes pubkey = 21;
-	optional bytes sign = 22;
-	optional bool local = 23;
+	optional bool client_relayed =  17;
+	optional bool universal = 18;
+	optional BroadcastParam broadcast = 19;
+	optional bool handled = 20;
+	optional uint64 des_dht_key_hash = 21;
+	optional bytes pubkey = 22;
+	optional bytes sign = 23;
+	optional bool local = 24;
+	optional bool client_proxy = 25;
 }

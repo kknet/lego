@@ -9,6 +9,8 @@
 #include "common/random.h"
 #include "security/schnorr.h"
 #include "security/multi_sign.h"
+#include "security/ecdh_create_key.h"
+#include "security/aes.h"
 
 namespace lego {
 
@@ -246,9 +248,40 @@ TEST_F(TestMultiSign, TestErrorDeserializationSignature) {
     ASSERT_TRUE(res == -1);
 }
 
-TEST_F(TestMultiSign, TestMultisign) {
-    for (uint32_t i = 0; i < 10000; ++i) {
+TEST_F(TestMultiSign, TestEcdhCreateKey) {
+    PrivateKey prikey;
+    PublicKey pubkey(prikey);
+    Schnorr::Instance()->set_prikey(std::make_shared<PrivateKey>(prikey));
+    Schnorr::Instance()->set_pubkey(std::make_shared<PublicKey>(pubkey));
+    ASSERT_TRUE(EcdhCreateKey::Instance()->Init() == kSecuritySuccess);
+    std::string sec_key;
 
+    PrivateKey peer_prikey;
+    PublicKey peer_pubkey(peer_prikey);
+    std::string sec_key1;
+    ASSERT_TRUE(EcdhCreateKey::Instance()->CreateKey(
+            peer_pubkey,
+            sec_key1) == kSecuritySuccess);
+
+    Schnorr::Instance()->set_prikey(std::make_shared<PrivateKey>(peer_prikey));
+    Schnorr::Instance()->set_pubkey(std::make_shared<PublicKey>(peer_pubkey));
+    std::string sec_key2;
+    ASSERT_TRUE(EcdhCreateKey::Instance()->Init() == kSecuritySuccess);
+    EcdhCreateKey::Instance()->CreateKey(pubkey, sec_key2);
+    std::cout << sec_key1.size() << ":" << common::Encode::HexEncode(sec_key1) << std::endl;
+    ASSERT_EQ(sec_key1, sec_key2);
+
+    for (uint32_t i = 1; i < 100; ++i) {
+        std::string test_aes = common::Random::RandomString(i);
+        std::string enc_out;
+        ASSERT_EQ(Aes::Encrypt(test_aes, sec_key1, enc_out), kSecuritySuccess);
+        std::string dec_out;
+        ASSERT_EQ(Aes::Decrypt(enc_out, sec_key1, dec_out), kSecuritySuccess);
+        ASSERT_EQ(test_aes, dec_out);
+    }
+}
+
+TEST_F(TestMultiSign, TestMultisign) {
     using namespace std;
     Schnorr& schnorr = *Schnorr::Instance();
     MultiSign& multisig = *MultiSign::Instance();
@@ -322,7 +355,6 @@ TEST_F(TestMultiSign, TestMultisign) {
     Response response_copy;
     response_copy = *agg_response;
     ASSERT_TRUE(response_copy == *agg_response);
-    }
 }
 
 TEST_F(TestMultiSign, TestSerialization) {

@@ -2,7 +2,7 @@
 
 #include "common/global_info.h"
 #include "common/state_lock.h"
-#include "transport/multi_thread/synchro_wait.h"
+#include "transport/synchro_wait.h"
 #include "dht/dht_key.h"
 #include "dht/dht_function.h"
 #include "network/network_utils.h"
@@ -66,10 +66,29 @@ void Uniersal::SetFrequently(transport::protobuf::Header& msg) {
 std::vector<dht::NodePtr> Uniersal::LocalGetNetworkNodes(
         uint32_t network_id,
         uint32_t count) {
+    return LocalGetNetworkNodes(
+            network_id,
+            common::GlobalInfo::Instance()->country(),
+            count);
+}
+
+std::vector<dht::NodePtr> Uniersal::RemoteGetNetworkNodes(
+        uint32_t network_id,
+        uint32_t count) {
+    return RemoteGetNetworkNodes(
+            network_id,
+            common::GlobalInfo::Instance()->country(),
+            count);
+}
+
+std::vector<dht::NodePtr> Uniersal::LocalGetNetworkNodes(
+        uint32_t network_id,
+        uint32_t country,
+        uint32_t count) {
     dht::Dht tmp_dht = *(readonly_dht());  // change must copy
     dht::DhtKeyManager dht_key(
             network_id,
-            common::GlobalInfo::Instance()->country(),
+            country,
             true);
     auto local_nodes = dht::DhtFunction::GetClosestNodes(
             tmp_dht,
@@ -78,8 +97,18 @@ std::vector<dht::NodePtr> Uniersal::LocalGetNetworkNodes(
     std::vector<dht::NodePtr> tmp_nodes;
     for (uint32_t i = 0; i < local_nodes.size(); ++i) {
         auto net_id = dht::DhtKeyManager::DhtKeyGetNetId(local_nodes[i]->dht_key);
-        if (net_id == network_id && local_nodes[i]->public_node) {
-            tmp_nodes.push_back(local_nodes[i]);
+        uint8_t find_country = dht::DhtKeyManager::DhtKeyGetCountry(local_nodes[i]->dht_key);
+        if (find_country == std::numeric_limits<uint8_t>::max()) {
+            if (net_id == network_id &&
+                    local_nodes[i]->public_node) {
+                tmp_nodes.push_back(local_nodes[i]);
+            }
+        } else {
+            if (net_id == network_id &&
+                    find_country == country &&
+                    local_nodes[i]->public_node) {
+                tmp_nodes.push_back(local_nodes[i]);
+            }
         }
     }
     return tmp_nodes;
@@ -87,11 +116,12 @@ std::vector<dht::NodePtr> Uniersal::LocalGetNetworkNodes(
 
 std::vector<dht::NodePtr> Uniersal::RemoteGetNetworkNodes(
         uint32_t network_id,
+        uint32_t country,
         uint32_t count) {
     // may be can try 3 times for random destination dht key
     transport::protobuf::Header msg;
     SetFrequently(msg);
-    NetworkProto::CreateGetNetworkNodesRequest(local_node(), network_id, count, msg);
+    NetworkProto::CreateGetNetworkNodesRequest(local_node(), network_id, country, count, msg);
     SendToClosestNode(msg);
     std::vector<dht::NodePtr> nodes;
     common::StateLock state_lock(0);

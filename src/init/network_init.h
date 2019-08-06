@@ -16,9 +16,9 @@ class NetworkInit {
 public:
     NetworkInit();
     ~NetworkInit();
-    int Init(int argc, char** argv);
+    virtual int Init(int argc, char** argv);
 
-private:
+protected:
     int InitConfigWithArgs(int argc, char** argv);
     int InitTransport();
     int ParseParams(int argc, char** argv, common::ParserArgs& parser_arg);
@@ -34,7 +34,7 @@ private:
 
     static const uint32_t kDefaultUdpSendBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kDefaultUdpRecvBufferSize = 10u * 1024u * 1024u;
-    static const uint32_t kTestCreateAccountPeriod = 50u * 1000u;
+    static const uint32_t kTestCreateAccountPeriod = 100u * 1000u;
     static const int64_t kTestNewElectPeriod = 10ll * 1000ll * 1000ll;
 
     common::Config conf_;

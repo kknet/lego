@@ -13,7 +13,7 @@
 #include "common/hash.h"
 #include "common/encode.h"
 #include "transport/transport_utils.h"
-#include "transport/multi_thread/multi_thread.h"
+#include "transport/multi_thread.h"
 
 namespace lego {
 
@@ -203,6 +203,7 @@ int UdpTransport::Send(
     proto.clear_to_ip();
     proto.clear_to_port();
     proto.clear_handled();
+    proto.clear_client_proxy();
     if (!proto.has_hash()) {
         proto.set_hash(GetMessageHash(proto));
     }

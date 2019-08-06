@@ -1,6 +1,7 @@
 #pragma once
 
 #include <unordered_map>
+#include <mutex>
 
 #include "security/public_key.h"
 #include "security/commit_secret.h"
@@ -45,6 +46,7 @@ public:
 private:
     MembersPtr* network_members_;
     NodeIndexMapPtr* node_index_map_;
+    std::mutex all_mutex_;
 
     DISALLOW_COPY_AND_ASSIGN(MemberManager);
 };

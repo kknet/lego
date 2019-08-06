@@ -3,7 +3,6 @@
 #include "common/utils.h"
 #include "network/route.h"
 #include "bft/bft_manager.h"
-#include "election/elect_node.h"
 
 namespace lego {
 
@@ -28,7 +27,7 @@ int ElectManager::Join(uint32_t network_id) {
     }
 
     auto elect_node = std::make_shared<ElectNode>(network_id);
-    if (elect_node->Init() != kElectSuccess) {
+    if (elect_node->Init() != network::kNetworkSuccess) {
         ELECT_ERROR("node join network [%u] failed!", network_id);
         return kElectError;
     }

@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package lego.service.protobuf;
+
+message GetVpnInfoRequest {
+    optional bytes pubkey = 1;
+}
+
+message GetVpnInfoResponse {
+	optional bytes ip = 1;
+	optional uint32 port = 2;
+	optional bytes encrypt_type = 3;
+	optional bytes passwd = 4;  // encrypt with ecdh key
+}
+
+message ServiceMessage {
+	optional GetVpnInfoRequest vpn_req = 1;
+	optional GetVpnInfoResponse vpn_res = 2;
+}

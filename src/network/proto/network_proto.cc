@@ -15,13 +15,11 @@ namespace network {
 void NetworkProto::CreateGetNetworkNodesRequest(
         const dht::NodePtr& local_node,
         uint32_t network_id,
+        uint32_t country,
         uint32_t count,
         transport::protobuf::Header& msg) {
     msg.set_src_dht_key(local_node->dht_key);
-    dht::DhtKeyManager dht_key(
-            network_id,
-            common::GlobalInfo::Instance()->country(),
-            true);
+    dht::DhtKeyManager dht_key(network_id, country, true);
     msg.set_des_dht_key(dht_key.StrKey());
     msg.set_priority(transport::kTransportPriorityHighest);
     msg.set_id(common::GlobalInfo::Instance()->MessageId());

@@ -73,12 +73,18 @@ std::vector<dht::NodePtr> Bootstrap::GetNetworkBootstrap(
     auto tmp_dht = UniversalManager::Instance()->GetUniversal(kUniversalNetworkId);
     std::shared_ptr<Uniersal> universal_dht = std::dynamic_pointer_cast<Uniersal>(tmp_dht);
     assert(universal_dht);
-    auto nodes = universal_dht->LocalGetNetworkNodes(network_id, count);
+    auto nodes = universal_dht->LocalGetNetworkNodes(
+            network_id,
+            std::numeric_limits<uint8_t>::max(),
+            count);
     if (!nodes.empty()) {
         return nodes;
     }
 
-    nodes = universal_dht->RemoteGetNetworkNodes(network_id, count);
+    nodes = universal_dht->RemoteGetNetworkNodes(
+            network_id,
+            std::numeric_limits<uint8_t>::max(),
+            count);
     return nodes;
 }
 

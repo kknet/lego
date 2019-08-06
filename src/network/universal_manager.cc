@@ -68,11 +68,13 @@ int UniversalManager::CreateNetwork(
             network_id,
             common::GlobalInfo::Instance()->country(),
             common::GlobalInfo::Instance()->id());
+    bool client = false;
+    config.Get("lego", "client", client);
     dht::NodePtr local_node = std::make_shared<dht::Node>(
             common::GlobalInfo::Instance()->id(),
             dht_key.StrKey(),
             dht::kNatTypeFullcone,
-            false,
+            client,
             common::GlobalInfo::Instance()->config_local_ip(),
             common::GlobalInfo::Instance()->config_local_port(),
             common::GlobalInfo::Instance()->config_local_ip(),

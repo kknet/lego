@@ -6,6 +6,7 @@
 
 #include "common/utils.h"
 #include "transport/proto/transport.pb.h"
+#include "network/shard_network.h"
 #include "election/elect_utils.h"
 #include "election/proto/elect.pb.h"
 
@@ -13,7 +14,7 @@ namespace lego {
 
 namespace elect {
 
-class ElectNode;
+typedef network::ShardNetwork<ElectDht> ElectNode;
 typedef std::shared_ptr<ElectNode> ElectNodePtr;
 
 class ElectManager {

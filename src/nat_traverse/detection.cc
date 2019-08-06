@@ -3,7 +3,7 @@
 #include "common/global_info.h"
 #include "common/encode.h"
 #include "transport/transport.h"
-#include "transport/multi_thread/processor.h"
+#include "transport/processor.h"
 #include "dht/base_dht.h"
 #include "nat_traverse/proto/nat_proto.h"
 #include "nat_traverse/nat_utils.h"

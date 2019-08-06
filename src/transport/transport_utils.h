@@ -16,6 +16,7 @@ enum TransportErrorCode {
     kTransportSuccess = 0,
     kTransportError = 1,
     kTransportTimeout = 2,
+    kTransportClientSended = 3,
 };
 
 enum TransportPriority {

@@ -31,6 +31,7 @@ void MemberManager::SetNetworkMember(
         uint32_t network_id,
         MembersPtr& members_ptr,
         NodeIndexMapPtr& node_index_map) {
+    std::lock_guard<std::mutex> guard(all_mutex_);
     assert(network_id < network::kConsensusShardEndNetworkId);  // just shard
     assert(!members_ptr->empty());
     network_members_[network_id] = members_ptr;
@@ -38,6 +39,7 @@ void MemberManager::SetNetworkMember(
 }
 
 MembersPtr MemberManager::GetNetworkMembers(uint32_t network_id) {
+    std::lock_guard<std::mutex> guard(all_mutex_);
     assert(network_id < network::kConsensusShardEndNetworkId);  // just shard
     return network_members_[network_id];
 }
@@ -46,6 +48,7 @@ bool MemberManager::IsLeader(
         uint32_t network_id,
         const std::string& node_id,
         uint64_t rand) {
+    std::lock_guard<std::mutex> guard(all_mutex_);
     assert(network_id < network::kConsensusShardEndNetworkId);  // just shard
     MembersPtr member_ptr = network_members_[network_id];
     assert(member_ptr != nullptr);
@@ -57,6 +60,7 @@ bool MemberManager::IsLeader(
 }
 
 uint32_t MemberManager::GetMemberIndex(uint32_t network_id, const std::string& node_id) {
+    std::lock_guard<std::mutex> guard(all_mutex_);
     assert(network_id < network::kConsensusShardEndNetworkId);  // just shard
     assert(node_index_map_[network_id] != nullptr);
     NodeIndexMapPtr node_index_map = node_index_map_[network_id];
@@ -72,6 +76,7 @@ BftMemberPtr MemberManager::GetMember(
         const std::string& node_id) {
     assert(network_id < network::kConsensusShardEndNetworkId);  // just shard
     uint32_t mem_index = GetMemberIndex(network_id, node_id);
+    std::lock_guard<std::mutex> guard(all_mutex_);
     MembersPtr member_ptr = network_members_[network_id];
     assert(member_ptr != nullptr);
     assert(!member_ptr->empty());
@@ -79,6 +84,7 @@ BftMemberPtr MemberManager::GetMember(
 }
 
 BftMemberPtr MemberManager::GetMember(uint32_t network_id, uint32_t index) {
+    std::lock_guard<std::mutex> guard(all_mutex_);
     MembersPtr member_ptr = network_members_[network_id];
     assert(member_ptr != nullptr);
     assert(!member_ptr->empty());

@@ -8,7 +8,7 @@
 #include "common/global_info.h"
 #include "db/db.h"
 #include "block/block_manager.h"
-#include "transport/multi_thread/multi_thread.h"
+#include "transport/multi_thread.h"
 #include "transport/udp/udp_transport.h"
 #include "transport/transport_utils.h"
 #include "election/elect_dht.h"
@@ -129,12 +129,12 @@ int NetworkInit::InitTransport() {
     conf_.Get("lego", "recv_buff_size", recv_buff_size);
     assert(send_buff_size > kDefaultBufferSize);
     assert(recv_buff_size > kDefaultBufferSize);
-    transport::MultiThreadHandler::Instance()->Init();
     transport_ = std::make_shared<transport::UdpTransport>(
             common::GlobalInfo::Instance()->config_local_ip(),
             common::GlobalInfo::Instance()->config_local_port(),
             send_buff_size,
             recv_buff_size);
+    transport::MultiThreadHandler::Instance()->Init(transport_);
     if (transport_->Init() != transport::kTransportSuccess) {
         INIT_ERROR("init udp transport failed!");
         return kInitError;
