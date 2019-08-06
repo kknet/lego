@@ -90,6 +90,7 @@ add_definitions(
     -DLEGO_TESTING # for testing
     -DOPENSSL_ROOT_DIR=/usr/local/Cellar/openssl/1.0.2r
     -DTEST_TRANSPORT_PERFOMANCE
+    -DLEGO_TRACE_MESSAGE
 )
 
 add_compile_options(-fPIC)
@@ -117,8 +118,10 @@ link_directories(
 
 # bin/lib
 add_executable(lego ${MAIN_DIR}/main.cc)
+add_executable(vpn_proxy ${MAIN_DIR}/vpn_proxy.cc)
 
 set(LINK_ARGS
+    services
     init
     bft
     vss
@@ -146,6 +149,7 @@ set(LINK_ARGS
 )
 
 target_link_libraries(lego ${LINK_ARGS})
+target_link_libraries(vpn_proxy ${LINK_ARGS})
 
 include_directories(SYSTEM ${SRC_DIR})
 
@@ -165,6 +169,7 @@ else()
     add_subdirectory(${SRC_DIR}/bft bft)
     add_subdirectory(${SRC_DIR}/vss vss)
     add_subdirectory(${SRC_DIR}/init init)
+    add_subdirectory(${SRC_DIR}/services services)
 
     if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
         add_subdirectory(${SRC_DIR}/common/tests common_test)
@@ -172,5 +177,6 @@ else()
         add_subdirectory(${SRC_DIR}/transport/demo udp_demo_svr)
         add_subdirectory(${SRC_DIR}/broadcast/tests broadcast_test )
         add_subdirectory(${SRC_DIR}/security/tests security_test )
+        add_subdirectory(${SRC_DIR}/services/tests services_test)
     endif()
 endif()
