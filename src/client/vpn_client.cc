@@ -16,6 +16,7 @@
 #include "transport/synchro_wait.h"
 #include "transport/transport_utils.h"
 #include "dht/base_dht.h"
+#include "dht/dht_key.h"
 #include "network/network_utils.h"
 #include "network/bootstrap.h"
 #include "network/universal_manager.h"
@@ -69,6 +70,10 @@ int VpnClient::GetVpnServerNodes(
             network::kVpnNetworkId,
             common::global_country_map[country],
             count);
+    std::cout << "get vpn nodes: " << dht_nodes.size() << std::endl;
+    if (dht_nodes.empty()) {
+        return kClientError;
+    }
     return GetVpnNodes(dht_nodes, nodes);
 }
 
@@ -146,6 +151,7 @@ int VpnClient::GetVpnNodes(
             state_lock.Signal();
         }
     };
+    std::cout << "add to sync wait now: " << nodes.size() << std::endl;
     transport::SynchroWait::Instance()->Add(msg_id, 500 * 1000, callback, nodes.size());
     state_lock.Wait();
     return kClientSuccess;
@@ -207,17 +213,40 @@ int VpnClient::InitNetworkSingleton() {
     network::DhtManager::Instance()->Init();
     network::UniversalManager::Instance()->Init();
     network::Route::Instance()->Init();
-    if (network::UniversalManager::Instance()->CreateUniversalNetwork(
-            conf_,
-            transport_) != network::kNetworkSuccess) {
-        CLIENT_ERROR("create universal network failed!");
-        return kClientError;
-    }
-    root_dht_ = std::dynamic_pointer_cast<network::Uniersal>(
-            network::UniversalManager::Instance()->GetUniversal(
-            network::kUniversalNetworkId));
-    if (root_dht_ == nullptr) {
-        assert(root_dht_ != nullptr);
+    return CreateClientUniversalNetwork();
+}
+
+int VpnClient::CreateClientUniversalNetwork() {
+    dht::DhtKeyManager dht_key(
+            network::kVpnNetworkId,
+            common::GlobalInfo::Instance()->country(),
+            common::GlobalInfo::Instance()->id());
+    bool client_mode = false;
+    conf_.Get("lego", "client", client_mode);
+    dht::NodePtr local_node = std::make_shared<dht::Node>(
+            common::GlobalInfo::Instance()->id(),
+            dht_key.StrKey(),
+            dht::kNatTypeFullcone,
+            client_mode,
+            common::GlobalInfo::Instance()->config_local_ip(),
+            common::GlobalInfo::Instance()->config_local_port(),
+            common::GlobalInfo::Instance()->config_local_ip(),
+            common::GlobalInfo::Instance()->config_local_port(),
+            security::Schnorr::Instance()->pubkey());
+    NETWORK_INFO("create universal network[%s][%d][%s]",
+            common::GlobalInfo::Instance()->id().c_str(),
+            common::GlobalInfo::Instance()->id().size(),
+            common::Encode::HexEncode(dht_key.StrKey()).c_str());
+    local_node->first_node = common::GlobalInfo::Instance()->config_first_node();
+    root_dht_ = std::make_shared<ClientUniversalDht>(transport_, local_node);
+    root_dht_->Init();
+    auto base_dht = std::dynamic_pointer_cast<dht::BaseDht>(root_dht_);
+    network::UniversalManager::Instance()->RegisterUniversal(network::kVpnNetworkId, base_dht);
+    std::vector<dht::NodePtr> boot_nodes = network::Bootstrap::Instance()->root_bootstrap();
+
+    if (root_dht_->Bootstrap(boot_nodes) != dht::kDhtSuccess) {
+        network::UniversalManager::Instance()->UnRegisterUniversal(network::kVpnNetworkId);
+        CLIENT_ERROR("bootstrap universal network failed!");
         return kClientError;
     }
     return kClientSuccess;

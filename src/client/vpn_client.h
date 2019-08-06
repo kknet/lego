@@ -5,6 +5,7 @@
 #include "common/utils.h"
 #include "common/config.h"
 #include "transport/transport.h"
+#include "client/client_universal_dht.h"
 
 namespace lego {
 
@@ -14,11 +15,6 @@ namespace dht {
     class BaseDht;
     typedef std::shared_ptr<BaseDht> BaseDhtPtr;
 }  // namespace dht
-
-namespace network {
-    class Uniersal;
-    typedef std::shared_ptr<Uniersal> UniersalPtr;
-}  // namespace network
 
 namespace client {
 
@@ -53,6 +49,7 @@ private:
     int GetVpnNodes(
             const std::vector<dht::NodePtr>& nodes,
             std::vector<VpnServerNodePtr>& vpn_nodes);
+    int CreateClientUniversalNetwork();
 
     static const uint32_t kDefaultUdpSendBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kDefaultUdpRecvBufferSize = 10u * 1024u * 1024u;
@@ -63,7 +60,7 @@ private:
     transport::TransportPtr transport_{ nullptr };
     bool inited_{ false };
     std::mutex init_mutex_;
-    network::UniersalPtr root_dht_{ nullptr };
+    ClientUniversalDhtPtr root_dht_{ nullptr };
 
     DISALLOW_COPY_AND_ASSIGN(VpnClient);
 };
