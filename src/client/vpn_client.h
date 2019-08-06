@@ -5,7 +5,6 @@
 #include "common/utils.h"
 #include "common/config.h"
 #include "transport/transport.h"
-#include "client/client_universal_dht.h"
 
 namespace lego {
 
@@ -15,6 +14,11 @@ namespace dht {
     class BaseDht;
     typedef std::shared_ptr<BaseDht> BaseDhtPtr;
 }  // namespace dht
+
+namespace network {
+    class Uniersal;
+    typedef std::shared_ptr<Uniersal> UniersalPtr;
+}  // namespace network
 
 namespace client {
 
@@ -59,7 +63,7 @@ private:
     transport::TransportPtr transport_{ nullptr };
     bool inited_{ false };
     std::mutex init_mutex_;
-    ClientUniversalDhtPtr root_dht_{ nullptr };
+    network::UniersalPtr root_dht_{ nullptr };
 
     DISALLOW_COPY_AND_ASSIGN(VpnClient);
 };

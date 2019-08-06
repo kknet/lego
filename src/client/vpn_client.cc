@@ -213,7 +213,7 @@ int VpnClient::InitNetworkSingleton() {
         CLIENT_ERROR("create universal network failed!");
         return kClientError;
     }
-    root_dht_ = std::dynamic_pointer_cast<ClientUniversalDht>(
+    root_dht_ = std::dynamic_pointer_cast<network::Uniersal>(
             network::UniversalManager::Instance()->GetUniversal(
             network::kUniversalNetworkId));
     if (root_dht_ == nullptr) {
