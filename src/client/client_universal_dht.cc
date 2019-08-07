@@ -25,6 +25,7 @@ void ClientUniversalDht::HandleMessage(transport::protobuf::Header& msg) {
     }
 
     if (svr_msg.has_vpn_res()) {
+        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("client callback", header);
         transport::SynchroWait::Instance()->Callback(msg.id(), msg);
     }
 }

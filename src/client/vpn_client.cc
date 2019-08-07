@@ -42,6 +42,7 @@ VpnClient::VpnClient() {
 VpnClient::~VpnClient() {}
 
 void VpnClient::HandleMessage(transport::protobuf::Header& header) {
+    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("client end", header);
     root_dht_->HandleMessage(header);
 }
 
@@ -147,6 +148,7 @@ int VpnClient::GetVpnNodes(
                 CLIENT_ERROR("aes encrypt failed!");
                 return;
             }
+            LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("called", header);
             std::lock_guard<std::mutex> guard(re_mutex);
             vpn_nodes.push_back(std::make_shared<VpnServerNode>(
                     svr_msg.vpn_res().ip(),

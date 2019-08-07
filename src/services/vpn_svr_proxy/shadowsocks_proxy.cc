@@ -39,6 +39,7 @@ void ShadowsocksProxy::HandleMessage(transport::protobuf::Header& header) {
     auto dht = network::Route::Instance()->GetDht(header.des_dht_key(), header.universal());
     assert(dht);
     dht->HandleMessage(header);
+    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("socks proxy", header);
 }
 
 ShadowsocksProxy* ShadowsocksProxy::Instance() {
