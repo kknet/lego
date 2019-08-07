@@ -14,21 +14,34 @@ public:
     static void CreateGetVpnInfoRes(
             const dht::NodePtr& local_node,
             const protobuf::ServiceMessage& svr_msg,
-            const transport::protobuf::Header& from_header,
+            const transport::protobuf::Header& header,
             transport::protobuf::Header& msg) {
         msg.set_src_dht_key(local_node->dht_key);
-        msg.set_des_dht_key(from_header.src_dht_key());
-        msg.set_des_dht_key_hash(common::Hash::Hash64(from_header.src_dht_key()));
+        msg.set_des_dht_key(header.src_dht_key());
+        msg.set_des_dht_key_hash(common::Hash::Hash64(header.src_dht_key()));
         msg.set_priority(transport::kTransportPriorityMiddle);
-        msg.set_id(from_header.id());
+        msg.set_id(header.id());
         msg.set_type(common::kServiceMessage);
-        if (from_header.client()) {
-            msg.set_client(from_header.client());
+        if (header.client()) {
+            msg.set_from_ip(header.from_ip());
+            msg.set_from_port(header.from_port());
+            msg.set_client(header.client());
             msg.set_client_relayed(true);
+            msg.set_client_proxy(header.client_proxy());
+            msg.set_client_dht_key(header.client_dht_key());
+            msg.set_des_dht_key(header.client_dht_key());
+            msg.set_des_dht_key_hash(common::Hash::Hash64(header.client_dht_key()));
         }
         msg.set_hop_count(0);
-        msg.set_des_node_id(from_header.src_node_id());  // client must fill this field
+        msg.set_des_node_id(header.src_node_id());  // client must fill this field
         msg.set_data(svr_msg.SerializeAsString());
+#ifdef LEGO_TRACE_MESSAGE
+        msg.set_debug(std::string("CreateGetVpnInfoRes:") +
+                local_node->public_ip + "-" +
+                std::to_string(local_node->public_port) + ", to " +
+                common::Encode::HexEncode(header.src_dht_key()));
+        DHT_DEBUG("begin: %s", msg.debug().c_str());
+#endif
     }
 
 private:

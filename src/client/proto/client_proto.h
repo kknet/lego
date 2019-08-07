@@ -30,6 +30,13 @@ public:
         auto vpn_req = svr_msg.mutable_vpn_req();
         vpn_req->set_pubkey(security::Schnorr::Instance()->str_prikey());
         msg.set_data(svr_msg.SerializeAsString());
+#ifdef LEGO_TRACE_MESSAGE
+        msg.set_debug(std::string("CreateGetVpnInfoRequest:") +
+            local_node->public_ip + "-" +
+            std::to_string(local_node->public_port) + ", to " +
+            common::Encode::HexEncode(des_node->dht_key));
+        DHT_DEBUG("begin: %s", msg.debug().c_str());
+#endif
     }
 
 private:
