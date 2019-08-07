@@ -124,6 +124,7 @@ add_executable(vpn_client ${MAIN_DIR}/vpn_client.cc)
 set(LINK_ARGS
     services
     init
+    client
     bft
     vss
     election
