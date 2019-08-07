@@ -294,6 +294,7 @@ int VpnClient::CreateAccountAddress() {
             rand_num,
             msg);
     network::Route::Instance()->Send(msg);
+    return kClientSuccess;
 }
 
 }  // namespace client
