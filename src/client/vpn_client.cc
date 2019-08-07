@@ -224,6 +224,10 @@ int VpnClient::SetPriAndPubKey(const std::string& prikey) {
     security::Schnorr::Instance()->set_prikey(prikey_ptr);
     security::Schnorr::Instance()->set_pubkey(pubkey_ptr);
 
+    if (prikey.empty()) {
+        std::string tx_gid;
+        Transaction("", 0, tx_gid);
+    }
     std::string pubkey_str;
     pubkey.Serialize(pubkey_str);
     std::string account_id = common::Hash::Hash256(pubkey_str);
@@ -290,17 +294,22 @@ int VpnClient::CreateClientUniversalNetwork() {
     return kClientSuccess;
 }
 
-int VpnClient::Transaction(const std::string& to, uint64_t amount) {
+int VpnClient::Transaction(const std::string& to, uint64_t amount, std::string& tx_gid) {
     transport::protobuf::Header msg;
     uint64_t rand_num = 0;
+    tx_gid = common::CreateGID(security::Schnorr::Instance()->str_pubkey());
     ClientProto::CreateTxRequest(
             root_dht_->local_node(),
-            common::CreateGID(security::Schnorr::Instance()->str_pubkey()),
+            tx_gid,
             to,
             amount,
             rand_num,
             msg);
     network::Route::Instance()->Send(msg);
+    return kClientSuccess;
+}
+
+int VpnClient::CheckTransaction(const std::string& tx_gid) {
     return kClientSuccess;
 }
 

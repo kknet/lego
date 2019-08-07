@@ -2,18 +2,6 @@ syntax = "proto2";
 
 package lego.client.protobuf;
 
-message GetVpnInfoRequest {
-    optional bytes pubkey = 1;
-}
-
-message GetVpnInfoResponse {
-	optional bytes ip = 1;
-	optional uint32 port = 2;
-	optional bytes encrypt_type = 3;
-	optional bytes passwd = 4;  // encrypt with ecdh key
-	optional bytes pubkey = 5;
-}
-
 message NewTx {
 	optional bytes gid = 1;
 	optional bytes from_acc_addr = 2;
@@ -23,8 +11,18 @@ message NewTx {
 	optional uint64 lego_count = 6;
 }
 
+message CheckTxRequest {
+	optional bytes tx_gid = 1;
+}
+
+message CheckTxResponse {
+	optional bytes block = 1;
+}
+
 message TxBft {
 	optional NewTx new_tx = 1;
+	optional CheckTxRequest check_tx_req = 2;
+	optional CheckTxResponse check_tx_res = 3;
 }
 
 message BftMessage {
@@ -47,6 +45,18 @@ message BftMessage {
 	optional bytes bft_address = 17;
 	optional uint32 pool_index = 18;
 	optional bytes data = 19;
+}
+
+message GetVpnInfoRequest {
+    optional bytes pubkey = 1;
+}
+
+message GetVpnInfoResponse {
+	optional bytes ip = 1;
+	optional uint32 port = 2;
+	optional bytes encrypt_type = 3;
+	optional bytes passwd = 4;  // encrypt with ecdh key
+	optional bytes pubkey = 5;
 }
 
 message ServiceMessage {

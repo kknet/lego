@@ -40,7 +40,8 @@ public:
             const std::string& country,
             uint32_t count,
             std::vector<VpnServerNodePtr>& nodes);
-    int Transaction(const std::string& to, uint64_t amount);
+    int Transaction(const std::string& to, uint64_t amount, std::string& tx_gid);
+    int CheckTransaction(const std::string& tx_gid);
 
 private:
     VpnClient();
