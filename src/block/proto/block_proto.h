@@ -38,6 +38,13 @@ public:
         auto block_res = block_msg.mutable_block_res();
         block_res->set_block(block_data);
         msg.set_data(block_msg.SerializeAsString());
+#ifdef LEGO_TRACE_MESSAGE
+        msg.set_debug(std::string("GetBlockResponse: ") +
+                local_node->public_ip + "-" +
+                std::to_string(local_node->public_port) + ", to " +
+                common::Encode::HexEncode(msg.des_dht_key()));
+        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("begin", msg);
+#endif
     }
 
 private:

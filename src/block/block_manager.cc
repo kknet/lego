@@ -69,6 +69,7 @@ void BlockManager::HandleMessage(transport::protobuf::Header& header) {
     }
 
     if (block_msg.has_block_req()) {
+        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("block handle", message);
         HandleGetBlockRequest(header, block_msg);
     }
 }
@@ -88,6 +89,7 @@ int BlockManager::HandleGetBlockRequest(
         }
         auto st = db::Db::Instance()->Get(tx_gid, &block_hash);
         if (!st.ok()) {
+            LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("get block hash error", message);
             return kBlockError;
         }
     }
@@ -99,6 +101,7 @@ int BlockManager::HandleGetBlockRequest(
     std::string block_data;
     auto st = db::Db::Instance()->Get(block_hash, &block_data);
     if (!st.ok()) {
+        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("get block data error", message);
         return kBlockError;
     }
 
@@ -108,6 +111,7 @@ int BlockManager::HandleGetBlockRequest(
     assert(dht_ptr != nullptr);
     BlockProto::CreateGetBlockResponse(dht_ptr->local_node(), header, block_data, msg);
     dht_ptr->SendToClosestNode(msg);
+    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end", message);
     return kBlockSuccess;
 }
 
