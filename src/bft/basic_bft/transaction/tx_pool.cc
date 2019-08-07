@@ -49,7 +49,7 @@ void TxPool::GetTx(std::vector<TxItemPtr>& res_vec) {
         }
     }
 
-    if (res_vec.size() <= kBftOneConsensusMinCount) {
+    if (res_vec.size() < kBftOneConsensusMinCount) {
         res_vec.clear();
     }
 }

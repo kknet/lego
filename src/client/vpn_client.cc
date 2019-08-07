@@ -64,6 +64,7 @@ int VpnClient::Init(const std::string& conf) {
 
     std::string priky("");
     if (SetPriAndPubKey(priky) != kClientSuccess) {
+        CLIENT_ERROR("SetPriAndPubKey failed!");
         return kClientError;
     }
 
@@ -73,10 +74,12 @@ int VpnClient::Init(const std::string& conf) {
     }
 
     if (InitTransport() != kClientSuccess) {
+        CLIENT_ERROR("InitTransport failed!");
         return kClientError;
     }
 
     if (InitNetworkSingleton() != kClientSuccess) {
+        CLIENT_ERROR("InitNetworkSingleton failed!");
         return kClientError;
     }
 
@@ -258,6 +261,7 @@ int VpnClient::InitNetworkSingleton() {
 }
 
 int VpnClient::CreateClientUniversalNetwork() {
+    return kClientSuccess;
     dht::DhtKeyManager dht_key(
             network::kVpnNetworkId,
             common::GlobalInfo::Instance()->country(),
@@ -300,9 +304,10 @@ int VpnClient::CreateClientUniversalNetwork() {
 int VpnClient::Transaction(const std::string& to, uint64_t amount, std::string& tx_gid) {
     transport::protobuf::Header msg;
     uint64_t rand_num = 0;
+    auto uni_dht = network::UniversalManager::Instance()->GetUniversal(network::kUniversalNetworkId);
     tx_gid = common::CreateGID(security::Schnorr::Instance()->str_pubkey());
     ClientProto::CreateTxRequest(
-            root_dht_->local_node(),
+            uni_dht->local_node(),
             tx_gid,
             to,
             amount,

@@ -95,6 +95,7 @@ int NetworkInit::Init(int argc, char** argv) {
     test_new_elect_tick_.CutOff(
             7ull * 1000ull * 1000ull,
             std::bind(&NetworkInit::CreateNewElectBlock, this));
+    test_start_bft_tick_.CutOff(1000 * 1000, std::bind(&NetworkInit::TestStartBft, this));
     inited_ = true;
     cmd_.Run();
     return kInitSuccess;
@@ -355,6 +356,7 @@ int NetworkInit::ParseParams(int argc, char** argv, common::ParserArgs& parser_a
 }
 
 void NetworkInit::CreateNewTx() {
+    return;
     if (!common::GlobalInfo::Instance()->config_first_node()) {
         return;
     }
@@ -385,6 +387,17 @@ void NetworkInit::CreateNewTx() {
     test_new_account_tick_.CutOff(
             kTestCreateAccountPeriod,
             std::bind(&NetworkInit::CreateNewTx, this));
+}
+
+void NetworkInit::TestStartBft() {
+    if (!common::GlobalInfo::Instance()->config_first_node()) {
+        return;
+    }
+
+    if (ec_block_ok_) {
+        bft::BftManager::Instance()->StartBft(bft::kTransactionPbftAddress, "", 4, 0);
+    }
+    test_start_bft_tick_.CutOff(1000 * 1000, std::bind(&NetworkInit::TestStartBft, this));
 }
 
 void NetworkInit::CreateNewElectBlock() {

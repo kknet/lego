@@ -64,6 +64,7 @@ void BftManager::HandleMessage(transport::protobuf::Header& header) {
     }
 
     if (bft_msg.status() == kBftInit) {
+        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("InitBft", header);
         InitBft(header, bft_msg);
         return;
     }
@@ -87,7 +88,6 @@ void BftManager::HandleMessage(transport::protobuf::Header& header) {
             LEGO_BFT_DEBUG_FOR_CONSENSUS_AND_MESSAGE("BackupPrepare ok", bft_ptr, header);
             AddBft(bft_ptr);
         } else {
-            std::cout << "bft_address: " << bft_msg.bft_address() << std::endl;
             assert(false);
         }
     } else {
@@ -179,6 +179,7 @@ int BftManager::InitBft(
             bft_msg.net_id(),
             bft_msg.rand());
     if (res != kBftSuccess) {
+        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("leader start bft failed.", header);
         if (res != kBftNoNewAccount) {
             BFT_WARN("start bft[%s][%s][%u][%llu] failed![%d]",
                 common::Encode::HexEncode(bft_msg.bft_address()).c_str(),
@@ -189,6 +190,7 @@ int BftManager::InitBft(
         }
         return kBftError;
     }
+    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("leader start bft succ", header);
     return kBftSuccess;
 }
 
@@ -550,6 +552,7 @@ int BftManager::BackupCommit(
         std::cout << num << " use time: " << (common::TimeStampMsec() - tps_btime_) << "ms" << std::endl;
         std::cout << "tps: " << ((float)num) / ((float)(common::TimeStampMsec() - tps_btime_) / float(1000.0)) << std::endl;
     }
+    std::cout << "backup commit ok." << std::endl;
     RemoveBft(bft_ptr->gid());
     // start new bft
     return kBftSuccess;

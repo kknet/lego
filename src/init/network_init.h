@@ -31,6 +31,7 @@ protected:
     void CreateNewElectBlock();
     int SetPriAndPubKey(const std::string& prikey);
     int InitBlock(const common::Config& conf);
+    void TestStartBft();
 
     static const uint32_t kDefaultUdpSendBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kDefaultUdpRecvBufferSize = 10u * 1024u * 1024u;
@@ -45,6 +46,7 @@ protected:
     elect::ElectManager elect_mgr_;
     common::Tick test_new_account_tick_;
     common::Tick test_new_elect_tick_;
+    common::Tick test_start_bft_tick_;
     bool ec_block_ok_{ false };
 
     DISALLOW_COPY_AND_ASSIGN(NetworkInit);
