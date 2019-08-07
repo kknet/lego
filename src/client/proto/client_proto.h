@@ -28,7 +28,7 @@ public:
         msg.set_hop_count(0);
         protobuf::ServiceMessage svr_msg;
         auto vpn_req = svr_msg.mutable_vpn_req();
-        vpn_req->set_pubkey(security::Schnorr::Instance()->str_prikey());
+        vpn_req->set_pubkey(security::Schnorr::Instance()->str_pubkey());
         msg.set_data(svr_msg.SerializeAsString());
 #ifdef LEGO_TRACE_MESSAGE
         msg.set_debug(std::string("CreateGetVpnInfoRequest:") +

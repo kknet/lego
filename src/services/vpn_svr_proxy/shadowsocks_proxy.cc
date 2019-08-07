@@ -8,6 +8,7 @@
 #include "common/random.h"
 #include "common/string_utils.h"
 #include "common/encode.h"
+#include "security/ecdh_create_key.h"
 #include "network/route.h"
 #include "services/vpn_svr_proxy/proxy_utils.h"
 
@@ -74,6 +75,11 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
 
     if (SetPriAndPubKey("") != kProxySuccess) {
         PROXY_ERROR("set node private and public key failed!");
+        return kProxyError;
+    }
+
+    if (security::EcdhCreateKey::Instance()->Init() != security::kSecuritySuccess) {
+        PROXY_ERROR("init ecdh create secret key failed!");
         return kProxyError;
     }
 

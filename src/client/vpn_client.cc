@@ -61,6 +61,11 @@ int VpnClient::Init(const std::string& conf) {
         return kClientError;
     }
 
+    if (security::EcdhCreateKey::Instance()->Init() != security::kSecuritySuccess) {
+        CLIENT_ERROR("init ecdh create secret key failed!");
+        return kClientError;
+    }
+
     if (InitTransport() != kClientSuccess) {
         return kClientError;
     }
