@@ -37,6 +37,10 @@ VpnClient::VpnClient() {
     network::Route::Instance()->RegisterMessage(
             common::kServiceMessage,
             std::bind(&VpnClient::HandleMessage, this, std::placeholders::_1));
+    network::Route::Instance()->RegisterMessage(
+            common::kBlockMessage,
+            std::bind(&VpnClient::HandleMessage, this, std::placeholders::_1));
+
 }
 
 VpnClient::~VpnClient() {}
@@ -48,7 +52,13 @@ VpnClient* VpnClient::Instance() {
 
 void VpnClient::HandleMessage(transport::protobuf::Header& header) {
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("client end", header);
-    root_dht_->HandleMessage(header);
+    if (header.type() == common::kServiceMessage) {
+        root_dht_->HandleMessage(header);
+    }
+
+    if (header.type() == common::kBlockMessage) {
+        transport::SynchroWait::Instance()->Callback(header.id(), header);
+    }
 }
 
 int VpnClient::Init(const std::string& conf) {
@@ -318,7 +328,42 @@ int VpnClient::Transaction(const std::string& to, uint64_t amount, std::string& 
 }
 
 int VpnClient::CheckTransaction(const std::string& tx_gid) {
+    auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+            network::kUniversalNetworkId);
+    transport::protobuf::Header msg;
+    ClientProto::GetBlockWithTxGid(uni_dht->local_node(), tx_gid, msg);
+    uni_dht->SendToClosestNode(msg);
 
+    common::StateLock state_lock(0);
+    bool block_finded = false;
+    auto callback = [&state_lock, &block_finded](
+        int status,
+        transport::protobuf::Header& header) {
+        do {
+            if (status != transport::kTransportSuccess) {
+                break;
+            }
+
+            if (header.type() != common::kBlockMessage) {
+                break;
+            }
+            protobuf::BlockMessage block_msg;
+            if (!block_msg.ParseFromString(header.data())) {
+                break;
+            }
+
+            if (block_msg.block_res().block().empty()) {
+                break;
+            }
+            block_finded = true;
+        } while (0);
+        state_lock.Signal();
+    };
+    transport::SynchroWait::Instance()->Add(msg.id(), 500 * 1000, callback, 1);
+    state_lock.Wait();
+    if (!block_finded) {
+        return kClientError;
+    }
     return kClientSuccess;
 }
 

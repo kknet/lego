@@ -3,9 +3,14 @@
 #include "common/encode.h"
 #include "db/db.h"
 #include "network/route.h"
+#include "network/universal_manager.h"
+#include "network/network_utils.h"
+#include "network/universal.h"
 #include "block/block_utils.h"
 #include "block/account_manager.h"
 #include "block/genesis_block.h"
+#include "block/proto/block.pb.h"
+#include "block/proto/block_proto.h"
 
 namespace lego {
 
@@ -51,7 +56,56 @@ int BlockManager::Init(common::Config& conf) {
 }
 
 void BlockManager::HandleMessage(transport::protobuf::Header& header) {
+    if (header.type() != common::kBlockMessage) {
+        return;
+    }
 
+    protobuf::BlockMessage block_msg;
+    if (!block_msg.ParseFromString(header.data())) {
+        return;
+    }
+
+    if (block_msg.has_block_req()) {
+        HandleGetBlockRequest(header, block_msg);
+    }
+}
+
+int BlockManager::HandleGetBlockRequest(
+        transport::protobuf::Header& header,
+        protobuf::BlockMessage& block_msg) {
+    std::string block_hash;
+    if (block_msg.block_req().has_block_hash()) {
+        block_hash = block_msg.block_req().block_hash();
+    } else if (block_msg.block_req().has_tx_gid()) {
+        std::string tx_gid;
+        if (block_msg.block_req().from()) {
+            tx_gid = common::GetTxDbKey(true, block_msg.block_req().tx_gid());
+        } else {
+            tx_gid = common::GetTxDbKey(false, block_msg.block_req().tx_gid());
+        }
+        auto st = db::Db::Instance()->Get(tx_gid, &block_hash);
+        if (!st.ok()) {
+            return kBlockError;
+        }
+    }
+
+    if (block_hash.empty()) {
+        return kBlockError;
+    }
+
+    std::string block_data;
+    auto st = db::Db::Instance()->Get(block_hash, &block_data);
+    if (!st.ok()) {
+        return kBlockError;
+    }
+
+    transport::protobuf::Header msg;
+    auto dht_ptr = network::UniversalManager::Instance()->GetUniversal(
+            network::kUniversalNetworkId);
+    assert(dht_ptr != nullptr);
+    BlockProto::CreateGetBlockResponse(dht_ptr->local_node(), header, block_data, msg);
+    dht_ptr->SendToClosestNode(msg);
+    return kBlockSuccess;
 }
 
 int BlockManager::LoadTxBlocks(const common::Config& conf) {

@@ -5,6 +5,7 @@ package lego.block.protobuf;
 message GetTxBlockRequest {
 	optional bytes tx_gid = 1;
 	optional bytes block_hash = 2;
+	optional bool from = 3;
 }
 
 message GetTxBlockResponse {

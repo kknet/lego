@@ -20,6 +20,9 @@ private:
     void HandleMessage(transport::protobuf::Header& header);
     int LoadTxBlocks(const common::Config& conf);
     int LoadAllTx(const std::string& frist_hash);
+    int HandleGetBlockRequest(
+            transport::protobuf::Header& header,
+            protobuf::BlockMessage& block_msg);
 
     DISALLOW_COPY_AND_ASSIGN(BlockManager);
 };

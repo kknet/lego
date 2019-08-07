@@ -57,7 +57,7 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
                     block_item.tx_block().network_id(),
                     pool_idx);
             SetPool(bptr);
-            std::string tx_gid = std::string("TX_to_") + tx_list[i].gid();
+            std::string tx_gid = common::GetTxDbKey(false, tx_list[i].gid());
             db::Db::Instance()->Put(tx_gid, block_item.hash());
         } else {
             if (CheckNetworkIdValid(tx_list[i].from()) != kBlockSuccess) {
@@ -76,7 +76,7 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
                     block_item.tx_block().network_id(),
                     pool_idx);
             SetPool(bptr);
-            std::string tx_gid = std::string("TX_from_") + tx_list[i].gid();
+            std::string tx_gid = common::GetTxDbKey(true, tx_list[i].gid());
             db::Db::Instance()->Put(tx_gid, block_item.hash());
         }
     }

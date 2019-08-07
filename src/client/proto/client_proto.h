@@ -129,40 +129,13 @@ public:
         msg.set_des_dht_key(dht_key.StrKey());
         msg.set_priority(transport::kTransportPriorityLowest);
         msg.set_id(common::GlobalInfo::Instance()->MessageId());
-        msg.set_type(common::kBftMessage);
+        msg.set_type(common::kBlockMessage);
         msg.set_client(local_node->client_mode);
         msg.set_hop_count(0);
-        protobuf::BftMessage bft_msg;
-        bft_msg.set_gid(tx_gid);
-        bft_msg.set_status(kBftInit);
-        bft_msg.set_leader(false);
-        bft_msg.set_net_id(des_net_id);
-        bft_msg.set_node_id(local_node->id);
-        bft_msg.set_pubkey(security::Schnorr::Instance()->str_pubkey());
-        bft_msg.set_bft_address(kTransactionPbftAddress);
-        protobuf::TxBft tx_bft;
-        auto check_tx_req = tx_bft.mutable_check_tx_req();
-        check_tx_req->set_tx_gid(tx_gid);
-        auto data = tx_bft.SerializeAsString();
-        bft_msg.set_data(data);
-        auto hash128 = common::Hash::Hash128(data);
-        security::Signature sign;
-        auto& prikey = *security::Schnorr::Instance()->prikey();
-        auto& pubkey = *security::Schnorr::Instance()->pubkey();
-        if (!security::Schnorr::Instance()->Sign(
-                hash128,
-                prikey,
-                pubkey,
-                sign)) {
-            CLIENT_ERROR("leader pre commit signature failed!");
-            return;
-        }
-        std::string sign_challenge_str;
-        std::string sign_response_str;
-        sign.Serialize(sign_challenge_str, sign_response_str);
-        bft_msg.set_sign_challenge(sign_challenge_str);
-        bft_msg.set_sign_response(sign_response_str);
-        msg.set_data(bft_msg.SerializeAsString());
+        protobuf::BlockMessage block_msg;
+        auto block_req = block_msg.mutable_block_req();
+        block_req->set_tx_gid(tx_gid);
+        msg.set_data(block_msg.SerializeAsString());
 #ifdef LEGO_TRACE_MESSAGE
         msg.set_debug(std::string("GetBlockWithTxGid: ") +
                 local_node->public_ip + "-" +
