@@ -76,7 +76,7 @@ void ProxyDht::HandleGetSocksRequest(
     }
     vpn_res->set_passwd(enc_passwd);
     transport::protobuf::Header res_msg;
-    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("getted socks", header);
+    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("getted socks", msg);
     service::ServiceProto::CreateGetVpnInfoRes(local_node(), svr_msg, msg, res_msg);
     SendToClosestNode(res_msg);
 }
