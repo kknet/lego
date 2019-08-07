@@ -33,9 +33,17 @@ namespace client {
 
 static const uint32_t kDefaultBufferSize = 1024u * 1024u;
 
-VpnClient::VpnClient() {}
+VpnClient::VpnClient() {
+    network::Route::Instance()->RegisterMessage(
+            common::kServiceMessage,
+            std::bind(&VpnClient::HandleMessage, this, std::placeholders::_1));
+}
 
 VpnClient::~VpnClient() {}
+
+void VpnClient::HandleMessage(transport::protobuf::Header& header) {
+    root_dht_->HandleMessage(header);
+}
 
 int VpnClient::Init(const std::string& conf) {
     if (!conf_.Init(conf)) {

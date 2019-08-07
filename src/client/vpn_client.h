@@ -43,6 +43,7 @@ public:
             std::vector<VpnServerNodePtr>& nodes);
 
 private:
+    void HandleMessage(transport::protobuf::Header& header);
     int InitTransport();
     int SetPriAndPubKey(const std::string& prikey);
     int InitNetworkSingleton();

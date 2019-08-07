@@ -32,6 +32,7 @@ private:
     ShadowsocksProxy();
     ~ShadowsocksProxy();
 
+    void HandleMessage(transport::protobuf::Header& header);
     int StartShadowsocks();
     int KillShadowsocks(const ShadowsocksConfPtr& socks_ptr);
     int RunCommand(const std::string& cmd, const std::string& succ_res);

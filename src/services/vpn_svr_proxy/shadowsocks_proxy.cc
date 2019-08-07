@@ -8,6 +8,7 @@
 #include "common/random.h"
 #include "common/string_utils.h"
 #include "common/encode.h"
+#include "network/route.h"
 #include "services/vpn_svr_proxy/proxy_utils.h"
 
 namespace lego {
@@ -15,6 +16,10 @@ namespace lego {
 namespace vpn {
 
 ShadowsocksProxy::ShadowsocksProxy() {
+    network::Route::Instance()->RegisterMessage(
+            common::kServiceMessage,
+            std::bind(&ShadowsocksProxy::HandleMessage, this, std::placeholders::_1));
+
     std::fill(socks_, socks_ + kMaxShadowsocksCount, nullptr);
     tick_.CutOff(
             kShowdowsocksShiftPeriod,
@@ -25,6 +30,16 @@ ShadowsocksProxy::ShadowsocksProxy() {
 }
 
 ShadowsocksProxy::~ShadowsocksProxy() {}
+
+void ShadowsocksProxy::HandleMessage(transport::protobuf::Header& header) {
+    if (header.type() != common::kServiceMessage) {
+        return;
+    }
+
+    auto dht = network::Route::Instance()->GetDht(header.des_dht_key(), header.universal());
+    assert(dht);
+    dht->HandleMessage(header);
+}
 
 ShadowsocksProxy* ShadowsocksProxy::Instance() {
     static ShadowsocksProxy ins;
