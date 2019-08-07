@@ -56,7 +56,7 @@ public:
             const std::string& to,
             uint64_t amount,
             uint64_t rand_num,
-        transport::protobuf::Header& msg) {
+            transport::protobuf::Header& msg) {
         security::PrivateKey prikey;
         security::PublicKey pubkey(prikey);
         std::string str_pubkey;
