@@ -57,13 +57,9 @@ public:
             uint64_t amount,
             uint64_t rand_num,
             transport::protobuf::Header& msg) {
-        security::PrivateKey prikey;
-        security::PublicKey pubkey(prikey);
-        std::string str_pubkey;
-        pubkey.Serialize(str_pubkey);
-
         msg.set_src_dht_key(local_node->dht_key);
-        std::string account_address = network::GetAccountAddressByPublicKey(str_pubkey);
+        std::string account_address = network::GetAccountAddressByPublicKey(
+                security::Schnorr::Instance()->str_pubkey());
         uint32_t des_net_id = network::GetConsensusShardNetworkId(account_address);
         dht::DhtKeyManager dht_key(des_net_id, 0);
         msg.set_des_dht_key(dht_key.StrKey());
@@ -81,7 +77,7 @@ public:
         bft_msg.set_leader(false);
         bft_msg.set_net_id(des_net_id);
         bft_msg.set_node_id(local_node->id);
-        bft_msg.set_pubkey(str_pubkey);
+        bft_msg.set_pubkey(security::Schnorr::Instance()->str_pubkey());
         bft_msg.set_bft_address(kTransactionPbftAddress);
         protobuf::TxBft tx_bft;
         auto new_tx = tx_bft.mutable_new_tx();
@@ -94,6 +90,8 @@ public:
         bft_msg.set_data(data);
         auto hash128 = common::Hash::Hash128(data);
         security::Signature sign;
+        auto& prikey = *security::Schnorr::Instance()->prikey();
+        auto& pubkey = *security::Schnorr::Instance()->pubkey();
         if (!security::Schnorr::Instance()->Sign(
                 hash128,
                 prikey,
@@ -110,6 +108,63 @@ public:
         msg.set_data(bft_msg.SerializeAsString());
 #ifdef LEGO_TRACE_MESSAGE
         msg.set_debug(std::string("new account: ") +
+                local_node->public_ip + "-" +
+                std::to_string(local_node->public_port) + ", to " +
+                common::Encode::HexEncode(dht_key.StrKey()));
+        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("begin", msg);
+#endif
+    }
+
+    static void GetBlockWithTxGid(
+            const dht::NodePtr& local_node,
+            const std::string& tx_gid,
+            transport::protobuf::Header& msg) {
+                msg.set_src_dht_key(local_node->dht_key);
+        std::string account_address = network::GetAccountAddressByPublicKey(
+                security::Schnorr::Instance()->str_pubkey());
+        uint32_t des_net_id = network::GetConsensusShardNetworkId(account_address);
+        dht::DhtKeyManager dht_key(
+                des_net_id,
+                rand() % std::numeric_limits<uint8_t>::max());
+        msg.set_des_dht_key(dht_key.StrKey());
+        msg.set_priority(transport::kTransportPriorityLowest);
+        msg.set_id(common::GlobalInfo::Instance()->MessageId());
+        msg.set_type(common::kBftMessage);
+        msg.set_client(local_node->client_mode);
+        msg.set_hop_count(0);
+        protobuf::BftMessage bft_msg;
+        bft_msg.set_gid(tx_gid);
+        bft_msg.set_status(kBftInit);
+        bft_msg.set_leader(false);
+        bft_msg.set_net_id(des_net_id);
+        bft_msg.set_node_id(local_node->id);
+        bft_msg.set_pubkey(security::Schnorr::Instance()->str_pubkey());
+        bft_msg.set_bft_address(kTransactionPbftAddress);
+        protobuf::TxBft tx_bft;
+        auto check_tx_req = tx_bft.mutable_check_tx_req();
+        check_tx_req->set_tx_gid(tx_gid);
+        auto data = tx_bft.SerializeAsString();
+        bft_msg.set_data(data);
+        auto hash128 = common::Hash::Hash128(data);
+        security::Signature sign;
+        auto& prikey = *security::Schnorr::Instance()->prikey();
+        auto& pubkey = *security::Schnorr::Instance()->pubkey();
+        if (!security::Schnorr::Instance()->Sign(
+                hash128,
+                prikey,
+                pubkey,
+                sign)) {
+            CLIENT_ERROR("leader pre commit signature failed!");
+            return;
+        }
+        std::string sign_challenge_str;
+        std::string sign_response_str;
+        sign.Serialize(sign_challenge_str, sign_response_str);
+        bft_msg.set_sign_challenge(sign_challenge_str);
+        bft_msg.set_sign_response(sign_response_str);
+        msg.set_data(bft_msg.SerializeAsString());
+#ifdef LEGO_TRACE_MESSAGE
+        msg.set_debug(std::string("GetBlockWithTxGid: ") +
                 local_node->public_ip + "-" +
                 std::to_string(local_node->public_port) + ", to " +
                 common::Encode::HexEncode(dht_key.StrKey()));

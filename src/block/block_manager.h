@@ -17,6 +17,7 @@ public:
 private:
     BlockManager();
     ~BlockManager();
+    void HandleMessage(transport::protobuf::Header& header);
     int LoadTxBlocks(const common::Config& conf);
     int LoadAllTx(const std::string& frist_hash);
 

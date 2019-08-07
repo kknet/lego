@@ -11,18 +11,8 @@ message NewTx {
 	optional uint64 lego_count = 6;
 }
 
-message CheckTxRequest {
-	optional bytes tx_gid = 1;
-}
-
-message CheckTxResponse {
-	optional bytes block = 1;
-}
-
 message TxBft {
 	optional NewTx new_tx = 1;
-	optional CheckTxRequest check_tx_req = 2;
-	optional CheckTxResponse check_tx_res = 3;
 }
 
 message BftMessage {
@@ -62,4 +52,18 @@ message GetVpnInfoResponse {
 message ServiceMessage {
 	optional GetVpnInfoRequest vpn_req = 1;
 	optional GetVpnInfoResponse vpn_res = 2;
+}
+
+message GetTxBlockRequest {
+	optional bytes tx_gid = 1;
+	optional bytes block_hash = 2;
+}
+
+message GetTxBlockResponse {
+	optional bytes block = 1;
+}
+
+message BlockMessage {
+	optional GetTxBlockRequest block_req = 1;
+	optional GetTxBlockResponse block_res = 2;
 }

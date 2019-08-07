@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package lego.block.protobuf;
+
+message GetTxBlockRequest {
+	optional bytes tx_gid = 1;
+	optional bytes block_hash = 2;
+}
+
+message GetTxBlockResponse {
+	optional bytes block = 1;
+}
+
+message BlockMessage {
+	optional GetTxBlockRequest block_req = 1;
+	optional GetTxBlockResponse block_res = 2;
+}

@@ -2,6 +2,7 @@
 
 #include "common/encode.h"
 #include "db/db.h"
+#include "network/route.h"
 #include "block/block_utils.h"
 #include "block/account_manager.h"
 #include "block/genesis_block.h"
@@ -14,7 +15,11 @@ BlockManager* BlockManager::Instance() {
     static BlockManager ins;
     return &ins;
 }
-BlockManager::BlockManager() {}
+BlockManager::BlockManager() {
+    network::Route::Instance()->RegisterMessage(
+            common::kBlockMessage,
+            std::bind(&BlockManager::HandleMessage, this, std::placeholders::_1));
+}
 
 BlockManager::~BlockManager() {}
 
@@ -43,6 +48,10 @@ int BlockManager::Init(common::Config& conf) {
         return kBlockError;
     }
     return kBlockSuccess;
+}
+
+void BlockManager::HandleMessage(transport::protobuf::Header& header) {
+
 }
 
 int BlockManager::LoadTxBlocks(const common::Config& conf) {

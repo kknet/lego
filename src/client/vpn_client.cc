@@ -318,6 +318,7 @@ int VpnClient::Transaction(const std::string& to, uint64_t amount, std::string& 
 }
 
 int VpnClient::CheckTransaction(const std::string& tx_gid) {
+
     return kClientSuccess;
 }
 

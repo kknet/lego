@@ -73,14 +73,6 @@ message NewTx {
 	optional uint64 lego_count = 6;
 }
 
-message CheckTxRequest {
-	optional bytes tx_gid = 1;
-}
-
-message CheckTxResponse {
-	optional bytes block = 1;
-}
-
 message TxBft {
 	optional NewTx new_tx = 1;
 	optional LeaderTxPrepare ltx_prepare = 2;
@@ -88,6 +80,4 @@ message TxBft {
 	optional LeaderTxPreCommit ltx_precommit = 4;
 	optional BackupTxPreCommit btx_precommit = 5;
 	optional LeaderTxCommit ltx_commit = 6;
-	optional CheckTxRequest check_tx_req = 7;
-	optional CheckTxResponse check_tx_res = 8;
 }
