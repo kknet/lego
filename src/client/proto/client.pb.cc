@@ -22,6 +22,7 @@
 namespace protobuf_client_2eproto {
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_client_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_GetVpnInfoRequest;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_client_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_GetVpnInfoResponse;
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_client_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_NewTx;
 }  // namespace protobuf_client_2eproto
 namespace lego {
 namespace client {
@@ -36,6 +37,21 @@ class GetVpnInfoResponseDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<GetVpnInfoResponse>
       _instance;
 } _GetVpnInfoResponse_default_instance_;
+class NewTxDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<NewTx>
+      _instance;
+} _NewTx_default_instance_;
+class TxBftDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<TxBft>
+      _instance;
+} _TxBft_default_instance_;
+class BftMessageDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<BftMessage>
+      _instance;
+} _BftMessage_default_instance_;
 class ServiceMessageDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<ServiceMessage>
@@ -73,6 +89,49 @@ static void InitDefaultsGetVpnInfoResponse() {
 ::google::protobuf::internal::SCCInfo<0> scc_info_GetVpnInfoResponse =
     {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsGetVpnInfoResponse}, {}};
 
+static void InitDefaultsNewTx() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::lego::client::protobuf::_NewTx_default_instance_;
+    new (ptr) ::lego::client::protobuf::NewTx();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::lego::client::protobuf::NewTx::InitAsDefaultInstance();
+}
+
+::google::protobuf::internal::SCCInfo<0> scc_info_NewTx =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsNewTx}, {}};
+
+static void InitDefaultsTxBft() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::lego::client::protobuf::_TxBft_default_instance_;
+    new (ptr) ::lego::client::protobuf::TxBft();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::lego::client::protobuf::TxBft::InitAsDefaultInstance();
+}
+
+::google::protobuf::internal::SCCInfo<1> scc_info_TxBft =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsTxBft}, {
+      &protobuf_client_2eproto::scc_info_NewTx.base,}};
+
+static void InitDefaultsBftMessage() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::lego::client::protobuf::_BftMessage_default_instance_;
+    new (ptr) ::lego::client::protobuf::BftMessage();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::lego::client::protobuf::BftMessage::InitAsDefaultInstance();
+}
+
+::google::protobuf::internal::SCCInfo<0> scc_info_BftMessage =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsBftMessage}, {}};
+
 static void InitDefaultsServiceMessage() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -92,10 +151,13 @@ static void InitDefaultsServiceMessage() {
 void InitDefaults() {
   ::google::protobuf::internal::InitSCC(&scc_info_GetVpnInfoRequest.base);
   ::google::protobuf::internal::InitSCC(&scc_info_GetVpnInfoResponse.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_NewTx.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_TxBft.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_BftMessage.base);
   ::google::protobuf::internal::InitSCC(&scc_info_ServiceMessage.base);
 }
 
-::google::protobuf::Metadata file_level_metadata[3];
+::google::protobuf::Metadata file_level_metadata[6];
 
 const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::GetVpnInfoRequest, _has_bits_),
@@ -120,6 +182,73 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   1,
   2,
   3,
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::NewTx, _has_bits_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::NewTx, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::NewTx, gid_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::NewTx, from_acc_addr_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::NewTx, from_pubkey_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::NewTx, from_sign_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::NewTx, to_acc_addr_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::NewTx, lego_count_),
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::TxBft, _has_bits_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::TxBft, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::TxBft, new_tx_),
+  0,
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::BftMessage, _has_bits_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::BftMessage, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::BftMessage, gid_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::BftMessage, rand_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::BftMessage, status_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::BftMessage, leader_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::BftMessage, net_id_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::BftMessage, node_id_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::BftMessage, pubkey_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::BftMessage, sign_challenge_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::BftMessage, sign_response_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::BftMessage, secret_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::BftMessage, challenge_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::BftMessage, response_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::BftMessage, agg_sign_challenge_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::BftMessage, agg_sign_response_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::BftMessage, bitmap_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::BftMessage, agree_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::BftMessage, bft_address_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::BftMessage, pool_index_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::BftMessage, data_),
+  0,
+  12,
+  13,
+  15,
+  14,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  ~0u,
+  16,
+  10,
+  17,
+  11,
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::ServiceMessage, _has_bits_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::ServiceMessage, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -133,12 +262,18 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   { 0, 6, sizeof(::lego::client::protobuf::GetVpnInfoRequest)},
   { 7, 17, sizeof(::lego::client::protobuf::GetVpnInfoResponse)},
-  { 22, 29, sizeof(::lego::client::protobuf::ServiceMessage)},
+  { 22, 33, sizeof(::lego::client::protobuf::NewTx)},
+  { 39, 45, sizeof(::lego::client::protobuf::TxBft)},
+  { 46, 70, sizeof(::lego::client::protobuf::BftMessage)},
+  { 89, 96, sizeof(::lego::client::protobuf::ServiceMessage)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::google::protobuf::Message*>(&::lego::client::protobuf::_GetVpnInfoRequest_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::lego::client::protobuf::_GetVpnInfoResponse_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::lego::client::protobuf::_NewTx_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::lego::client::protobuf::_TxBft_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::lego::client::protobuf::_BftMessage_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::lego::client::protobuf::_ServiceMessage_default_instance_),
 };
 
@@ -157,7 +292,7 @@ void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) GOOGLE_PROTOBUF_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 3);
+  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 6);
 }
 
 void AddDescriptorsImpl() {
@@ -167,13 +302,27 @@ void AddDescriptorsImpl() {
       "GetVpnInfoRequest\022\016\n\006pubkey\030\001 \001(\014\"d\n\022Get"
       "VpnInfoResponse\022\n\n\002ip\030\001 \001(\014\022\014\n\004port\030\002 \001("
       "\r\022\024\n\014encrypt_type\030\003 \001(\014\022\016\n\006passwd\030\004 \001(\014\022"
-      "\016\n\006pubkey\030\005 \001(\014\"\205\001\n\016ServiceMessage\0228\n\007vp"
-      "n_req\030\001 \001(\0132\'.lego.client.protobuf.GetVp"
-      "nInfoRequest\0229\n\007vpn_res\030\002 \001(\0132(.lego.cli"
-      "ent.protobuf.GetVpnInfoResponse"
+      "\016\n\006pubkey\030\005 \001(\014\"|\n\005NewTx\022\013\n\003gid\030\001 \001(\014\022\025\n"
+      "\rfrom_acc_addr\030\002 \001(\014\022\023\n\013from_pubkey\030\003 \001("
+      "\014\022\021\n\tfrom_sign\030\004 \001(\014\022\023\n\013to_acc_addr\030\005 \001("
+      "\014\022\022\n\nlego_count\030\006 \001(\004\"4\n\005TxBft\022+\n\006new_tx"
+      "\030\001 \001(\0132\033.lego.client.protobuf.NewTx\"\351\002\n\n"
+      "BftMessage\022\013\n\003gid\030\001 \001(\014\022\014\n\004rand\030\002 \001(\004\022\016\n"
+      "\006status\030\003 \001(\005\022\016\n\006leader\030\004 \001(\010\022\016\n\006net_id\030"
+      "\005 \001(\r\022\017\n\007node_id\030\006 \001(\014\022\016\n\006pubkey\030\007 \001(\014\022\026"
+      "\n\016sign_challenge\030\010 \001(\014\022\025\n\rsign_response\030"
+      "\t \001(\014\022\016\n\006secret\030\n \001(\014\022\021\n\tchallenge\030\013 \001(\014"
+      "\022\020\n\010response\030\014 \001(\014\022\032\n\022agg_sign_challenge"
+      "\030\r \001(\014\022\031\n\021agg_sign_response\030\016 \001(\014\022\016\n\006bit"
+      "map\030\017 \003(\004\022\r\n\005agree\030\020 \001(\010\022\023\n\013bft_address\030"
+      "\021 \001(\014\022\022\n\npool_index\030\022 \001(\r\022\014\n\004data\030\023 \001(\014\""
+      "\205\001\n\016ServiceMessage\0228\n\007vpn_req\030\001 \001(\0132\'.le"
+      "go.client.protobuf.GetVpnInfoRequest\0229\n\007"
+      "vpn_res\030\002 \001(\0132(.lego.client.protobuf.Get"
+      "VpnInfoResponse"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 311);
+      descriptor, 855);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "client.proto", &protobuf_RegisterTypes);
 }
@@ -862,6 +1011,1779 @@ void GetVpnInfoResponse::InternalSwap(GetVpnInfoResponse* other) {
 
 // ===================================================================
 
+void NewTx::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int NewTx::kGidFieldNumber;
+const int NewTx::kFromAccAddrFieldNumber;
+const int NewTx::kFromPubkeyFieldNumber;
+const int NewTx::kFromSignFieldNumber;
+const int NewTx::kToAccAddrFieldNumber;
+const int NewTx::kLegoCountFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+NewTx::NewTx()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_client_2eproto::scc_info_NewTx.base);
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:lego.client.protobuf.NewTx)
+}
+NewTx::NewTx(const NewTx& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _has_bits_(from._has_bits_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  gid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_gid()) {
+    gid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.gid_);
+  }
+  from_acc_addr_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_from_acc_addr()) {
+    from_acc_addr_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.from_acc_addr_);
+  }
+  from_pubkey_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_from_pubkey()) {
+    from_pubkey_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.from_pubkey_);
+  }
+  from_sign_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_from_sign()) {
+    from_sign_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.from_sign_);
+  }
+  to_acc_addr_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_to_acc_addr()) {
+    to_acc_addr_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.to_acc_addr_);
+  }
+  lego_count_ = from.lego_count_;
+  // @@protoc_insertion_point(copy_constructor:lego.client.protobuf.NewTx)
+}
+
+void NewTx::SharedCtor() {
+  gid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  from_acc_addr_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  from_pubkey_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  from_sign_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  to_acc_addr_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  lego_count_ = GOOGLE_ULONGLONG(0);
+}
+
+NewTx::~NewTx() {
+  // @@protoc_insertion_point(destructor:lego.client.protobuf.NewTx)
+  SharedDtor();
+}
+
+void NewTx::SharedDtor() {
+  gid_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  from_acc_addr_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  from_pubkey_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  from_sign_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  to_acc_addr_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void NewTx::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const ::google::protobuf::Descriptor* NewTx::descriptor() {
+  ::protobuf_client_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_client_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const NewTx& NewTx::default_instance() {
+  ::google::protobuf::internal::InitSCC(&protobuf_client_2eproto::scc_info_NewTx.base);
+  return *internal_default_instance();
+}
+
+
+void NewTx::Clear() {
+// @@protoc_insertion_point(message_clear_start:lego.client.protobuf.NewTx)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 31u) {
+    if (cached_has_bits & 0x00000001u) {
+      gid_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      from_acc_addr_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000004u) {
+      from_pubkey_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000008u) {
+      from_sign_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000010u) {
+      to_acc_addr_.ClearNonDefaultToEmptyNoArena();
+    }
+  }
+  lego_count_ = GOOGLE_ULONGLONG(0);
+  _has_bits_.Clear();
+  _internal_metadata_.Clear();
+}
+
+bool NewTx::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:lego.client.protobuf.NewTx)
+  for (;;) {
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional bytes gid = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_gid()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bytes from_acc_addr = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_from_acc_addr()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bytes from_pubkey = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_from_pubkey()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bytes from_sign = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_from_sign()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bytes to_acc_addr = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_to_acc_addr()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional uint64 lego_count = 6;
+      case 6: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(48u /* 48 & 0xFF */)) {
+          set_has_lego_count();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &lego_count_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:lego.client.protobuf.NewTx)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:lego.client.protobuf.NewTx)
+  return false;
+#undef DO_
+}
+
+void NewTx::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:lego.client.protobuf.NewTx)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // optional bytes gid = 1;
+  if (cached_has_bits & 0x00000001u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      1, this->gid(), output);
+  }
+
+  // optional bytes from_acc_addr = 2;
+  if (cached_has_bits & 0x00000002u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      2, this->from_acc_addr(), output);
+  }
+
+  // optional bytes from_pubkey = 3;
+  if (cached_has_bits & 0x00000004u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      3, this->from_pubkey(), output);
+  }
+
+  // optional bytes from_sign = 4;
+  if (cached_has_bits & 0x00000008u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      4, this->from_sign(), output);
+  }
+
+  // optional bytes to_acc_addr = 5;
+  if (cached_has_bits & 0x00000010u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      5, this->to_acc_addr(), output);
+  }
+
+  // optional uint64 lego_count = 6;
+  if (cached_has_bits & 0x00000020u) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(6, this->lego_count(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:lego.client.protobuf.NewTx)
+}
+
+::google::protobuf::uint8* NewTx::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:lego.client.protobuf.NewTx)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // optional bytes gid = 1;
+  if (cached_has_bits & 0x00000001u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        1, this->gid(), target);
+  }
+
+  // optional bytes from_acc_addr = 2;
+  if (cached_has_bits & 0x00000002u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        2, this->from_acc_addr(), target);
+  }
+
+  // optional bytes from_pubkey = 3;
+  if (cached_has_bits & 0x00000004u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        3, this->from_pubkey(), target);
+  }
+
+  // optional bytes from_sign = 4;
+  if (cached_has_bits & 0x00000008u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        4, this->from_sign(), target);
+  }
+
+  // optional bytes to_acc_addr = 5;
+  if (cached_has_bits & 0x00000010u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        5, this->to_acc_addr(), target);
+  }
+
+  // optional uint64 lego_count = 6;
+  if (cached_has_bits & 0x00000020u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(6, this->lego_count(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:lego.client.protobuf.NewTx)
+  return target;
+}
+
+size_t NewTx::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:lego.client.protobuf.NewTx)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  if (_has_bits_[0 / 32] & 63u) {
+    // optional bytes gid = 1;
+    if (has_gid()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->gid());
+    }
+
+    // optional bytes from_acc_addr = 2;
+    if (has_from_acc_addr()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->from_acc_addr());
+    }
+
+    // optional bytes from_pubkey = 3;
+    if (has_from_pubkey()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->from_pubkey());
+    }
+
+    // optional bytes from_sign = 4;
+    if (has_from_sign()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->from_sign());
+    }
+
+    // optional bytes to_acc_addr = 5;
+    if (has_to_acc_addr()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->to_acc_addr());
+    }
+
+    // optional uint64 lego_count = 6;
+    if (has_lego_count()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt64Size(
+          this->lego_count());
+    }
+
+  }
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void NewTx::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:lego.client.protobuf.NewTx)
+  GOOGLE_DCHECK_NE(&from, this);
+  const NewTx* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const NewTx>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:lego.client.protobuf.NewTx)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:lego.client.protobuf.NewTx)
+    MergeFrom(*source);
+  }
+}
+
+void NewTx::MergeFrom(const NewTx& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:lego.client.protobuf.NewTx)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 63u) {
+    if (cached_has_bits & 0x00000001u) {
+      set_has_gid();
+      gid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.gid_);
+    }
+    if (cached_has_bits & 0x00000002u) {
+      set_has_from_acc_addr();
+      from_acc_addr_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.from_acc_addr_);
+    }
+    if (cached_has_bits & 0x00000004u) {
+      set_has_from_pubkey();
+      from_pubkey_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.from_pubkey_);
+    }
+    if (cached_has_bits & 0x00000008u) {
+      set_has_from_sign();
+      from_sign_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.from_sign_);
+    }
+    if (cached_has_bits & 0x00000010u) {
+      set_has_to_acc_addr();
+      to_acc_addr_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.to_acc_addr_);
+    }
+    if (cached_has_bits & 0x00000020u) {
+      lego_count_ = from.lego_count_;
+    }
+    _has_bits_[0] |= cached_has_bits;
+  }
+}
+
+void NewTx::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:lego.client.protobuf.NewTx)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void NewTx::CopyFrom(const NewTx& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:lego.client.protobuf.NewTx)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool NewTx::IsInitialized() const {
+  return true;
+}
+
+void NewTx::Swap(NewTx* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void NewTx::InternalSwap(NewTx* other) {
+  using std::swap;
+  gid_.Swap(&other->gid_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  from_acc_addr_.Swap(&other->from_acc_addr_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  from_pubkey_.Swap(&other->from_pubkey_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  from_sign_.Swap(&other->from_sign_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  to_acc_addr_.Swap(&other->to_acc_addr_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(lego_count_, other->lego_count_);
+  swap(_has_bits_[0], other->_has_bits_[0]);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+}
+
+::google::protobuf::Metadata NewTx::GetMetadata() const {
+  protobuf_client_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_client_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
+void TxBft::InitAsDefaultInstance() {
+  ::lego::client::protobuf::_TxBft_default_instance_._instance.get_mutable()->new_tx_ = const_cast< ::lego::client::protobuf::NewTx*>(
+      ::lego::client::protobuf::NewTx::internal_default_instance());
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int TxBft::kNewTxFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+TxBft::TxBft()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_client_2eproto::scc_info_TxBft.base);
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:lego.client.protobuf.TxBft)
+}
+TxBft::TxBft(const TxBft& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _has_bits_(from._has_bits_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  if (from.has_new_tx()) {
+    new_tx_ = new ::lego::client::protobuf::NewTx(*from.new_tx_);
+  } else {
+    new_tx_ = NULL;
+  }
+  // @@protoc_insertion_point(copy_constructor:lego.client.protobuf.TxBft)
+}
+
+void TxBft::SharedCtor() {
+  new_tx_ = NULL;
+}
+
+TxBft::~TxBft() {
+  // @@protoc_insertion_point(destructor:lego.client.protobuf.TxBft)
+  SharedDtor();
+}
+
+void TxBft::SharedDtor() {
+  if (this != internal_default_instance()) delete new_tx_;
+}
+
+void TxBft::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const ::google::protobuf::Descriptor* TxBft::descriptor() {
+  ::protobuf_client_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_client_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const TxBft& TxBft::default_instance() {
+  ::google::protobuf::internal::InitSCC(&protobuf_client_2eproto::scc_info_TxBft.base);
+  return *internal_default_instance();
+}
+
+
+void TxBft::Clear() {
+// @@protoc_insertion_point(message_clear_start:lego.client.protobuf.TxBft)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    GOOGLE_DCHECK(new_tx_ != NULL);
+    new_tx_->Clear();
+  }
+  _has_bits_.Clear();
+  _internal_metadata_.Clear();
+}
+
+bool TxBft::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:lego.client.protobuf.TxBft)
+  for (;;) {
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional .lego.client.protobuf.NewTx new_tx = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+               input, mutable_new_tx()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:lego.client.protobuf.TxBft)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:lego.client.protobuf.TxBft)
+  return false;
+#undef DO_
+}
+
+void TxBft::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:lego.client.protobuf.TxBft)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // optional .lego.client.protobuf.NewTx new_tx = 1;
+  if (cached_has_bits & 0x00000001u) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, this->_internal_new_tx(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:lego.client.protobuf.TxBft)
+}
+
+::google::protobuf::uint8* TxBft::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:lego.client.protobuf.TxBft)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // optional .lego.client.protobuf.NewTx new_tx = 1;
+  if (cached_has_bits & 0x00000001u) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        1, this->_internal_new_tx(), deterministic, target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:lego.client.protobuf.TxBft)
+  return target;
+}
+
+size_t TxBft::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:lego.client.protobuf.TxBft)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  // optional .lego.client.protobuf.NewTx new_tx = 1;
+  if (has_new_tx()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSize(
+        *new_tx_);
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void TxBft::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:lego.client.protobuf.TxBft)
+  GOOGLE_DCHECK_NE(&from, this);
+  const TxBft* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const TxBft>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:lego.client.protobuf.TxBft)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:lego.client.protobuf.TxBft)
+    MergeFrom(*source);
+  }
+}
+
+void TxBft::MergeFrom(const TxBft& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:lego.client.protobuf.TxBft)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.has_new_tx()) {
+    mutable_new_tx()->::lego::client::protobuf::NewTx::MergeFrom(from.new_tx());
+  }
+}
+
+void TxBft::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:lego.client.protobuf.TxBft)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void TxBft::CopyFrom(const TxBft& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:lego.client.protobuf.TxBft)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TxBft::IsInitialized() const {
+  return true;
+}
+
+void TxBft::Swap(TxBft* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void TxBft::InternalSwap(TxBft* other) {
+  using std::swap;
+  swap(new_tx_, other->new_tx_);
+  swap(_has_bits_[0], other->_has_bits_[0]);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+}
+
+::google::protobuf::Metadata TxBft::GetMetadata() const {
+  protobuf_client_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_client_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
+void BftMessage::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int BftMessage::kGidFieldNumber;
+const int BftMessage::kRandFieldNumber;
+const int BftMessage::kStatusFieldNumber;
+const int BftMessage::kLeaderFieldNumber;
+const int BftMessage::kNetIdFieldNumber;
+const int BftMessage::kNodeIdFieldNumber;
+const int BftMessage::kPubkeyFieldNumber;
+const int BftMessage::kSignChallengeFieldNumber;
+const int BftMessage::kSignResponseFieldNumber;
+const int BftMessage::kSecretFieldNumber;
+const int BftMessage::kChallengeFieldNumber;
+const int BftMessage::kResponseFieldNumber;
+const int BftMessage::kAggSignChallengeFieldNumber;
+const int BftMessage::kAggSignResponseFieldNumber;
+const int BftMessage::kBitmapFieldNumber;
+const int BftMessage::kAgreeFieldNumber;
+const int BftMessage::kBftAddressFieldNumber;
+const int BftMessage::kPoolIndexFieldNumber;
+const int BftMessage::kDataFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+BftMessage::BftMessage()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_client_2eproto::scc_info_BftMessage.base);
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:lego.client.protobuf.BftMessage)
+}
+BftMessage::BftMessage(const BftMessage& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _has_bits_(from._has_bits_),
+      bitmap_(from.bitmap_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  gid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_gid()) {
+    gid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.gid_);
+  }
+  node_id_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_node_id()) {
+    node_id_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.node_id_);
+  }
+  pubkey_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_pubkey()) {
+    pubkey_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.pubkey_);
+  }
+  sign_challenge_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_sign_challenge()) {
+    sign_challenge_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sign_challenge_);
+  }
+  sign_response_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_sign_response()) {
+    sign_response_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sign_response_);
+  }
+  secret_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_secret()) {
+    secret_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.secret_);
+  }
+  challenge_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_challenge()) {
+    challenge_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.challenge_);
+  }
+  response_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_response()) {
+    response_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.response_);
+  }
+  agg_sign_challenge_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_agg_sign_challenge()) {
+    agg_sign_challenge_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.agg_sign_challenge_);
+  }
+  agg_sign_response_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_agg_sign_response()) {
+    agg_sign_response_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.agg_sign_response_);
+  }
+  bft_address_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_bft_address()) {
+    bft_address_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.bft_address_);
+  }
+  data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_data()) {
+    data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
+  }
+  ::memcpy(&rand_, &from.rand_,
+    static_cast<size_t>(reinterpret_cast<char*>(&pool_index_) -
+    reinterpret_cast<char*>(&rand_)) + sizeof(pool_index_));
+  // @@protoc_insertion_point(copy_constructor:lego.client.protobuf.BftMessage)
+}
+
+void BftMessage::SharedCtor() {
+  gid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  node_id_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  pubkey_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  sign_challenge_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  sign_response_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  secret_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  challenge_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  response_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  agg_sign_challenge_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  agg_sign_response_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  bft_address_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&rand_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&pool_index_) -
+      reinterpret_cast<char*>(&rand_)) + sizeof(pool_index_));
+}
+
+BftMessage::~BftMessage() {
+  // @@protoc_insertion_point(destructor:lego.client.protobuf.BftMessage)
+  SharedDtor();
+}
+
+void BftMessage::SharedDtor() {
+  gid_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  node_id_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  pubkey_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  sign_challenge_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  sign_response_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  secret_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  challenge_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  response_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  agg_sign_challenge_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  agg_sign_response_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  bft_address_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  data_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void BftMessage::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const ::google::protobuf::Descriptor* BftMessage::descriptor() {
+  ::protobuf_client_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_client_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const BftMessage& BftMessage::default_instance() {
+  ::google::protobuf::internal::InitSCC(&protobuf_client_2eproto::scc_info_BftMessage.base);
+  return *internal_default_instance();
+}
+
+
+void BftMessage::Clear() {
+// @@protoc_insertion_point(message_clear_start:lego.client.protobuf.BftMessage)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  bitmap_.Clear();
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 255u) {
+    if (cached_has_bits & 0x00000001u) {
+      gid_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      node_id_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000004u) {
+      pubkey_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000008u) {
+      sign_challenge_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000010u) {
+      sign_response_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000020u) {
+      secret_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000040u) {
+      challenge_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000080u) {
+      response_.ClearNonDefaultToEmptyNoArena();
+    }
+  }
+  if (cached_has_bits & 3840u) {
+    if (cached_has_bits & 0x00000100u) {
+      agg_sign_challenge_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000200u) {
+      agg_sign_response_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000400u) {
+      bft_address_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000800u) {
+      data_.ClearNonDefaultToEmptyNoArena();
+    }
+  }
+  if (cached_has_bits & 61440u) {
+    ::memset(&rand_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&leader_) -
+        reinterpret_cast<char*>(&rand_)) + sizeof(leader_));
+  }
+  if (cached_has_bits & 196608u) {
+    ::memset(&agree_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&pool_index_) -
+        reinterpret_cast<char*>(&agree_)) + sizeof(pool_index_));
+  }
+  _has_bits_.Clear();
+  _internal_metadata_.Clear();
+}
+
+bool BftMessage::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:lego.client.protobuf.BftMessage)
+  for (;;) {
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(16383u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional bytes gid = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_gid()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional uint64 rand = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+          set_has_rand();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &rand_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional int32 status = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+          set_has_status();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &status_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bool leader = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
+          set_has_leader();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &leader_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional uint32 net_id = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
+          set_has_net_id();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &net_id_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bytes node_id = 6;
+      case 6: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_node_id()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bytes pubkey = 7;
+      case 7: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(58u /* 58 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_pubkey()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bytes sign_challenge = 8;
+      case 8: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(66u /* 66 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_sign_challenge()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bytes sign_response = 9;
+      case 9: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(74u /* 74 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_sign_response()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bytes secret = 10;
+      case 10: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(82u /* 82 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_secret()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bytes challenge = 11;
+      case 11: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(90u /* 90 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_challenge()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bytes response = 12;
+      case 12: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(98u /* 98 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_response()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bytes agg_sign_challenge = 13;
+      case 13: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(106u /* 106 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_agg_sign_challenge()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bytes agg_sign_response = 14;
+      case 14: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(114u /* 114 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_agg_sign_response()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated uint64 bitmap = 15;
+      case 15: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(120u /* 120 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 1, 120u, input, this->mutable_bitmap())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(122u /* 122 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, this->mutable_bitmap())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bool agree = 16;
+      case 16: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(128u /* 128 & 0xFF */)) {
+          set_has_agree();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &agree_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bytes bft_address = 17;
+      case 17: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(138u /* 138 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_bft_address()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional uint32 pool_index = 18;
+      case 18: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(144u /* 144 & 0xFF */)) {
+          set_has_pool_index();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &pool_index_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bytes data = 19;
+      case 19: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(154u /* 154 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_data()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:lego.client.protobuf.BftMessage)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:lego.client.protobuf.BftMessage)
+  return false;
+#undef DO_
+}
+
+void BftMessage::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:lego.client.protobuf.BftMessage)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // optional bytes gid = 1;
+  if (cached_has_bits & 0x00000001u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      1, this->gid(), output);
+  }
+
+  // optional uint64 rand = 2;
+  if (cached_has_bits & 0x00001000u) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(2, this->rand(), output);
+  }
+
+  // optional int32 status = 3;
+  if (cached_has_bits & 0x00002000u) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->status(), output);
+  }
+
+  // optional bool leader = 4;
+  if (cached_has_bits & 0x00008000u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(4, this->leader(), output);
+  }
+
+  // optional uint32 net_id = 5;
+  if (cached_has_bits & 0x00004000u) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(5, this->net_id(), output);
+  }
+
+  // optional bytes node_id = 6;
+  if (cached_has_bits & 0x00000002u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      6, this->node_id(), output);
+  }
+
+  // optional bytes pubkey = 7;
+  if (cached_has_bits & 0x00000004u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      7, this->pubkey(), output);
+  }
+
+  // optional bytes sign_challenge = 8;
+  if (cached_has_bits & 0x00000008u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      8, this->sign_challenge(), output);
+  }
+
+  // optional bytes sign_response = 9;
+  if (cached_has_bits & 0x00000010u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      9, this->sign_response(), output);
+  }
+
+  // optional bytes secret = 10;
+  if (cached_has_bits & 0x00000020u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      10, this->secret(), output);
+  }
+
+  // optional bytes challenge = 11;
+  if (cached_has_bits & 0x00000040u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      11, this->challenge(), output);
+  }
+
+  // optional bytes response = 12;
+  if (cached_has_bits & 0x00000080u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      12, this->response(), output);
+  }
+
+  // optional bytes agg_sign_challenge = 13;
+  if (cached_has_bits & 0x00000100u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      13, this->agg_sign_challenge(), output);
+  }
+
+  // optional bytes agg_sign_response = 14;
+  if (cached_has_bits & 0x00000200u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      14, this->agg_sign_response(), output);
+  }
+
+  // repeated uint64 bitmap = 15;
+  for (int i = 0, n = this->bitmap_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(
+      15, this->bitmap(i), output);
+  }
+
+  // optional bool agree = 16;
+  if (cached_has_bits & 0x00010000u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(16, this->agree(), output);
+  }
+
+  // optional bytes bft_address = 17;
+  if (cached_has_bits & 0x00000400u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      17, this->bft_address(), output);
+  }
+
+  // optional uint32 pool_index = 18;
+  if (cached_has_bits & 0x00020000u) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(18, this->pool_index(), output);
+  }
+
+  // optional bytes data = 19;
+  if (cached_has_bits & 0x00000800u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      19, this->data(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:lego.client.protobuf.BftMessage)
+}
+
+::google::protobuf::uint8* BftMessage::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:lego.client.protobuf.BftMessage)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // optional bytes gid = 1;
+  if (cached_has_bits & 0x00000001u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        1, this->gid(), target);
+  }
+
+  // optional uint64 rand = 2;
+  if (cached_has_bits & 0x00001000u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(2, this->rand(), target);
+  }
+
+  // optional int32 status = 3;
+  if (cached_has_bits & 0x00002000u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->status(), target);
+  }
+
+  // optional bool leader = 4;
+  if (cached_has_bits & 0x00008000u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(4, this->leader(), target);
+  }
+
+  // optional uint32 net_id = 5;
+  if (cached_has_bits & 0x00004000u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(5, this->net_id(), target);
+  }
+
+  // optional bytes node_id = 6;
+  if (cached_has_bits & 0x00000002u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        6, this->node_id(), target);
+  }
+
+  // optional bytes pubkey = 7;
+  if (cached_has_bits & 0x00000004u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        7, this->pubkey(), target);
+  }
+
+  // optional bytes sign_challenge = 8;
+  if (cached_has_bits & 0x00000008u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        8, this->sign_challenge(), target);
+  }
+
+  // optional bytes sign_response = 9;
+  if (cached_has_bits & 0x00000010u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        9, this->sign_response(), target);
+  }
+
+  // optional bytes secret = 10;
+  if (cached_has_bits & 0x00000020u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        10, this->secret(), target);
+  }
+
+  // optional bytes challenge = 11;
+  if (cached_has_bits & 0x00000040u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        11, this->challenge(), target);
+  }
+
+  // optional bytes response = 12;
+  if (cached_has_bits & 0x00000080u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        12, this->response(), target);
+  }
+
+  // optional bytes agg_sign_challenge = 13;
+  if (cached_has_bits & 0x00000100u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        13, this->agg_sign_challenge(), target);
+  }
+
+  // optional bytes agg_sign_response = 14;
+  if (cached_has_bits & 0x00000200u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        14, this->agg_sign_response(), target);
+  }
+
+  // repeated uint64 bitmap = 15;
+  target = ::google::protobuf::internal::WireFormatLite::
+    WriteUInt64ToArray(15, this->bitmap_, target);
+
+  // optional bool agree = 16;
+  if (cached_has_bits & 0x00010000u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(16, this->agree(), target);
+  }
+
+  // optional bytes bft_address = 17;
+  if (cached_has_bits & 0x00000400u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        17, this->bft_address(), target);
+  }
+
+  // optional uint32 pool_index = 18;
+  if (cached_has_bits & 0x00020000u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(18, this->pool_index(), target);
+  }
+
+  // optional bytes data = 19;
+  if (cached_has_bits & 0x00000800u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        19, this->data(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:lego.client.protobuf.BftMessage)
+  return target;
+}
+
+size_t BftMessage::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:lego.client.protobuf.BftMessage)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  // repeated uint64 bitmap = 15;
+  {
+    size_t data_size = ::google::protobuf::internal::WireFormatLite::
+      UInt64Size(this->bitmap_);
+    total_size += 1 *
+                  ::google::protobuf::internal::FromIntSize(this->bitmap_size());
+    total_size += data_size;
+  }
+
+  if (_has_bits_[0 / 32] & 255u) {
+    // optional bytes gid = 1;
+    if (has_gid()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->gid());
+    }
+
+    // optional bytes node_id = 6;
+    if (has_node_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->node_id());
+    }
+
+    // optional bytes pubkey = 7;
+    if (has_pubkey()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->pubkey());
+    }
+
+    // optional bytes sign_challenge = 8;
+    if (has_sign_challenge()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->sign_challenge());
+    }
+
+    // optional bytes sign_response = 9;
+    if (has_sign_response()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->sign_response());
+    }
+
+    // optional bytes secret = 10;
+    if (has_secret()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->secret());
+    }
+
+    // optional bytes challenge = 11;
+    if (has_challenge()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->challenge());
+    }
+
+    // optional bytes response = 12;
+    if (has_response()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->response());
+    }
+
+  }
+  if (_has_bits_[8 / 32] & 65280u) {
+    // optional bytes agg_sign_challenge = 13;
+    if (has_agg_sign_challenge()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->agg_sign_challenge());
+    }
+
+    // optional bytes agg_sign_response = 14;
+    if (has_agg_sign_response()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->agg_sign_response());
+    }
+
+    // optional bytes bft_address = 17;
+    if (has_bft_address()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->bft_address());
+    }
+
+    // optional bytes data = 19;
+    if (has_data()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->data());
+    }
+
+    // optional uint64 rand = 2;
+    if (has_rand()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt64Size(
+          this->rand());
+    }
+
+    // optional int32 status = 3;
+    if (has_status()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->status());
+    }
+
+    // optional uint32 net_id = 5;
+    if (has_net_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->net_id());
+    }
+
+    // optional bool leader = 4;
+    if (has_leader()) {
+      total_size += 1 + 1;
+    }
+
+  }
+  if (_has_bits_[16 / 32] & 196608u) {
+    // optional bool agree = 16;
+    if (has_agree()) {
+      total_size += 2 + 1;
+    }
+
+    // optional uint32 pool_index = 18;
+    if (has_pool_index()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->pool_index());
+    }
+
+  }
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void BftMessage::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:lego.client.protobuf.BftMessage)
+  GOOGLE_DCHECK_NE(&from, this);
+  const BftMessage* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const BftMessage>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:lego.client.protobuf.BftMessage)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:lego.client.protobuf.BftMessage)
+    MergeFrom(*source);
+  }
+}
+
+void BftMessage::MergeFrom(const BftMessage& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:lego.client.protobuf.BftMessage)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  bitmap_.MergeFrom(from.bitmap_);
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 255u) {
+    if (cached_has_bits & 0x00000001u) {
+      set_has_gid();
+      gid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.gid_);
+    }
+    if (cached_has_bits & 0x00000002u) {
+      set_has_node_id();
+      node_id_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.node_id_);
+    }
+    if (cached_has_bits & 0x00000004u) {
+      set_has_pubkey();
+      pubkey_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.pubkey_);
+    }
+    if (cached_has_bits & 0x00000008u) {
+      set_has_sign_challenge();
+      sign_challenge_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sign_challenge_);
+    }
+    if (cached_has_bits & 0x00000010u) {
+      set_has_sign_response();
+      sign_response_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sign_response_);
+    }
+    if (cached_has_bits & 0x00000020u) {
+      set_has_secret();
+      secret_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.secret_);
+    }
+    if (cached_has_bits & 0x00000040u) {
+      set_has_challenge();
+      challenge_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.challenge_);
+    }
+    if (cached_has_bits & 0x00000080u) {
+      set_has_response();
+      response_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.response_);
+    }
+  }
+  if (cached_has_bits & 65280u) {
+    if (cached_has_bits & 0x00000100u) {
+      set_has_agg_sign_challenge();
+      agg_sign_challenge_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.agg_sign_challenge_);
+    }
+    if (cached_has_bits & 0x00000200u) {
+      set_has_agg_sign_response();
+      agg_sign_response_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.agg_sign_response_);
+    }
+    if (cached_has_bits & 0x00000400u) {
+      set_has_bft_address();
+      bft_address_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.bft_address_);
+    }
+    if (cached_has_bits & 0x00000800u) {
+      set_has_data();
+      data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
+    }
+    if (cached_has_bits & 0x00001000u) {
+      rand_ = from.rand_;
+    }
+    if (cached_has_bits & 0x00002000u) {
+      status_ = from.status_;
+    }
+    if (cached_has_bits & 0x00004000u) {
+      net_id_ = from.net_id_;
+    }
+    if (cached_has_bits & 0x00008000u) {
+      leader_ = from.leader_;
+    }
+    _has_bits_[0] |= cached_has_bits;
+  }
+  if (cached_has_bits & 196608u) {
+    if (cached_has_bits & 0x00010000u) {
+      agree_ = from.agree_;
+    }
+    if (cached_has_bits & 0x00020000u) {
+      pool_index_ = from.pool_index_;
+    }
+    _has_bits_[0] |= cached_has_bits;
+  }
+}
+
+void BftMessage::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:lego.client.protobuf.BftMessage)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void BftMessage::CopyFrom(const BftMessage& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:lego.client.protobuf.BftMessage)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool BftMessage::IsInitialized() const {
+  return true;
+}
+
+void BftMessage::Swap(BftMessage* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void BftMessage::InternalSwap(BftMessage* other) {
+  using std::swap;
+  bitmap_.InternalSwap(&other->bitmap_);
+  gid_.Swap(&other->gid_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  node_id_.Swap(&other->node_id_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  pubkey_.Swap(&other->pubkey_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  sign_challenge_.Swap(&other->sign_challenge_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  sign_response_.Swap(&other->sign_response_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  secret_.Swap(&other->secret_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  challenge_.Swap(&other->challenge_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  response_.Swap(&other->response_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  agg_sign_challenge_.Swap(&other->agg_sign_challenge_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  agg_sign_response_.Swap(&other->agg_sign_response_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  bft_address_.Swap(&other->bft_address_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  data_.Swap(&other->data_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(rand_, other->rand_);
+  swap(status_, other->status_);
+  swap(net_id_, other->net_id_);
+  swap(leader_, other->leader_);
+  swap(agree_, other->agree_);
+  swap(pool_index_, other->pool_index_);
+  swap(_has_bits_[0], other->_has_bits_[0]);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+}
+
+::google::protobuf::Metadata BftMessage::GetMetadata() const {
+  protobuf_client_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_client_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
 void ServiceMessage::InitAsDefaultInstance() {
   ::lego::client::protobuf::_ServiceMessage_default_instance_._instance.get_mutable()->vpn_req_ = const_cast< ::lego::client::protobuf::GetVpnInfoRequest*>(
       ::lego::client::protobuf::GetVpnInfoRequest::internal_default_instance());
@@ -1169,6 +3091,15 @@ template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::lego::client::protobuf::GetVpnIn
 }
 template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::lego::client::protobuf::GetVpnInfoResponse* Arena::CreateMaybeMessage< ::lego::client::protobuf::GetVpnInfoResponse >(Arena* arena) {
   return Arena::CreateInternal< ::lego::client::protobuf::GetVpnInfoResponse >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::lego::client::protobuf::NewTx* Arena::CreateMaybeMessage< ::lego::client::protobuf::NewTx >(Arena* arena) {
+  return Arena::CreateInternal< ::lego::client::protobuf::NewTx >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::lego::client::protobuf::TxBft* Arena::CreateMaybeMessage< ::lego::client::protobuf::TxBft >(Arena* arena) {
+  return Arena::CreateInternal< ::lego::client::protobuf::TxBft >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::lego::client::protobuf::BftMessage* Arena::CreateMaybeMessage< ::lego::client::protobuf::BftMessage >(Arena* arena) {
+  return Arena::CreateInternal< ::lego::client::protobuf::BftMessage >(arena);
 }
 template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::lego::client::protobuf::ServiceMessage* Arena::CreateMaybeMessage< ::lego::client::protobuf::ServiceMessage >(Arena* arena) {
   return Arena::CreateInternal< ::lego::client::protobuf::ServiceMessage >(arena);
