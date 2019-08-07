@@ -80,7 +80,14 @@ int VpnClient::GetVpnServerNodes(
         const std::string& country,
         uint32_t count,
         std::vector<VpnServerNodePtr>& nodes) {
-    auto dht_nodes = root_dht_->RemoteGetNetworkNodes(
+    auto uni_dht = std::dynamic_pointer_cast<network::Uniersal>(
+            network::UniversalManager::Instance()->GetUniversal(
+            network::kUniversalNetworkId));
+    if (!uni_dht) {
+        return kClientError;
+    }
+
+    auto dht_nodes = uni_dht->RemoteGetNetworkNodes(
             network::kVpnNetworkId,
             common::global_country_map[country],
             count);
