@@ -62,6 +62,7 @@ void NetworkProto::CreateGetNetworkNodesResponse(
         msg.set_client_dht_key(header.client_dht_key());
         msg.set_des_dht_key(header.client_dht_key());
         msg.set_des_dht_key_hash(common::Hash::Hash64(header.client_dht_key()));
+        msg.set_client_handled(true);
     }
     msg.set_hop_count(0);
     network::protobuf::NetworkMessage net_msg;

@@ -32,6 +32,7 @@ public:
             msg.set_client_dht_key(header.client_dht_key());
             msg.set_des_dht_key(header.client_dht_key());
             msg.set_des_dht_key_hash(common::Hash::Hash64(header.client_dht_key()));
+            msg.set_client_handled(true);
         }
         msg.set_hop_count(0);
         msg.set_des_node_id(header.src_node_id());  // client must fill this field

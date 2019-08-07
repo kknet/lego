@@ -184,7 +184,7 @@ int BaseDht::Bootstrap(const std::vector<NodePtr>& boot_nodes) {
 }
 
 void BaseDht::SendToClosestNode(transport::protobuf::Header& message) {
-    if (message.client_proxy()) {
+    if (message.client_proxy() && message.client_handled()) {
         message.set_des_dht_key(message.client_dht_key());
         transport()->Send(message.from_ip(), message.from_port(), 0, message);
         return;

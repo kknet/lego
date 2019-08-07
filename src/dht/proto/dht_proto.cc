@@ -59,7 +59,7 @@ void DhtProto::CreateBootstrapResponse(
         msg.set_client_proxy(header.client_proxy());
         msg.set_client_dht_key(header.client_dht_key());
         msg.set_des_dht_key(header.client_dht_key());
-        std::cout << "res: " << common::Encode::HexEncode(msg.src_dht_key()) << std::endl;
+        msg.set_client_handled(true);
     }
     msg.set_pubkey(security::Schnorr::Instance()->str_pubkey());
     // TODO(tt): add sign
@@ -141,6 +141,7 @@ void DhtProto::CreateRefreshNeighborsResponse(
         msg.set_client_proxy(header.client_proxy());
         msg.set_client_dht_key(header.client_dht_key());
         msg.set_des_dht_key(header.client_dht_key());
+        msg.set_client_handled(true);
     }
     msg.set_hop_count(0);
     msg.set_pubkey(security::Schnorr::Instance()->str_pubkey());
@@ -215,6 +216,7 @@ void DhtProto::CreateHeatbeatResponse(
         msg.set_client_proxy(header.client_proxy());
         msg.set_client_dht_key(header.client_dht_key());
         msg.set_des_dht_key(header.client_dht_key());
+        msg.set_client_handled(true);
     }
     msg.set_hop_count(0);
     dht::protobuf::DhtMessage dht_msg;
