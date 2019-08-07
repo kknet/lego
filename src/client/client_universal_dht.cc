@@ -33,6 +33,7 @@ void ClientUniversalDht::HandleMessage(transport::protobuf::Header& msg) {
 void ClientUniversalDht::SetFrequently(transport::protobuf::Header& msg) {
     network::Uniersal::SetFrequently(msg);
     msg.set_client(true);
+    msg.set_universal(false);
 }
 
 }  // namespace client
