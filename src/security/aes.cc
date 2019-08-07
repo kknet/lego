@@ -10,7 +10,7 @@ namespace lego {
 namespace security {
 
 int Aes::Encrypt(const std::string& src, const std::string& key, std::string& out) {
-    assert(key.size() == 16 || key.size() == 24 || key.size() == 25);
+    assert(key.size() == 16 || key.size() == 24 || key.size() == 32);
     if (src.empty() || key.empty()) {
         return kSecurityError;
     }
@@ -41,7 +41,7 @@ int Aes::Encrypt(const std::string& src, const std::string& key, std::string& ou
 }
 
 int Aes::Decrypt(const std::string& src, const std::string& key, std::string& out) {
-    assert(key.size() == 16 || key.size() == 24 || key.size() == 25);
+    assert(key.size() == 16 || key.size() == 24 || key.size() == 32);
     if (src.empty() || key.empty()) {
         return kSecurityError;
     }
