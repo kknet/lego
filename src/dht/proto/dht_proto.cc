@@ -52,9 +52,12 @@ void DhtProto::CreateBootstrapResponse(
     msg.set_type(common::kDhtMessage);
     msg.set_hop_count(0);
     if (header.client()) {
+        msg.set_from_ip(header.from_ip());
+        msg.set_from_port(header.from_port());
         msg.set_client(header.client());
         msg.set_client_relayed(true);
         msg.set_client_proxy(header.client_proxy());
+        msg.set_client_dht_key(header.client_dht_key());
         msg.set_des_dht_key(header.client_dht_key());
     }
     msg.set_pubkey(security::Schnorr::Instance()->str_pubkey());
@@ -130,9 +133,12 @@ void DhtProto::CreateRefreshNeighborsResponse(
     msg.set_id(header.id());
     msg.set_type(common::kDhtMessage);
     if (header.client()) {
+        msg.set_from_ip(header.from_ip());
+        msg.set_from_port(header.from_port());
         msg.set_client(header.client());
         msg.set_client_relayed(true);
         msg.set_client_proxy(header.client_proxy());
+        msg.set_client_dht_key(header.client_dht_key());
         msg.set_des_dht_key(header.client_dht_key());
     }
     msg.set_hop_count(0);
@@ -201,9 +207,12 @@ void DhtProto::CreateHeatbeatResponse(
     msg.set_id(header.id());
     msg.set_type(common::kDhtMessage);
     if (header.client()) {
+        msg.set_from_ip(header.from_ip());
+        msg.set_from_port(header.from_port());
         msg.set_client(header.client());
         msg.set_client_relayed(true);
         msg.set_client_proxy(header.client_proxy());
+        msg.set_client_dht_key(header.client_dht_key());
         msg.set_des_dht_key(header.client_dht_key());
     }
     msg.set_hop_count(0);

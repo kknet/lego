@@ -54,13 +54,16 @@ void NetworkProto::CreateGetNetworkNodesResponse(
     msg.set_id(header.id());
     msg.set_type(common::kNetworkMessage);
     if (header.client()) {
+        msg.set_from_ip(header.from_ip());
+        msg.set_from_port(header.from_port());
         msg.set_client(header.client());
         msg.set_client_relayed(true);
         msg.set_client_proxy(header.client_proxy());
+        msg.set_client_dht_key(header.client_dht_key());
         msg.set_des_dht_key(header.client_dht_key());
+        msg.set_des_dht_key_hash(common::Hash::Hash64(header.client_dht_key()));
     }
     msg.set_hop_count(0);
-    msg.set_des_dht_key_hash(common::Hash::Hash64(header.src_dht_key()));
     network::protobuf::NetworkMessage net_msg;
     auto* get_nodes_res = net_msg.mutable_get_net_nodes_res();
     for (uint32_t i = 0; i < nodes.size(); ++i) {

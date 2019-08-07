@@ -5,6 +5,7 @@
 #include "common/global_info.h"
 #include "common/hash.h"
 #include "common/random.h"
+#include "common/encode.h"
 #include "dht/dht_utils.h"
 
 namespace lego {
@@ -63,6 +64,9 @@ const std::string& DhtKeyManager::StrKey() {
 }
 
 uint32_t DhtKeyManager::DhtKeyGetNetId(const std::string& dht_key) {
+    if (dht_key.size() != kDhtKeySize) {
+        std::cout << dht_key.size() << ": " << common::Encode::HexEncode(dht_key) << std::endl;
+    }
     assert(dht_key.size() == kDhtKeySize);
     DhtKey::Construct* cons_key = (DhtKey::Construct*)(dht_key.c_str());
     return cons_key->net_id;

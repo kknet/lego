@@ -202,6 +202,7 @@ void Uniersal::ProcessGetNetworkNodesRequest(
     dht::BaseDhtPtr dht = UniversalManager::Instance()->GetUniversal(kUniversalNetworkId);
     auto universal_dht = std::dynamic_pointer_cast<Uniersal>(dht);
     if (!universal_dht->HasNetworkId(network_msg.get_net_nodes_req().net_id())) {
+        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end 1", header);
         SendToClosestNode(header);
         return;
     }
@@ -213,6 +214,7 @@ void Uniersal::ProcessGetNetworkNodesRequest(
     SetFrequently(msg);
     NetworkProto::CreateGetNetworkNodesResponse(local_node_, header, nodes, msg);
     SendToClosestNode(msg);
+    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end 2", header);
 }
 
 void Uniersal::ProcessGetNetworkNodesResponse(
