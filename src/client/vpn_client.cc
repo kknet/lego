@@ -97,6 +97,9 @@ int VpnClient::Init(const std::string& conf) {
         std::string tx_gid;
         Transaction("", 0, tx_gid);
         std::cout << "tx gid: " << common::Encode::HexEncode(tx_gid) << std::endl;
+        if (CheckTransaction(tx_gid) != kClientSuccess) {
+            CLIENT_ERROR("check transaction failed!");
+        }
     }
     return kClientSuccess;
 }
@@ -359,7 +362,7 @@ int VpnClient::CheckTransaction(const std::string& tx_gid) {
         } while (0);
         state_lock.Signal();
     };
-    transport::SynchroWait::Instance()->Add(msg.id(), 500 * 1000, callback, 1);
+    transport::SynchroWait::Instance()->Add(msg.id(), 3 * 1000 * 1000, callback, 1);
     state_lock.Wait();
     if (!block_finded) {
         return kClientError;

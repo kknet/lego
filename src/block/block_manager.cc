@@ -2,10 +2,13 @@
 
 #include "common/encode.h"
 #include "db/db.h"
+#include "dht/dht_key.h"
 #include "network/route.h"
 #include "network/universal_manager.h"
 #include "network/network_utils.h"
 #include "network/universal.h"
+#include "network/dht_manager.h"
+#include "network/route.h"
 #include "block/block_utils.h"
 #include "block/account_manager.h"
 #include "block/genesis_block.h"
