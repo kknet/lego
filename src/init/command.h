@@ -29,6 +29,7 @@ private:
     void AddBaseCommands();
     void PrintDht(uint32_t network_id);
     void PrintMembers(uint32_t network_id);
+    void GetVpnNodes();
 
     std::map<std::string, CommandFunction> cmd_map_;
     std::mutex cmd_map_mutex_;

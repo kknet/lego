@@ -12,6 +12,7 @@
 #include "network/universal_manager.h"
 #include "bft/bft_manager.h"
 #include "init/init_utils.h"
+#include "client/vpn_client.h"
 
 namespace lego {
 
@@ -108,6 +109,19 @@ void Command::AddBaseCommands() {
         uint32_t network_id = common::StringUtil::ToUint32(args[0]);
         PrintMembers(network_id);
     });
+    AddCommand("vn", [this](const std::vector<std::string>& args) {
+        GetVpnNodes();
+    });
+}
+
+void Command::GetVpnNodes() {
+    std::vector<lego::client::VpnServerNodePtr> nodes;
+    lego::client::VpnClient::Instance()->GetVpnServerNodes("US", 2, nodes);
+    std::cout << "get vpn_nodes size: " << nodes.size() << std::endl;
+    for (uint32_t i = 0; i < nodes.size(); ++i) {
+        std::cout << "get vpn_info: " << nodes[i]->ip << ":" << nodes[i]->port
+            << ", " << nodes[i]->encrypt_type << ", " << nodes[i]->passwd << std::endl;
+    }
 }
 
 void Command::PrintMembers(uint32_t network_id) {

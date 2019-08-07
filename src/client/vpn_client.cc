@@ -41,6 +41,11 @@ VpnClient::VpnClient() {
 
 VpnClient::~VpnClient() {}
 
+VpnClient* VpnClient::Instance() {
+    static VpnClient ins;
+    return &ins;
+}
+
 void VpnClient::HandleMessage(transport::protobuf::Header& header) {
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("client end", header);
     root_dht_->HandleMessage(header);

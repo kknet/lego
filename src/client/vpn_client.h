@@ -34,8 +34,7 @@ typedef std::shared_ptr<VpnServerNode> VpnServerNodePtr;
 
 class VpnClient {
 public:
-    VpnClient();
-    ~VpnClient();
+    static VpnClient* Instance();
     int Init(const std::string& conf);
     int GetVpnServerNodes(
             const std::string& country,
@@ -43,6 +42,9 @@ public:
             std::vector<VpnServerNodePtr>& nodes);
 
 private:
+    VpnClient();
+    ~VpnClient();
+
     void HandleMessage(transport::protobuf::Header& header);
     int InitTransport();
     int SetPriAndPubKey(const std::string& prikey);
