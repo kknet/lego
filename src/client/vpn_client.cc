@@ -337,7 +337,7 @@ int VpnClient::CheckTransaction(const std::string& tx_gid) {
     auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
             network::kUniversalNetworkId);
     transport::protobuf::Header msg;
-    ClientProto::GetBlockWithTxGid(uni_dht->local_node(), tx_gid, msg);
+    ClientProto::GetBlockWithTxGid(uni_dht->local_node(), tx_gid, true, msg);
     uni_dht->SendToClosestNode(msg);
 
     common::StateLock state_lock(0);

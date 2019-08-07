@@ -118,8 +118,9 @@ public:
     static void GetBlockWithTxGid(
             const dht::NodePtr& local_node,
             const std::string& tx_gid,
+            bool from,
             transport::protobuf::Header& msg) {
-                msg.set_src_dht_key(local_node->dht_key);
+        msg.set_src_dht_key(local_node->dht_key);
         std::string account_address = network::GetAccountAddressByPublicKey(
                 security::Schnorr::Instance()->str_pubkey());
         uint32_t des_net_id = network::GetConsensusShardNetworkId(account_address);
@@ -135,6 +136,7 @@ public:
         protobuf::BlockMessage block_msg;
         auto block_req = block_msg.mutable_block_req();
         block_req->set_tx_gid(tx_gid);
+        block_req->set_from(from);
         msg.set_data(block_msg.SerializeAsString());
 #ifdef LEGO_TRACE_MESSAGE
         msg.set_debug(std::string("GetBlockWithTxGid: ") +
