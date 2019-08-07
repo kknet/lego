@@ -222,7 +222,11 @@ int UdpTransport::Send(
         if (ttl != 0) {
             uv_udp_set_ttl(&uv_udp_, ttl);
         }
-        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("udp sent", proto);
+#ifdef LEGO_TRACE_MESSAGE
+        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE(
+                std::string("udp sent ") + ip + ":" + std::to_string(port),
+                proto);
+#endif // LEGO_TRACE_MESSAGE
         uv_udp_try_send(&uv_udp_, buf, kSendBufCount, (const struct sockaddr*)&addr);
         if (ttl != 0) {
             uv_udp_set_ttl(&uv_udp_, kDefaultTtl);
