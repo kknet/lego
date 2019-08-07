@@ -185,18 +185,28 @@ class GetNetworkNodesRequest : public ::google::protobuf::Message /* @@protoc_in
   ::google::protobuf::uint32 count() const;
   void set_count(::google::protobuf::uint32 value);
 
+  // optional uint32 country = 3;
+  bool has_country() const;
+  void clear_country();
+  static const int kCountryFieldNumber = 3;
+  ::google::protobuf::uint32 country() const;
+  void set_country(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:lego.network.protobuf.GetNetworkNodesRequest)
  private:
   void set_has_net_id();
   void clear_has_net_id();
   void set_has_count();
   void clear_has_count();
+  void set_has_country();
+  void clear_has_country();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   ::google::protobuf::uint32 net_id_;
   ::google::protobuf::uint32 count_;
+  ::google::protobuf::uint32 country_;
   friend struct ::protobuf_network_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
@@ -731,6 +741,30 @@ inline void GetNetworkNodesRequest::set_count(::google::protobuf::uint32 value) 
   set_has_count();
   count_ = value;
   // @@protoc_insertion_point(field_set:lego.network.protobuf.GetNetworkNodesRequest.count)
+}
+
+// optional uint32 country = 3;
+inline bool GetNetworkNodesRequest::has_country() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void GetNetworkNodesRequest::set_has_country() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void GetNetworkNodesRequest::clear_has_country() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void GetNetworkNodesRequest::clear_country() {
+  country_ = 0u;
+  clear_has_country();
+}
+inline ::google::protobuf::uint32 GetNetworkNodesRequest::country() const {
+  // @@protoc_insertion_point(field_get:lego.network.protobuf.GetNetworkNodesRequest.country)
+  return country_;
+}
+inline void GetNetworkNodesRequest::set_country(::google::protobuf::uint32 value) {
+  set_has_country();
+  country_ = value;
+  // @@protoc_insertion_point(field_set:lego.network.protobuf.GetNetworkNodesRequest.country)
 }
 
 // -------------------------------------------------------------------

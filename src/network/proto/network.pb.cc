@@ -127,8 +127,10 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::network::protobuf::GetNetworkNodesRequest, net_id_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::network::protobuf::GetNetworkNodesRequest, count_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::network::protobuf::GetNetworkNodesRequest, country_),
   0,
   1,
+  2,
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::network::protobuf::NodeInfo, _has_bits_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::network::protobuf::NodeInfo, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -168,10 +170,10 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   1,
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, 7, sizeof(::lego::network::protobuf::GetNetworkNodesRequest)},
-  { 9, 22, sizeof(::lego::network::protobuf::NodeInfo)},
-  { 30, 36, sizeof(::lego::network::protobuf::GetNetworkNodesResponse)},
-  { 37, 44, sizeof(::lego::network::protobuf::NetworkMessage)},
+  { 0, 8, sizeof(::lego::network::protobuf::GetNetworkNodesRequest)},
+  { 11, 24, sizeof(::lego::network::protobuf::NodeInfo)},
+  { 32, 38, sizeof(::lego::network::protobuf::GetNetworkNodesResponse)},
+  { 39, 46, sizeof(::lego::network::protobuf::NetworkMessage)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -202,22 +204,22 @@ void protobuf_RegisterTypes(const ::std::string&) {
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-      "\n\rnetwork.proto\022\025lego.network.protobuf\"7"
+      "\n\rnetwork.proto\022\025lego.network.protobuf\"H"
       "\n\026GetNetworkNodesRequest\022\016\n\006net_id\030\001 \001(\r"
-      "\022\r\n\005count\030\002 \001(\r\"\227\001\n\010NodeInfo\022\021\n\tpublic_i"
-      "p\030\001 \001(\014\022\023\n\013public_port\030\002 \001(\005\022\020\n\010local_ip"
-      "\030\003 \001(\014\022\022\n\nlocal_port\030\004 \001(\005\022\n\n\002id\030\005 \001(\014\022\020"
-      "\n\010nat_type\030\006 \001(\005\022\017\n\007dht_key\030\007 \001(\014\022\016\n\006pub"
-      "key\030\010 \001(\014\"I\n\027GetNetworkNodesResponse\022.\n\005"
-      "nodes\030\001 \003(\0132\037.lego.network.protobuf.Node"
-      "Info\"\245\001\n\016NetworkMessage\022H\n\021get_net_nodes"
-      "_req\030\001 \001(\0132-.lego.network.protobuf.GetNe"
-      "tworkNodesRequest\022I\n\021get_net_nodes_res\030\002"
-      " \001(\0132..lego.network.protobuf.GetNetworkN"
-      "odesResponse"
+      "\022\r\n\005count\030\002 \001(\r\022\017\n\007country\030\003 \001(\r\"\227\001\n\010Nod"
+      "eInfo\022\021\n\tpublic_ip\030\001 \001(\014\022\023\n\013public_port\030"
+      "\002 \001(\005\022\020\n\010local_ip\030\003 \001(\014\022\022\n\nlocal_port\030\004 "
+      "\001(\005\022\n\n\002id\030\005 \001(\014\022\020\n\010nat_type\030\006 \001(\005\022\017\n\007dht"
+      "_key\030\007 \001(\014\022\016\n\006pubkey\030\010 \001(\014\"I\n\027GetNetwork"
+      "NodesResponse\022.\n\005nodes\030\001 \003(\0132\037.lego.netw"
+      "ork.protobuf.NodeInfo\"\245\001\n\016NetworkMessage"
+      "\022H\n\021get_net_nodes_req\030\001 \001(\0132-.lego.netwo"
+      "rk.protobuf.GetNetworkNodesRequest\022I\n\021ge"
+      "t_net_nodes_res\030\002 \001(\0132..lego.network.pro"
+      "tobuf.GetNetworkNodesResponse"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 492);
+      descriptor, 509);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "network.proto", &protobuf_RegisterTypes);
 }
@@ -244,6 +246,7 @@ void GetNetworkNodesRequest::InitAsDefaultInstance() {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int GetNetworkNodesRequest::kNetIdFieldNumber;
 const int GetNetworkNodesRequest::kCountFieldNumber;
+const int GetNetworkNodesRequest::kCountryFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 GetNetworkNodesRequest::GetNetworkNodesRequest()
@@ -259,15 +262,15 @@ GetNetworkNodesRequest::GetNetworkNodesRequest(const GetNetworkNodesRequest& fro
       _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::memcpy(&net_id_, &from.net_id_,
-    static_cast<size_t>(reinterpret_cast<char*>(&count_) -
-    reinterpret_cast<char*>(&net_id_)) + sizeof(count_));
+    static_cast<size_t>(reinterpret_cast<char*>(&country_) -
+    reinterpret_cast<char*>(&net_id_)) + sizeof(country_));
   // @@protoc_insertion_point(copy_constructor:lego.network.protobuf.GetNetworkNodesRequest)
 }
 
 void GetNetworkNodesRequest::SharedCtor() {
   ::memset(&net_id_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&count_) -
-      reinterpret_cast<char*>(&net_id_)) + sizeof(count_));
+      reinterpret_cast<char*>(&country_) -
+      reinterpret_cast<char*>(&net_id_)) + sizeof(country_));
 }
 
 GetNetworkNodesRequest::~GetNetworkNodesRequest() {
@@ -299,10 +302,10 @@ void GetNetworkNodesRequest::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 3u) {
+  if (cached_has_bits & 7u) {
     ::memset(&net_id_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&count_) -
-        reinterpret_cast<char*>(&net_id_)) + sizeof(count_));
+        reinterpret_cast<char*>(&country_) -
+        reinterpret_cast<char*>(&net_id_)) + sizeof(country_));
   }
   _has_bits_.Clear();
   _internal_metadata_.Clear();
@@ -346,6 +349,20 @@ bool GetNetworkNodesRequest::MergePartialFromCodedStream(
         break;
       }
 
+      // optional uint32 country = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+          set_has_country();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &country_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -383,6 +400,11 @@ void GetNetworkNodesRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->count(), output);
   }
 
+  // optional uint32 country = 3;
+  if (cached_has_bits & 0x00000004u) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->country(), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -408,6 +430,11 @@ void GetNetworkNodesRequest::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->count(), target);
   }
 
+  // optional uint32 country = 3;
+  if (cached_has_bits & 0x00000004u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->country(), target);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
@@ -425,7 +452,7 @@ size_t GetNetworkNodesRequest::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         _internal_metadata_.unknown_fields());
   }
-  if (_has_bits_[0 / 32] & 3u) {
+  if (_has_bits_[0 / 32] & 7u) {
     // optional uint32 net_id = 1;
     if (has_net_id()) {
       total_size += 1 +
@@ -438,6 +465,13 @@ size_t GetNetworkNodesRequest::ByteSizeLong() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt32Size(
           this->count());
+    }
+
+    // optional uint32 country = 3;
+    if (has_country()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->country());
     }
 
   }
@@ -469,12 +503,15 @@ void GetNetworkNodesRequest::MergeFrom(const GetNetworkNodesRequest& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 3u) {
+  if (cached_has_bits & 7u) {
     if (cached_has_bits & 0x00000001u) {
       net_id_ = from.net_id_;
     }
     if (cached_has_bits & 0x00000002u) {
       count_ = from.count_;
+    }
+    if (cached_has_bits & 0x00000004u) {
+      country_ = from.country_;
     }
     _has_bits_[0] |= cached_has_bits;
   }
@@ -506,6 +543,7 @@ void GetNetworkNodesRequest::InternalSwap(GetNetworkNodesRequest* other) {
   using std::swap;
   swap(net_id_, other->net_id_);
   swap(count_, other->count_);
+  swap(country_, other->country_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   _internal_metadata_.Swap(&other->_internal_metadata_);
 }

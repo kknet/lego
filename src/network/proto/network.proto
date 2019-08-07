@@ -5,6 +5,7 @@ package lego.network.protobuf;
 message GetNetworkNodesRequest {
 	optional uint32 net_id = 1;
 	optional uint32 count = 2;
+	optional uint32 country = 3;
 }
 
 message NodeInfo {
