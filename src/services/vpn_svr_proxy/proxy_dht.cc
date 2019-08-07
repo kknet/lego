@@ -1,6 +1,7 @@
 #include "services/vpn_svr_proxy/proxy_dht.h"
 
 #include "security/ecdh_create_key.h"
+#include "security/schnorr.h"
 #include "security/aes.h"
 #include "services/proto/service_proto.h"
 #include "services/proto/service.pb.h"
@@ -37,13 +38,11 @@ void ProxyDht::HandleMessage(transport::protobuf::Header& msg) {
 void ProxyDht::HandleGetSocksRequest(
         transport::protobuf::Header& msg,
         service::protobuf::ServiceMessage& src_svr_msg) {
-    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("getted socks 1", msg);
     if (!src_svr_msg.has_vpn_req()) {
         return;
     }
 
     auto vpn_conf = ShadowsocksProxy::Instance()->GetShadowsocks();
-    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("getted socks 2", msg);
     if (vpn_conf == nullptr) {
         PROXY_ERROR("there is no vpn service started!");
         return;
@@ -55,7 +54,6 @@ void ProxyDht::HandleGetSocksRequest(
     vpn_res->set_port(vpn_conf->port);
     vpn_res->set_encrypt_type(vpn_conf->method);
     security::PublicKey pubkey;
-    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("getted socks 3", msg);
     if (pubkey.Deserialize(src_svr_msg.vpn_req().pubkey()) != 0) {
         PROXY_ERROR("invalid public key.");
         return;
@@ -64,14 +62,12 @@ void ProxyDht::HandleGetSocksRequest(
     // ecdh encrypt vpn password
     std::string sec_key;
     auto res = security::EcdhCreateKey::Instance()->CreateKey(pubkey, sec_key);
-    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("getted socks 4", msg);
     if (res != security::kSecuritySuccess) {
         PROXY_ERROR("create sec key failed!");
         return;
     }
 
     std::string enc_passwd;
-    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("getted socks 5", msg);
     if (security::Aes::Encrypt(
             vpn_conf->passwd,
             sec_key,
@@ -80,6 +76,7 @@ void ProxyDht::HandleGetSocksRequest(
         return;
     }
     vpn_res->set_passwd(enc_passwd);
+    vpn_res->set_pubkey(security::Schnorr::Instance()->str_pubkey());
     transport::protobuf::Header res_msg;
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("getted socks", msg);
     service::ServiceProto::CreateGetVpnInfoRes(local_node(), svr_msg, msg, res_msg);
