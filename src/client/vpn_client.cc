@@ -115,28 +115,23 @@ int VpnClient::GetVpnNodes(
     auto callback = [&state_lock, &vpn_nodes, &re_mutex, &res_num, expect_num](
             int status,
             transport::protobuf::Header& header) {
-        std::cout << "callback 1." << std::endl;
         do  {
             if (status != transport::kTransportSuccess) {
                 break;
             }
-            std::cout << "callback 2." << std::endl;
 
             if (header.type() != common::kServiceMessage) {
                 break;
             }
-            std::cout << "callback 3." << std::endl;
 
             protobuf::ServiceMessage svr_msg;
             if (!svr_msg.ParseFromString(header.data())) {
                 break;
             }
-            std::cout << "callback 4." << std::endl;
 
             if (!svr_msg.has_vpn_res()) {
                 break;
             }
-            std::cout << "callback 5." << std::endl;
 
             if (svr_msg.vpn_res().ip().empty() ||
                     svr_msg.vpn_res().port() <= 0 ||
@@ -144,13 +139,11 @@ int VpnClient::GetVpnNodes(
                     svr_msg.vpn_res().passwd().empty()) {
                 break;
             }
-            std::cout << "callback 6." << std::endl;
 
             security::PublicKey pubkey;
             if (pubkey.Deserialize(svr_msg.vpn_res().pubkey()) != 0) {
                 break;
             }
-            std::cout << "callback 7." << std::endl;
             // ecdh encrypt vpn password
             std::string sec_key;
             auto res = security::EcdhCreateKey::Instance()->CreateKey(pubkey, sec_key);
@@ -158,7 +151,6 @@ int VpnClient::GetVpnNodes(
                 CLIENT_ERROR("create sec key failed!");
                 return;
             }
-            std::cout << "callback 8." << std::endl;
 
             std::string dec_passwd;
             if (security::Aes::Decrypt(
@@ -168,7 +160,6 @@ int VpnClient::GetVpnNodes(
                 CLIENT_ERROR("aes encrypt failed!");
                 return;
             }
-            std::cout << "callback 9." << std::endl;
             LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("called", header);
             std::lock_guard<std::mutex> guard(re_mutex);
             vpn_nodes.push_back(std::make_shared<VpnServerNode>(
