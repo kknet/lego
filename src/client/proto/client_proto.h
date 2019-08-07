@@ -83,7 +83,7 @@ public:
         auto new_tx = tx_bft.mutable_new_tx();
         new_tx->set_gid(gid);
         new_tx->set_from_acc_addr(account_address);
-        new_tx->set_from_pubkey(str_pubkey);
+        new_tx->set_from_pubkey(security::Schnorr::Instance()->str_pubkey());
         new_tx->set_to_acc_addr(to);
         new_tx->set_lego_count(amount);
         auto data = tx_bft.SerializeAsString();
