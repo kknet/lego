@@ -366,7 +366,7 @@ void NetworkInit::CreateNewTx() {
         return;
     }
     auto btime = common::TimeStampMsec();
-    for (uint32_t i = 0; i < 1000; ++i) {
+    for (uint32_t i = 0; i < 1; ++i) {
         transport::protobuf::Header msg;
         auto dht = network::DhtManager::Instance()->GetDht(4);
         if (dht->readonly_dht()->size() >= 2) {

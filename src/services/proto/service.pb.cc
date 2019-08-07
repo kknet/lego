@@ -114,10 +114,12 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::service::protobuf::GetVpnInfoResponse, port_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::service::protobuf::GetVpnInfoResponse, encrypt_type_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::service::protobuf::GetVpnInfoResponse, passwd_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::service::protobuf::GetVpnInfoResponse, pubkey_),
   0,
-  3,
+  4,
   1,
   2,
+  3,
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::service::protobuf::ServiceMessage, _has_bits_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::service::protobuf::ServiceMessage, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -130,8 +132,8 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   { 0, 6, sizeof(::lego::service::protobuf::GetVpnInfoRequest)},
-  { 7, 16, sizeof(::lego::service::protobuf::GetVpnInfoResponse)},
-  { 20, 27, sizeof(::lego::service::protobuf::ServiceMessage)},
+  { 7, 17, sizeof(::lego::service::protobuf::GetVpnInfoResponse)},
+  { 22, 29, sizeof(::lego::service::protobuf::ServiceMessage)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -162,16 +164,16 @@ void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
       "\n\rservice.proto\022\025lego.service.protobuf\"#"
-      "\n\021GetVpnInfoRequest\022\016\n\006pubkey\030\001 \001(\014\"T\n\022G"
+      "\n\021GetVpnInfoRequest\022\016\n\006pubkey\030\001 \001(\014\"d\n\022G"
       "etVpnInfoResponse\022\n\n\002ip\030\001 \001(\014\022\014\n\004port\030\002 "
       "\001(\r\022\024\n\014encrypt_type\030\003 \001(\014\022\016\n\006passwd\030\004 \001("
-      "\014\"\207\001\n\016ServiceMessage\0229\n\007vpn_req\030\001 \001(\0132(."
-      "lego.service.protobuf.GetVpnInfoRequest\022"
-      ":\n\007vpn_res\030\002 \001(\0132).lego.service.protobuf"
-      ".GetVpnInfoResponse"
+      "\014\022\016\n\006pubkey\030\005 \001(\014\"\207\001\n\016ServiceMessage\0229\n\007"
+      "vpn_req\030\001 \001(\0132(.lego.service.protobuf.Ge"
+      "tVpnInfoRequest\022:\n\007vpn_res\030\002 \001(\0132).lego."
+      "service.protobuf.GetVpnInfoResponse"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 299);
+      descriptor, 315);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "service.proto", &protobuf_RegisterTypes);
 }
@@ -438,6 +440,7 @@ const int GetVpnInfoResponse::kIpFieldNumber;
 const int GetVpnInfoResponse::kPortFieldNumber;
 const int GetVpnInfoResponse::kEncryptTypeFieldNumber;
 const int GetVpnInfoResponse::kPasswdFieldNumber;
+const int GetVpnInfoResponse::kPubkeyFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 GetVpnInfoResponse::GetVpnInfoResponse()
@@ -464,6 +467,10 @@ GetVpnInfoResponse::GetVpnInfoResponse(const GetVpnInfoResponse& from)
   if (from.has_passwd()) {
     passwd_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.passwd_);
   }
+  pubkey_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_pubkey()) {
+    pubkey_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.pubkey_);
+  }
   port_ = from.port_;
   // @@protoc_insertion_point(copy_constructor:lego.service.protobuf.GetVpnInfoResponse)
 }
@@ -472,6 +479,7 @@ void GetVpnInfoResponse::SharedCtor() {
   ip_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   encrypt_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   passwd_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  pubkey_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   port_ = 0u;
 }
 
@@ -484,6 +492,7 @@ void GetVpnInfoResponse::SharedDtor() {
   ip_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   encrypt_type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   passwd_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  pubkey_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void GetVpnInfoResponse::SetCachedSize(int size) const {
@@ -507,7 +516,7 @@ void GetVpnInfoResponse::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 7u) {
+  if (cached_has_bits & 15u) {
     if (cached_has_bits & 0x00000001u) {
       ip_.ClearNonDefaultToEmptyNoArena();
     }
@@ -516,6 +525,9 @@ void GetVpnInfoResponse::Clear() {
     }
     if (cached_has_bits & 0x00000004u) {
       passwd_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000008u) {
+      pubkey_.ClearNonDefaultToEmptyNoArena();
     }
   }
   port_ = 0u;
@@ -583,6 +595,18 @@ bool GetVpnInfoResponse::MergePartialFromCodedStream(
         break;
       }
 
+      // optional bytes pubkey = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_pubkey()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -617,7 +641,7 @@ void GetVpnInfoResponse::SerializeWithCachedSizes(
   }
 
   // optional uint32 port = 2;
-  if (cached_has_bits & 0x00000008u) {
+  if (cached_has_bits & 0x00000010u) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->port(), output);
   }
 
@@ -631,6 +655,12 @@ void GetVpnInfoResponse::SerializeWithCachedSizes(
   if (cached_has_bits & 0x00000004u) {
     ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
       4, this->passwd(), output);
+  }
+
+  // optional bytes pubkey = 5;
+  if (cached_has_bits & 0x00000008u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      5, this->pubkey(), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -656,7 +686,7 @@ void GetVpnInfoResponse::SerializeWithCachedSizes(
   }
 
   // optional uint32 port = 2;
-  if (cached_has_bits & 0x00000008u) {
+  if (cached_has_bits & 0x00000010u) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->port(), target);
   }
 
@@ -672,6 +702,13 @@ void GetVpnInfoResponse::SerializeWithCachedSizes(
     target =
       ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
         4, this->passwd(), target);
+  }
+
+  // optional bytes pubkey = 5;
+  if (cached_has_bits & 0x00000008u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        5, this->pubkey(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -691,7 +728,7 @@ size_t GetVpnInfoResponse::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         _internal_metadata_.unknown_fields());
   }
-  if (_has_bits_[0 / 32] & 15u) {
+  if (_has_bits_[0 / 32] & 31u) {
     // optional bytes ip = 1;
     if (has_ip()) {
       total_size += 1 +
@@ -711,6 +748,13 @@ size_t GetVpnInfoResponse::ByteSizeLong() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::BytesSize(
           this->passwd());
+    }
+
+    // optional bytes pubkey = 5;
+    if (has_pubkey()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->pubkey());
     }
 
     // optional uint32 port = 2;
@@ -749,7 +793,7 @@ void GetVpnInfoResponse::MergeFrom(const GetVpnInfoResponse& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 15u) {
+  if (cached_has_bits & 31u) {
     if (cached_has_bits & 0x00000001u) {
       set_has_ip();
       ip_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.ip_);
@@ -763,6 +807,10 @@ void GetVpnInfoResponse::MergeFrom(const GetVpnInfoResponse& from) {
       passwd_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.passwd_);
     }
     if (cached_has_bits & 0x00000008u) {
+      set_has_pubkey();
+      pubkey_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.pubkey_);
+    }
+    if (cached_has_bits & 0x00000010u) {
       port_ = from.port_;
     }
     _has_bits_[0] |= cached_has_bits;
@@ -798,6 +846,8 @@ void GetVpnInfoResponse::InternalSwap(GetVpnInfoResponse* other) {
   encrypt_type_.Swap(&other->encrypt_type_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
   passwd_.Swap(&other->passwd_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  pubkey_.Swap(&other->pubkey_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
   swap(port_, other->port_);
   swap(_has_bits_[0], other->_has_bits_[0]);
