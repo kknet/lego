@@ -38,6 +38,7 @@ private:
     void CheckVpnStatus();
     void ShiftVpnPeriod();
     int CreateVpnProxyNetwork();
+    bool CheckVpnExists(const std::string& passwd);
 
     static const uint32_t kMaxShadowsocksCount = 3u;
     static const int64_t kShowdowsocksShiftPeriod = 3600ll * 1000ll * 1000ll;

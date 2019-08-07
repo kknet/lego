@@ -209,14 +209,17 @@ void ShadowsocksProxy::CheckVpnStatus() {
             if (socks_conf == nullptr) {
                 continue;
             }
-            std::string cmd = common::StringUtil::Format("ps -ef | grep %s", socks_conf->passwd.c_str());
-            std::string vpn_bin_path;
-            if (!conf_.Get("lego", "vpn_bin_path", vpn_bin_path) || vpn_bin_path.empty()) {
-                PROXY_ERROR("get vpn bin path failed.");
-                break;
-            }
+            
 
-            if (RunCommand(cmd, vpn_bin_path) != kProxySuccess) {
+            if (!CheckVpnExists(socks_conf->passwd)) {
+                std::string cmd = common::StringUtil::Format(
+                        "ps -ef | grep %s | awk -F' ' '{print $2}' | xargs kill -9",
+                        socks_conf->passwd.c_str());
+                if (RunCommand(cmd, "") != kProxySuccess) {
+                    PROXY_ERROR("run cmd [%s] failed!", cmd.c_str());
+                    continue;
+                }
+                std::this_thread::sleep_for(std::chrono::microseconds(100000ull));
                 std::string cmd = common::StringUtil::Format(
                         "nohup /usr/bin/gpgk -s %s -p %d -k %s -m %s -t %d -u &",
                         common::GlobalInfo::Instance()->config_local_ip().c_str(),
@@ -252,6 +255,24 @@ int ShadowsocksProxy::CreateVpnProxyNetwork() {
 
     return kProxySuccess;
 }
+
+bool ShadowsocksProxy::CheckVpnExists(const std::string& passwd) {
+    std::string cmd = common::StringUtil::Format("ps -ef | grep %s", passwd.c_str());
+    std::string vpn_bin_path;
+    if (!conf_.Get("lego", "vpn_bin_path", vpn_bin_path) || vpn_bin_path.empty()) {
+        PROXY_ERROR("get vpn bin path failed.");
+        return true;
+    }
+    for (uint32_t i = 0; i < 3; ++i) {
+        if (RunCommand(cmd, vpn_bin_path) != kProxySuccess) {
+            std::this_thread::sleep_for(std::chrono::microseconds(100000ull));
+            continue;
+        }
+        return true;
+    }
+    return false;
+}
+
 
 }  // namespace vpn
 
