@@ -290,12 +290,14 @@ int VpnClient::CreateClientUniversalNetwork() {
     return kClientSuccess;
 }
 
-int VpnClient::CreateAccountAddress() {
+int VpnClient::Transaction(const std::string& to, uint64_t amount) {
     transport::protobuf::Header msg;
     uint64_t rand_num = 0;
     ClientProto::CreateTxRequest(
             root_dht_->local_node(),
             common::CreateGID(security::Schnorr::Instance()->str_pubkey()),
+            to,
+            amount,
             rand_num,
             msg);
     network::Route::Instance()->Send(msg);

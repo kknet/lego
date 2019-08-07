@@ -53,8 +53,10 @@ public:
     static void CreateTxRequest(
             const dht::NodePtr& local_node,
             const std::string& gid,
+            const std::string& to,
+            uint64_t amount,
             uint64_t rand_num,
-            transport::protobuf::Header& msg) {
+        transport::protobuf::Header& msg) {
         security::PrivateKey prikey;
         security::PublicKey pubkey(prikey);
         std::string str_pubkey;
@@ -86,7 +88,8 @@ public:
         new_tx->set_gid(gid);
         new_tx->set_from_acc_addr(account_address);
         new_tx->set_from_pubkey(str_pubkey);
-        new_tx->set_from_sign("from_sign");
+        new_tx->set_to_acc_addr(to);
+        new_tx->set_lego_count(amount);
         auto data = tx_bft.SerializeAsString();
         bft_msg.set_data(data);
         auto hash128 = common::Hash::Hash128(data);

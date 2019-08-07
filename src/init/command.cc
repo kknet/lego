@@ -112,6 +112,9 @@ void Command::AddBaseCommands() {
     AddCommand("vn", [this](const std::vector<std::string>& args) {
         GetVpnNodes();
     });
+    AddCommand("tx", [this](const std::vector<std::string>& args) {
+        lego::client::VpnClient::Instance()->Transaction("", 0);
+    });
 }
 
 void Command::GetVpnNodes() {
