@@ -72,6 +72,7 @@ static const uint32_t kTestForNetworkId = 4u;
 
 uint32_t GetPoolIndex(const std::string& acc_addr);
 std::string GetAccountAddress(const std::string& pubkey);
+std::string CreateGID(const std::string& pubkey);
 
 uint64_t TimeStampMsec();
 uint64_t TimeStampUsec();

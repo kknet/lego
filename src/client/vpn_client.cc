@@ -285,6 +285,17 @@ int VpnClient::CreateClientUniversalNetwork() {
     return kClientSuccess;
 }
 
+int VpnClient::CreateAccountAddress() {
+    transport::protobuf::Header msg;
+    uint64_t rand_num = 0;
+    ClientProto::CreateTxRequest(
+            root_dht_->local_node(),
+            common::CreateGID(security::Schnorr::Instance()->str_pubkey()),
+            rand_num,
+            msg);
+    network::Route::Instance()->Send(msg);
+}
+
 }  // namespace client
 
 }  // namespace lego

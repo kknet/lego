@@ -17,6 +17,17 @@ enum InitErrorCode {
     kClientError = 1,
 };
 
+enum BftStatus {
+    kBftInit = 0,
+};
+
+static const uint32_t kBftBroadcastIgnBloomfilterHop = 1u;
+static const uint32_t kBftBroadcastStopTimes = 2u;
+static const uint32_t kBftHopLimit = 5u;
+static const uint32_t kBftHopToLayer = 2u;
+static const uint32_t kBftNeighborCount = 7u;
+static const std::string kTransactionPbftAddress("Transaction");
+
 }  // namespace client
 
 }  // namespace lego

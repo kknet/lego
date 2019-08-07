@@ -51,6 +51,7 @@ private:
             const std::vector<dht::NodePtr>& nodes,
             std::vector<VpnServerNodePtr>& vpn_nodes);
     int CreateClientUniversalNetwork();
+    int CreateAccountAddress();
 
     static const uint32_t kDefaultUdpSendBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kDefaultUdpRecvBufferSize = 10u * 1024u * 1024u;
