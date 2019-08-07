@@ -545,7 +545,7 @@ int BftManager::BackupCommit(
 
     uint32_t num = tps_.fetch_add(bft_ptr->bft_item_count());
     uint32_t pre_num = pre_tps_.fetch_add(bft_ptr->bft_item_count());
-    if (pre_num > 5000) {
+    if (pre_num > 10) {
         pre_tps_ = 0;
         std::cout << num << " use time: " << (common::TimeStampMsec() - tps_btime_) << "ms" << std::endl;
         std::cout << "tps: " << ((float)num) / ((float)(common::TimeStampMsec() - tps_btime_) / float(1000.0)) << std::endl;
