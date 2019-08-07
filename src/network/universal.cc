@@ -72,7 +72,7 @@ std::vector<dht::NodePtr> Uniersal::LocalGetNetworkNodes(
         uint32_t count) {
     return LocalGetNetworkNodes(
             network_id,
-            common::GlobalInfo::Instance()->country(),
+            std::numeric_limits<uint8_t>::max(),
             count);
 }
 
@@ -81,7 +81,7 @@ std::vector<dht::NodePtr> Uniersal::RemoteGetNetworkNodes(
         uint32_t count) {
     return RemoteGetNetworkNodes(
             network_id,
-            common::GlobalInfo::Instance()->country(),
+            std::numeric_limits<uint8_t>::max(),
             count);
 }
 
@@ -102,7 +102,7 @@ std::vector<dht::NodePtr> Uniersal::LocalGetNetworkNodes(
     for (uint32_t i = 0; i < local_nodes.size(); ++i) {
         auto net_id = dht::DhtKeyManager::DhtKeyGetNetId(local_nodes[i]->dht_key);
         uint8_t find_country = dht::DhtKeyManager::DhtKeyGetCountry(local_nodes[i]->dht_key);
-        if (find_country == std::numeric_limits<uint8_t>::max()) {
+        if (country == std::numeric_limits<uint8_t>::max()) {
             if (net_id == network_id &&
                     local_nodes[i]->public_node) {
                 tmp_nodes.push_back(local_nodes[i]);
@@ -207,9 +207,17 @@ void Uniersal::ProcessGetNetworkNodesRequest(
         return;
     }
 
-    auto nodes = LocalGetNetworkNodes(
+    std::vector<dht::NodePtr> nodes;
+    if (network_msg.get_net_nodes_req().has_country()) {
+        nodes = LocalGetNetworkNodes(
+                network_msg.get_net_nodes_req().net_id(),
+                network_msg.get_net_nodes_req().country(),
+                network_msg.get_net_nodes_req().count());
+    } else {
+        nodes = LocalGetNetworkNodes(
             network_msg.get_net_nodes_req().net_id(),
             network_msg.get_net_nodes_req().count());
+    }
     transport::protobuf::Header msg;
     SetFrequently(msg);
     NetworkProto::CreateGetNetworkNodesResponse(local_node_, header, nodes, msg);
