@@ -62,7 +62,8 @@ int VpnClient::Init(const std::string& conf) {
         return kClientError;
     }
 
-    if (SetPriAndPubKey("") != kClientSuccess) {
+    std::string priky("");
+    if (SetPriAndPubKey(priky) != kClientSuccess) {
         return kClientError;
     }
 
@@ -77,6 +78,12 @@ int VpnClient::Init(const std::string& conf) {
 
     if (InitNetworkSingleton() != kClientSuccess) {
         return kClientError;
+    }
+
+    if (priky.empty()) {
+        std::string tx_gid;
+        Transaction("", 0, tx_gid);
+        std::cout << "tx gid: " << common::Encode::HexEncode(tx_gid) << std::endl;
     }
     return kClientSuccess;
 }
@@ -224,10 +231,6 @@ int VpnClient::SetPriAndPubKey(const std::string& prikey) {
     security::Schnorr::Instance()->set_prikey(prikey_ptr);
     security::Schnorr::Instance()->set_pubkey(pubkey_ptr);
 
-    if (prikey.empty()) {
-        std::string tx_gid;
-        Transaction("", 0, tx_gid);
-    }
     std::string pubkey_str;
     pubkey.Serialize(pubkey_str);
     std::string account_id = common::Hash::Hash256(pubkey_str);
