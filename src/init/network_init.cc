@@ -382,7 +382,6 @@ void NetworkInit::CreateNewTx() {
             network::Route::Instance()->SendToLocal(msg);
         }
     }
-    std::cout << "create accs use time: " << (common::TimeStampMsec() - btime) << " ms" << std::endl;
     test_new_account_tick_.CutOff(
             kTestCreateAccountPeriod,
             std::bind(&NetworkInit::CreateNewTx, this));
