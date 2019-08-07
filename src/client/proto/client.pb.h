@@ -38,7 +38,7 @@ namespace protobuf_client_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[6];
+  static const ::google::protobuf::internal::ParseTable schema[8];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -51,6 +51,12 @@ namespace protobuf {
 class BftMessage;
 class BftMessageDefaultTypeInternal;
 extern BftMessageDefaultTypeInternal _BftMessage_default_instance_;
+class CheckTxRequest;
+class CheckTxRequestDefaultTypeInternal;
+extern CheckTxRequestDefaultTypeInternal _CheckTxRequest_default_instance_;
+class CheckTxResponse;
+class CheckTxResponseDefaultTypeInternal;
+extern CheckTxResponseDefaultTypeInternal _CheckTxResponse_default_instance_;
 class GetVpnInfoRequest;
 class GetVpnInfoRequestDefaultTypeInternal;
 extern GetVpnInfoRequestDefaultTypeInternal _GetVpnInfoRequest_default_instance_;
@@ -72,6 +78,8 @@ extern TxBftDefaultTypeInternal _TxBft_default_instance_;
 namespace google {
 namespace protobuf {
 template<> ::lego::client::protobuf::BftMessage* Arena::CreateMaybeMessage<::lego::client::protobuf::BftMessage>(Arena*);
+template<> ::lego::client::protobuf::CheckTxRequest* Arena::CreateMaybeMessage<::lego::client::protobuf::CheckTxRequest>(Arena*);
+template<> ::lego::client::protobuf::CheckTxResponse* Arena::CreateMaybeMessage<::lego::client::protobuf::CheckTxResponse>(Arena*);
 template<> ::lego::client::protobuf::GetVpnInfoRequest* Arena::CreateMaybeMessage<::lego::client::protobuf::GetVpnInfoRequest>(Arena*);
 template<> ::lego::client::protobuf::GetVpnInfoResponse* Arena::CreateMaybeMessage<::lego::client::protobuf::GetVpnInfoResponse>(Arena*);
 template<> ::lego::client::protobuf::NewTx* Arena::CreateMaybeMessage<::lego::client::protobuf::NewTx>(Arena*);
@@ -84,314 +92,6 @@ namespace client {
 namespace protobuf {
 
 // ===================================================================
-
-class GetVpnInfoRequest : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:lego.client.protobuf.GetVpnInfoRequest) */ {
- public:
-  GetVpnInfoRequest();
-  virtual ~GetVpnInfoRequest();
-
-  GetVpnInfoRequest(const GetVpnInfoRequest& from);
-
-  inline GetVpnInfoRequest& operator=(const GetVpnInfoRequest& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  GetVpnInfoRequest(GetVpnInfoRequest&& from) noexcept
-    : GetVpnInfoRequest() {
-    *this = ::std::move(from);
-  }
-
-  inline GetVpnInfoRequest& operator=(GetVpnInfoRequest&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _internal_metadata_.unknown_fields();
-  }
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return _internal_metadata_.mutable_unknown_fields();
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const GetVpnInfoRequest& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const GetVpnInfoRequest* internal_default_instance() {
-    return reinterpret_cast<const GetVpnInfoRequest*>(
-               &_GetVpnInfoRequest_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    0;
-
-  void Swap(GetVpnInfoRequest* other);
-  friend void swap(GetVpnInfoRequest& a, GetVpnInfoRequest& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline GetVpnInfoRequest* New() const final {
-    return CreateMaybeMessage<GetVpnInfoRequest>(NULL);
-  }
-
-  GetVpnInfoRequest* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<GetVpnInfoRequest>(arena);
-  }
-  void CopyFrom(const ::google::protobuf::Message& from) final;
-  void MergeFrom(const ::google::protobuf::Message& from) final;
-  void CopyFrom(const GetVpnInfoRequest& from);
-  void MergeFrom(const GetVpnInfoRequest& from);
-  void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) final;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const final;
-  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
-      bool deterministic, ::google::protobuf::uint8* target) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(GetVpnInfoRequest* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::google::protobuf::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // optional bytes pubkey = 1;
-  bool has_pubkey() const;
-  void clear_pubkey();
-  static const int kPubkeyFieldNumber = 1;
-  const ::std::string& pubkey() const;
-  void set_pubkey(const ::std::string& value);
-  #if LANG_CXX11
-  void set_pubkey(::std::string&& value);
-  #endif
-  void set_pubkey(const char* value);
-  void set_pubkey(const void* value, size_t size);
-  ::std::string* mutable_pubkey();
-  ::std::string* release_pubkey();
-  void set_allocated_pubkey(::std::string* pubkey);
-
-  // @@protoc_insertion_point(class_scope:lego.client.protobuf.GetVpnInfoRequest)
- private:
-  void set_has_pubkey();
-  void clear_has_pubkey();
-
-  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::internal::HasBits<1> _has_bits_;
-  mutable ::google::protobuf::internal::CachedSize _cached_size_;
-  ::google::protobuf::internal::ArenaStringPtr pubkey_;
-  friend struct ::protobuf_client_2eproto::TableStruct;
-};
-// -------------------------------------------------------------------
-
-class GetVpnInfoResponse : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:lego.client.protobuf.GetVpnInfoResponse) */ {
- public:
-  GetVpnInfoResponse();
-  virtual ~GetVpnInfoResponse();
-
-  GetVpnInfoResponse(const GetVpnInfoResponse& from);
-
-  inline GetVpnInfoResponse& operator=(const GetVpnInfoResponse& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  GetVpnInfoResponse(GetVpnInfoResponse&& from) noexcept
-    : GetVpnInfoResponse() {
-    *this = ::std::move(from);
-  }
-
-  inline GetVpnInfoResponse& operator=(GetVpnInfoResponse&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _internal_metadata_.unknown_fields();
-  }
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return _internal_metadata_.mutable_unknown_fields();
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const GetVpnInfoResponse& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const GetVpnInfoResponse* internal_default_instance() {
-    return reinterpret_cast<const GetVpnInfoResponse*>(
-               &_GetVpnInfoResponse_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    1;
-
-  void Swap(GetVpnInfoResponse* other);
-  friend void swap(GetVpnInfoResponse& a, GetVpnInfoResponse& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline GetVpnInfoResponse* New() const final {
-    return CreateMaybeMessage<GetVpnInfoResponse>(NULL);
-  }
-
-  GetVpnInfoResponse* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<GetVpnInfoResponse>(arena);
-  }
-  void CopyFrom(const ::google::protobuf::Message& from) final;
-  void MergeFrom(const ::google::protobuf::Message& from) final;
-  void CopyFrom(const GetVpnInfoResponse& from);
-  void MergeFrom(const GetVpnInfoResponse& from);
-  void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) final;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const final;
-  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
-      bool deterministic, ::google::protobuf::uint8* target) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(GetVpnInfoResponse* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::google::protobuf::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // optional bytes ip = 1;
-  bool has_ip() const;
-  void clear_ip();
-  static const int kIpFieldNumber = 1;
-  const ::std::string& ip() const;
-  void set_ip(const ::std::string& value);
-  #if LANG_CXX11
-  void set_ip(::std::string&& value);
-  #endif
-  void set_ip(const char* value);
-  void set_ip(const void* value, size_t size);
-  ::std::string* mutable_ip();
-  ::std::string* release_ip();
-  void set_allocated_ip(::std::string* ip);
-
-  // optional bytes encrypt_type = 3;
-  bool has_encrypt_type() const;
-  void clear_encrypt_type();
-  static const int kEncryptTypeFieldNumber = 3;
-  const ::std::string& encrypt_type() const;
-  void set_encrypt_type(const ::std::string& value);
-  #if LANG_CXX11
-  void set_encrypt_type(::std::string&& value);
-  #endif
-  void set_encrypt_type(const char* value);
-  void set_encrypt_type(const void* value, size_t size);
-  ::std::string* mutable_encrypt_type();
-  ::std::string* release_encrypt_type();
-  void set_allocated_encrypt_type(::std::string* encrypt_type);
-
-  // optional bytes passwd = 4;
-  bool has_passwd() const;
-  void clear_passwd();
-  static const int kPasswdFieldNumber = 4;
-  const ::std::string& passwd() const;
-  void set_passwd(const ::std::string& value);
-  #if LANG_CXX11
-  void set_passwd(::std::string&& value);
-  #endif
-  void set_passwd(const char* value);
-  void set_passwd(const void* value, size_t size);
-  ::std::string* mutable_passwd();
-  ::std::string* release_passwd();
-  void set_allocated_passwd(::std::string* passwd);
-
-  // optional bytes pubkey = 5;
-  bool has_pubkey() const;
-  void clear_pubkey();
-  static const int kPubkeyFieldNumber = 5;
-  const ::std::string& pubkey() const;
-  void set_pubkey(const ::std::string& value);
-  #if LANG_CXX11
-  void set_pubkey(::std::string&& value);
-  #endif
-  void set_pubkey(const char* value);
-  void set_pubkey(const void* value, size_t size);
-  ::std::string* mutable_pubkey();
-  ::std::string* release_pubkey();
-  void set_allocated_pubkey(::std::string* pubkey);
-
-  // optional uint32 port = 2;
-  bool has_port() const;
-  void clear_port();
-  static const int kPortFieldNumber = 2;
-  ::google::protobuf::uint32 port() const;
-  void set_port(::google::protobuf::uint32 value);
-
-  // @@protoc_insertion_point(class_scope:lego.client.protobuf.GetVpnInfoResponse)
- private:
-  void set_has_ip();
-  void clear_has_ip();
-  void set_has_port();
-  void clear_has_port();
-  void set_has_encrypt_type();
-  void clear_has_encrypt_type();
-  void set_has_passwd();
-  void clear_has_passwd();
-  void set_has_pubkey();
-  void clear_has_pubkey();
-
-  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::internal::HasBits<1> _has_bits_;
-  mutable ::google::protobuf::internal::CachedSize _cached_size_;
-  ::google::protobuf::internal::ArenaStringPtr ip_;
-  ::google::protobuf::internal::ArenaStringPtr encrypt_type_;
-  ::google::protobuf::internal::ArenaStringPtr passwd_;
-  ::google::protobuf::internal::ArenaStringPtr pubkey_;
-  ::google::protobuf::uint32 port_;
-  friend struct ::protobuf_client_2eproto::TableStruct;
-};
-// -------------------------------------------------------------------
 
 class NewTx : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:lego.client.protobuf.NewTx) */ {
  public:
@@ -435,7 +135,7 @@ class NewTx : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
                &_NewTx_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    0;
 
   void Swap(NewTx* other);
   friend void swap(NewTx& a, NewTx& b) {
@@ -597,6 +297,250 @@ class NewTx : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
 };
 // -------------------------------------------------------------------
 
+class CheckTxRequest : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:lego.client.protobuf.CheckTxRequest) */ {
+ public:
+  CheckTxRequest();
+  virtual ~CheckTxRequest();
+
+  CheckTxRequest(const CheckTxRequest& from);
+
+  inline CheckTxRequest& operator=(const CheckTxRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  CheckTxRequest(CheckTxRequest&& from) noexcept
+    : CheckTxRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline CheckTxRequest& operator=(CheckTxRequest&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const CheckTxRequest& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const CheckTxRequest* internal_default_instance() {
+    return reinterpret_cast<const CheckTxRequest*>(
+               &_CheckTxRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    1;
+
+  void Swap(CheckTxRequest* other);
+  friend void swap(CheckTxRequest& a, CheckTxRequest& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline CheckTxRequest* New() const final {
+    return CreateMaybeMessage<CheckTxRequest>(NULL);
+  }
+
+  CheckTxRequest* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<CheckTxRequest>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const CheckTxRequest& from);
+  void MergeFrom(const CheckTxRequest& from);
+  void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(CheckTxRequest* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional bytes tx_gid = 1;
+  bool has_tx_gid() const;
+  void clear_tx_gid();
+  static const int kTxGidFieldNumber = 1;
+  const ::std::string& tx_gid() const;
+  void set_tx_gid(const ::std::string& value);
+  #if LANG_CXX11
+  void set_tx_gid(::std::string&& value);
+  #endif
+  void set_tx_gid(const char* value);
+  void set_tx_gid(const void* value, size_t size);
+  ::std::string* mutable_tx_gid();
+  ::std::string* release_tx_gid();
+  void set_allocated_tx_gid(::std::string* tx_gid);
+
+  // @@protoc_insertion_point(class_scope:lego.client.protobuf.CheckTxRequest)
+ private:
+  void set_has_tx_gid();
+  void clear_has_tx_gid();
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::HasBits<1> _has_bits_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  ::google::protobuf::internal::ArenaStringPtr tx_gid_;
+  friend struct ::protobuf_client_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class CheckTxResponse : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:lego.client.protobuf.CheckTxResponse) */ {
+ public:
+  CheckTxResponse();
+  virtual ~CheckTxResponse();
+
+  CheckTxResponse(const CheckTxResponse& from);
+
+  inline CheckTxResponse& operator=(const CheckTxResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  CheckTxResponse(CheckTxResponse&& from) noexcept
+    : CheckTxResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline CheckTxResponse& operator=(CheckTxResponse&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const CheckTxResponse& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const CheckTxResponse* internal_default_instance() {
+    return reinterpret_cast<const CheckTxResponse*>(
+               &_CheckTxResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  void Swap(CheckTxResponse* other);
+  friend void swap(CheckTxResponse& a, CheckTxResponse& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline CheckTxResponse* New() const final {
+    return CreateMaybeMessage<CheckTxResponse>(NULL);
+  }
+
+  CheckTxResponse* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<CheckTxResponse>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const CheckTxResponse& from);
+  void MergeFrom(const CheckTxResponse& from);
+  void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(CheckTxResponse* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional bytes block = 1;
+  bool has_block() const;
+  void clear_block();
+  static const int kBlockFieldNumber = 1;
+  const ::std::string& block() const;
+  void set_block(const ::std::string& value);
+  #if LANG_CXX11
+  void set_block(::std::string&& value);
+  #endif
+  void set_block(const char* value);
+  void set_block(const void* value, size_t size);
+  ::std::string* mutable_block();
+  ::std::string* release_block();
+  void set_allocated_block(::std::string* block);
+
+  // @@protoc_insertion_point(class_scope:lego.client.protobuf.CheckTxResponse)
+ private:
+  void set_has_block();
+  void clear_has_block();
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::HasBits<1> _has_bits_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  ::google::protobuf::internal::ArenaStringPtr block_;
+  friend struct ::protobuf_client_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class TxBft : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:lego.client.protobuf.TxBft) */ {
  public:
   TxBft();
@@ -703,15 +647,45 @@ class TxBft : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
   ::lego::client::protobuf::NewTx* mutable_new_tx();
   void set_allocated_new_tx(::lego::client::protobuf::NewTx* new_tx);
 
+  // optional .lego.client.protobuf.CheckTxRequest check_tx_req = 2;
+  bool has_check_tx_req() const;
+  void clear_check_tx_req();
+  static const int kCheckTxReqFieldNumber = 2;
+  private:
+  const ::lego::client::protobuf::CheckTxRequest& _internal_check_tx_req() const;
+  public:
+  const ::lego::client::protobuf::CheckTxRequest& check_tx_req() const;
+  ::lego::client::protobuf::CheckTxRequest* release_check_tx_req();
+  ::lego::client::protobuf::CheckTxRequest* mutable_check_tx_req();
+  void set_allocated_check_tx_req(::lego::client::protobuf::CheckTxRequest* check_tx_req);
+
+  // optional .lego.client.protobuf.CheckTxResponse check_tx_res = 3;
+  bool has_check_tx_res() const;
+  void clear_check_tx_res();
+  static const int kCheckTxResFieldNumber = 3;
+  private:
+  const ::lego::client::protobuf::CheckTxResponse& _internal_check_tx_res() const;
+  public:
+  const ::lego::client::protobuf::CheckTxResponse& check_tx_res() const;
+  ::lego::client::protobuf::CheckTxResponse* release_check_tx_res();
+  ::lego::client::protobuf::CheckTxResponse* mutable_check_tx_res();
+  void set_allocated_check_tx_res(::lego::client::protobuf::CheckTxResponse* check_tx_res);
+
   // @@protoc_insertion_point(class_scope:lego.client.protobuf.TxBft)
  private:
   void set_has_new_tx();
   void clear_has_new_tx();
+  void set_has_check_tx_req();
+  void clear_has_check_tx_req();
+  void set_has_check_tx_res();
+  void clear_has_check_tx_res();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   ::lego::client::protobuf::NewTx* new_tx_;
+  ::lego::client::protobuf::CheckTxRequest* check_tx_req_;
+  ::lego::client::protobuf::CheckTxResponse* check_tx_res_;
   friend struct ::protobuf_client_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
@@ -1109,6 +1083,314 @@ class BftMessage : public ::google::protobuf::Message /* @@protoc_insertion_poin
 };
 // -------------------------------------------------------------------
 
+class GetVpnInfoRequest : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:lego.client.protobuf.GetVpnInfoRequest) */ {
+ public:
+  GetVpnInfoRequest();
+  virtual ~GetVpnInfoRequest();
+
+  GetVpnInfoRequest(const GetVpnInfoRequest& from);
+
+  inline GetVpnInfoRequest& operator=(const GetVpnInfoRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  GetVpnInfoRequest(GetVpnInfoRequest&& from) noexcept
+    : GetVpnInfoRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline GetVpnInfoRequest& operator=(GetVpnInfoRequest&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GetVpnInfoRequest& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const GetVpnInfoRequest* internal_default_instance() {
+    return reinterpret_cast<const GetVpnInfoRequest*>(
+               &_GetVpnInfoRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    5;
+
+  void Swap(GetVpnInfoRequest* other);
+  friend void swap(GetVpnInfoRequest& a, GetVpnInfoRequest& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline GetVpnInfoRequest* New() const final {
+    return CreateMaybeMessage<GetVpnInfoRequest>(NULL);
+  }
+
+  GetVpnInfoRequest* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<GetVpnInfoRequest>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const GetVpnInfoRequest& from);
+  void MergeFrom(const GetVpnInfoRequest& from);
+  void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(GetVpnInfoRequest* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional bytes pubkey = 1;
+  bool has_pubkey() const;
+  void clear_pubkey();
+  static const int kPubkeyFieldNumber = 1;
+  const ::std::string& pubkey() const;
+  void set_pubkey(const ::std::string& value);
+  #if LANG_CXX11
+  void set_pubkey(::std::string&& value);
+  #endif
+  void set_pubkey(const char* value);
+  void set_pubkey(const void* value, size_t size);
+  ::std::string* mutable_pubkey();
+  ::std::string* release_pubkey();
+  void set_allocated_pubkey(::std::string* pubkey);
+
+  // @@protoc_insertion_point(class_scope:lego.client.protobuf.GetVpnInfoRequest)
+ private:
+  void set_has_pubkey();
+  void clear_has_pubkey();
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::HasBits<1> _has_bits_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  ::google::protobuf::internal::ArenaStringPtr pubkey_;
+  friend struct ::protobuf_client_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class GetVpnInfoResponse : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:lego.client.protobuf.GetVpnInfoResponse) */ {
+ public:
+  GetVpnInfoResponse();
+  virtual ~GetVpnInfoResponse();
+
+  GetVpnInfoResponse(const GetVpnInfoResponse& from);
+
+  inline GetVpnInfoResponse& operator=(const GetVpnInfoResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  GetVpnInfoResponse(GetVpnInfoResponse&& from) noexcept
+    : GetVpnInfoResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline GetVpnInfoResponse& operator=(GetVpnInfoResponse&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GetVpnInfoResponse& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const GetVpnInfoResponse* internal_default_instance() {
+    return reinterpret_cast<const GetVpnInfoResponse*>(
+               &_GetVpnInfoResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    6;
+
+  void Swap(GetVpnInfoResponse* other);
+  friend void swap(GetVpnInfoResponse& a, GetVpnInfoResponse& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline GetVpnInfoResponse* New() const final {
+    return CreateMaybeMessage<GetVpnInfoResponse>(NULL);
+  }
+
+  GetVpnInfoResponse* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<GetVpnInfoResponse>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const GetVpnInfoResponse& from);
+  void MergeFrom(const GetVpnInfoResponse& from);
+  void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(GetVpnInfoResponse* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional bytes ip = 1;
+  bool has_ip() const;
+  void clear_ip();
+  static const int kIpFieldNumber = 1;
+  const ::std::string& ip() const;
+  void set_ip(const ::std::string& value);
+  #if LANG_CXX11
+  void set_ip(::std::string&& value);
+  #endif
+  void set_ip(const char* value);
+  void set_ip(const void* value, size_t size);
+  ::std::string* mutable_ip();
+  ::std::string* release_ip();
+  void set_allocated_ip(::std::string* ip);
+
+  // optional bytes encrypt_type = 3;
+  bool has_encrypt_type() const;
+  void clear_encrypt_type();
+  static const int kEncryptTypeFieldNumber = 3;
+  const ::std::string& encrypt_type() const;
+  void set_encrypt_type(const ::std::string& value);
+  #if LANG_CXX11
+  void set_encrypt_type(::std::string&& value);
+  #endif
+  void set_encrypt_type(const char* value);
+  void set_encrypt_type(const void* value, size_t size);
+  ::std::string* mutable_encrypt_type();
+  ::std::string* release_encrypt_type();
+  void set_allocated_encrypt_type(::std::string* encrypt_type);
+
+  // optional bytes passwd = 4;
+  bool has_passwd() const;
+  void clear_passwd();
+  static const int kPasswdFieldNumber = 4;
+  const ::std::string& passwd() const;
+  void set_passwd(const ::std::string& value);
+  #if LANG_CXX11
+  void set_passwd(::std::string&& value);
+  #endif
+  void set_passwd(const char* value);
+  void set_passwd(const void* value, size_t size);
+  ::std::string* mutable_passwd();
+  ::std::string* release_passwd();
+  void set_allocated_passwd(::std::string* passwd);
+
+  // optional bytes pubkey = 5;
+  bool has_pubkey() const;
+  void clear_pubkey();
+  static const int kPubkeyFieldNumber = 5;
+  const ::std::string& pubkey() const;
+  void set_pubkey(const ::std::string& value);
+  #if LANG_CXX11
+  void set_pubkey(::std::string&& value);
+  #endif
+  void set_pubkey(const char* value);
+  void set_pubkey(const void* value, size_t size);
+  ::std::string* mutable_pubkey();
+  ::std::string* release_pubkey();
+  void set_allocated_pubkey(::std::string* pubkey);
+
+  // optional uint32 port = 2;
+  bool has_port() const;
+  void clear_port();
+  static const int kPortFieldNumber = 2;
+  ::google::protobuf::uint32 port() const;
+  void set_port(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:lego.client.protobuf.GetVpnInfoResponse)
+ private:
+  void set_has_ip();
+  void clear_has_ip();
+  void set_has_port();
+  void clear_has_port();
+  void set_has_encrypt_type();
+  void clear_has_encrypt_type();
+  void set_has_passwd();
+  void clear_has_passwd();
+  void set_has_pubkey();
+  void clear_has_pubkey();
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::HasBits<1> _has_bits_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  ::google::protobuf::internal::ArenaStringPtr ip_;
+  ::google::protobuf::internal::ArenaStringPtr encrypt_type_;
+  ::google::protobuf::internal::ArenaStringPtr passwd_;
+  ::google::protobuf::internal::ArenaStringPtr pubkey_;
+  ::google::protobuf::uint32 port_;
+  friend struct ::protobuf_client_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class ServiceMessage : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:lego.client.protobuf.ServiceMessage) */ {
  public:
   ServiceMessage();
@@ -1151,7 +1433,7 @@ class ServiceMessage : public ::google::protobuf::Message /* @@protoc_insertion_
                &_ServiceMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    7;
 
   void Swap(ServiceMessage* other);
   friend void swap(ServiceMessage& a, ServiceMessage& b) {
@@ -1250,368 +1532,6 @@ class ServiceMessage : public ::google::protobuf::Message /* @@protoc_insertion_
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// GetVpnInfoRequest
-
-// optional bytes pubkey = 1;
-inline bool GetVpnInfoRequest::has_pubkey() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
-inline void GetVpnInfoRequest::set_has_pubkey() {
-  _has_bits_[0] |= 0x00000001u;
-}
-inline void GetVpnInfoRequest::clear_has_pubkey() {
-  _has_bits_[0] &= ~0x00000001u;
-}
-inline void GetVpnInfoRequest::clear_pubkey() {
-  pubkey_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  clear_has_pubkey();
-}
-inline const ::std::string& GetVpnInfoRequest::pubkey() const {
-  // @@protoc_insertion_point(field_get:lego.client.protobuf.GetVpnInfoRequest.pubkey)
-  return pubkey_.GetNoArena();
-}
-inline void GetVpnInfoRequest::set_pubkey(const ::std::string& value) {
-  set_has_pubkey();
-  pubkey_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:lego.client.protobuf.GetVpnInfoRequest.pubkey)
-}
-#if LANG_CXX11
-inline void GetVpnInfoRequest::set_pubkey(::std::string&& value) {
-  set_has_pubkey();
-  pubkey_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.GetVpnInfoRequest.pubkey)
-}
-#endif
-inline void GetVpnInfoRequest::set_pubkey(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  set_has_pubkey();
-  pubkey_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.GetVpnInfoRequest.pubkey)
-}
-inline void GetVpnInfoRequest::set_pubkey(const void* value, size_t size) {
-  set_has_pubkey();
-  pubkey_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.GetVpnInfoRequest.pubkey)
-}
-inline ::std::string* GetVpnInfoRequest::mutable_pubkey() {
-  set_has_pubkey();
-  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.GetVpnInfoRequest.pubkey)
-  return pubkey_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* GetVpnInfoRequest::release_pubkey() {
-  // @@protoc_insertion_point(field_release:lego.client.protobuf.GetVpnInfoRequest.pubkey)
-  if (!has_pubkey()) {
-    return NULL;
-  }
-  clear_has_pubkey();
-  return pubkey_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void GetVpnInfoRequest::set_allocated_pubkey(::std::string* pubkey) {
-  if (pubkey != NULL) {
-    set_has_pubkey();
-  } else {
-    clear_has_pubkey();
-  }
-  pubkey_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), pubkey);
-  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.GetVpnInfoRequest.pubkey)
-}
-
-// -------------------------------------------------------------------
-
-// GetVpnInfoResponse
-
-// optional bytes ip = 1;
-inline bool GetVpnInfoResponse::has_ip() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
-inline void GetVpnInfoResponse::set_has_ip() {
-  _has_bits_[0] |= 0x00000001u;
-}
-inline void GetVpnInfoResponse::clear_has_ip() {
-  _has_bits_[0] &= ~0x00000001u;
-}
-inline void GetVpnInfoResponse::clear_ip() {
-  ip_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  clear_has_ip();
-}
-inline const ::std::string& GetVpnInfoResponse::ip() const {
-  // @@protoc_insertion_point(field_get:lego.client.protobuf.GetVpnInfoResponse.ip)
-  return ip_.GetNoArena();
-}
-inline void GetVpnInfoResponse::set_ip(const ::std::string& value) {
-  set_has_ip();
-  ip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:lego.client.protobuf.GetVpnInfoResponse.ip)
-}
-#if LANG_CXX11
-inline void GetVpnInfoResponse::set_ip(::std::string&& value) {
-  set_has_ip();
-  ip_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.GetVpnInfoResponse.ip)
-}
-#endif
-inline void GetVpnInfoResponse::set_ip(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  set_has_ip();
-  ip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.GetVpnInfoResponse.ip)
-}
-inline void GetVpnInfoResponse::set_ip(const void* value, size_t size) {
-  set_has_ip();
-  ip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.GetVpnInfoResponse.ip)
-}
-inline ::std::string* GetVpnInfoResponse::mutable_ip() {
-  set_has_ip();
-  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.GetVpnInfoResponse.ip)
-  return ip_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* GetVpnInfoResponse::release_ip() {
-  // @@protoc_insertion_point(field_release:lego.client.protobuf.GetVpnInfoResponse.ip)
-  if (!has_ip()) {
-    return NULL;
-  }
-  clear_has_ip();
-  return ip_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void GetVpnInfoResponse::set_allocated_ip(::std::string* ip) {
-  if (ip != NULL) {
-    set_has_ip();
-  } else {
-    clear_has_ip();
-  }
-  ip_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ip);
-  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.GetVpnInfoResponse.ip)
-}
-
-// optional uint32 port = 2;
-inline bool GetVpnInfoResponse::has_port() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
-}
-inline void GetVpnInfoResponse::set_has_port() {
-  _has_bits_[0] |= 0x00000010u;
-}
-inline void GetVpnInfoResponse::clear_has_port() {
-  _has_bits_[0] &= ~0x00000010u;
-}
-inline void GetVpnInfoResponse::clear_port() {
-  port_ = 0u;
-  clear_has_port();
-}
-inline ::google::protobuf::uint32 GetVpnInfoResponse::port() const {
-  // @@protoc_insertion_point(field_get:lego.client.protobuf.GetVpnInfoResponse.port)
-  return port_;
-}
-inline void GetVpnInfoResponse::set_port(::google::protobuf::uint32 value) {
-  set_has_port();
-  port_ = value;
-  // @@protoc_insertion_point(field_set:lego.client.protobuf.GetVpnInfoResponse.port)
-}
-
-// optional bytes encrypt_type = 3;
-inline bool GetVpnInfoResponse::has_encrypt_type() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
-}
-inline void GetVpnInfoResponse::set_has_encrypt_type() {
-  _has_bits_[0] |= 0x00000002u;
-}
-inline void GetVpnInfoResponse::clear_has_encrypt_type() {
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline void GetVpnInfoResponse::clear_encrypt_type() {
-  encrypt_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  clear_has_encrypt_type();
-}
-inline const ::std::string& GetVpnInfoResponse::encrypt_type() const {
-  // @@protoc_insertion_point(field_get:lego.client.protobuf.GetVpnInfoResponse.encrypt_type)
-  return encrypt_type_.GetNoArena();
-}
-inline void GetVpnInfoResponse::set_encrypt_type(const ::std::string& value) {
-  set_has_encrypt_type();
-  encrypt_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:lego.client.protobuf.GetVpnInfoResponse.encrypt_type)
-}
-#if LANG_CXX11
-inline void GetVpnInfoResponse::set_encrypt_type(::std::string&& value) {
-  set_has_encrypt_type();
-  encrypt_type_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.GetVpnInfoResponse.encrypt_type)
-}
-#endif
-inline void GetVpnInfoResponse::set_encrypt_type(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  set_has_encrypt_type();
-  encrypt_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.GetVpnInfoResponse.encrypt_type)
-}
-inline void GetVpnInfoResponse::set_encrypt_type(const void* value, size_t size) {
-  set_has_encrypt_type();
-  encrypt_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.GetVpnInfoResponse.encrypt_type)
-}
-inline ::std::string* GetVpnInfoResponse::mutable_encrypt_type() {
-  set_has_encrypt_type();
-  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.GetVpnInfoResponse.encrypt_type)
-  return encrypt_type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* GetVpnInfoResponse::release_encrypt_type() {
-  // @@protoc_insertion_point(field_release:lego.client.protobuf.GetVpnInfoResponse.encrypt_type)
-  if (!has_encrypt_type()) {
-    return NULL;
-  }
-  clear_has_encrypt_type();
-  return encrypt_type_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void GetVpnInfoResponse::set_allocated_encrypt_type(::std::string* encrypt_type) {
-  if (encrypt_type != NULL) {
-    set_has_encrypt_type();
-  } else {
-    clear_has_encrypt_type();
-  }
-  encrypt_type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), encrypt_type);
-  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.GetVpnInfoResponse.encrypt_type)
-}
-
-// optional bytes passwd = 4;
-inline bool GetVpnInfoResponse::has_passwd() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
-}
-inline void GetVpnInfoResponse::set_has_passwd() {
-  _has_bits_[0] |= 0x00000004u;
-}
-inline void GetVpnInfoResponse::clear_has_passwd() {
-  _has_bits_[0] &= ~0x00000004u;
-}
-inline void GetVpnInfoResponse::clear_passwd() {
-  passwd_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  clear_has_passwd();
-}
-inline const ::std::string& GetVpnInfoResponse::passwd() const {
-  // @@protoc_insertion_point(field_get:lego.client.protobuf.GetVpnInfoResponse.passwd)
-  return passwd_.GetNoArena();
-}
-inline void GetVpnInfoResponse::set_passwd(const ::std::string& value) {
-  set_has_passwd();
-  passwd_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:lego.client.protobuf.GetVpnInfoResponse.passwd)
-}
-#if LANG_CXX11
-inline void GetVpnInfoResponse::set_passwd(::std::string&& value) {
-  set_has_passwd();
-  passwd_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.GetVpnInfoResponse.passwd)
-}
-#endif
-inline void GetVpnInfoResponse::set_passwd(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  set_has_passwd();
-  passwd_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.GetVpnInfoResponse.passwd)
-}
-inline void GetVpnInfoResponse::set_passwd(const void* value, size_t size) {
-  set_has_passwd();
-  passwd_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.GetVpnInfoResponse.passwd)
-}
-inline ::std::string* GetVpnInfoResponse::mutable_passwd() {
-  set_has_passwd();
-  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.GetVpnInfoResponse.passwd)
-  return passwd_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* GetVpnInfoResponse::release_passwd() {
-  // @@protoc_insertion_point(field_release:lego.client.protobuf.GetVpnInfoResponse.passwd)
-  if (!has_passwd()) {
-    return NULL;
-  }
-  clear_has_passwd();
-  return passwd_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void GetVpnInfoResponse::set_allocated_passwd(::std::string* passwd) {
-  if (passwd != NULL) {
-    set_has_passwd();
-  } else {
-    clear_has_passwd();
-  }
-  passwd_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), passwd);
-  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.GetVpnInfoResponse.passwd)
-}
-
-// optional bytes pubkey = 5;
-inline bool GetVpnInfoResponse::has_pubkey() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
-}
-inline void GetVpnInfoResponse::set_has_pubkey() {
-  _has_bits_[0] |= 0x00000008u;
-}
-inline void GetVpnInfoResponse::clear_has_pubkey() {
-  _has_bits_[0] &= ~0x00000008u;
-}
-inline void GetVpnInfoResponse::clear_pubkey() {
-  pubkey_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  clear_has_pubkey();
-}
-inline const ::std::string& GetVpnInfoResponse::pubkey() const {
-  // @@protoc_insertion_point(field_get:lego.client.protobuf.GetVpnInfoResponse.pubkey)
-  return pubkey_.GetNoArena();
-}
-inline void GetVpnInfoResponse::set_pubkey(const ::std::string& value) {
-  set_has_pubkey();
-  pubkey_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:lego.client.protobuf.GetVpnInfoResponse.pubkey)
-}
-#if LANG_CXX11
-inline void GetVpnInfoResponse::set_pubkey(::std::string&& value) {
-  set_has_pubkey();
-  pubkey_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.GetVpnInfoResponse.pubkey)
-}
-#endif
-inline void GetVpnInfoResponse::set_pubkey(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  set_has_pubkey();
-  pubkey_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.GetVpnInfoResponse.pubkey)
-}
-inline void GetVpnInfoResponse::set_pubkey(const void* value, size_t size) {
-  set_has_pubkey();
-  pubkey_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.GetVpnInfoResponse.pubkey)
-}
-inline ::std::string* GetVpnInfoResponse::mutable_pubkey() {
-  set_has_pubkey();
-  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.GetVpnInfoResponse.pubkey)
-  return pubkey_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* GetVpnInfoResponse::release_pubkey() {
-  // @@protoc_insertion_point(field_release:lego.client.protobuf.GetVpnInfoResponse.pubkey)
-  if (!has_pubkey()) {
-    return NULL;
-  }
-  clear_has_pubkey();
-  return pubkey_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void GetVpnInfoResponse::set_allocated_pubkey(::std::string* pubkey) {
-  if (pubkey != NULL) {
-    set_has_pubkey();
-  } else {
-    clear_has_pubkey();
-  }
-  pubkey_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), pubkey);
-  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.GetVpnInfoResponse.pubkey)
-}
-
-// -------------------------------------------------------------------
-
 // NewTx
 
 // optional bytes gid = 1;
@@ -1970,6 +1890,146 @@ inline void NewTx::set_lego_count(::google::protobuf::uint64 value) {
 
 // -------------------------------------------------------------------
 
+// CheckTxRequest
+
+// optional bytes tx_gid = 1;
+inline bool CheckTxRequest::has_tx_gid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void CheckTxRequest::set_has_tx_gid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void CheckTxRequest::clear_has_tx_gid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void CheckTxRequest::clear_tx_gid() {
+  tx_gid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_tx_gid();
+}
+inline const ::std::string& CheckTxRequest::tx_gid() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.CheckTxRequest.tx_gid)
+  return tx_gid_.GetNoArena();
+}
+inline void CheckTxRequest::set_tx_gid(const ::std::string& value) {
+  set_has_tx_gid();
+  tx_gid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.CheckTxRequest.tx_gid)
+}
+#if LANG_CXX11
+inline void CheckTxRequest::set_tx_gid(::std::string&& value) {
+  set_has_tx_gid();
+  tx_gid_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.CheckTxRequest.tx_gid)
+}
+#endif
+inline void CheckTxRequest::set_tx_gid(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_tx_gid();
+  tx_gid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.CheckTxRequest.tx_gid)
+}
+inline void CheckTxRequest::set_tx_gid(const void* value, size_t size) {
+  set_has_tx_gid();
+  tx_gid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.CheckTxRequest.tx_gid)
+}
+inline ::std::string* CheckTxRequest::mutable_tx_gid() {
+  set_has_tx_gid();
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.CheckTxRequest.tx_gid)
+  return tx_gid_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* CheckTxRequest::release_tx_gid() {
+  // @@protoc_insertion_point(field_release:lego.client.protobuf.CheckTxRequest.tx_gid)
+  if (!has_tx_gid()) {
+    return NULL;
+  }
+  clear_has_tx_gid();
+  return tx_gid_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void CheckTxRequest::set_allocated_tx_gid(::std::string* tx_gid) {
+  if (tx_gid != NULL) {
+    set_has_tx_gid();
+  } else {
+    clear_has_tx_gid();
+  }
+  tx_gid_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), tx_gid);
+  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.CheckTxRequest.tx_gid)
+}
+
+// -------------------------------------------------------------------
+
+// CheckTxResponse
+
+// optional bytes block = 1;
+inline bool CheckTxResponse::has_block() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void CheckTxResponse::set_has_block() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void CheckTxResponse::clear_has_block() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void CheckTxResponse::clear_block() {
+  block_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_block();
+}
+inline const ::std::string& CheckTxResponse::block() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.CheckTxResponse.block)
+  return block_.GetNoArena();
+}
+inline void CheckTxResponse::set_block(const ::std::string& value) {
+  set_has_block();
+  block_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.CheckTxResponse.block)
+}
+#if LANG_CXX11
+inline void CheckTxResponse::set_block(::std::string&& value) {
+  set_has_block();
+  block_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.CheckTxResponse.block)
+}
+#endif
+inline void CheckTxResponse::set_block(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_block();
+  block_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.CheckTxResponse.block)
+}
+inline void CheckTxResponse::set_block(const void* value, size_t size) {
+  set_has_block();
+  block_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.CheckTxResponse.block)
+}
+inline ::std::string* CheckTxResponse::mutable_block() {
+  set_has_block();
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.CheckTxResponse.block)
+  return block_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* CheckTxResponse::release_block() {
+  // @@protoc_insertion_point(field_release:lego.client.protobuf.CheckTxResponse.block)
+  if (!has_block()) {
+    return NULL;
+  }
+  clear_has_block();
+  return block_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void CheckTxResponse::set_allocated_block(::std::string* block) {
+  if (block != NULL) {
+    set_has_block();
+  } else {
+    clear_has_block();
+  }
+  block_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), block);
+  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.CheckTxResponse.block)
+}
+
+// -------------------------------------------------------------------
+
 // TxBft
 
 // optional .lego.client.protobuf.NewTx new_tx = 1;
@@ -2028,6 +2088,122 @@ inline void TxBft::set_allocated_new_tx(::lego::client::protobuf::NewTx* new_tx)
   }
   new_tx_ = new_tx;
   // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.TxBft.new_tx)
+}
+
+// optional .lego.client.protobuf.CheckTxRequest check_tx_req = 2;
+inline bool TxBft::has_check_tx_req() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void TxBft::set_has_check_tx_req() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void TxBft::clear_has_check_tx_req() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void TxBft::clear_check_tx_req() {
+  if (check_tx_req_ != NULL) check_tx_req_->Clear();
+  clear_has_check_tx_req();
+}
+inline const ::lego::client::protobuf::CheckTxRequest& TxBft::_internal_check_tx_req() const {
+  return *check_tx_req_;
+}
+inline const ::lego::client::protobuf::CheckTxRequest& TxBft::check_tx_req() const {
+  const ::lego::client::protobuf::CheckTxRequest* p = check_tx_req_;
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.TxBft.check_tx_req)
+  return p != NULL ? *p : *reinterpret_cast<const ::lego::client::protobuf::CheckTxRequest*>(
+      &::lego::client::protobuf::_CheckTxRequest_default_instance_);
+}
+inline ::lego::client::protobuf::CheckTxRequest* TxBft::release_check_tx_req() {
+  // @@protoc_insertion_point(field_release:lego.client.protobuf.TxBft.check_tx_req)
+  clear_has_check_tx_req();
+  ::lego::client::protobuf::CheckTxRequest* temp = check_tx_req_;
+  check_tx_req_ = NULL;
+  return temp;
+}
+inline ::lego::client::protobuf::CheckTxRequest* TxBft::mutable_check_tx_req() {
+  set_has_check_tx_req();
+  if (check_tx_req_ == NULL) {
+    auto* p = CreateMaybeMessage<::lego::client::protobuf::CheckTxRequest>(GetArenaNoVirtual());
+    check_tx_req_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.TxBft.check_tx_req)
+  return check_tx_req_;
+}
+inline void TxBft::set_allocated_check_tx_req(::lego::client::protobuf::CheckTxRequest* check_tx_req) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete check_tx_req_;
+  }
+  if (check_tx_req) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      check_tx_req = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, check_tx_req, submessage_arena);
+    }
+    set_has_check_tx_req();
+  } else {
+    clear_has_check_tx_req();
+  }
+  check_tx_req_ = check_tx_req;
+  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.TxBft.check_tx_req)
+}
+
+// optional .lego.client.protobuf.CheckTxResponse check_tx_res = 3;
+inline bool TxBft::has_check_tx_res() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void TxBft::set_has_check_tx_res() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void TxBft::clear_has_check_tx_res() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void TxBft::clear_check_tx_res() {
+  if (check_tx_res_ != NULL) check_tx_res_->Clear();
+  clear_has_check_tx_res();
+}
+inline const ::lego::client::protobuf::CheckTxResponse& TxBft::_internal_check_tx_res() const {
+  return *check_tx_res_;
+}
+inline const ::lego::client::protobuf::CheckTxResponse& TxBft::check_tx_res() const {
+  const ::lego::client::protobuf::CheckTxResponse* p = check_tx_res_;
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.TxBft.check_tx_res)
+  return p != NULL ? *p : *reinterpret_cast<const ::lego::client::protobuf::CheckTxResponse*>(
+      &::lego::client::protobuf::_CheckTxResponse_default_instance_);
+}
+inline ::lego::client::protobuf::CheckTxResponse* TxBft::release_check_tx_res() {
+  // @@protoc_insertion_point(field_release:lego.client.protobuf.TxBft.check_tx_res)
+  clear_has_check_tx_res();
+  ::lego::client::protobuf::CheckTxResponse* temp = check_tx_res_;
+  check_tx_res_ = NULL;
+  return temp;
+}
+inline ::lego::client::protobuf::CheckTxResponse* TxBft::mutable_check_tx_res() {
+  set_has_check_tx_res();
+  if (check_tx_res_ == NULL) {
+    auto* p = CreateMaybeMessage<::lego::client::protobuf::CheckTxResponse>(GetArenaNoVirtual());
+    check_tx_res_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.TxBft.check_tx_res)
+  return check_tx_res_;
+}
+inline void TxBft::set_allocated_check_tx_res(::lego::client::protobuf::CheckTxResponse* check_tx_res) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete check_tx_res_;
+  }
+  if (check_tx_res) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      check_tx_res = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, check_tx_res, submessage_arena);
+    }
+    set_has_check_tx_res();
+  } else {
+    clear_has_check_tx_res();
+  }
+  check_tx_res_ = check_tx_res;
+  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.TxBft.check_tx_res)
 }
 
 // -------------------------------------------------------------------
@@ -3002,6 +3178,368 @@ inline void BftMessage::set_allocated_data(::std::string* data) {
 
 // -------------------------------------------------------------------
 
+// GetVpnInfoRequest
+
+// optional bytes pubkey = 1;
+inline bool GetVpnInfoRequest::has_pubkey() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GetVpnInfoRequest::set_has_pubkey() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GetVpnInfoRequest::clear_has_pubkey() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GetVpnInfoRequest::clear_pubkey() {
+  pubkey_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_pubkey();
+}
+inline const ::std::string& GetVpnInfoRequest::pubkey() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.GetVpnInfoRequest.pubkey)
+  return pubkey_.GetNoArena();
+}
+inline void GetVpnInfoRequest::set_pubkey(const ::std::string& value) {
+  set_has_pubkey();
+  pubkey_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.GetVpnInfoRequest.pubkey)
+}
+#if LANG_CXX11
+inline void GetVpnInfoRequest::set_pubkey(::std::string&& value) {
+  set_has_pubkey();
+  pubkey_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.GetVpnInfoRequest.pubkey)
+}
+#endif
+inline void GetVpnInfoRequest::set_pubkey(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_pubkey();
+  pubkey_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.GetVpnInfoRequest.pubkey)
+}
+inline void GetVpnInfoRequest::set_pubkey(const void* value, size_t size) {
+  set_has_pubkey();
+  pubkey_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.GetVpnInfoRequest.pubkey)
+}
+inline ::std::string* GetVpnInfoRequest::mutable_pubkey() {
+  set_has_pubkey();
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.GetVpnInfoRequest.pubkey)
+  return pubkey_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* GetVpnInfoRequest::release_pubkey() {
+  // @@protoc_insertion_point(field_release:lego.client.protobuf.GetVpnInfoRequest.pubkey)
+  if (!has_pubkey()) {
+    return NULL;
+  }
+  clear_has_pubkey();
+  return pubkey_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void GetVpnInfoRequest::set_allocated_pubkey(::std::string* pubkey) {
+  if (pubkey != NULL) {
+    set_has_pubkey();
+  } else {
+    clear_has_pubkey();
+  }
+  pubkey_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), pubkey);
+  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.GetVpnInfoRequest.pubkey)
+}
+
+// -------------------------------------------------------------------
+
+// GetVpnInfoResponse
+
+// optional bytes ip = 1;
+inline bool GetVpnInfoResponse::has_ip() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GetVpnInfoResponse::set_has_ip() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GetVpnInfoResponse::clear_has_ip() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GetVpnInfoResponse::clear_ip() {
+  ip_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_ip();
+}
+inline const ::std::string& GetVpnInfoResponse::ip() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.GetVpnInfoResponse.ip)
+  return ip_.GetNoArena();
+}
+inline void GetVpnInfoResponse::set_ip(const ::std::string& value) {
+  set_has_ip();
+  ip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.GetVpnInfoResponse.ip)
+}
+#if LANG_CXX11
+inline void GetVpnInfoResponse::set_ip(::std::string&& value) {
+  set_has_ip();
+  ip_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.GetVpnInfoResponse.ip)
+}
+#endif
+inline void GetVpnInfoResponse::set_ip(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_ip();
+  ip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.GetVpnInfoResponse.ip)
+}
+inline void GetVpnInfoResponse::set_ip(const void* value, size_t size) {
+  set_has_ip();
+  ip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.GetVpnInfoResponse.ip)
+}
+inline ::std::string* GetVpnInfoResponse::mutable_ip() {
+  set_has_ip();
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.GetVpnInfoResponse.ip)
+  return ip_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* GetVpnInfoResponse::release_ip() {
+  // @@protoc_insertion_point(field_release:lego.client.protobuf.GetVpnInfoResponse.ip)
+  if (!has_ip()) {
+    return NULL;
+  }
+  clear_has_ip();
+  return ip_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void GetVpnInfoResponse::set_allocated_ip(::std::string* ip) {
+  if (ip != NULL) {
+    set_has_ip();
+  } else {
+    clear_has_ip();
+  }
+  ip_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ip);
+  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.GetVpnInfoResponse.ip)
+}
+
+// optional uint32 port = 2;
+inline bool GetVpnInfoResponse::has_port() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void GetVpnInfoResponse::set_has_port() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void GetVpnInfoResponse::clear_has_port() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void GetVpnInfoResponse::clear_port() {
+  port_ = 0u;
+  clear_has_port();
+}
+inline ::google::protobuf::uint32 GetVpnInfoResponse::port() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.GetVpnInfoResponse.port)
+  return port_;
+}
+inline void GetVpnInfoResponse::set_port(::google::protobuf::uint32 value) {
+  set_has_port();
+  port_ = value;
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.GetVpnInfoResponse.port)
+}
+
+// optional bytes encrypt_type = 3;
+inline bool GetVpnInfoResponse::has_encrypt_type() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void GetVpnInfoResponse::set_has_encrypt_type() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void GetVpnInfoResponse::clear_has_encrypt_type() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void GetVpnInfoResponse::clear_encrypt_type() {
+  encrypt_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_encrypt_type();
+}
+inline const ::std::string& GetVpnInfoResponse::encrypt_type() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.GetVpnInfoResponse.encrypt_type)
+  return encrypt_type_.GetNoArena();
+}
+inline void GetVpnInfoResponse::set_encrypt_type(const ::std::string& value) {
+  set_has_encrypt_type();
+  encrypt_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.GetVpnInfoResponse.encrypt_type)
+}
+#if LANG_CXX11
+inline void GetVpnInfoResponse::set_encrypt_type(::std::string&& value) {
+  set_has_encrypt_type();
+  encrypt_type_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.GetVpnInfoResponse.encrypt_type)
+}
+#endif
+inline void GetVpnInfoResponse::set_encrypt_type(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_encrypt_type();
+  encrypt_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.GetVpnInfoResponse.encrypt_type)
+}
+inline void GetVpnInfoResponse::set_encrypt_type(const void* value, size_t size) {
+  set_has_encrypt_type();
+  encrypt_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.GetVpnInfoResponse.encrypt_type)
+}
+inline ::std::string* GetVpnInfoResponse::mutable_encrypt_type() {
+  set_has_encrypt_type();
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.GetVpnInfoResponse.encrypt_type)
+  return encrypt_type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* GetVpnInfoResponse::release_encrypt_type() {
+  // @@protoc_insertion_point(field_release:lego.client.protobuf.GetVpnInfoResponse.encrypt_type)
+  if (!has_encrypt_type()) {
+    return NULL;
+  }
+  clear_has_encrypt_type();
+  return encrypt_type_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void GetVpnInfoResponse::set_allocated_encrypt_type(::std::string* encrypt_type) {
+  if (encrypt_type != NULL) {
+    set_has_encrypt_type();
+  } else {
+    clear_has_encrypt_type();
+  }
+  encrypt_type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), encrypt_type);
+  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.GetVpnInfoResponse.encrypt_type)
+}
+
+// optional bytes passwd = 4;
+inline bool GetVpnInfoResponse::has_passwd() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void GetVpnInfoResponse::set_has_passwd() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void GetVpnInfoResponse::clear_has_passwd() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void GetVpnInfoResponse::clear_passwd() {
+  passwd_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_passwd();
+}
+inline const ::std::string& GetVpnInfoResponse::passwd() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.GetVpnInfoResponse.passwd)
+  return passwd_.GetNoArena();
+}
+inline void GetVpnInfoResponse::set_passwd(const ::std::string& value) {
+  set_has_passwd();
+  passwd_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.GetVpnInfoResponse.passwd)
+}
+#if LANG_CXX11
+inline void GetVpnInfoResponse::set_passwd(::std::string&& value) {
+  set_has_passwd();
+  passwd_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.GetVpnInfoResponse.passwd)
+}
+#endif
+inline void GetVpnInfoResponse::set_passwd(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_passwd();
+  passwd_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.GetVpnInfoResponse.passwd)
+}
+inline void GetVpnInfoResponse::set_passwd(const void* value, size_t size) {
+  set_has_passwd();
+  passwd_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.GetVpnInfoResponse.passwd)
+}
+inline ::std::string* GetVpnInfoResponse::mutable_passwd() {
+  set_has_passwd();
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.GetVpnInfoResponse.passwd)
+  return passwd_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* GetVpnInfoResponse::release_passwd() {
+  // @@protoc_insertion_point(field_release:lego.client.protobuf.GetVpnInfoResponse.passwd)
+  if (!has_passwd()) {
+    return NULL;
+  }
+  clear_has_passwd();
+  return passwd_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void GetVpnInfoResponse::set_allocated_passwd(::std::string* passwd) {
+  if (passwd != NULL) {
+    set_has_passwd();
+  } else {
+    clear_has_passwd();
+  }
+  passwd_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), passwd);
+  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.GetVpnInfoResponse.passwd)
+}
+
+// optional bytes pubkey = 5;
+inline bool GetVpnInfoResponse::has_pubkey() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void GetVpnInfoResponse::set_has_pubkey() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void GetVpnInfoResponse::clear_has_pubkey() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void GetVpnInfoResponse::clear_pubkey() {
+  pubkey_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_pubkey();
+}
+inline const ::std::string& GetVpnInfoResponse::pubkey() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.GetVpnInfoResponse.pubkey)
+  return pubkey_.GetNoArena();
+}
+inline void GetVpnInfoResponse::set_pubkey(const ::std::string& value) {
+  set_has_pubkey();
+  pubkey_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.GetVpnInfoResponse.pubkey)
+}
+#if LANG_CXX11
+inline void GetVpnInfoResponse::set_pubkey(::std::string&& value) {
+  set_has_pubkey();
+  pubkey_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.GetVpnInfoResponse.pubkey)
+}
+#endif
+inline void GetVpnInfoResponse::set_pubkey(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_pubkey();
+  pubkey_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.GetVpnInfoResponse.pubkey)
+}
+inline void GetVpnInfoResponse::set_pubkey(const void* value, size_t size) {
+  set_has_pubkey();
+  pubkey_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.GetVpnInfoResponse.pubkey)
+}
+inline ::std::string* GetVpnInfoResponse::mutable_pubkey() {
+  set_has_pubkey();
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.GetVpnInfoResponse.pubkey)
+  return pubkey_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* GetVpnInfoResponse::release_pubkey() {
+  // @@protoc_insertion_point(field_release:lego.client.protobuf.GetVpnInfoResponse.pubkey)
+  if (!has_pubkey()) {
+    return NULL;
+  }
+  clear_has_pubkey();
+  return pubkey_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void GetVpnInfoResponse::set_allocated_pubkey(::std::string* pubkey) {
+  if (pubkey != NULL) {
+    set_has_pubkey();
+  } else {
+    clear_has_pubkey();
+  }
+  pubkey_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), pubkey);
+  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.GetVpnInfoResponse.pubkey)
+}
+
+// -------------------------------------------------------------------
+
 // ServiceMessage
 
 // optional .lego.client.protobuf.GetVpnInfoRequest vpn_req = 1;
@@ -3123,6 +3661,10 @@ inline void ServiceMessage::set_allocated_vpn_res(::lego::client::protobuf::GetV
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
