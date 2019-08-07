@@ -38,7 +38,7 @@ namespace protobuf_client_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[8];
+  static const ::google::protobuf::internal::ParseTable schema[9];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -51,12 +51,15 @@ namespace protobuf {
 class BftMessage;
 class BftMessageDefaultTypeInternal;
 extern BftMessageDefaultTypeInternal _BftMessage_default_instance_;
-class CheckTxRequest;
-class CheckTxRequestDefaultTypeInternal;
-extern CheckTxRequestDefaultTypeInternal _CheckTxRequest_default_instance_;
-class CheckTxResponse;
-class CheckTxResponseDefaultTypeInternal;
-extern CheckTxResponseDefaultTypeInternal _CheckTxResponse_default_instance_;
+class BlockMessage;
+class BlockMessageDefaultTypeInternal;
+extern BlockMessageDefaultTypeInternal _BlockMessage_default_instance_;
+class GetTxBlockRequest;
+class GetTxBlockRequestDefaultTypeInternal;
+extern GetTxBlockRequestDefaultTypeInternal _GetTxBlockRequest_default_instance_;
+class GetTxBlockResponse;
+class GetTxBlockResponseDefaultTypeInternal;
+extern GetTxBlockResponseDefaultTypeInternal _GetTxBlockResponse_default_instance_;
 class GetVpnInfoRequest;
 class GetVpnInfoRequestDefaultTypeInternal;
 extern GetVpnInfoRequestDefaultTypeInternal _GetVpnInfoRequest_default_instance_;
@@ -78,8 +81,9 @@ extern TxBftDefaultTypeInternal _TxBft_default_instance_;
 namespace google {
 namespace protobuf {
 template<> ::lego::client::protobuf::BftMessage* Arena::CreateMaybeMessage<::lego::client::protobuf::BftMessage>(Arena*);
-template<> ::lego::client::protobuf::CheckTxRequest* Arena::CreateMaybeMessage<::lego::client::protobuf::CheckTxRequest>(Arena*);
-template<> ::lego::client::protobuf::CheckTxResponse* Arena::CreateMaybeMessage<::lego::client::protobuf::CheckTxResponse>(Arena*);
+template<> ::lego::client::protobuf::BlockMessage* Arena::CreateMaybeMessage<::lego::client::protobuf::BlockMessage>(Arena*);
+template<> ::lego::client::protobuf::GetTxBlockRequest* Arena::CreateMaybeMessage<::lego::client::protobuf::GetTxBlockRequest>(Arena*);
+template<> ::lego::client::protobuf::GetTxBlockResponse* Arena::CreateMaybeMessage<::lego::client::protobuf::GetTxBlockResponse>(Arena*);
 template<> ::lego::client::protobuf::GetVpnInfoRequest* Arena::CreateMaybeMessage<::lego::client::protobuf::GetVpnInfoRequest>(Arena*);
 template<> ::lego::client::protobuf::GetVpnInfoResponse* Arena::CreateMaybeMessage<::lego::client::protobuf::GetVpnInfoResponse>(Arena*);
 template<> ::lego::client::protobuf::NewTx* Arena::CreateMaybeMessage<::lego::client::protobuf::NewTx>(Arena*);
@@ -297,250 +301,6 @@ class NewTx : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
 };
 // -------------------------------------------------------------------
 
-class CheckTxRequest : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:lego.client.protobuf.CheckTxRequest) */ {
- public:
-  CheckTxRequest();
-  virtual ~CheckTxRequest();
-
-  CheckTxRequest(const CheckTxRequest& from);
-
-  inline CheckTxRequest& operator=(const CheckTxRequest& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  CheckTxRequest(CheckTxRequest&& from) noexcept
-    : CheckTxRequest() {
-    *this = ::std::move(from);
-  }
-
-  inline CheckTxRequest& operator=(CheckTxRequest&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _internal_metadata_.unknown_fields();
-  }
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return _internal_metadata_.mutable_unknown_fields();
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const CheckTxRequest& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const CheckTxRequest* internal_default_instance() {
-    return reinterpret_cast<const CheckTxRequest*>(
-               &_CheckTxRequest_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    1;
-
-  void Swap(CheckTxRequest* other);
-  friend void swap(CheckTxRequest& a, CheckTxRequest& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline CheckTxRequest* New() const final {
-    return CreateMaybeMessage<CheckTxRequest>(NULL);
-  }
-
-  CheckTxRequest* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<CheckTxRequest>(arena);
-  }
-  void CopyFrom(const ::google::protobuf::Message& from) final;
-  void MergeFrom(const ::google::protobuf::Message& from) final;
-  void CopyFrom(const CheckTxRequest& from);
-  void MergeFrom(const CheckTxRequest& from);
-  void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) final;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const final;
-  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
-      bool deterministic, ::google::protobuf::uint8* target) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(CheckTxRequest* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::google::protobuf::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // optional bytes tx_gid = 1;
-  bool has_tx_gid() const;
-  void clear_tx_gid();
-  static const int kTxGidFieldNumber = 1;
-  const ::std::string& tx_gid() const;
-  void set_tx_gid(const ::std::string& value);
-  #if LANG_CXX11
-  void set_tx_gid(::std::string&& value);
-  #endif
-  void set_tx_gid(const char* value);
-  void set_tx_gid(const void* value, size_t size);
-  ::std::string* mutable_tx_gid();
-  ::std::string* release_tx_gid();
-  void set_allocated_tx_gid(::std::string* tx_gid);
-
-  // @@protoc_insertion_point(class_scope:lego.client.protobuf.CheckTxRequest)
- private:
-  void set_has_tx_gid();
-  void clear_has_tx_gid();
-
-  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::internal::HasBits<1> _has_bits_;
-  mutable ::google::protobuf::internal::CachedSize _cached_size_;
-  ::google::protobuf::internal::ArenaStringPtr tx_gid_;
-  friend struct ::protobuf_client_2eproto::TableStruct;
-};
-// -------------------------------------------------------------------
-
-class CheckTxResponse : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:lego.client.protobuf.CheckTxResponse) */ {
- public:
-  CheckTxResponse();
-  virtual ~CheckTxResponse();
-
-  CheckTxResponse(const CheckTxResponse& from);
-
-  inline CheckTxResponse& operator=(const CheckTxResponse& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  CheckTxResponse(CheckTxResponse&& from) noexcept
-    : CheckTxResponse() {
-    *this = ::std::move(from);
-  }
-
-  inline CheckTxResponse& operator=(CheckTxResponse&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _internal_metadata_.unknown_fields();
-  }
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return _internal_metadata_.mutable_unknown_fields();
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const CheckTxResponse& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const CheckTxResponse* internal_default_instance() {
-    return reinterpret_cast<const CheckTxResponse*>(
-               &_CheckTxResponse_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    2;
-
-  void Swap(CheckTxResponse* other);
-  friend void swap(CheckTxResponse& a, CheckTxResponse& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline CheckTxResponse* New() const final {
-    return CreateMaybeMessage<CheckTxResponse>(NULL);
-  }
-
-  CheckTxResponse* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<CheckTxResponse>(arena);
-  }
-  void CopyFrom(const ::google::protobuf::Message& from) final;
-  void MergeFrom(const ::google::protobuf::Message& from) final;
-  void CopyFrom(const CheckTxResponse& from);
-  void MergeFrom(const CheckTxResponse& from);
-  void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) final;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const final;
-  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
-      bool deterministic, ::google::protobuf::uint8* target) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(CheckTxResponse* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::google::protobuf::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // optional bytes block = 1;
-  bool has_block() const;
-  void clear_block();
-  static const int kBlockFieldNumber = 1;
-  const ::std::string& block() const;
-  void set_block(const ::std::string& value);
-  #if LANG_CXX11
-  void set_block(::std::string&& value);
-  #endif
-  void set_block(const char* value);
-  void set_block(const void* value, size_t size);
-  ::std::string* mutable_block();
-  ::std::string* release_block();
-  void set_allocated_block(::std::string* block);
-
-  // @@protoc_insertion_point(class_scope:lego.client.protobuf.CheckTxResponse)
- private:
-  void set_has_block();
-  void clear_has_block();
-
-  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::internal::HasBits<1> _has_bits_;
-  mutable ::google::protobuf::internal::CachedSize _cached_size_;
-  ::google::protobuf::internal::ArenaStringPtr block_;
-  friend struct ::protobuf_client_2eproto::TableStruct;
-};
-// -------------------------------------------------------------------
-
 class TxBft : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:lego.client.protobuf.TxBft) */ {
  public:
   TxBft();
@@ -583,7 +343,7 @@ class TxBft : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
                &_TxBft_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    1;
 
   void Swap(TxBft* other);
   friend void swap(TxBft& a, TxBft& b) {
@@ -647,45 +407,15 @@ class TxBft : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
   ::lego::client::protobuf::NewTx* mutable_new_tx();
   void set_allocated_new_tx(::lego::client::protobuf::NewTx* new_tx);
 
-  // optional .lego.client.protobuf.CheckTxRequest check_tx_req = 2;
-  bool has_check_tx_req() const;
-  void clear_check_tx_req();
-  static const int kCheckTxReqFieldNumber = 2;
-  private:
-  const ::lego::client::protobuf::CheckTxRequest& _internal_check_tx_req() const;
-  public:
-  const ::lego::client::protobuf::CheckTxRequest& check_tx_req() const;
-  ::lego::client::protobuf::CheckTxRequest* release_check_tx_req();
-  ::lego::client::protobuf::CheckTxRequest* mutable_check_tx_req();
-  void set_allocated_check_tx_req(::lego::client::protobuf::CheckTxRequest* check_tx_req);
-
-  // optional .lego.client.protobuf.CheckTxResponse check_tx_res = 3;
-  bool has_check_tx_res() const;
-  void clear_check_tx_res();
-  static const int kCheckTxResFieldNumber = 3;
-  private:
-  const ::lego::client::protobuf::CheckTxResponse& _internal_check_tx_res() const;
-  public:
-  const ::lego::client::protobuf::CheckTxResponse& check_tx_res() const;
-  ::lego::client::protobuf::CheckTxResponse* release_check_tx_res();
-  ::lego::client::protobuf::CheckTxResponse* mutable_check_tx_res();
-  void set_allocated_check_tx_res(::lego::client::protobuf::CheckTxResponse* check_tx_res);
-
   // @@protoc_insertion_point(class_scope:lego.client.protobuf.TxBft)
  private:
   void set_has_new_tx();
   void clear_has_new_tx();
-  void set_has_check_tx_req();
-  void clear_has_check_tx_req();
-  void set_has_check_tx_res();
-  void clear_has_check_tx_res();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   ::lego::client::protobuf::NewTx* new_tx_;
-  ::lego::client::protobuf::CheckTxRequest* check_tx_req_;
-  ::lego::client::protobuf::CheckTxResponse* check_tx_res_;
   friend struct ::protobuf_client_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
@@ -732,7 +462,7 @@ class BftMessage : public ::google::protobuf::Message /* @@protoc_insertion_poin
                &_BftMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    2;
 
   void Swap(BftMessage* other);
   friend void swap(BftMessage& a, BftMessage& b) {
@@ -1125,7 +855,7 @@ class GetVpnInfoRequest : public ::google::protobuf::Message /* @@protoc_inserti
                &_GetVpnInfoRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    3;
 
   void Swap(GetVpnInfoRequest* other);
   friend void swap(GetVpnInfoRequest& a, GetVpnInfoRequest& b) {
@@ -1247,7 +977,7 @@ class GetVpnInfoResponse : public ::google::protobuf::Message /* @@protoc_insert
                &_GetVpnInfoResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    4;
 
   void Swap(GetVpnInfoResponse* other);
   friend void swap(GetVpnInfoResponse& a, GetVpnInfoResponse& b) {
@@ -1433,7 +1163,7 @@ class ServiceMessage : public ::google::protobuf::Message /* @@protoc_insertion_
                &_ServiceMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    5;
 
   void Swap(ServiceMessage* other);
   friend void swap(ServiceMessage& a, ServiceMessage& b) {
@@ -1521,6 +1251,402 @@ class ServiceMessage : public ::google::protobuf::Message /* @@protoc_insertion_
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   ::lego::client::protobuf::GetVpnInfoRequest* vpn_req_;
   ::lego::client::protobuf::GetVpnInfoResponse* vpn_res_;
+  friend struct ::protobuf_client_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class GetTxBlockRequest : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:lego.client.protobuf.GetTxBlockRequest) */ {
+ public:
+  GetTxBlockRequest();
+  virtual ~GetTxBlockRequest();
+
+  GetTxBlockRequest(const GetTxBlockRequest& from);
+
+  inline GetTxBlockRequest& operator=(const GetTxBlockRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  GetTxBlockRequest(GetTxBlockRequest&& from) noexcept
+    : GetTxBlockRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline GetTxBlockRequest& operator=(GetTxBlockRequest&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GetTxBlockRequest& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const GetTxBlockRequest* internal_default_instance() {
+    return reinterpret_cast<const GetTxBlockRequest*>(
+               &_GetTxBlockRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    6;
+
+  void Swap(GetTxBlockRequest* other);
+  friend void swap(GetTxBlockRequest& a, GetTxBlockRequest& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline GetTxBlockRequest* New() const final {
+    return CreateMaybeMessage<GetTxBlockRequest>(NULL);
+  }
+
+  GetTxBlockRequest* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<GetTxBlockRequest>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const GetTxBlockRequest& from);
+  void MergeFrom(const GetTxBlockRequest& from);
+  void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(GetTxBlockRequest* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional bytes tx_gid = 1;
+  bool has_tx_gid() const;
+  void clear_tx_gid();
+  static const int kTxGidFieldNumber = 1;
+  const ::std::string& tx_gid() const;
+  void set_tx_gid(const ::std::string& value);
+  #if LANG_CXX11
+  void set_tx_gid(::std::string&& value);
+  #endif
+  void set_tx_gid(const char* value);
+  void set_tx_gid(const void* value, size_t size);
+  ::std::string* mutable_tx_gid();
+  ::std::string* release_tx_gid();
+  void set_allocated_tx_gid(::std::string* tx_gid);
+
+  // optional bytes block_hash = 2;
+  bool has_block_hash() const;
+  void clear_block_hash();
+  static const int kBlockHashFieldNumber = 2;
+  const ::std::string& block_hash() const;
+  void set_block_hash(const ::std::string& value);
+  #if LANG_CXX11
+  void set_block_hash(::std::string&& value);
+  #endif
+  void set_block_hash(const char* value);
+  void set_block_hash(const void* value, size_t size);
+  ::std::string* mutable_block_hash();
+  ::std::string* release_block_hash();
+  void set_allocated_block_hash(::std::string* block_hash);
+
+  // @@protoc_insertion_point(class_scope:lego.client.protobuf.GetTxBlockRequest)
+ private:
+  void set_has_tx_gid();
+  void clear_has_tx_gid();
+  void set_has_block_hash();
+  void clear_has_block_hash();
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::HasBits<1> _has_bits_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  ::google::protobuf::internal::ArenaStringPtr tx_gid_;
+  ::google::protobuf::internal::ArenaStringPtr block_hash_;
+  friend struct ::protobuf_client_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class GetTxBlockResponse : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:lego.client.protobuf.GetTxBlockResponse) */ {
+ public:
+  GetTxBlockResponse();
+  virtual ~GetTxBlockResponse();
+
+  GetTxBlockResponse(const GetTxBlockResponse& from);
+
+  inline GetTxBlockResponse& operator=(const GetTxBlockResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  GetTxBlockResponse(GetTxBlockResponse&& from) noexcept
+    : GetTxBlockResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline GetTxBlockResponse& operator=(GetTxBlockResponse&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GetTxBlockResponse& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const GetTxBlockResponse* internal_default_instance() {
+    return reinterpret_cast<const GetTxBlockResponse*>(
+               &_GetTxBlockResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    7;
+
+  void Swap(GetTxBlockResponse* other);
+  friend void swap(GetTxBlockResponse& a, GetTxBlockResponse& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline GetTxBlockResponse* New() const final {
+    return CreateMaybeMessage<GetTxBlockResponse>(NULL);
+  }
+
+  GetTxBlockResponse* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<GetTxBlockResponse>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const GetTxBlockResponse& from);
+  void MergeFrom(const GetTxBlockResponse& from);
+  void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(GetTxBlockResponse* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional bytes block = 1;
+  bool has_block() const;
+  void clear_block();
+  static const int kBlockFieldNumber = 1;
+  const ::std::string& block() const;
+  void set_block(const ::std::string& value);
+  #if LANG_CXX11
+  void set_block(::std::string&& value);
+  #endif
+  void set_block(const char* value);
+  void set_block(const void* value, size_t size);
+  ::std::string* mutable_block();
+  ::std::string* release_block();
+  void set_allocated_block(::std::string* block);
+
+  // @@protoc_insertion_point(class_scope:lego.client.protobuf.GetTxBlockResponse)
+ private:
+  void set_has_block();
+  void clear_has_block();
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::HasBits<1> _has_bits_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  ::google::protobuf::internal::ArenaStringPtr block_;
+  friend struct ::protobuf_client_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class BlockMessage : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:lego.client.protobuf.BlockMessage) */ {
+ public:
+  BlockMessage();
+  virtual ~BlockMessage();
+
+  BlockMessage(const BlockMessage& from);
+
+  inline BlockMessage& operator=(const BlockMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  BlockMessage(BlockMessage&& from) noexcept
+    : BlockMessage() {
+    *this = ::std::move(from);
+  }
+
+  inline BlockMessage& operator=(BlockMessage&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const BlockMessage& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const BlockMessage* internal_default_instance() {
+    return reinterpret_cast<const BlockMessage*>(
+               &_BlockMessage_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    8;
+
+  void Swap(BlockMessage* other);
+  friend void swap(BlockMessage& a, BlockMessage& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline BlockMessage* New() const final {
+    return CreateMaybeMessage<BlockMessage>(NULL);
+  }
+
+  BlockMessage* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<BlockMessage>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const BlockMessage& from);
+  void MergeFrom(const BlockMessage& from);
+  void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(BlockMessage* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional .lego.client.protobuf.GetTxBlockRequest block_req = 1;
+  bool has_block_req() const;
+  void clear_block_req();
+  static const int kBlockReqFieldNumber = 1;
+  private:
+  const ::lego::client::protobuf::GetTxBlockRequest& _internal_block_req() const;
+  public:
+  const ::lego::client::protobuf::GetTxBlockRequest& block_req() const;
+  ::lego::client::protobuf::GetTxBlockRequest* release_block_req();
+  ::lego::client::protobuf::GetTxBlockRequest* mutable_block_req();
+  void set_allocated_block_req(::lego::client::protobuf::GetTxBlockRequest* block_req);
+
+  // optional .lego.client.protobuf.GetTxBlockResponse block_res = 2;
+  bool has_block_res() const;
+  void clear_block_res();
+  static const int kBlockResFieldNumber = 2;
+  private:
+  const ::lego::client::protobuf::GetTxBlockResponse& _internal_block_res() const;
+  public:
+  const ::lego::client::protobuf::GetTxBlockResponse& block_res() const;
+  ::lego::client::protobuf::GetTxBlockResponse* release_block_res();
+  ::lego::client::protobuf::GetTxBlockResponse* mutable_block_res();
+  void set_allocated_block_res(::lego::client::protobuf::GetTxBlockResponse* block_res);
+
+  // @@protoc_insertion_point(class_scope:lego.client.protobuf.BlockMessage)
+ private:
+  void set_has_block_req();
+  void clear_has_block_req();
+  void set_has_block_res();
+  void clear_has_block_res();
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::HasBits<1> _has_bits_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  ::lego::client::protobuf::GetTxBlockRequest* block_req_;
+  ::lego::client::protobuf::GetTxBlockResponse* block_res_;
   friend struct ::protobuf_client_2eproto::TableStruct;
 };
 // ===================================================================
@@ -1890,146 +2016,6 @@ inline void NewTx::set_lego_count(::google::protobuf::uint64 value) {
 
 // -------------------------------------------------------------------
 
-// CheckTxRequest
-
-// optional bytes tx_gid = 1;
-inline bool CheckTxRequest::has_tx_gid() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
-inline void CheckTxRequest::set_has_tx_gid() {
-  _has_bits_[0] |= 0x00000001u;
-}
-inline void CheckTxRequest::clear_has_tx_gid() {
-  _has_bits_[0] &= ~0x00000001u;
-}
-inline void CheckTxRequest::clear_tx_gid() {
-  tx_gid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  clear_has_tx_gid();
-}
-inline const ::std::string& CheckTxRequest::tx_gid() const {
-  // @@protoc_insertion_point(field_get:lego.client.protobuf.CheckTxRequest.tx_gid)
-  return tx_gid_.GetNoArena();
-}
-inline void CheckTxRequest::set_tx_gid(const ::std::string& value) {
-  set_has_tx_gid();
-  tx_gid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:lego.client.protobuf.CheckTxRequest.tx_gid)
-}
-#if LANG_CXX11
-inline void CheckTxRequest::set_tx_gid(::std::string&& value) {
-  set_has_tx_gid();
-  tx_gid_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.CheckTxRequest.tx_gid)
-}
-#endif
-inline void CheckTxRequest::set_tx_gid(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  set_has_tx_gid();
-  tx_gid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.CheckTxRequest.tx_gid)
-}
-inline void CheckTxRequest::set_tx_gid(const void* value, size_t size) {
-  set_has_tx_gid();
-  tx_gid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.CheckTxRequest.tx_gid)
-}
-inline ::std::string* CheckTxRequest::mutable_tx_gid() {
-  set_has_tx_gid();
-  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.CheckTxRequest.tx_gid)
-  return tx_gid_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* CheckTxRequest::release_tx_gid() {
-  // @@protoc_insertion_point(field_release:lego.client.protobuf.CheckTxRequest.tx_gid)
-  if (!has_tx_gid()) {
-    return NULL;
-  }
-  clear_has_tx_gid();
-  return tx_gid_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void CheckTxRequest::set_allocated_tx_gid(::std::string* tx_gid) {
-  if (tx_gid != NULL) {
-    set_has_tx_gid();
-  } else {
-    clear_has_tx_gid();
-  }
-  tx_gid_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), tx_gid);
-  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.CheckTxRequest.tx_gid)
-}
-
-// -------------------------------------------------------------------
-
-// CheckTxResponse
-
-// optional bytes block = 1;
-inline bool CheckTxResponse::has_block() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
-inline void CheckTxResponse::set_has_block() {
-  _has_bits_[0] |= 0x00000001u;
-}
-inline void CheckTxResponse::clear_has_block() {
-  _has_bits_[0] &= ~0x00000001u;
-}
-inline void CheckTxResponse::clear_block() {
-  block_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  clear_has_block();
-}
-inline const ::std::string& CheckTxResponse::block() const {
-  // @@protoc_insertion_point(field_get:lego.client.protobuf.CheckTxResponse.block)
-  return block_.GetNoArena();
-}
-inline void CheckTxResponse::set_block(const ::std::string& value) {
-  set_has_block();
-  block_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:lego.client.protobuf.CheckTxResponse.block)
-}
-#if LANG_CXX11
-inline void CheckTxResponse::set_block(::std::string&& value) {
-  set_has_block();
-  block_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.CheckTxResponse.block)
-}
-#endif
-inline void CheckTxResponse::set_block(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  set_has_block();
-  block_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.CheckTxResponse.block)
-}
-inline void CheckTxResponse::set_block(const void* value, size_t size) {
-  set_has_block();
-  block_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.CheckTxResponse.block)
-}
-inline ::std::string* CheckTxResponse::mutable_block() {
-  set_has_block();
-  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.CheckTxResponse.block)
-  return block_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* CheckTxResponse::release_block() {
-  // @@protoc_insertion_point(field_release:lego.client.protobuf.CheckTxResponse.block)
-  if (!has_block()) {
-    return NULL;
-  }
-  clear_has_block();
-  return block_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void CheckTxResponse::set_allocated_block(::std::string* block) {
-  if (block != NULL) {
-    set_has_block();
-  } else {
-    clear_has_block();
-  }
-  block_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), block);
-  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.CheckTxResponse.block)
-}
-
-// -------------------------------------------------------------------
-
 // TxBft
 
 // optional .lego.client.protobuf.NewTx new_tx = 1;
@@ -2088,122 +2074,6 @@ inline void TxBft::set_allocated_new_tx(::lego::client::protobuf::NewTx* new_tx)
   }
   new_tx_ = new_tx;
   // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.TxBft.new_tx)
-}
-
-// optional .lego.client.protobuf.CheckTxRequest check_tx_req = 2;
-inline bool TxBft::has_check_tx_req() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
-}
-inline void TxBft::set_has_check_tx_req() {
-  _has_bits_[0] |= 0x00000002u;
-}
-inline void TxBft::clear_has_check_tx_req() {
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline void TxBft::clear_check_tx_req() {
-  if (check_tx_req_ != NULL) check_tx_req_->Clear();
-  clear_has_check_tx_req();
-}
-inline const ::lego::client::protobuf::CheckTxRequest& TxBft::_internal_check_tx_req() const {
-  return *check_tx_req_;
-}
-inline const ::lego::client::protobuf::CheckTxRequest& TxBft::check_tx_req() const {
-  const ::lego::client::protobuf::CheckTxRequest* p = check_tx_req_;
-  // @@protoc_insertion_point(field_get:lego.client.protobuf.TxBft.check_tx_req)
-  return p != NULL ? *p : *reinterpret_cast<const ::lego::client::protobuf::CheckTxRequest*>(
-      &::lego::client::protobuf::_CheckTxRequest_default_instance_);
-}
-inline ::lego::client::protobuf::CheckTxRequest* TxBft::release_check_tx_req() {
-  // @@protoc_insertion_point(field_release:lego.client.protobuf.TxBft.check_tx_req)
-  clear_has_check_tx_req();
-  ::lego::client::protobuf::CheckTxRequest* temp = check_tx_req_;
-  check_tx_req_ = NULL;
-  return temp;
-}
-inline ::lego::client::protobuf::CheckTxRequest* TxBft::mutable_check_tx_req() {
-  set_has_check_tx_req();
-  if (check_tx_req_ == NULL) {
-    auto* p = CreateMaybeMessage<::lego::client::protobuf::CheckTxRequest>(GetArenaNoVirtual());
-    check_tx_req_ = p;
-  }
-  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.TxBft.check_tx_req)
-  return check_tx_req_;
-}
-inline void TxBft::set_allocated_check_tx_req(::lego::client::protobuf::CheckTxRequest* check_tx_req) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete check_tx_req_;
-  }
-  if (check_tx_req) {
-    ::google::protobuf::Arena* submessage_arena = NULL;
-    if (message_arena != submessage_arena) {
-      check_tx_req = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, check_tx_req, submessage_arena);
-    }
-    set_has_check_tx_req();
-  } else {
-    clear_has_check_tx_req();
-  }
-  check_tx_req_ = check_tx_req;
-  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.TxBft.check_tx_req)
-}
-
-// optional .lego.client.protobuf.CheckTxResponse check_tx_res = 3;
-inline bool TxBft::has_check_tx_res() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
-}
-inline void TxBft::set_has_check_tx_res() {
-  _has_bits_[0] |= 0x00000004u;
-}
-inline void TxBft::clear_has_check_tx_res() {
-  _has_bits_[0] &= ~0x00000004u;
-}
-inline void TxBft::clear_check_tx_res() {
-  if (check_tx_res_ != NULL) check_tx_res_->Clear();
-  clear_has_check_tx_res();
-}
-inline const ::lego::client::protobuf::CheckTxResponse& TxBft::_internal_check_tx_res() const {
-  return *check_tx_res_;
-}
-inline const ::lego::client::protobuf::CheckTxResponse& TxBft::check_tx_res() const {
-  const ::lego::client::protobuf::CheckTxResponse* p = check_tx_res_;
-  // @@protoc_insertion_point(field_get:lego.client.protobuf.TxBft.check_tx_res)
-  return p != NULL ? *p : *reinterpret_cast<const ::lego::client::protobuf::CheckTxResponse*>(
-      &::lego::client::protobuf::_CheckTxResponse_default_instance_);
-}
-inline ::lego::client::protobuf::CheckTxResponse* TxBft::release_check_tx_res() {
-  // @@protoc_insertion_point(field_release:lego.client.protobuf.TxBft.check_tx_res)
-  clear_has_check_tx_res();
-  ::lego::client::protobuf::CheckTxResponse* temp = check_tx_res_;
-  check_tx_res_ = NULL;
-  return temp;
-}
-inline ::lego::client::protobuf::CheckTxResponse* TxBft::mutable_check_tx_res() {
-  set_has_check_tx_res();
-  if (check_tx_res_ == NULL) {
-    auto* p = CreateMaybeMessage<::lego::client::protobuf::CheckTxResponse>(GetArenaNoVirtual());
-    check_tx_res_ = p;
-  }
-  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.TxBft.check_tx_res)
-  return check_tx_res_;
-}
-inline void TxBft::set_allocated_check_tx_res(::lego::client::protobuf::CheckTxResponse* check_tx_res) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete check_tx_res_;
-  }
-  if (check_tx_res) {
-    ::google::protobuf::Arena* submessage_arena = NULL;
-    if (message_arena != submessage_arena) {
-      check_tx_res = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, check_tx_res, submessage_arena);
-    }
-    set_has_check_tx_res();
-  } else {
-    clear_has_check_tx_res();
-  }
-  check_tx_res_ = check_tx_res;
-  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.TxBft.check_tx_res)
 }
 
 // -------------------------------------------------------------------
@@ -3658,9 +3528,337 @@ inline void ServiceMessage::set_allocated_vpn_res(::lego::client::protobuf::GetV
   // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.ServiceMessage.vpn_res)
 }
 
+// -------------------------------------------------------------------
+
+// GetTxBlockRequest
+
+// optional bytes tx_gid = 1;
+inline bool GetTxBlockRequest::has_tx_gid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GetTxBlockRequest::set_has_tx_gid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GetTxBlockRequest::clear_has_tx_gid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GetTxBlockRequest::clear_tx_gid() {
+  tx_gid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_tx_gid();
+}
+inline const ::std::string& GetTxBlockRequest::tx_gid() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.GetTxBlockRequest.tx_gid)
+  return tx_gid_.GetNoArena();
+}
+inline void GetTxBlockRequest::set_tx_gid(const ::std::string& value) {
+  set_has_tx_gid();
+  tx_gid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.GetTxBlockRequest.tx_gid)
+}
+#if LANG_CXX11
+inline void GetTxBlockRequest::set_tx_gid(::std::string&& value) {
+  set_has_tx_gid();
+  tx_gid_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.GetTxBlockRequest.tx_gid)
+}
+#endif
+inline void GetTxBlockRequest::set_tx_gid(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_tx_gid();
+  tx_gid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.GetTxBlockRequest.tx_gid)
+}
+inline void GetTxBlockRequest::set_tx_gid(const void* value, size_t size) {
+  set_has_tx_gid();
+  tx_gid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.GetTxBlockRequest.tx_gid)
+}
+inline ::std::string* GetTxBlockRequest::mutable_tx_gid() {
+  set_has_tx_gid();
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.GetTxBlockRequest.tx_gid)
+  return tx_gid_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* GetTxBlockRequest::release_tx_gid() {
+  // @@protoc_insertion_point(field_release:lego.client.protobuf.GetTxBlockRequest.tx_gid)
+  if (!has_tx_gid()) {
+    return NULL;
+  }
+  clear_has_tx_gid();
+  return tx_gid_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void GetTxBlockRequest::set_allocated_tx_gid(::std::string* tx_gid) {
+  if (tx_gid != NULL) {
+    set_has_tx_gid();
+  } else {
+    clear_has_tx_gid();
+  }
+  tx_gid_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), tx_gid);
+  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.GetTxBlockRequest.tx_gid)
+}
+
+// optional bytes block_hash = 2;
+inline bool GetTxBlockRequest::has_block_hash() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void GetTxBlockRequest::set_has_block_hash() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void GetTxBlockRequest::clear_has_block_hash() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void GetTxBlockRequest::clear_block_hash() {
+  block_hash_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_block_hash();
+}
+inline const ::std::string& GetTxBlockRequest::block_hash() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.GetTxBlockRequest.block_hash)
+  return block_hash_.GetNoArena();
+}
+inline void GetTxBlockRequest::set_block_hash(const ::std::string& value) {
+  set_has_block_hash();
+  block_hash_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.GetTxBlockRequest.block_hash)
+}
+#if LANG_CXX11
+inline void GetTxBlockRequest::set_block_hash(::std::string&& value) {
+  set_has_block_hash();
+  block_hash_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.GetTxBlockRequest.block_hash)
+}
+#endif
+inline void GetTxBlockRequest::set_block_hash(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_block_hash();
+  block_hash_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.GetTxBlockRequest.block_hash)
+}
+inline void GetTxBlockRequest::set_block_hash(const void* value, size_t size) {
+  set_has_block_hash();
+  block_hash_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.GetTxBlockRequest.block_hash)
+}
+inline ::std::string* GetTxBlockRequest::mutable_block_hash() {
+  set_has_block_hash();
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.GetTxBlockRequest.block_hash)
+  return block_hash_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* GetTxBlockRequest::release_block_hash() {
+  // @@protoc_insertion_point(field_release:lego.client.protobuf.GetTxBlockRequest.block_hash)
+  if (!has_block_hash()) {
+    return NULL;
+  }
+  clear_has_block_hash();
+  return block_hash_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void GetTxBlockRequest::set_allocated_block_hash(::std::string* block_hash) {
+  if (block_hash != NULL) {
+    set_has_block_hash();
+  } else {
+    clear_has_block_hash();
+  }
+  block_hash_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), block_hash);
+  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.GetTxBlockRequest.block_hash)
+}
+
+// -------------------------------------------------------------------
+
+// GetTxBlockResponse
+
+// optional bytes block = 1;
+inline bool GetTxBlockResponse::has_block() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GetTxBlockResponse::set_has_block() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GetTxBlockResponse::clear_has_block() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GetTxBlockResponse::clear_block() {
+  block_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_block();
+}
+inline const ::std::string& GetTxBlockResponse::block() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.GetTxBlockResponse.block)
+  return block_.GetNoArena();
+}
+inline void GetTxBlockResponse::set_block(const ::std::string& value) {
+  set_has_block();
+  block_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.GetTxBlockResponse.block)
+}
+#if LANG_CXX11
+inline void GetTxBlockResponse::set_block(::std::string&& value) {
+  set_has_block();
+  block_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.GetTxBlockResponse.block)
+}
+#endif
+inline void GetTxBlockResponse::set_block(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_block();
+  block_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.GetTxBlockResponse.block)
+}
+inline void GetTxBlockResponse::set_block(const void* value, size_t size) {
+  set_has_block();
+  block_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.GetTxBlockResponse.block)
+}
+inline ::std::string* GetTxBlockResponse::mutable_block() {
+  set_has_block();
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.GetTxBlockResponse.block)
+  return block_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* GetTxBlockResponse::release_block() {
+  // @@protoc_insertion_point(field_release:lego.client.protobuf.GetTxBlockResponse.block)
+  if (!has_block()) {
+    return NULL;
+  }
+  clear_has_block();
+  return block_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void GetTxBlockResponse::set_allocated_block(::std::string* block) {
+  if (block != NULL) {
+    set_has_block();
+  } else {
+    clear_has_block();
+  }
+  block_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), block);
+  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.GetTxBlockResponse.block)
+}
+
+// -------------------------------------------------------------------
+
+// BlockMessage
+
+// optional .lego.client.protobuf.GetTxBlockRequest block_req = 1;
+inline bool BlockMessage::has_block_req() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void BlockMessage::set_has_block_req() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void BlockMessage::clear_has_block_req() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void BlockMessage::clear_block_req() {
+  if (block_req_ != NULL) block_req_->Clear();
+  clear_has_block_req();
+}
+inline const ::lego::client::protobuf::GetTxBlockRequest& BlockMessage::_internal_block_req() const {
+  return *block_req_;
+}
+inline const ::lego::client::protobuf::GetTxBlockRequest& BlockMessage::block_req() const {
+  const ::lego::client::protobuf::GetTxBlockRequest* p = block_req_;
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.BlockMessage.block_req)
+  return p != NULL ? *p : *reinterpret_cast<const ::lego::client::protobuf::GetTxBlockRequest*>(
+      &::lego::client::protobuf::_GetTxBlockRequest_default_instance_);
+}
+inline ::lego::client::protobuf::GetTxBlockRequest* BlockMessage::release_block_req() {
+  // @@protoc_insertion_point(field_release:lego.client.protobuf.BlockMessage.block_req)
+  clear_has_block_req();
+  ::lego::client::protobuf::GetTxBlockRequest* temp = block_req_;
+  block_req_ = NULL;
+  return temp;
+}
+inline ::lego::client::protobuf::GetTxBlockRequest* BlockMessage::mutable_block_req() {
+  set_has_block_req();
+  if (block_req_ == NULL) {
+    auto* p = CreateMaybeMessage<::lego::client::protobuf::GetTxBlockRequest>(GetArenaNoVirtual());
+    block_req_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.BlockMessage.block_req)
+  return block_req_;
+}
+inline void BlockMessage::set_allocated_block_req(::lego::client::protobuf::GetTxBlockRequest* block_req) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete block_req_;
+  }
+  if (block_req) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      block_req = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, block_req, submessage_arena);
+    }
+    set_has_block_req();
+  } else {
+    clear_has_block_req();
+  }
+  block_req_ = block_req;
+  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.BlockMessage.block_req)
+}
+
+// optional .lego.client.protobuf.GetTxBlockResponse block_res = 2;
+inline bool BlockMessage::has_block_res() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void BlockMessage::set_has_block_res() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void BlockMessage::clear_has_block_res() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void BlockMessage::clear_block_res() {
+  if (block_res_ != NULL) block_res_->Clear();
+  clear_has_block_res();
+}
+inline const ::lego::client::protobuf::GetTxBlockResponse& BlockMessage::_internal_block_res() const {
+  return *block_res_;
+}
+inline const ::lego::client::protobuf::GetTxBlockResponse& BlockMessage::block_res() const {
+  const ::lego::client::protobuf::GetTxBlockResponse* p = block_res_;
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.BlockMessage.block_res)
+  return p != NULL ? *p : *reinterpret_cast<const ::lego::client::protobuf::GetTxBlockResponse*>(
+      &::lego::client::protobuf::_GetTxBlockResponse_default_instance_);
+}
+inline ::lego::client::protobuf::GetTxBlockResponse* BlockMessage::release_block_res() {
+  // @@protoc_insertion_point(field_release:lego.client.protobuf.BlockMessage.block_res)
+  clear_has_block_res();
+  ::lego::client::protobuf::GetTxBlockResponse* temp = block_res_;
+  block_res_ = NULL;
+  return temp;
+}
+inline ::lego::client::protobuf::GetTxBlockResponse* BlockMessage::mutable_block_res() {
+  set_has_block_res();
+  if (block_res_ == NULL) {
+    auto* p = CreateMaybeMessage<::lego::client::protobuf::GetTxBlockResponse>(GetArenaNoVirtual());
+    block_res_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.BlockMessage.block_res)
+  return block_res_;
+}
+inline void BlockMessage::set_allocated_block_res(::lego::client::protobuf::GetTxBlockResponse* block_res) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete block_res_;
+  }
+  if (block_res) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      block_res = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, block_res, submessage_arena);
+    }
+    set_has_block_res();
+  } else {
+    clear_has_block_res();
+  }
+  block_res_ = block_res;
+  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.BlockMessage.block_res)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
