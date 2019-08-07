@@ -220,7 +220,7 @@ void ShadowsocksProxy::CheckVpnStatus() {
                     continue;
                 }
                 std::this_thread::sleep_for(std::chrono::microseconds(100000ull));
-                std::string cmd = common::StringUtil::Format(
+                cmd = common::StringUtil::Format(
                         "nohup /usr/bin/gpgk -s %s -p %d -k %s -m %s -t %d -u &",
                         common::GlobalInfo::Instance()->config_local_ip().c_str(),
                         socks_conf->port,
