@@ -561,10 +561,10 @@ class Header : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   ::std::string* release_client_dht_key();
   void set_allocated_client_dht_key(::std::string* client_dht_key);
 
-  // optional bytes pubkey = 24;
+  // optional bytes pubkey = 25;
   bool has_pubkey() const;
   void clear_pubkey();
-  static const int kPubkeyFieldNumber = 24;
+  static const int kPubkeyFieldNumber = 25;
   const ::std::string& pubkey() const;
   void set_pubkey(const ::std::string& value);
   #if LANG_CXX11
@@ -576,10 +576,10 @@ class Header : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   ::std::string* release_pubkey();
   void set_allocated_pubkey(::std::string* pubkey);
 
-  // optional bytes sign = 25;
+  // optional bytes sign = 26;
   bool has_sign() const;
   void clear_sign();
-  static const int kSignFieldNumber = 25;
+  static const int kSignFieldNumber = 26;
   const ::std::string& sign() const;
   void set_sign(const ::std::string& value);
   #if LANG_CXX11
@@ -591,10 +591,10 @@ class Header : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   ::std::string* release_sign();
   void set_allocated_sign(::std::string* sign);
 
-  // optional .lego.transport.protobuf.BroadcastParam broadcast = 21;
+  // optional .lego.transport.protobuf.BroadcastParam broadcast = 22;
   bool has_broadcast() const;
   void clear_broadcast();
-  static const int kBroadcastFieldNumber = 21;
+  static const int kBroadcastFieldNumber = 22;
   private:
   const ::lego::transport::protobuf::BroadcastParam& _internal_broadcast() const;
   public:
@@ -673,31 +673,38 @@ class Header : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   bool client_proxy() const;
   void set_client_proxy(bool value);
 
-  // optional bool universal = 20;
+  // optional bool client_handled = 20;
+  bool has_client_handled() const;
+  void clear_client_handled();
+  static const int kClientHandledFieldNumber = 20;
+  bool client_handled() const;
+  void set_client_handled(bool value);
+
+  // optional bool universal = 21;
   bool has_universal() const;
   void clear_universal();
-  static const int kUniversalFieldNumber = 20;
+  static const int kUniversalFieldNumber = 21;
   bool universal() const;
   void set_universal(bool value);
 
-  // optional bool handled = 22;
+  // optional bool handled = 23;
   bool has_handled() const;
   void clear_handled();
-  static const int kHandledFieldNumber = 22;
+  static const int kHandledFieldNumber = 23;
   bool handled() const;
   void set_handled(bool value);
 
-  // optional bool local = 26;
+  // optional bool local = 27;
   bool has_local() const;
   void clear_local();
-  static const int kLocalFieldNumber = 26;
+  static const int kLocalFieldNumber = 27;
   bool local() const;
   void set_local(bool value);
 
-  // optional uint64 des_dht_key_hash = 23;
+  // optional uint64 des_dht_key_hash = 24;
   bool has_des_dht_key_hash() const;
   void clear_des_dht_key_hash();
-  static const int kDesDhtKeyHashFieldNumber = 23;
+  static const int kDesDhtKeyHashFieldNumber = 24;
   ::google::protobuf::uint64 des_dht_key_hash() const;
   void set_des_dht_key_hash(::google::protobuf::uint64 value);
 
@@ -741,6 +748,8 @@ class Header : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   void clear_has_client_proxy();
   void set_has_client_dht_key();
   void clear_has_client_dht_key();
+  void set_has_client_handled();
+  void clear_has_client_handled();
   void set_has_universal();
   void clear_has_universal();
   void set_has_broadcast();
@@ -781,6 +790,7 @@ class Header : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   bool client_;
   bool client_relayed_;
   bool client_proxy_;
+  bool client_handled_;
   bool universal_;
   bool handled_;
   bool local_;
@@ -2062,15 +2072,39 @@ inline void Header::set_allocated_client_dht_key(::std::string* client_dht_key) 
   // @@protoc_insertion_point(field_set_allocated:lego.transport.protobuf.Header.client_dht_key)
 }
 
-// optional bool universal = 20;
-inline bool Header::has_universal() const {
+// optional bool client_handled = 20;
+inline bool Header::has_client_handled() const {
   return (_has_bits_[0] & 0x00400000u) != 0;
 }
-inline void Header::set_has_universal() {
+inline void Header::set_has_client_handled() {
   _has_bits_[0] |= 0x00400000u;
 }
-inline void Header::clear_has_universal() {
+inline void Header::clear_has_client_handled() {
   _has_bits_[0] &= ~0x00400000u;
+}
+inline void Header::clear_client_handled() {
+  client_handled_ = false;
+  clear_has_client_handled();
+}
+inline bool Header::client_handled() const {
+  // @@protoc_insertion_point(field_get:lego.transport.protobuf.Header.client_handled)
+  return client_handled_;
+}
+inline void Header::set_client_handled(bool value) {
+  set_has_client_handled();
+  client_handled_ = value;
+  // @@protoc_insertion_point(field_set:lego.transport.protobuf.Header.client_handled)
+}
+
+// optional bool universal = 21;
+inline bool Header::has_universal() const {
+  return (_has_bits_[0] & 0x00800000u) != 0;
+}
+inline void Header::set_has_universal() {
+  _has_bits_[0] |= 0x00800000u;
+}
+inline void Header::clear_has_universal() {
+  _has_bits_[0] &= ~0x00800000u;
 }
 inline void Header::clear_universal() {
   universal_ = false;
@@ -2086,7 +2120,7 @@ inline void Header::set_universal(bool value) {
   // @@protoc_insertion_point(field_set:lego.transport.protobuf.Header.universal)
 }
 
-// optional .lego.transport.protobuf.BroadcastParam broadcast = 21;
+// optional .lego.transport.protobuf.BroadcastParam broadcast = 22;
 inline bool Header::has_broadcast() const {
   return (_has_bits_[0] & 0x00000800u) != 0;
 }
@@ -2144,15 +2178,15 @@ inline void Header::set_allocated_broadcast(::lego::transport::protobuf::Broadca
   // @@protoc_insertion_point(field_set_allocated:lego.transport.protobuf.Header.broadcast)
 }
 
-// optional bool handled = 22;
+// optional bool handled = 23;
 inline bool Header::has_handled() const {
-  return (_has_bits_[0] & 0x00800000u) != 0;
+  return (_has_bits_[0] & 0x01000000u) != 0;
 }
 inline void Header::set_has_handled() {
-  _has_bits_[0] |= 0x00800000u;
+  _has_bits_[0] |= 0x01000000u;
 }
 inline void Header::clear_has_handled() {
-  _has_bits_[0] &= ~0x00800000u;
+  _has_bits_[0] &= ~0x01000000u;
 }
 inline void Header::clear_handled() {
   handled_ = false;
@@ -2168,15 +2202,15 @@ inline void Header::set_handled(bool value) {
   // @@protoc_insertion_point(field_set:lego.transport.protobuf.Header.handled)
 }
 
-// optional uint64 des_dht_key_hash = 23;
+// optional uint64 des_dht_key_hash = 24;
 inline bool Header::has_des_dht_key_hash() const {
-  return (_has_bits_[0] & 0x02000000u) != 0;
+  return (_has_bits_[0] & 0x04000000u) != 0;
 }
 inline void Header::set_has_des_dht_key_hash() {
-  _has_bits_[0] |= 0x02000000u;
+  _has_bits_[0] |= 0x04000000u;
 }
 inline void Header::clear_has_des_dht_key_hash() {
-  _has_bits_[0] &= ~0x02000000u;
+  _has_bits_[0] &= ~0x04000000u;
 }
 inline void Header::clear_des_dht_key_hash() {
   des_dht_key_hash_ = GOOGLE_ULONGLONG(0);
@@ -2192,7 +2226,7 @@ inline void Header::set_des_dht_key_hash(::google::protobuf::uint64 value) {
   // @@protoc_insertion_point(field_set:lego.transport.protobuf.Header.des_dht_key_hash)
 }
 
-// optional bytes pubkey = 24;
+// optional bytes pubkey = 25;
 inline bool Header::has_pubkey() const {
   return (_has_bits_[0] & 0x00000200u) != 0;
 }
@@ -2258,7 +2292,7 @@ inline void Header::set_allocated_pubkey(::std::string* pubkey) {
   // @@protoc_insertion_point(field_set_allocated:lego.transport.protobuf.Header.pubkey)
 }
 
-// optional bytes sign = 25;
+// optional bytes sign = 26;
 inline bool Header::has_sign() const {
   return (_has_bits_[0] & 0x00000400u) != 0;
 }
@@ -2324,15 +2358,15 @@ inline void Header::set_allocated_sign(::std::string* sign) {
   // @@protoc_insertion_point(field_set_allocated:lego.transport.protobuf.Header.sign)
 }
 
-// optional bool local = 26;
+// optional bool local = 27;
 inline bool Header::has_local() const {
-  return (_has_bits_[0] & 0x01000000u) != 0;
+  return (_has_bits_[0] & 0x02000000u) != 0;
 }
 inline void Header::set_has_local() {
-  _has_bits_[0] |= 0x01000000u;
+  _has_bits_[0] |= 0x02000000u;
 }
 inline void Header::clear_has_local() {
-  _has_bits_[0] &= ~0x01000000u;
+  _has_bits_[0] &= ~0x02000000u;
 }
 inline void Header::clear_local() {
   local_ = false;

@@ -271,11 +271,15 @@ int VpnClient::CreateClientUniversalNetwork() {
     root_dht_->Init();
     auto base_dht = std::dynamic_pointer_cast<dht::BaseDht>(root_dht_);
     network::DhtManager::Instance()->RegisterDht(network::kVpnNetworkId, base_dht);
-    std::vector<dht::NodePtr> boot_nodes = network::Bootstrap::Instance()->root_bootstrap();
+
+    auto boot_nodes = network::Bootstrap::Instance()->GetNetworkBootstrap(network::kVpnNetworkId, 3);
+    std::cout << "boot nodes: " << boot_nodes.size() << std::endl;
+    if (boot_nodes.empty()) {
+        return kClientError;
+    }
 
     if (root_dht_->Bootstrap(boot_nodes) != dht::kDhtSuccess) {
-        network::DhtManager::Instance()->UnRegisterDht(network::kVpnNetworkId);
-        CLIENT_ERROR("bootstrap universal network failed!");
+        NETWORK_ERROR("join universal network failed!");
         return kClientError;
     }
     return kClientSuccess;

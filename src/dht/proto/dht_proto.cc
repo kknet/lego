@@ -59,6 +59,7 @@ void DhtProto::CreateBootstrapResponse(
         msg.set_client_proxy(header.client_proxy());
         msg.set_client_dht_key(header.client_dht_key());
         msg.set_des_dht_key(header.client_dht_key());
+        std::cout << "res: " << common::Encode::HexEncode(msg.src_dht_key()) << std::endl;
     }
     msg.set_pubkey(security::Schnorr::Instance()->str_pubkey());
     // TODO(tt): add sign
