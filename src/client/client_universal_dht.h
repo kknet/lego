@@ -1,12 +1,12 @@
 #pragma once
 
-#include "network/universal.h"
+#include "dht/base_dht.h"
 
 namespace lego {
 
 namespace client {
 
-class ClientUniversalDht : public network::Uniersal {
+class ClientUniversalDht : public dht::BaseDht {
 public:
     ClientUniversalDht(transport::TransportPtr& transport_ptr, dht::NodePtr& local_node);
     virtual ~ClientUniversalDht();

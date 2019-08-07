@@ -10,13 +10,13 @@ namespace client {
 ClientUniversalDht::ClientUniversalDht(
         transport::TransportPtr& transport_ptr,
         dht::NodePtr& local_node)
-        : network::Uniersal(transport_ptr, local_node) {}
+        : dht::BaseDht(transport_ptr, local_node) {}
 
 ClientUniversalDht::~ClientUniversalDht() {}
 
 void ClientUniversalDht::HandleMessage(transport::protobuf::Header& msg) {
     if (msg.type() != common::kServiceMessage) {
-        return network::Uniersal::HandleMessage(msg);
+        return dht::BaseDht::HandleMessage(msg);
     }
 
     protobuf::ServiceMessage svr_msg;
@@ -31,9 +31,8 @@ void ClientUniversalDht::HandleMessage(transport::protobuf::Header& msg) {
 }
 
 void ClientUniversalDht::SetFrequently(transport::protobuf::Header& msg) {
-    network::Uniersal::SetFrequently(msg);
+    dht::BaseDht::SetFrequently(msg);
     msg.set_client(true);
-    msg.set_universal(false);
 }
 
 }  // namespace client
