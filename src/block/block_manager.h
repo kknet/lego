@@ -2,8 +2,9 @@
 
 #include "common/config.h"
 #include "transport/proto/transport.pb.h"
-#include "block/block_utils.h"
 #include "bft/basic_bft/transaction/proto/tx.pb.h"
+#include "block/block_utils.h"
+#include "block/proto/block.pb.h"
 
 namespace lego {
 
