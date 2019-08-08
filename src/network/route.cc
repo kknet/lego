@@ -88,7 +88,10 @@ void Route::HandleMessage(transport::protobuf::Header& header) {
     // every route message must use dht
     auto dht = GetDht(header.des_dht_key(), header.universal());
     if (!dht) {
-        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("no dht, route by universal", header);
+        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE(
+                std::string("no dht, route by universal: ") +
+                std::to_string(header.universal()),
+                header);
         RouteByUniversal(header);
         return;
     }

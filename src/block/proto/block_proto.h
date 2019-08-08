@@ -22,6 +22,7 @@ public:
         msg.set_priority(transport::kTransportPriorityLow);
         msg.set_id(header.id());
         msg.set_type(common::kBlockMessage);
+        msg.set_universal(header.universal());
         if (header.client()) {
             msg.set_from_ip(header.from_ip());
             msg.set_from_port(header.from_port());

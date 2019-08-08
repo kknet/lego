@@ -329,8 +329,10 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::GetTxBlockRequest, tx_gid_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::GetTxBlockRequest, block_hash_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::GetTxBlockRequest, from_),
   0,
   1,
+  2,
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::GetTxBlockResponse, _has_bits_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::GetTxBlockResponse, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -355,9 +357,9 @@ static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROT
   { 67, 73, sizeof(::lego::client::protobuf::GetVpnInfoRequest)},
   { 74, 84, sizeof(::lego::client::protobuf::GetVpnInfoResponse)},
   { 89, 96, sizeof(::lego::client::protobuf::ServiceMessage)},
-  { 98, 105, sizeof(::lego::client::protobuf::GetTxBlockRequest)},
-  { 107, 113, sizeof(::lego::client::protobuf::GetTxBlockResponse)},
-  { 114, 121, sizeof(::lego::client::protobuf::BlockMessage)},
+  { 98, 106, sizeof(::lego::client::protobuf::GetTxBlockRequest)},
+  { 109, 115, sizeof(::lego::client::protobuf::GetTxBlockResponse)},
+  { 116, 123, sizeof(::lego::client::protobuf::BlockMessage)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -414,16 +416,16 @@ void AddDescriptorsImpl() {
       "\205\001\n\016ServiceMessage\0228\n\007vpn_req\030\001 \001(\0132\'.le"
       "go.client.protobuf.GetVpnInfoRequest\0229\n\007"
       "vpn_res\030\002 \001(\0132(.lego.client.protobuf.Get"
-      "VpnInfoResponse\"7\n\021GetTxBlockRequest\022\016\n\006"
-      "tx_gid\030\001 \001(\014\022\022\n\nblock_hash\030\002 \001(\014\"#\n\022GetT"
-      "xBlockResponse\022\r\n\005block\030\001 \001(\014\"\207\001\n\014BlockM"
-      "essage\022:\n\tblock_req\030\001 \001(\0132\'.lego.client."
-      "protobuf.GetTxBlockRequest\022;\n\tblock_res\030"
-      "\002 \001(\0132(.lego.client.protobuf.GetTxBlockR"
-      "esponse"
+      "VpnInfoResponse\"E\n\021GetTxBlockRequest\022\016\n\006"
+      "tx_gid\030\001 \001(\014\022\022\n\nblock_hash\030\002 \001(\014\022\014\n\004from"
+      "\030\003 \001(\010\"#\n\022GetTxBlockResponse\022\r\n\005block\030\001 "
+      "\001(\014\"\207\001\n\014BlockMessage\022:\n\tblock_req\030\001 \001(\0132"
+      "\'.lego.client.protobuf.GetTxBlockRequest"
+      "\022;\n\tblock_res\030\002 \001(\0132(.lego.client.protob"
+      "uf.GetTxBlockResponse"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 1087);
+      descriptor, 1101);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "client.proto", &protobuf_RegisterTypes);
 }
@@ -3188,6 +3190,7 @@ void GetTxBlockRequest::InitAsDefaultInstance() {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int GetTxBlockRequest::kTxGidFieldNumber;
 const int GetTxBlockRequest::kBlockHashFieldNumber;
+const int GetTxBlockRequest::kFromFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 GetTxBlockRequest::GetTxBlockRequest()
@@ -3210,12 +3213,14 @@ GetTxBlockRequest::GetTxBlockRequest(const GetTxBlockRequest& from)
   if (from.has_block_hash()) {
     block_hash_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.block_hash_);
   }
+  from_ = from.from_;
   // @@protoc_insertion_point(copy_constructor:lego.client.protobuf.GetTxBlockRequest)
 }
 
 void GetTxBlockRequest::SharedCtor() {
   tx_gid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   block_hash_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  from_ = false;
 }
 
 GetTxBlockRequest::~GetTxBlockRequest() {
@@ -3257,6 +3262,7 @@ void GetTxBlockRequest::Clear() {
       block_hash_.ClearNonDefaultToEmptyNoArena();
     }
   }
+  from_ = false;
   _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
@@ -3289,6 +3295,20 @@ bool GetTxBlockRequest::MergePartialFromCodedStream(
             static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_block_hash()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bool from = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+          set_has_from();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &from_)));
         } else {
           goto handle_unusual;
         }
@@ -3334,6 +3354,11 @@ void GetTxBlockRequest::SerializeWithCachedSizes(
       2, this->block_hash(), output);
   }
 
+  // optional bool from = 3;
+  if (cached_has_bits & 0x00000004u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->from(), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -3363,6 +3388,11 @@ void GetTxBlockRequest::SerializeWithCachedSizes(
         2, this->block_hash(), target);
   }
 
+  // optional bool from = 3;
+  if (cached_has_bits & 0x00000004u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(3, this->from(), target);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
@@ -3380,7 +3410,7 @@ size_t GetTxBlockRequest::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         _internal_metadata_.unknown_fields());
   }
-  if (_has_bits_[0 / 32] & 3u) {
+  if (_has_bits_[0 / 32] & 7u) {
     // optional bytes tx_gid = 1;
     if (has_tx_gid()) {
       total_size += 1 +
@@ -3393,6 +3423,11 @@ size_t GetTxBlockRequest::ByteSizeLong() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::BytesSize(
           this->block_hash());
+    }
+
+    // optional bool from = 3;
+    if (has_from()) {
+      total_size += 1 + 1;
     }
 
   }
@@ -3424,7 +3459,7 @@ void GetTxBlockRequest::MergeFrom(const GetTxBlockRequest& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 3u) {
+  if (cached_has_bits & 7u) {
     if (cached_has_bits & 0x00000001u) {
       set_has_tx_gid();
       tx_gid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.tx_gid_);
@@ -3433,6 +3468,10 @@ void GetTxBlockRequest::MergeFrom(const GetTxBlockRequest& from) {
       set_has_block_hash();
       block_hash_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.block_hash_);
     }
+    if (cached_has_bits & 0x00000004u) {
+      from_ = from.from_;
+    }
+    _has_bits_[0] |= cached_has_bits;
   }
 }
 
@@ -3464,6 +3503,7 @@ void GetTxBlockRequest::InternalSwap(GetTxBlockRequest* other) {
     GetArenaNoVirtual());
   block_hash_.Swap(&other->block_hash_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
+  swap(from_, other->from_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   _internal_metadata_.Swap(&other->_internal_metadata_);
 }

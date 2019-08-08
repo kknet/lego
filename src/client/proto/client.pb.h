@@ -1379,18 +1379,28 @@ class GetTxBlockRequest : public ::google::protobuf::Message /* @@protoc_inserti
   ::std::string* release_block_hash();
   void set_allocated_block_hash(::std::string* block_hash);
 
+  // optional bool from = 3;
+  bool has_from() const;
+  void clear_from();
+  static const int kFromFieldNumber = 3;
+  bool from() const;
+  void set_from(bool value);
+
   // @@protoc_insertion_point(class_scope:lego.client.protobuf.GetTxBlockRequest)
  private:
   void set_has_tx_gid();
   void clear_has_tx_gid();
   void set_has_block_hash();
   void clear_has_block_hash();
+  void set_has_from();
+  void clear_has_from();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   ::google::protobuf::internal::ArenaStringPtr tx_gid_;
   ::google::protobuf::internal::ArenaStringPtr block_hash_;
+  bool from_;
   friend struct ::protobuf_client_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
@@ -3662,6 +3672,30 @@ inline void GetTxBlockRequest::set_allocated_block_hash(::std::string* block_has
   }
   block_hash_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), block_hash);
   // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.GetTxBlockRequest.block_hash)
+}
+
+// optional bool from = 3;
+inline bool GetTxBlockRequest::has_from() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void GetTxBlockRequest::set_has_from() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void GetTxBlockRequest::clear_has_from() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void GetTxBlockRequest::clear_from() {
+  from_ = false;
+  clear_has_from();
+}
+inline bool GetTxBlockRequest::from() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.GetTxBlockRequest.from)
+  return from_;
+}
+inline void GetTxBlockRequest::set_from(bool value) {
+  set_has_from();
+  from_ = value;
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.GetTxBlockRequest.from)
 }
 
 // -------------------------------------------------------------------
