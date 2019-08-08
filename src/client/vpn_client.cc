@@ -100,13 +100,17 @@ std::string VpnClient::Init(const std::string& conf) {
 
     if (priky.empty()) {
         std::string tx_gid;
-        Transaction("", 0, tx_gid);
+        if (Transaction("", 0, tx_gid) != "OK") {
+            return "tx create acc failed!";
+        }
         std::cout << "tx gid: " << common::Encode::HexEncode(tx_gid) << std::endl;
-        std::this_thread::sleep_for(std::chrono::microseconds(3000000ull));
+        std::this_thread::sleep_for(std::chrono::microseconds(1000000ull));
         if (CheckTransaction(tx_gid) != "OK") {
             std::cout << "check transaction failed!" << std::endl;
             CLIENT_ERROR("check transaction failed!");
+            return "check transaction failed!";
         }
+        return "create account success!";
         std::cout << "create account success!" << std::endl;
     }
     return "OK";
@@ -157,7 +161,9 @@ std::string VpnClient::Init(
         if (CheckTransaction(tx_gid) != "OK") {
             std::cout << "check transaction failed!" << std::endl;
             CLIENT_ERROR("check transaction failed!");
+            return "check transaction failed!";
         }
+        return "create account success!";
         std::cout << "create account success!" << std::endl;
     }
     return "OK";
@@ -418,7 +424,7 @@ std::string VpnClient::CheckTransaction(const std::string& tx_gid) {
         } while (0);
         state_lock.Signal();
     };
-    transport::SynchroWait::Instance()->Add(msg.id(), 3 * 1000 * 1000, callback, 1);
+    transport::SynchroWait::Instance()->Add(msg.id(), 1 * 1000 * 1000, callback, 1);
     state_lock.Wait();
     if (!block_finded) {
         return "ERROR";
