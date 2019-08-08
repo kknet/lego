@@ -65,11 +65,11 @@ void VpnClient::HandleMessage(transport::protobuf::Header& header) {
     }
 }
 
-int VpnClient::Init(const std::string& conf) {
+std::string VpnClient::Init(const std::string& conf) {
     common::Config config;
     if (!config.Init(conf)) {
         CLIENT_ERROR("init config [%s] failed!", conf.c_str());
-        return kClientError;
+        return std::string("read conf: ") + conf + " failed!";
     }
 
     config.Get("lego", "send_buff_size", send_buff_size_);
@@ -78,28 +78,28 @@ int VpnClient::Init(const std::string& conf) {
     assert(recv_buff_size_ > kDefaultBufferSize);
     if (common::GlobalInfo::Instance()->Init(config) != common::kCommonSuccess) {
         CLIENT_ERROR("init global info failed!");
-        return kClientError;
+        return "init global failed";
     }
 
     std::string priky("");
     if (SetPriAndPubKey(priky) != kClientSuccess) {
         CLIENT_ERROR("SetPriAndPubKey failed!");
-        return kClientError;
+        return "set pri and pub key fauled!";
     }
 
     if (security::EcdhCreateKey::Instance()->Init() != security::kSecuritySuccess) {
         CLIENT_ERROR("init ecdh create secret key failed!");
-        return kClientError;
+        return "ecdh init failed!";
     }
 
     if (InitTransport() != kClientSuccess) {
         CLIENT_ERROR("InitTransport failed!");
-        return kClientError;
+        return "init transport failed!";
     }
 
     if (InitNetworkSingleton(conf) != kClientSuccess) {
         CLIENT_ERROR("InitNetworkSingleton failed!");
-        return kClientError;
+        return "init network failed!";
     }
 
     if (priky.empty()) {
@@ -113,10 +113,10 @@ int VpnClient::Init(const std::string& conf) {
         }
         std::cout << "create account success!" << std::endl;
     }
-    return kClientSuccess;
+    return "OK";
 }
 
-int VpnClient::GetVpnServerNodes(
+std::string VpnClient::GetVpnServerNodes(
         const std::string& country,
         uint32_t count,
         std::vector<VpnServerNodePtr>& nodes) {
@@ -124,7 +124,7 @@ int VpnClient::GetVpnServerNodes(
             network::UniversalManager::Instance()->GetUniversal(
             network::kUniversalNetworkId));
     if (!uni_dht) {
-        return kClientError;
+        return "get universal dht error";
     }
 
     auto dht_nodes = uni_dht->RemoteGetNetworkNodes(
@@ -133,9 +133,13 @@ int VpnClient::GetVpnServerNodes(
             count);
     std::cout << "get vpn nodes: " << dht_nodes.size() << std::endl;
     if (dht_nodes.empty()) {
-        return kClientError;
+        return "vpn nodes empty";
     }
-    return GetVpnNodes(dht_nodes, nodes);
+    int res = GetVpnNodes(dht_nodes, nodes);
+    if (res != kClientSuccess) {
+        return "get vpn nodes failed!";
+    }
+    return "OK";
 }
 
 int VpnClient::GetVpnNodes(
@@ -324,7 +328,7 @@ int VpnClient::CreateClientUniversalNetwork() {
     return kClientSuccess;
 }
 
-int VpnClient::Transaction(const std::string& to, uint64_t amount, std::string& tx_gid) {
+std::string VpnClient::Transaction(const std::string& to, uint64_t amount, std::string& tx_gid) {
     transport::protobuf::Header msg;
     uint64_t rand_num = 0;
     auto uni_dht = network::UniversalManager::Instance()->GetUniversal(network::kUniversalNetworkId);
@@ -337,10 +341,10 @@ int VpnClient::Transaction(const std::string& to, uint64_t amount, std::string& 
             rand_num,
             msg);
     network::Route::Instance()->Send(msg);
-    return kClientSuccess;
+    return "OK";
 }
 
-int VpnClient::CheckTransaction(const std::string& tx_gid) {
+std::string VpnClient::CheckTransaction(const std::string& tx_gid) {
     auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
             network::kUniversalNetworkId);
     transport::protobuf::Header msg;
@@ -376,9 +380,9 @@ int VpnClient::CheckTransaction(const std::string& tx_gid) {
     transport::SynchroWait::Instance()->Add(msg.id(), 3 * 1000 * 1000, callback, 1);
     state_lock.Wait();
     if (!block_finded) {
-        return kClientError;
+        return "ERROR";
     }
-    return kClientSuccess;
+    return "OK";
 }
 
 }  // namespace client

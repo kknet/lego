@@ -8,7 +8,7 @@
 int main(int argc, char** argv) {
     log4cpp::PropertyConfigurator::configure("./conf/log4cpp.properties");
     if (lego::client::VpnClient::Instance()->Init(
-            "./conf/lego.conf") != lego::client::kClientSuccess) {
+            "./conf/lego.conf") != "OK") {
         std::cout << "init client failed!" << std::endl;
         return 1;
     }
