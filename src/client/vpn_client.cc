@@ -9,6 +9,7 @@
 #include "common/global_info.h"
 #include "common/country_code.h"
 #include "common/state_lock.h"
+#include "common/split.h"
 #include "security/private_key.h"
 #include "security/public_key.h"
 #include "security/schnorr.h"
@@ -37,6 +38,7 @@ namespace lego {
 namespace client {
 
 static const uint32_t kDefaultBufferSize = 1024u * 1024u;
+static common::Config config;
 
 VpnClient::VpnClient() {
     network::Route::Instance()->RegisterMessage(
@@ -65,15 +67,17 @@ void VpnClient::HandleMessage(transport::protobuf::Header& header) {
     }
 }
 
-std::string VpnClient::Init(const std::string& conf) {
-    common::Config config;
-    if (!config.InitWithContent(conf)) {
-        CLIENT_ERROR("init config [%s] failed!", conf.c_str());
-        return std::string("read conf: ") + conf + " failed!";
-    }
-
-    config.Get("lego", "send_buff_size", send_buff_size_);
-    config.Get("lego", "recv_buff_size", recv_buff_size_);
+std::string VpnClient::Init(
+        const std::string& local_ip,
+        uint16_t local_port,
+        const std::string& bootstrap) {
+    config.Set("lego", "local_ip", local_ip);
+    config.Set("lego", "local_port", local_port);
+    config.Set("lego", "country", "US");
+    config.Set("lego", "first_node", false);
+    config.Set("lego", "id", "id_cleint_1");
+    config.Set("lego", "client", true);
+    config.Set("lego", "bootstrap", bootstrap);
     assert(send_buff_size_ > kDefaultBufferSize);
     assert(recv_buff_size_ > kDefaultBufferSize);
     if (common::GlobalInfo::Instance()->Init(config) != common::kCommonSuccess) {
@@ -97,7 +101,7 @@ std::string VpnClient::Init(const std::string& conf) {
         return "init transport failed!";
     }
 
-    if (InitNetworkSingleton(conf) != kClientSuccess) {
+    if (InitNetworkSingleton() != kClientSuccess) {
         CLIENT_ERROR("InitNetworkSingleton failed!");
         return "init network failed!";
     }
@@ -264,13 +268,7 @@ int VpnClient::SetPriAndPubKey(const std::string& prikey) {
     return kClientSuccess;
 }
 
-int VpnClient::InitNetworkSingleton(const std::string& conf) {
-    common::Config config;
-    if (!config.Init(conf)) {
-        CLIENT_ERROR("init config [%s] failed!", conf.c_str());
-        return kClientError;
-    }
-
+int VpnClient::InitNetworkSingleton() {
     if (network::Bootstrap::Instance()->Init(config) != network::kNetworkSuccess) {
         CLIENT_ERROR("init bootstrap failed!");
         return kClientError;
