@@ -107,7 +107,7 @@ std::string VpnClient::Init(const std::string& conf) {
         Transaction("", 0, tx_gid);
         std::cout << "tx gid: " << common::Encode::HexEncode(tx_gid) << std::endl;
         std::this_thread::sleep_for(std::chrono::microseconds(3000000ull));
-        if (CheckTransaction(tx_gid) != kClientSuccess) {
+        if (CheckTransaction(tx_gid) != "OK") {
             std::cout << "check transaction failed!" << std::endl;
             CLIENT_ERROR("check transaction failed!");
         }
