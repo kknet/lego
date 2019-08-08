@@ -1,13 +1,20 @@
 #pragma once
 
 #include <vector>
-
-#include "common/utils.h"
-#include "common/config.h"
-#include "transport/transport.h"
-#include "client/client_universal_dht.h"
+#include <memory>
+#include <string>
+#include <cstdint>
+#include <mutex>
 
 namespace lego {
+
+namespace transport {
+    class Transport;
+    typedef std::shared_ptr<Transport> TransportPtr;
+    namespace protobuf {
+        class Header;
+    }
+}  // namespace transport
 
 namespace dht {
     class Node;
@@ -17,6 +24,9 @@ namespace dht {
 }  // namespace dht
 
 namespace client {
+
+class ClientUniversalDht;
+typedef std::shared_ptr<ClientUniversalDht> ClientUniversalDhtPtr;
 
 struct VpnServerNode {
     VpnServerNode(
@@ -50,7 +60,7 @@ private:
     void HandleMessage(transport::protobuf::Header& header);
     int InitTransport();
     int SetPriAndPubKey(const std::string& prikey);
-    int InitNetworkSingleton();
+    int InitNetworkSingleton(const std::string& conf);
     int GetVpnNodes(
             const std::vector<dht::NodePtr>& nodes,
             std::vector<VpnServerNodePtr>& vpn_nodes);
@@ -61,13 +71,13 @@ private:
     static const uint32_t kTestCreateAccountPeriod = 100u * 1000u;
     static const int64_t kTestNewElectPeriod = 10ll * 1000ll * 1000ll;
 
-    common::Config conf_;
     transport::TransportPtr transport_{ nullptr };
     bool inited_{ false };
     std::mutex init_mutex_;
     ClientUniversalDhtPtr root_dht_{ nullptr };
-
-    DISALLOW_COPY_AND_ASSIGN(VpnClient);
+    bool client_mode_{ false };
+    uint32_t send_buff_size_{ kDefaultUdpSendBufferSize };
+    uint32_t recv_buff_size_{ kDefaultUdpRecvBufferSize };
 };
 
 }  // namespace client

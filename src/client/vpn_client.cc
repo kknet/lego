@@ -2,6 +2,9 @@
 
 #include <cassert>
 
+#include "common/log.h"
+#include "common/utils.h"
+#include "common/config.h"
 #include "common/hash.h"
 #include "common/global_info.h"
 #include "common/country_code.h"
@@ -15,6 +18,7 @@
 #include "transport/multi_thread.h"
 #include "transport/synchro_wait.h"
 #include "transport/transport_utils.h"
+#include "transport/proto/transport.pb.h"
 #include "dht/base_dht.h"
 #include "dht/dht_key.h"
 #include "network/network_utils.h"
@@ -26,6 +30,7 @@
 #include "client/client_utils.h"
 #include "client/proto/client.pb.h"
 #include "client/proto/client_proto.h"
+#include "client/client_universal_dht.h"
 
 namespace lego {
 
@@ -61,12 +66,17 @@ void VpnClient::HandleMessage(transport::protobuf::Header& header) {
 }
 
 int VpnClient::Init(const std::string& conf) {
-    if (!conf_.Init(conf)) {
+    common::Config config;
+    if (!config.Init(conf)) {
         CLIENT_ERROR("init config [%s] failed!", conf.c_str());
         return kClientError;
     }
 
-    if (common::GlobalInfo::Instance()->Init(conf_) != common::kCommonSuccess) {
+    config.Get("lego", "send_buff_size", send_buff_size_);
+    config.Get("lego", "recv_buff_size", recv_buff_size_);
+    assert(send_buff_size_ > kDefaultBufferSize);
+    assert(recv_buff_size_ > kDefaultBufferSize);
+    if (common::GlobalInfo::Instance()->Init(config) != common::kCommonSuccess) {
         CLIENT_ERROR("init global info failed!");
         return kClientError;
     }
@@ -87,7 +97,7 @@ int VpnClient::Init(const std::string& conf) {
         return kClientError;
     }
 
-    if (InitNetworkSingleton() != kClientSuccess) {
+    if (InitNetworkSingleton(conf) != kClientSuccess) {
         CLIENT_ERROR("InitNetworkSingleton failed!");
         return kClientError;
     }
@@ -210,17 +220,11 @@ int VpnClient::GetVpnNodes(
 }
 
 int VpnClient::InitTransport() {
-    uint32_t send_buff_size = kDefaultUdpSendBufferSize;
-    conf_.Get("lego", "send_buff_size", send_buff_size);
-    uint32_t recv_buff_size = kDefaultUdpRecvBufferSize;
-    conf_.Get("lego", "recv_buff_size", recv_buff_size);
-    assert(send_buff_size > kDefaultBufferSize);
-    assert(recv_buff_size > kDefaultBufferSize);
     transport_ = std::make_shared<transport::UdpTransport>(
-        common::GlobalInfo::Instance()->config_local_ip(),
-        common::GlobalInfo::Instance()->config_local_port(),
-        send_buff_size,
-        recv_buff_size);
+            common::GlobalInfo::Instance()->config_local_ip(),
+            common::GlobalInfo::Instance()->config_local_port(),
+            send_buff_size_,
+            recv_buff_size_);
     transport::MultiThreadHandler::Instance()->Init(transport_);
     if (transport_->Init() != transport::kTransportSuccess) {
         CLIENT_ERROR("init udp transport failed!");
@@ -256,8 +260,14 @@ int VpnClient::SetPriAndPubKey(const std::string& prikey) {
     return kClientSuccess;
 }
 
-int VpnClient::InitNetworkSingleton() {
-    if (network::Bootstrap::Instance()->Init(conf_) != network::kNetworkSuccess) {
+int VpnClient::InitNetworkSingleton(const std::string& conf) {
+    common::Config config;
+    if (!config.Init(conf)) {
+        CLIENT_ERROR("init config [%s] failed!", conf.c_str());
+        return kClientError;
+    }
+
+    if (network::Bootstrap::Instance()->Init(config) != network::kNetworkSuccess) {
         CLIENT_ERROR("init bootstrap failed!");
         return kClientError;
     }
@@ -266,7 +276,7 @@ int VpnClient::InitNetworkSingleton() {
     network::UniversalManager::Instance()->Init();
     network::Route::Instance()->Init();
     if (network::UniversalManager::Instance()->CreateUniversalNetwork(
-            conf_,
+            config,
             transport_) != network::kNetworkSuccess) {
         CLIENT_ERROR("create universal network failed!");
         return kClientError;
@@ -281,13 +291,11 @@ int VpnClient::CreateClientUniversalNetwork() {
             network::kVpnNetworkId,
             common::GlobalInfo::Instance()->country(),
             common::GlobalInfo::Instance()->id());
-    bool client_mode = false;
-    conf_.Get("lego", "client", client_mode);
     dht::NodePtr local_node = std::make_shared<dht::Node>(
             common::GlobalInfo::Instance()->id(),
             dht_key.StrKey(),
             dht::kNatTypeFullcone,
-            client_mode,
+            client_mode_,
             common::GlobalInfo::Instance()->config_local_ip(),
             common::GlobalInfo::Instance()->config_local_port(),
             common::GlobalInfo::Instance()->config_local_ip(),
