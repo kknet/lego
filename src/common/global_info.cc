@@ -18,15 +18,10 @@ GlobalInfo* GlobalInfo::Instance() {
 }
 
 GlobalInfo::GlobalInfo() : id_(kAccountAddress), message_id_(TimeStampMsec()) {
+    return;
     id_string_hash_ = Hash::Hash192(id_);
     id_hash_ = Hash::Hash64(id_);
-
-    uuid_t uu;
-    char buf[16];
-    uuid_generate_random(uu);
-    uuid_unparse(uu, buf);
-    std::string tmp_str = std::string(buf, sizeof(buf)) + Random::RandomString(4096u);
-    gid_hash_ = Hash::Hash256(tmp_str);
+    gid_hash_ = Hash::Hash256(Random::RandomString(4096u));
 }
 
 GlobalInfo::~GlobalInfo() {}

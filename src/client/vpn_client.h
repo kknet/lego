@@ -49,6 +49,7 @@ public:
             const std::string& local_ip,
             uint16_t local_port,
             const std::string& bootstrap);
+    std::string Init(const std::string& conf);
     std::string GetVpnServerNodes(
             const std::string& country,
             uint32_t count,

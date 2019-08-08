@@ -67,6 +67,51 @@ void VpnClient::HandleMessage(transport::protobuf::Header& header) {
     }
 }
 
+std::string VpnClient::Init(const std::string& conf) {
+    if (!config.Init(conf)) {
+        return "init config failed";
+    }
+
+    if (common::GlobalInfo::Instance()->Init(config) != common::kCommonSuccess) {
+        CLIENT_ERROR("init global info failed!");
+        return "init global failed";
+    }
+
+    std::string priky("");
+    if (SetPriAndPubKey(priky) != kClientSuccess) {
+        CLIENT_ERROR("SetPriAndPubKey failed!");
+        return "set pri and pub key fauled!";
+    }
+
+    if (security::EcdhCreateKey::Instance()->Init() != security::kSecuritySuccess) {
+        CLIENT_ERROR("init ecdh create secret key failed!");
+        return "ecdh init failed!";
+    }
+
+    if (InitTransport() != kClientSuccess) {
+        CLIENT_ERROR("InitTransport failed!");
+        return "init transport failed!";
+    }
+
+    if (InitNetworkSingleton() != kClientSuccess) {
+        CLIENT_ERROR("InitNetworkSingleton failed!");
+        return "init network failed!";
+    }
+
+    if (priky.empty()) {
+        std::string tx_gid;
+        Transaction("", 0, tx_gid);
+        std::cout << "tx gid: " << common::Encode::HexEncode(tx_gid) << std::endl;
+        std::this_thread::sleep_for(std::chrono::microseconds(3000000ull));
+        if (CheckTransaction(tx_gid) != "OK") {
+            std::cout << "check transaction failed!" << std::endl;
+            CLIENT_ERROR("check transaction failed!");
+        }
+        std::cout << "create account success!" << std::endl;
+    }
+    return "OK";
+}
+
 std::string VpnClient::Init(
         const std::string& local_ip,
         uint16_t local_port,
@@ -78,8 +123,6 @@ std::string VpnClient::Init(
     config.Set("lego", "id", "id_cleint_1");
     config.Set("lego", "client", true);
     config.Set("lego", "bootstrap", bootstrap);
-    assert(send_buff_size_ > kDefaultBufferSize);
-    assert(recv_buff_size_ > kDefaultBufferSize);
     if (common::GlobalInfo::Instance()->Init(config) != common::kCommonSuccess) {
         CLIENT_ERROR("init global info failed!");
         return "init global failed";
@@ -283,7 +326,7 @@ int VpnClient::InitNetworkSingleton() {
         CLIENT_ERROR("create universal network failed!");
         return kClientError;
     }
-
+    return kClientSuccess;
     return CreateClientUniversalNetwork();
 }
 

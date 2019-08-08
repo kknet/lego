@@ -87,13 +87,7 @@ std::string GetAccountAddress(const std::string& pubkey) {
 }
 
 std::string CreateGID(const std::string& pubkey) {
-    uuid_t uu;
-    char buf[16];
-    uuid_generate_random(uu);
-    uuid_unparse(uu, buf);
-    std::string str = (pubkey +
-            std::string(buf, sizeof(buf)) +
-            Random::RandomString(1024u));
+    std::string str = (pubkey + Random::RandomString(1024u));
     return common::Hash::Hash256(str);
 }
 
