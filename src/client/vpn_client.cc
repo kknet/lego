@@ -67,7 +67,7 @@ void VpnClient::HandleMessage(transport::protobuf::Header& header) {
 
 std::string VpnClient::Init(const std::string& conf) {
     common::Config config;
-    if (!config.Init(conf)) {
+    if (!config.InitWithContent(conf)) {
         CLIENT_ERROR("init config [%s] failed!", conf.c_str());
         return std::string("read conf: ") + conf + " failed!";
     }

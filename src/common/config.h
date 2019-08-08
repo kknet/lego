@@ -23,6 +23,7 @@ public:
     }
 
     bool Init(const std::string& conf);
+    bool InitWithContent(const std::string& content);
     bool DumpConfig(const std::string& conf);
     bool Get(const std::string& field, const std::string& key, std::string& value) const;
     bool Get(const std::string& field, const std::string& key, bool& value) const;

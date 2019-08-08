@@ -5,6 +5,7 @@
 
 #include "common/log.h"
 #include "common/string_utils.h"
+#include "common/split.h"
 
 namespace lego {
 
@@ -304,6 +305,56 @@ bool Config::DumpConfig(const std::string& conf) {
         }
     }
     fclose(fd);
+    return res;
+}
+
+bool Config::InitWithContent(const std::string& content) {
+    common::Split spliter(content.c_str(), '\n', content.size());
+    bool res = true;
+    std::string filed;
+    for (uint32_t i = 0; i < spliter.Count(); ++i) {
+        std::string line(spliter[i]);
+        if (line.size() >= kConfigMaxLen) {
+            ERROR("line size exceeded %d", kConfigMaxLen);
+            res = false;
+            break;
+        }
+
+        if (line[0] == '#') {
+            continue;
+        }
+
+        if (line.find(']') != std::string::npos) {
+            if (!HandleFiled(line, filed)) {
+                ERROR("handle field failed[%s][%d]", line.c_str(), line.find(']'));
+                res = false;
+                break;
+            }
+            continue;
+        }
+
+        if (line.find('=') != std::string::npos) {
+            if (!HandleKeyValue(filed, line)) {
+                ERROR("handle key value failed[%s]", line.c_str());
+                res = false;
+                break;
+            }
+            continue;
+        }
+
+        for (uint32_t i = 0; i < line.size(); ++i) {
+            if (line[i] != ' ' && line[i] != ' ' && line[i] != '\n') {
+                ERROR("line illegal[%s]", line.c_str());
+                res = false;
+                break;
+            }
+        }
+
+        if (!res) {
+            break;
+        }
+    }
+
     return res;
 }
 
