@@ -140,7 +140,7 @@ std::string VpnClient::Init(
 
     config.Set("lego", "local_ip", local_ip);
     config.Set("lego", "local_port", local_port);
-    config.Set("lego", "country", "US");
+    config.Set("lego", "country", std::string("US"));
     config.Set("lego", "first_node", false);
     config.Set("lego", "client", true);
     config.Set("lego", "bootstrap", bootstrap);
