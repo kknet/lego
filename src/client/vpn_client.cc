@@ -174,7 +174,7 @@ std::string VpnClient::Init(
 
 bool VpnClient::ConfigExists() {
     FILE* file = NULL;
-    file = fopen(kDefaultLogConfig.c_str(), "r");
+    file = fopen(kDefaultConfPath.c_str(), "r");
     if (file == NULL) {
         return false;
     }
