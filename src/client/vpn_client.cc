@@ -220,8 +220,9 @@ void VpnClient::WriteDefaultLogConf() {
 }
 
 std::string VpnClient::GetTransactionInfo(const std::string& tx_gid) {
+    auto tmp_gid = common::Encode::HexDecode(tx_gid);
     std::lock_guard<std::mutex> guard(tx_map_mutex_);
-    auto iter = tx_map_.find(tx_gid);
+    auto iter = tx_map_.find(tmp_gid);
     if (iter != tx_map_.end()) {
         if (iter->second == nullptr) {
             return "";
@@ -233,7 +234,7 @@ std::string VpnClient::GetTransactionInfo(const std::string& tx_gid) {
         tx_map_.erase(iter);
         return tmp_str;
     } else {
-        tx_map_[tx_gid] = nullptr;
+        tx_map_[tmp_gid] = nullptr;
     }
     return "";
 }
