@@ -51,15 +51,18 @@ bool TxPoolManager::TxValid(TxItemPtr& tx_ptr) {
 
         auto acc_info = block::AccountManager::Instance()->GetAcountInfo(account_addr);
         if (acc_info != nullptr) {
+            BFT_ERROR("tx invalid. acc exists");
             return false;
         }
     } else {
         auto acc_info = block::AccountManager::Instance()->GetAcountInfo(account_addr);
         if (acc_info == nullptr) {
+            BFT_ERROR("tx invalid. account address not exists");
             return false;
         }
 
         if (acc_info->balance < static_cast<int64_t>(tx_ptr->lego_count)) {
+            BFT_ERROR("tx invalid. balance error[%ll][%llu]", acc_info->balance, tx_ptr->lego_count);
             return false;
         }
     }
