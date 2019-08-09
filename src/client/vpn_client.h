@@ -64,7 +64,7 @@ public:
             uint32_t count,
             std::vector<VpnServerNodePtr>& nodes);
     std::string Transaction(const std::string& to, uint64_t amount, std::string& tx_gid);
-    TxInfoPtr GetTransactionInfo(const std::string& tx_gid);
+    std::string GetTransactionInfo(const std::string& tx_gid);
     int GetSocket();
 
 private:
