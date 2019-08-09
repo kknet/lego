@@ -18,6 +18,7 @@ public:
             uint32_t ttl,
             transport::protobuf::Header& message) = 0;
     virtual int SendToLocal(transport::protobuf::Header& message) = 0;
+    virtual int GetSocket() = 0;
 
 protected:
     Transport() {}

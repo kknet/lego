@@ -228,7 +228,8 @@ int UdpTransport::Send(
                 std::string("udp sent ") + ip + ":" + std::to_string(port),
                 proto);
 #endif // LEGO_TRACE_MESSAGE
-        uv_udp_try_send(&uv_udp_, buf, kSendBufCount, (const struct sockaddr*)&addr);
+        int res = uv_udp_try_send(&uv_udp_, buf, kSendBufCount, (const struct sockaddr*)&addr);
+        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE(std::string("udp send res: ") + std::to_string(res), proto);
         if (ttl != 0) {
             uv_udp_set_ttl(&uv_udp_, kDefaultTtl);
         }

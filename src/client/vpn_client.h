@@ -56,6 +56,7 @@ public:
             std::vector<VpnServerNodePtr>& nodes);
     std::string Transaction(const std::string& to, uint64_t amount, std::string& tx_gid);
     std::string CheckTransaction(const std::string& tx_gid);
+    int GetSocket();
 
 private:
     VpnClient();

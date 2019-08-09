@@ -67,6 +67,10 @@ void VpnClient::HandleMessage(transport::protobuf::Header& header) {
     }
 }
 
+int VpnClient::GetSocket() {
+    return transport_->GetSocket();
+}
+
 std::string VpnClient::Init(const std::string& conf) {
     if (!config.Init(conf)) {
         return "init config failed";
@@ -120,6 +124,27 @@ std::string VpnClient::Init(
         const std::string& local_ip,
         uint16_t local_port,
         const std::string& bootstrap) {
+    FILE* file = NULL;
+    file = fopen("/data/data/com.vm.legovpn/log4cpp.properties", "w");
+    if (file == NULL) {
+        return "create file failed2!";
+    }
+    std::string log_str = ("# log4cpp.properties\n"
+        "log4cpp.rootCategory = DEBUG\n"
+        "log4cpp.category.sub1 = DEBUG, programLog\n"
+        "log4cpp.appender.rootAppender = ConsoleAppender\n"
+        "log4cpp.appender.rootAppender.layout = PatternLayout\n"
+        "log4cpp.appender.rootAppender.layout.ConversionPattern = %d [%p] %m%n\n"
+        "log4cpp.appender.programLog = RollingFileAppender\n"
+        "log4cpp.appender.programLog.fileName = /data/data/com.vm.legovpn/lego.log\n"
+        "log4cpp.appender.programLog.maxFileSize = 1073741824\n"
+        "log4cpp.appender.programLog.maxBackupIndex = 1\n"
+        "log4cpp.appender.programLog.layout = PatternLayout\n"
+        "log4cpp.appender.programLog.layout.ConversionPattern = %d [%p] %m%n\n");
+    fwrite(log_str.c_str(), log_str.size(), 1, file);
+    fclose(file); 
+    log4cpp::PropertyConfigurator::configure("/data/data/com.vm.legovpn/log4cpp.properties");
+
     config.Set("lego", "local_ip", local_ip);
     config.Set("lego", "local_port", local_port);
     config.Set("lego", "country", "US");
@@ -158,12 +183,15 @@ std::string VpnClient::Init(
         Transaction("", 0, tx_gid);
         std::cout << "tx gid: " << common::Encode::HexEncode(tx_gid) << std::endl;
         std::this_thread::sleep_for(std::chrono::microseconds(3000000ull));
+        auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+                network::kUniversalNetworkId);
+
         if (CheckTransaction(tx_gid) != "OK") {
             std::cout << "check transaction failed!" << std::endl;
             CLIENT_ERROR("check transaction failed!");
-            return "check transaction failed!";
+            return "check transaction failed: " + std::to_string(uni_dht->readonly_dht()->size());
         }
-        return "create account success!";
+        return "create account success: " + std::to_string(uni_dht->readonly_dht()->size());
         std::cout << "create account success!" << std::endl;
     }
     return "OK";

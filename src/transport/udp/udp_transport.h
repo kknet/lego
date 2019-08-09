@@ -30,6 +30,9 @@ public:
             uint32_t ttl,
             transport::protobuf::Header& message);
     virtual int SendToLocal(transport::protobuf::Header& message);
+    virtual int GetSocket() {
+        return socket_;
+    }
 
 private:
     void Run();

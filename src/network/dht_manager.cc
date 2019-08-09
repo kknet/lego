@@ -92,7 +92,10 @@ void DhtManager::NetworkDetection() {
 
     auto dht = UniversalManager::Instance()->GetUniversal(kUniversalNetworkId);
     auto universal_dht = std::dynamic_pointer_cast<Uniersal>(dht);
-    assert(universal_dht);
+    if (!universal_dht) {
+        tick_.CutOff(kNetworkDetectPeriod, std::bind(&DhtManager::NetworkDetection, this));
+        return;
+    }
     for (auto iter = detect_dhts.begin(); iter != detect_dhts.end(); ++iter) {
         uint32_t network_id = dht::DhtKeyManager::DhtKeyGetNetId(
                 (*iter)->local_node()->dht_key);
