@@ -1,5 +1,7 @@
 #include "client/vpn_client.h"
 
+#include <stdio.h>
+#include <io.h>
 #include <cassert>
 
 #include "common/log.h"
@@ -41,6 +43,9 @@ namespace client {
 static const uint32_t kDefaultBufferSize = 1024u * 1024u;
 static common::Config config;
 static common::Tick check_tx_tick_;
+
+static const std::string kDefaultLogConfig("/data/data/com.vm.legovpn/log4cpp.properties");
+static const std::string kDefaultConfPath("/data/data/com.vm.legovpn/lego.conf");
 
 VpnClient::VpnClient() {
     network::Route::Instance()->RegisterMessage(
@@ -85,9 +90,15 @@ std::string VpnClient::Init(const std::string& conf) {
     }
 
     std::string priky("");
-    if (SetPriAndPubKey(priky) != kClientSuccess) {
+    if (!config.Get("lego", "prikey", priky) || priky.empty()) {
+        CLIENT_ERROR("config[%s] invalid!", kDefaultConfPath.c_str());
+        return "config invalid";
+    }
+
+    std::string private_key = common::Encode::HexDecode(priky);
+    if (SetPriAndPubKey(private_key) != kClientSuccess) {
         CLIENT_ERROR("SetPriAndPubKey failed!");
-        return "set pri and pub key fauled!";
+        return "set private and pub key failed!";
     }
 
     if (security::EcdhCreateKey::Instance()->Init() != security::kSecuritySuccess) {
@@ -111,26 +122,11 @@ std::string VpnClient::Init(
         const std::string& local_ip,
         uint16_t local_port,
         const std::string& bootstrap) {
-    FILE* file = NULL;
-    file = fopen("/data/data/com.vm.legovpn/log4cpp.properties", "w");
-    if (file == NULL) {
-        return "create file failed2!";
+    WriteDefaultLogConf();
+    log4cpp::PropertyConfigurator::configure(kDefaultLogConfig);
+    if (ConfigExists()) {
+        return Init(kDefaultConfPath);
     }
-    std::string log_str = ("# log4cpp.properties\n"
-        "log4cpp.rootCategory = DEBUG\n"
-        "log4cpp.category.sub1 = DEBUG, programLog\n"
-        "log4cpp.appender.rootAppender = ConsoleAppender\n"
-        "log4cpp.appender.rootAppender.layout = PatternLayout\n"
-        "log4cpp.appender.rootAppender.layout.ConversionPattern = %d [%p] %m%n\n"
-        "log4cpp.appender.programLog = RollingFileAppender\n"
-        "log4cpp.appender.programLog.fileName = /data/data/com.vm.legovpn/lego.log\n"
-        "log4cpp.appender.programLog.maxFileSize = 1073741824\n"
-        "log4cpp.appender.programLog.maxBackupIndex = 1\n"
-        "log4cpp.appender.programLog.layout = PatternLayout\n"
-        "log4cpp.appender.programLog.layout.ConversionPattern = %d [%p] %m%n\n");
-    fwrite(log_str.c_str(), log_str.size(), 1, file);
-    fclose(file); 
-    log4cpp::PropertyConfigurator::configure("/data/data/com.vm.legovpn/log4cpp.properties");
 
     config.Set("lego", "local_ip", local_ip);
     config.Set("lego", "local_port", local_port);
@@ -144,10 +140,20 @@ std::string VpnClient::Init(
         return "init global failed";
     }
 
-    std::string priky("");
+    std::string priky = "";
     if (SetPriAndPubKey(priky) != kClientSuccess) {
         CLIENT_ERROR("SetPriAndPubKey failed!");
-        return "set pri and pub key fauled!";
+        return "set private and pub key failed!";
+    }
+
+    config.Set("lego", "prikey", common::Encode::HexEncode(
+            security::Schnorr::Instance()->str_prikey()));
+    config.Set("lego", "pubkey", common::Encode::HexEncode(
+            security::Schnorr::Instance()->str_pubkey()));
+    config.Set("lego", "id", common::Encode::HexEncode(
+            common::GlobalInfo::Instance()->id()));
+    if (!config.DumpConfig(kDefaultConfPath)) {
+        return "dump config failed!";
     }
 
     if (security::EcdhCreateKey::Instance()->Init() != security::kSecuritySuccess) {
@@ -165,6 +171,35 @@ std::string VpnClient::Init(
         return "init network failed!";
     }
     return "OK";
+}
+
+bool VpnClient::ConfigExists() {
+    if (!access(kDefaultConfPath.c_str(), R_OK | W_OK)) {
+        return false;
+    }
+    return true;
+}
+
+void VpnClient::WriteDefaultLogConf() {
+    FILE* file = NULL;
+    file = fopen(kDefaultLogConfig.c_str(), "w");
+    if (file == NULL) {
+        return;
+    }
+    std::string log_str = ("# log4cpp.properties\n"
+        "log4cpp.rootCategory = DEBUG\n"
+        "log4cpp.category.sub1 = DEBUG, programLog\n"
+        "log4cpp.appender.rootAppender = ConsoleAppender\n"
+        "log4cpp.appender.rootAppender.layout = PatternLayout\n"
+        "log4cpp.appender.rootAppender.layout.ConversionPattern = %d [%p] %m%n\n"
+        "log4cpp.appender.programLog = RollingFileAppender\n"
+        "log4cpp.appender.programLog.fileName = /data/data/com.vm.legovpn/lego.log\n"
+        "log4cpp.appender.programLog.maxFileSize = 1073741824\n"
+        "log4cpp.appender.programLog.maxBackupIndex = 1\n"
+        "log4cpp.appender.programLog.layout = PatternLayout\n"
+        "log4cpp.appender.programLog.layout.ConversionPattern = %d [%p] %m%n\n");
+    fwrite(log_str.c_str(), log_str.size(), 1, file);
+    fclose(file);
 }
 
 std::string VpnClient::GetTransactionInfo(const std::string& tx_gid) {
@@ -321,6 +356,9 @@ int VpnClient::SetPriAndPubKey(const std::string& prikey) {
     security::Schnorr::Instance()->set_prikey(prikey_ptr);
     security::Schnorr::Instance()->set_pubkey(pubkey_ptr);
 
+    CLIENT_INFO("new prikey[%s]", common::Encode::HexEncode(security::Schnorr::Instance()->str_prikey()).c_str());
+    CLIENT_INFO("new pubkey[%s]", common::Encode::HexEncode(security::Schnorr::Instance()->str_pubkey()).c_str());
+
     std::string pubkey_str;
     pubkey.Serialize(pubkey_str);
     std::string account_id = common::Hash::Hash256(pubkey_str);
@@ -439,7 +477,7 @@ std::string VpnClient::CheckTransaction(const std::string& tx_gid) {
                 std::lock_guard<std::mutex> guard(tx_map_mutex_);
                 tx_map_.insert(std::make_pair(tx_gid, header.data()));
             }
-            CLIENT_INFO("get new tx block[%s]", tx_gid.c_str());
+            CLIENT_INFO("get new tx block[%s]", common::Encode::HexEncode(tx_gid).c_str());
             block_finded = true;
         } while (0);
         state_lock.Signal();

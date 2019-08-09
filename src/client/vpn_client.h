@@ -73,6 +73,8 @@ private:
     int CreateClientUniversalNetwork();
     void CheckTxExists();
     std::string CheckTransaction(const std::string& tx_gid);
+    void WriteDefaultLogConf();
+    bool ConfigExists();
 
     static const uint32_t kDefaultUdpSendBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kDefaultUdpRecvBufferSize = 10u * 1024u * 1024u;
