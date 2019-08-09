@@ -10,6 +10,7 @@
 #include "common/country_code.h"
 #include "common/state_lock.h"
 #include "common/split.h"
+#include "common/tick.h"
 #include "security/private_key.h"
 #include "security/public_key.h"
 #include "security/schnorr.h"
@@ -39,6 +40,7 @@ namespace client {
 
 static const uint32_t kDefaultBufferSize = 1024u * 1024u;
 static common::Config config;
+static common::Tick check_tx_tick_;
 
 VpnClient::VpnClient() {
     network::Route::Instance()->RegisterMessage(
@@ -47,6 +49,7 @@ VpnClient::VpnClient() {
     network::Route::Instance()->RegisterMessage(
             common::kBlockMessage,
             std::bind(&VpnClient::HandleMessage, this, std::placeholders::_1));
+    check_tx_tick_.CutOff(kCheckTxPeriod, std::bind(&VpnClient::CheckTxExists, this));
 }
 
 VpnClient::~VpnClient() {}
@@ -100,22 +103,6 @@ std::string VpnClient::Init(const std::string& conf) {
     if (InitNetworkSingleton() != kClientSuccess) {
         CLIENT_ERROR("InitNetworkSingleton failed!");
         return "init network failed!";
-    }
-
-    if (priky.empty()) {
-        std::string tx_gid;
-        if (Transaction("", 0, tx_gid) != "OK") {
-            return "tx create acc failed!";
-        }
-        std::cout << "tx gid: " << common::Encode::HexEncode(tx_gid) << std::endl;
-        std::this_thread::sleep_for(std::chrono::microseconds(1000000ull));
-        if (CheckTransaction(tx_gid) != "OK") {
-            std::cout << "check transaction failed!" << std::endl;
-            CLIENT_ERROR("check transaction failed!");
-            return "check transaction failed!";
-        }
-        return "create account success!";
-        std::cout << "create account success!" << std::endl;
     }
     return "OK";
 }
@@ -195,6 +182,19 @@ std::string VpnClient::Init(
         std::cout << "create account success!" << std::endl;
     }
     return "OK";
+}
+
+std::string VpnClient::GetTransactionInfo(const std::string& tx_gid) {
+    std::lock_guard<std::mutex> guard(tx_map_mutex_);
+    auto iter = tx_map_.find(tx_gid);
+    if (iter != tx_map_.end()) {
+        auto tmp_str = iter->second;
+        tx_map_.erase(iter);
+        return tmp_str;
+    } else {
+        tx_map_[tx_gid] = "";
+    }
+    return "";
 }
 
 std::string VpnClient::GetVpnServerNodes(
@@ -416,6 +416,10 @@ std::string VpnClient::Transaction(const std::string& to, uint64_t amount, std::
             rand_num,
             msg);
     network::Route::Instance()->Send(msg);
+    {
+        std::lock_guard<std::mutex> guard(tx_map_mutex_);
+        tx_map_.insert(std::make_pair(tx_gid, ""));
+    }
     return "OK";
 }
 
@@ -429,7 +433,7 @@ std::string VpnClient::CheckTransaction(const std::string& tx_gid) {
 
     common::StateLock state_lock(0);
     bool block_finded = false;
-    auto callback = [&state_lock, &block_finded](
+    auto callback = [&state_lock, &block_finded, this, tx_gid](
         int status,
         transport::protobuf::Header& header) {
         do {
@@ -448,6 +452,10 @@ std::string VpnClient::CheckTransaction(const std::string& tx_gid) {
             if (block_msg.block_res().block().empty()) {
                 break;
             }
+            {
+                std::lock_guard<std::mutex> guard(tx_map_mutex_);
+                tx_map_.insert(std::make_pair(tx_gid, header.data()));
+            }
             block_finded = true;
         } while (0);
         state_lock.Signal();
@@ -458,6 +466,20 @@ std::string VpnClient::CheckTransaction(const std::string& tx_gid) {
         return "ERROR";
     }
     return "OK";
+}
+
+void VpnClient::CheckTxExists() {
+    std::unordered_map<std::string, std::string> tx_map;
+    {
+        std::lock_guard<std::mutex> gaurd(tx_map_mutex_);
+        tx_map = tx_map_;
+    }
+    for (auto iter = tx_map.begin(); iter != tx_map.end(); ++iter) {
+        if (iter->second.empty()) {
+            CheckTransaction(iter->first);
+        }
+    }
+    check_tx_tick_.CutOff(kCheckTxPeriod, std::bind(&VpnClient::CheckTxExists, this));
 }
 
 }  // namespace client

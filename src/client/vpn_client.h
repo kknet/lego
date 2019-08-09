@@ -5,6 +5,7 @@
 #include <string>
 #include <cstdint>
 #include <mutex>
+#include <unordered_map>
 
 namespace lego {
 
@@ -55,7 +56,7 @@ public:
             uint32_t count,
             std::vector<VpnServerNodePtr>& nodes);
     std::string Transaction(const std::string& to, uint64_t amount, std::string& tx_gid);
-    std::string CheckTransaction(const std::string& tx_gid);
+    std::string GetTransactionInfo(const std::string& tx_gid);
     int GetSocket();
 
 private:
@@ -70,11 +71,14 @@ private:
             const std::vector<dht::NodePtr>& nodes,
             std::vector<VpnServerNodePtr>& vpn_nodes);
     int CreateClientUniversalNetwork();
+    void CheckTxExists();
+    std::string CheckTransaction(const std::string& tx_gid);
 
     static const uint32_t kDefaultUdpSendBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kDefaultUdpRecvBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kTestCreateAccountPeriod = 100u * 1000u;
     static const int64_t kTestNewElectPeriod = 10ll * 1000ll * 1000ll;
+    static const uint32_t kCheckTxPeriod = 1 * 1000 * 1000;
 
     transport::TransportPtr transport_{ nullptr };
     bool inited_{ false };
@@ -83,6 +87,8 @@ private:
     bool client_mode_{ true };
     uint32_t send_buff_size_{ kDefaultUdpSendBufferSize };
     uint32_t recv_buff_size_{ kDefaultUdpRecvBufferSize };
+    std::unordered_map<std::string, std::string> tx_map_;
+    std::mutex tx_map_mutex_;
 };
 
 }  // namespace client
