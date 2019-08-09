@@ -164,23 +164,6 @@ std::string VpnClient::Init(
         CLIENT_ERROR("InitNetworkSingleton failed!");
         return "init network failed!";
     }
-
-    if (priky.empty()) {
-        std::string tx_gid;
-        Transaction("", 0, tx_gid);
-        std::cout << "tx gid: " << common::Encode::HexEncode(tx_gid) << std::endl;
-        std::this_thread::sleep_for(std::chrono::microseconds(3000000ull));
-        auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
-                network::kUniversalNetworkId);
-
-        if (CheckTransaction(tx_gid) != "OK") {
-            std::cout << "check transaction failed!" << std::endl;
-            CLIENT_ERROR("check transaction failed!");
-            return "check transaction failed: " + std::to_string(uni_dht->readonly_dht()->size());
-        }
-        return "create account success: " + std::to_string(uni_dht->readonly_dht()->size());
-        std::cout << "create account success!" << std::endl;
-    }
     return "OK";
 }
 
