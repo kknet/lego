@@ -123,26 +123,30 @@ std::string VpnClient::Init(
         const std::string& bootstrap) {
     WriteDefaultLogConf();
     log4cpp::PropertyConfigurator::configure(kDefaultLogConfig);
+    std::string private_key;
     if (ConfigExists()) {
-        return Init(kDefaultConfPath);
+        if (!config.Init(kDefaultConfPath)) {
+            CLIENT_ERROR("init config failed!");
+            return "init config failed!";
+        }
+
+        std::string priky("");
+        if (!config.Get("lego", "prikey", priky) || priky.empty()) {
+            CLIENT_ERROR("config[%s] invalid!", kDefaultConfPath.c_str());
+        } else {
+            private_key = common::Encode::HexDecode(priky);
+        }
     }
 
     config.Set("lego", "local_ip", local_ip);
     config.Set("lego", "local_port", local_port);
     config.Set("lego", "country", "US");
     config.Set("lego", "first_node", false);
-    config.Set("lego", "id", "id_cleint_1");
     config.Set("lego", "client", true);
     config.Set("lego", "bootstrap", bootstrap);
     if (common::GlobalInfo::Instance()->Init(config) != common::kCommonSuccess) {
         CLIENT_ERROR("init global info failed!");
         return "init global failed";
-    }
-
-    std::string priky = "";
-    if (SetPriAndPubKey(priky) != kClientSuccess) {
-        CLIENT_ERROR("SetPriAndPubKey failed!");
-        return "set private and pub key failed!";
     }
 
     config.Set("lego", "prikey", common::Encode::HexEncode(
@@ -151,8 +155,8 @@ std::string VpnClient::Init(
             security::Schnorr::Instance()->str_pubkey()));
     config.Set("lego", "id", common::Encode::HexEncode(
             common::GlobalInfo::Instance()->id()));
-    if (!config.DumpConfig(kDefaultConfPath)) {
-        return "dump config failed!";
+    if (!ConfigExists()) {
+        config.DumpConfig(kDefaultConfPath)
     }
 
     if (security::EcdhCreateKey::Instance()->Init() != security::kSecuritySuccess) {
