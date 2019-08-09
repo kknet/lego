@@ -439,6 +439,7 @@ std::string VpnClient::CheckTransaction(const std::string& tx_gid) {
                 std::lock_guard<std::mutex> guard(tx_map_mutex_);
                 tx_map_.insert(std::make_pair(tx_gid, header.data()));
             }
+            CLIENT_INFO("get new tx block[%s]", tx_gid.c_str());
             block_finded = true;
         } while (0);
         state_lock.Signal();
