@@ -1,7 +1,12 @@
 #include "client/vpn_client.h"
 
 #include <stdio.h>
+#ifdef WIN32
 #include <io.h>
+#else
+#include<unistd.h>
+#endif // WIN32
+
 #include <cassert>
 
 #include "common/log.h"
