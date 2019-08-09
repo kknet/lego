@@ -518,11 +518,9 @@ std::string VpnClient::CheckTransaction(const std::string& tx_gid) {
                             tx_list[i].balance());
                     {
                         std::lock_guard<std::mutex> guard(tx_map_mutex_);
-                        tx_map_.insert(std::make_pair(
-                                tx_gid,
-                                std::make_shared<TxInfo>(
-                                common::Encode::HexSubstr(tx_list[i].to()),
-                                tx_list[i].balance())));
+                        tx_map_[tx_gid] = std::make_shared<TxInfo>(
+                            common::Encode::HexSubstr(tx_list[i].to()),
+                            tx_list[i].balance());
                     }
                 }
             }
