@@ -208,9 +208,9 @@ int TxBft::CheckTxInfo(
             return kBftAccountExists;
         }
 
-        if (tx_info.amount() != 0 || tx_info.balance() != 0) {
-            return kBftAccountBalanceError;
-        }
+//         if (tx_info.amount() != 0 || tx_info.balance() != 0) {
+//             return kBftAccountBalanceError;
+//         }
     }
 
     if (acc_ptr != nullptr) {
