@@ -143,10 +143,16 @@ std::string VpnClient::Init(
     config.Set("lego", "country", std::string("US"));
     config.Set("lego", "first_node", false);
     config.Set("lego", "client", true);
+    config.Set("lego", "id", std::string("test_id"));
     config.Set("lego", "bootstrap", bootstrap);
     if (common::GlobalInfo::Instance()->Init(config) != common::kCommonSuccess) {
         CLIENT_ERROR("init global info failed!");
         return "init global failed";
+    }
+
+    if (SetPriAndPubKey(private_key) != kClientSuccess) {
+        CLIENT_ERROR("SetPriAndPubKey failed!");
+        return "set private and pub key failed!";
     }
 
     config.Set("lego", "prikey", common::Encode::HexEncode(
