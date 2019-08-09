@@ -156,7 +156,7 @@ std::string VpnClient::Init(
     config.Set("lego", "id", common::Encode::HexEncode(
             common::GlobalInfo::Instance()->id()));
     if (!ConfigExists()) {
-        config.DumpConfig(kDefaultConfPath)
+        config.DumpConfig(kDefaultConfPath);
     }
 
     if (security::EcdhCreateKey::Instance()->Init() != security::kSecuritySuccess) {
