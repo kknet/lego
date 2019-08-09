@@ -43,6 +43,14 @@ struct VpnServerNode {
 };
 typedef std::shared_ptr<VpnServerNode> VpnServerNodePtr;
 
+struct TxInfo {
+    TxInfo(const std::string& in_to, uint64_t in_balance)
+            : to(in_to), balance(in_balance) {}
+    std::string to;
+    uint64_t balance;
+};
+typedef std::shared_ptr<TxInfo> TxInfoPtr;
+
 class VpnClient {
 public:
     static VpnClient* Instance();
@@ -56,7 +64,7 @@ public:
             uint32_t count,
             std::vector<VpnServerNodePtr>& nodes);
     std::string Transaction(const std::string& to, uint64_t amount, std::string& tx_gid);
-    std::string GetTransactionInfo(const std::string& tx_gid);
+    TxInfoPtr GetTransactionInfo(const std::string& tx_gid);
     int GetSocket();
 
 private:
@@ -89,7 +97,7 @@ private:
     bool client_mode_{ true };
     uint32_t send_buff_size_{ kDefaultUdpSendBufferSize };
     uint32_t recv_buff_size_{ kDefaultUdpRecvBufferSize };
-    std::unordered_map<std::string, std::string> tx_map_;
+    std::unordered_map<std::string, TxInfoPtr> tx_map_;
     std::mutex tx_map_mutex_;
 };
 

@@ -219,7 +219,7 @@ void VpnClient::WriteDefaultLogConf() {
     fclose(file);
 }
 
-std::string VpnClient::GetTransactionInfo(const std::string& tx_gid) {
+TxInfoPtr VpnClient::GetTransactionInfo(const std::string& tx_gid) {
     std::lock_guard<std::mutex> guard(tx_map_mutex_);
     auto iter = tx_map_.find(tx_gid);
     if (iter != tx_map_.end()) {
@@ -227,9 +227,9 @@ std::string VpnClient::GetTransactionInfo(const std::string& tx_gid) {
         tx_map_.erase(iter);
         return tmp_str;
     } else {
-        tx_map_[tx_gid] = "";
+        tx_map_[tx_gid] = nullptr;
     }
-    return "";
+    return nullptr;
 }
 
 std::string VpnClient::GetVpnServerNodes(
@@ -460,7 +460,7 @@ std::string VpnClient::Transaction(const std::string& to, uint64_t amount, std::
     network::Route::Instance()->Send(msg);
     {
         std::lock_guard<std::mutex> guard(tx_map_mutex_);
-        tx_map_.insert(std::make_pair(tx_gid, ""));
+        tx_map_.insert(std::make_pair(tx_gid, nullptr));
     }
     tx_gid = common::Encode::HexEncode(tx_gid);
     return "OK";
@@ -509,11 +509,15 @@ std::string VpnClient::CheckTransaction(const std::string& tx_gid) {
                             common::Encode::HexEncode(tx_list[i].from()).c_str(),
                             common::Encode::HexEncode(tx_list[i].to()).c_str(),
                             tx_list[i].balance());
+                    {
+                        std::lock_guard<std::mutex> guard(tx_map_mutex_);
+                        tx_map_.insert(std::make_pair(
+                                tx_gid,
+                                std::make_shared<TxInfo>(
+                                common::Encode::HexEncode(tx_list[i].to()),
+                                tx_list[i].balance())));
+                    }
                 }
-            }
-            {
-                std::lock_guard<std::mutex> guard(tx_map_mutex_);
-                tx_map_.insert(std::make_pair(tx_gid, header.data()));
             }
             block_finded = true;
         } while (0);
@@ -528,15 +532,18 @@ std::string VpnClient::CheckTransaction(const std::string& tx_gid) {
 }
 
 void VpnClient::CheckTxExists() {
-    std::unordered_map<std::string, std::string> tx_map;
+    std::vector<std::string> tx_vec;
     {
         std::lock_guard<std::mutex> gaurd(tx_map_mutex_);
-        tx_map = tx_map_;
-    }
-    for (auto iter = tx_map.begin(); iter != tx_map.end(); ++iter) {
-        if (iter->second.empty()) {
-            CheckTransaction(iter->first);
+        for (auto iter = tx_map_.begin(); iter != tx_map_.end(); ++iter) {
+            if (iter->second == nullptr) {
+                tx_vec.push_back(iter->first);
+            }
         }
+    }
+
+    for (auto iter = tx_vec.begin(); iter != tx_vec.end(); ++iter) {
+        CheckTransaction(*iter);
     }
     check_tx_tick_.CutOff(kCheckTxPeriod, std::bind(&VpnClient::CheckTxExists, this));
 }
