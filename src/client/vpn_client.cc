@@ -1,12 +1,5 @@
 #include "client/vpn_client.h"
 
-#include <stdio.h>
-#ifdef WIN32
-#include <io.h>
-#else
-#include<unistd.h>
-#endif // WIN32
-
 #include <cassert>
 
 #include "common/log.h"
@@ -86,6 +79,7 @@ int VpnClient::GetSocket() {
 
 std::string VpnClient::Init(const std::string& conf) {
     if (!config.Init(conf)) {
+        CLIENT_ERROR("init config[%s] failed!", kDefaultConfPath.c_str());
         return "init config failed";
     }
 
@@ -179,7 +173,17 @@ std::string VpnClient::Init(
 }
 
 bool VpnClient::ConfigExists() {
-    if (!access(kDefaultConfPath.c_str(), R_OK | W_OK)) {
+    FILE* file = NULL;
+    file = fopen(kDefaultLogConfig.c_str(), "r");
+    if (file == NULL) {
+        return false;
+    }
+
+    struct stat buf;
+    int fd = fileno(file);
+    fstat(fd, &buf);
+    fclose(file);
+    if (buf.st_size <= 0) {
         return false;
     }
     return true;
