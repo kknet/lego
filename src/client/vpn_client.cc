@@ -495,11 +495,26 @@ std::string VpnClient::CheckTransaction(const std::string& tx_gid) {
             if (block_msg.block_res().block().empty()) {
                 break;
             }
+
+            client::protobuf::Block block;
+            if (!block.ParseFromString(block_msg.block_res().block())) {
+                break;
+            }
+
+            auto& tx_list = block.tx_block().tx_list();
+            for (int32_t i = 0; i < tx_list.size(); ++i) {
+                if (tx_list[i].from() == common::GlobalInfo::Instance()->id()) {
+                    CLIENT_INFO("get new tx block[%s][%s]to[%s][balance: %llu]",
+                            common::Encode::HexEncode(tx_gid).c_str(),
+                            common::Encode::HexEncode(tx_list[i].from()).c_str(),
+                            common::Encode::HexEncode(tx_list[i].to()).c_str(),
+                            tx_list[i].balance());
+                }
+            }
             {
                 std::lock_guard<std::mutex> guard(tx_map_mutex_);
                 tx_map_.insert(std::make_pair(tx_gid, header.data()));
             }
-            CLIENT_INFO("get new tx block[%s]", common::Encode::HexEncode(tx_gid).c_str());
             block_finded = true;
         } while (0);
         state_lock.Signal();
