@@ -445,6 +445,10 @@ std::string VpnClient::Transaction(const std::string& to, uint64_t amount, std::
     transport::protobuf::Header msg;
     uint64_t rand_num = 0;
     auto uni_dht = network::UniversalManager::Instance()->GetUniversal(network::kUniversalNetworkId);
+    if (uni_dht == nullptr) {
+        assert(false);
+        return "ERROR";
+    }
     tx_gid = common::CreateGID(security::Schnorr::Instance()->str_pubkey());
     ClientProto::CreateTxRequest(
             uni_dht->local_node(),
@@ -458,6 +462,7 @@ std::string VpnClient::Transaction(const std::string& to, uint64_t amount, std::
         std::lock_guard<std::mutex> guard(tx_map_mutex_);
         tx_map_.insert(std::make_pair(tx_gid, ""));
     }
+    tx_gid = common::Encode::HexEncode(tx_gid);
     return "OK";
 }
 

@@ -45,9 +45,9 @@ bool TxPoolManager::TxValid(TxItemPtr& tx_ptr) {
     }
 
     if (tx_ptr->to_acc_addr.empty()) {
-        if (tx_ptr->lego_count != 0) {
-            return false;
-        }
+//         if (tx_ptr->lego_count != 0) {
+//             return false;
+//         }
 
         auto acc_info = block::AccountManager::Instance()->GetAcountInfo(account_addr);
         if (acc_info != nullptr) {

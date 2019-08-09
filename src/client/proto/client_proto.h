@@ -66,7 +66,7 @@ public:
         msg.set_priority(transport::kTransportPriorityLowest);
         msg.set_id(common::GlobalInfo::Instance()->MessageId());
         msg.set_type(common::kBftMessage);
-        msg.set_client(local_node->client_mode);
+        msg.set_client(false);
         msg.set_hop_count(0);
         auto broad_param = msg.mutable_broadcast();
         SetDefaultBroadcastParam(broad_param);
@@ -89,6 +89,7 @@ public:
         auto data = tx_bft.SerializeAsString();
         bft_msg.set_data(data);
         auto hash128 = common::Hash::Hash128(data);
+        
         security::Signature sign;
         auto& prikey = *security::Schnorr::Instance()->prikey();
         auto& pubkey = *security::Schnorr::Instance()->pubkey();
