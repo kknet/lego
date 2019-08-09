@@ -127,7 +127,7 @@ std::string VpnClient::Init(
     if (ConfigExists()) {
         if (!config.Init(kDefaultConfPath)) {
             CLIENT_ERROR("init config failed!");
-            return "init config failed!";
+            return "ERROR";
         }
 
         std::string priky("");
@@ -147,12 +147,12 @@ std::string VpnClient::Init(
     config.Set("lego", "bootstrap", bootstrap);
     if (common::GlobalInfo::Instance()->Init(config) != common::kCommonSuccess) {
         CLIENT_ERROR("init global info failed!");
-        return "init global failed";
+        return "ERROR";
     }
 
     if (SetPriAndPubKey(private_key) != kClientSuccess) {
         CLIENT_ERROR("SetPriAndPubKey failed!");
-        return "set private and pub key failed!";
+        return "ERROR";
     }
 
     config.Set("lego", "prikey", common::Encode::HexEncode(
@@ -161,25 +161,23 @@ std::string VpnClient::Init(
             security::Schnorr::Instance()->str_pubkey()));
     config.Set("lego", "id", common::Encode::HexEncode(
             common::GlobalInfo::Instance()->id()));
-    if (!ConfigExists()) {
-        config.DumpConfig(kDefaultConfPath);
-    }
+    config.DumpConfig(kDefaultConfPath);
 
     if (security::EcdhCreateKey::Instance()->Init() != security::kSecuritySuccess) {
         CLIENT_ERROR("init ecdh create secret key failed!");
-        return "ecdh init failed!";
+        return "ERROR";
     }
 
     if (InitTransport() != kClientSuccess) {
         CLIENT_ERROR("InitTransport failed!");
-        return "init transport failed!";
+        return "ERROR";
     }
 
     if (InitNetworkSingleton() != kClientSuccess) {
         CLIENT_ERROR("InitNetworkSingleton failed!");
-        return "init network failed!";
+        return "ERROR";
     }
-    return "OK";
+    return common::Encode::HexEncode(common::GlobalInfo::Instance()->id());
 }
 
 bool VpnClient::ConfigExists() {
