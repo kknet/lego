@@ -549,6 +549,7 @@ int BftManager::LeaderCommit(
             return kBftError;
         }
         network::Route::Instance()->Send(msg);
+        LeaderBroadcastToAcc(bft_ptr->prpare_block());
         RemoveBft(bft_ptr->gid());
         LEGO_BFT_DEBUG_FOR_CONSENSUS_AND_MESSAGE("LeaderCommit aggree", bft_ptr, msg);
     }  else if (res == kBftReChallenge) {
@@ -593,6 +594,7 @@ int BftManager::BackupCommit(
         return kBftError;
     }
 
+    LeaderBroadcastToAcc(bft_ptr->prpare_block());
     LEGO_BFT_DEBUG_FOR_CONSENSUS("BackupCommit", bft_ptr);
     if ((uint32_t)tps_ == 0) {
         tps_btime_ = common::TimeStampMsec();
