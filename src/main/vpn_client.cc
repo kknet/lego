@@ -10,12 +10,12 @@
 #include "client/client_utils.h"
 
 int main(int argc, char** argv) {
-    auto res = lego::client::VpnClient::Instance()->Init(
+    auto int_res = lego::client::VpnClient::Instance()->Init(
             "192.168.20.17",
             8994,
             "id_1:192.168.20.17:8991");
-    if (res != "OK") {
-        std::cout << "init client failed: " << res << std::endl;
+    if (int_res != "OK") {
+        std::cout << "init client failed: " << int_res << std::endl;
         return 1;
     }
     std::string create_acc_gid;
