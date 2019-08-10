@@ -18,17 +18,24 @@ int main(int argc, char** argv) {
         std::cout << "init client failed: " << int_res << std::endl;
         return 1;
     }
-    std::string create_acc_gid;
-    lego::client::VpnClient::Instance()->Transaction("", 0, create_acc_gid);
-    std::cout << "create acc gid: " << lego::common::Encode::HexEncode(create_acc_gid);
-    while (lego::client::VpnClient::Instance()->GetTransactionInfo(create_acc_gid).empty()) {
-        std::this_thread::sleep_for(std::chrono::microseconds(50000ull));
+
+    if (!lego::client::VpnClient::Instance()->ConfigExists()) {
+        std::string create_acc_gid;
+        lego::client::VpnClient::Instance()->Transaction("", 0, create_acc_gid);
+        std::cout << "create acc gid: " <<
+                lego::common::Encode::HexEncode(create_acc_gid) << std::endl;
+        while (lego::client::VpnClient::Instance()->GetTransactionInfo(create_acc_gid).empty()) {
+            std::this_thread::sleep_for(std::chrono::microseconds(50000ull));
+        }
+        std::cout << "success create account: " << lego::common::Encode::HexEncode(
+                lego::common::GlobalInfo::Instance()->id()) << std::endl;
     }
-    std::cout << "success create account: " << lego::common::Encode::HexEncode(
-            lego::common::GlobalInfo::Instance()->id()) << std::endl;
-    return 0;
     std::string tx_gid;
-    lego::client::VpnClient::Instance()->Transaction("to", 10, tx_gid);
+    lego::client::VpnClient::Instance()->Transaction(
+            lego::common::Encode::HexDecode(
+            "324ec69ab59c57eb582cdd243058e8255e2bc309ac06df3917b4af404353b44b"),
+            10,
+            tx_gid);
     auto res = lego::client::VpnClient::Instance()->GetTransactionInfo(tx_gid);
     while (res.empty()) {
         std::this_thread::sleep_for(std::chrono::microseconds(50000ull));
