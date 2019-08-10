@@ -231,7 +231,8 @@ std::string VpnClient::GetTransactionInfo(const std::string& tx_gid) {
         std::string tmp_str = iter->second->to + "\t" +
                 std::to_string(iter->second->balance) + "\t" +
                 std::to_string(iter->second->height) + "\t" +
-                iter->second->block_hash;
+                iter->second->block_hash + "\t" +
+                common::Encode::HexDecode(tx_gid);
         auto tmp_ptr = iter->second;
         tx_map_.erase(iter);
         CLIENT_ERROR("get transaction info success[%s]", tx_gid.c_str());
