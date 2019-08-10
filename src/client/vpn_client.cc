@@ -228,8 +228,10 @@ std::string VpnClient::GetTransactionInfo(const std::string& tx_gid) {
             return "";
         }
 
-        std::string tmp_str = iter->second->to + ", balance: " +
-                std::to_string(iter->second->balance);
+        std::string tmp_str = iter->second->to + "\t" +
+                std::to_string(iter->second->balance) + "\t" +
+                std::to_string(iter->second->height) + "\t" +
+                iter->second->block_hash;
         auto tmp_ptr = iter->second;
         tx_map_.erase(iter);
         CLIENT_ERROR("get transaction info success[%s]", tx_gid.c_str());
@@ -520,8 +522,10 @@ std::string VpnClient::CheckTransaction(const std::string& tx_gid) {
                     {
                         std::lock_guard<std::mutex> guard(tx_map_mutex_);
                         tx_map_[tx_gid] = std::make_shared<TxInfo>(
-                            common::Encode::HexSubstr(tx_list[i].to()),
-                            tx_list[i].balance());
+                                common::Encode::HexSubstr(tx_list[i].to()),
+                                tx_list[i].balance(),
+                                block.height(),
+                                common::Encode::HexEncode(block.hash()));
                     }
                 }
             }

@@ -44,10 +44,12 @@ struct VpnServerNode {
 typedef std::shared_ptr<VpnServerNode> VpnServerNodePtr;
 
 struct TxInfo {
-    TxInfo(const std::string& in_to, uint64_t in_balance)
-            : to(in_to), balance(in_balance) {}
+    TxInfo(const std::string& in_to, uint64_t in_balance, uint32_t h, const std::string& hash)
+            : to(in_to), balance(in_balance), height(h), block_hash(hash) {}
     std::string to;
     uint64_t balance;
+    uint32_t height;
+    std::string block_hash;
 };
 typedef std::shared_ptr<TxInfo> TxInfoPtr;
 
