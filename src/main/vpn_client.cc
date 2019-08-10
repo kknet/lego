@@ -4,14 +4,18 @@
 #include "common/log.h"
 #include "common/encode.h"
 #include "common/global_info.h"
+#include "common/config.h"
 #include "init/command.h"
 #include "client/vpn_client.h"
 #include "client/client_utils.h"
 
 int main(int argc, char** argv) {
-    if (lego::client::VpnClient::Instance()->Init(
-            "./conf/lego.conf") != "OK") {
-        std::cout << "init client failed!" << std::endl;
+    auto res = lego::client::VpnClient::Instance()->Init(
+            "192.168.20.17",
+            8994,
+            "id_1:192.168.20.17:8991");
+    if (res != "OK") {
+        std::cout << "init client failed: " << res << std::endl;
         return 1;
     }
     std::string create_acc_gid;
