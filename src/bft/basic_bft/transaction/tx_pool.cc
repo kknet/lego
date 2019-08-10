@@ -79,10 +79,10 @@ void TxPool::BftOver(BftInterfacePtr& bft_ptr) {
     for (uint32_t i = 0; i < item_vec.size(); ++i) {
         auto iter = tx_pool_.find(item_vec[i]);
         if (iter != tx_pool_.end()) {
-            auto set_iter = added_tx_set_.find(iter->second->gid);
-            if (set_iter != added_tx_set_.end()) {
-                added_tx_set_.erase(set_iter);
-            }
+//             auto set_iter = added_tx_set_.find(iter->second->gid);
+//             if (set_iter != added_tx_set_.end()) {
+//                 added_tx_set_.erase(set_iter);
+//             }
             tx_pool_.erase(iter);
         }
     }
