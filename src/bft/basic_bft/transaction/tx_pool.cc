@@ -18,12 +18,16 @@ TxPool::~TxPool() {}
 int TxPool::AddTx(TxItemPtr& tx_ptr) {
     assert(tx_ptr != nullptr);
     std::lock_guard<std::mutex> guard(tx_pool_mutex_);
-    auto iter = added_tx_set_.find(tx_ptr->gid);
+    std::string uni_gid = tx_ptr->gid;
+    if (tx_ptr->add_to_acc_addr) {
+        uni_gid = std::string("t_") + tx_ptr->gid;
+    }
+    auto iter = added_tx_set_.find(uni_gid);
     if (iter != added_tx_set_.end()) {
         return kBftTxAdded;
     }
 
-    added_tx_set_.insert(tx_ptr->gid);
+    added_tx_set_.insert(uni_gid);
     uint64_t tx_index = pool_index_gen_.fetch_add(1);
     tx_pool_[tx_index] = tx_ptr;
     tx_ptr->index = tx_index;
@@ -54,9 +58,13 @@ void TxPool::GetTx(std::vector<TxItemPtr>& res_vec) {
     }
 }
 
-bool TxPool::HasTx(const std::string& tx_gid) {
+bool TxPool::HasTx(bool to, const std::string& tx_gid) {
+    std::string uni_gid = tx_gid;
+    if (to) {
+        uni_gid = std::string("t_") + tx_gid;
+    }
     std::lock_guard<std::mutex> guard(tx_pool_mutex_);
-    auto iter = added_tx_set_.find(tx_gid);
+    auto iter = added_tx_set_.find(uni_gid);
     return iter != added_tx_set_.end();
 }
 

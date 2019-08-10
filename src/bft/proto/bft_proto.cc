@@ -302,6 +302,8 @@ void BftProto::CreateLeaderBroadcastToAccount(
     *block = *(block_ptr.get());
     bft_msg.set_data(tx_bft.SerializeAsString());
     bft_msg.set_status(kBftToTxInit);
+    bft_msg.set_net_id(4);
+    bft_msg.set_node_id(local_node->id);
     std::string sha128 = common::Hash::Hash128(bft_msg.data());
     security::Signature sign;
     bool sign_res = security::Schnorr::Instance()->Sign(

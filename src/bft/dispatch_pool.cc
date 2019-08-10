@@ -27,6 +27,18 @@ int DispatchPool::Dispatch(
     return kBftSuccess;
 }
 
+int DispatchPool::Dispatch(const protobuf::TxInfo& tx_info) {
+    auto tx_ptr = std::make_shared<TxItem>(
+        tx_info.gid(),
+        tx_info.from(),
+        tx_info.from_pubkey(),
+        tx_info.from_sign(),
+        tx_info.to(),
+        tx_info.amount());
+    tx_ptr->add_to_acc_addr = tx_info.to_add();
+    return tx_pool_.AddTx(tx_ptr);
+}
+
 int DispatchPool::AddTx(const bft::protobuf::BftMessage& bft_msg) {
     protobuf::TxBft tx_bft;
     if (!tx_bft.ParseFromString(bft_msg.data())) {
@@ -49,12 +61,12 @@ int DispatchPool::AddTx(const bft::protobuf::BftMessage& bft_msg) {
     return tx_pool_.GetTx(pool_index, res_vec);
 }
 
-bool DispatchPool::HasTx(const std::string& acc_addr, const std::string& gid) {
-    return tx_pool_.HasTx(acc_addr, gid);
+bool DispatchPool::HasTx(const std::string& acc_addr, bool to, const std::string& gid) {
+    return tx_pool_.HasTx(acc_addr, to, gid);
 }
 
-bool DispatchPool::HasTx(uint32_t pool_index, const std::string& gid) {
-    return tx_pool_.HasTx(pool_index, gid);
+bool DispatchPool::HasTx(uint32_t pool_index, bool to, const std::string& gid) {
+    return tx_pool_.HasTx(pool_index, to, gid);
 }
 
 void DispatchPool::BftOver(BftInterfacePtr& bft_ptr) {

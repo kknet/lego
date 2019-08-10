@@ -150,6 +150,7 @@ int TxBft::CheckTxInfo(
         const protobuf::TxInfo& tx_info) {
     if (!DispatchPool::Instance()->HasTx(
             pool_index(),
+            tx_info.to_add(),
             tx_info.gid())) {
         BFT_ERROR("prepare not has tx[%s]to[%s][%s]!",
                 common::Encode::HexEncode(tx_info.from()).c_str(),

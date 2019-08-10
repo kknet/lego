@@ -18,8 +18,8 @@ public:
     ~TxPoolManager();
     int AddTx(TxItemPtr& tx_ptr);
     void GetTx(uint32_t& pool_index, std::vector<TxItemPtr>& res_vec);
-    bool HasTx(const std::string& acc_addr, const std::string& tx_gid);
-    bool HasTx(uint32_t pool_index, const std::string& tx_gid);
+    bool HasTx(const std::string& acc_addr, bool to, const std::string& tx_gid);
+    bool HasTx(uint32_t pool_index, bool to, const std::string& tx_gid);
     void BftOver(BftInterfacePtr& bft_ptr);
     bool LockPool(uint32_t pool_index);
     bool TxValid(TxItemPtr& tx_ptr);

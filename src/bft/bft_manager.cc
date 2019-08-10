@@ -160,6 +160,53 @@ void BftManager::HandleMessage(transport::protobuf::Header& header) {
     }
 }
 
+void BftManager::HandleToAccountTxBlock(
+        transport::protobuf::Header& header,
+        bft::protobuf::BftMessage& bft_msg) {
+    uint32_t mem_index = GetMemberIndex(bft_msg.net_id(), bft_msg.node_id());
+    security::Signature sign;
+    if (VerifySignature(mem_index, bft_msg, sign) != kBftSuccess) {
+        BFT_ERROR("verify signature error!");
+        return;
+    }
+
+    protobuf::TxBft tx_bft;
+    if (!tx_bft.ParseFromString(bft_msg.data())) {
+        return;
+    }
+
+    if (!tx_bft.has_to_tx() && !tx_bft.to_tx().has_block()) {
+        return;
+    }
+
+    auto tx_list = tx_bft.to_tx().block().tx_block().tx_list();
+    // check aggsign
+    for (int32_t i = 0; i < tx_list.size(); ++i) {
+        if (tx_list[i]->to().empty() || !tx_list[i]->to_add()) {
+            continue;
+        }
+
+        // (TODO): check is this network
+        if (network::GetConsensusShardNetworkId(tx_list[i]) != 4) {
+            continue;
+        }
+        
+        if (DispatchPool::Instance()->Dispatch(tx_list[i]) != kBftSuccess) {
+            BFT_ERROR("dispatch pool failed!");
+        }
+
+        if (!mem_manager_->IsLeader(4, common::GlobalInfo::Instance()->id(), 0)) {
+            continue;
+        }
+
+        int res = StartBft(kTransactionPbftAddress, "", 4, 0);
+        if (res != kBftSuccess) {
+            LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("to leader start bft failed.", header);
+        }
+        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("to leader start bft succ", header);
+    }
+}
+
 int BftManager::InitBft(
         transport::protobuf::Header& header,
         bft::protobuf::BftMessage& bft_msg) {

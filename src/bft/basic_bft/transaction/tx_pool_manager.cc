@@ -108,14 +108,14 @@ void TxPoolManager::GetTx(uint32_t& pool_index, std::vector<TxItemPtr>& res_vec)
     }
 }
 
-bool TxPoolManager::HasTx(const std::string& acc_addr, const std::string& tx_gid) {
+bool TxPoolManager::HasTx(const std::string& acc_addr, bool to, const std::string& tx_gid) {
     uint32_t pool_index = common::GetPoolIndex(acc_addr);
-    return tx_pool_[pool_index].HasTx(tx_gid);
+    return tx_pool_[pool_index].HasTx(to, tx_gid);
 }
 
-bool TxPoolManager::HasTx(uint32_t pool_index, const std::string& tx_gid) {
+bool TxPoolManager::HasTx(uint32_t pool_index, bool to, const std::string& tx_gid) {
     assert(pool_index < common::kImmutablePoolSize);
-    return tx_pool_[pool_index].HasTx(tx_gid);
+    return tx_pool_[pool_index].HasTx(to, tx_gid);
 }
 
 void TxPoolManager::BftOver(BftInterfacePtr& bft_ptr) {
