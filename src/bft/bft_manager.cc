@@ -182,12 +182,12 @@ void BftManager::HandleToAccountTxBlock(
     auto tx_list = tx_bft.to_tx().block().tx_block().tx_list();
     // check aggsign
     for (int32_t i = 0; i < tx_list.size(); ++i) {
-        if (tx_list[i]->to().empty() || !tx_list[i]->to_add()) {
+        if (tx_list[i].to().empty() || !tx_list[i].to_add()) {
             continue;
         }
 
         // (TODO): check is this network
-        if (network::GetConsensusShardNetworkId(tx_list[i]) != 4) {
+        if (network::GetConsensusShardNetworkId(tx_list[i].to()) != 4) {
             continue;
         }
         
