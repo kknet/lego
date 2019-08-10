@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
             "192.168.20.17",
             8994,
             "id_1:192.168.20.17:8991");
-    if (int_res != "OK") {
+    if (int_res == "ERROR") {
         std::cout << "init client failed: " << int_res << std::endl;
         return 1;
     }
