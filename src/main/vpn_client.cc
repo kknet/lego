@@ -1,6 +1,8 @@
 #include <iostream>
 
 #include "common/log.h"
+#include "common/encode.h"
+#include "common/global_info.h"
 #include "init/command.h"
 #include "client/vpn_client.h"
 #include "client/client_utils.h"
@@ -11,6 +13,24 @@ int main(int argc, char** argv) {
         std::cout << "init client failed!" << std::endl;
         return 1;
     }
+    std::string create_acc_gid;
+    lego::client::VpnClient::Instance()->Transaction("", 0, create_acc_gid);
+    std::cout << "create acc gid: " << lego::common::Encode::HexEncode(create_acc_gid);
+    while (lego::client::VpnClient::Instance()->GetTransactionInfo(create_acc_gid).empty()) {
+        std::this_thread::sleep_for(std::chrono::microseconds(50000ull));
+    }
+    std::cout << "success create account: " << lego::common::Encode::HexEncode(
+            lego::common::GlobalInfo::Instance()->id()) << std::endl;
+    return 0;
+    std::string tx_gid;
+    lego::client::VpnClient::Instance()->Transaction("to", 10, tx_gid);
+    auto res = lego::client::VpnClient::Instance()->GetTransactionInfo(tx_gid);
+    while (res.empty()) {
+        std::this_thread::sleep_for(std::chrono::microseconds(50000ull));
+        res = lego::client::VpnClient::Instance()->GetTransactionInfo(tx_gid);
+    }
+    std::cout << "transaction success: " << res << std::endl;
+    return 0;
 
     std::vector<lego::client::VpnServerNodePtr> nodes;
     lego::client::VpnClient::Instance()->GetVpnServerNodes("US", 2, nodes);
