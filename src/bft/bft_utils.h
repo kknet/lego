@@ -89,6 +89,7 @@ enum BftStatus {
     kBftPreCommit = 2,
     kBftCommit = 3,
     kBftCommited = 4,
+    kBftToTxInit = 5,
 };
 
 enum BftRole {

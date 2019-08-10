@@ -280,7 +280,7 @@ void BftProto::LeaderCreateCommit(
 #endif
 }
 
-void BftProto::LeaderBroadcastToAccount(
+void BftProto::CreateLeaderBroadcastToAccount(
         const dht::NodePtr& local_node,
         uint32_t net_id,
         const std::shared_ptr<bft::protobuf::Block>& block_ptr,
@@ -296,7 +296,12 @@ void BftProto::LeaderBroadcastToAccount(
     auto broad_param = msg.mutable_broadcast();
     SetDefaultBroadcastParam(broad_param);
     bft::protobuf::BftMessage bft_msg;
-    bft_msg.set_data(block_ptr->SerializeAsString());
+    bft::protobuf::TxBft tx_bft;
+    auto to_tx = tx_bft.mutable_to_tx();
+    auto block = to_tx->mutable_block();
+    *block = *(block_ptr.get());
+    bft_msg.set_data(tx_bft.SerializeAsString());
+    bft_msg.set_status(kBftToTxInit);
     std::string sha128 = common::Hash::Hash128(bft_msg.data());
     security::Signature sign;
     bool sign_res = security::Schnorr::Instance()->Sign(

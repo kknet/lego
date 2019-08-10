@@ -73,11 +73,16 @@ message NewTx {
 	optional uint64 lego_count = 6;
 }
 
+message ToAccountTx {
+	optional Block block = 1;
+}
+
 message TxBft {
 	optional NewTx new_tx = 1;
-	optional LeaderTxPrepare ltx_prepare = 2;
-	optional BackupTxPrepare btx_prepare = 3;
-	optional LeaderTxPreCommit ltx_precommit = 4;
-	optional BackupTxPreCommit btx_precommit = 5;
-	optional LeaderTxCommit ltx_commit = 6;
+	optional ToAccountTx to_tx = 2;
+	optional LeaderTxPrepare ltx_prepare = 3;
+	optional BackupTxPrepare btx_prepare = 4;
+	optional LeaderTxPreCommit ltx_precommit = 5;
+	optional BackupTxPreCommit btx_precommit = 6;
+	optional LeaderTxCommit ltx_commit = 7;
 }

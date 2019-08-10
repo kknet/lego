@@ -10,6 +10,7 @@
 #include "election/elect_dht.h"
 #include "network/dht_manager.h"
 #include "network/route.h"
+#include "network/universal_manager.h"
 #include "bft/bft_utils.h"
 #include "bft/basic_bft/transaction/tx_pool_manager.h"
 #include "bft/basic_bft/transaction/tx_bft.h"
@@ -66,6 +67,11 @@ void BftManager::HandleMessage(transport::protobuf::Header& header) {
     if (bft_msg.status() == kBftInit) {
         LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("InitBft", header);
         InitBft(header, bft_msg);
+        return;
+    }
+
+    if (bft_msg.status() == kBftToTxInit) {
+        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("kBftToTxInit", header);
         return;
     }
 
@@ -565,13 +571,24 @@ void BftManager::LeaderBroadcastToAcc(const std::shared_ptr<bft::protobuf::Block
 
     std::set<uint32_t> broadcast_nets;
     auto tx_list = block_ptr->tx_block().tx_list();
-    for (uint32_t i = 0; i < tx_list.size(); ++i) {
+    for (int32_t i = 0; i < tx_list.size(); ++i) {
         if (tx_list[i].has_to() && !tx_list[i].to_add()) {
             broadcast_nets.insert(network::GetConsensusShardNetworkId(tx_list[i].to()));
         }
     }
 
+    for (auto iter = broadcast_nets.begin(); iter != broadcast_nets.end(); ++iter) {
+        transport::protobuf::Header msg;
+        auto dht_ptr = network::UniversalManager::Instance()->GetUniversal(network::kUniversalNetworkId);
+        if (!dht_ptr) {
+            assert(false);
+            continue;
+        }
 
+        auto local_node = dht_ptr->local_node();
+        BftProto::CreateLeaderBroadcastToAccount(local_node, *iter, block_ptr, msg);
+        network::Route::Instance()->Send(msg);
+    }
 }
 
 void BftManager::CheckTimeout() {
