@@ -19,6 +19,7 @@
 #include "uuid/uuid.h"
 #include "common/hash.h"
 #include "common/random.h"
+#include "common/country_code.h"
 
 namespace lego {
 
@@ -89,6 +90,10 @@ std::string GetAccountAddress(const std::string& pubkey) {
 std::string CreateGID(const std::string& pubkey) {
     std::string str = (pubkey + Random::RandomString(1024u));
     return common::Hash::Hash256(str);
+}
+
+uint32_t RandomCountry() {
+    return rand() % FX;
 }
 
 }  // namespace common

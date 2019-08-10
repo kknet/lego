@@ -558,6 +558,22 @@ int BftManager::BackupCommit(
     return kBftSuccess;
 }
 
+void BftManager::LeaderBroadcastToAcc(const std::shared_ptr<bft::protobuf::Block>& block_ptr) {
+    if (!mem_manager_->IsLeader(4, common::GlobalInfo::Instance()->id(), 0)) {
+        return;
+    }
+
+    std::set<uint32_t> broadcast_nets;
+    auto tx_list = block_ptr->tx_block().tx_list();
+    for (uint32_t i = 0; i < tx_list.size(); ++i) {
+        if (tx_list[i].has_to() && !tx_list[i].to_add()) {
+            broadcast_nets.insert(network::GetConsensusShardNetworkId(tx_list[i].to()));
+        }
+    }
+
+
+}
+
 void BftManager::CheckTimeout() {
     std::vector<BftInterfacePtr> timeout_vec;
     {

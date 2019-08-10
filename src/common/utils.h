@@ -84,6 +84,7 @@ inline static std::string GetTxDbKey(bool from, const std::string& gid) {
 
 uint64_t TimeStampMsec();
 uint64_t TimeStampUsec();
+uint32_t RandomCountry();
 
 }  // namespace common
 

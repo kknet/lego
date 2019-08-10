@@ -43,6 +43,11 @@ public:
             const dht::NodePtr& local_node,
             const BftInterfacePtr& bft_ptr,
             transport::protobuf::Header& msg);
+    static void LeaderBroadcastToAccount(
+            const dht::NodePtr& local_node,
+            uint32_t net_id,
+            const std::shared_ptr<bft::protobuf::Block>& block_ptr,
+            transport::protobuf::Header& msg);
 
 private:
     DISALLOW_COPY_AND_ASSIGN(BftProto);

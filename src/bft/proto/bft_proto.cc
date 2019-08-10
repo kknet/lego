@@ -280,6 +280,51 @@ void BftProto::LeaderCreateCommit(
 #endif
 }
 
+void BftProto::LeaderBroadcastToAccount(
+        const dht::NodePtr& local_node,
+        uint32_t net_id,
+        const std::shared_ptr<bft::protobuf::Block>& block_ptr,
+        transport::protobuf::Header& msg) {
+    msg.set_src_dht_key(local_node->dht_key);
+    dht::DhtKeyManager dht_key(net_id, common::RandomCountry());
+    msg.set_des_dht_key(dht_key.StrKey());
+    msg.set_priority(transport::kTransportPriorityHighest);
+    msg.set_id(common::GlobalInfo::Instance()->MessageId());
+    msg.set_type(common::kBftMessage);
+    msg.set_client(false);
+    msg.set_hop_count(0);
+    auto broad_param = msg.mutable_broadcast();
+    SetDefaultBroadcastParam(broad_param);
+    bft::protobuf::BftMessage bft_msg;
+    bft_msg.set_data(block_ptr->SerializeAsString());
+    std::string sha128 = common::Hash::Hash128(bft_msg.data());
+    security::Signature sign;
+    bool sign_res = security::Schnorr::Instance()->Sign(
+            sha128,
+            *(security::Schnorr::Instance()->prikey()),
+            *(security::Schnorr::Instance()->pubkey()),
+            sign);
+    if (!sign_res) {
+        BFT_ERROR("signature error.");
+        return;
+    }
+
+    std::string sign_challenge_str;
+    std::string sign_response_str;
+    sign.Serialize(sign_challenge_str, sign_response_str);
+    bft_msg.set_sign_challenge(sign_challenge_str);
+    bft_msg.set_sign_response(sign_response_str);
+    msg.set_data(bft_msg.SerializeAsString());
+
+#ifdef LEGO_TRACE_MESSAGE
+    msg.set_debug(std::string("LeaderBroadcastToAccount:") +
+            local_node->public_ip + "-" +
+            std::to_string(local_node->public_port) + ", to " +
+            common::Encode::HexEncode(dht_key.StrKey()));
+    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("begin", msg);
+#endif
+}
+
 }  // namespace bft
 
 }  // namespace lego
