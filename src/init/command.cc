@@ -128,7 +128,7 @@ void Command::AddBaseCommands() {
         while (lego::client::VpnClient::Instance()->GetTransactionInfo(tx_gid).empty()) {
             std::this_thread::sleep_for(std::chrono::microseconds(100000ull));
         }
-        std::cout << "tx gid:" << common::Encode::HexEncode(tx_gid) << " success transaction from: "
+        std::cout << "tx gid:" << tx_gid << " success transaction from: "
                 << common::Encode::HexEncode(common::GlobalInfo::Instance()->id())
                 << " to: " << args[0] << " , amount: " << amount << std::endl;
     });
