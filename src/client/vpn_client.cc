@@ -533,7 +533,8 @@ std::string VpnClient::CheckTransaction(const std::string& hash, bool is_gid) {
                                 common::Encode::HexSubstr(tx_list[i].to()),
                                 tx_list[i].balance(),
                                 block.height(),
-                                common::Encode::HexEncode(block.hash()));
+                                common::Encode::HexEncode(block.hash()),
+                                std::make_shared<client::protobuf::Block>(block));
                     }
                 }
             }

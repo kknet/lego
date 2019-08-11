@@ -28,6 +28,10 @@ namespace client {
 
 class ClientUniversalDht;
 typedef std::shared_ptr<ClientUniversalDht> ClientUniversalDhtPtr;
+namespace protobuf {
+    class Block;
+    typedef std::shared_ptr<Block> BlockPtr;
+}  // namespace protobuf
 
 struct VpnServerNode {
     VpnServerNode(
@@ -44,12 +48,19 @@ struct VpnServerNode {
 typedef std::shared_ptr<VpnServerNode> VpnServerNodePtr;
 
 struct TxInfo {
-    TxInfo(const std::string& in_to, uint64_t in_balance, uint32_t h, const std::string& hash)
-            : to(in_to), balance(in_balance), height(h), block_hash(hash) {}
+    TxInfo(
+            const std::string& in_to,
+            uint64_t in_balance,
+            uint32_t h,
+            const std::string& hash,
+            const protobuf::BlockPtr& in_block)
+            : to(in_to), balance(in_balance), height(h),
+              block_hash(hash), block_ptr(in_block) {}
     std::string to;
     uint64_t balance;
     uint32_t height;
     std::string block_hash;
+    protobuf::BlockPtr block_ptr;
 };
 typedef std::shared_ptr<TxInfo> TxInfoPtr;
 
