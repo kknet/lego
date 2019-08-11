@@ -590,7 +590,22 @@ TxInfoPtr VpnClient::GetBlockWithGid(const std::string& tx_gid) {
 }
 
 TxInfoPtr VpnClient::GetBlockWithHash(const std::string& block_hash) {
-    return GetBlockWithGid(std::string("b_") + block_hash);
+    auto tmp_gid = std::string("b_") + common::Encode::HexDecode(block_hash);
+    std::lock_guard<std::mutex> guard(tx_map_mutex_);
+    auto iter = tx_map_.find(tmp_gid);
+    if (iter != tx_map_.end()) {
+        if (iter->second == nullptr) {
+            return nullptr;
+        }
+
+        auto tmp_ptr = iter->second;
+        tx_map_.erase(iter);
+        return tmp_ptr;
+    } else {
+        tx_map_[tmp_gid] = nullptr;
+    }
+    return nullptr;
+
 }
 
 }  // namespace client
