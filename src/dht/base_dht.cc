@@ -107,6 +107,10 @@ int BaseDht::Join(NodePtr& node) {
 int BaseDht::Drop(NodePtr& node) {
     {
         std::lock_guard<std::mutex> guard(dht_mutex_);
+        if (dht_.size() <= kDhtMinReserveNodes) {
+            return kDhtError;
+        }
+
         auto& id_hash = node->id_hash;
         auto iter = std::find_if(
                 dht_.begin(),

@@ -22,6 +22,7 @@ enum DhtErrorCode {
 };
 
 static const uint32_t kDhtNearestNodesCount = 16u;
+static const uint32_t kDhtMinReserveNodes = 4u;
 static const uint32_t kDhtKeySize = 32u;
 static const uint32_t kDhtMaxNeighbors = kDhtKeySize * 8 + kDhtNearestNodesCount;
 static const uint32_t kRefreshNeighborsCount = 64u;
