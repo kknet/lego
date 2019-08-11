@@ -118,7 +118,8 @@ public:
 
     static void GetBlockWithTxGid(
             const dht::NodePtr& local_node,
-            const std::string& tx_gid,
+            const std::string& hash,
+            bool is_gid,
             bool from,
             transport::protobuf::Header& msg) {
         msg.set_src_dht_key(local_node->dht_key);
@@ -136,7 +137,11 @@ public:
         msg.set_hop_count(0);
         protobuf::BlockMessage block_msg;
         auto block_req = block_msg.mutable_block_req();
-        block_req->set_tx_gid(tx_gid);
+        if (is_gid) {
+            block_req->set_tx_gid(hash);
+        }else {
+            block_req->set_block_hash(hash);
+        }
         block_req->set_from(from);
         msg.set_data(block_msg.SerializeAsString());
 #ifdef LEGO_TRACE_MESSAGE

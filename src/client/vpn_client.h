@@ -67,6 +67,8 @@ public:
             std::vector<VpnServerNodePtr>& nodes);
     std::string Transaction(const std::string& to, uint64_t amount, std::string& tx_gid);
     std::string GetTransactionInfo(const std::string& tx_gid);
+    TxInfoPtr GetBlockWithGid(const std::string& gid);
+    TxInfoPtr GetBlockWithHash(const std::string& block_hash);
     int GetSocket();
     bool ConfigExists();
 
@@ -83,7 +85,7 @@ private:
             std::vector<VpnServerNodePtr>& vpn_nodes);
     int CreateClientUniversalNetwork();
     void CheckTxExists();
-    std::string CheckTransaction(const std::string& tx_gid);
+    std::string CheckTransaction(const std::string& hash, bool is_gid);
     void WriteDefaultLogConf();
 
     static const uint32_t kDefaultUdpSendBufferSize = 10u * 1024u * 1024u;

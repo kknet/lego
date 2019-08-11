@@ -476,7 +476,7 @@ std::string VpnClient::Transaction(const std::string& to, uint64_t amount, std::
     return "OK";
 }
 
-std::string VpnClient::CheckTransaction(const std::string& tx_gid) {
+std::string VpnClient::CheckTransaction(const std::string& hash, bool is_gid) {
     auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
             network::kUniversalNetworkId);
     if (uni_dht == nullptr) {
@@ -484,12 +484,16 @@ std::string VpnClient::CheckTransaction(const std::string& tx_gid) {
     }
     transport::protobuf::Header msg;
     uni_dht->SetFrequently(msg);
-    ClientProto::GetBlockWithTxGid(uni_dht->local_node(), tx_gid, true, msg);
+    std::string tmp_hash = hash;
+    if (!is_gid) {
+        tmp_hash = std::string(hash.begin() + 2, hash.end());
+    }
+    ClientProto::GetBlockWithTxGid(uni_dht->local_node(), tmp_hash, is_gid, true, msg);
     uni_dht->SendToClosestNode(msg);
 
     common::StateLock state_lock(0);
     bool block_finded = false;
-    auto callback = [&state_lock, &block_finded, this, tx_gid](
+    auto callback = [&state_lock, &block_finded, this, hash, is_gid](
         int status,
         transport::protobuf::Header& header) {
         do {
@@ -517,14 +521,15 @@ std::string VpnClient::CheckTransaction(const std::string& tx_gid) {
             auto& tx_list = block.tx_block().tx_list();
             for (int32_t i = 0; i < tx_list.size(); ++i) {
                 if (tx_list[i].from() == common::GlobalInfo::Instance()->id()) {
-                    CLIENT_INFO("get new tx block[%s][%s]to[%s][balance: %llu]",
-                            common::Encode::HexEncode(tx_gid).c_str(),
+                    CLIENT_INFO("get new tx block[%s][%d][%s]to[%s][balance: %llu]",
+                            common::Encode::HexEncode(hash).c_str(),
+                            is_gid,
                             common::Encode::HexEncode(tx_list[i].from()).c_str(),
                             common::Encode::HexEncode(tx_list[i].to()).c_str(),
                             tx_list[i].balance());
                     {
                         std::lock_guard<std::mutex> guard(tx_map_mutex_);
-                        tx_map_[tx_gid] = std::make_shared<TxInfo>(
+                        tx_map_[hash] = std::make_shared<TxInfo>(
                                 common::Encode::HexSubstr(tx_list[i].to()),
                                 tx_list[i].balance(),
                                 block.height(),
@@ -556,9 +561,35 @@ void VpnClient::CheckTxExists() {
     }
 
     for (auto iter = tx_vec.begin(); iter != tx_vec.end(); ++iter) {
-        CheckTransaction(*iter);
+        if ((*iter)[0] == 'b' && (*iter)[1] == '_') {
+            CheckTransaction(*iter, false);
+        } else {
+            CheckTransaction(*iter, true);
+        }
     }
     check_tx_tick_.CutOff(kCheckTxPeriod, std::bind(&VpnClient::CheckTxExists, this));
+}
+
+TxInfoPtr VpnClient::GetBlockWithGid(const std::string& tx_gid) {
+    auto tmp_gid = common::Encode::HexDecode(tx_gid);
+    std::lock_guard<std::mutex> guard(tx_map_mutex_);
+    auto iter = tx_map_.find(tmp_gid);
+    if (iter != tx_map_.end()) {
+        if (iter->second == nullptr) {
+            return nullptr;
+        }
+
+        auto tmp_ptr = iter->second;
+        tx_map_.erase(iter);
+        return tmp_ptr;
+    } else {
+        tx_map_[tmp_gid] = nullptr;
+    }
+    return nullptr;
+}
+
+TxInfoPtr VpnClient::GetBlockWithHash(const std::string& block_hash) {
+    return GetBlockWithGid(std::string("b_") + block_hash);
 }
 
 }  // namespace client

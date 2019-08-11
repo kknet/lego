@@ -7,6 +7,7 @@
 #include "common/split.h"
 #include "common/string_utils.h"
 #include "common/encode.h"
+#include "common/global_info.h"
 #include "dht/base_dht.h"
 #include "network/dht_manager.h"
 #include "network/universal_manager.h"
@@ -114,7 +115,49 @@ void Command::AddBaseCommands() {
     });
     AddCommand("tx", [this](const std::vector<std::string>& args) {
         std::string tx_gid;
-        lego::client::VpnClient::Instance()->Transaction("", 0, tx_gid);
+        std::string to;
+        if (args.size() > 0) {
+            to = common::Encode::HexDecode(args[0]);
+        }
+
+        uint64_t amount = 0;
+        if (args.size() > 1) {
+            amount = common::StringUtil::ToUint64(args[1]);
+        }
+        lego::client::VpnClient::Instance()->Transaction(to, amount, tx_gid);
+        while (lego::client::VpnClient::Instance()->GetTransactionInfo(tx_gid).empty()) {
+            std::this_thread::sleep_for(std::chrono::microseconds(50000ull));
+        }
+        std::cout << "success transaction from: "
+                << common::Encode::HexEncode(common::GlobalInfo::Instance()->id())
+                << " to: " << to << " , amount: " << amount << std::endl;
+    });
+    AddCommand("bg", [this](const std::vector<std::string>& args) {
+        if (args.size() <= 0) {
+            return;
+        }
+
+        std::string hash = args[0];
+        bool is_gid = false;
+        if (args.size() > 1) {
+            is_gid = common::StringUtil::ToBool(args[1]);
+        }
+
+        client::TxInfoPtr block_ptr = nullptr;
+        if (is_gid) {
+            block_ptr = lego::client::VpnClient::Instance()->GetBlockWithGid(hash);
+        } else {
+            block_ptr = lego::client::VpnClient::Instance()->GetBlockWithHash(hash);
+        }
+
+        while (block_ptr == nullptr) {
+            std::this_thread::sleep_for(std::chrono::microseconds(50000ull));
+            if (is_gid) {
+                block_ptr = lego::client::VpnClient::Instance()->GetBlockWithGid(hash);
+            } else {
+                block_ptr = lego::client::VpnClient::Instance()->GetBlockWithHash(hash);
+            }
+        }
     });
 }
 

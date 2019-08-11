@@ -166,27 +166,25 @@ void BftManager::HandleToAccountTxBlock(
         bft::protobuf::BftMessage& bft_msg) {
     uint32_t mem_index = GetMemberIndex(bft_msg.net_id(), bft_msg.node_id());
     security::Signature sign;
-    std::cout << 1 << std::endl;
     if (VerifySignature(mem_index, bft_msg, sign) != kBftSuccess) {
         BFT_ERROR("verify signature error!");
         return;
     }
 
-    std::cout << 2 << std::endl;
     protobuf::TxBft tx_bft;
     if (!tx_bft.ParseFromString(bft_msg.data())) {
         LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("paser fail", header);
         return;
     }
 
-    std::cout << 3 << std::endl;
-    if (!tx_bft.has_to_tx() && !tx_bft.to_tx().has_block()) {
+    if (!(tx_bft.has_to_tx() &&
+            tx_bft.to_tx().has_block() &&
+            tx_bft.to_tx().block().has_tx_block())) {
         LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("not to", header);
         return;
     }
-    std::cout << 4 << std::endl;
 
-    auto& tx_list = *(tx_bft.to_tx().block().tx_block().mutable_tx_list());
+    auto& tx_list = *(tx_bft.mutable_to_tx()->mutable_block()->mutable_tx_block()->mutable_tx_list());
     // check aggsign
     for (int32_t i = 0; i < tx_list.size(); ++i) {
         if (tx_list[i].to().empty() || tx_list[i].to_add()) {
@@ -194,33 +192,28 @@ void BftManager::HandleToAccountTxBlock(
             continue;
         }
         tx_list[i].set_to_add(true);
-        std::cout << 5 << std::endl;
 
         // (TODO): check is this network
         if (network::GetConsensusShardNetworkId(tx_list[i].to()) != 4) {
             LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("network id error", header);
             continue;
         }
-        std::cout << 6 << std::endl;
 
         if (DispatchPool::Instance()->Dispatch(tx_list[i]) != kBftSuccess) {
             BFT_ERROR("dispatch pool failed!");
             LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("dispatch error", header);
         }
-        std::cout << 7 << std::endl;
 
         if (!mem_manager_->IsLeader(4, common::GlobalInfo::Instance()->id(), 0)) {
             LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("dispatch error", header);
             continue;
         }
-        std::cout << 8 << std::endl;
 
         int res = StartBft(kTransactionPbftAddress, "", 4, 0);
         if (res != kBftSuccess) {
             LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("to leader start bft failed.", header);
         }
         LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("to leader start bft succ", header);
-        std::cout << 9 << std::endl;
     }
 }
 
