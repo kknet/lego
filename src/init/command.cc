@@ -158,6 +158,7 @@ void Command::AddBaseCommands() {
                 block_ptr = lego::client::VpnClient::Instance()->GetBlockWithHash(hash);
             }
         }
+        std::cout << "get block info success." << std::endl;
     });
 }
 
