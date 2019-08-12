@@ -92,6 +92,7 @@ inline const unsigned char *ASN1_STRING_get0_data(const ASN1_STRING *asn1) {
 #include <zlib.h>
 #endif
 
+#include "common/split.h"
 /*
  * Configuration
  */
@@ -1227,7 +1228,6 @@ inline uint64_t get_header_value_uint64(const Headers &headers, const char *key,
 }
 
 inline bool read_headers(Stream &strm, Headers &headers) {
-  static std::regex re(R"((.+?):\s*(.+?)\s*\r\n)");
 
   const auto bufsiz = 2048;
   char buf[bufsiz];
@@ -1237,14 +1237,13 @@ inline bool read_headers(Stream &strm, Headers &headers) {
   for (;;) {
     if (!reader.getline()) { return false; }
     if (!strcmp(reader.ptr(), "\r\n")) { break; }
-    std::cmatch m;
-    if (std::regex_match(reader.ptr(), m, re)) {
-      auto key = std::string(m[1]);
-      auto val = std::string(m[2]);
-      headers.emplace(key, val);
+    lego::common::Split split(reader.ptr(), ':');
+    if (split.Count() >= 2) {
+        auto key = std::string(split[0]);
+        auto val = std::string(split[1]);
+        headers.emplace(key, val);
     }
   }
-
   return true;
 }
 
@@ -2123,24 +2122,20 @@ inline void Server::stop() {
 }
 
 inline bool Server::parse_request_line(const char *s, Request &req) {
-  static std::regex re("(GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS) "
-                       "(([^?]+)(?:\\?(.+?))?) (HTTP/1\\.[01])\r\n");
+    lego::common::Split split(s, ' ', strlen(s));
+    if (split.Count() < 3) {
+        return false;
+    }
+    req.method = std::string(split[0]);
+    req.target = std::string(split[1]);
+    lego::common::Split target_split(split[1], '?');
+    req.path = detail::decode_url(target_split[0]);
+    if (target_split.SubLen(1) > 0) {
+        detail::parse_query_text(target_split[1], req.params);
+    }
 
-  std::cmatch m;
-  if (std::regex_match(s, m, re)) {
-    req.version = std::string(m[5]);
-    req.method = std::string(m[1]);
-    req.target = std::string(m[2]);
-    req.path = detail::decode_url(m[3]);
-
-    // Parse query text
-    auto len = std::distance(m[4].first, m[4].second);
-    if (len > 0) { detail::parse_query_text(m[4], req.params); }
-
+    req.version = split[2];
     return true;
-  }
-
-  return false;
 }
 
 inline bool Server::write_response(Stream &strm, bool last_connection,
@@ -2376,12 +2371,11 @@ inline bool Server::listen_internal() {
       if (val == 0) { // Timeout
         continue;
       }
-
       socket_t sock = accept(svr_sock_, nullptr, nullptr);
 
       if (sock == INVALID_SOCKET) {
         if (svr_sock_ != INVALID_SOCKET) {
-          detail::close_socket(svr_sock_);
+            detail::close_socket(svr_sock_);
           ret = false;
         } else {
           ; // The server socket was closed by user.
@@ -2438,7 +2432,6 @@ Server::process_request(Stream &strm, bool last_connection,
                         std::function<void(Request &)> setup_request) {
   const auto bufsiz = 2048;
   char buf[bufsiz];
-
   detail::stream_line_reader reader(strm, buf, bufsiz);
 
   // Connection has been closed on client
@@ -2509,9 +2502,9 @@ Server::process_request(Stream &strm, bool last_connection,
   if (setup_request) { setup_request(req); }
 
   if (routing(req, res)) {
-    if (res.status == -1) { res.status = req.ranges.empty() ? 200 : 206; }
+      if (res.status == -1) { res.status = req.ranges.empty() ? 200 : 206; }
   } else {
-    res.status = 404;
+      res.status = 404;
   }
 
   return write_response(strm, last_connection, req, res);
