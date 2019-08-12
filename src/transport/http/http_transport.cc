@@ -18,6 +18,15 @@ int HttpTransport::Init() {
 }
 
 int HttpTransport::Start(bool hold) {
+    if (hold) {
+        Listen();
+    } else {
+        run_thread_ = std::make_shared<std::thread>(std::bind(&HttpTransport::Listen, this));
+        run_thread_->detach();
+    }
+}
+
+void HttpTransport::Listen() {
     http_svr_.Get("/http_message", [=](const httplib::Request& req, httplib::Response &res) {
         std::cout << "http get request size: " << req.body.size() << std::endl;
         res.set_content("Hello World!\n", "text/plain");
@@ -33,9 +42,9 @@ int HttpTransport::Start(bool hold) {
     if (!http_svr_.listen(
             common::GlobalInfo::Instance()->config_local_ip().c_str(),
             8080)) {
-        return kTransportError;
+        assert(false);
+        exit(1);
     }
-    return kTransportSuccess;
 }
 
 void HttpTransport::Stop() {

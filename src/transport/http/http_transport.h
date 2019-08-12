@@ -23,7 +23,10 @@ public:
     virtual int GetSocket();
 
 private:
+    void Listen();
+
     httplib::Server http_svr_;
+    std::shared_ptr<std::thread> run_thread_{ nullptr };
 
     DISALLOW_COPY_AND_ASSIGN(HttpTransport);
 };
