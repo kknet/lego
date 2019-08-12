@@ -11,6 +11,7 @@
 #include "transport/multi_thread.h"
 #include "transport/udp/udp_transport.h"
 #include "transport/transport_utils.h"
+#include "transport/http/http_transport.h"
 #include "election/elect_dht.h"
 #include "election/proto/elect_proto.h"
 #include "network/network_utils.h"
@@ -143,6 +144,20 @@ int NetworkInit::InitTransport() {
 
     if (transport_->Start(false) != transport::kTransportSuccess) {
         INIT_ERROR("start udp transport failed!");
+        return kInitError;
+    }
+    return kInitSuccess;
+}
+
+int NetworkInit::InitHttpTransport() {
+    http_transport_ = std::make_shared<transport::HttpTransport>();
+    if (http_transport_->Init() != transport::kTransportSuccess) {
+        INIT_ERROR("init http transport failed!");
+        return kInitError;
+    }
+
+    if (http_transport_->Start(false) != transport::kTransportSuccess) {
+        INIT_ERROR("start http transport failed!");
         return kInitError;
     }
     return kInitSuccess;

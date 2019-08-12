@@ -21,6 +21,7 @@ public:
 protected:
     int InitConfigWithArgs(int argc, char** argv);
     int InitTransport();
+    int InitHttpTransport();
     int ParseParams(int argc, char** argv, common::ParserArgs& parser_arg);
     int ResetConfig(common::ParserArgs& parser_arg);
     int InitNetworkSingleton();
@@ -40,6 +41,7 @@ protected:
 
     common::Config conf_;
     transport::TransportPtr transport_{ nullptr };
+    transport::TransportPtr http_transport_{ nullptr };
     bool inited_{ false };
     std::mutex init_mutex_;
     Command cmd_;
