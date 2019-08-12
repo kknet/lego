@@ -93,6 +93,8 @@ inline const unsigned char *ASN1_STRING_get0_data(const ASN1_STRING *asn1) {
 #endif
 
 #include "common/split.h"
+#include "json/json.hpp"
+
 /*
  * Configuration
  */
@@ -1519,18 +1521,18 @@ inline std::string decode_url(const std::string &s) {
 }
 
 inline void parse_query_text(const std::string &s, Params &params) {
-  split(&s[0], &s[s.size()], '&', [&](const char *b, const char *e) {
-    std::string key;
-    std::string val;
-    split(b, e, '=', [&](const char *b, const char *e) {
-      if (key.empty()) {
-        key.assign(b, e);
-      } else {
-        val.assign(b, e);
-      }
+    split(&s[0], &s[s.size()], '&', [&](const char *b, const char *e) {
+        std::string key;
+        std::string val;
+        split(b, e, '=', [&](const char *b, const char *e) {
+            if (key.empty()) {
+                key.assign(b, e);
+            } else {
+                val.assign(b, e);
+            }
+        });
+        params.emplace(key, decode_url(val));
     });
-    params.emplace(key, decode_url(val));
-  });
 }
 
 inline bool parse_multipart_boundary(const std::string &content_type,
@@ -2122,6 +2124,7 @@ inline void Server::stop() {
 }
 
 inline bool Server::parse_request_line(const char *s, Request &req) {
+    std::cout << "line parser: " << s << std::endl;
     lego::common::Split split(s, ' ', strlen(s));
     if (split.Count() < 3) {
         return false;

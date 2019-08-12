@@ -1,0 +1,153 @@
+syntax = "proto2";
+
+package lego.client.protobuf;
+
+message BroadcastParam {
+	optional uint32 type = 1;
+	optional uint32 neighbor_count = 2;
+	optional uint32 stop_times = 3;
+	optional uint32 hop_limit = 4;
+	optional uint64 layer_left = 5;
+	optional uint64 layer_right = 6;
+	optional float overlap = 7;
+	optional uint32 hop_to_layer = 8;
+	optional bytes header = 9;
+	optional bytes body = 10;
+	optional bool net_crossed = 11;
+	repeated uint64 bloomfilter = 12;
+	optional float evil_rate = 13;
+	optional uint32 ign_bloomfilter_hop = 14;
+}
+
+message Header {
+	optional bytes src_dht_key = 1;
+	optional bytes des_dht_key = 2;
+	optional bytes src_node_id = 3;
+	optional bytes des_node_id = 4;
+	optional uint32 hop_count = 5;
+	optional bytes data = 6;
+	optional uint32 priority = 7;
+	optional bytes debug = 8;
+	optional bytes from_ip = 9;  // will clear before transport send, not use
+	optional uint32 from_port = 10;  // will clear before transport send, not use
+	optional bytes to_ip = 11;  // will clear before transport send, not use
+	optional uint32 to_port = 12;  // will clear before transport send, not use
+	optional uint32 id = 13;
+	optional uint64 hash = 14;
+	optional uint32 type = 15;
+	optional bool client = 16;
+	optional bool client_relayed =  17;
+	optional bool client_proxy = 18;  // for local node to handle client message and direct send back
+	optional bytes client_dht_key = 19;
+	optional bool client_handled = 20;
+	optional bool universal = 21;
+	optional BroadcastParam broadcast = 22;
+	optional bool handled = 23;
+	optional uint64 des_dht_key_hash = 24;
+	optional bytes pubkey = 25;
+	optional bytes sign = 26;
+	optional bool local = 27;
+}
+
+message NewTx {
+	optional bytes gid = 1;
+	optional bytes from_acc_addr = 2;
+	optional bytes from_pubkey = 3;
+	optional bytes from_sign = 4;
+	optional bytes to_acc_addr = 5;
+	optional uint64 lego_count = 6;
+}
+
+message TxBft {
+	optional NewTx new_tx = 1;
+}
+
+message BftMessage {
+	optional bytes gid = 1;
+	optional uint64 rand = 2;
+	optional int32 status = 3;
+	optional bool leader = 4;
+	optional uint32 net_id = 5;
+	optional bytes node_id = 6;
+	optional bytes pubkey = 7;
+	optional bytes sign_challenge = 8;
+	optional bytes sign_response = 9;
+	optional bytes secret = 10;
+	optional bytes challenge = 11;
+	optional bytes response = 12;
+	optional bytes agg_sign_challenge = 13;
+	optional bytes agg_sign_response = 14;
+	repeated uint64 bitmap = 15;
+	optional bool agree = 16;
+	optional bytes bft_address = 17;
+	optional uint32 pool_index = 18;
+	optional bytes data = 19;
+}
+
+message GetVpnInfoRequest {
+    optional bytes pubkey = 1;
+}
+
+message GetVpnInfoResponse {
+	optional bytes ip = 1;
+	optional uint32 port = 2;
+	optional bytes encrypt_type = 3;
+	optional bytes passwd = 4;  // encrypt with ecdh key
+	optional bytes pubkey = 5;
+}
+
+message ServiceMessage {
+	optional GetVpnInfoRequest vpn_req = 1;
+	optional GetVpnInfoResponse vpn_res = 2;
+}
+
+message GetTxBlockRequest {
+	optional bytes tx_gid = 1;
+	optional bytes block_hash = 2;
+	optional bool from = 3;
+}
+
+message GetTxBlockResponse {
+	optional bytes block = 1;
+}
+
+message BlockMessage {
+	optional GetTxBlockRequest block_req = 1;
+	optional GetTxBlockResponse block_res = 2;
+}
+
+message TxInfo {
+	optional uint32 version = 1;
+	optional bytes gid = 2;
+	optional bytes from = 3;
+	optional bytes from_pubkey = 4;
+	optional bytes from_sign = 5;
+	optional bytes to = 6;
+	optional uint64 amount = 7;
+	optional uint64 gas_limit = 8;
+    optional uint64 gas_used = 9;
+    optional uint64 gas_price = 10;
+	optional uint64 balance = 11;
+	optional bool to_add = 12;
+}
+
+message TxBlock {
+    optional bytes prehash = 1;
+    optional uint32 version = 2;
+    optional uint32 elect_ver = 3;
+	optional bytes rc_hash = 4;
+	repeated uint64 bitmap = 5;
+	optional bytes agg_pubkey = 6;
+	optional bytes agg_sign = 7;
+    optional uint64 tx_id = 8;
+    optional bytes tx_hash = 9;
+    optional bytes tx_root_hash = 10;
+    repeated TxInfo tx_list = 11;
+	optional uint32 network_id = 12;
+}
+
+message Block {
+    optional bytes hash = 1;
+	optional uint64 height = 2;
+	optional TxBlock tx_block = 3;
+}

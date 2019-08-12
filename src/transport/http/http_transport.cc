@@ -32,6 +32,25 @@ void HttpTransport::Listen() {
         res.set_content("Hello World!\n", "text/plain");
     });
 
+    http_svr_.Post("/person", [&](const httplib::Request &req, httplib::Response &res) {
+        auto params = req.params;
+        if (params.empty()) {
+            try {
+                auto json_obj = nlohmann::json::parse(req.body);
+                for (auto it = json_obj.begin(); it != json_obj.end(); ++it) {
+                    params.emplace(it.key(), httplib::detail::decode_url(it.value()));
+                }
+            } catch (...) {
+            }
+        }
+
+        if (params.find("name") != params.end() && params.find("note") != params.end()) {
+            res.set_content("person Hello World!\n", "text/plain");
+        } else {
+            res.status = 400;
+        }
+    });
+
     http_svr_.set_error_handler([](const httplib::Request&, httplib::Response &res) {
         const char *fmt = "<p>Error Status: <span style='color:red;'>%d</span></p>";
         char buf[BUFSIZ];
