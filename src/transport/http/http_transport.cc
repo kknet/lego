@@ -1,5 +1,3 @@
-#pragma once
-
 #include "common/global_info.h"
 
 #include "transport/http/http_transport.h"
