@@ -12,19 +12,24 @@ HttpTransport::~HttpTransport() {}
 
 int HttpTransport::Init() {
     if (!http_svr_.is_valid()) {
-        printf("server has an error...\n");
         return -1;
     }
+    return kTransportSuccess;
+}
 
+int HttpTransport::Start(bool hold) {
     http_svr_.Get("/http_message", [=](const httplib::Request& req, httplib::Response &res) {
         std::cout << "http get request size: " << req.body.size() << std::endl;
         res.set_content("Hello World!\n", "text/plain");
     });
 
-    return kTransportSuccess;
-}
+    http_svr_.set_error_handler([](const httplib::Request&, httplib::Response &res) {
+        const char *fmt = "<p>Error Status: <span style='color:red;'>%d</span></p>";
+        char buf[BUFSIZ];
+        snprintf(buf, sizeof(buf), fmt, res.status);
+        res.set_content(buf, "text/html");
+    });
 
-int HttpTransport::Start(bool hold) {
     if (!http_svr_.listen(
             common::GlobalInfo::Instance()->config_local_ip().c_str(),
             8080)) {
