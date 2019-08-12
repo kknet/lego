@@ -7,7 +7,7 @@ namespace lego {
 
 namespace transport {
 
-class HttpTransport {
+class HttpTransport : public Transport {
 public:
     HttpTransport();
     virtual ~HttpTransport();
