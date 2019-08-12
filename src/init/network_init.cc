@@ -70,6 +70,11 @@ int NetworkInit::Init(int argc, char** argv) {
         return kInitError;
     }
 
+    if (InitHttpTransport() != kInitSuccess) {
+        INIT_ERROR("init http transport failed!");
+        return kInitError;
+    }
+
     if (InitNetworkSingleton() != kInitSuccess) {
         INIT_ERROR("InitNetworkSingleton failed!");
         return kInitError;
