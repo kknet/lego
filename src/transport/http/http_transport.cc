@@ -32,7 +32,7 @@ void HttpTransport::Listen() {
         res.set_content("Hello World!\n", "text/plain");
     });
 
-    http_svr_.Post("/person", [&](const httplib::Request &req, httplib::Response &res) {
+    http_svr_.Post("/js_request", [&](const httplib::Request &req, httplib::Response &res) {
         auto params = req.params;
         if (params.empty()) {
             try {
@@ -44,7 +44,7 @@ void HttpTransport::Listen() {
             }
         }
 
-        if (params.find("name") != params.end() && params.find("note") != params.end()) {
+        if (params.find("data") != params.end()) {
             res.set_content("person Hello World!\n", "text/plain");
         } else {
             res.status = 400;
