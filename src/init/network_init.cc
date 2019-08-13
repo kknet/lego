@@ -415,7 +415,6 @@ void NetworkInit::TestStartBft() {
     }
 
     if (ec_block_ok_) {
-        std::cout << "start bft" << std::endl;
         bft::BftManager::Instance()->StartBft(bft::kTransactionPbftAddress, "", 4, 0);
     }
     test_start_bft_tick_.CutOff(1000 * 1000, std::bind(&NetworkInit::TestStartBft, this));

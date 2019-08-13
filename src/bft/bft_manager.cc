@@ -335,7 +335,6 @@ int BftManager::LeaderPrepare(BftInterfacePtr& bft_ptr) {
             bft_ptr->rand_num())) {
         std::string prepare_data;
         int res = bft_ptr->Prepare(true, prepare_data);
-        std::cout << "leader prepare: " << res << std::endl;
         LEGO_BFT_DEBUG_FOR_CONSENSUS_AND_MESSAGE(
                 std::string("LeaderPrepare ok:") + std::to_string(res),
                 bft_ptr,

@@ -76,6 +76,8 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
                     block_item.tx_block().network_id(),
                     pool_idx);
             SetPool(bptr);
+            std::cout << "from put gid: " << tx_list[i].gid() << std::endl;
+            std::cout << "from put gid: " << common::Encode::HexEncode(tx_list[i].gid()) << std::endl;
             std::string tx_gid = common::GetTxDbKey(true, tx_list[i].gid());
             db::Db::Instance()->Put(tx_gid, block_item.hash());
         }
