@@ -1,5 +1,5 @@
 #include "common/global_info.h"
-
+#include "common/encode.h"
 #include "transport/http/http_transport.h"
 #include "transport/transport_utils.h"
 
@@ -33,20 +33,27 @@ void HttpTransport::Listen() {
     });
 
     http_svr_.Post("/js_request", [&](const httplib::Request &req, httplib::Response &res) {
-        auto params = req.params;
-        if (params.empty()) {
-            try {
-                auto json_obj = nlohmann::json::parse(req.body);
-                for (auto it = json_obj.begin(); it != json_obj.end(); ++it) {
-                    params.emplace(it.key(), httplib::detail::decode_url(it.value()));
-                }
-            } catch (...) {
+        std::map<std::string, std::string> params;
+        try {
+            auto json_obj = nlohmann::json::parse(req.body);
+            for (auto it = json_obj.begin(); it != json_obj.end(); ++it) {
+                params.emplace(it.key(), it.value());
             }
+        } catch (...) {
         }
 
-        if (params.find("data") != params.end()) {
+        auto iter = params.find("data");
+        if (iter != params.end()) {
+            auto data = common::Encode::HexDecode(iter->second);
+            transport::protobuf::Header msg;
+            if (!msg.ParseFromString(data)) {
+                std::cout << "transport::protobuf::Header ParseFromString." << std::endl;
+            } else {
+                std::cout << "src dht key:" << msg.src_dht_key().size() << ", " << common::Encode::HexEncode(msg.src_dht_key()) << std::endl;
+            }
             res.set_content("person Hello World!\n", "text/plain");
         } else {
+            std::cout << "res: 400" << std::endl;
             res.status = 400;
         }
     });

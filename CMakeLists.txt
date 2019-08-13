@@ -11,7 +11,7 @@ if(NOT BUILD_CLIENT)
         set(CURL_LIBRARIES libcurl)
         set(CURL_INCLUDE_DIRS )
     else()
-        find_package(CURL REQUIRED)
+        #find_package(CURL REQUIRED)
     endif()
 endif()
 
@@ -165,9 +165,11 @@ set(CLIENT_LINK_ARGS
     bz2
     db
     security
+    json2pb
     common
     protobuf
     uv
+    uuid
     pthread
     tcmalloc
     ${LINK_PTHREAD}
@@ -186,6 +188,8 @@ include_directories(SYSTEM ${SRC_DIR})
 if(BUILD_CLIENT)
 else()
     add_subdirectory(${SRC_DIR}/common common)
+    add_subdirectory(${SRC_DIR}/uuid uuid)
+    add_subdirectory(${SRC_DIR}/json2pb json2pb)
     add_subdirectory(${SRC_DIR}/security security)
     add_subdirectory(${SRC_DIR}/db db)
     add_subdirectory(${SRC_DIR}/block block)
