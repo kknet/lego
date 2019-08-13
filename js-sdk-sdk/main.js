@@ -1,23 +1,23 @@
 'use strict';
 const axios = require('axios');
+const { ClientProto } = require("./proto/client_proto");
+let client_proto = new ClientProto();
+const { HttpRequest } = require("./proto/http_req");
+let http_request = new HttpRequest();
 
-var FFI = require('ffi');
+var EC = require('elliptic').ec;
+var ec = new EC('secp256k1');
+var key = ec.genKeyPair();
 
-function TEXT(text) {
-    return new Buffer(text, 'ucs2').toString('binary');
-}
+var msg = client_proto.CreateTxRequest(
+    key.getPrivate().toString('hex'),
+    key.getPublic().encode('hex'),
+    1, 'from', 'to', 10);
+console.log(msg);
 
-var user32 = new FFI.Library('user32', {
-    'MessageBoxW':
-        [
-            'int32', ['int32', 'string', 'string', 'int32']
-        ]
-});
+var res = http_request.SendRequest('192.168.20.17', '8080', msg);
+console.log(res);
 
-var OK_or_Cancel = user32.MessageBoxW(
-    0, TEXT('I am Node.JS!'), TEXT('Hello, World!'), 1
-);
-console.log(OK_or_Cancel);
 return;
 
 
