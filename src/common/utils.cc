@@ -83,10 +83,6 @@ uint32_t GetPoolIndex(const std::string& acc_addr) {
     return pool_index;
 }
 
-std::string GetAccountAddress(const std::string& pubkey) {
-    return common::Hash::Hash256(pubkey);
-}
-
 std::string CreateGID(const std::string& pubkey) {
     std::string str = (pubkey + Random::RandomString(1024u));
     return common::Hash::Hash256(str);

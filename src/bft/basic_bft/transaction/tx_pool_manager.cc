@@ -3,6 +3,7 @@
 #include "common/hash.h"
 #include "common/string_utils.h"
 #include "block/account_manager.h"
+#include "network/network_utils.h"
 
 namespace lego {
 
@@ -39,7 +40,7 @@ int TxPoolManager::AddTx(TxItemPtr& tx_ptr) {
 }
 
 bool TxPoolManager::TxValid(TxItemPtr& tx_ptr) {
-    std::string account_addr = common::GetAccountAddress(tx_ptr->from_pubkey);
+    std::string account_addr = network::GetAccountAddressByPublicKey(tx_ptr->from_pubkey);
     if (account_addr != tx_ptr->from_acc_addr) {
         return false;
     }
