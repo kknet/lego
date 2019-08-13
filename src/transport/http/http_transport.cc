@@ -56,9 +56,16 @@ static void CreateTxRequest(
         const nlohmann::json& data,
         std::string& account_address,
         transport::protobuf::Header& msg) {
-    msg.set_src_dht_key(data["src_dht_key"].get<std::string>());
-    account_address = network::GetAccountAddressByPublicKey(
-            data["pubkey"].get<std::string>());
+    auto prikey = security::PrivateKey(common::Encode::HexDecode(
+        data["prikey"].get<std::string>()));
+    auto pubkey = security::PublicKey(prikey);
+    std::string str_pubkey;
+    pubkey.Serialize(str_pubkey);
+    auto gid = common::Encode::HexDecode(data["gid"].get<std::string>());
+    auto to = common::Encode::HexDecode(data["to"].get<std::string>());
+    msg.set_src_dht_key(common::Encode::HexDecode(
+            data["src_dht_key"].get<std::string>()));
+    account_address = network::GetAccountAddressByPublicKey(str_pubkey);
     uint32_t des_net_id = network::GetConsensusShardNetworkId(account_address);
     dht::DhtKeyManager dht_key(des_net_id, 0);
     msg.set_des_dht_key(dht_key.StrKey());
@@ -70,25 +77,20 @@ static void CreateTxRequest(
     auto broad_param = msg.mutable_broadcast();
     SetDefaultBroadcastParam(broad_param);
     bft::protobuf::BftMessage bft_msg;
-    bft_msg.set_gid(data["gid"].get<std::string>());
+    bft_msg.set_gid(gid);
     bft_msg.set_rand(0);
     bft_msg.set_status(bft::kBftInit);
     bft_msg.set_leader(false);
     bft_msg.set_net_id(des_net_id);
     bft_msg.set_node_id(account_address);
-    auto prikey = security::PrivateKey(common::Encode::HexDecode(
-            data["prikey"].get<std::string>()));
-    auto pubkey = security::PublicKey(prikey);
-    std::string str_pubkey;
-    pubkey.Serialize(str_pubkey);
     bft_msg.set_pubkey(str_pubkey);
     bft_msg.set_bft_address(bft::kTransactionPbftAddress);
     bft::protobuf::TxBft tx_bft;
     auto new_tx = tx_bft.mutable_new_tx();
-    new_tx->set_gid(data["gid"].get<std::string>());
+    new_tx->set_gid(gid);
     new_tx->set_from_acc_addr(account_address);
     new_tx->set_from_pubkey(str_pubkey);
-    new_tx->set_to_acc_addr(data["to"].get<std::string>());
+    new_tx->set_to_acc_addr(to);
     new_tx->set_lego_count(data["amount"].get<uint64_t>());
     auto tx_data = tx_bft.SerializeAsString();
     bft_msg.set_data(tx_data);
@@ -109,7 +111,7 @@ static void CreateTxRequest(
     bft_msg.set_sign_response(sign_response_str);
     msg.set_data(bft_msg.SerializeAsString());
 #ifdef LEGO_TRACE_MESSAGE
-    msg.set_debug(std::string("new account: ") +
+    msg.set_debug(std::string("js new account: ") +
             common::Encode::HexEncode(account_address) + ", to " +
             common::Encode::HexEncode(dht_key.StrKey()));
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("begin", msg);
@@ -138,7 +140,7 @@ void HttpTransport::Listen() {
             res.status = 400;
             return;
         }
-        res.set_content(account_address, "text/plain");
+        res.set_content(common::Encode::HexEncode(account_address), "text/plain");
         return;
     });
 

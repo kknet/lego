@@ -389,7 +389,7 @@ int VpnClient::SetPriAndPubKey(const std::string& prikey) {
 
     std::string pubkey_str;
     pubkey.Serialize(pubkey_str);
-    std::string account_id = common::Hash::Hash256(pubkey_str);
+    std::string account_id = network::GetAccountAddressByPublicKey(pubkey_str);
     common::GlobalInfo::Instance()->set_id(account_id);
     return kClientSuccess;
 }

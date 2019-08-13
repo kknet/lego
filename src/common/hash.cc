@@ -5,6 +5,7 @@
 #include "common/log.h"
 #include "common/encode.h"
 #include "xxHash/xxhash.h"
+#include "security/sha256.h"
 
 namespace lego {
 
@@ -82,7 +83,9 @@ std::string Hash::Hash192(const std::string& str) {
 }
 
 std::string Hash::Sha256(const std::string& str) {
-    return "";
+    security::Sha256 sha256;
+    sha256.Update(str);
+    return sha256.Finalize();
 }
 
 }  // namespace common

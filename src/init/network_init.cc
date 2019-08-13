@@ -415,6 +415,7 @@ void NetworkInit::TestStartBft() {
     }
 
     if (ec_block_ok_) {
+        std::cout << "start bft" << std::endl;
         bft::BftManager::Instance()->StartBft(bft::kTransactionPbftAddress, "", 4, 0);
     }
     test_start_bft_tick_.CutOff(1000 * 1000, std::bind(&NetworkInit::TestStartBft, this));
@@ -459,7 +460,7 @@ int NetworkInit::SetPriAndPubKey(const std::string& prikey) {
 
     std::string pubkey_str;
     pubkey.Serialize(pubkey_str);
-    std::string account_id = common::Hash::Hash256(pubkey_str);
+    std::string account_id = network::GetAccountAddressByPublicKey(pubkey_str);
     common::GlobalInfo::Instance()->set_id(account_id);
     return kInitSuccess;
 }

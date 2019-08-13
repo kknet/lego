@@ -50,7 +50,7 @@ inline static uint32_t GetConsensusShardNetworkId(const std::string& account_add
 }
 
 inline static std::string GetAccountAddressByPublicKey(const std::string& pub_key) {
-    return common::Hash::Hash256(pub_key);
+    return common::Hash::Sha256(pub_key);
 }
 
 }  // namespace network
