@@ -47,4 +47,6 @@ message Header {
 	optional bytes pubkey = 25;
 	optional bytes sign = 26;
 	optional bool local = 27;
+	optional int32 des_network = 28;
+	optional bytes des_country = 29;
 }

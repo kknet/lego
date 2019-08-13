@@ -50,6 +50,10 @@ public:
         return config_local_port_;
     }
 
+    uint16_t http_port() {
+        return http_port_;
+    }
+
     bool config_first_node() {
         return config_first_node_;
     }
@@ -77,6 +81,7 @@ private:
     std::string version_info_;
     std::string gid_hash_;
     std::atomic<uint64_t> gid_idx_{ 0 };
+    uint16_t http_port_{ 0 };
 
     DISALLOW_COPY_AND_ASSIGN(GlobalInfo);
 };

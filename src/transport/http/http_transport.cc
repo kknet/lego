@@ -1,7 +1,17 @@
 #include "common/global_info.h"
 #include "common/encode.h"
+#include "common/hash.h"
+#include "security/schnorr.h"
+#include "security/sha256.h"
 #include "transport/http/http_transport.h"
 #include "transport/transport_utils.h"
+#include "dht/dht_key.h"
+#include "network/network_utils.h"
+#include "network/dht_manager.h"
+#include "network/route.h"
+#include "bft/proto/bft.pb.h"
+#include "bft/bft_utils.h"
+#include "bft/basic_bft/transaction/proto/tx.pb.h"
 
 namespace lego {
 
@@ -26,6 +36,87 @@ int HttpTransport::Start(bool hold) {
     }
 }
 
+static const uint32_t kBftBroadcastIgnBloomfilterHop = 1u;
+static const uint32_t kBftBroadcastStopTimes = 2u;
+static const uint32_t kBftHopLimit = 5u;
+static const uint32_t kBftHopToLayer = 2u;
+static const uint32_t kBftNeighborCount = 7u;
+
+static void SetDefaultBroadcastParam(transport::protobuf::BroadcastParam* broad_param) {
+    broad_param->set_layer_left(0);
+    broad_param->set_layer_right(std::numeric_limits<uint64_t>::max());
+    broad_param->set_ign_bloomfilter_hop(kBftBroadcastIgnBloomfilterHop);
+    broad_param->set_stop_times(kBftBroadcastStopTimes);
+    broad_param->set_hop_limit(kBftHopLimit);
+    broad_param->set_hop_to_layer(kBftHopToLayer);
+    broad_param->set_neighbor_count(kBftNeighborCount);
+}
+
+static void CreateTxRequest(
+        const nlohmann::json& data,
+        std::string& account_address,
+        transport::protobuf::Header& msg) {
+    msg.set_src_dht_key(data["src_dht_key"].get<std::string>());
+    account_address = network::GetAccountAddressByPublicKey(
+            data["pubkey"].get<std::string>());
+    uint32_t des_net_id = network::GetConsensusShardNetworkId(account_address);
+    dht::DhtKeyManager dht_key(des_net_id, 0);
+    msg.set_des_dht_key(dht_key.StrKey());
+    msg.set_priority(transport::kTransportPriorityLowest);
+    msg.set_id(common::GlobalInfo::Instance()->MessageId());
+    msg.set_type(common::kBftMessage);
+    msg.set_client(false);
+    msg.set_hop_count(0);
+    auto broad_param = msg.mutable_broadcast();
+    SetDefaultBroadcastParam(broad_param);
+    bft::protobuf::BftMessage bft_msg;
+    bft_msg.set_gid(data["gid"].get<std::string>());
+    bft_msg.set_rand(0);
+    bft_msg.set_status(bft::kBftInit);
+    bft_msg.set_leader(false);
+    bft_msg.set_net_id(des_net_id);
+    bft_msg.set_node_id(account_address);
+    auto prikey = security::PrivateKey(common::Encode::HexDecode(
+            data["prikey"].get<std::string>()));
+    auto pubkey = security::PublicKey(prikey);
+    std::string str_pubkey;
+    pubkey.Serialize(str_pubkey);
+    bft_msg.set_pubkey(str_pubkey);
+    bft_msg.set_bft_address(bft::kTransactionPbftAddress);
+    bft::protobuf::TxBft tx_bft;
+    auto new_tx = tx_bft.mutable_new_tx();
+    new_tx->set_gid(data["gid"].get<std::string>());
+    new_tx->set_from_acc_addr(account_address);
+    new_tx->set_from_pubkey(str_pubkey);
+    new_tx->set_to_acc_addr(data["to"].get<std::string>());
+    new_tx->set_lego_count(data["amount"].get<uint64_t>());
+    auto tx_data = tx_bft.SerializeAsString();
+    bft_msg.set_data(tx_data);
+    auto hash128 = common::Hash::Hash128(tx_data);
+    security::Signature sign;
+    if (!security::Schnorr::Instance()->Sign(
+            hash128,
+            prikey,
+            pubkey,
+            sign)) {
+        TRANSPORT_ERROR("leader pre commit signature failed!");
+        return;
+    }
+    std::string sign_challenge_str;
+    std::string sign_response_str;
+    sign.Serialize(sign_challenge_str, sign_response_str);
+    bft_msg.set_sign_challenge(sign_challenge_str);
+    bft_msg.set_sign_response(sign_response_str);
+    msg.set_data(bft_msg.SerializeAsString());
+#ifdef LEGO_TRACE_MESSAGE
+    msg.set_debug(std::string("new account: ") +
+            common::Encode::HexEncode(account_address) + ", to " +
+            common::Encode::HexEncode(dht_key.StrKey()));
+    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("begin", msg);
+#endif
+}
+
+
 void HttpTransport::Listen() {
     http_svr_.Get("/http_message", [=](const httplib::Request& req, httplib::Response &res) {
         std::cout << "http get request size: " << req.body.size() << std::endl;
@@ -34,28 +125,21 @@ void HttpTransport::Listen() {
 
     http_svr_.Post("/js_request", [&](const httplib::Request &req, httplib::Response &res) {
         std::map<std::string, std::string> params;
+        std::string account_address;
         try {
-            auto json_obj = nlohmann::json::parse(req.body);
-            for (auto it = json_obj.begin(); it != json_obj.end(); ++it) {
-                params.emplace(it.key(), it.value());
-            }
-        } catch (...) {
-        }
-
-        auto iter = params.find("data");
-        if (iter != params.end()) {
-            auto data = common::Encode::HexDecode(iter->second);
+            nlohmann::json json_obj = nlohmann::json::parse(req.body);
+            nlohmann::json type = json_obj["type"];
+            nlohmann::json data = json_obj["data"];
             transport::protobuf::Header msg;
-            if (!msg.ParseFromString(data)) {
-                std::cout << "transport::protobuf::Header ParseFromString." << std::endl;
-            } else {
-                std::cout << "src dht key:" << msg.src_dht_key().size() << ", " << common::Encode::HexEncode(msg.src_dht_key()) << std::endl;
-            }
-            res.set_content("person Hello World!\n", "text/plain");
-        } else {
-            std::cout << "res: 400" << std::endl;
+            CreateTxRequest(data, account_address, msg);
+            network::Route::Instance()->Send(msg);
+            network::Route::Instance()->SendToLocal(msg);
+        } catch (...) {
             res.status = 400;
+            return;
         }
+        res.set_content(account_address, "text/plain");
+        return;
     });
 
     http_svr_.set_error_handler([](const httplib::Request&, httplib::Response &res) {
@@ -67,7 +151,7 @@ void HttpTransport::Listen() {
 
     if (!http_svr_.listen(
             common::GlobalInfo::Instance()->config_local_ip().c_str(),
-            8080)) {
+            common::GlobalInfo::Instance()->http_port())) {
         assert(false);
         exit(1);
     }
