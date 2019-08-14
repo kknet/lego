@@ -96,14 +96,14 @@ void Route::HandleMessage(transport::protobuf::Header& header) {
         return;
     }
 
-    if (header.has_broadcast()) {
-        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("broadcast it", header);
-        Broadcast(header);
-    }
-
     if (!header.handled()) {
         LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("call func", header);
         message_processor_[header.type()](header);
+    }
+
+    if (header.has_broadcast()) {
+        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("broadcast it", header);
+        Broadcast(header);
     }
 }
 
