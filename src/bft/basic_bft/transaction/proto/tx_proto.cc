@@ -115,7 +115,6 @@ void TxProto::CreateTxBlock(
                         tx_vec[i]->to_acc_addr);
                 if (acc_info == nullptr) {
                     // this should remove from tx pool
-                    assert(false);
                     continue;
                 }
                 tx.set_balance(acc_info->balance + tx_vec[i]->lego_count);
@@ -124,7 +123,6 @@ void TxProto::CreateTxBlock(
                         tx_vec[i]->from_acc_addr);
                 if (acc_info == nullptr) {
                     // this should remove from tx pool
-                    assert(false);
                     continue;
                 }
                 if (acc_info->balance < static_cast<int64_t>(tx_vec[i]->lego_count)) {
