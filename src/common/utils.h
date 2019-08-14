@@ -25,9 +25,10 @@ struct Construct {
         if (message.has_debug()) { \
             Construct* src_cons_key = (Construct*)(message.src_dht_key().c_str()); \
             Construct* des_cons_key = (Construct*)(message.des_dht_key().c_str()); \
-            DEBUG("%s: [hash: %llu][hop: %d][src_net: %u][des_net: %u][id:%u]" \
+            DEBUG("%s:[handled: %d] [hash: %llu][hop: %d][src_net: %u][des_net: %u][id:%u]" \
                 "[broad: %d][universal: %d][type: %d] %s", \
                 std::string(pre).c_str(), \
+                message.handled(), \
                 message.hash(), \
                 message.hop_count(), \
                 src_cons_key->net_id, \
