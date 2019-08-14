@@ -460,10 +460,15 @@ std::string VpnClient::Transaction(const std::string& to, uint64_t amount, std::
         return "ERROR";
     }
     tx_gid = common::CreateGID(security::Schnorr::Instance()->str_pubkey());
+    std::string to_addr;
+    if (!to.empty()) {
+        to_addr = common::Encode::HexDecode(to);
+    }
+
     ClientProto::CreateTxRequest(
             uni_dht->local_node(),
             tx_gid,
-            to,
+            to_addr,
             amount,
             rand_num,
             msg);
