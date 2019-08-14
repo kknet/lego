@@ -38,8 +38,7 @@ int GlobalInfo::Init(const common::Config& config) {
     }
 
     if (!config.Get("lego", "http_port", http_port_)) {
-        ERROR("get lego local_port from config failed.");
-        return kCommonError;
+        http_port_ = 0;
     }
 
     std::string str_contry;

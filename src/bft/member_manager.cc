@@ -51,6 +51,9 @@ bool MemberManager::IsLeader(
     std::lock_guard<std::mutex> guard(all_mutex_);
     assert(network_id < network::kConsensusShardEndNetworkId);  // just shard
     MembersPtr member_ptr = network_members_[network_id];
+    if (member_ptr == nullptr) {
+        return false;
+    }
     assert(member_ptr != nullptr);
     assert(!member_ptr->empty());
     uint32_t node_idx = rand % member_ptr->size();
