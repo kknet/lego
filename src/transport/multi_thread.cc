@@ -140,26 +140,24 @@ void MultiThreadHandler::HandleMessage(
         return;
     }
 
-    // stop broadcast
-    if (message_ptr->has_broadcast() &&
-            MessageFilter::Instance()->StopBroadcast(*message_ptr)) {
-        const auto& msg = *message_ptr;
-        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("stop gossip", msg);
-        return;
-    }
+    if (message_ptr->has_broadcast()) {
+        if (MessageFilter::Instance()->StopBroadcast(*message_ptr)) {
+            return;
+        }
 
-    // filter duplicate
-    if (!message_ptr->has_broadcast() &&
-            MessageFilter::Instance()->CheckUnique(message_ptr->hash())) {
-        const auto& msg = *message_ptr;
-        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("stop uniqued", msg);
-        return;
-    }
-
-    if (message_ptr->has_broadcast() &&
-            MessageFilter::Instance()->CheckUnique(message_ptr->hash())) {
-        message_ptr->set_handled(true);
-        std::cout << "set handled: " << message_ptr->hash() << std::endl;
+        if (MessageFilter::Instance()->CheckUnique(message_ptr->hash())) {
+            message_ptr->set_handled(true);
+            std::cout << "set handled: " << message_ptr->hash() << std::endl;
+        }else {
+            message_ptr->set_handled(false);
+            std::cout << "first handled: " << message_ptr->hash() << std::endl;
+        }
+    } else {
+        if (MessageFilter::Instance()->CheckUnique(message_ptr->hash())) {
+            const auto& msg = *message_ptr;
+            LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("stop uniqued", msg);
+            return;
+        }
     }
 
     if (message_ptr->client()) {
@@ -228,7 +226,7 @@ int MultiThreadHandler::HandleClientMessage(
 
 std::shared_ptr<protobuf::Header> MultiThreadHandler::GetMessageFromQueue() {
     std::unique_lock<std::mutex> lock(priority_queue_map_mutex_);
-    for (uint32_t i = kTransportPriorityHighest; i <= kTransportPriorityLowest; ++i) {
+    for (uint32_t i = kTransportPrioritySystem; i <= kTransportPriorityLowest; ++i) {
         if (!priority_queue_map_[i].empty()) {
             std::shared_ptr<protobuf::Header> msg_obj = priority_queue_map_[i].front();
             priority_queue_map_[i].pop();
