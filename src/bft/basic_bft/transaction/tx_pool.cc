@@ -24,6 +24,7 @@ int TxPool::AddTx(TxItemPtr& tx_ptr) {
     }
     auto iter = added_tx_set_.find(uni_gid);
     if (iter != added_tx_set_.end()) {
+        BFT_ERROR("tx gid[%s] has added!", common::Encode::HexEncode(uni_gid));
         return kBftTxAdded;
     }
 
