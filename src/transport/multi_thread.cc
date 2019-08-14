@@ -147,10 +147,8 @@ void MultiThreadHandler::HandleMessage(
 
         if (MessageFilter::Instance()->CheckUnique(message_ptr->hash())) {
             message_ptr->set_handled(true);
-            std::cout << "set handled: " << message_ptr->hash() << std::endl;
-        }else {
+        } else {
             message_ptr->set_handled(false);
-            std::cout << "first handled: " << message_ptr->hash() << std::endl;
         }
     } else {
         if (MessageFilter::Instance()->CheckUnique(message_ptr->hash())) {
