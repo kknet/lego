@@ -185,6 +185,10 @@ void BftManager::HandleToAccountTxBlock(
     }
 
     auto& tx_list = *(tx_bft.mutable_to_tx()->mutable_block()->mutable_tx_block()->mutable_tx_list());
+    if (tx_list.empty()) {
+        BFT_ERROR("to has no transaction info!");
+        return;
+    }
     // check aggsign
     for (int32_t i = 0; i < tx_list.size(); ++i) {
         if (tx_list[i].to().empty() || tx_list[i].to_add()) {

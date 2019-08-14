@@ -18,6 +18,7 @@ bool MessageFilter::CheckUnique(uint64_t msg_hash) {
     }
 
     unique_set_.insert(msg_hash);
+    unique_queue_.push(msg_hash);
     if (unique_queue_.size() >= kUniqueMaxMessageCount) {
         unique_set_.erase(unique_queue_.front());
         unique_queue_.pop();
@@ -45,6 +46,7 @@ bool MessageFilter::StopBroadcast(transport::protobuf::Header& header) {
         broadcast_stop_map_[header.hash()] = 1;
     }
 
+    broadcast_stop_queue_.push(header.hash());
     if (broadcast_stop_queue_.size() >= kBroadcastMaxMessageCount) {
         broadcast_stop_map_.erase(broadcast_stop_queue_.front());
         broadcast_stop_queue_.pop();
