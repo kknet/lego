@@ -59,7 +59,6 @@ int BlockManager::Init(common::Config& conf) {
 }
 
 void BlockManager::HandleMessage(transport::protobuf::Header& header) {
-    std::cout << "block manager message coming." << std::endl;
     if (header.type() != common::kBlockMessage) {
         return;
     }
