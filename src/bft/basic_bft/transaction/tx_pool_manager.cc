@@ -42,6 +42,7 @@ int TxPoolManager::AddTx(TxItemPtr& tx_ptr) {
 bool TxPoolManager::TxValid(TxItemPtr& tx_ptr) {
     std::string account_addr = network::GetAccountAddressByPublicKey(tx_ptr->from_pubkey);
     if (account_addr != tx_ptr->from_acc_addr) {
+        BFT_ERROR("from accaddr not equal to from pub create addr.");
         return false;
     }
 
