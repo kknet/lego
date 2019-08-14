@@ -104,6 +104,8 @@ void Route::HandleMessage(transport::protobuf::Header& header) {
     if (!header.handled()) {
         LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("call func", header);
         message_processor_[header.type()](header);
+    } else {
+        std::cout << "message handled:" << header.hash() << std::endl;
     }
 }
 
