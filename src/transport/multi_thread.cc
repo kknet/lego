@@ -93,6 +93,7 @@ void MultiThreadHandler::Destroy() {
 }
 
 void MultiThreadHandler::HandleMessage(protobuf::Header& msg) {
+    assert(false);
     auto message_ptr = std::make_shared<transport::protobuf::Header>(msg);
     {
         std::unique_lock<std::mutex> lock(priority_queue_map_mutex_);
