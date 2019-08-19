@@ -81,6 +81,7 @@ enum BftErrorCode {
     kBftPoolIndexError = 14,
     kBftBlockNotExists = 15,
     kBftBlockPreHashError = 16,
+	kBftNetwokInvalid = 17,
 };
 
 enum BftStatus {

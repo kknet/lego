@@ -48,7 +48,8 @@ int EcdhCreateKey::CreateKey(const PublicKey& peer_pubkey, std::string& sec_key)
     sec_key.resize(secret_len, 0);
     secret_len = ECDH_compute_key(
             ((void*)&(sec_key[0])),
-            secret_len, peer_pubkey.ec_point().get(),
+            secret_len,
+            peer_pubkey.ec_point().get(),
             ec_key_,
             NULL);
     if (secret_len <= 0) {

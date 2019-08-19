@@ -17,8 +17,10 @@ GlobalInfo* GlobalInfo::Instance() {
     return &ins;
 }
 
-GlobalInfo::GlobalInfo() : id_(kAccountAddress), message_id_(TimeStampMsec()) {
-    return;
+GlobalInfo::GlobalInfo()
+		: id_(kAccountAddress),
+	      message_id_(TimeStampMsec()),
+	      network_id_(kDefaultTestNetworkShardId) {
     id_string_hash_ = Hash::Hash192(id_);
     id_hash_ = Hash::Hash64(id_);
     gid_hash_ = Hash::Hash256(Random::RandomString(4096u));

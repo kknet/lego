@@ -11,6 +11,7 @@
 
 #include "common/utils.h"
 #include "common/hash.h"
+#include "common/global_info.h"
 #include "bft/bft_utils.h"
 #include "bft/bft_interface.h"
 
@@ -35,6 +36,11 @@ struct TxItem {
         delta_time = (std::chrono::steady_clock::now() +
                 std::chrono::microseconds(kBftStartDeltaTime));
         time_valid += common::TimeStampUsec() + kBftStartDeltaTime;
+		if (in_to_acc_addr.empty()) {
+			// may be use shard load info
+			create_acc_network_id = (common::Hash::Hash32(in_from_acc_addr) %
+					common::GlobalInfo::Instance()->consensus_shard_count());
+		}
     }
     std::string gid;
     std::string from_acc_addr;
@@ -47,6 +53,7 @@ struct TxItem {
     std::chrono::steady_clock::time_point delta_time;
     uint64_t time_valid{ 0 };
     uint64_t index;
+	uint32_t create_acc_network_id{ 0 };
 };
 
 typedef std::shared_ptr<TxItem> TxItemPtr;

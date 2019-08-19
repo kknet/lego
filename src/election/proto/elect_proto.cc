@@ -41,7 +41,8 @@ void ElectProto::CreateElectBlock(
     msg.set_universal(true);
     msg.set_hop_count(0);
 
-    auto dht = network::DhtManager::Instance()->GetDht(4);
+    auto dht = network::DhtManager::Instance()->GetDht(
+			common::GlobalInfo::Instance()->network_id());
     auto readonly_dht = dht->readonly_dht();
     if (readonly_dht->size() < 2) {
         return;

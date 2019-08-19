@@ -64,6 +64,7 @@ void BftManager::HandleMessage(transport::protobuf::Header& header) {
         return;
     }
 
+	// TODO: check account address's network id valid. and this node is valid bft node
     if (bft_msg.status() == kBftInit) {
         LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("InitBft", header);
         InitBft(header, bft_msg);

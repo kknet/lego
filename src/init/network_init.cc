@@ -22,6 +22,7 @@
 #include "bft/bft_manager.h"
 #include "bft/proto/bft_proto.h"
 #include "bft/basic_bft/transaction/proto/tx_proto.h"
+#include "root_congress/congress_init.h"
 #include "init/init_utils.h"
 
 namespace lego {
@@ -113,19 +114,29 @@ int NetworkInit::InitBft() {
 }
 
 int NetworkInit::CreateConfitNetwork() {
-    std::string net_ids;
-    if (!conf_.Get("lego", "net_ids", net_ids) || net_ids.empty()) {
+    uint32_t net_id;
+    if (!conf_.Get("lego", "net_id", net_id)) {
         return kInitSuccess;
     }
 
-    common::Split split(net_ids.c_str(), ',', net_ids.size());
-    for (uint32_t i = 0; i < split.Count(); ++i) {
-        auto net_id = common::StringUtil::ToUint32(split[i]);
-        if (elect_mgr_.Join(net_id) != elect::kElectSuccess) {
-            INIT_ERROR("join network [%u] failed!", net_id);
-            return kInitError;
-        }
-    }
+	if (net_id >= network::kConsensusShardEndNetworkId) {
+		// for bussiness network
+		return kInitSuccess;
+	}
+
+	if (net_id == network::kRootCongressNetworkId) {
+		congress_ = std::make_shared<congress::CongressInit>();
+		if (!congress_->Init() != congress::kCongressSuccess) {
+			INIT_ERROR("init congress failed!");
+			return kInitError;
+		}
+		return kInitSuccess;
+	}
+
+	if (elect_mgr_.Join(net_id) != elect::kElectSuccess) {
+		INIT_ERROR("join network [%u] failed!", net_id);
+		return kInitError;
+	}
     return kInitSuccess;
 }
 

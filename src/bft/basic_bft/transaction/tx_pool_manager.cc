@@ -2,6 +2,7 @@
 
 #include "common/hash.h"
 #include "common/string_utils.h"
+#include "common/global_info.h"
 #include "block/account_manager.h"
 #include "network/network_utils.h"
 
@@ -47,13 +48,19 @@ bool TxPoolManager::TxValid(TxItemPtr& tx_ptr) {
     }
 
     if (tx_ptr->to_acc_addr.empty()) {
-//         if (tx_ptr->lego_count != 0) {
-//             return false;
-//         }
+        if (tx_ptr->lego_count != 0) {
+            return false;
+        }
+
+		if (common::GlobalInfo::Instance()->network_id() != network::kRootCongressNetworkId) {
+			BFT_ERROR("create account address must root conngress.not[%u]",
+					common::GlobalInfo::Instance()->network_id());
+			return false;
+		}
 
         auto acc_info = block::AccountManager::Instance()->GetAcountInfo(account_addr);
         if (acc_info != nullptr) {
-            BFT_ERROR("tx invalid. acc exists");
+            BFT_ERROR("tx invalid. account address exists");
             return false;
         }
     } else {
@@ -64,7 +71,9 @@ bool TxPoolManager::TxValid(TxItemPtr& tx_ptr) {
         }
 
         if (acc_info->balance < static_cast<int64_t>(tx_ptr->lego_count)) {
-            BFT_ERROR("tx invalid. balance error[%ll][%llu]", acc_info->balance, tx_ptr->lego_count);
+            BFT_ERROR("tx invalid. balance error[%ll][%llu]",
+					acc_info->balance,
+					tx_ptr->lego_count);
             return false;
         }
     }

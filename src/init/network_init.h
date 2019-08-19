@@ -10,12 +10,17 @@
 
 namespace lego {
 
+namespace congress {
+	class CongressInit;
+	typedef std::shared_ptr<CongressInit> CongressInitPtr;
+}  // namespace congress
+
 namespace init {
 
 class NetworkInit {
 public:
     NetworkInit();
-    ~NetworkInit();
+    virtual ~NetworkInit();
     virtual int Init(int argc, char** argv);
 
 protected:
@@ -50,6 +55,7 @@ protected:
     common::Tick test_new_elect_tick_;
     common::Tick test_start_bft_tick_;
     bool ec_block_ok_{ false };
+	congress::CongressInitPtr congress_{ nullptr };
 
     DISALLOW_COPY_AND_ASSIGN(NetworkInit);
 };

@@ -66,9 +66,33 @@ public:
         return gid_hash_ + std::to_string(gid_idx_.fetch_add(1));
     }
 
+	void set_network_id(uint32_t netid) {
+		// one node just has only one network role
+		std::lock_guard<std::mutex> guard(network_id_set_mutex_);
+		if (network_id_ != 0) {
+			assert(false);
+			return;
+		}
+		network_id_ = netid;
+	}
+
+	uint32_t network_id() {
+		return network_id_;
+	}
+
+	void set_consensus_shard_count(uint32_t count) {
+		consensus_shard_count_ = count;
+	}
+
+	uint32_t consensus_shard_count() {
+		return consensus_shard_count_;
+	}
+
 private:
     GlobalInfo();
     ~GlobalInfo();
+
+	static const uint32_t kDefaultTestNetworkShardId = 4u;
 
     std::string id_;
     std::atomic<uint32_t> message_id_{ 0 };
@@ -82,6 +106,9 @@ private:
     std::string gid_hash_;
     std::atomic<uint64_t> gid_idx_{ 0 };
     uint16_t http_port_{ 0 };
+	uint32_t network_id_{ 0 };
+	std::mutex network_id_set_mutex_;
+	uint32_t consensus_shard_count_{ 0 };
 
     DISALLOW_COPY_AND_ASSIGN(GlobalInfo);
 };
