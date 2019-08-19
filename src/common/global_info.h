@@ -2,6 +2,7 @@
 
 #include <atomic>
 #include <string>
+#include <mutex>
 
 #include "common/utils.h"
 #include "common/hash.h"
