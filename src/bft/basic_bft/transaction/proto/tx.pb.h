@@ -327,6 +327,13 @@ class TxInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   ::google::protobuf::uint64 balance() const;
   void set_balance(::google::protobuf::uint64 value);
 
+  // optional uint32 netwok_id = 13;
+  bool has_netwok_id() const;
+  void clear_netwok_id();
+  static const int kNetwokIdFieldNumber = 13;
+  ::google::protobuf::uint32 netwok_id() const;
+  void set_netwok_id(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:lego.bft.protobuf.TxInfo)
  private:
   void set_has_version();
@@ -353,6 +360,8 @@ class TxInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   void clear_has_balance();
   void set_has_to_add();
   void clear_has_to_add();
+  void set_has_netwok_id();
+  void clear_has_netwok_id();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
@@ -369,6 +378,7 @@ class TxInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   ::google::protobuf::uint64 gas_used_;
   ::google::protobuf::uint64 gas_price_;
   ::google::protobuf::uint64 balance_;
+  ::google::protobuf::uint32 netwok_id_;
   friend struct ::protobuf_tx_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
@@ -2563,6 +2573,30 @@ inline void TxInfo::set_to_add(bool value) {
   set_has_to_add();
   to_add_ = value;
   // @@protoc_insertion_point(field_set:lego.bft.protobuf.TxInfo.to_add)
+}
+
+// optional uint32 netwok_id = 13;
+inline bool TxInfo::has_netwok_id() const {
+  return (_has_bits_[0] & 0x00001000u) != 0;
+}
+inline void TxInfo::set_has_netwok_id() {
+  _has_bits_[0] |= 0x00001000u;
+}
+inline void TxInfo::clear_has_netwok_id() {
+  _has_bits_[0] &= ~0x00001000u;
+}
+inline void TxInfo::clear_netwok_id() {
+  netwok_id_ = 0u;
+  clear_has_netwok_id();
+}
+inline ::google::protobuf::uint32 TxInfo::netwok_id() const {
+  // @@protoc_insertion_point(field_get:lego.bft.protobuf.TxInfo.netwok_id)
+  return netwok_id_;
+}
+inline void TxInfo::set_netwok_id(::google::protobuf::uint32 value) {
+  set_has_netwok_id();
+  netwok_id_ = value;
+  // @@protoc_insertion_point(field_set:lego.bft.protobuf.TxInfo.netwok_id)
 }
 
 // -------------------------------------------------------------------

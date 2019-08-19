@@ -314,6 +314,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::TxInfo, gas_price_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::TxInfo, balance_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::TxInfo, to_add_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::TxInfo, netwok_id_),
   5,
   0,
   1,
@@ -326,6 +327,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   10,
   11,
   6,
+  12,
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::TxBlock, _has_bits_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::TxBlock, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -457,18 +459,18 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   6,
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, 17, sizeof(::lego::bft::protobuf::TxInfo)},
-  { 29, 46, sizeof(::lego::bft::protobuf::TxBlock)},
-  { 58, 66, sizeof(::lego::bft::protobuf::Block)},
-  { 69, 76, sizeof(::lego::bft::protobuf::TxPrepareItem)},
-  { 78, 85, sizeof(::lego::bft::protobuf::LeaderTxPrepare)},
-  { 87, 93, sizeof(::lego::bft::protobuf::BackupTxPrepare)},
-  { 94, 100, sizeof(::lego::bft::protobuf::LeaderTxPreCommit)},
-  { 101, 107, sizeof(::lego::bft::protobuf::BackupTxPreCommit)},
-  { 108, 114, sizeof(::lego::bft::protobuf::LeaderTxCommit)},
-  { 115, 126, sizeof(::lego::bft::protobuf::NewTx)},
-  { 132, 138, sizeof(::lego::bft::protobuf::ToAccountTx)},
-  { 139, 151, sizeof(::lego::bft::protobuf::TxBft)},
+  { 0, 18, sizeof(::lego::bft::protobuf::TxInfo)},
+  { 31, 48, sizeof(::lego::bft::protobuf::TxBlock)},
+  { 60, 68, sizeof(::lego::bft::protobuf::Block)},
+  { 71, 78, sizeof(::lego::bft::protobuf::TxPrepareItem)},
+  { 80, 87, sizeof(::lego::bft::protobuf::LeaderTxPrepare)},
+  { 89, 95, sizeof(::lego::bft::protobuf::BackupTxPrepare)},
+  { 96, 102, sizeof(::lego::bft::protobuf::LeaderTxPreCommit)},
+  { 103, 109, sizeof(::lego::bft::protobuf::BackupTxPreCommit)},
+  { 110, 116, sizeof(::lego::bft::protobuf::LeaderTxCommit)},
+  { 117, 128, sizeof(::lego::bft::protobuf::NewTx)},
+  { 134, 140, sizeof(::lego::bft::protobuf::ToAccountTx)},
+  { 141, 153, sizeof(::lego::bft::protobuf::TxBft)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -507,46 +509,46 @@ void protobuf_RegisterTypes(const ::std::string&) {
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-      "\n\010tx.proto\022\021lego.bft.protobuf\"\321\001\n\006TxInfo"
+      "\n\010tx.proto\022\021lego.bft.protobuf\"\344\001\n\006TxInfo"
       "\022\017\n\007version\030\001 \001(\r\022\013\n\003gid\030\002 \001(\014\022\014\n\004from\030\003"
       " \001(\014\022\023\n\013from_pubkey\030\004 \001(\014\022\021\n\tfrom_sign\030\005"
       " \001(\014\022\n\n\002to\030\006 \001(\014\022\016\n\006amount\030\007 \001(\004\022\021\n\tgas_"
       "limit\030\010 \001(\004\022\020\n\010gas_used\030\t \001(\004\022\021\n\tgas_pri"
       "ce\030\n \001(\004\022\017\n\007balance\030\013 \001(\004\022\016\n\006to_add\030\014 \001("
-      "\010\"\373\001\n\007TxBlock\022\017\n\007prehash\030\001 \001(\014\022\017\n\007versio"
-      "n\030\002 \001(\r\022\021\n\telect_ver\030\003 \001(\r\022\017\n\007rc_hash\030\004 "
-      "\001(\014\022\016\n\006bitmap\030\005 \003(\004\022\022\n\nagg_pubkey\030\006 \001(\014\022"
-      "\020\n\010agg_sign\030\007 \001(\014\022\r\n\005tx_id\030\010 \001(\004\022\017\n\007tx_h"
-      "ash\030\t \001(\014\022\024\n\014tx_root_hash\030\n \001(\014\022*\n\007tx_li"
-      "st\030\013 \003(\0132\031.lego.bft.protobuf.TxInfo\022\022\n\nn"
-      "etwork_id\030\014 \001(\r\"S\n\005Block\022\014\n\004hash\030\001 \001(\014\022\016"
-      "\n\006height\030\002 \001(\004\022,\n\010tx_block\030\003 \001(\0132\032.lego."
-      "bft.protobuf.TxBlock\".\n\rTxPrepareItem\022\020\n"
-      "\010acc_addr\030\001 \001(\014\022\013\n\003gid\030\002 \001(\014\"i\n\017LeaderTx"
-      "Prepare\022-\n\003txs\030\001 \003(\0132 .lego.bft.protobuf"
-      ".TxPrepareItem\022\'\n\005block\030\002 \001(\0132\030.lego.bft"
-      ".protobuf.Block\"!\n\017BackupTxPrepare\022\016\n\006st"
-      "atus\030\001 \001(\005\"#\n\021LeaderTxPreCommit\022\016\n\006statu"
-      "s\030\001 \001(\005\"#\n\021BackupTxPreCommit\022\016\n\006status\030\001"
-      " \001(\005\" \n\016LeaderTxCommit\022\016\n\006status\030\001 \001(\005\"|"
-      "\n\005NewTx\022\013\n\003gid\030\001 \001(\014\022\025\n\rfrom_acc_addr\030\002 "
-      "\001(\014\022\023\n\013from_pubkey\030\003 \001(\014\022\021\n\tfrom_sign\030\004 "
-      "\001(\014\022\023\n\013to_acc_addr\030\005 \001(\014\022\022\n\nlego_count\030\006"
-      " \001(\004\"6\n\013ToAccountTx\022\'\n\005block\030\001 \001(\0132\030.leg"
-      "o.bft.protobuf.Block\"\203\003\n\005TxBft\022(\n\006new_tx"
-      "\030\001 \001(\0132\030.lego.bft.protobuf.NewTx\022-\n\005to_t"
-      "x\030\002 \001(\0132\036.lego.bft.protobuf.ToAccountTx\022"
-      "7\n\013ltx_prepare\030\003 \001(\0132\".lego.bft.protobuf"
-      ".LeaderTxPrepare\0227\n\013btx_prepare\030\004 \001(\0132\"."
-      "lego.bft.protobuf.BackupTxPrepare\022;\n\rltx"
-      "_precommit\030\005 \001(\0132$.lego.bft.protobuf.Lea"
-      "derTxPreCommit\022;\n\rbtx_precommit\030\006 \001(\0132$."
-      "lego.bft.protobuf.BackupTxPreCommit\0225\n\nl"
-      "tx_commit\030\007 \001(\0132!.lego.bft.protobuf.Lead"
-      "erTxCommit"
+      "\010\022\021\n\tnetwok_id\030\r \001(\r\"\373\001\n\007TxBlock\022\017\n\007preh"
+      "ash\030\001 \001(\014\022\017\n\007version\030\002 \001(\r\022\021\n\telect_ver\030"
+      "\003 \001(\r\022\017\n\007rc_hash\030\004 \001(\014\022\016\n\006bitmap\030\005 \003(\004\022\022"
+      "\n\nagg_pubkey\030\006 \001(\014\022\020\n\010agg_sign\030\007 \001(\014\022\r\n\005"
+      "tx_id\030\010 \001(\004\022\017\n\007tx_hash\030\t \001(\014\022\024\n\014tx_root_"
+      "hash\030\n \001(\014\022*\n\007tx_list\030\013 \003(\0132\031.lego.bft.p"
+      "rotobuf.TxInfo\022\022\n\nnetwork_id\030\014 \001(\r\"S\n\005Bl"
+      "ock\022\014\n\004hash\030\001 \001(\014\022\016\n\006height\030\002 \001(\004\022,\n\010tx_"
+      "block\030\003 \001(\0132\032.lego.bft.protobuf.TxBlock\""
+      ".\n\rTxPrepareItem\022\020\n\010acc_addr\030\001 \001(\014\022\013\n\003gi"
+      "d\030\002 \001(\014\"i\n\017LeaderTxPrepare\022-\n\003txs\030\001 \003(\0132"
+      " .lego.bft.protobuf.TxPrepareItem\022\'\n\005blo"
+      "ck\030\002 \001(\0132\030.lego.bft.protobuf.Block\"!\n\017Ba"
+      "ckupTxPrepare\022\016\n\006status\030\001 \001(\005\"#\n\021LeaderT"
+      "xPreCommit\022\016\n\006status\030\001 \001(\005\"#\n\021BackupTxPr"
+      "eCommit\022\016\n\006status\030\001 \001(\005\" \n\016LeaderTxCommi"
+      "t\022\016\n\006status\030\001 \001(\005\"|\n\005NewTx\022\013\n\003gid\030\001 \001(\014\022"
+      "\025\n\rfrom_acc_addr\030\002 \001(\014\022\023\n\013from_pubkey\030\003 "
+      "\001(\014\022\021\n\tfrom_sign\030\004 \001(\014\022\023\n\013to_acc_addr\030\005 "
+      "\001(\014\022\022\n\nlego_count\030\006 \001(\004\"6\n\013ToAccountTx\022\'"
+      "\n\005block\030\001 \001(\0132\030.lego.bft.protobuf.Block\""
+      "\203\003\n\005TxBft\022(\n\006new_tx\030\001 \001(\0132\030.lego.bft.pro"
+      "tobuf.NewTx\022-\n\005to_tx\030\002 \001(\0132\036.lego.bft.pr"
+      "otobuf.ToAccountTx\0227\n\013ltx_prepare\030\003 \001(\0132"
+      "\".lego.bft.protobuf.LeaderTxPrepare\0227\n\013b"
+      "tx_prepare\030\004 \001(\0132\".lego.bft.protobuf.Bac"
+      "kupTxPrepare\022;\n\rltx_precommit\030\005 \001(\0132$.le"
+      "go.bft.protobuf.LeaderTxPreCommit\022;\n\rbtx"
+      "_precommit\030\006 \001(\0132$.lego.bft.protobuf.Bac"
+      "kupTxPreCommit\0225\n\nltx_commit\030\007 \001(\0132!.leg"
+      "o.bft.protobuf.LeaderTxCommit"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 1450);
+      descriptor, 1469);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "tx.proto", &protobuf_RegisterTypes);
 }
@@ -583,6 +585,7 @@ const int TxInfo::kGasUsedFieldNumber;
 const int TxInfo::kGasPriceFieldNumber;
 const int TxInfo::kBalanceFieldNumber;
 const int TxInfo::kToAddFieldNumber;
+const int TxInfo::kNetwokIdFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 TxInfo::TxInfo()
@@ -618,8 +621,8 @@ TxInfo::TxInfo(const TxInfo& from)
     to_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.to_);
   }
   ::memcpy(&version_, &from.version_,
-    static_cast<size_t>(reinterpret_cast<char*>(&balance_) -
-    reinterpret_cast<char*>(&version_)) + sizeof(balance_));
+    static_cast<size_t>(reinterpret_cast<char*>(&netwok_id_) -
+    reinterpret_cast<char*>(&version_)) + sizeof(netwok_id_));
   // @@protoc_insertion_point(copy_constructor:lego.bft.protobuf.TxInfo)
 }
 
@@ -630,8 +633,8 @@ void TxInfo::SharedCtor() {
   from_sign_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   to_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&version_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&balance_) -
-      reinterpret_cast<char*>(&version_)) + sizeof(balance_));
+      reinterpret_cast<char*>(&netwok_id_) -
+      reinterpret_cast<char*>(&version_)) + sizeof(netwok_id_));
 }
 
 TxInfo::~TxInfo() {
@@ -690,10 +693,10 @@ void TxInfo::Clear() {
         reinterpret_cast<char*>(&amount_) -
         reinterpret_cast<char*>(&version_)) + sizeof(amount_));
   }
-  if (cached_has_bits & 3840u) {
+  if (cached_has_bits & 7936u) {
     ::memset(&gas_limit_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&balance_) -
-        reinterpret_cast<char*>(&gas_limit_)) + sizeof(balance_));
+        reinterpret_cast<char*>(&netwok_id_) -
+        reinterpret_cast<char*>(&gas_limit_)) + sizeof(netwok_id_));
   }
   _has_bits_.Clear();
   _internal_metadata_.Clear();
@@ -867,6 +870,20 @@ bool TxInfo::MergePartialFromCodedStream(
         break;
       }
 
+      // optional uint32 netwok_id = 13;
+      case 13: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(104u /* 104 & 0xFF */)) {
+          set_has_netwok_id();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &netwok_id_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -959,6 +976,11 @@ void TxInfo::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteBool(12, this->to_add(), output);
   }
 
+  // optional uint32 netwok_id = 13;
+  if (cached_has_bits & 0x00001000u) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(13, this->netwok_id(), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -1044,6 +1066,11 @@ void TxInfo::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(12, this->to_add(), target);
   }
 
+  // optional uint32 netwok_id = 13;
+  if (cached_has_bits & 0x00001000u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(13, this->netwok_id(), target);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
@@ -1117,7 +1144,7 @@ size_t TxInfo::ByteSizeLong() const {
     }
 
   }
-  if (_has_bits_[8 / 32] & 3840u) {
+  if (_has_bits_[8 / 32] & 7936u) {
     // optional uint64 gas_limit = 8;
     if (has_gas_limit()) {
       total_size += 1 +
@@ -1144,6 +1171,13 @@ size_t TxInfo::ByteSizeLong() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt64Size(
           this->balance());
+    }
+
+    // optional uint32 netwok_id = 13;
+    if (has_netwok_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->netwok_id());
     }
 
   }
@@ -1207,7 +1241,7 @@ void TxInfo::MergeFrom(const TxInfo& from) {
     }
     _has_bits_[0] |= cached_has_bits;
   }
-  if (cached_has_bits & 3840u) {
+  if (cached_has_bits & 7936u) {
     if (cached_has_bits & 0x00000100u) {
       gas_limit_ = from.gas_limit_;
     }
@@ -1219,6 +1253,9 @@ void TxInfo::MergeFrom(const TxInfo& from) {
     }
     if (cached_has_bits & 0x00000800u) {
       balance_ = from.balance_;
+    }
+    if (cached_has_bits & 0x00001000u) {
+      netwok_id_ = from.netwok_id_;
     }
     _has_bits_[0] |= cached_has_bits;
   }
@@ -1265,6 +1302,7 @@ void TxInfo::InternalSwap(TxInfo* other) {
   swap(gas_used_, other->gas_used_);
   swap(gas_price_, other->gas_price_);
   swap(balance_, other->balance_);
+  swap(netwok_id_, other->netwok_id_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   _internal_metadata_.Swap(&other->_internal_metadata_);
 }
