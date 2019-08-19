@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "network/network_utils.h"
 #include "root_congress/congress_utils.h"
 
