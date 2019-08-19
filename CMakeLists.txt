@@ -124,6 +124,7 @@ add_executable(vpn_client ${MAIN_DIR}/vpn_client.cc)
 set(LINK_ARGS
     services
     init
+    root_congress
     client
     bft
     vss
@@ -134,6 +135,7 @@ set(LINK_ARGS
     dht
     nat_traverse
     transport
+    kcp
     bz2
     block
     db
@@ -162,6 +164,7 @@ set(CLIENT_LINK_ARGS
     dht
     nat_traverse
     transport
+    kcp
     bz2
     db
     security
@@ -205,6 +208,7 @@ else()
     add_subdirectory(${SRC_DIR}/init init)
     add_subdirectory(${SRC_DIR}/services services)
     add_subdirectory(${SRC_DIR}/client client)
+    add_subdirectory(${SRC_DIR}/root_congress)
 
     if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
         add_subdirectory(${SRC_DIR}/common/tests common_test)
