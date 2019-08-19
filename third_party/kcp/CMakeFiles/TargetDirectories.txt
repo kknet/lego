@@ -1,0 +1,4 @@
+/root/work/lego/third_party/kcp/CMakeFiles/rebuild_cache.dir
+/root/work/lego/third_party/kcp/CMakeFiles/kcp_test.dir
+/root/work/lego/third_party/kcp/CMakeFiles/edit_cache.dir
+/root/work/lego/third_party/kcp/CMakeFiles/kcp.dir

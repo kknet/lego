@@ -1,0 +1,2 @@
+/usr/bin/ar qc libkcp.a  CMakeFiles/kcp.dir/ikcp.c.o
+/usr/bin/ranlib libkcp.a

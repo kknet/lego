@@ -1,0 +1,36 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/root/work/lego/third_party/kcp/ikcp.c
+ikcp.h
+/root/work/lego/third_party/kcp/ikcp.h
+stddef.h
+-
+stdlib.h
+-
+string.h
+-
+stdarg.h
+-
+stdio.h
+-
+
+/root/work/lego/third_party/kcp/ikcp.h
+stddef.h
+-
+stdlib.h
+-
+assert.h
+-
+sys/types.h
+-
+sys/inttypes.h
+-
+stdint.h
+-
+
