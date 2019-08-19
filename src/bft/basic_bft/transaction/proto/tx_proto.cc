@@ -108,6 +108,7 @@ void TxProto::CreateTxBlock(
         tx.set_gas_price(0);
         tx.set_gas_used(0);
         if (tx_vec[i]->to_acc_addr.empty()) {
+			tx.set_netwok_id(network::GetConsensusShardNetworkId(tx_vec[i]->from_acc_addr));
             tx.set_balance(100000);  // create new account address
         } else {
             if (tx_vec[i]->add_to_acc_addr) {

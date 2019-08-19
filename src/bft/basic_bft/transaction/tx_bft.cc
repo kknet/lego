@@ -217,8 +217,7 @@ int TxBft::CheckTxInfo(
             return kBftAccountExists;
         }
 
-		auto hash_network_id = (common::Hash::Hash32(tx_info.from()) %
-					common::GlobalInfo::Instance()->consensus_shard_count());
+		auto hash_network_id = network::GetConsensusShardNetworkId(tx_info.from());
 		if (hash_network_id != tx_info.netwok_id()) {
 			BFT_ERROR("backup compute network id[%u] but leader[%u]",
 					hash_network_id, tx_info.netwok_id());

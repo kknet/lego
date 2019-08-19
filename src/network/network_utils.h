@@ -3,6 +3,7 @@
 #include "common/utils.h"
 #include "common/log.h"
 #include "common/hash.h"
+#include "common/global_info.h"
 
 #define NETWORK_DEBUG(fmt, ...) DEBUG("[network]" fmt, ## __VA_ARGS__)
 #define NETWORK_INFO(fmt, ...) INFO("[network]" fmt, ## __VA_ARGS__)
@@ -44,9 +45,9 @@ enum ServiceNetworkType {
 };
 
 inline static uint32_t GetConsensusShardNetworkId(const std::string& account_address) {
-    return 4u;
     return (kConsensusShardBeginNetworkId + (
-            common::Hash::Hash32(account_address) % kConsensusShardNetworkCount));
+            common::Hash::Hash32(account_address) %
+			common::GlobalInfo::Instance()->consensus_shard_count()));
 }
 
 inline static std::string GetAccountAddressByPublicKey(const std::string& pub_key) {
