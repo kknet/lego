@@ -41,8 +41,6 @@ int ElectManager::Join(uint32_t network_id) {
         }
         elect_network_map_[network_id] = elect_node;
     }
-
-	common::GlobalInfo::Instance()->set_network_id(network_id);
     return kElectSuccess;
 }
 

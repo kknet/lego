@@ -153,6 +153,7 @@ void TxProto::CreateTxBlock(
     auto sha256 = common::Hash::Hash256(tx_block->SerializeAsString());
     block_item.set_hash(sha256);
     block_item.set_height(block_ptr->height + 1);
+	block_item.set_timestamp(common::TimeStampMsec());
 }
 
 }  // namespace bft

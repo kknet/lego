@@ -37,6 +37,7 @@ message Block {
     optional bytes hash = 1;
 	optional uint64 height = 2;
 	optional TxBlock tx_block = 3;
+	optional uint64 timestamp = 4;
 }
 
 message TxPrepareItem {

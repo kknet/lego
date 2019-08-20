@@ -24,6 +24,10 @@ public:
 
 private:
     void Listen();
+	void HandleTransaction(const httplib::Request &req, httplib::Response &res);
+	void HandleAccountBalance(const httplib::Request &req, httplib::Response &res);
+	void HandleGetTransaction(const httplib::Request &req, httplib::Response &res);
+	void HandleListTransactions(const httplib::Request &req, httplib::Response &res);
 
     httplib::Server http_svr_;
     std::shared_ptr<std::thread> run_thread_{ nullptr };

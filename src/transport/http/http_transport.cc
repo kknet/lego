@@ -120,6 +120,127 @@ static void CreateTxRequest(
 #endif
 }
 
+void HttpTransport::HandleTransaction(const httplib::Request &req, httplib::Response &res) {
+	std::map<std::string, std::string> params;
+    std::string account_address;
+    try {
+        nlohmann::json json_obj = nlohmann::json::parse(req.body);
+		nlohmann::json data = json_obj["data"];
+        transport::protobuf::Header msg;
+        CreateTxRequest(data, account_address, msg);
+        network::Route::Instance()->Send(msg);
+        network::Route::Instance()->SendToLocal(msg);
+        TRANSPORT_ERROR("js relay by this node ok.");
+        std::cout << "js relay by this node ok." << std::endl;
+    } catch (std::exception& e) {
+        res.status = 400;
+        TRANSPORT_ERROR("js relay by this node error.");
+        std::cout << "js relay by this node error." << e.what() << std::endl;
+        return;
+    }
+    res.set_content(common::Encode::HexEncode(account_address), "text/plain");
+    res.set_header("Access-Control-Allow-Origin", "*");
+    return;
+}
+
+void HttpTransport::HandleAccountBalance(const httplib::Request &req, httplib::Response &res) {
+    try {
+        nlohmann::json json_obj = nlohmann::json::parse(req.body);
+        auto acc_addr = common::Encode::HexDecode(json_obj["acc_addr"].get<std::string>());
+        auto acc_info_ptr = block::AccountManager::Instance()->GetAcountInfo(acc_addr);
+        if (acc_info_ptr == nullptr) {
+            res.set_content(std::to_string(-1), "text/plain");
+			res.set_header("Access-Control-Allow-Origin", "*");
+        } else {
+            res.set_content(std::to_string(acc_info_ptr->balance), "text/plain");
+            res.set_header("Access-Control-Allow-Origin", "*");
+        }
+    } catch (...) {
+        res.status = 400;
+        TRANSPORT_ERROR("account_balance by this node error.");
+        std::cout << "account_balance by this node error." << std::endl;
+    }
+}
+
+void HttpTransport::HandleGetTransaction(const httplib::Request &req, httplib::Response &res) {
+    try {
+        nlohmann::json json_obj = nlohmann::json::parse(req.body);
+        std::string tx_gid;
+        std::string block_hash;
+        if (json_obj.find("tx_gid") != json_obj.end()) {
+            auto tx_gid = common::Encode::HexDecode(json_obj["tx_gid"].get<std::string>());
+            tx_gid = common::GetTxDbKey(true, tx_gid);
+            auto st = db::Db::Instance()->Get(tx_gid, &block_hash);
+            if (!st.ok()) {
+                res.set_content("gid not exists", "text/plain");
+                res.set_header("Access-Control-Allow-Origin", "*");
+                return;
+            }
+        }
+
+        if (json_obj.find("block_hash") != json_obj.end()) {
+            block_hash = common::Encode::HexDecode(json_obj["block_hash"].get<std::string>());
+        }
+
+        std::string block_data;
+        auto st = db::Db::Instance()->Get(block_hash, &block_data);
+        if (!st.ok()) {
+            res.set_content("block not exists", "text/plain");
+            res.set_header("Access-Control-Allow-Origin", "*");
+            return;
+        }
+
+        bft::protobuf::Block block;
+        if (!block.ParseFromString(block_data)) {
+            res.set_content("block error", "text/plain");
+            res.set_header("Access-Control-Allow-Origin", "*");
+            return;
+        }
+
+        nlohmann::json res_json;
+        res_json["block_height"] = block.height();
+        res_json["block_hash"] = common::Encode::HexEncode(block.hash());
+        res_json["prev_hash"] = common::Encode::HexEncode(block.tx_block().prehash());
+        res_json["transaction_size"] = block.tx_block().tx_list_size();
+        auto tx_list_res = res_json["tx_list"];
+        auto tx_list = block.tx_block().tx_list();
+        for (int32_t i = 0; i < tx_list.size(); ++i) {
+            res_json["tx_list"][i]["tx_gid"] = common::Encode::HexEncode(tx_list[i].gid());
+            res_json["tx_list"][i]["from"] = common::Encode::HexEncode(tx_list[i].from());
+            res_json["tx_list"][i]["to"] = common::Encode::HexEncode(tx_list[i].to());
+            res_json["tx_list"][i]["amount"] = tx_list[i].amount();
+        }
+        res.set_content(res_json.dump(), "text/plain");
+        res.set_header("Access-Control-Allow-Origin", "*");
+    } catch (...) {
+        res.status = 400;
+        TRANSPORT_ERROR("account_balance by this node error.");
+        std::cout << "account_balance by this node error." << std::endl;
+    }
+}
+
+void HttpTransport::HandleListTransactions(const httplib::Request &req, httplib::Response &res) {
+	try {
+        nlohmann::json json_obj = nlohmann::json::parse(req.body);
+		std::string acc_addr;
+		auto iter = json_obj.find("acc_addr");
+		if (iter != json_obj.end()) {
+			acc_addr = common::Encode::HexDecode(json_obj["acc_addr"].get<std::string>());
+		}
+        auto acc_info_ptr = block::AccountManager::Instance()->GetAcountInfo(acc_addr);
+        if (acc_info_ptr == nullptr) {
+            res.set_content(std::to_string(-1), "text/plain");
+			res.set_header("Access-Control-Allow-Origin", "*");
+        } else {
+            res.set_content(std::to_string(acc_info_ptr->balance), "text/plain");
+            res.set_header("Access-Control-Allow-Origin", "*");
+        }
+    } catch (...) {
+        res.status = 400;
+        TRANSPORT_ERROR("account_balance by this node error.");
+        std::cout << "account_balance by this node error." << std::endl;
+    }
+}
 
 void HttpTransport::Listen() {
     http_svr_.Get("/http_message", [=](const httplib::Request& req, httplib::Response &res) {
@@ -128,106 +249,13 @@ void HttpTransport::Listen() {
     });
 
     http_svr_.Post("/transaction", [&](const httplib::Request &req, httplib::Response &res) {
-        std::map<std::string, std::string> params;
-        std::string account_address;
-        try {
-            nlohmann::json json_obj = nlohmann::json::parse(req.body);
-            nlohmann::json data = json_obj["data"];
-            transport::protobuf::Header msg;
-            CreateTxRequest(data, account_address, msg);
-            network::Route::Instance()->Send(msg);
-            network::Route::Instance()->SendToLocal(msg);
-            TRANSPORT_ERROR("js relay by this node ok.");
-            std::cout << "js relay by this node ok." << std::endl;
-        } catch (std::exception& e) {
-            res.status = 400;
-            TRANSPORT_ERROR("js relay by this node error.");
-            std::cout << "js relay by this node error." << e.what() << std::endl;
-            return;
-        }
-        res.set_content(common::Encode::HexEncode(account_address), "text/plain");
-        res.set_header("Access-Control-Allow-Origin", "*");
-        return;
+		HandleTransaction(req, res);
     });
-
     http_svr_.Post("/account_balance", [&](const httplib::Request &req, httplib::Response &res) {
-        std::map<std::string, std::string> params;
-        std::string account_address;
-        try {
-            nlohmann::json json_obj = nlohmann::json::parse(req.body);
-            auto acc_addr = common::Encode::HexDecode(json_obj["acc_addr"].get<std::string>());
-            auto acc_info_ptr = block::AccountManager::Instance()->GetAcountInfo(acc_addr);
-            if (acc_info_ptr == nullptr) {
-                res.set_content(std::to_string(-1), "text/plain");
-                res.set_header("Access-Control-Allow-Origin", "*");
-            } else {
-                res.set_content(std::to_string(acc_info_ptr->balance), "text/plain");
-                res.set_header("Access-Control-Allow-Origin", "*");
-            }
-        } catch (...) {
-            res.status = 400;
-            TRANSPORT_ERROR("account_balance by this node error.");
-            std::cout << "account_balance by this node error." << std::endl;
-        }
-    });
-
+		HandleAccountBalance(req, res);
+	});
     http_svr_.Post("/get_transaction", [&](const httplib::Request &req, httplib::Response &res) {
-        std::map<std::string, std::string> params;
-        std::string account_address;
-        try {
-            nlohmann::json json_obj = nlohmann::json::parse(req.body);
-            std::string tx_gid;
-            std::string block_hash;
-            if (json_obj.find("tx_gid") != json_obj.end()) {
-                auto tx_gid = common::Encode::HexDecode(json_obj["tx_gid"].get<std::string>());
-                tx_gid = common::GetTxDbKey(true, tx_gid);
-                auto st = db::Db::Instance()->Get(tx_gid, &block_hash);
-                if (!st.ok()) {
-                    res.set_content("gid not exists", "text/plain");
-                    res.set_header("Access-Control-Allow-Origin", "*");
-                    return;
-                }
-            }
-
-            if (json_obj.find("block_hash") != json_obj.end()) {
-                block_hash = common::Encode::HexDecode(json_obj["block_hash"].get<std::string>());
-            }
-
-            std::string block_data;
-            auto st = db::Db::Instance()->Get(block_hash, &block_data);
-            if (!st.ok()) {
-                res.set_content("block not exists", "text/plain");
-                res.set_header("Access-Control-Allow-Origin", "*");
-                return;
-            }
-
-            bft::protobuf::Block block;
-            if (!block.ParseFromString(block_data)) {
-                res.set_content("block error", "text/plain");
-                res.set_header("Access-Control-Allow-Origin", "*");
-                return;
-            }
-
-            nlohmann::json res_json;
-            res_json["block_height"] = block.height();
-            res_json["block_hash"] = common::Encode::HexEncode(block.hash());
-            res_json["prev_hash"] = common::Encode::HexEncode(block.tx_block().prehash());
-            res_json["transaction_size"] = block.tx_block().tx_list_size();
-            auto tx_list_res = res_json["tx_list"];
-            auto tx_list = block.tx_block().tx_list();
-            for (int32_t i = 0; i < tx_list.size(); ++i) {
-                res_json["tx_list"][i]["tx_gid"] = common::Encode::HexEncode(tx_list[i].gid());
-                res_json["tx_list"][i]["from"] = common::Encode::HexEncode(tx_list[i].from());
-                res_json["tx_list"][i]["to"] = common::Encode::HexEncode(tx_list[i].to());
-                res_json["tx_list"][i]["amount"] = tx_list[i].amount();
-            }
-            res.set_content(res_json.dump(), "text/plain");
-            res.set_header("Access-Control-Allow-Origin", "*");
-        } catch (...) {
-            res.status = 400;
-            TRANSPORT_ERROR("account_balance by this node error.");
-            std::cout << "account_balance by this node error." << std::endl;
-        }
+		HandleGetTransaction(req, res);
     });
 
     http_svr_.set_error_handler([](const httplib::Request&, httplib::Response &res) {
