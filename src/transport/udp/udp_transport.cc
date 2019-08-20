@@ -207,11 +207,6 @@ int UdpTransport::SendKcpBuf(
 	uv_buf[0] = uv_buf_init((char*)&header, sizeof(TransportHeader));
 	uv_buf[1] = uv_buf_init((char*)buf, len);
 		
-#ifdef LEGO_TRACE_MESSAGE
-		LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE(
-			std::string("udp sent ") + ip + ":" + std::to_string(port),
-			proto);
-#endif // LEGO_TRACE_MESSAGE
 	struct sockaddr_in addr;
 	if (uv_ip4_addr(ip.c_str(), port, &addr) != 0) {
 		TRANSPORT_ERROR("create uv ipv4 addr failed!");
@@ -219,7 +214,6 @@ int UdpTransport::SendKcpBuf(
 	}
 
 	int res = uv_udp_try_send(&uv_udp_, uv_buf, kSendBufCount, (const struct sockaddr*)&addr);
-	LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE(std::string("udp send res: ") + std::to_string(res), proto);
 	return kTransportSuccess;
 }
 
