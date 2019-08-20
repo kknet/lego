@@ -206,23 +206,23 @@ int TxBft::CheckTxInfo(
             return kBftPoolIndexError;
         }
 
-		if (common::GlobalInfo::Instance()->network_id() != network::kRootCongressNetworkId) {
-			BFT_ERROR("create account address must root conngress.not[%u]",
-				common::GlobalInfo::Instance()->network_id());
-			return kBftNetwokInvalid;
-		}
+// 		if (common::GlobalInfo::Instance()->network_id() != network::kRootCongressNetworkId) {
+// 			BFT_ERROR("create account address must root conngress.not[%u]",
+// 				common::GlobalInfo::Instance()->network_id());
+// 			return kBftNetwokInvalid;
+// 		}
 
         acc_ptr = block::AccountManager::Instance()->GetAcountInfo(tx_info.from());
         if (acc_ptr != nullptr) {
             return kBftAccountExists;
         }
 
-		auto hash_network_id = network::GetConsensusShardNetworkId(tx_info.from());
-		if (hash_network_id != tx_info.netwok_id()) {
-			BFT_ERROR("backup compute network id[%u] but leader[%u]",
-					hash_network_id, tx_info.netwok_id());
-			return kBftNetwokInvalid;
-		}
+// 		auto hash_network_id = network::GetConsensusShardNetworkId(tx_info.from());
+// 		if (hash_network_id != tx_info.netwok_id()) {
+// 			BFT_ERROR("backup compute network id[%u] but leader[%u]",
+// 					hash_network_id, tx_info.netwok_id());
+// 			return kBftNetwokInvalid;
+// 		}
 //         if (tx_info.amount() != 0 || tx_info.balance() != 0) {
 //             return kBftAccountBalanceError;
 //         }

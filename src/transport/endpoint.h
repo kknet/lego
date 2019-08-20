@@ -22,11 +22,14 @@ struct Endpoint {
 
 }  // namespace lego
 
-bool operator==(const lego::transport::Endpoint& lhs, const lego::transport::Endpoint& rhs) {
-	return lhs.ip == rhs.ip && lhs.port == rhs.port;
-}
 
 namespace std {
+	inline static bool operator==(
+			const lego::transport::Endpoint& lhs,
+			const lego::transport::Endpoint& rhs) {
+		return lhs.ip == rhs.ip && lhs.port == rhs.port;
+	}
+
 	template <>
 	struct hash<lego::transport::Endpoint> {
 		size_t operator()(lego::transport::Endpoint const& endpoint) const {

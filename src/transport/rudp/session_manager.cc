@@ -67,7 +67,7 @@ SessionItemPtr SessionManager::GetSession(const std::string& ip, uint16_t port) 
 		return iter->second;
 	}
 
-	auto kcp = std::make_shared<ikcpcb>(
+	auto kcp = std::shared_ptr<ikcpcb>(
 			ikcp_create(kKcpSessionDefaultNum, (void*)endpoint.get()),
 			ikcp_release);
 	kcp->output = SessionManager::SendWithUdp;

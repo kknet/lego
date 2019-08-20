@@ -48,15 +48,15 @@ bool TxPoolManager::TxValid(TxItemPtr& tx_ptr) {
     }
 
     if (tx_ptr->to_acc_addr.empty()) {
-        if (tx_ptr->lego_count != 0) {
-            return false;
-        }
-
-		if (common::GlobalInfo::Instance()->network_id() != network::kRootCongressNetworkId) {
-			BFT_ERROR("create account address must root conngress.not[%u]",
-					common::GlobalInfo::Instance()->network_id());
-			return false;
-		}
+//         if (tx_ptr->lego_count != 0) {
+//             return false;
+//         }
+// 
+// 		if (common::GlobalInfo::Instance()->network_id() != network::kRootCongressNetworkId) {
+// 			BFT_ERROR("create account address must root conngress.not[%u]",
+// 					common::GlobalInfo::Instance()->network_id());
+// 			return false;
+// 		}
 
         auto acc_info = block::AccountManager::Instance()->GetAcountInfo(account_addr);
         if (acc_info != nullptr) {
