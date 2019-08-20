@@ -43,6 +43,7 @@ void ElectProto::CreateElectBlock(
 
     auto dht = network::DhtManager::Instance()->GetDht(
 			common::GlobalInfo::Instance()->network_id());
+	assert(dht);
     auto readonly_dht = dht->readonly_dht();
     if (readonly_dht->size() < 2) {
         return;
