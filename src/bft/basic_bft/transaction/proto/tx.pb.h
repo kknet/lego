@@ -789,6 +789,13 @@ class Block : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
   ::google::protobuf::uint64 height() const;
   void set_height(::google::protobuf::uint64 value);
 
+  // optional uint64 timestamp = 4;
+  bool has_timestamp() const;
+  void clear_timestamp();
+  static const int kTimestampFieldNumber = 4;
+  ::google::protobuf::uint64 timestamp() const;
+  void set_timestamp(::google::protobuf::uint64 value);
+
   // @@protoc_insertion_point(class_scope:lego.bft.protobuf.Block)
  private:
   void set_has_hash();
@@ -797,6 +804,8 @@ class Block : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
   void clear_has_height();
   void set_has_tx_block();
   void clear_has_tx_block();
+  void set_has_timestamp();
+  void clear_has_timestamp();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
@@ -804,6 +813,7 @@ class Block : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
   ::google::protobuf::internal::ArenaStringPtr hash_;
   ::lego::bft::protobuf::TxBlock* tx_block_;
   ::google::protobuf::uint64 height_;
+  ::google::protobuf::uint64 timestamp_;
   friend struct ::protobuf_tx_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
@@ -3305,6 +3315,30 @@ inline void Block::set_allocated_tx_block(::lego::bft::protobuf::TxBlock* tx_blo
   }
   tx_block_ = tx_block;
   // @@protoc_insertion_point(field_set_allocated:lego.bft.protobuf.Block.tx_block)
+}
+
+// optional uint64 timestamp = 4;
+inline bool Block::has_timestamp() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void Block::set_has_timestamp() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void Block::clear_has_timestamp() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void Block::clear_timestamp() {
+  timestamp_ = GOOGLE_ULONGLONG(0);
+  clear_has_timestamp();
+}
+inline ::google::protobuf::uint64 Block::timestamp() const {
+  // @@protoc_insertion_point(field_get:lego.bft.protobuf.Block.timestamp)
+  return timestamp_;
+}
+inline void Block::set_timestamp(::google::protobuf::uint64 value) {
+  set_has_timestamp();
+  timestamp_ = value;
+  // @@protoc_insertion_point(field_set:lego.bft.protobuf.Block.timestamp)
 }
 
 // -------------------------------------------------------------------
