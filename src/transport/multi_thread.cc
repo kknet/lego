@@ -4,6 +4,7 @@
 #include "transport/processor.h"
 #include "transport/message_filter.h"
 #include "transport/client_relay.h"
+#include "transport/rudp/session_manager.h"
 
 #define ENABLE_CLIENT_MODE
 #ifdef ENABLE_CLIENT_MODE
@@ -115,72 +116,93 @@ void MultiThreadHandler::HandleMessage(
         const char* message,
         uint32_t len) {
     assert(len > sizeof(TransportHeader));
-    auto message_ptr = std::make_shared<transport::protobuf::Header>();
-    std::string content(
-            message + sizeof(TransportHeader),
-            len - sizeof(TransportHeader));
-    if (!message_ptr->ParseFromString(content)) {
-        TRANSPORT_ERROR("Message ParseFromString from string failed!");
-        return;
-    }
+	TransportHeader* trans_header = (TransportHeader*)(message);
+	if (trans_header->type == kKcpUdp) {
+		SessionManager::Instance()->Recv(
+				from_ip,
+				from_port,
+				message + sizeof(TransportHeader),
+				len - sizeof(TransportHeader));
+		return;
+	}
 
-    if (message_ptr->hop_count() >= kMaxHops) {
-        TRANSPORT_ERROR("Message max hot discard!");
-        return;
-    }
+	HandleRemoteMessage(
+			from_ip,
+			from_port,
+			message + sizeof(TransportHeader),
+			len - sizeof(TransportHeader));
+}
 
-    if (thread_vec_.empty()) {
-        return;
-    }
+void MultiThreadHandler::HandleRemoteMessage(
+		const std::string& from_ip,
+		uint16_t from_port,
+		const char* buf,
+		uint32_t len) {
+	auto message_ptr = std::make_shared<transport::protobuf::Header>();
+	if (!message_ptr->ParseFromArray(buf, len)) {
+		TRANSPORT_ERROR("Message ParseFromString from string failed!");
+		return;
+	}
 
-    assert(message_ptr->has_hash());
-    if (message_ptr->hop_count() >= kMaxHops) {
-        const auto& msg = *message_ptr;
-        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("stop max hop stop", msg);
-        return;
-    }
+	if (message_ptr->hop_count() >= kMaxHops) {
+		TRANSPORT_ERROR("Message max hot discard!");
+		return;
+	}
 
-    if (message_ptr->has_broadcast()) {
-        if (MessageFilter::Instance()->StopBroadcast(*message_ptr)) {
-            return;
-        }
+	if (thread_vec_.empty()) {
+		return;
+	}
 
-        if (MessageFilter::Instance()->CheckUnique(message_ptr->hash())) {
-            message_ptr->set_handled(true);
-        } else {
-            message_ptr->set_handled(false);
-        }
-    } else {
-        if (MessageFilter::Instance()->CheckUnique(message_ptr->hash())) {
-            const auto& msg = *message_ptr;
-            LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("stop uniqued", msg);
-            return;
-        }
-    }
+	assert(message_ptr->has_hash());
+	if (message_ptr->hop_count() >= kMaxHops) {
+		const auto& msg = *message_ptr;
+		LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("stop max hop stop", msg);
+		return;
+	}
 
-    if (message_ptr->client()) {
-        if (HandleClientMessage(message_ptr, from_ip, from_port) != kTransportSuccess) {
-            const auto& msg = *message_ptr;
-            LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("stop client", msg);
-            return;
-        }
-    }
-    message_ptr->set_from_ip(from_ip);
-    message_ptr->set_from_port(from_port);
-    message_ptr->set_hop_count(message_ptr->hop_count() + 1);
-    {
-        std::unique_lock<std::mutex> lock(priority_queue_map_mutex_);
-        uint32_t priority = kTransportPriorityLowest;
-        if (message_ptr->has_priority() &&
-                (message_ptr->priority() < kTransportPriorityLowest)) {
-            priority = message_ptr->priority();
-        }
-        priority_queue_map_[priority].push(message_ptr);
+	if (message_ptr->has_broadcast()) {
+		if (MessageFilter::Instance()->StopBroadcast(*message_ptr)) {
+			return;
+		}
+
+		if (MessageFilter::Instance()->CheckUnique(message_ptr->hash())) {
+			message_ptr->set_handled(true);
+		}
+		else {
+			message_ptr->set_handled(false);
+		}
+	}
+	else {
+		if (MessageFilter::Instance()->CheckUnique(message_ptr->hash())) {
+			const auto& msg = *message_ptr;
+			LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("stop uniqued", msg);
+			return;
+		}
+	}
+
+	if (message_ptr->client()) {
+		if (HandleClientMessage(message_ptr, from_ip, from_port) != kTransportSuccess) {
+			const auto& msg = *message_ptr;
+			LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("stop client", msg);
+			return;
+		}
+	}
+	message_ptr->set_from_ip(from_ip);
+	message_ptr->set_from_port(from_port);
+	message_ptr->set_hop_count(message_ptr->hop_count() + 1);
+	{
+		std::unique_lock<std::mutex> lock(priority_queue_map_mutex_);
+		uint32_t priority = kTransportPriorityLowest;
+		if (message_ptr->has_priority() &&
+			(message_ptr->priority() < kTransportPriorityLowest)) {
+			priority = message_ptr->priority();
+		}
+		priority_queue_map_[priority].push(message_ptr);
 #ifdef LEGO_TRACE_MESSAGE
-		transport::protobuf::Header& msg = *(message_ptr);
-        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("transport push to queue", msg);
+			transport::protobuf::Header& msg = *(message_ptr);
+			LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("transport push to queue", msg);
 #endif
-    }
+	}
 }
 
 int MultiThreadHandler::HandleClientMessage(

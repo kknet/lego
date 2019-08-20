@@ -28,9 +28,14 @@ enum TransportPriority {
     kTransportPriorityLowest = 5,
 };
 
+enum UdpPacketType {
+	kOriginalUdp = 0,
+	kKcpUdp = 1,
+};
+
 struct TransportHeader {
     uint32_t size;
-    uint32_t hash;
+    uint32_t type;
 };
 
 typedef std::function<void(protobuf::Header& message)> MessageProcessor;
@@ -39,6 +44,8 @@ static const uint32_t kMaxHops = 20u;
 static const uint32_t kBroadcastMaxRelayTimes = 2u;
 static const uint32_t kBroadcastMaxMessageCount = 1024u * 1024u;
 static const uint32_t kUniqueMaxMessageCount = 1024u * 1024u;
+static const uint32_t kKcpRecvWindowSize = 128u;
+static const uint32_t kKcpSendWindowSize = 128u;
 
 }  // namespace transport
 

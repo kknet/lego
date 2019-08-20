@@ -15,10 +15,13 @@
 #include "common/global_info.h"
 #include "transport/transport_utils.h"
 #include "transport/multi_thread.h"
+#include "transport/rudp/rudp.h"
 
 namespace lego {
 
 namespace transport {
+
+static RudpPtr rudp_ptr{ nullptr };
 
 static void Startup(void) {
 #ifdef _WIN32
@@ -187,6 +190,39 @@ int UdpTransport::SendToLocal(transport::protobuf::Header& message) {
     return kTransportSuccess;
 }
 
+void UdpTransport::SetRudpPtr(RudpPtr& rudp) {
+	rudp_ptr = rudp;
+}
+
+int UdpTransport::SendKcpBuf(
+		const std::string& ip,
+		uint16_t port,
+		const char* buf,
+		uint32_t len) {
+	static const uint32_t kSendBufCount = 2u;
+	uv_buf_t uv_buf[kSendBufCount];
+	TransportHeader header;
+	header.size = len;
+	header.type = kKcpUdp;
+	uv_buf[0] = uv_buf_init((char*)&header, sizeof(TransportHeader));
+	uv_buf[1] = uv_buf_init((char*)buf, len);
+		
+#ifdef LEGO_TRACE_MESSAGE
+		LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE(
+			std::string("udp sent ") + ip + ":" + std::to_string(port),
+			proto);
+#endif // LEGO_TRACE_MESSAGE
+	struct sockaddr_in addr;
+	if (uv_ip4_addr(ip.c_str(), port, &addr) != 0) {
+		TRANSPORT_ERROR("create uv ipv4 addr failed!");
+		return kTransportError;
+	}
+
+	int res = uv_udp_try_send(&uv_udp_, uv_buf, kSendBufCount, (const struct sockaddr*)&addr);
+	LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE(std::string("udp send res: ") + std::to_string(res), proto);
+	return kTransportSuccess;
+}
+
 int UdpTransport::Send(
         const std::string& ip,
         uint16_t port,
@@ -216,6 +252,7 @@ int UdpTransport::Send(
     uv_buf_t buf[kSendBufCount];
     TransportHeader header;
     header.size = message.size();
+	header.type = kOriginalUdp;
     buf[0] = uv_buf_init((char*)&header, sizeof(TransportHeader));
     buf[1] = uv_buf_init((char*)message.c_str(), message.size());
     {

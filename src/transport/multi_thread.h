@@ -48,7 +48,12 @@ public:
             const char* message,
             uint32_t len);
     void HandleMessage(protobuf::Header& msg);
-    std::shared_ptr<protobuf::Header> GetMessageFromQueue();
+	void HandleRemoteMessage(
+			const std::string& from_ip,
+			uint16_t from_port,
+			const char* buf,
+			uint32_t len);
+	std::shared_ptr<protobuf::Header> GetMessageFromQueue();
     void Destroy();
 
 private:

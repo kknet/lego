@@ -13,6 +13,9 @@ namespace lego {
 
 namespace transport {
 
+class Rudp;
+typedef std::shared_ptr<Rudp> RudpPtr;
+
 class UdpTransport : public Transport {
 public:
     UdpTransport(
@@ -34,6 +37,13 @@ public:
         return socket_;
     }
 
+	void SetRudpPtr(RudpPtr& rudp);
+	int SendKcpBuf(
+			const std::string& ip,
+			uint16_t port,
+			const char* buf,
+			uint32_t len);
+
 private:
     void Run();
     void SetSocketOption();
@@ -54,6 +64,8 @@ private:
 
     DISALLOW_COPY_AND_ASSIGN(UdpTransport);
 };
+
+typedef std::shared_ptr<UdpTransport> UdpTransportPtr;
 
 }  // namespace transport
 
