@@ -331,10 +331,16 @@ void HttpTransport::HandleListTransactions(const httplib::Request &req, httplib:
 
 void HttpTransport::HandleTxInfo(const httplib::Request &req, httplib::Response &res) {
     try {
+        nlohmann::json json_obj = nlohmann::json::parse(req.body);
+        auto acc_addr = common::Encode::HexDecode(json_obj["acc_addr"].get<std::string>());
+        auto acc_ptr = block::AccountManager::Instance()->GetAcountInfo(acc_addr);
         nlohmann::json res_json;
         res_json["tx_count"] = common::GlobalInfo::Instance()->tx_count();
         res_json["tx_amount"] = common::GlobalInfo::Instance()->tx_amount();
         res_json["tps"] = common::GlobalInfo::Instance()->tps();
+        res_json["balance"] = acc_ptr->balance;
+        res_json["in"] = acc_ptr->in_count;
+        res_json["out"] = acc_ptr->out_count;
         res.set_content(res_json.dump(), "text/plain");
         res.set_header("Access-Control-Allow-Origin", "*");
     } catch (...) {

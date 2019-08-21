@@ -16,6 +16,8 @@ struct AccountInfo {
     std::string account_id;
     int64_t balance;
     uint64_t height;
+    std::atomic<uint32_t> out_count{ 0 };
+    std::atomic<uint32_t> in_count{ 0 };
 };
 typedef std::shared_ptr<AccountInfo> AccountInfoPtr;
 
