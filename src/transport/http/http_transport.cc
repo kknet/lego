@@ -408,6 +408,9 @@ void HttpTransport::HandleTxInfo(const httplib::Request &req, httplib::Response 
             res_json["balance"] = acc_ptr->balance;
             res_json["in"] = static_cast<uint32_t>(acc_ptr->in_count);
             res_json["out"] = static_cast<uint32_t>(acc_ptr->out_count);
+            res_json["in_lego"] = static_cast<uint32_t>(acc_ptr->in_lego);
+            res_json["out_lego"] = static_cast<uint32_t>(acc_ptr->out_lego);
+            res_json["new_height"] = static_cast<uint32_t>(acc_ptr->new_height);
         }
         res.set_content(res_json.dump(), "text/plain");
         res.set_header("Access-Control-Allow-Origin", "*");
