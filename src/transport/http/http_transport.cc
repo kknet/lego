@@ -254,6 +254,71 @@ void HttpTransport::HandleListTransactions(const httplib::Request &req, httplib:
             acc_addr = common::Encode::HexDecode(json_obj["acc_addr"].get<std::string>());
             if (!acc_addr.empty()) {
                 // just get 100 this user block
+                auto pool_idx = common::GetPoolIndex(acc_addr);
+                std::string key = block::GetLastBlockHash(
+                        common::GlobalInfo::Instance()->network_id(),
+                        pool_idx);
+                std::string block_hash;
+                auto st = db::Db::Instance()->Get(key, &block_hash);
+                if (!st.ok()) {
+                    return;
+                }
+
+                nlohmann::json res_json;
+                uint32_t block_idx = 0;
+                uint32_t count = 0;
+                while (count++ < 100) {
+                    if (block_hash.empty()) {
+                        break;
+                    }
+
+                    std::string block_str;
+                    st = db::Db::Instance()->Get(block_hash, &block_str);
+                    if (!st.ok()) {
+                        continue;
+                    }
+
+                    auto block_ptr = std::make_shared<bft::protobuf::Block>();
+                    if (!block_ptr->ParseFromString(block_str)) {
+                        continue;
+                    }
+
+                    auto& tx_list = block_ptr->tx_block().tx_list();
+                    for (int32_t i = 0; i < tx_list.size(); ++i) {
+                        if (tx_list[i].from() != acc_addr && tx_list[i].to() != acc_addr) {
+                            continue;
+                        }
+
+                        res_json[block_idx]["height"] = block_ptr->height();
+                        res_json[block_idx]["timestamp"] = block_ptr->timestamp();
+                        res_json[block_idx]["network_id"] = common::GlobalInfo::Instance()->network_id();
+                        res_json[block_idx]["add_to"] = tx_list[i].to_add();
+                        res_json[block_idx]["from"] = common::Encode::HexEncode(tx_list[i].from());
+                        res_json[block_idx]["to"] = common::Encode::HexEncode(tx_list[i].to());
+                        if (tx_list[i].to_add()) {
+                            res_json[block_idx]["pool_idx"] = common::GetPoolIndex(tx_list[i].to());
+                        }
+                        else {
+                            res_json[block_idx]["pool_idx"] = common::GetPoolIndex(tx_list[i].from());
+                        }
+                        res_json[block_idx]["gas_price"] = tx_list[i].gas_price();
+                        res_json[block_idx]["amount"] = tx_list[i].amount();
+                        res_json[block_idx]["version"] = tx_list[i].version();
+                        res_json[block_idx]["gid"] = common::Encode::HexEncode(tx_list[i].gid());
+                        res_json[block_idx]["balance"] = tx_list[i].balance();
+                        ++block_idx;
+                        if (block_idx >= 100) {
+                            break;
+                        }
+                    }
+
+                    if (block_idx >= 100) {
+                        break;
+                    }
+                    block_hash = block_ptr->tx_block().prehash();
+                }
+                res.set_content(res_json.dump(), "text/plain");
+                res.set_header("Access-Control-Allow-Origin", "*");
                 return;
             }
         }
