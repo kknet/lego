@@ -625,7 +625,9 @@ int BftManager::BackupCommit(
     if (pre_num > 10) {
         pre_tps_ = 0;
         std::cout << num << " use time: " << (common::TimeStampMsec() - tps_btime_) << "ms" << std::endl;
-        std::cout << "tps: " << ((float)num) / ((float)(common::TimeStampMsec() - tps_btime_) / float(1000.0)) << std::endl;
+        float tps = ((float)num) / ((float)(common::TimeStampMsec() - tps_btime_) / float(1000.0));
+        std::cout << "tps: " << tps << std::endl;
+        common::GlobalInfo::Instance()->set_tps(tps);
     }
     std::cout << "backup commit ok." << std::endl;
     RemoveBft(bft_ptr->gid());

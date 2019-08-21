@@ -1,6 +1,7 @@
 #include "block/account_manager.h"
 
 #include "common/encode.h"
+#include "common/global_info.h"
 #include "db/db.h"
 
 namespace lego {
@@ -39,8 +40,10 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
         return kBlockError;
     }
 
+    common::GlobalInfo::Instance()->inc_tx_count(tx_list.size());
     for (int32_t i = 0; i < tx_list.size(); ++i) {
         if (tx_list[i].to_add()) {
+            common::GlobalInfo::Instance()->inc_tx_amount(tx_list[i].amount());
             if (CheckNetworkIdValid(tx_list[i].to()) != kBlockSuccess) {
                 continue;
             }

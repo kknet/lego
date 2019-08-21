@@ -90,6 +90,30 @@ public:
 		return consensus_shard_count_;
 	}
 
+    void inc_tx_count(uint32_t count) {
+        tx_count_ += count;
+    }
+
+    uint32_t tx_count() {
+        return tx_count_;
+    }
+
+    void inc_tx_amount(uint64_t amount) {
+        tx_amount_ += amount;
+    }
+
+    uint64_t tx_amount() {
+        return tx_amount_;
+    }
+
+    void set_tps(float tps) {
+        tps_ = tps;
+    }
+
+    float tps() {
+        return tps_;
+    }
+
 private:
     GlobalInfo();
     ~GlobalInfo();
@@ -111,6 +135,9 @@ private:
 	uint32_t network_id_{ 0 };
 	std::mutex network_id_set_mutex_;
 	uint32_t consensus_shard_count_{ 0 };
+    std::atomic<uint32_t> tx_count_{ 0 };
+    float tps_{ 0 };
+    std::atomic <uint64_t> tx_amount_{ 0 };
 
     DISALLOW_COPY_AND_ASSIGN(GlobalInfo);
 };

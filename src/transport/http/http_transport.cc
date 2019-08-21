@@ -35,11 +35,11 @@ int HttpTransport::Init() {
 int HttpTransport::Start(bool hold) {
     if (hold) {
         Listen();
-    }
-    else {
+    } else {
         run_thread_ = std::make_shared<std::thread>(std::bind(&HttpTransport::Listen, this));
         run_thread_->detach();
     }
+    return kTransportSuccess;
 }
 
 static const uint32_t kBftBroadcastIgnBloomfilterHop = 1u;
@@ -100,6 +100,10 @@ static void CreateTxRequest(
     new_tx->set_lego_count(data["amount"].get<uint64_t>());
     auto tx_data = tx_bft.SerializeAsString();
     bft_msg.set_data(tx_data);
+
+    std::cout << "new tx, from: " << common::Encode::HexEncode(account_address)
+        << " to: " << data["to"].get<std::string>()
+        << ", amount: " << data["amount"].get<uint64_t>() << std::endl;
     auto hash128 = common::Hash::Hash128(tx_data);
     security::Signature sign;
     if (!security::Schnorr::Instance()->Sign(
@@ -117,7 +121,7 @@ static void CreateTxRequest(
     bft_msg.set_sign_response(sign_response_str);
     msg.set_data(bft_msg.SerializeAsString());
 #ifdef LEGO_TRACE_MESSAGE
-    msg.set_debug(std::string("js new account: ") +
+    msg.set_debug(std::string("js new transaction: ") +
         common::Encode::HexEncode(account_address) + ", to " +
         common::Encode::HexEncode(dht_key.StrKey()));
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("begin", msg);
@@ -134,7 +138,6 @@ void HttpTransport::HandleTransaction(const httplib::Request &req, httplib::Resp
         CreateTxRequest(data, account_address, msg);
         network::Route::Instance()->Send(msg);
         network::Route::Instance()->SendToLocal(msg);
-        TRANSPORT_ERROR("js relay by this node ok.");
     } catch (std::exception& e) {
         res.status = 400;
         TRANSPORT_ERROR("js relay by this node error.");
@@ -232,7 +235,7 @@ struct BlockOperator {
 typedef std::priority_queue<BlockPtr, std::vector<BlockPtr>, BlockOperator> PriQueue;
 bool PushPriQueue(PriQueue& pri_queue, BlockPtr& item) {
     pri_queue.push(item);
-    if (pri_queue.size() > 100) {
+    if (pri_queue.size() > 50) {
         auto tmp_item = pri_queue.top();
         pri_queue.pop();
         if (tmp_item->hash() == item->hash()) {
@@ -314,20 +317,27 @@ void HttpTransport::HandleListTransactions(const httplib::Request &req, httplib:
                 res_json[block_idx]["gid"] = common::Encode::HexEncode(tx_list[i].gid());
                 res_json[block_idx]["balance"] = tx_list[i].balance();
                 ++block_idx;
-                if (block_idx >= 100) {
-                    break;
-                }
-            }
-
-            if (block_idx >= 100) {
-                break;
             }
         }
 
         res.set_content(res_json.dump(), "text/plain");
         res.set_header("Access-Control-Allow-Origin", "*");
+    } catch (...) {
+        res.status = 400;
+        TRANSPORT_ERROR("account_balance by this node error.");
+        std::cout << "account_balance by this node error." << std::endl;
     }
-    catch (...) {
+}
+
+void HttpTransport::HandleTxInfo(const httplib::Request &req, httplib::Response &res) {
+    try {
+        nlohmann::json res_json;
+        res_json["tx_count"] = common::GlobalInfo::Instance()->tx_count();
+        res_json["tx_amount"] = common::GlobalInfo::Instance()->tx_amount();
+        res_json["tps"] = common::GlobalInfo::Instance()->tps();
+        res.set_content(res_json.dump(), "text/plain");
+        res.set_header("Access-Control-Allow-Origin", "*");
+    } catch (...) {
         res.status = 400;
         TRANSPORT_ERROR("account_balance by this node error.");
         std::cout << "account_balance by this node error." << std::endl;
@@ -351,6 +361,9 @@ void HttpTransport::Listen() {
     });
     http_svr_.Post("/list_transaction", [&](const httplib::Request &req, httplib::Response &res) {
         HandleListTransactions(req, res);
+    });
+    http_svr_.Post("/tx_info", [&](const httplib::Request &req, httplib::Response &res) {
+        HandleTxInfo(req, res);
     });
 
     http_svr_.set_error_handler([](const httplib::Request&, httplib::Response &res) {

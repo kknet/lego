@@ -228,10 +228,16 @@ int TxBft::CheckTxInfo(
 //         }
     }
 
-    if (acc_ptr != nullptr) {
-        if (acc_ptr->height + 1 != block_info.height()) {
-            return kBftBlockHeightError;
-        }
+    auto block_ptr = block::AccountManager::Instance()->GetBlockInfo(pool_index());
+    if (block_ptr == nullptr) {
+        return kBftBlockHeightError;
+    }
+
+    if (block_ptr->height + 1 != block_info.height()) {
+        BFT_ERROR("block height error:[now: %d][leader: %d]",
+                (block_ptr->height + 1),
+                block_info.height());
+        return kBftBlockHeightError;
     }
     return kBftSuccess;
 }
