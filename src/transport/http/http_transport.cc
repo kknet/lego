@@ -289,23 +289,23 @@ void HttpTransport::HandleListTransactions(const httplib::Request &req, httplib:
                             continue;
                         }
 
-                        res_json[block_idx]["height"] = block_ptr->height();
-                        res_json[block_idx]["timestamp"] = block_ptr->timestamp();
-                        res_json[block_idx]["network_id"] = common::GlobalInfo::Instance()->network_id();
-                        res_json[block_idx]["add_to"] = tx_list[i].to_add();
-                        res_json[block_idx]["from"] = common::Encode::HexEncode(tx_list[i].from());
-                        res_json[block_idx]["to"] = common::Encode::HexEncode(tx_list[i].to());
+                        res_json["data"][block_idx]["height"] = block_ptr->height();
+                        res_json["data"][block_idx]["timestamp"] = block_ptr->timestamp();
+                        res_json["data"][block_idx]["network_id"] = common::GlobalInfo::Instance()->network_id();
+                        res_json["data"][block_idx]["add_to"] = tx_list[i].to_add();
+                        res_json["data"][block_idx]["from"] = common::Encode::HexEncode(tx_list[i].from());
+                        res_json["data"][block_idx]["to"] = common::Encode::HexEncode(tx_list[i].to());
                         if (tx_list[i].to_add()) {
-                            res_json[block_idx]["pool_idx"] = common::GetPoolIndex(tx_list[i].to());
+                            res_json["data"][block_idx]["pool_idx"] = common::GetPoolIndex(tx_list[i].to());
                         }
                         else {
-                            res_json[block_idx]["pool_idx"] = common::GetPoolIndex(tx_list[i].from());
+                            res_json["data"][block_idx]["pool_idx"] = common::GetPoolIndex(tx_list[i].from());
                         }
-                        res_json[block_idx]["gas_price"] = tx_list[i].gas_price();
-                        res_json[block_idx]["amount"] = tx_list[i].amount();
-                        res_json[block_idx]["version"] = tx_list[i].version();
-                        res_json[block_idx]["gid"] = common::Encode::HexEncode(tx_list[i].gid());
-                        res_json[block_idx]["balance"] = tx_list[i].balance();
+                        res_json["data"][block_idx]["gas_price"] = tx_list[i].gas_price();
+                        res_json["data"][block_idx]["amount"] = tx_list[i].amount();
+                        res_json["data"][block_idx]["version"] = tx_list[i].version();
+                        res_json["data"][block_idx]["gid"] = common::Encode::HexEncode(tx_list[i].gid());
+                        res_json["data"][block_idx]["balance"] = tx_list[i].balance();
                         ++block_idx;
                         if (block_idx >= 100) {
                             break;
@@ -317,14 +317,8 @@ void HttpTransport::HandleListTransactions(const httplib::Request &req, httplib:
                     }
                     block_hash = block_ptr->tx_block().prehash();
                 }
-
-                nlohmann::json tmp_res_json;
-                uint32_t new_idx = 0;
-                for (uint32_t i = res_json.size() - 1; i >= 0; --i) {
-                    tmp_res_json[new_idx] = res_json[i];
-                    ++new_idx;
-                }
-                res.set_content(tmp_res_json.dump(), "text/plain");
+                res_json["type"] = 0;
+                res.set_content(res_json.dump(), "text/plain");
                 res.set_header("Access-Control-Allow-Origin", "*");
                 return;
             }
@@ -372,26 +366,26 @@ void HttpTransport::HandleListTransactions(const httplib::Request &req, httplib:
             pri_queue.pop();
             auto& tx_list = item->tx_block().tx_list();
             for (int32_t i = 0; i < tx_list.size(); ++i) {
-                res_json[block_idx]["height"] = item->height();
-                res_json[block_idx]["timestamp"] = item->timestamp();
-                res_json[block_idx]["network_id"] = common::GlobalInfo::Instance()->network_id();
-                res_json[block_idx]["add_to"] = tx_list[i].to_add();
-                res_json[block_idx]["from"] = common::Encode::HexEncode(tx_list[i].from());
-                res_json[block_idx]["to"] = common::Encode::HexEncode(tx_list[i].to());
+                res_json["data"][block_idx]["height"] = item->height();
+                res_json["data"][block_idx]["timestamp"] = item->timestamp();
+                res_json["data"][block_idx]["network_id"] = common::GlobalInfo::Instance()->network_id();
+                res_json["data"][block_idx]["add_to"] = tx_list[i].to_add();
+                res_json["data"][block_idx]["from"] = common::Encode::HexEncode(tx_list[i].from());
+                res_json["data"][block_idx]["to"] = common::Encode::HexEncode(tx_list[i].to());
                 if (tx_list[i].to_add()) {
-                    res_json[block_idx]["pool_idx"] = common::GetPoolIndex(tx_list[i].to());
+                    res_json["data"][block_idx]["pool_idx"] = common::GetPoolIndex(tx_list[i].to());
                 } else {
-                    res_json[block_idx]["pool_idx"] = common::GetPoolIndex(tx_list[i].from());
+                    res_json["data"][block_idx]["pool_idx"] = common::GetPoolIndex(tx_list[i].from());
                 }
-                res_json[block_idx]["gas_price"] = tx_list[i].gas_price();
-                res_json[block_idx]["amount"] = tx_list[i].amount();
-                res_json[block_idx]["version"] = tx_list[i].version();
-                res_json[block_idx]["gid"] = common::Encode::HexEncode(tx_list[i].gid());
-                res_json[block_idx]["balance"] = tx_list[i].balance();
+                res_json["data"][block_idx]["gas_price"] = tx_list[i].gas_price();
+                res_json["data"][block_idx]["amount"] = tx_list[i].amount();
+                res_json["data"][block_idx]["version"] = tx_list[i].version();
+                res_json["data"][block_idx]["gid"] = common::Encode::HexEncode(tx_list[i].gid());
+                res_json["data"][block_idx]["balance"] = tx_list[i].balance();
                 ++block_idx;
             }
         }
-
+        res_json["type"] = 1;
         res.set_content(res_json.dump(), "text/plain");
         res.set_header("Access-Control-Allow-Origin", "*");
     } catch (...) {
