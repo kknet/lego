@@ -38,8 +38,7 @@ struct TxItem {
         time_valid += common::TimeStampUsec() + kBftStartDeltaTime;
 		if (in_to_acc_addr.empty()) {
 			// may be use shard load info
-			create_acc_network_id = (common::Hash::Hash32(in_from_acc_addr) %
-					common::GlobalInfo::Instance()->consensus_shard_count());
+			create_acc_network_id = network::GetConsensusShardNetworkId(in_from_acc_addr);
 		}
     }
     std::string gid;

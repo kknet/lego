@@ -45,6 +45,7 @@ enum ServiceNetworkType {
 };
 
 inline static uint32_t GetConsensusShardNetworkId(const std::string& account_address) {
+	return 4;
     return (kConsensusShardBeginNetworkId + (
             common::Hash::Hash32(account_address) %
 			common::GlobalInfo::Instance()->consensus_shard_count()));
