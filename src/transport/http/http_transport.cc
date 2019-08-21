@@ -249,8 +249,10 @@ void HttpTransport::HandleListTransactions(const httplib::Request &req, httplib:
 		auto iter = json_obj.find("acc_addr");
 		if (iter != json_obj.end()) {
 			acc_addr = common::Encode::HexDecode(json_obj["acc_addr"].get<std::string>());
-			// just get 100 this user block
-			return;
+			if (!acc_addr.empty()) {
+				// just get 100 this user block
+				return;
+			}
 		}
 
 		PriQueue pri_queue;
@@ -345,6 +347,9 @@ void HttpTransport::Listen() {
     http_svr_.Post("/get_transaction", [&](const httplib::Request &req, httplib::Response &res) {
 		HandleGetTransaction(req, res);
     });
+	http_svr_.Post("/list_transaction", [&](const httplib::Request &req, httplib::Response &res) {
+		HandleListTransactions(req, res);
+	});
 
     http_svr_.set_error_handler([](const httplib::Request&, httplib::Response &res) {
         const char *fmt = "<p>Error Status: <span style='color:red;'>%d</span></p>";
