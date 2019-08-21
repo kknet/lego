@@ -338,9 +338,11 @@ void HttpTransport::HandleTxInfo(const httplib::Request &req, httplib::Response 
         res_json["tx_count"] = common::GlobalInfo::Instance()->tx_count();
         res_json["tx_amount"] = common::GlobalInfo::Instance()->tx_amount();
         res_json["tps"] = common::GlobalInfo::Instance()->tps();
-        res_json["balance"] = acc_ptr->balance;
-        res_json["in"] = static_cast<uint32_t>(acc_ptr->in_count);
-        res_json["out"] = static_cast<uint32_t>(acc_ptr->out_count);
+        if (acc_ptr != nullptr) {
+            res_json["balance"] = acc_ptr->balance;
+            res_json["in"] = static_cast<uint32_t>(acc_ptr->in_count);
+            res_json["out"] = static_cast<uint32_t>(acc_ptr->out_count);
+        }
         res.set_content(res_json.dump(), "text/plain");
         res.set_header("Access-Control-Allow-Origin", "*");
     } catch (...) {
