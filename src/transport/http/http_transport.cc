@@ -317,8 +317,14 @@ void HttpTransport::HandleListTransactions(const httplib::Request &req, httplib:
                     }
                     block_hash = block_ptr->tx_block().prehash();
                 }
-                res_json["acc_addr"] = true;
-                res.set_content(res_json.dump(), "text/plain");
+
+                nlohmann::json tmp_res_json;
+                uint32_t new_idx = 0;
+                for (uint32_t i = res_json.size() - 1; i >= 0; --i) {
+                    tmp_res_json[new_idx] = res_json[i];
+                    ++new_idx;
+                }
+                res.set_content(tmp_res_json.dump(), "text/plain");
                 res.set_header("Access-Control-Allow-Origin", "*");
                 return;
             }
