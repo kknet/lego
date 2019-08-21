@@ -297,6 +297,7 @@ void HttpTransport::HandleListTransactions(const httplib::Request &req, httplib:
 			pri_queue.pop();
 			auto& tx_list = item->tx_block().tx_list();
 			for (int32_t i = 0; i < tx_list.size(); ++i) {
+				res_json[block_idx]["height"] = item->height();
 				res_json[block_idx]["timestamp"] = item->timestamp();
 				res_json[block_idx]["network_id"] = common::GlobalInfo::Instance()->network_id();
 				res_json[block_idx]["add_to"] = tx_list[i].to_add();

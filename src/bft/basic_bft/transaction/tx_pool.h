@@ -14,6 +14,7 @@
 #include "common/global_info.h"
 #include "bft/bft_utils.h"
 #include "bft/bft_interface.h"
+#include "network/network_utils.h"
 
 namespace lego {
 
