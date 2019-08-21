@@ -24,9 +24,14 @@ int TxPool::AddTx(TxItemPtr& tx_ptr) {
     }
     auto iter = added_tx_set_.find(uni_gid);
     if (iter != added_tx_set_.end()) {
-        BFT_ERROR("tx gid[%s] has added!", common::Encode::HexEncode(uni_gid).c_str());
+        BFT_ERROR("tx gid[%d][%s] has added!",
+                tx_ptr->add_to_acc_addr,
+                common::Encode::HexEncode(uni_gid).c_str());
         return kBftTxAdded;
     }
+    BFT_ERROR("tx gid[%d][%s] add success!",
+            tx_ptr->add_to_acc_addr,
+            common::Encode::HexEncode(uni_gid).c_str());
 
     added_tx_set_.insert(uni_gid);
     uint64_t tx_index = pool_index_gen_.fetch_add(1);

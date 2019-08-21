@@ -35,7 +35,8 @@ int HttpTransport::Init() {
 int HttpTransport::Start(bool hold) {
     if (hold) {
         Listen();
-    } else {
+    }
+    else {
         run_thread_ = std::make_shared<std::thread>(std::bind(&HttpTransport::Listen, this));
         run_thread_->detach();
     }
@@ -58,9 +59,9 @@ static void SetDefaultBroadcastParam(transport::protobuf::BroadcastParam* broad_
 }
 
 static void CreateTxRequest(
-        const nlohmann::json& data,
-        std::string& account_address,
-        transport::protobuf::Header& msg) {
+    const nlohmann::json& data,
+    std::string& account_address,
+    transport::protobuf::Header& msg) {
     auto prikey = security::PrivateKey(common::Encode::HexDecode(
         data["prikey"].get<std::string>()));
     auto pubkey = security::PublicKey(prikey);
@@ -69,7 +70,7 @@ static void CreateTxRequest(
     auto gid = common::Encode::HexDecode(data["gid"].get<std::string>());
     auto to = common::Encode::HexDecode(data["to"].get<std::string>());
     msg.set_src_dht_key(common::Encode::HexDecode(
-            data["src_dht_key"].get<std::string>()));
+        data["src_dht_key"].get<std::string>()));
     account_address = network::GetAccountAddressByPublicKey(str_pubkey);
     uint32_t des_net_id = network::GetConsensusShardNetworkId(account_address);
     dht::DhtKeyManager dht_key(des_net_id, 0);
@@ -102,10 +103,10 @@ static void CreateTxRequest(
     auto hash128 = common::Hash::Hash128(tx_data);
     security::Signature sign;
     if (!security::Schnorr::Instance()->Sign(
-            hash128,
-            prikey,
-            pubkey,
-            sign)) {
+        hash128,
+        prikey,
+        pubkey,
+        sign)) {
         TRANSPORT_ERROR("leader pre commit signature failed!");
         return;
     }
@@ -117,24 +118,23 @@ static void CreateTxRequest(
     msg.set_data(bft_msg.SerializeAsString());
 #ifdef LEGO_TRACE_MESSAGE
     msg.set_debug(std::string("js new account: ") +
-            common::Encode::HexEncode(account_address) + ", to " +
-            common::Encode::HexEncode(dht_key.StrKey()));
+        common::Encode::HexEncode(account_address) + ", to " +
+        common::Encode::HexEncode(dht_key.StrKey()));
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("begin", msg);
 #endif
 }
 
 void HttpTransport::HandleTransaction(const httplib::Request &req, httplib::Response &res) {
-	std::map<std::string, std::string> params;
+    std::map<std::string, std::string> params;
     std::string account_address;
     try {
         nlohmann::json json_obj = nlohmann::json::parse(req.body);
-		nlohmann::json data = json_obj["data"];
+        nlohmann::json data = json_obj["data"];
         transport::protobuf::Header msg;
         CreateTxRequest(data, account_address, msg);
         network::Route::Instance()->Send(msg);
         network::Route::Instance()->SendToLocal(msg);
         TRANSPORT_ERROR("js relay by this node ok.");
-        std::cout << "js relay by this node ok." << std::endl;
     } catch (std::exception& e) {
         res.status = 400;
         TRANSPORT_ERROR("js relay by this node error.");
@@ -153,7 +153,7 @@ void HttpTransport::HandleAccountBalance(const httplib::Request &req, httplib::R
         auto acc_info_ptr = block::AccountManager::Instance()->GetAcountInfo(acc_addr);
         if (acc_info_ptr == nullptr) {
             res.set_content(std::to_string(-1), "text/plain");
-			res.set_header("Access-Control-Allow-Origin", "*");
+            res.set_header("Access-Control-Allow-Origin", "*");
         } else {
             res.set_content(std::to_string(acc_info_ptr->balance), "text/plain");
             res.set_header("Access-Control-Allow-Origin", "*");
@@ -224,109 +224,110 @@ void HttpTransport::HandleGetTransaction(const httplib::Request &req, httplib::R
 
 typedef std::shared_ptr<bft::protobuf::Block> BlockPtr;
 struct BlockOperator {
-	bool operator() (const BlockPtr& lhs, const BlockPtr& rhs) {
-		return lhs->timestamp() > rhs->timestamp();
-	}
+    bool operator() (const BlockPtr& lhs, const BlockPtr& rhs) {
+        return lhs->timestamp() > rhs->timestamp();
+    }
 };
 
 typedef std::priority_queue<BlockPtr, std::vector<BlockPtr>, BlockOperator> PriQueue;
 bool PushPriQueue(PriQueue& pri_queue, BlockPtr& item) {
-	pri_queue.push(item);
-	if (pri_queue.size() > 100) {
-		auto tmp_item = pri_queue.top();
-		pri_queue.pop();
-		if (tmp_item->hash() == item->hash()) {
-			return false;
-		}
-	}
-	return true;
+    pri_queue.push(item);
+    if (pri_queue.size() > 100) {
+        auto tmp_item = pri_queue.top();
+        pri_queue.pop();
+        if (tmp_item->hash() == item->hash()) {
+            return false;
+        }
+    }
+    return true;
 }
 
 void HttpTransport::HandleListTransactions(const httplib::Request &req, httplib::Response &res) {
-	try {
+    try {
         nlohmann::json json_obj = nlohmann::json::parse(req.body);
-		std::string acc_addr;
-		auto iter = json_obj.find("acc_addr");
-		if (iter != json_obj.end()) {
-			acc_addr = common::Encode::HexDecode(json_obj["acc_addr"].get<std::string>());
-			if (!acc_addr.empty()) {
-				// just get 100 this user block
-				return;
-			}
-		}
+        std::string acc_addr;
+        auto iter = json_obj.find("acc_addr");
+        if (iter != json_obj.end()) {
+            acc_addr = common::Encode::HexDecode(json_obj["acc_addr"].get<std::string>());
+            if (!acc_addr.empty()) {
+                // just get 100 this user block
+                return;
+            }
+        }
 
-		PriQueue pri_queue;
-		for (uint32_t i = 0; i < common::kImmutablePoolSize; ++i) {
-			std::string key = block::GetLastBlockHash(
-					common::GlobalInfo::Instance()->network_id(),
-					i);
-			std::string block_hash;
-			auto st = db::Db::Instance()->Get(key, &block_hash);
-			if (!st.ok()) {
-				continue;
-			}
+        PriQueue pri_queue;
+        for (uint32_t i = 0; i < common::kImmutablePoolSize; ++i) {
+            std::string key = block::GetLastBlockHash(
+                common::GlobalInfo::Instance()->network_id(),
+                i);
+            std::string block_hash;
+            auto st = db::Db::Instance()->Get(key, &block_hash);
+            if (!st.ok()) {
+                continue;
+            }
 
-			uint32_t count = 0;
-			while (count++ < 100) {
-				if (block_hash.empty()) {
-					break;
-				}
+            uint32_t count = 0;
+            while (count++ < 100) {
+                if (block_hash.empty()) {
+                    break;
+                }
 
-				std::string block_str;
-				st = db::Db::Instance()->Get(block_hash, &block_str);
-				if (!st.ok()) {
-					continue;
-				}
+                std::string block_str;
+                st = db::Db::Instance()->Get(block_hash, &block_str);
+                if (!st.ok()) {
+                    continue;
+                }
 
-				auto block_ptr = std::make_shared<bft::protobuf::Block>();
-				if (!block_ptr->ParseFromString(block_str)) {
-					continue;
-				}
+                auto block_ptr = std::make_shared<bft::protobuf::Block>();
+                if (!block_ptr->ParseFromString(block_str)) {
+                    continue;
+                }
 
-				if (!PushPriQueue(pri_queue, block_ptr)) {
-					break;
-				}
-				block_hash = block_ptr->tx_block().prehash();
-			}
-		}
+                if (!PushPriQueue(pri_queue, block_ptr)) {
+                    break;
+                }
+                block_hash = block_ptr->tx_block().prehash();
+            }
+        }
 
-		nlohmann::json res_json;
-		uint32_t block_idx = 0;
-		while (!pri_queue.empty()) {
-			auto item = pri_queue.top();
-			pri_queue.pop();
-			auto& tx_list = item->tx_block().tx_list();
-			for (int32_t i = 0; i < tx_list.size(); ++i) {
-				res_json[block_idx]["height"] = item->height();
-				res_json[block_idx]["timestamp"] = item->timestamp();
-				res_json[block_idx]["network_id"] = common::GlobalInfo::Instance()->network_id();
-				res_json[block_idx]["add_to"] = tx_list[i].to_add();
-				res_json[block_idx]["from"] = common::Encode::HexEncode(tx_list[i].from());
-				res_json[block_idx]["to"] = common::Encode::HexEncode(tx_list[i].to());
-				if (tx_list[i].to_add()) {
-					res_json[block_idx]["pool_idx"] = common::GetPoolIndex(tx_list[i].to());
-				} else {
-					res_json[block_idx]["pool_idx"] = common::GetPoolIndex(tx_list[i].from());
-				}
-				res_json[block_idx]["gas_price"] = tx_list[i].gas_price();
-				res_json[block_idx]["amount"] = tx_list[i].amount();
-				res_json[block_idx]["version"] = tx_list[i].version();
-				res_json[block_idx]["gid"] = common::Encode::HexEncode(tx_list[i].gid());
-				res_json[block_idx]["balance"] = tx_list[i].balance();
-				++block_idx;
-				if (block_idx >= 100) {
-					break;
-				}
-			}
+        nlohmann::json res_json;
+        uint32_t block_idx = 0;
+        while (!pri_queue.empty()) {
+            auto item = pri_queue.top();
+            pri_queue.pop();
+            auto& tx_list = item->tx_block().tx_list();
+            for (int32_t i = 0; i < tx_list.size(); ++i) {
+                res_json[block_idx]["height"] = item->height();
+                res_json[block_idx]["timestamp"] = item->timestamp();
+                res_json[block_idx]["network_id"] = common::GlobalInfo::Instance()->network_id();
+                res_json[block_idx]["add_to"] = tx_list[i].to_add();
+                res_json[block_idx]["from"] = common::Encode::HexEncode(tx_list[i].from());
+                res_json[block_idx]["to"] = common::Encode::HexEncode(tx_list[i].to());
+                if (tx_list[i].to_add()) {
+                    res_json[block_idx]["pool_idx"] = common::GetPoolIndex(tx_list[i].to());
+                } else {
+                    res_json[block_idx]["pool_idx"] = common::GetPoolIndex(tx_list[i].from());
+                }
+                res_json[block_idx]["gas_price"] = tx_list[i].gas_price();
+                res_json[block_idx]["amount"] = tx_list[i].amount();
+                res_json[block_idx]["version"] = tx_list[i].version();
+                res_json[block_idx]["gid"] = common::Encode::HexEncode(tx_list[i].gid());
+                res_json[block_idx]["balance"] = tx_list[i].balance();
+                ++block_idx;
+                if (block_idx >= 100) {
+                    break;
+                }
+            }
 
-			if (block_idx >= 100) {
-				break;
-			}
-		}
+            if (block_idx >= 100) {
+                break;
+            }
+        }
 
-		res.set_content(res_json.dump(), "text/plain");
-		res.set_header("Access-Control-Allow-Origin", "*");
-    } catch (...) {
+        res.set_content(res_json.dump(), "text/plain");
+        res.set_header("Access-Control-Allow-Origin", "*");
+    }
+    catch (...) {
         res.status = 400;
         TRANSPORT_ERROR("account_balance by this node error.");
         std::cout << "account_balance by this node error." << std::endl;
@@ -340,17 +341,17 @@ void HttpTransport::Listen() {
     });
 
     http_svr_.Post("/transaction", [&](const httplib::Request &req, httplib::Response &res) {
-		HandleTransaction(req, res);
+        HandleTransaction(req, res);
     });
     http_svr_.Post("/account_balance", [&](const httplib::Request &req, httplib::Response &res) {
-		HandleAccountBalance(req, res);
-	});
-    http_svr_.Post("/get_transaction", [&](const httplib::Request &req, httplib::Response &res) {
-		HandleGetTransaction(req, res);
+        HandleAccountBalance(req, res);
     });
-	http_svr_.Post("/list_transaction", [&](const httplib::Request &req, httplib::Response &res) {
-		HandleListTransactions(req, res);
-	});
+    http_svr_.Post("/get_transaction", [&](const httplib::Request &req, httplib::Response &res) {
+        HandleGetTransaction(req, res);
+    });
+    http_svr_.Post("/list_transaction", [&](const httplib::Request &req, httplib::Response &res) {
+        HandleListTransactions(req, res);
+    });
 
     http_svr_.set_error_handler([](const httplib::Request&, httplib::Response &res) {
         const char *fmt = "<p>Error Status: <span style='color:red;'>%d</span></p>";
@@ -360,8 +361,8 @@ void HttpTransport::Listen() {
     });
 
     if (!http_svr_.listen(
-            common::GlobalInfo::Instance()->config_local_ip().c_str(),
-            common::GlobalInfo::Instance()->http_port())) {
+        common::GlobalInfo::Instance()->config_local_ip().c_str(),
+        common::GlobalInfo::Instance()->http_port())) {
         assert(false);
         exit(1);
     }
@@ -372,10 +373,10 @@ void HttpTransport::Stop() {
 }
 
 int HttpTransport::Send(
-        const std::string& ip,
-        uint16_t port,
-        uint32_t ttl,
-        transport::protobuf::Header& message) {
+    const std::string& ip,
+    uint16_t port,
+    uint32_t ttl,
+    transport::protobuf::Header& message) {
     assert(false);
     return kTransportSuccess;
 }
