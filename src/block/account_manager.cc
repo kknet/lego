@@ -52,7 +52,7 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
                     tx_list[i].balance(),
                     block_item.height());
             ++(acc_ptr->in_count);
-            acc_ptr->in_lego += tx_list[i].amount;
+            acc_ptr->in_lego = tx_list[i].amount();
             AddAccount(acc_ptr);
             uint32_t pool_idx = common::GetPoolIndex(tx_list[i].to());
             auto bptr = std::make_shared<TxBlockInfo>(
@@ -74,7 +74,7 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
                     block_item.height());
             if (!tx_list[i].to().empty()) {
                 ++(acc_ptr->out_count);
-                acc_ptr->out_lego += tx_list[i].amount;
+                acc_ptr->out_lego = tx_list[i].amount();
             } else {
                 acc_ptr->new_height = block_item.height();
             }
@@ -110,7 +110,7 @@ void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
         acc_map_[acc_ptr->account_id] = acc_ptr;
     } else {
         acc_map_[acc_ptr->account_id]->in_count += acc_ptr->in_count;
-        acc_map_[acc_ptr->account_id]->in_count += acc_ptr->out_count;
+        acc_map_[acc_ptr->account_id]->out_count += acc_ptr->out_count;
         acc_map_[acc_ptr->account_id]->in_lego += acc_ptr->in_lego;
         acc_map_[acc_ptr->account_id]->out_lego += acc_ptr->out_lego;
         acc_map_[acc_ptr->account_id]->new_height = acc_ptr->new_height;
