@@ -18,6 +18,9 @@ struct AccountInfo {
     uint64_t height;
     std::atomic<uint32_t> out_count{ 0 };
     std::atomic<uint32_t> in_count{ 0 };
+    std::atomic<uint64_t> out_lego{ 0 };
+    std::atomic<uint64_t> in_lego{ 0 };
+    uint32_t new_height{ 0 };
 };
 typedef std::shared_ptr<AccountInfo> AccountInfoPtr;
 
