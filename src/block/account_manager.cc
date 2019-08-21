@@ -71,7 +71,9 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
                     tx_list[i].from(),
                     tx_list[i].balance(),
                     block_item.height());
-            ++(acc_ptr->out_count);
+            if (!tx_list[i].to().empty()) {
+                ++(acc_ptr->out_count);
+            }
             AddAccount(acc_ptr);
             uint32_t pool_idx = common::GetPoolIndex(tx_list[i].from());
             auto bptr = std::make_shared<TxBlockInfo>(
@@ -96,11 +98,11 @@ void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
         return;
     }
 
+    acc_ptr->in_count += iter->second->in_count;
+    acc_ptr->out_count += iter->second->out_count;
     if (iter->second->height < acc_ptr->height) {
         acc_map_[acc_ptr->account_id] = acc_ptr;
     }
-    acc_map_[acc_ptr->account_id]->in_count += acc_ptr->in_count;
-    acc_map_[acc_ptr->account_id]->out_count += acc_ptr->out_count;
 }
 
 TxBlockInfoPtr AccountManager::GetBlockInfo(uint32_t pool_idx) {
