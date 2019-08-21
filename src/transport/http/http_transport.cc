@@ -1,10 +1,13 @@
+#include "transport/http/http_transport.h"
+
+#include <queue>
+
 #include "common/global_info.h"
 #include "common/encode.h"
 #include "common/hash.h"
 #include "db/db.h"
 #include "security/schnorr.h"
 #include "security/sha256.h"
-#include "transport/http/http_transport.h"
 #include "transport/transport_utils.h"
 #include "dht/dht_key.h"
 #include "network/network_utils.h"
@@ -219,6 +222,26 @@ void HttpTransport::HandleGetTransaction(const httplib::Request &req, httplib::R
     }
 }
 
+typedef std::shared_ptr<bft::protobuf::Block> BlockPtr;
+struct BlockOperator {
+	bool operator() (const BlockPtr& lhs, const BlockPtr& rhs) {
+		return lhs->timestamp() > rhs->timestamp();
+	}
+};
+
+typedef std::priority_queue<BlockPtr, std::vector<BlockPtr>, BlockOperator> PriQueue;
+bool PushPriQueue(PriQueue& pri_queue, BlockPtr& item) {
+	pri_queue.push(item);
+	if (pri_queue.size() > 100) {
+		auto tmp_item = pri_queue.top();
+		pri_queue.pop();
+		if (tmp_item->hash() == item->hash()) {
+			return false;
+		}
+	}
+	return true;
+}
+
 void HttpTransport::HandleListTransactions(const httplib::Request &req, httplib::Response &res) {
 	try {
         nlohmann::json json_obj = nlohmann::json::parse(req.body);
@@ -226,15 +249,80 @@ void HttpTransport::HandleListTransactions(const httplib::Request &req, httplib:
 		auto iter = json_obj.find("acc_addr");
 		if (iter != json_obj.end()) {
 			acc_addr = common::Encode::HexDecode(json_obj["acc_addr"].get<std::string>());
+			// just get 100 this user block
+			return;
 		}
-        auto acc_info_ptr = block::AccountManager::Instance()->GetAcountInfo(acc_addr);
-        if (acc_info_ptr == nullptr) {
-            res.set_content(std::to_string(-1), "text/plain");
-			res.set_header("Access-Control-Allow-Origin", "*");
-        } else {
-            res.set_content(std::to_string(acc_info_ptr->balance), "text/plain");
-            res.set_header("Access-Control-Allow-Origin", "*");
-        }
+
+		PriQueue pri_queue;
+		for (uint32_t i = 0; i < common::kImmutablePoolSize; ++i) {
+			std::string key = block::GetLastBlockHash(
+					common::GlobalInfo::Instance()->network_id(),
+					i);
+			std::string block_hash;
+			auto st = db::Db::Instance()->Get(key, &block_hash);
+			if (!st.ok()) {
+				continue;
+			}
+
+			uint32_t count = 0;
+			while (count++ < 100) {
+				if (block_hash.empty()) {
+					break;
+				}
+
+				std::string block_str;
+				st = db::Db::Instance()->Get(block_hash, &block_str);
+				if (!st.ok()) {
+					continue;
+				}
+
+				auto block_ptr = std::make_shared<bft::protobuf::Block>();
+				if (!block_ptr->ParseFromString(block_str)) {
+					continue;
+				}
+
+				if (!PushPriQueue(pri_queue, block_ptr)) {
+					break;
+				}
+				block_hash = block_ptr->tx_block().prehash();
+			}
+		}
+
+		nlohmann::json res_json;
+		uint32_t block_idx = 0;
+		while (!pri_queue.empty()) {
+			auto item = pri_queue.top();
+			pri_queue.pop();
+			auto& tx_list = item->tx_block().tx_list();
+			for (int32_t i = 0; i < tx_list.size(); ++i) {
+				res_json[block_idx]["timestamp"] = item->timestamp();
+				res_json[block_idx]["network_id"] = common::GlobalInfo::Instance()->network_id();
+				res_json[block_idx]["add_to"] = tx_list[i].to_add();
+				res_json[block_idx]["from"] = common::Encode::HexEncode(tx_list[i].from());
+				res_json[block_idx]["to"] = common::Encode::HexEncode(tx_list[i].to());
+				if (tx_list[i].to_add()) {
+					res_json[block_idx]["pool_idx"] = common::GetPoolIndex(tx_list[i].to());
+				} else {
+					res_json[block_idx]["pool_idx"] = common::GetPoolIndex(tx_list[i].from());
+				}
+				res_json[block_idx]["gas_price"] = tx_list[i].gas_price();
+				res_json[block_idx]["amount"] = tx_list[i].amount();
+				res_json[block_idx]["version"] = tx_list[i].version();
+				res_json[block_idx]["gid"] = common::Encode::HexEncode(tx_list[i].gid());
+				res_json[block_idx]["balance"] = tx_list[i].balance();
+				++block_idx;
+				if (block_idx >= 100) {
+					break;
+				}
+			}
+
+			if (block_idx >= 100) {
+				break;
+			}
+		}
+
+		res.set_content(res_json.dump(), "text/plain");
+		res.set_header("Access-Control-Allow-Origin", "*");
     } catch (...) {
         res.status = 400;
         TRANSPORT_ERROR("account_balance by this node error.");
