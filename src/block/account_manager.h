@@ -47,6 +47,7 @@ public:
         for (auto iter = acc_map_.begin(); iter != acc_map_.end(); ++iter) {
             all_lego += iter->second->balance;
         }
+        return all_lego;
     }
 private:
     AccountManager();
