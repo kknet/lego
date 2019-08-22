@@ -404,7 +404,7 @@ void HttpTransport::HandleTxInfo(const httplib::Request &req, httplib::Response 
         nlohmann::json res_json;
         res_json["tx_count"] = statis::Statistics::Instance()->tx_count();
         res_json["tx_amount"] = statis::Statistics::Instance()->tx_amount();
-        res_json["tps"] = common::GlobalInfo::Instance()->tps();
+        res_json["tps"] = statis::Statistics::Instance()->tps();
         if (acc_ptr != nullptr) {
             res_json["balance"] = acc_ptr->balance;
             res_json["in"] = static_cast<uint32_t>(acc_ptr->in_count);
