@@ -268,7 +268,7 @@ void HttpTransport::HandleListTransactions(const httplib::Request &req, httplib:
                 nlohmann::json res_json;
                 uint32_t block_idx = 0;
                 uint32_t count = 0;
-                while (count++ < 100) {
+                while (count++ < 100 || block_idx <= 1) {
                     if (block_hash.empty()) {
                         break;
                     }
