@@ -99,7 +99,6 @@ void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
     auto iter = acc_map_.find(acc_ptr->account_id);
     if (iter == acc_map_.end()) {
         acc_map_[acc_ptr->account_id] = acc_ptr;
-        statis::Statistics::Instance()->AddNewAccount(acc_ptr);
         return;
     }
 
@@ -109,14 +108,12 @@ void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
         acc_ptr->in_lego += iter->second->in_lego;
         acc_ptr->out_lego += iter->second->out_lego;
         acc_map_[acc_ptr->account_id] = acc_ptr;
-        statis::Statistics::Instance()->AddNewAccount(acc_ptr);
     } else {
         acc_map_[acc_ptr->account_id]->in_count += acc_ptr->in_count;
         acc_map_[acc_ptr->account_id]->out_count += acc_ptr->out_count;
         acc_map_[acc_ptr->account_id]->in_lego += acc_ptr->in_lego;
         acc_map_[acc_ptr->account_id]->out_lego += acc_ptr->out_lego;
         acc_map_[acc_ptr->account_id]->new_height = acc_ptr->new_height;
-        statis::Statistics::Instance()->AddNewAccount(acc_map_[acc_ptr->account_id]);
     }
 }
 

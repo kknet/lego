@@ -80,7 +80,6 @@ void Statistics::AddNewAccount(const block::AccountInfoPtr& acc_ptr) {
         return;
     }
 
-    std::lock_guard<std::mutex> guard(acc_pri_q_mutex_);
     acc_pri_q_.push(acc_ptr);
     if (acc_pri_q_.size() > 1000) {
         acc_pri_q_.pop();
