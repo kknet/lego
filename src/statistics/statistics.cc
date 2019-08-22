@@ -77,7 +77,7 @@ void Statistics::GetBestAddr(nlohmann::json& res_json) {
         addr_q = acc_pri_q_;
     }
 
-    while (!acc_pri_q_.empty()) {
+    while (!addr_q.empty()) {
         auto addr = addr_q.top();
         addr_q.pop();
         res_json["id"] = addr->account_id;
