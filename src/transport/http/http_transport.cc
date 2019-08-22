@@ -5,6 +5,7 @@
 #include "common/global_info.h"
 #include "common/encode.h"
 #include "common/hash.h"
+#include "statistics/statistics.h"
 #include "db/db.h"
 #include "security/schnorr.h"
 #include "security/sha256.h"
@@ -401,8 +402,8 @@ void HttpTransport::HandleTxInfo(const httplib::Request &req, httplib::Response 
         auto acc_addr = common::Encode::HexDecode(json_obj["acc_addr"].get<std::string>());
         auto acc_ptr = block::AccountManager::Instance()->GetAcountInfo(acc_addr);
         nlohmann::json res_json;
-        res_json["tx_count"] = common::GlobalInfo::Instance()->tx_count();
-        res_json["tx_amount"] = common::GlobalInfo::Instance()->tx_amount();
+        res_json["tx_count"] = statis::Statistics::Instance()->tx_count();
+        res_json["tx_amount"] = statis::Statistics::Instance()->tx_amount();
         res_json["tps"] = common::GlobalInfo::Instance()->tps();
         if (acc_ptr != nullptr) {
             res_json["balance"] = acc_ptr->balance;
