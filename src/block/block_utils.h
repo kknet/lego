@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <atomic>
 
 #include "common/utils.h"
 #include "common/log.h"
