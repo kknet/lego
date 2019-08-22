@@ -140,6 +140,7 @@ set(LINK_ARGS
     block
     db
     security
+    statistics
     common
     protobuf
     uv
@@ -209,6 +210,7 @@ else()
     add_subdirectory(${SRC_DIR}/services services)
     add_subdirectory(${SRC_DIR}/client client)
     add_subdirectory(${SRC_DIR}/root_congress)
+    add_subdirectory(${SRC_DIR}/statistics)
 
     if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
         add_subdirectory(${SRC_DIR}/common/tests common_test)
