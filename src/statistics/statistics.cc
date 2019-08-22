@@ -1,5 +1,6 @@
 #include "statistics/statistics.h"
 
+#include "common/encode.h"
 #include "block/account_manager.h"
 
 namespace lego {
@@ -77,12 +78,14 @@ void Statistics::GetBestAddr(nlohmann::json& res_json) {
         addr_q = acc_pri_q_;
     }
 
+    uint32_t index = 0;
     while (!addr_q.empty()) {
-        auto addr = addr_q.top();
+        block::AccountInfoPtr addr = addr_q.top();
         addr_q.pop();
-        res_json["id"] = addr->account_id;
-        res_json["balance"] = addr->balance;
-        res_json["ratio"] = (double)addr->balance / (double)all_tx_amount_;
+        res_json[index]["id"] = common::Encode::HexEncode(addr->account_id);
+        res_json[index]["balance"] = addr->balance;
+        res_json[index]["ratio"] = (double)addr->balance / (double)all_tx_amount_;
+        ++index;
     }
 }
 

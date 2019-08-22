@@ -454,8 +454,8 @@ void HttpTransport::HandleBestAddr(const httplib::Request &req, httplib::Respons
         res.set_header("Access-Control-Allow-Origin", "*");
     } catch (...) {
         res.status = 400;
-        TRANSPORT_ERROR("HandleStatistics by this node error.");
-        std::cout << "HandleStatistics by this node error." << std::endl;
+        TRANSPORT_ERROR("HandleBestAddr by this node error.");
+        std::cout << "HandleBestAddr by this node error." << std::endl;
     }
 }
 
