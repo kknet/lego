@@ -21,6 +21,10 @@ public:
     }
 
     uint32_t tx_count() {
+        return tx_count_;
+    }
+
+    uint32_t all_tx_count() {
         return all_tx_count_;
     }
 
@@ -31,6 +35,10 @@ public:
     }
 
     uint64_t tx_amount() {
+        return tx_amount_;
+    }
+
+    uint64_t all_tx_amount() {
         return all_tx_amount_;
     }
 
@@ -58,6 +66,15 @@ public:
         return tx_amount_q_;
     }
 
+    std::deque<uint32_t> addr_q() {
+        std::lock_guard<std::mutex> gaurd(change_mutex_);
+        return addr_q_;
+    }
+
+    uint32_t addr_count() {
+        return addr_count_;
+    }
+
 private:
     Statistics();
     ~Statistics();
@@ -79,6 +96,8 @@ private:
     std::deque<uint64_t> tx_amount_q_;
     std::chrono::steady_clock::time_point period_begin_;
     std::mutex change_mutex_;
+    uint32_t addr_count_{ 0 };
+    std::deque<uint32_t> addr_q_;
 
     DISALLOW_COPY_AND_ASSIGN(Statistics);
 };

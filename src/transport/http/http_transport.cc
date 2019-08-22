@@ -402,8 +402,8 @@ void HttpTransport::HandleTxInfo(const httplib::Request &req, httplib::Response 
         auto acc_addr = common::Encode::HexDecode(json_obj["acc_addr"].get<std::string>());
         auto acc_ptr = block::AccountManager::Instance()->GetAcountInfo(acc_addr);
         nlohmann::json res_json;
-        res_json["tx_count"] = statis::Statistics::Instance()->tx_count();
-        res_json["tx_amount"] = statis::Statistics::Instance()->tx_amount();
+        res_json["tx_count"] = statis::Statistics::Instance()->all_tx_count();
+        res_json["tx_amount"] = statis::Statistics::Instance()->all_tx_amount();
         res_json["tps"] = statis::Statistics::Instance()->tps();
         if (acc_ptr != nullptr) {
             res_json["balance"] = acc_ptr->balance;
@@ -420,6 +420,29 @@ void HttpTransport::HandleTxInfo(const httplib::Request &req, httplib::Response 
         res.status = 400;
         TRANSPORT_ERROR("account_balance by this node error.");
         std::cout << "account_balance by this node error." << std::endl;
+    }
+}
+
+void HttpTransport::HandleStatistics(const httplib::Request &req, httplib::Response &res) {
+    try {
+        nlohmann::json res_json;
+        res_json["all_tx_count"] = statis::Statistics::Instance()->all_tx_count();
+        res_json["all_tx_amount"] = statis::Statistics::Instance()->all_tx_amount();
+        res_json["tx_count"] = statis::Statistics::Instance()->tx_count();
+        res_json["tx_amount"] = statis::Statistics::Instance()->tx_amount();
+        res_json["addr_count"] = statis::Statistics::Instance()->addr_count();
+        res_json["tps"] = statis::Statistics::Instance()->tps();
+
+        res_json["tps_q"] = statis::Statistics::Instance()->tps_queue();
+        res_json["tx_count_q"] = statis::Statistics::Instance()->tx_count_q();
+        res_json["tx_amount_q"] = statis::Statistics::Instance()->tx_amount_q();
+        res_json["addr_q"] = statis::Statistics::Instance()->addr_q();
+        res.set_content(res_json.dump(), "text/plain");
+        res.set_header("Access-Control-Allow-Origin", "*");
+    } catch (...) {
+        res.status = 400;
+        TRANSPORT_ERROR("HandleStatistics by this node error.");
+        std::cout << "HandleStatistics by this node error." << std::endl;
     }
 }
 
@@ -443,6 +466,9 @@ void HttpTransport::Listen() {
     });
     http_svr_.Post("/tx_info", [&](const httplib::Request &req, httplib::Response &res) {
         HandleTxInfo(req, res);
+    });
+    http_svr_.Post("/statistics", [&](const httplib::Request &req, httplib::Response &res) {
+        HandleStatistics(req, res);
     });
 
     http_svr_.set_error_handler([](const httplib::Request&, httplib::Response &res) {

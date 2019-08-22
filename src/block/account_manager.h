@@ -50,6 +50,10 @@ public:
     int AddBlockItem(const bft::protobuf::Block& block_item);
     AccountInfoPtr GetAcountInfo(const std::string& acc_id);
     TxBlockInfoPtr GetBlockInfo(uint32_t pool_idx);
+    uint32_t addr_count() {
+        std::lock_guard<std::mutex> gaurd(acc_map_mutex_);
+        return acc_map_.size();
+    }
 
 private:
     AccountManager();
