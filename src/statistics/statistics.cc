@@ -60,13 +60,19 @@ void Statistics::StatisUpdate() {
             addr_q_.pop_front();
         }
     }
+    all_acc_lego_ = block::AccountManager::Instance()->all_acc_lego();
     statis_tick_.CutOff(kTpsUpdatePeriod, std::bind(&Statistics::StatisUpdate, this));
 }
 
 void Statistics::AddNewAccount(const block::AccountInfoPtr& acc_ptr) {
+    auto ratio = (double)acc_ptr->balance / (double)all_acc_lego_;
+    if (ratio < 0.01) {
+        return;
+    }
+
     std::lock_guard<std::mutex> guard(acc_pri_q_mutex_);
     acc_pri_q_.push(acc_ptr);
-    if (acc_pri_q_.size() > kMaxBestAcountCount) {
+    if (acc_pri_q_.size() > 1000) {
         acc_pri_q_.pop();
     }
 }
@@ -84,7 +90,7 @@ void Statistics::GetBestAddr(nlohmann::json& res_json) {
         addr_q.pop();
         res_json[index]["id"] = common::Encode::HexEncode(addr->account_id);
         res_json[index]["balance"] = addr->balance;
-        res_json[index]["ratio"] = (double)addr->balance / (double)all_tx_amount_;
+        res_json[index]["ratio"] = (double)addr->balance / (double)all_acc_lego_;
         ++index;
     }
 }

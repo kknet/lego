@@ -116,6 +116,7 @@ private:
     std::deque<uint32_t> addr_q_;
     PriQueue acc_pri_q_;
     std::mutex acc_pri_q_mutex_;
+    uint64_t all_acc_lego_{ 0 };
 
     DISALLOW_COPY_AND_ASSIGN(Statistics);
 };

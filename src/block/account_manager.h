@@ -41,6 +41,13 @@ public:
         return acc_map_.size();
     }
 
+    uint64_t all_acc_lego() {
+        uint64_t all_lego = 0;
+        std::lock_guard<std::mutex> gaurd(acc_map_mutex_);
+        for (auto iter = acc_map_.begin(); iter != acc_map_.end(); ++iter) {
+            all_lego += iter->second->balance;
+        }
+    }
 private:
     AccountManager();
     ~AccountManager();
