@@ -85,9 +85,14 @@ void Statistics::GetBestAddr(nlohmann::json& res_json) {
     }
 
     uint32_t index = 0;
+    std::set<std::string> id_set;
     while (!addr_q.empty()) {
         block::AccountInfoPtr addr = addr_q.top();
         addr_q.pop();
+        if (id_set.find(addr->account_id) != id_set.end()) {
+            continue;
+        }
+        id_set.insert(addr->account_id);
         res_json[index]["id"] = common::Encode::HexEncode(addr->account_id);
         res_json[index]["balance"] = addr->balance;
         res_json[index]["ratio"] = (double)addr->balance / (double)all_acc_lego_;
