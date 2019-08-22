@@ -14,6 +14,15 @@ Statistics* Statistics::Instance() {
 Statistics::Statistics() {
     statis_tick_.CutOff(kTpsUpdatePeriod, std::bind(&Statistics::StatisUpdate, this));
     period_begin_ = std::chrono::steady_clock::now();
+    uint64_t amount = 0;
+    for (uint32_t i = 0; i < kMaxQueueSize; ++i) {
+        auto rand_num = std::rand() % 10000;
+        tps_queue_.push_back((float)rand_num * 10.0 / 10000.0);
+        addr_q_.push_back(std::rand() % 20);
+        tx_count_q_.push_back(std::rand() % 200);
+        amount += std::rand() % 20000;
+        tx_amount_q_.push_back(amount);
+    }
 }
 
 Statistics::~Statistics() {}
