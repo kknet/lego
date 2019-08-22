@@ -1,0 +1,48 @@
+#include "statistics/statistics.h"
+
+namespace lego {
+
+namespace statis {
+
+Statistics* Statistics::Instance() {
+    static Statistics ins;
+    return &ins;
+}
+
+Statistics::Statistics() {
+    statis_tick_.CutOff(kTpsUpdatePeriod, std::bind(&Statistics::StatisUpdate, this));
+    period_begin_ = std::chrono::steady_clock::now();
+}
+
+Statistics::~Statistics() {}
+
+void Statistics::StatisUpdate() {
+    std::lock_guard<std::mutex> gaurd(change_mutex_);
+    float tps = (float)period_tx_count_ / 10.0;
+    tps_queue_.push_back(tps);
+    if (tps_queue_.size() > kMaxQueueSize) {
+        tps_queue_.pop_front();
+    }
+
+    auto tick_now = std::chrono::steady_clock::now();
+    auto period_tick = period_begin_ + std::chrono::minutes(kQueuePeriod);
+    if (tick_now >= period_tick) {
+        period_begin_ = tick_now;
+        tx_count_q_.push_back(tx_count_);
+        tx_count_ = 0;
+        tx_amount_q_.push_back(tx_amount_);
+        tx_amount_ = 0;
+        if (tx_count_q_.size() > kMaxQueueSize) {
+            tx_count_q_.pop_front();
+        }
+
+        if (tx_amount_q_.size() > kMaxQueueSize) {
+            tx_amount_q_.pop_front();
+        }
+    }
+    statis_tick_.CutOff(kTpsUpdatePeriod, std::bind(&Statistics::StatisUpdate, this));
+}
+
+}  // namespace statis
+
+}  // namespace lego

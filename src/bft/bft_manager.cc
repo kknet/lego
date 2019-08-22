@@ -4,6 +4,7 @@
 
 #include "common/hash.h"
 #include "common/global_info.h"
+#include "statistics/statistics.h"
 #include "block/block_manager.h"
 #include "security/schnorr.h"
 #include "dht/base_dht.h"
@@ -571,21 +572,9 @@ int BftManager::LeaderCommit(
         network::Route::Instance()->Send(msg);
         LeaderBroadcastToAcc(bft_ptr->prpare_block());
         RemoveBft(bft_ptr->gid());
+        statis::Statistics::Instance()->inc_period_tx_count(
+                bft_ptr->prpare_block()->tx_block().tx_list_size());
         LEGO_BFT_DEBUG_FOR_CONSENSUS_AND_MESSAGE("LeaderCommit aggree", bft_ptr, msg);
-
-        if ((uint32_t)tps_ == 0) {
-            tps_btime_ = common::TimeStampMsec();
-        }
-
-        uint32_t num = tps_.fetch_add(bft_ptr->bft_item_count());
-        uint32_t pre_num = pre_tps_.fetch_add(bft_ptr->bft_item_count());
-        if (pre_num > 10) {
-            pre_tps_ = 0;
-            std::cout << num << " use time: " << (common::TimeStampMsec() - tps_btime_) << "ms" << std::endl;
-            float tps = ((float)num) / ((float)(common::TimeStampMsec() - tps_btime_) / float(1000.0));
-            std::cout << "tps: " << tps << std::endl;
-            common::GlobalInfo::Instance()->set_tps(tps);
-        }
     }  else if (res == kBftReChallenge) {
         transport::protobuf::Header msg;
         BftProto::LeaderCreatePreCommit(local_node, bft_ptr, msg);
@@ -630,19 +619,8 @@ int BftManager::BackupCommit(
 
     LeaderBroadcastToAcc(bft_ptr->prpare_block());
     LEGO_BFT_DEBUG_FOR_CONSENSUS("BackupCommit", bft_ptr);
-    if ((uint32_t)tps_ == 0) {
-        tps_btime_ = common::TimeStampMsec();
-    }
-
-    uint32_t num = tps_.fetch_add(bft_ptr->bft_item_count());
-    uint32_t pre_num = pre_tps_.fetch_add(bft_ptr->bft_item_count());
-    if (pre_num > 10) {
-        pre_tps_ = 0;
-        std::cout << num << " use time: " << (common::TimeStampMsec() - tps_btime_) << "ms" << std::endl;
-        float tps = ((float)num) / ((float)(common::TimeStampMsec() - tps_btime_) / float(1000.0));
-        std::cout << "tps: " << tps << std::endl;
-        common::GlobalInfo::Instance()->set_tps(tps);
-    }
+    statis::Statistics::Instance()->inc_period_tx_count(
+            bft_ptr->prpare_block()->tx_block().tx_list_size());
     std::cout << "backup commit ok." << std::endl;
     RemoveBft(bft_ptr->gid());
     // start new bft
