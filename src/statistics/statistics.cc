@@ -62,6 +62,30 @@ void Statistics::StatisUpdate() {
     statis_tick_.CutOff(kTpsUpdatePeriod, std::bind(&Statistics::StatisUpdate, this));
 }
 
+void Statistics::AddNewAccount(const block::AccountInfoPtr& acc_ptr) {
+    std::lock_guard<std::mutex> guard(acc_pri_q_mutex_);
+    acc_pri_q_.push(acc_ptr);
+    if (acc_pri_q_.size() > kMaxBestAcountCount) {
+        acc_pri_q_.pop();
+    }
+}
+
+void Statistics::GetBestAddr(nlohmann::json& res_json) {
+    PriQueue addr_q;
+    {
+        std::lock_guard<std::mutex> guard(acc_pri_q_mutex_);
+        addr_q = acc_pri_q_;
+    }
+
+    while (!acc_pri_q_.empty()) {
+        auto addr = addr_q.top();
+        addr_q.pop();
+        res_json["id"] = addr->account_id;
+        res_json["balance"] = addr->balance;
+        res_json["ratio"] = (double)addr->balance / (double)all_tx_amount_;
+    }
+}
+
 }  // namespace statis
 
 }  // namespace lego

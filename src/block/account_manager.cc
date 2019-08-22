@@ -99,6 +99,7 @@ void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
     auto iter = acc_map_.find(acc_ptr->account_id);
     if (iter == acc_map_.end()) {
         acc_map_[acc_ptr->account_id] = acc_ptr;
+        statis::Statistics::Instance()->AddNewAccount(acc_ptr);
         return;
     }
 

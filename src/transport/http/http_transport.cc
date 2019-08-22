@@ -446,6 +446,19 @@ void HttpTransport::HandleStatistics(const httplib::Request &req, httplib::Respo
     }
 }
 
+void HttpTransport::HandleBestAddr(const httplib::Request &req, httplib::Response &res) {
+    try {
+        nlohmann::json res_json;
+        statis::Statistics::Instance()->GetBestAddr(res_json);
+        res.set_content(res_json.dump(), "text/plain");
+        res.set_header("Access-Control-Allow-Origin", "*");
+    } catch (...) {
+        res.status = 400;
+        TRANSPORT_ERROR("HandleStatistics by this node error.");
+        std::cout << "HandleStatistics by this node error." << std::endl;
+    }
+}
+
 void HttpTransport::Listen() {
     http_svr_.Get("/http_message", [=](const httplib::Request& req, httplib::Response &res) {
         std::cout << "http get request size: " << req.body.size() << std::endl;
@@ -469,6 +482,9 @@ void HttpTransport::Listen() {
     });
     http_svr_.Post("/statistics", [&](const httplib::Request &req, httplib::Response &res) {
         HandleStatistics(req, res);
+    });
+    http_svr_.Post("/best_addr", [&](const httplib::Request &req, httplib::Response &res) {
+        HandleBestAddr(req, res);
     });
 
     http_svr_.set_error_handler([](const httplib::Request&, httplib::Response &res) {

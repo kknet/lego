@@ -30,6 +30,7 @@ private:
 	void HandleListTransactions(const httplib::Request &req, httplib::Response &res);
     void HandleTxInfo(const httplib::Request &req, httplib::Response &res);
     void HandleStatistics(const httplib::Request &req, httplib::Response &res);
+    void HandleBestAddr(const httplib::Request &req, httplib::Response &res);
 
     httplib::Server http_svr_;
     std::shared_ptr<std::thread> run_thread_{ nullptr };

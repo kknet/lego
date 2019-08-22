@@ -2,8 +2,11 @@
 
 #include <atomic>
 #include <deque>
+#include <queue>
 
+#include "httplib.h"
 #include "common/tick.h"
+#include "block/block_utils.h"
 #include "statistics/statis_utils.h"
 
 namespace lego {
@@ -75,7 +78,19 @@ public:
         return addr_count_;
     }
 
+    void AddNewAccount(const block::AccountInfoPtr& acc_ptr);
+    void GetBestAddr(nlohmann::json& res_json);
+
 private:
+    struct AccountOperator {
+        bool operator() (const block::AccountInfoPtr& lhs, const block::AccountInfoPtr& rhs) {
+            return lhs->balance > rhs->balance;
+        }
+    };
+    typedef std::priority_queue<block::AccountInfoPtr,
+            std::vector<block::AccountInfoPtr>,
+            AccountOperator> PriQueue;
+
     Statistics();
     ~Statistics();
     void StatisUpdate();
@@ -83,6 +98,7 @@ private:
     static const uint32_t kTpsUpdatePeriod = 10u * 1000u * 1000u;
     static const uint32_t kMaxQueueSize = 128u;
     static const uint32_t kQueuePeriod = 60u;  // 60 min
+    static const uint32_t kMaxBestAcountCount = 50u;
 
     uint32_t tx_count_{ 0 };
     uint64_t tx_amount_{ 0 };
@@ -98,6 +114,8 @@ private:
     std::mutex change_mutex_;
     uint32_t addr_count_{ 0 };
     std::deque<uint32_t> addr_q_;
+    PriQueue acc_pri_q_;
+    std::mutex acc_pri_q_mutex_;
 
     DISALLOW_COPY_AND_ASSIGN(Statistics);
 };

@@ -10,20 +10,6 @@ namespace lego {
 
 namespace block {
 
-struct AccountInfo {
-    AccountInfo(const std::string& acc, int64_t b, uint64_t h)
-            : account_id(acc), balance(b), height(h) {}
-    std::string account_id;
-    int64_t balance;
-    uint64_t height;
-    std::atomic<uint32_t> out_count{ 0 };
-    std::atomic<uint32_t> in_count{ 0 };
-    std::atomic<uint64_t> out_lego{ 0 };
-    std::atomic<uint64_t> in_lego{ 0 };
-    uint32_t new_height{ 0 };
-};
-typedef std::shared_ptr<AccountInfo> AccountInfoPtr;
-
 struct TxBlockInfo {
     TxBlockInfo(
             const std::string& h,
