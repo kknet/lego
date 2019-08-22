@@ -49,6 +49,12 @@ public:
         }
         return all_lego;
     }
+
+    std::shared_ptr<std::unordered_map<std::string, AccountInfoPtr>> acc_map_ptr() {
+        std::lock_guard<std::mutex> gaurd(acc_map_mutex_);
+        return std::make_shared<std::unordered_map<std::string, AccountInfoPtr>>(acc_map_);
+    }
+
 private:
     AccountManager();
     ~AccountManager();

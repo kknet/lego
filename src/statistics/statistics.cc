@@ -61,6 +61,16 @@ void Statistics::StatisUpdate() {
         }
     }
     all_acc_lego_ = block::AccountManager::Instance()->all_acc_lego();
+    acc_addr_ptr_ = block::AccountManager::Instance()->acc_map_ptr();
+    {
+        std::lock_guard<std::mutex> guard(acc_pri_q_mutex_);
+        while (!acc_pri_q_.empty()) {
+            acc_pri_q_.pop();
+        }
+        for (auto iter = acc_addr_ptr_->begin(); iter != acc_addr_ptr_->end(); ++iter) {
+            AddNewAccount(iter->second);
+        }
+    }
     statis_tick_.CutOff(kTpsUpdatePeriod, std::bind(&Statistics::StatisUpdate, this));
 }
 

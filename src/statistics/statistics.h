@@ -117,6 +117,7 @@ private:
     PriQueue acc_pri_q_;
     std::mutex acc_pri_q_mutex_;
     uint64_t all_acc_lego_{ 0 };
+    std::shared_ptr<std::unordered_map<std::string, block::AccountInfoPtr>> acc_addr_ptr_{ nullptr };
 
     DISALLOW_COPY_AND_ASSIGN(Statistics);
 };
