@@ -70,7 +70,9 @@ public:
     std::string Init(
             const std::string& local_ip,
             uint16_t local_port,
-            const std::string& bootstrap);
+            const std::string& bootstrap,
+            const std::string& conf_path,
+            const std::string& log_conf_path);
     std::string Init(const std::string& conf);
     std::string GetVpnServerNodes(
             const std::string& country,
@@ -81,7 +83,7 @@ public:
     TxInfoPtr GetBlockWithGid(const std::string& gid);
     TxInfoPtr GetBlockWithHash(const std::string& block_hash);
     int GetSocket();
-    bool ConfigExists();
+    bool ConfigExists(const std::string& conf_path);
 
 private:
     VpnClient();

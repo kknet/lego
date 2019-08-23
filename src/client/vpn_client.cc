@@ -42,9 +42,6 @@ static const uint32_t kDefaultBufferSize = 1024u * 1024u;
 static common::Config config;
 static common::Tick check_tx_tick_;
 
-static const std::string kDefaultLogConfig("./conf/log4cpp.properties");
-static const std::string kDefaultConfPath("./conf/lego.conf");
-
 VpnClient::VpnClient() {
     network::Route::Instance()->RegisterMessage(
             common::kServiceMessage,
@@ -79,7 +76,7 @@ int VpnClient::GetSocket() {
 
 std::string VpnClient::Init(const std::string& conf) {
     if (!config.Init(conf)) {
-        CLIENT_ERROR("init config[%s] failed!", kDefaultConfPath.c_str());
+        CLIENT_ERROR("init config[%s] failed!", conf.c_str());
         return "init config failed";
     }
 
@@ -90,7 +87,7 @@ std::string VpnClient::Init(const std::string& conf) {
 
     std::string priky("");
     if (!config.Get("lego", "prikey", priky) || priky.empty()) {
-        CLIENT_ERROR("config[%s] invalid!", kDefaultConfPath.c_str());
+        CLIENT_ERROR("config[%s] invalid!", conf.c_str());
         return "config invalid";
     }
 
@@ -120,19 +117,21 @@ std::string VpnClient::Init(const std::string& conf) {
 std::string VpnClient::Init(
         const std::string& local_ip,
         uint16_t local_port,
-        const std::string& bootstrap) {
+        const std::string& bootstrap,
+        const std::string& conf_path,
+        const std::string& log_conf_path) {
     WriteDefaultLogConf();
-    log4cpp::PropertyConfigurator::configure(kDefaultLogConfig);
+    log4cpp::PropertyConfigurator::configure(log_conf_path);
     std::string private_key;
-    if (ConfigExists()) {
-        if (!config.Init(kDefaultConfPath)) {
+    if (ConfigExists(conf_path)) {
+        if (!config.Init(conf_path)) {
             CLIENT_ERROR("init config failed!");
             return "ERROR";
         }
 
         std::string priky("");
         if (!config.Get("lego", "prikey", priky) || priky.empty()) {
-            CLIENT_ERROR("config[%s] invalid!", kDefaultConfPath.c_str());
+            CLIENT_ERROR("config[%s] invalid!", conf_path.c_str());
         } else {
             private_key = common::Encode::HexDecode(priky);
         }
@@ -164,7 +163,7 @@ std::string VpnClient::Init(
     common::GlobalInfo::Instance()->set_id(account_address);
     config.Set("lego", "id", common::Encode::HexEncode(
             common::GlobalInfo::Instance()->id()));
-    config.DumpConfig(kDefaultConfPath);
+    config.DumpConfig(conf_path);
 
     if (security::EcdhCreateKey::Instance()->Init() != security::kSecuritySuccess) {
         CLIENT_ERROR("init ecdh create secret key failed!");
@@ -183,9 +182,9 @@ std::string VpnClient::Init(
     return common::Encode::HexEncode(common::GlobalInfo::Instance()->id());
 }
 
-bool VpnClient::ConfigExists() {
+bool VpnClient::ConfigExists(const std::string& conf_path) {
     FILE* file = NULL;
-    file = fopen(kDefaultConfPath.c_str(), "r");
+    file = fopen(conf_path.c_str(), "r");
     if (file == NULL) {
         return false;
     }

@@ -1,10 +1,7 @@
 #pragma once
 
-#include <iostream>
-#include <iomanip>
 #include <functional>
 #include <string>
-#include <unordered_set>
 
 #include "transport/transport_utils.h"
 
@@ -16,6 +13,9 @@ struct Endpoint {
 	Endpoint(const std::string& in_ip, uint16_t in_port) : ip(in_ip), port(in_port) {}
 	std::string ip;
 	uint16_t port;
+    bool operator==(const Endpoint& other)const {
+        return ip == other.ip && port == other.port;
+    }
 };
 
 }  // namespace transport
@@ -24,12 +24,6 @@ struct Endpoint {
 
 
 namespace std {
-	inline static bool operator==(
-			const lego::transport::Endpoint& lhs,
-			const lego::transport::Endpoint& rhs) {
-		return lhs.ip == rhs.ip && lhs.port == rhs.port;
-	}
-
 	template <>
 	struct hash<lego::transport::Endpoint> {
 		size_t operator()(lego::transport::Endpoint const& endpoint) const {

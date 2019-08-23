@@ -1,11 +1,11 @@
 #pragma once
 
+#include "transport/endpoint.h"
 #include <unordered_map>
 #include <atomic>
 #include <memory>
 
 #include "kcp/ikcp.h"
-#include "transport/endpoint.h"
 #include "transport/udp/udp_transport.h"
 
 namespace lego {
