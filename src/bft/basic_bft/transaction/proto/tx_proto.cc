@@ -95,6 +95,7 @@ void TxProto::CreateTxBlock(
     protobuf::Block& block_item = *(bft_msg.mutable_block());
     auto tx_block = block_item.mutable_tx_block();
     auto tx_list = tx_block->mutable_tx_list();
+    std::unordered_map<std::string, int64_t> acc_balance_map;
     for (uint32_t i = 0; i < tx_vec.size(); ++i) {
         protobuf::TxInfo tx;
         tx.set_version(0);
@@ -112,25 +113,43 @@ void TxProto::CreateTxBlock(
             tx.set_balance(100000);  // create new account address
         } else {
             if (tx_vec[i]->add_to_acc_addr) {
-                auto acc_info = block::AccountManager::Instance()->GetAcountInfo(
-                        tx_vec[i]->to_acc_addr);
-                if (acc_info == nullptr) {
-                    // this should remove from tx pool
-                    continue;
-                }
-                tx.set_balance(acc_info->balance + tx_vec[i]->lego_count);
-            } else {
-                auto acc_info = block::AccountManager::Instance()->GetAcountInfo(
-                        tx_vec[i]->from_acc_addr);
-                if (acc_info == nullptr) {
-                    // this should remove from tx pool
-                    continue;
-                }
-                if (acc_info->balance < static_cast<int64_t>(tx_vec[i]->lego_count)) {
-                    tx.set_balance(acc_info->balance);  // don't change balance
+                auto iter = acc_balance_map.find(tx_vec[i]->to_acc_addr());
+                if (iter == acc_balance_map.end()) {
+                    auto acc_info = block::AccountManager::Instance()->GetAcountInfo(
+                            tx_vec[i]->to_acc_addr);
+                    if (acc_info == nullptr) {
+                        // this should remove from tx pool
+                        continue;
+                    }
+                    acc_balance_map[tx_vec[i]->to_acc_addr()] = acc_info->balance + tx_vec[i]->lego_count;
                 } else {
-                    tx.set_balance(acc_info->balance - tx_vec[i]->lego_count);
+                    acc_balance_map[tx_vec[i]->to_acc_addr()] += tx_vec[i]->lego_count;
                 }
+                tx.set_balance(acc_balance_map[tx_vec[i]->to_acc_addr()]);
+            } else {
+                auto iter = acc_balance_map.find(tx_vec[i]->from_acc_addr());
+                if (iter == acc_balance_map.end()) {
+                    auto acc_info = block::AccountManager::Instance()->GetAcountInfo(
+                            tx_vec[i]->from_acc_addr);
+                    if (acc_info == nullptr) {
+                        // this should remove from tx pool
+                        continue;
+                    }
+
+                    if (acc_info->balance < static_cast<int64_t>(tx_vec[i]->lego_count)) {
+                        // this should remove from tx pool
+                        continue;
+                    }
+                    acc_balance_map[tx_vec[i]->from_acc_addr()] = (
+                            acc_info->balance - static_cast<int64_t>(tx_vec[i]->lego_count));
+                } else {
+                    if (acc_balance_map[tx_vec[i]->from_acc_addr()] < static_cast<int64_t>(tx_vec[i]->lego_count)) {
+                        // this should remove from tx pool
+                        continue;
+                    }
+                    acc_balance_map[tx_vec[i]->from_acc_addr()] -= static_cast<int64_t>(tx_vec[i]->lego_count);
+                }
+                tx.set_balance(acc_balance_map[tx_vec[i]->from_acc_addr()]);
             }
         }
         tx.set_to_add(tx_vec[i]->add_to_acc_addr);
