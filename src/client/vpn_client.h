@@ -72,6 +72,7 @@ public:
             uint16_t local_port,
             const std::string& bootstrap,
             const std::string& conf_path,
+            const std::string& log_path,
             const std::string& log_conf_path);
     std::string Init(const std::string& conf);
     std::string GetVpnServerNodes(
@@ -99,7 +100,9 @@ private:
     int CreateClientUniversalNetwork();
     void CheckTxExists();
     std::string CheckTransaction(const std::string& hash, bool is_gid);
-    void WriteDefaultLogConf(const std::string& log_conf_path);
+    void WriteDefaultLogConf(
+            const std::string& log_conf_path,
+            const std::string& log_path);
 
     static const uint32_t kDefaultUdpSendBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kDefaultUdpRecvBufferSize = 10u * 1024u * 1024u;

@@ -119,8 +119,9 @@ std::string VpnClient::Init(
         uint16_t local_port,
         const std::string& bootstrap,
         const std::string& conf_path,
+        const std::string& log_path,
         const std::string& log_conf_path) {
-    WriteDefaultLogConf(log_conf_path);
+    WriteDefaultLogConf(log_conf_path, log_path);
     log4cpp::PropertyConfigurator::configure(log_conf_path);
     std::string private_key;
     if (ConfigExists(conf_path)) {
@@ -199,7 +200,9 @@ bool VpnClient::ConfigExists(const std::string& conf_path) {
     return true;
 }
 
-void VpnClient::WriteDefaultLogConf(const std::string& log_conf_path) {
+void VpnClient::WriteDefaultLogConf(
+        const std::string& log_conf_path,
+        const std::string& log_path) {
     FILE* file = NULL;
     file = fopen(log_conf_path.c_str(), "w");
     if (file == NULL) {
@@ -212,8 +215,8 @@ void VpnClient::WriteDefaultLogConf(const std::string& log_conf_path) {
         "log4cpp.appender.rootAppender.layout = PatternLayout\n"
         "log4cpp.appender.rootAppender.layout.ConversionPattern = %d [%p] %m%n\n"
         "log4cpp.appender.programLog = RollingFileAppender\n"
-        "log4cpp.appender.programLog.fileName = ./log/lego.log\n"
-        "log4cpp.appender.programLog.maxFileSize = 1073741824\n"
+        "log4cpp.appender.programLog.fileName = ") + log_path + "\n" +
+        std::string("log4cpp.appender.programLog.maxFileSize = 1073741824\n"
         "log4cpp.appender.programLog.maxBackupIndex = 1\n"
         "log4cpp.appender.programLog.layout = PatternLayout\n"
         "log4cpp.appender.programLog.layout.ConversionPattern = %d [%p] %m%n\n");
