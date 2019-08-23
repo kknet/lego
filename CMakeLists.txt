@@ -141,6 +141,7 @@ set(LINK_ARGS
     db
     security
     statistics
+    ip
     common
     protobuf
     uv
@@ -158,6 +159,8 @@ set(CLIENT_LINK_ARGS
     client
     init
     bft
+    block
+    statistics
     vss
     network
     sync
@@ -170,6 +173,7 @@ set(CLIENT_LINK_ARGS
     db
     security
     json2pb
+    ip
     common
     protobuf
     uv
@@ -192,6 +196,7 @@ include_directories(SYSTEM ${SRC_DIR})
 if(BUILD_CLIENT)
 else()
     add_subdirectory(${SRC_DIR}/common common)
+    add_subdirectory(${SRC_DIR}/ip ip)
 #    add_subdirectory(${SRC_DIR}/uuid uuid)
     add_subdirectory(${SRC_DIR}/json2pb json2pb)
     add_subdirectory(${SRC_DIR}/security security)
@@ -214,6 +219,7 @@ else()
 
     if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
         add_subdirectory(${SRC_DIR}/common/tests common_test)
+        add_subdirectory(${SRC_DIR}/ip/tests ip_test)
         add_subdirectory(${SRC_DIR}/db/tests db_test)
         add_subdirectory(${SRC_DIR}/transport/demo udp_demo_svr)
         add_subdirectory(${SRC_DIR}/broadcast/tests broadcast_test )

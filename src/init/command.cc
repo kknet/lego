@@ -202,6 +202,10 @@ void Command::TxPeriod() {
     std::string tx_gid;
     lego::client::VpnClient::Instance()->Transaction(to, amount, tx_gid);
     tx_tick_.CutOff(kTransportTestPeriod, std::bind(&Command::TxPeriod, this));
+    std::cout << "tx gid:" << tx_gid << " success transaction from: "
+        << common::Encode::HexEncode(common::GlobalInfo::Instance()->id())
+        << " to: " << to << " , amount: " << amount << std::endl;
+
 }
 
 void Command::GetVpnNodes() {

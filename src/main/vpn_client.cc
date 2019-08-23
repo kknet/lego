@@ -12,8 +12,8 @@
 int main(int argc, char** argv) {
     auto int_res = lego::client::VpnClient::Instance()->Init(
             "192.168.190.129",
-            8994,
-            "id_1:122.112.234.133:8992",
+            0,
+            "id_1:122.112.234.133:8991",
             "./conf/lego.conf",
             "./log/lego.log",
             "./conf/log4cpp.properties");
@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
 //             << ", " << nodes[i]->encrypt_type << ", " << nodes[i]->passwd << std::endl;
 //     }
     lego::init::Command cmd;
-    if (!cmd.Init(false, true)) {
+    if (!cmd.Init(false, false, true)) {
         std::cout << "init cmd failed!" << std::endl;
         return 1;
     }
