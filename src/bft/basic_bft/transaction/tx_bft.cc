@@ -117,6 +117,53 @@ int TxBft::BackupCheckPrepare(std::string& bft_str) {
             BFT_ERROR("check transaction failed![%d]", res);
             return res;
         }
+
+        std::unordered_map<std::string, int64_t> acc_balance_map;
+        if (tx_info.has_to() && !tx_info.to().empty()) {
+            if (tx_info.to_add()) {
+                auto iter = acc_balance_map.find(tx_info.to());
+                if (iter == acc_balance_map.end()) {
+                    auto acc_info = block::AccountManager::Instance()->GetAcountInfo(tx_info.to());
+                    if (acc_info == nullptr) {
+                        // this should remove from tx pool
+                        return kBftAccountNotExists;
+                    }
+                    acc_balance_map[tx_info.to()] = acc_info->balance + tx_info.amount();
+                } else {
+                    acc_balance_map[tx_info.to()] += tx_info.amount();
+                }
+
+                if (acc_balance_map[tx_info.to()] != tx_info.balance()) {
+                    return kBftAccountBalanceError;
+                }
+            } else {
+                auto iter = acc_balance_map.find(tx_info.from());
+                if (iter == acc_balance_map.end()) {
+                    auto acc_info = block::AccountManager::Instance()->GetAcountInfo(tx_info.from());
+                    if (acc_info == nullptr) {
+                        // this should remove from tx pool
+                        return kBftAccountNotExists;
+                    }
+
+                    if (acc_info->balance < static_cast<int64_t>(tx_info.amount())) {
+                        // this should remove from tx pool
+                        return kBftAccountBalanceError;
+                    }
+                    acc_balance_map[tx_info.from()] = (
+                            acc_info->balance - static_cast<int64_t>(tx_info.amount()));
+                } else {
+                    if (acc_balance_map[tx_info.from()] < static_cast<int64_t>(tx_info.amount())) {
+                        // this should remove from tx pool
+                        return kBftAccountBalanceError;
+                    }
+                    acc_balance_map[tx_info.from()] -= static_cast<int64_t>(tx_info.amount());
+                }
+
+                if (acc_balance_map[tx_info.from()] != tx_info.balance()) {
+                    return kBftAccountBalanceError;
+                }
+            }
+        }
         push_bft_item_vec(tx_info.gid());
     }
 
@@ -163,42 +210,42 @@ int TxBft::CheckTxInfo(
 
     block::AccountInfoPtr acc_ptr{ nullptr };
     if (tx_info.has_to() && !tx_info.to().empty()) {
-        if (tx_info.to_add()) {
-            // check from consensus result(from broadcast to this shard)
-            // check to network id, if not then broadcast to destination network
-            // check to pool index
-            if (common::GetPoolIndex(tx_info.to()) != pool_index()) {
-                return kBftPoolIndexError;
-            }
-            // just add
-            acc_ptr = block::AccountManager::Instance()->GetAcountInfo(tx_info.to());
-            if (acc_ptr == nullptr) {
-                return kBftAccountNotExists;
-            }
-
-            if (acc_ptr->balance + tx_info.amount() != tx_info.balance()) {
-                return kBftAccountBalanceError;
-            }
-        } else {
-            // check from balance
-            // check to pool index
-            if (common::GetPoolIndex(tx_info.from()) != pool_index()) {
-                return kBftPoolIndexError;
-            }
-
-            acc_ptr = block::AccountManager::Instance()->GetAcountInfo(tx_info.from());
-            if (acc_ptr == nullptr) {
-                return kBftAccountNotExists;
-            }
-
-            if (acc_ptr->balance < static_cast<int64_t>(tx_info.amount())) {
-                return kBftAccountBalanceError;
-            }
-
-            if (acc_ptr->balance - tx_info.amount() != tx_info.balance()) {
-                return kBftAccountBalanceError;
-            }
-        }
+//         if (tx_info.to_add()) {
+//             // check from consensus result(from broadcast to this shard)
+//             // check to network id, if not then broadcast to destination network
+//             // check to pool index
+//             if (common::GetPoolIndex(tx_info.to()) != pool_index()) {
+//                 return kBftPoolIndexError;
+//             }
+//             // just add
+//             acc_ptr = block::AccountManager::Instance()->GetAcountInfo(tx_info.to());
+//             if (acc_ptr == nullptr) {
+//                 return kBftAccountNotExists;
+//             }
+// 
+//             if (acc_ptr->balance + tx_info.amount() != tx_info.balance()) {
+//                 return kBftAccountBalanceError;
+//             }
+//         } else {
+//             // check from balance
+//             // check to pool index
+//             if (common::GetPoolIndex(tx_info.from()) != pool_index()) {
+//                 return kBftPoolIndexError;
+//             }
+// 
+//             acc_ptr = block::AccountManager::Instance()->GetAcountInfo(tx_info.from());
+//             if (acc_ptr == nullptr) {
+//                 return kBftAccountNotExists;
+//             }
+// 
+//             if (acc_ptr->balance < static_cast<int64_t>(tx_info.amount())) {
+//                 return kBftAccountBalanceError;
+//             }
+// 
+//             if (acc_ptr->balance - tx_info.amount() != tx_info.balance()) {
+//                 return kBftAccountBalanceError;
+//             }
+//         }
     } else {
         // check amount is 0
         // new account address
