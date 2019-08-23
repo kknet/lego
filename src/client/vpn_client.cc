@@ -42,8 +42,8 @@ static const uint32_t kDefaultBufferSize = 1024u * 1024u;
 static common::Config config;
 static common::Tick check_tx_tick_;
 
-static const std::string kDefaultLogConfig("/data/data/com.vm.legovpn/log4cpp.properties");
-static const std::string kDefaultConfPath("/data/data/com.vm.legovpn/lego.conf");
+static const std::string kDefaultLogConfig("./conf/log4cpp.properties");
+static const std::string kDefaultConfPath("./conf/lego.conf");
 
 VpnClient::VpnClient() {
     network::Route::Instance()->RegisterMessage(
@@ -159,6 +159,9 @@ std::string VpnClient::Init(
             security::Schnorr::Instance()->str_prikey()));
     config.Set("lego", "pubkey", common::Encode::HexEncode(
             security::Schnorr::Instance()->str_pubkey()));
+    std::string account_address = network::GetAccountAddressByPublicKey(
+            security::Schnorr::Instance()->str_pubkey());
+    common::GlobalInfo::Instance()->set_id(account_address);
     config.Set("lego", "id", common::Encode::HexEncode(
             common::GlobalInfo::Instance()->id()));
     config.DumpConfig(kDefaultConfPath);
@@ -210,7 +213,7 @@ void VpnClient::WriteDefaultLogConf() {
         "log4cpp.appender.rootAppender.layout = PatternLayout\n"
         "log4cpp.appender.rootAppender.layout.ConversionPattern = %d [%p] %m%n\n"
         "log4cpp.appender.programLog = RollingFileAppender\n"
-        "log4cpp.appender.programLog.fileName = /data/data/com.vm.legovpn/lego.log\n"
+        "log4cpp.appender.programLog.fileName = ./log/lego.log\n"
         "log4cpp.appender.programLog.maxFileSize = 1073741824\n"
         "log4cpp.appender.programLog.maxBackupIndex = 1\n"
         "log4cpp.appender.programLog.layout = PatternLayout\n"
@@ -478,6 +481,11 @@ std::string VpnClient::Transaction(const std::string& to, uint64_t amount, std::
         tx_map_.insert(std::make_pair(tx_gid, nullptr));
     }
     tx_gid = common::Encode::HexEncode(tx_gid);
+    CLIENT_ERROR("send new tx: %s, from: %s, to: %s, amount: %llu",
+            tx_gid.c_str(),
+            common::Encode::HexEncode(common::GlobalInfo::Instance()->id()).c_str(),
+            to.c_str(),
+            amount);
     return "OK";
 }
 

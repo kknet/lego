@@ -118,7 +118,7 @@ void Command::AddBaseCommands() {
         std::string tx_gid;
         std::string to;
         if (args.size() > 0) {
-            to = common::Encode::HexDecode(args[0]);
+            to = args[0];
         }
 
         uint64_t amount = 0;

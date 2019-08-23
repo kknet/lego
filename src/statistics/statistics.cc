@@ -35,6 +35,7 @@ void Statistics::StatisUpdate() {
     std::lock_guard<std::mutex> gaurd(change_mutex_);
     float tps = (float)period_tx_count_ / 10.0;
     tps_queue_.push_back(tps);
+    period_tx_count_ = 0;
     if (tps_queue_.size() > kMaxQueueSize) {
         tps_queue_.pop_front();
     }
