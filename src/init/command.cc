@@ -26,10 +26,13 @@ Command::~Command() {
     destroy_ = true;
 }
 
-bool Command::Init(bool first_node, bool show_cmd) {
+bool Command::Init(bool first_node, bool show_cmd, bool period_tick) {
     first_node_ = first_node;
     show_cmd_ = show_cmd;
     AddBaseCommands();
+    if (period_tick) {
+        tx_tick_.CutOff(kTransportTestPeriod, std::bind(&Command::TxPeriod, this));
+    }
     return true;
 }
 
@@ -174,6 +177,31 @@ void Command::AddBaseCommands() {
             std::cout << std::endl;
         }
     });
+}
+
+void Command::TxPeriod() {
+    const static std::vector<std::string> kToVec = {
+        "ed8ff8be40cea693ccccdec322734efad3887c214d9b5b5d27e7eeb23f9bad57",
+        "d13e2e80bfabf218571aa7d1e9d78725ac81a44c5ce1cdd26e26682f5fb074ea",
+        "7ff1c9d61979ff5e628a462a12cf6bb37b0385999e4d38dba49b2f3b290cb629",
+        "33db092901adfc31113bb4c8de4d02f71725ecab3cc6f80cbf17198a44d27042",
+        "8362c14239913b0bba5cfde3077e7213f1dd63483b96c3a4d69c96b7bc880dd0",
+        "562e22f17854a247bcb31b7593e3e7870de3e6185180f079bb7b9b3ff7d332ba",
+        "1cbf2103db1fdb0257a4fed5fb4088ec0ee5ec092a16113acfd0d39b7fda32ef",
+        "9933386363509f9cc38850819da15805c905b23ca0fe1b72e00167c733b612ad",
+        "5ebd74cbdbb526380ff42ded6ec1e285b41f0adee552d7517c5bfd84ee4f893b",
+        "eddfa882929c48b6021dfe2f44f7af49c6402c121965057f67fad275aec9e340",
+        "07d2d95eb210cd897d255767e0e278d23e21193fbd3ba02452d4c0bf711f6a38",
+        "46e404414a45abbb8375a07465445958a0485f692f3118e2e444b17c8b516bd2",
+        "ed64f20aa64f4543162b7806c6205ae5655a469280531e58accd793f581387f4",
+        "a67f5318d4355861b9fa4d8d7ebc346ae2154691ca7aaf90111e4d87f0e3254a",
+        "72012a413fe07cc3fd6367489ce047e577f646e8c45cdf649bd23cb21c8b707e"
+    };
+    std::string to = kToVec[std::rand() % kToVec.size()];
+    uint32_t amount = std::rand() % 100 + 10;
+    std::string tx_gid;
+    lego::client::VpnClient::Instance()->Transaction(to, amount, tx_gid);
+    tx_tick_.CutOff(kTransportTestPeriod, std::bind(&Command::TxPeriod, this));
 }
 
 void Command::GetVpnNodes() {

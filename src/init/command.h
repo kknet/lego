@@ -6,6 +6,7 @@
 #include <map>
 
 #include "common/utils.h"
+#include "common/tick.h"
 
 namespace lego {
 
@@ -18,7 +19,7 @@ public:
     Command();
     ~Command();
 
-    bool Init(bool first_node, bool show_cmd);
+    bool Init(bool first_node, bool show_cmd, bool period_tick = false);
     void Run();
     void Destroy() { destroy_ = true; }
     void Help();
@@ -30,12 +31,15 @@ private:
     void PrintDht(uint32_t network_id);
     void PrintMembers(uint32_t network_id);
     void GetVpnNodes();
+    void TxPeriod();
 
+    static const uint32_t kTransportTestPeriod = 1000 * 1000;
     std::map<std::string, CommandFunction> cmd_map_;
     std::mutex cmd_map_mutex_;
     bool destroy_{ false };
     bool show_cmd_{ false };
     bool first_node_{ false };
+    common::Tick tx_tick_;
 };
 
 }  // namespace init
