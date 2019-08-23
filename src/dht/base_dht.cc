@@ -194,7 +194,7 @@ void BaseDht::SendToClosestNode(transport::protobuf::Header& message) {
         return;
     }
 
-    if (message.des_dht_key() != local_node_->dht_key) {
+    if (message.des_dht_key() == local_node_->dht_key) {
         return;
     }
 
