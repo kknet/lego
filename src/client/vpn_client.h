@@ -99,7 +99,7 @@ private:
     int CreateClientUniversalNetwork();
     void CheckTxExists();
     std::string CheckTransaction(const std::string& hash, bool is_gid);
-    void WriteDefaultLogConf();
+    void WriteDefaultLogConf(const std::string& log_conf_path);
 
     static const uint32_t kDefaultUdpSendBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kDefaultUdpRecvBufferSize = 10u * 1024u * 1024u;

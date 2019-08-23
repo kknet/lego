@@ -120,7 +120,7 @@ std::string VpnClient::Init(
         const std::string& bootstrap,
         const std::string& conf_path,
         const std::string& log_conf_path) {
-    WriteDefaultLogConf();
+    WriteDefaultLogConf(log_conf_path);
     log4cpp::PropertyConfigurator::configure(log_conf_path);
     std::string private_key;
     if (ConfigExists(conf_path)) {
@@ -199,9 +199,9 @@ bool VpnClient::ConfigExists(const std::string& conf_path) {
     return true;
 }
 
-void VpnClient::WriteDefaultLogConf() {
+void VpnClient::WriteDefaultLogConf(const std::string& log_conf_path) {
     FILE* file = NULL;
-    file = fopen(kDefaultLogConfig.c_str(), "w");
+    file = fopen(log_conf_path.c_str(), "w");
     if (file == NULL) {
         return;
     }
