@@ -13,7 +13,7 @@ int main(int argc, char** argv) {
     auto int_res = lego::client::VpnClient::Instance()->Init(
             "192.168.190.129",
             8994,
-            "id_1:192.168.190.129:8991",
+            "id_1:122.112.234.133:8992",
             "./conf/lego.conf",
             "./log/lego.log",
             "./conf/log4cpp.properties");

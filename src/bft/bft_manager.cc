@@ -61,7 +61,6 @@ void BftManager::HandleMessage(transport::protobuf::Header& header) {
     }
 
     if (!bft_msg.has_status()) {
-        assert(bft_msg.has_status());
         return;
     }
 

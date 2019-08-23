@@ -86,6 +86,7 @@ void BftProto::BackupCreatePrepare(
     bft_msg.set_net_id(from_bft_msg.net_id());
     bft_msg.set_node_id(local_node->id);
     bft_msg.set_agree(agree);
+    bft_msg.set_status(kBftPrepare);
     std::string secret_str;
     secret.Serialize(secret_str);
     bft_msg.set_secret(secret_str);
