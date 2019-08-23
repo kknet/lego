@@ -193,8 +193,11 @@ void BaseDht::SendToClosestNode(transport::protobuf::Header& message) {
         transport()->Send(message.from_ip(), message.from_port(), 0, message);
         return;
     }
-    assert(!message.des_dht_key().empty());
-    assert(message.des_dht_key() != local_node_->dht_key);
+
+    if (message.des_dht_key() != local_node_->dht_key) {
+        return;
+    }
+
     if (readonly_dht_->empty()) {
         LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("dht empty", message);
         return;
