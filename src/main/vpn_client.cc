@@ -13,7 +13,9 @@ int main(int argc, char** argv) {
     auto int_res = lego::client::VpnClient::Instance()->Init(
             "192.168.190.129",
             8994,
-            "id_1:192.168.190.129:8991");
+            "id_1:192.168.190.129:8991",
+            "./conf/lego.conf",
+            "./conf/log4cpp.properties");
     if (int_res == "ERROR") {
         std::cout << "init client failed: " << int_res << std::endl;
         return 1;
