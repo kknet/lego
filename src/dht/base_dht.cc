@@ -8,6 +8,7 @@
 #include "common/hash.h"
 #include "common/encode.h"
 #include "common/bloom_filter.h"
+#include "ip/ip_with_country.h"
 #include "transport/processor.h"
 #include "transport/transport_utils.h"
 #include "broadcast/broadcast_utils.h"
@@ -322,10 +323,13 @@ void BaseDht::ProcessBootstrapRequest(
         return;
     }
     // check sign
+    auto node_country = ip::IpWithCountry::Instance()->GetCountryUintCode(header.from_ip());
+    auto src_dht_key = DhtKeyManager(header.src_dht_key());
+    src_dht_key.SetCountryId(node_country);
     auto pubkey_ptr = std::make_shared<security::PublicKey>(header.pubkey());
     NodePtr node = std::make_shared<Node>(
             dht_msg.bootstrap_req().node_id(),
-            header.src_dht_key(),
+            src_dht_key.StrKey(),
             dht_msg.bootstrap_req().nat_type(),
             header.client(),
             header.from_ip(),
@@ -382,11 +386,16 @@ void BaseDht::ProcessBootstrapResponse(
         return;
     }
 
-    joined_ = true;
     local_node_->public_ip = dht_msg.bootstrap_res().public_ip();
     local_node_->public_port = dht_msg.bootstrap_res().public_port();
+    auto node_country = ip::IpWithCountry::Instance()->GetCountryUintCode(local_node_->public_ip);
+    auto local_dht_key = DhtKeyManager(local_node_->dht_key);
+    local_dht_key.SetCountryId(node_country);
+    local_node_->dht_key = local_dht_key.StrKey();
+    local_node_->dht_key_hash = common::Hash::Hash64(local_node_->dht_key);
     join_res_con_.notify_all();
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("4 end", header);
+    joined_ = true;
 }
 
 void BaseDht::ProcessRefreshNeighborsRequest(
@@ -686,7 +695,7 @@ bool BaseDht::CheckDestination(const std::string& des_dht_key, bool check_closes
 
 void BaseDht::RefreshNeighbors() {
     Dht tmp_dht = *readonly_dht_;  // change must copy
-    if (!tmp_dht.empty()) {
+    if (!tmp_dht.empty() && joined_) {
         auto close_nodes = DhtFunction::GetClosestNodes(
                 tmp_dht,
                 local_node_->dht_key,

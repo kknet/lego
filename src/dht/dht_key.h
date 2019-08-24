@@ -37,6 +37,10 @@ public:
     const std::string& StrKey();
     static uint32_t DhtKeyGetNetId(const std::string& dht_key);
     static uint8_t DhtKeyGetCountry(const std::string& dht_key);
+    void SetCountryId(uint8_t country) {
+        dht_key_.construct.country = country;
+        str_key_ = std::string(dht_key_.dht_key, sizeof(dht_key_.dht_key));
+    }
 
 private:
     DhtKey dht_key_;
