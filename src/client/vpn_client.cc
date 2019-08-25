@@ -264,11 +264,14 @@ std::string VpnClient::GetVpnServerNodes(
             common::global_country_map[country],
             count);
     std::cout << "get vpn nodes: " << dht_nodes.size() << std::endl;
+    CLIENT_ERROR("get dht_nodes: [%d]", dht_nodes.size());
     if (dht_nodes.empty()) {
+        CLIENT_ERROR("get dht_nodes: vpn nodes empty!");
         return "vpn nodes empty";
     }
     int res = GetVpnNodes(dht_nodes, nodes);
     if (res != kClientSuccess) {
+        CLIENT_ERROR("get dht_nodes: get vpn nodes failed!");
         return "get vpn nodes failed!";
     }
     return "OK";
