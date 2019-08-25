@@ -130,15 +130,14 @@ int ShadowsocksProxy::StartShadowsocks() {
     socks_conf->mode = kMode;
     socks_conf->passwd = common::Encode::HexEncode(common::Random::RandomString(32));
     socks_conf->timeout = 60;
-    std::string vpn_bin_path;
-    if (!conf_.Get("lego", "vpn_bin_path", vpn_bin_path) || vpn_bin_path.empty()) {
+    if (!conf_.Get("lego", "vpn_bin_path", vpn_bin_path_) || vpn_bin_path_.empty()) {
         PROXY_ERROR("get vpn bin path failed.");
         return kProxyError;
     }
 
     std::string cmd = common::StringUtil::Format(
             "nohup %s -s %s -p %d -k %s -m %s -t %d -u &",
-            vpn_bin_path.c_str(),
+            vpn_bin_path_.c_str(),
             common::GlobalInfo::Instance()->config_local_ip().c_str(),
             socks_conf->port,
             socks_conf->passwd.c_str(),
@@ -243,7 +242,8 @@ void ShadowsocksProxy::CheckVpnStatus() {
                 }
                 std::this_thread::sleep_for(std::chrono::microseconds(100000ull));
                 cmd = common::StringUtil::Format(
-                        "nohup /usr/bin/gpgk -s %s -p %d -k %s -m %s -t %d -u &",
+                        "nohup %s -s %s -p %d -k %s -m %s -t %d -u &",
+                        vpn_bin_path_.c_str(),
                         common::GlobalInfo::Instance()->config_local_ip().c_str(),
                         socks_conf->port,
                         socks_conf->passwd.c_str(),

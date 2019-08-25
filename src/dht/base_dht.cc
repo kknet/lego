@@ -79,7 +79,7 @@ int BaseDht::Join(NodePtr& node) {
     if (replace_pos < dht_.size()) {
         auto rm_iter = dht_.begin() + replace_pos;
         std::unique_lock<std::mutex> lock_hash(node_map_mutex_);
-        auto hash_iter = node_map_.find((*rm_iter)->dht_key_hash);
+        auto hash_iter = node_map_.find((*rm_iter)->id_hash);
         if (hash_iter != node_map_.end()) {
             node_map_.erase(hash_iter);
         }
@@ -88,7 +88,7 @@ int BaseDht::Join(NodePtr& node) {
 
     nat_detection_->Remove(node->dht_key_hash);
     std::unique_lock<std::mutex> lock(node_map_mutex_);
-    auto iter = node_map_.insert(std::make_pair(node->dht_key_hash, node));
+    auto iter = node_map_.insert(std::make_pair(node->id_hash, node));
     if (!iter.second) {
         return kDhtNodeJoined;
     }
@@ -608,12 +608,21 @@ bool BaseDht::NodeValid(NodePtr& node) {
                 common::Encode::HexEncode(node->id).c_str());
         return false;
     }
+
+    auto country_id = ip::IpWithCountry::Instance()->GetCountryUintCode(node->public_ip);
+    auto dht_key_country_code = DhtKeyManager::DhtKeyGetCountry(node->dht_key);
+    if (country_id != dht_key_country_code) {
+        DHT_WARN("node public ip country [%d] not equal to node dht key country[%d]",
+                country_id,
+                dht_key_country_code);
+        return false;
+    }
     return true;
 }
 
 bool BaseDht::NodeJoined(NodePtr& node) {
     std::lock_guard<std::mutex> guard(node_map_mutex_);
-    auto iter = node_map_.find(node->dht_key_hash);
+    auto iter = node_map_.find(node->id_hash);
     return iter != node_map_.end();
 }
 

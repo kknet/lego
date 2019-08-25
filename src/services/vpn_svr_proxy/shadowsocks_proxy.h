@@ -51,6 +51,7 @@ private:
     common::Tick tick_status_;
     std::mutex socks_mutex_;
     VpnProxyNodePtr vpn_proxy_{ nullptr };
+    std::string vpn_bin_path_;
 
     DISALLOW_COPY_AND_ASSIGN(ShadowsocksProxy);
 };
