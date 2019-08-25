@@ -29,10 +29,6 @@ int TxPool::AddTx(TxItemPtr& tx_ptr) {
                 common::Encode::HexEncode(uni_gid).c_str());
         return kBftTxAdded;
     }
-    BFT_ERROR("tx gid[%d][%s] add success!",
-            tx_ptr->add_to_acc_addr,
-            common::Encode::HexEncode(uni_gid).c_str());
-
     added_tx_set_.insert(uni_gid);
     uint64_t tx_index = pool_index_gen_.fetch_add(1);
     tx_pool_[tx_index] = tx_ptr;
