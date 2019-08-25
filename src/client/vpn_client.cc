@@ -414,12 +414,10 @@ int VpnClient::InitNetworkSingleton() {
         CLIENT_ERROR("create universal network failed!");
         return kClientError;
     }
-    return kClientSuccess;
     return CreateClientUniversalNetwork();
 }
 
 int VpnClient::CreateClientUniversalNetwork() {
-    return kClientSuccess;
     dht::DhtKeyManager dht_key(
             network::kVpnNetworkId,
             common::GlobalInfo::Instance()->country(),

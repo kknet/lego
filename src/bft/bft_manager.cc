@@ -166,6 +166,10 @@ void BftManager::HandleToAccountTxBlock(
         transport::protobuf::Header& header,
         bft::protobuf::BftMessage& bft_msg) {
     uint32_t mem_index = GetMemberIndex(bft_msg.net_id(), bft_msg.node_id());
+    if (mem_index == kInvalidMemberIndex) {
+        return;
+    }
+
     security::Signature sign;
     if (VerifySignature(mem_index, bft_msg, sign) != kBftSuccess) {
         BFT_ERROR("verify signature error!");
@@ -352,6 +356,9 @@ int BftManager::LeaderPrepare(BftInterfacePtr& bft_ptr) {
         uint32_t member_idx = GetMemberIndex(
                 bft_ptr->network_id(),
                 common::GlobalInfo::Instance()->id());
+        if (member_idx == kInvalidMemberIndex) {
+            return kBftError;
+        }
         security::Signature leader_sig;
         if (!security::Schnorr::Instance()->Sign(
                 bft_ptr->prepare_hash(),
@@ -435,6 +442,10 @@ int BftManager::LeaderPrecommit(
     }
 
     uint32_t mem_index = GetMemberIndex(bft_msg.net_id(), bft_msg.node_id());
+    if (mem_index == kInvalidMemberIndex) {
+        return kBftError;
+    }
+
     security::Signature sign;
     if (VerifySignature(mem_index, bft_msg, sign) != kBftSuccess) {
         BFT_ERROR("verify signature error!");
@@ -453,6 +464,9 @@ int BftManager::LeaderPrecommit(
         uint32_t member_idx = GetMemberIndex(
                 bft_ptr->network_id(),
                 common::GlobalInfo::Instance()->id());
+        if (member_idx == kInvalidMemberIndex) {
+            return kBftError;
+        }
         security::Response sec_res(
                 bft_ptr->secret(),
                 bft_ptr->challenge(),
@@ -533,6 +547,10 @@ int BftManager::LeaderCommit(
         transport::protobuf::Header& header,
         bft::protobuf::BftMessage& bft_msg) {
     uint32_t mem_index = GetMemberIndex(bft_msg.net_id(), bft_msg.node_id());
+    if (mem_index == kInvalidMemberIndex) {
+        return kBftError;
+    }
+
     security::Signature sign;
     if (VerifySignature(mem_index, bft_msg, sign) != kBftSuccess) {
         BFT_ERROR("verify signature error!");

@@ -70,6 +70,9 @@ uint32_t MemberManager::GetMemberIndex(uint32_t network_id, const std::string& n
     assert(node_index_map != nullptr);
     assert(!node_index_map->empty());
     auto iter = node_index_map->find(node_id);
+    if (iter == node_index_map->end) {
+        return kInvalidMemberIndex;
+    }
     assert(iter != node_index_map->end());
     return iter->second;
 }
@@ -79,6 +82,9 @@ BftMemberPtr MemberManager::GetMember(
         const std::string& node_id) {
     assert(network_id < network::kConsensusShardEndNetworkId);  // just shard
     uint32_t mem_index = GetMemberIndex(network_id, node_id);
+    if (mem_index == kInvalidMemberIndex) {
+        return nullptr;
+    }
     std::lock_guard<std::mutex> guard(all_mutex_);
     MembersPtr member_ptr = network_members_[network_id];
     assert(member_ptr != nullptr);

@@ -10,10 +10,25 @@
 #include "client/client_utils.h"
 
 int main(int argc, char** argv) {
+    lego::common::Config conf;
+    if (!conf.Init("./conf/lego.conf")) {
+        return 1;
+    }
+    std::string local_ip;
+    conf.Get("lego", "local_ip", local_ip);
+    uint16_t local_port;
+    conf.Get("lego", "local_port", local_port);
+    std::string bootstrap;
+    conf.Get("lego", "bootstrap", bootstrap);
+    bool show_cmd;
+    conf.Get("lego", "show_cmd", show_cmd);
+    bool run_tx = false;
+    conf.Get("lego", "run_tx", run_tx);
+
     auto int_res = lego::client::VpnClient::Instance()->Init(
-            "192.168.190.129",
-            0,
-            "id_1:122.112.234.133:8991",
+            local_ip,
+            local_port,
+            bootstrap,
             "./conf/lego.conf",
             "./log/lego.log",
             "./conf/log4cpp.properties");
@@ -55,7 +70,7 @@ int main(int argc, char** argv) {
 //             << ", " << nodes[i]->encrypt_type << ", " << nodes[i]->passwd << std::endl;
 //     }
     lego::init::Command cmd;
-    if (!cmd.Init(false, false, true)) {
+    if (!cmd.Init(false, show_cmd, run_tx)) {
         std::cout << "init cmd failed!" << std::endl;
         return 1;
     }

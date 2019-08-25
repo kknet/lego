@@ -323,9 +323,12 @@ void BaseDht::ProcessBootstrapRequest(
         return;
     }
     // check sign
-    auto node_country = ip::IpWithCountry::Instance()->GetCountryUintCode(header.from_ip());
     auto src_dht_key = DhtKeyManager(header.src_dht_key());
-    src_dht_key.SetCountryId(node_country);
+    auto node_country = ip::IpWithCountry::Instance()->GetCountryUintCode(header.from_ip());
+    if (node_country != ip::kInvalidCountryCode) {
+        src_dht_key.SetCountryId(node_country);
+    }
+
     auto pubkey_ptr = std::make_shared<security::PublicKey>(header.pubkey());
     NodePtr node = std::make_shared<Node>(
             dht_msg.bootstrap_req().node_id(),
@@ -388,9 +391,12 @@ void BaseDht::ProcessBootstrapResponse(
 
     local_node_->public_ip = dht_msg.bootstrap_res().public_ip();
     local_node_->public_port = dht_msg.bootstrap_res().public_port();
-    auto node_country = ip::IpWithCountry::Instance()->GetCountryUintCode(local_node_->public_ip);
+    auto node_country = ip::IpWithCountry::Instance()->GetCountryUintCode(
+            local_node_->public_ip);
     auto local_dht_key = DhtKeyManager(local_node_->dht_key);
-    local_dht_key.SetCountryId(node_country);
+    if (node_country != ip::kInvalidCountryCode) {
+        local_dht_key.SetCountryId(node_country);
+    }
     local_node_->dht_key = local_dht_key.StrKey();
     local_node_->dht_key_hash = common::Hash::Hash64(local_node_->dht_key);
     join_res_con_.notify_all();
@@ -611,11 +617,14 @@ bool BaseDht::NodeValid(NodePtr& node) {
 
     auto country_id = ip::IpWithCountry::Instance()->GetCountryUintCode(node->public_ip);
     auto dht_key_country_code = DhtKeyManager::DhtKeyGetCountry(node->dht_key);
-    if (country_id != dht_key_country_code) {
-        DHT_WARN("node public ip country [%d] not equal to node dht key country[%d]",
-                country_id,
-                dht_key_country_code);
-        return false;
+    if (country_id != ip::kInvalidCountryCode) {
+        if (country_id != dht_key_country_code) {
+            DHT_WARN("node public ip[%s] country [%d] not equal to node dht key country[%d]",
+                    node->public_ip.c_str(),
+                    country_id,
+                    dht_key_country_code);
+            return false;
+        }
     }
     return true;
 }
