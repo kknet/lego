@@ -185,6 +185,7 @@ int TxBft::CheckBlockInfo(const protobuf::Block& block_info) {
     }
 
     if (block_ptr->hash != block_info.tx_block().prehash()) {
+        // (TODO): add sync
         return kBftBlockPreHashError;
     }
 

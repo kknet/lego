@@ -87,7 +87,10 @@ int Route::Send(transport::protobuf::Header& message) {
 
 void Route::HandleMessage(transport::protobuf::Header& header) {
     assert(header.type() < common::kLegoMaxMessageTypeCount);
-    assert(message_processor_[header.type()] != nullptr);
+    if (message_processor_[header.type()] == nullptr) {
+        RouteByUniversal(header);
+        return;
+    }
     // every route message must use dht
     auto dht = GetDht(header.des_dht_key(), header.universal());
     if (!dht) {
