@@ -79,7 +79,7 @@ int BaseDht::Join(NodePtr& node) {
     if (replace_pos < dht_.size()) {
         auto rm_iter = dht_.begin() + replace_pos;
         std::unique_lock<std::mutex> lock_hash(node_map_mutex_);
-        auto hash_iter = node_map_.find((*rm_iter)->id_hash);
+        auto hash_iter = node_map_.find((*rm_iter)->dht_key_hash);
         if (hash_iter != node_map_.end()) {
             node_map_.erase(hash_iter);
         }
@@ -88,7 +88,7 @@ int BaseDht::Join(NodePtr& node) {
 
     nat_detection_->Remove(node->dht_key_hash);
     std::unique_lock<std::mutex> lock(node_map_mutex_);
-    auto iter = node_map_.insert(std::make_pair(node->id_hash, node));
+    auto iter = node_map_.insert(std::make_pair(node->dht_key_hash, node));
     if (!iter.second) {
         return kDhtNodeJoined;
     }
@@ -622,7 +622,7 @@ bool BaseDht::NodeValid(NodePtr& node) {
 
 bool BaseDht::NodeJoined(NodePtr& node) {
     std::lock_guard<std::mutex> guard(node_map_mutex_);
-    auto iter = node_map_.find(node->id_hash);
+    auto iter = node_map_.find(node->dht_key_hash);
     return iter != node_map_.end();
 }
 
