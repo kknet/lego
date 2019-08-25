@@ -165,7 +165,7 @@ std::vector<dht::NodePtr> Uniersal::RemoteGetNetworkNodes(
         } while (0);
         state_lock.Signal();
     };
-    transport::SynchroWait::Instance()->Add(msg.id(), 1 * 1000 * 1000, callback, 1);
+    transport::SynchroWait::Instance()->Add(msg.id(), 3 * 1000 * 1000, callback, 1);
     state_lock.Wait();
     return nodes;
 }
