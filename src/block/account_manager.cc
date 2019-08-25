@@ -64,7 +64,6 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
             SetPool(bptr);
             std::string tx_gid = common::GetTxDbKey(false, tx_list[i].gid());
             db::Db::Instance()->Put(tx_gid, block_item.hash());
-            std::cout << "put new tx_gid 1: " << common::Encode::HexEncode(tx_list[i].gid()) << std::endl;
         } else {
             if (CheckNetworkIdValid(tx_list[i].from()) != kBlockSuccess) {
                 continue;
@@ -90,7 +89,6 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
             SetPool(bptr);
             std::string tx_gid = common::GetTxDbKey(true, tx_list[i].gid());
             db::Db::Instance()->Put(tx_gid, block_item.hash());
-            std::cout << "put new tx_gid 0: " << common::Encode::HexEncode(tx_list[i].gid()) << std::endl;
         }
     }
     return kBlockSuccess;
