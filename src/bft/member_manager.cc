@@ -70,7 +70,7 @@ uint32_t MemberManager::GetMemberIndex(uint32_t network_id, const std::string& n
     assert(node_index_map != nullptr);
     assert(!node_index_map->empty());
     auto iter = node_index_map->find(node_id);
-    if (iter == node_index_map->end) {
+    if (iter == node_index_map->end()) {
         return kInvalidMemberIndex;
     }
     assert(iter != node_index_map->end());
