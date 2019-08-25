@@ -110,6 +110,7 @@ int TxBft::BackupCheckPrepare(std::string& bft_str) {
         return res;
     }
 
+    std::unordered_map<std::string, int64_t> acc_balance_map;
     for (int32_t i = 0; i < block.tx_block().tx_list_size(); ++i) {
         const auto& tx_info = block.tx_block().tx_list(i);
         int res = CheckTxInfo(block, tx_info);
@@ -118,7 +119,6 @@ int TxBft::BackupCheckPrepare(std::string& bft_str) {
             return res;
         }
 
-        std::unordered_map<std::string, int64_t> acc_balance_map;
         if (tx_info.has_to() && !tx_info.to().empty()) {
             if (tx_info.to_add()) {
                 auto iter = acc_balance_map.find(tx_info.to());
@@ -156,7 +156,8 @@ int TxBft::BackupCheckPrepare(std::string& bft_str) {
                     acc_balance_map[tx_info.from()] = (
                             acc_info->balance - static_cast<int64_t>(tx_info.amount()));
                 } else {
-                    if (acc_balance_map[tx_info.from()] < static_cast<int64_t>(tx_info.amount())) {
+                    if (acc_balance_map[tx_info.from()] <
+                            static_cast<int64_t>(tx_info.amount())) {
                         // this should remove from tx pool
                         BFT_ERROR("bft::protobuf::TxBft kBftAccountBalanceError failed!");
                         return kBftAccountBalanceError;

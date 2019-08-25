@@ -143,11 +143,13 @@ void TxProto::CreateTxBlock(
                     acc_balance_map[tx_vec[i]->from_acc_addr] = (
                             acc_info->balance - static_cast<int64_t>(tx_vec[i]->lego_count));
                 } else {
-                    if (acc_balance_map[tx_vec[i]->from_acc_addr] < static_cast<int64_t>(tx_vec[i]->lego_count)) {
+                    if (acc_balance_map[tx_vec[i]->from_acc_addr] <
+                            static_cast<int64_t>(tx_vec[i]->lego_count)) {
                         // this should remove from tx pool
                         continue;
                     }
-                    acc_balance_map[tx_vec[i]->from_acc_addr] -= static_cast<int64_t>(tx_vec[i]->lego_count);
+                    acc_balance_map[tx_vec[i]->from_acc_addr] -=
+                            static_cast<int64_t>(tx_vec[i]->lego_count);
                 }
                 tx.set_balance(acc_balance_map[tx_vec[i]->from_acc_addr]);
             }
