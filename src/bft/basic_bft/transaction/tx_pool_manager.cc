@@ -25,7 +25,7 @@ TxPoolManager::~TxPoolManager() {
 
 int TxPoolManager::AddTx(TxItemPtr& tx_ptr) {
     if (!TxValid(tx_ptr)) {
-        BFT_ERROR("tx invalid.");
+//         BFT_ERROR("tx invalid.");
         return kBftError;
     }
 
@@ -60,7 +60,7 @@ bool TxPoolManager::TxValid(TxItemPtr& tx_ptr) {
 
         auto acc_info = block::AccountManager::Instance()->GetAcountInfo(account_addr);
         if (acc_info != nullptr) {
-            BFT_ERROR("tx invalid. account address exists");
+//             BFT_ERROR("tx invalid. account address exists");
             return false;
         }
     } else {

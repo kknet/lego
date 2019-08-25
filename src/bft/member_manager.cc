@@ -52,6 +52,7 @@ bool MemberManager::IsLeader(
     assert(network_id < network::kConsensusShardEndNetworkId);  // just shard
     MembersPtr member_ptr = network_members_[network_id];
     if (member_ptr == nullptr) {
+        BFT_ERROR("get network members failed![%d]", network_id);
         return false;
     }
     assert(member_ptr != nullptr);
