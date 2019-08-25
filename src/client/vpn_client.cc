@@ -435,7 +435,7 @@ int VpnClient::CreateClientUniversalNetwork() {
             common::GlobalInfo::Instance()->config_local_ip(),
             common::GlobalInfo::Instance()->config_local_port(),
             security::Schnorr::Instance()->pubkey());
-    NETWORK_INFO("create universal network[%s][%d][%s]",
+    NETWORK_ERROR("create universal network[%s][%d][%s]",
             common::GlobalInfo::Instance()->id().c_str(),
             common::GlobalInfo::Instance()->id().size(),
             common::Encode::HexEncode(dht_key.StrKey()).c_str());
@@ -444,17 +444,6 @@ int VpnClient::CreateClientUniversalNetwork() {
     root_dht_->Init();
     auto base_dht = std::dynamic_pointer_cast<dht::BaseDht>(root_dht_);
     network::DhtManager::Instance()->RegisterDht(network::kVpnNetworkId, base_dht);
-
-    auto boot_nodes = network::Bootstrap::Instance()->GetNetworkBootstrap(network::kVpnNetworkId, 3);
-    std::cout << "boot nodes: " << boot_nodes.size() << std::endl;
-    if (boot_nodes.empty()) {
-        return kClientError;
-    }
-
-    if (root_dht_->Bootstrap(boot_nodes) != dht::kDhtSuccess) {
-        NETWORK_ERROR("join universal network failed!");
-        return kClientError;
-    }
     return kClientSuccess;
 }
 
@@ -582,6 +571,19 @@ void VpnClient::CheckTxExists() {
             CheckTransaction(*iter, false);
         } else {
             CheckTransaction(*iter, true);
+        }
+    }
+
+    {
+        if (!root_dht_joined_) {
+            auto boot_nodes = network::Bootstrap::Instance()->GetNetworkBootstrap(
+                    network::kVpnNetworkId,
+                    3);
+            if (!boot_nodes.empty()) {
+                if (root_dht_->Bootstrap(boot_nodes) == dht::kDhtSuccess) {
+                    root_dht_joined_ = true;
+                }
+            }
         }
     }
     check_tx_tick_.CutOff(kCheckTxPeriod, std::bind(&VpnClient::CheckTxExists, this));

@@ -114,6 +114,7 @@ private:
     bool inited_{ false };
     std::mutex init_mutex_;
     ClientUniversalDhtPtr root_dht_{ nullptr };
+    bool root_dht_joined_{ false };
     bool client_mode_{ true };
     uint32_t send_buff_size_{ kDefaultUdpSendBufferSize };
     uint32_t recv_buff_size_{ kDefaultUdpRecvBufferSize };
