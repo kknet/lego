@@ -126,6 +126,7 @@ int TxBft::BackupCheckPrepare(std::string& bft_str) {
                     auto acc_info = block::AccountManager::Instance()->GetAcountInfo(tx_info.to());
                     if (acc_info == nullptr) {
                         // this should remove from tx pool
+                        BFT_ERROR("bft::protobuf::TxBft kBftAccountNotExists failed!");
                         return kBftAccountNotExists;
                     }
                     acc_balance_map[tx_info.to()] = acc_info->balance + tx_info.amount();
@@ -134,6 +135,7 @@ int TxBft::BackupCheckPrepare(std::string& bft_str) {
                 }
 
                 if (acc_balance_map[tx_info.to()] != tx_info.balance()) {
+                    BFT_ERROR("bft::protobuf::TxBft kBftAccountBalanceError failed!");
                     return kBftAccountBalanceError;
                 }
             } else {
@@ -142,11 +144,13 @@ int TxBft::BackupCheckPrepare(std::string& bft_str) {
                     auto acc_info = block::AccountManager::Instance()->GetAcountInfo(tx_info.from());
                     if (acc_info == nullptr) {
                         // this should remove from tx pool
+                        BFT_ERROR("bft::protobuf::TxBft kBftAccountNotExists failed!");
                         return kBftAccountNotExists;
                     }
 
                     if (acc_info->balance < static_cast<int64_t>(tx_info.amount())) {
                         // this should remove from tx pool
+                        BFT_ERROR("bft::protobuf::TxBft kBftAccountBalanceError failed!");
                         return kBftAccountBalanceError;
                     }
                     acc_balance_map[tx_info.from()] = (
@@ -154,12 +158,14 @@ int TxBft::BackupCheckPrepare(std::string& bft_str) {
                 } else {
                     if (acc_balance_map[tx_info.from()] < static_cast<int64_t>(tx_info.amount())) {
                         // this should remove from tx pool
+                        BFT_ERROR("bft::protobuf::TxBft kBftAccountBalanceError failed!");
                         return kBftAccountBalanceError;
                     }
                     acc_balance_map[tx_info.from()] -= static_cast<int64_t>(tx_info.amount());
                 }
 
                 if (acc_balance_map[tx_info.from()] != tx_info.balance()) {
+                    BFT_ERROR("bft::protobuf::TxBft kBftAccountBalanceError failed!");
                     return kBftAccountBalanceError;
                 }
             }
