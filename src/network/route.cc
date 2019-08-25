@@ -29,6 +29,9 @@ void Route::Init() {
     RegisterMessage(
             common::kNetworkMessage,
             std::bind(&Route::HandleDhtMessage, this, std::placeholders::_1));
+    RegisterMessage(
+            common::kRelayMessage,
+            std::bind(&Route::RouteByUniversal, this, std::placeholders::_1));
     broadcast_ = std::make_shared<broadcast::FilterBroadcast>();
 }
 

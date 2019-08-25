@@ -28,6 +28,10 @@ void Processor::HandleMessage(lego::transport::protobuf::Header& message) {
 #endif // LEGO_TRACE_MESSAGE
 
     assert(message.type() < common::kLegoMaxMessageTypeCount);
+    if (message_processor_[message.type()] == nullptr) {
+        message_processor_[common::kRelayMessage](message);
+        return;
+    }
     assert(message_processor_[message.type()] != nullptr);
     message_processor_[message.type()](message);
 }
