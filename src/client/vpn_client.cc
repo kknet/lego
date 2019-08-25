@@ -353,7 +353,7 @@ int VpnClient::GetVpnNodes(
         }
     };
     std::cout << "add to sync wait now: " << msg_id << std::endl;
-    transport::SynchroWait::Instance()->Add(msg_id, 500 * 1000, callback, nodes.size());
+    transport::SynchroWait::Instance()->Add(msg_id, 3 * 1000 * 1000, callback, nodes.size());
     state_lock.Wait();
     return kClientSuccess;
 }
@@ -547,7 +547,7 @@ std::string VpnClient::CheckTransaction(const std::string& hash, bool is_gid) {
         } while (0);
         state_lock.Signal();
     };
-    transport::SynchroWait::Instance()->Add(msg.id(), 5 * 1000 * 1000, callback, 1);
+    transport::SynchroWait::Instance()->Add(msg.id(), 3 * 1000 * 1000, callback, 1);
     state_lock.Wait();
     if (!block_finded) {
         return "ERROR";
