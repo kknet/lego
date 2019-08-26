@@ -78,15 +78,15 @@ void Detection::SendTtlPacket(DetectionItemPtr& item) {
     transport::protobuf::Header header;
     base_dht_->SetFrequently(header);
     NatProto::CreateDetectionRequest(base_dht_->local_node(), item->node, header);
-    uint32_t ttl = kDetecitonTtl;
-    if (item->detected_times > ttl) {
-        ttl = item->detected_times;
-    }
-
-    if (item->detected_times > 7) {
-        ttl = 0;
-    }
-    transport_->Send(item->node->public_ip, item->node->public_port, ttl, header);
+//     uint32_t ttl = kDetecitonTtl;
+//     if (item->detected_times > ttl) {
+//         ttl = item->detected_times;
+//     }
+// 
+//     if (item->detected_times > 7) {
+//         ttl = 0;
+//     }
+    transport_->Send(item->node->public_ip, item->node->public_port, 0, header);
 }
 
 void Detection::HandleMessage(transport::protobuf::Header& header) {
