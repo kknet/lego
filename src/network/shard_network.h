@@ -90,7 +90,7 @@ int ShardNetwork<DhtType>::JoinUniversal() {
     }
     network::UniversalManager::Instance()->RegisterUniversal(network_id_, universal_role_);
     if (universal_role_->Bootstrap(
-        network::Bootstrap::Instance()->root_bootstrap()) != dht::kDhtSuccess) {
+            network::Bootstrap::Instance()->root_bootstrap()) != dht::kDhtSuccess) {
         NETWORK_ERROR("join universal network failed!");
         network::UniversalManager::Instance()->UnRegisterUniversal(network_id_);
         return kNetworkError;

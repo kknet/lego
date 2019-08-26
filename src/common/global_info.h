@@ -40,6 +40,10 @@ public:
         return id_hash_;
     }
 
+    void set_country(uint8_t country) {
+        country_ = country;
+    }
+
     uint8_t country() {
         return country_;
     }

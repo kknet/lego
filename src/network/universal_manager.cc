@@ -4,6 +4,8 @@
 
 #include "common/global_info.h"
 #include "common/encode.h"
+#include "common/country_code.h"
+#include "ip/ip_with_country.h"
 #include "security/schnorr.h"
 #include "dht/dht_key.h"
 #include "network/universal.h"
@@ -110,7 +112,41 @@ int UniversalManager::CreateNetwork(
 int UniversalManager::CreateUniversalNetwork(
         const common::Config& config,
         transport::TransportPtr& transport) {
-    return CreateNetwork(kUniversalNetworkId, config, transport);
+    int res = CreateNetwork(kUniversalNetworkId, config, transport);
+    if (res != kNetworkSuccess) {
+        return res;
+    }
+
+    auto universal_dht = GetUniversal(kUniversalNetworkId);
+    if (universal_dht == nullptr) {
+        return kNetworkError;
+    }
+
+    auto country = dht::DhtKeyManager::DhtKeyGetCountry(
+            universal_dht->local_node()->dht_key);
+    std::cout << "universal network joined and set country: "
+            << common::global_code_to_country_map[country] << std::endl;
+    auto ip_country = ip::IpWithCountry::Instance()->GetCountryUintCode(
+            universal_dht->local_node()->public_ip);
+    if (ip_country != ip::kInvalidCountryCode) {
+        if (universal_dht->local_node()->first_node) {
+            auto local_dht_key = dht::DhtKeyManager(universal_dht->local_node()->dht_key);
+            local_dht_key.SetCountryId(ip_country);
+            universal_dht->local_node()->dht_key = local_dht_key.StrKey();
+            universal_dht->local_node()->dht_key_hash = common::Hash::Hash64(
+                    universal_dht->local_node()->dht_key);
+            country = ip_country;
+        } else {
+            if (country != ip_country) {
+                assert(false);
+                return kNetworkError;
+            }
+        }
+    }
+    common::GlobalInfo::Instance()->set_country(country);
+    std::cout << "universal network joined and set country: "
+            << common::global_code_to_country_map[country] << std::endl;
+    return kNetworkSuccess;
 }
 
 int UniversalManager::CreateNodeNetwork(
