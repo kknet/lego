@@ -248,8 +248,8 @@ void Command::PrintDht(uint32_t network_id) {
         assert(node != nullptr);
         auto country = common::global_code_to_country_map[
                 dht::DhtKeyManager::DhtKeyGetCountry(node->dht_key)];
-        std::cout << common::Encode::HexEncode(node->id)
-            << ", " << common::Encode::HexSubstr(node->dht_key) << ", " << country
+        std::cout << common::Encode::HexSubstr(node->id)
+            << ", " << common::Encode::HexEncode(node->dht_key) << ", " << country
             << ", " << node->public_ip << ":" << node->public_port << std::endl;
     }
 }
