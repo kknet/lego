@@ -75,7 +75,7 @@ int Cidr::Init(const std::string& file_path) {
 
 uint32_t Cidr::GetGeoId(const std::string& ip) {
     in_addr_t addr = atoh((char*)ip.c_str());
-    for (uint32_t i = 32; i > 0; --i) {
+    for (uint32_t i = 32; i > 6; --i) {
         in_addr_t mask = Netmask(i);
         uint32_t prefix = addr & mask;
         auto iter = cicd_map_.find(prefix);
