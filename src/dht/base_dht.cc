@@ -197,6 +197,7 @@ void BaseDht::SendToClosestNode(transport::protobuf::Header& message) {
     }
 
     if (message.des_dht_key() == local_node_->dht_key) {
+        DHT_ERROR("send to local dht key failed!");
         return;
     }
 
@@ -218,6 +219,7 @@ void BaseDht::SendToClosestNode(transport::protobuf::Header& message) {
     }
 
     if (!node) {
+        DHT_ERROR("no node to send!");
         LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("closest node is null", message);
         return;
     }

@@ -33,6 +33,7 @@ void NetworkProto::CreateGetNetworkNodesRequest(
     auto* get_nodes_req = net_msg.mutable_get_net_nodes_req();
     get_nodes_req->set_net_id(network_id);
     get_nodes_req->set_count(count);
+    get_nodes_req->set_country(country);
     msg.set_data(net_msg.SerializeAsString());
 #ifdef LEGO_TRACE_MESSAGE
     msg.set_debug(std::string("GetNetworkNodesRequest:") +
