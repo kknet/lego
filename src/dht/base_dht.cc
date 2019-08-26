@@ -66,31 +66,36 @@ int BaseDht::Destroy() {
 
 int BaseDht::Join(NodePtr& node) {
     if (CheckJoin(node) != kDhtSuccess) {
+        DHT_ERROR("check join failed!");
         return kDhtError;
     }
 
     std::lock_guard<std::mutex> guard(dht_mutex_);
+    std::unique_lock<std::mutex> lock_hash(node_map_mutex_);
+    uint32_t b_dht_size = dht_.size();
+    uint32_t b_map_size = node_map_.size();
     DhtFunction::PartialSort(local_node_->dht_key, dht_.size(), dht_);
     uint32_t replace_pos = dht_.size() + 1;
     if (!DhtFunction::Displacement(local_node_->dht_key, dht_, node, replace_pos)) {
         DHT_WARN("displacement for new node failed!");
+        assert(false);
         return kDhtError;
     }
 
     if (replace_pos < dht_.size()) {
         auto rm_iter = dht_.begin() + replace_pos;
-        std::unique_lock<std::mutex> lock_hash(node_map_mutex_);
         auto hash_iter = node_map_.find((*rm_iter)->dht_key_hash);
         if (hash_iter != node_map_.end()) {
             node_map_.erase(hash_iter);
         }
         dht_.erase(rm_iter);
+        assert(false);
     }
 
     nat_detection_->Remove(node->dht_key_hash);
-    std::unique_lock<std::mutex> lock(node_map_mutex_);
     auto iter = node_map_.insert(std::make_pair(node->dht_key_hash, node));
     if (!iter.second) {
+        assert(false);
         return kDhtNodeJoined;
     }
     dht_.push_back(node);
@@ -103,24 +108,32 @@ int BaseDht::Join(NodePtr& node) {
     });
     readonly_hash_sort_dht_ = std::make_shared<Dht>(dht_);
     readony_node_map_ = std::make_shared<std::unordered_map<uint64_t, NodePtr>>(node_map_);
+    uint32_t e_dht_size = dht_.size();
+    uint32_t e_map_size = node_map_.size();
+    assert((b_dht_size + 1) == e_dht_size);
+    assert((b_map_size + 1) == e_map_size);
+    assert(readonly_hash_sort_dht_->size() == e_map_size);
+    assert(readony_node_map_->size() == e_dht_size);
+    assert(readonly_dht_->size() == e_dht_size);
     return kDhtSuccess;
 }
 
 int BaseDht::Drop(NodePtr& node) {
+    std::lock_guard<std::mutex> guard1(node_map_mutex_);
+    std::lock_guard<std::mutex> guard2(dht_mutex_);
     {
-        std::lock_guard<std::mutex> guard(dht_mutex_);
         if (dht_.size() <= kDhtMinReserveNodes) {
             return kDhtError;
         }
 
-        auto& id_hash = node->id_hash;
+        auto& dht_key_hash = node->dht_key_hash;
         auto iter = std::find_if(
                 dht_.begin(),
                 dht_.end(),
-                [id_hash](const NodePtr& rhs) -> bool {
-            return id_hash == rhs->id_hash;
+                [dht_key_hash](const NodePtr& rhs) -> bool {
+            return dht_key_hash == rhs->dht_key_hash;
         });
-
+        assert((*iter)->id == node->id);
         if (iter != dht_.end()) {
             dht_.erase(iter);
         }
@@ -135,11 +148,11 @@ int BaseDht::Drop(NodePtr& node) {
     }
 
     {
-        std::lock_guard<std::mutex> guard(node_map_mutex_);
         auto iter = node_map_.find(node->dht_key_hash);
         if (iter != node_map_.end()) {
             node_map_.erase(iter);
         }
+        assert(iter->second->id == node->id);
         readony_node_map_ = std::make_shared<std::unordered_map<uint64_t, NodePtr>>(node_map_);
     }
     return kDhtSuccess;
@@ -661,6 +674,7 @@ bool BaseDht::NodeJoined(NodePtr& node) {
 
 int BaseDht::CheckJoin(NodePtr& node) {
     if (node->client_mode) {
+        DHT_ERROR("node is client mode error!");
         return kDhtError;
     }
 
@@ -684,7 +698,14 @@ int BaseDht::CheckJoin(NodePtr& node) {
     }
 
     if (NodeJoined(node)) {
-        DHT_DEBUG("node has joined[%s][%s][%d][%llu]",
+        std::unique_lock<std::mutex> lock_map(node_map_mutex_);
+        std::unique_lock<std::mutex> lock_dht(dht_mutex_);
+        DHT_WARN("node has joined[map_size: %d][dht_size: %d]"
+                "[ptr_map_size: %d][ptr_dht_size: %d][%s][%s][%d][%llu]",
+                node_map_.size(),
+                dht_.size(),
+                readonly_dht_->size(),
+                readony_node_map_->size(),
                 common::Encode::HexEncode(node->dht_key).c_str(),
                 node->public_ip.c_str(),
                 node->public_port,
@@ -798,7 +819,7 @@ void BaseDht::Heartbeat() {
     uint32_t net_id;
     uint8_t country;
     GetNetIdAndCountry(net_id, country);
-    DHT_DEBUG("[net_id: %u][country: %d] nodes_size[%d] [universal:%d]",
+    DHT_ERROR("[net_id: %u][country: %d] nodes_size[%d] [universal:%d]",
             net_id, country, tmp_dht_ptr->size(), IsUniversal());
     heartbeat_tick_.CutOff(
             kHeartbeatPeriod,

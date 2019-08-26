@@ -81,10 +81,7 @@ std::vector<dht::NodePtr> Bootstrap::GetNetworkBootstrap(
         return nodes;
     }
 
-    nodes = universal_dht->RemoteGetNetworkNodes(
-            network_id,
-            std::numeric_limits<uint8_t>::max(),
-            count);
+    nodes = universal_dht->RemoteGetNetworkNodes(network_id, count);
     return nodes;
 }
 

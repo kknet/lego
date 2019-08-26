@@ -98,8 +98,8 @@ bool DhtFunction::Displacement(
     }
 
     if (CloserToTarget(
-            node->id,
-            dht.at(kDhtNearestNodesCount - 1)->id,
+            node->dht_key,
+            dht.at(kDhtNearestNodesCount - 1)->dht_key,
             local_dht_key)) {
         replace_pos = kDhtNearestNodesCount - 1;
         return true;
@@ -111,8 +111,8 @@ bool DhtFunction::Displacement(
         }
 
         if ((dht[index]->bucket > node->bucket) || CloserToTarget(
-                node->id,
-                dht[index]->id,
+                node->dht_key,
+                dht[index]->dht_key,
                 local_dht_key)) {
             replace_pos = index + 1;
             return true;
