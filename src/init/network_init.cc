@@ -6,6 +6,7 @@
 #include "common/split.h"
 #include "common/string_utils.h"
 #include "common/global_info.h"
+#include "ip/ip_with_country.h"
 #include "db/db.h"
 #include "block/block_manager.h"
 #include "transport/multi_thread.h"
@@ -43,6 +44,13 @@ int NetworkInit::Init(int argc, char** argv) {
     std::lock_guard<std::mutex> guard(init_mutex_);
     if (inited_) {
         INIT_ERROR("network inited!");
+        return kInitError;
+    }
+
+    if (ip::IpWithCountry::Instance()->Init(
+            "./conf/geolite.conf",
+            "./conf/geo_country.conf") != ip::kIpSuccess) {
+        INIT_ERROR("init ip config with args failed!");
         return kInitError;
     }
 

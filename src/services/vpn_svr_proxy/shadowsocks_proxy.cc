@@ -8,6 +8,7 @@
 #include "common/random.h"
 #include "common/string_utils.h"
 #include "common/encode.h"
+#include "ip/ip_with_country.h"
 #include "security/ecdh_create_key.h"
 #include "network/route.h"
 #include "services/vpn_svr_proxy/proxy_utils.h"
@@ -65,6 +66,13 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
 
     if (InitConfigWithArgs(argc, argv) != kProxySuccess) {
         PROXY_ERROR("init config with args failed!");
+        return kProxySuccess;
+    }
+
+    if (ip::IpWithCountry::Instance()->Init(
+            "./conf/geolite.conf",
+            "./conf/geo_country.conf") != ip::kIpSuccess) {
+        PROXY_ERROR("init ip config with args failed!");
         return kProxySuccess;
     }
 

@@ -8,6 +8,7 @@
 #include "common/hash.h"
 #include "common/encode.h"
 #include "common/bloom_filter.h"
+#include "common/country_code.h"
 #include "ip/ip_with_country.h"
 #include "transport/processor.h"
 #include "transport/transport_utils.h"
@@ -326,7 +327,12 @@ void BaseDht::ProcessBootstrapRequest(
     auto src_dht_key = DhtKeyManager(header.src_dht_key());
     auto node_country = ip::IpWithCountry::Instance()->GetCountryUintCode(header.from_ip());
     if (node_country != ip::kInvalidCountryCode) {
+        std::cout << "node bootstrap: " << header.from_ip() << ":"
+                << common::global_code_to_country_map[node_country] << std::endl;
         src_dht_key.SetCountryId(node_country);
+    } else {
+        std::cout << "node bootstrap: " << header.from_ip() << ":"
+            << " get country by ip failed!" << std::endl;
     }
 
     auto pubkey_ptr = std::make_shared<security::PublicKey>(header.pubkey());
@@ -395,7 +401,12 @@ void BaseDht::ProcessBootstrapResponse(
             local_node_->public_ip);
     auto local_dht_key = DhtKeyManager(local_node_->dht_key);
     if (node_country != ip::kInvalidCountryCode) {
+        std::cout << "node bootstrap res: " << local_node_->public_ip << ":"
+            << common::global_code_to_country_map[node_country] << std::endl;
         local_dht_key.SetCountryId(node_country);
+    } else {
+        std::cout << "node bootstrap res: " << local_node_->public_ip << ":"
+            << " get country by ip failed!" << std::endl;
     }
     local_node_->dht_key = local_dht_key.StrKey();
     local_node_->dht_key_hash = common::Hash::Hash64(local_node_->dht_key);
