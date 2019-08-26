@@ -124,8 +124,6 @@ int UniversalManager::CreateUniversalNetwork(
 
     auto country = dht::DhtKeyManager::DhtKeyGetCountry(
             universal_dht->local_node()->dht_key);
-    std::cout << "universal network joined and set country: "
-            << common::global_code_to_country_map[country] << std::endl;
     auto ip_country = ip::IpWithCountry::Instance()->GetCountryUintCode(
             universal_dht->local_node()->public_ip);
     if (ip_country != ip::kInvalidCountryCode) {
@@ -144,8 +142,6 @@ int UniversalManager::CreateUniversalNetwork(
         }
     }
     common::GlobalInfo::Instance()->set_country(country);
-    std::cout << "universal network joined and set country: "
-            << common::global_code_to_country_map[country] << std::endl;
     return kNetworkSuccess;
 }
 

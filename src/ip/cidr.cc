@@ -65,9 +65,10 @@ int Cidr::Init(const std::string& file_path) {
             continue;
         }
 
+        common::Split mask_split(spliter[0], '/');
         ParseCidr(&addr, &mask, spliter[0]);
         uint32_t prefix = addr & mask;
-        cicd_map_[prefix] = atoi(spliter[1]);
+        cicd_map_[prefix] = std::make_pair(atoi(spliter[1]),atoi(mask_split[1])) ;
     }
     fclose(fp);
     return kIpSuccess;
@@ -79,8 +80,8 @@ uint32_t Cidr::GetGeoId(const std::string& ip) {
         in_addr_t mask = Netmask(i);
         uint32_t prefix = addr & mask;
         auto iter = cicd_map_.find(prefix);
-        if (iter != cicd_map_.end()) {
-            return iter->second;
+        if (iter != cicd_map_.end() && iter->second.second == i) {
+            return iter->second.first;
         }
     }
     return 0;

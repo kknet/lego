@@ -29,7 +29,7 @@ private:
     in_addr_t atoh(char *s);
     void ParseCidr(in_addr_t *addr, in_addr_t *mask, char *str);
 
-    std::unordered_map<uint32_t, uint32_t> cicd_map_;
+    std::unordered_map<uint32_t, std::pair<uint32_t, uint32_t>> cicd_map_;
 
     DISALLOW_COPY_AND_ASSIGN(Cidr);
 };
