@@ -3,6 +3,7 @@
 #include "common/global_info.h"
 #include "common/encode.h"
 #include "common/hash.h"
+#include "ip/ip_utils.h"
 #include "security/schnorr.h"
 #include "transport/transport_utils.h"
 #include "dht/dht_key.h"
@@ -19,7 +20,11 @@ void NetworkProto::CreateGetNetworkNodesRequest(
         uint32_t count,
         transport::protobuf::Header& msg) {
     msg.set_src_dht_key(local_node->dht_key);
-    dht::DhtKeyManager dht_key(network_id, country, true);
+    auto tmp_country = country;
+    if (tmp_country == ip::kInvalidCountryCode) {
+        tmp_country = std::rand() % 255;
+    }
+    dht::DhtKeyManager dht_key(network_id, tmp_country, true);
     msg.set_des_dht_key(dht_key.StrKey());
     msg.set_priority(transport::kTransportPriorityHighest);
     msg.set_id(common::GlobalInfo::Instance()->MessageId());
