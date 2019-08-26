@@ -8,7 +8,9 @@
 #include "common/string_utils.h"
 #include "common/encode.h"
 #include "common/global_info.h"
+#include "common/country_code.h"
 #include "dht/base_dht.h"
+#include "dht/dht_key.h"
 #include "network/dht_manager.h"
 #include "network/universal_manager.h"
 #include "bft/bft_manager.h"
@@ -244,8 +246,10 @@ void Command::PrintDht(uint32_t network_id) {
     for (auto iter = readonly_dht->begin(); iter != readonly_dht->end(); ++iter) {
         auto node = *iter;
         assert(node != nullptr);
-        std::cout << common::Encode::HexEncode(node->id) << ":" << node->id_hash
-            << ", " << common::Encode::HexSubstr(node->dht_key) << ":" << node->dht_key_hash
+        auto country = common::global_code_to_country_map[
+                dht::DhtKeyManager::DhtKeyGetCountry(node->dht_key)];
+        std::cout << common::Encode::HexEncode(node->id)
+            << ", " << common::Encode::HexSubstr(node->dht_key) << ", " << country
             << ", " << node->public_ip << ":" << node->public_port << std::endl;
     }
 }
