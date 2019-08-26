@@ -203,6 +203,7 @@ void BaseDht::SendToClosestNode(transport::protobuf::Header& message) {
 
     if (readonly_dht_->empty()) {
         LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("dht empty", message);
+        DHT_ERROR("local dht is emppty!");
         return;
     }
 
@@ -504,15 +505,15 @@ void BaseDht::ProcessRefreshNeighborsResponse(
                 res_nodes[i].local_ip(),
                 res_nodes[i].local_port(),
                 pubkey_ptr);
-        if (CheckJoin(node) != kDhtSuccess) {
-            continue;
-        }
+        Join(node);
         AddDetectionTarget(node);
         transport::protobuf::Header msg;
         SetFrequently(msg);
         DhtProto::CreateConnectRequest(local_node_, node, false, msg);
+        transport_->Send(node->public_ip, node->public_port, 0, msg);
         SendToClosestNode(msg);
-        DHT_ERROR("refresh neighbors connect to node[%s][%d]",
+        DHT_ERROR("[%s][%d] connect to node[%s][%d]",
+                local_node_->public_ip.c_str(), local_node_->public_port,
                 node->public_ip.c_str(), node->public_port);
     }
 }
@@ -581,6 +582,10 @@ void BaseDht::ProcessHeartbeatResponse(
 void BaseDht::ProcessConnectRequest(
         transport::protobuf::Header& header,
         protobuf::DhtMessage& dht_msg) {
+    DHT_ERROR("[%s][%d] coming connect to node[%s][%d]",
+            local_node_->public_ip.c_str(), local_node_->public_port,
+            dht_msg.connect_req().public_ip().c_str(), dht_msg.connect_req().public_port());
+
     if (header.des_dht_key() != local_node_->dht_key) {
         if (dht_msg.connect_req().direct()) {
             LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("stop direct", header);
@@ -612,11 +617,14 @@ void BaseDht::ProcessConnectRequest(
             dht_msg.connect_req().local_ip(),
             static_cast<uint16_t>(dht_msg.connect_req().local_port()),
             pubkey_ptr);
-    if (dht_msg.connect_req().direct()) {
-        Join(node);
-    } else {
-        nat_detection_->AddTarget(node);
-    }
+    DHT_ERROR("[%s][%d] receive connect to node[%s][%d]",
+        local_node_->public_ip.c_str(), local_node_->public_port,
+        node->public_ip.c_str(), node->public_port);
+    Join(node);
+//     if (dht_msg.connect_req().direct()) {
+//     } else {
+//         nat_detection_->AddTarget(node);
+//     }
 }
 
 bool BaseDht::NodeValid(NodePtr& node) {
