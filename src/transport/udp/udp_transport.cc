@@ -254,20 +254,23 @@ int UdpTransport::Send(
     buf[0] = uv_buf_init((char*)&header, sizeof(TransportHeader));
     buf[1] = uv_buf_init((char*)message.c_str(), message.size());
     {
-        std::lock_guard<std::mutex> guard(ttl_mutex_);
-        if (ttl != 0) {
-            uv_udp_set_ttl(&uv_udp_, ttl);
-        }
+//         std::lock_guard<std::mutex> guard(ttl_mutex_);
+//         if (ttl != 0) {
+//             uv_udp_set_ttl(&uv_udp_, ttl);
+//         }
 #ifdef LEGO_TRACE_MESSAGE
         LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE(
                 std::string("udp sent ") + ip + ":" + std::to_string(port),
                 proto);
 #endif // LEGO_TRACE_MESSAGE
         int res = uv_udp_try_send(&uv_udp_, buf, kSendBufCount, (const struct sockaddr*)&addr);
-        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE(std::string("udp send res: ") + std::to_string(res), proto);
-        if (ttl != 0) {
-            uv_udp_set_ttl(&uv_udp_, kDefaultTtl);
+        if (res <= 0) {
+            assert(false);
         }
+        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE(std::string("udp send res: ") + std::to_string(res), proto);
+//         if (ttl != 0) {
+//             uv_udp_set_ttl(&uv_udp_, kDefaultTtl);
+//         }
     }
     return kTransportSuccess;
 }

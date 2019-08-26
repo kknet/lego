@@ -18,6 +18,7 @@
 #include "dht/proto/dht_proto.h"
 #include "dht/dht_function.h"
 #include "dht/dht_key.h"
+#include "network/network_utils.h"
 
 namespace lego {
 
@@ -506,7 +507,10 @@ void BaseDht::ProcessRefreshNeighborsResponse(
     // check sign
     auto pubkey_ptr = std::make_shared<security::PublicKey>(header.pubkey());
     const auto& res_nodes = dht_msg.refresh_neighbors_res().nodes();
-    DHT_ERROR("refresh neighbors get nodes: %d", res_nodes.size());
+    auto net_id = DhtKeyManager::DhtKeyGetNetId(local_node_->dht_key);
+    if (net_id == network::kVpnNetworkId) {
+        DHT_ERROR("refresh neighbors get nodes: %d", res_nodes.size());
+    }
     for (int32_t i = 0; i < res_nodes.size(); ++i) {
         NodePtr node = std::make_shared<Node>(
                 res_nodes[i].id(),
@@ -525,9 +529,11 @@ void BaseDht::ProcessRefreshNeighborsResponse(
         DhtProto::CreateConnectRequest(local_node_, node, false, msg);
         transport_->Send(node->public_ip, node->public_port, 0, msg);
         SendToClosestNode(msg);
-        DHT_ERROR("[%s][%d] connect to node[%s][%d]",
+        if (net_id == network::kVpnNetworkId) {
+            DHT_ERROR("[%s][%d] connect to node[%s][%d]",
                 local_node_->public_ip.c_str(), local_node_->public_port,
                 node->public_ip.c_str(), node->public_port);
+        }
     }
 }
 
@@ -595,10 +601,12 @@ void BaseDht::ProcessHeartbeatResponse(
 void BaseDht::ProcessConnectRequest(
         transport::protobuf::Header& header,
         protobuf::DhtMessage& dht_msg) {
-    DHT_ERROR("[%s][%d] coming connect to node[%s][%d]",
+    auto net_id = DhtKeyManager::DhtKeyGetNetId(local_node_->dht_key);
+    if (net_id == network::kVpnNetworkId) {
+        DHT_ERROR("[%s][%d] coming connect to node[%s][%d]",
             local_node_->public_ip.c_str(), local_node_->public_port,
             dht_msg.connect_req().public_ip().c_str(), dht_msg.connect_req().public_port());
-
+    }
     if (header.des_dht_key() != local_node_->dht_key) {
         if (dht_msg.connect_req().direct()) {
             LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("stop direct", header);
@@ -630,9 +638,11 @@ void BaseDht::ProcessConnectRequest(
             dht_msg.connect_req().local_ip(),
             static_cast<uint16_t>(dht_msg.connect_req().local_port()),
             pubkey_ptr);
-    DHT_ERROR("[%s][%d] receive connect to node[%s][%d]",
-        local_node_->public_ip.c_str(), local_node_->public_port,
-        node->public_ip.c_str(), node->public_port);
+    if (net_id == network::kVpnNetworkId) {
+        DHT_ERROR("[%s][%d] receive connect to node[%s][%d]",
+            local_node_->public_ip.c_str(), local_node_->public_port,
+            node->public_ip.c_str(), node->public_port);
+    }
     Join(node);
 //     if (dht_msg.connect_req().direct()) {
 //     } else {
@@ -798,7 +808,7 @@ void BaseDht::Heartbeat() {
         }
 
         if (node->heartbeat_send_times >= kHeartbeatMaxSendTimes) {
-            DHT_INFO("node[%s][%d] heartbeat failed after [%u] times, drop it!",
+            DHT_ERROR("node[%s][%d] heartbeat failed after [%u] times, drop it!",
                     node->public_ip.c_str(),
                     node->public_port,
                     (uint32_t)node->heartbeat_send_times);
@@ -819,8 +829,11 @@ void BaseDht::Heartbeat() {
     uint32_t net_id;
     uint8_t country;
     GetNetIdAndCountry(net_id, country);
-    DHT_ERROR("[net_id: %u][country: %d] nodes_size[%d] [universal:%d]",
-            net_id, country, tmp_dht_ptr->size(), IsUniversal());
+    auto local_net_id = DhtKeyManager::DhtKeyGetNetId(local_node_->dht_key);
+    if (local_net_id == network::kVpnNetworkId) {
+        DHT_ERROR("[net_id: %u][country: %d] nodes_size[%d] [universal:%d]",
+            local_net_id, country, tmp_dht_ptr->size(), IsUniversal());
+    }
     heartbeat_tick_.CutOff(
             kHeartbeatPeriod,
             std::bind(&BaseDht::Heartbeat, shared_from_this()));
