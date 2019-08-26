@@ -45,7 +45,7 @@ void NetworkProto::CreateGetNetworkNodesRequest(
             local_node->public_ip + "-" +
             std::to_string(local_node->public_port) + ", to " +
             common::Encode::HexEncode(dht_key.StrKey()));
-    DHT_DEBUG("begin: %s", msg.debug().c_str());
+    DHT_ERROR("begin: %s", msg.debug().c_str());
 #endif
 }
 

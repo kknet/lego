@@ -23,12 +23,12 @@ ShadowsocksProxy::ShadowsocksProxy() {
             std::bind(&ShadowsocksProxy::HandleMessage, this, std::placeholders::_1));
 
     std::fill(socks_, socks_ + kMaxShadowsocksCount, nullptr);
-    tick_.CutOff(
-            kShowdowsocksShiftPeriod,
-            std::bind(&ShadowsocksProxy::ShiftVpnPeriod, this));
-    tick_status_.CutOff(
-            kCheckVpnServerStatusPeriod,
-            std::bind(&ShadowsocksProxy::CheckVpnStatus, this));
+//     tick_.CutOff(
+//             kShowdowsocksShiftPeriod,
+//             std::bind(&ShadowsocksProxy::ShiftVpnPeriod, this));
+//     tick_status_.CutOff(
+//             kCheckVpnServerStatusPeriod,
+//             std::bind(&ShadowsocksProxy::CheckVpnStatus, this));
 }
 
 ShadowsocksProxy::~ShadowsocksProxy() {}
@@ -56,13 +56,13 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
         return kProxyError;
     }
 
-    std::string cmd = common::StringUtil::Format(
-            "ps -ef | grep gpgk | awk -F' ' '{print $2}' | xargs kill -9");
-    auto res = system(cmd.c_str());
-    if (RunCommand(cmd, "") != kProxySuccess) {
-        PROXY_ERROR("run cmd [%s] failed!", cmd.c_str());
-        return kProxyError;
-    }
+//     std::string cmd = common::StringUtil::Format(
+//             "ps -ef | grep gpgk | awk -F' ' '{print $2}' | xargs kill -9");
+//     auto res = system(cmd.c_str());
+//     if (RunCommand(cmd, "") != kProxySuccess) {
+//         PROXY_ERROR("run cmd [%s] failed!", cmd.c_str());
+//         return kProxyError;
+//     }
 
     if (InitConfigWithArgs(argc, argv) != kProxySuccess) {
         PROXY_ERROR("init config with args failed!");
@@ -101,10 +101,10 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
         return kProxyError;
     }
 
-    if (StartShadowsocks() != kProxySuccess) {
-        PROXY_ERROR("start shadowsocks failed!");
-        return kProxyError;
-    }
+//     if (StartShadowsocks() != kProxySuccess) {
+//         PROXY_ERROR("start shadowsocks failed!");
+//         return kProxyError;
+//     }
 
     if (CreateVpnProxyNetwork() != kProxySuccess) {
         PROXY_ERROR("create vpn proxy network failed!");

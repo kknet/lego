@@ -492,6 +492,7 @@ void BaseDht::ProcessRefreshNeighborsResponse(
     // check sign
     auto pubkey_ptr = std::make_shared<security::PublicKey>(header.pubkey());
     const auto& res_nodes = dht_msg.refresh_neighbors_res().nodes();
+    DHT_ERROR("refresh neighbors get nodes: %d", res_nodes.size());
     for (int32_t i = 0; i < res_nodes.size(); ++i) {
         NodePtr node = std::make_shared<Node>(
                 res_nodes[i].id(),
@@ -511,6 +512,8 @@ void BaseDht::ProcessRefreshNeighborsResponse(
         SetFrequently(msg);
         DhtProto::CreateConnectRequest(local_node_, node, false, msg);
         SendToClosestNode(msg);
+        DHT_ERROR("refresh neighbors connect to node[%s][%d]",
+                node->public_ip.c_str(), node->public_port);
     }
 }
 
@@ -726,7 +729,14 @@ bool BaseDht::CheckDestination(const std::string& des_dht_key, bool check_closes
 
 void BaseDht::RefreshNeighbors() {
     Dht tmp_dht = *readonly_dht_;  // change must copy
-    if (!tmp_dht.empty() && joined_) {
+    if (!tmp_dht.empty()) {
+        if (!local_node_->first_node && !joined_) {
+            refresh_neighbors_tick_.CutOff(
+                    kRefreshNeighborPeriod,
+                    std::bind(&BaseDht::RefreshNeighbors, shared_from_this()));
+            return;
+        }
+
         auto close_nodes = DhtFunction::GetClosestNodes(
                 tmp_dht,
                 local_node_->dht_key,

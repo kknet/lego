@@ -117,7 +117,11 @@ void Command::AddBaseCommands() {
         PrintMembers(network_id);
     });
     AddCommand("vn", [this](const std::vector<std::string>& args) {
-        GetVpnNodes();
+        if (args.size() > 0) {
+            GetVpnNodes(args[0]);
+        } else {
+            GetVpnNodes("US");
+        }
     });
     AddCommand("tx", [this](const std::vector<std::string>& args) {
         std::string tx_gid;
@@ -210,9 +214,9 @@ void Command::TxPeriod() {
 
 }
 
-void Command::GetVpnNodes() {
+void Command::GetVpnNodes(const std::string& country) {
     std::vector<lego::client::VpnServerNodePtr> nodes;
-    lego::client::VpnClient::Instance()->GetVpnServerNodes("US", 2, nodes);
+    lego::client::VpnClient::Instance()->GetVpnServerNodes(country, 2, nodes);
     std::cout << "get vpn_nodes size: " << nodes.size() << std::endl;
     for (uint32_t i = 0; i < nodes.size(); ++i) {
         std::cout << "get vpn_info: " << nodes[i]->ip << ":" << nodes[i]->port
@@ -240,6 +244,7 @@ void Command::PrintDht(uint32_t network_id) {
     }
     dht::DhtPtr readonly_dht = base_dht->readonly_dht();
     auto node = base_dht->local_node();
+    std::cout << "dht nnum: " << readonly_dht->size() + 1 << std::endl;
     std::cout << "local: " << common::Encode::HexEncode(node->id) << ":" << node->id_hash
         << ", " << common::Encode::HexSubstr(node->dht_key) << ":" << node->dht_key_hash
         << ", " << node->public_ip << ":" << node->public_port << std::endl;

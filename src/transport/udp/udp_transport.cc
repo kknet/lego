@@ -241,7 +241,11 @@ int UdpTransport::Send(
     }
 
     auto message = proto.SerializeAsString();
-    assert(message.size() <= 6500);
+    if (message.size() > 6500) {
+        TRANSPORT_ERROR("message package length[%d] too big.type[%d]",
+                message.size(), proto.type());
+        assert(message.size() <= 6500);
+    }
     static const uint32_t kSendBufCount = 2u;
     uv_buf_t buf[kSendBufCount];
     TransportHeader header;

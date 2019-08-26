@@ -30,7 +30,7 @@ private:
     void AddBaseCommands();
     void PrintDht(uint32_t network_id);
     void PrintMembers(uint32_t network_id);
-    void GetVpnNodes();
+    void GetVpnNodes(const std::string& country);
     void TxPeriod();
 
     static const uint32_t kTransportTestPeriod = 1000 * 1000;

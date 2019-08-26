@@ -96,13 +96,11 @@ void DhtManager::NetworkDetection() {
         tick_.CutOff(kNetworkDetectPeriod, std::bind(&DhtManager::NetworkDetection, this));
         return;
     }
+
     for (auto iter = detect_dhts.begin(); iter != detect_dhts.end(); ++iter) {
         uint32_t network_id = dht::DhtKeyManager::DhtKeyGetNetId(
                 (*iter)->local_node()->dht_key);
-        auto nodes = universal_dht->RemoteGetNetworkNodes(
-                network_id,
-                std::numeric_limits<uint8_t>::max(),
-                4);
+        auto nodes = universal_dht->RemoteGetNetworkNodes(network_id, 4);
         if (nodes.empty()) {
             continue;
         }

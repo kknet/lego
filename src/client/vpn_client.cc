@@ -269,11 +269,11 @@ std::string VpnClient::GetVpnServerNodes(
         CLIENT_ERROR("get dht_nodes: vpn nodes empty!");
         return "vpn nodes empty";
     }
-    int res = GetVpnNodes(dht_nodes, nodes);
-    if (res != kClientSuccess) {
-        CLIENT_ERROR("get dht_nodes: get vpn nodes failed!");
-        return "get vpn nodes failed!";
-    }
+//     int res = GetVpnNodes(dht_nodes, nodes);
+//     if (res != kClientSuccess) {
+//         CLIENT_ERROR("get dht_nodes: get vpn nodes failed!");
+//         return "get vpn nodes failed!";
+//     }
     return "OK";
 }
 
