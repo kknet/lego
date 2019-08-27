@@ -240,7 +240,10 @@ void BaseDht::SendToClosestNode(transport::protobuf::Header& message) {
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("send to closest node", message);
     assert(node->dht_key_hash != local_node_->dht_key_hash);
     transport_->Send(node->public_ip, node->public_port, 0, message);
-    DHT_ERROR("send by closest node[%s][%d]", node->public_ip.c_str(), node->public_port);
+    if (message.type() == common::kServiceMessage) {
+        std::cout << "send by closest node:" << node->public_ip.c_str() << ":" << node->public_port << std::endl;
+        DHT_ERROR("send by closest node[%s][%d]", node->public_ip.c_str(), node->public_port);
+    }
 }
 
 NodePtr BaseDht::FindNodeDirect(transport::protobuf::Header& message) {

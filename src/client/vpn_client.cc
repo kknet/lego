@@ -290,7 +290,8 @@ int VpnClient::GetVpnNodes(
     uint32_t msg_id = common::GlobalInfo::Instance()->MessageId();
     for (uint32_t i = 0; i < nodes.size(); ++i) {
         transport::protobuf::Header msg;
-        auto uni_dht = network::UniversalManager::Instance()->GetUniversal(network::kUniversalNetworkId);
+        auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+                network::kUniversalNetworkId);
         ClientProto::CreateGetVpnInfoRequest(root_dht_->local_node(), nodes[i], msg_id, msg);
         uni_dht->SendToClosestNode(msg);
     }

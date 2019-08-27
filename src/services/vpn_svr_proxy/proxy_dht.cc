@@ -82,6 +82,9 @@ void ProxyDht::HandleGetSocksRequest(
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("getted socks", msg);
     service::ServiceProto::CreateGetVpnInfoRes(local_node(), svr_msg, msg, res_msg);
     network::Route::Instance()->Send(res_msg);
+    PROXY_ERROR("send res get vpn config info.");
+    auto netid = dht::DhtKeyManager::DhtKeyGetNetId(res_msg.des_dht_key());
+    std::cout << "send to des network: " << netid << std::endl;
 }
 
 }  // namespace vpn

@@ -139,11 +139,18 @@ void MultiThreadHandler::HandleRemoteMessage(
 		uint16_t from_port,
 		const char* buf,
 		uint32_t len) {
+
 	auto message_ptr = std::make_shared<transport::protobuf::Header>();
 	if (!message_ptr->ParseFromArray(buf, len)) {
 		TRANSPORT_ERROR("Message ParseFromString from string failed!");
 		return;
 	}
+
+    if (message_ptr->type() == common::kServiceMessage) {
+        if (message_ptr->client_relayed()) {
+            std::cout << "receive client relayed message 1111." << std::endl;
+        }
+    }
 
 	if (message_ptr->hop_count() >= kMaxHops) {
 		TRANSPORT_ERROR("Message max hot discard!");
@@ -172,14 +179,14 @@ void MultiThreadHandler::HandleRemoteMessage(
 		else {
 			message_ptr->set_handled(false);
 		}
-	}
-	else {
+	} else {
 		if (MessageFilter::Instance()->CheckUnique(message_ptr->hash())) {
 			const auto& msg = *message_ptr;
 			LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("stop uniqued", msg);
 			return;
 		}
 	}
+
 
 	if (message_ptr->client()) {
 		if (HandleClientMessage(message_ptr, from_ip, from_port) != kTransportSuccess) {
@@ -237,6 +244,9 @@ int MultiThreadHandler::HandleClientMessage(
             DHT_ERROR("receive client message. from[%s][%d]", message_ptr->from_ip().c_str(), message_ptr->from_port());
         }
     } else {
+        if (message_ptr->type() == common::kServiceMessage) {
+            std::cout << "receive relayed message to client." << std::endl;
+        }
         auto client_node = ClientRelay::Instance()->GetClient(message_ptr->client_dht_key());
         if (client_node != nullptr) {
             message_ptr->set_des_dht_key(message_ptr->client_dht_key());
