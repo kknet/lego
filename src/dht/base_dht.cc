@@ -67,7 +67,6 @@ int BaseDht::Destroy() {
 
 int BaseDht::Join(NodePtr& node) {
     if (CheckJoin(node) != kDhtSuccess) {
-        DHT_ERROR("check join failed!");
         return kDhtError;
     }
 
@@ -222,18 +221,6 @@ void BaseDht::SendToClosestNode(transport::protobuf::Header& message) {
     }
 
     NodePtr node = FindNodeDirect(message);
-    if (local_node_->client_mode) {
-        // client just choose same public node relay
-        std::set<std::string> exclude;
-        Dht tmp_dht = *readonly_dht_;
-        node = DhtFunction::GetClosestNode(
-                tmp_dht,
-                local_node_->dht_key,
-                local_node_->dht_key,
-                true,
-                exclude);
-    }
-
     if (!node) {
         std::set<std::string> exclude;
         Dht tmp_dht = *readonly_dht_;  // change must copy
@@ -675,6 +662,14 @@ int BaseDht::CheckJoin(NodePtr& node) {
     if (node->client_mode) {
         DHT_ERROR("node is client mode error!");
         return kDhtError;
+    }
+
+    if (local_node_->client_mode) {
+        auto local_country = DhtKeyManager::DhtKeyGetCountry(local_node_->dht_key);
+        auto node_country = DhtKeyManager::DhtKeyGetCountry(node->dht_key);
+        if (local_country != node_country) {
+            return kDhtError;
+        }
     }
 
     if (node->nat_type == kNatTypeUnknown) {

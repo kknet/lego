@@ -30,6 +30,8 @@ void Processor::HandleMessage(lego::transport::protobuf::Header& message) {
     assert(message.type() < common::kLegoMaxMessageTypeCount);
     if (message_processor_[message.type()] == nullptr) {
         message_processor_[common::kRelayMessage](message);
+        TRANSPORT_ERROR("this node not register message[%d] then relay by universal.",
+                message.type());
         return;
     }
     assert(message_processor_[message.type()] != nullptr);
