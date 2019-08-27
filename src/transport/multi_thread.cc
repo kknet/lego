@@ -239,6 +239,7 @@ int MultiThreadHandler::HandleClientMessage(
     } else {
         auto client_node = ClientRelay::Instance()->GetClient(message_ptr->client_dht_key());
         if (client_node != nullptr) {
+            message_ptr->set_des_dht_key(message_ptr->client_dht_key());
             auto& msg = *message_ptr;
             transport_->Send(client_node->ip, client_node->port, 0, msg);
             if (message_ptr->type() != common::kDhtMessage) {

@@ -87,9 +87,16 @@ int Route::Send(transport::protobuf::Header& message) {
 
 void Route::HandleMessage(transport::protobuf::Header& header) {
     assert(header.type() < common::kLegoMaxMessageTypeCount);
+
+    if (header.type() == common::kServiceMessage) {
+        std::cout << "coming 1" << std::endl;
+    }
     if (message_processor_[header.type()] == nullptr) {
         RouteByUniversal(header);
         return;
+    }
+    if (header.type() == common::kServiceMessage) {
+        std::cout << "coming 2" << std::endl;
     }
     // every route message must use dht
     auto dht = GetDht(header.des_dht_key(), header.universal());
@@ -101,15 +108,24 @@ void Route::HandleMessage(transport::protobuf::Header& header) {
         RouteByUniversal(header);
         return;
     }
+    if (header.type() == common::kServiceMessage) {
+        std::cout << "coming 3" << std::endl;
+    }
 
     if (!header.handled()) {
         LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("call func", header);
         message_processor_[header.type()](header);
     }
+    if (header.type() == common::kServiceMessage) {
+        std::cout << "coming 4" << std::endl;
+    }
 
     if (header.has_broadcast()) {
         LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("broadcast it", header);
         Broadcast(header);
+    }
+    if (header.type() == common::kServiceMessage) {
+        std::cout << "coming 5" << std::endl;
     }
 }
 
