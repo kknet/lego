@@ -42,6 +42,7 @@ void ProxyDht::HandleGetSocksRequest(
         return;
     }
 
+    PROXY_ERROR("get vpn server info coming.1");
     auto vpn_conf = ShadowsocksProxy::Instance()->GetShadowsocks();
     if (vpn_conf == nullptr) {
         PROXY_ERROR("there is no vpn service started!");
@@ -54,6 +55,7 @@ void ProxyDht::HandleGetSocksRequest(
     vpn_res->set_port(vpn_conf->port);
     vpn_res->set_encrypt_type(vpn_conf->method);
     security::PublicKey pubkey;
+    PROXY_ERROR("get vpn server info coming.2");
     if (pubkey.Deserialize(src_svr_msg.vpn_req().pubkey()) != 0) {
         PROXY_ERROR("invalid public key.");
         return;
@@ -61,12 +63,14 @@ void ProxyDht::HandleGetSocksRequest(
 
     // ecdh encrypt vpn password
     std::string sec_key;
+    PROXY_ERROR("get vpn server info coming.3");
     auto res = security::EcdhCreateKey::Instance()->CreateKey(pubkey, sec_key);
     if (res != security::kSecuritySuccess) {
         PROXY_ERROR("create sec key failed!");
         return;
     }
 
+    PROXY_ERROR("get vpn server info coming.4");
     std::string enc_passwd;
     if (security::Aes::Encrypt(
             vpn_conf->passwd,
@@ -75,6 +79,7 @@ void ProxyDht::HandleGetSocksRequest(
         PROXY_ERROR("aes encrypt failed!");
         return;
     }
+    PROXY_ERROR("get vpn server info coming.5");
     vpn_res->set_passwd(enc_passwd);
     vpn_res->set_pubkey(security::Schnorr::Instance()->str_pubkey());
     transport::protobuf::Header res_msg;

@@ -259,10 +259,16 @@ std::string VpnClient::GetVpnServerNodes(
         return "get universal dht error";
     }
 
-    auto dht_nodes = uni_dht->RemoteGetNetworkNodes(
+    std::vector<dht::NodePtr> dht_nodes = uni_dht->LocalGetNetworkNodes(
             network::kVpnNetworkId,
             common::global_country_map[country],
             count);
+    if (dht_nodes.empty()) {
+        dht_nodes = uni_dht->RemoteGetNetworkNodes(
+                network::kVpnNetworkId,
+                common::global_country_map[country],
+                count);
+    }
     std::cout << "get vpn nodes: " << dht_nodes.size() << std::endl;
     CLIENT_ERROR("get dht_nodes: [%d]", dht_nodes.size());
     if (dht_nodes.empty()) {
@@ -284,8 +290,7 @@ int VpnClient::GetVpnNodes(
     for (uint32_t i = 0; i < nodes.size(); ++i) {
         transport::protobuf::Header msg;
         ClientProto::CreateGetVpnInfoRequest(root_dht_->local_node(), nodes[i], msg_id, msg);
-        root_dht_->transport()->Send(nodes[i]->public_ip, nodes[i]->public_port, 0, msg);
-        std::cout << "send vpn info req to: " << nodes[i]->public_ip << ":" << nodes[i]->public_port << std::endl;
+        root_dht_->SendToClosestNode(msg);
     }
 
     common::StateLock state_lock(0);

@@ -222,6 +222,18 @@ void BaseDht::SendToClosestNode(transport::protobuf::Header& message) {
     }
 
     NodePtr node = FindNodeDirect(message);
+    if (local_node_->client_mode) {
+        // client just choose same public node relay
+        std::set<std::string> exclude;
+        Dht tmp_dht = *readonly_dht_;
+        node = DhtFunction::GetClosestNode(
+                tmp_dht,
+                local_node_->dht_key,
+                local_node_->dht_key,
+                true,
+                exclude);
+    }
+
     if (!node) {
         std::set<std::string> exclude;
         Dht tmp_dht = *readonly_dht_;  // change must copy
@@ -430,9 +442,14 @@ void BaseDht::ProcessRefreshNeighborsRequest(
         protobuf::DhtMessage& dht_msg) {
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end", header);
     if (!CheckDestination(header.des_dht_key(), false)) {
-        DHT_WARN("refresh neighbors request destnation error[%s][%s]",
+        DHT_WARN("refresh neighbors request destnation error[%s][%s]"
+                "from[%s][%d]to[%s][%d]",
                 common::Encode::HexEncode(header.des_dht_key()).c_str(),
-                common::Encode::HexEncode(local_node_->dht_key).c_str());
+                common::Encode::HexEncode(local_node_->dht_key).c_str(),
+                header.from_ip().c_str(),
+                header.from_port(),
+                local_node_->public_ip.c_str(),
+                local_node_->public_port);
         return;
     }
 
