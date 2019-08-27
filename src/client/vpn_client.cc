@@ -63,7 +63,6 @@ void VpnClient::HandleMessage(transport::protobuf::Header& header) {
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("client end", header);
     if (header.type() == common::kServiceMessage) {
         std::cout << "receive service message." << std::endl;
-        root_dht_->HandleMessage(header);
         transport::SynchroWait::Instance()->Callback(header.id(), header);
     }
 
@@ -357,10 +356,7 @@ int VpnClient::GetVpnNodes(
                     svr_msg.vpn_res().encrypt_type(),
                     dec_passwd));
         } while (0);
-        ++res_num;
-        if (res_num >= expect_num) {
-            state_lock.Signal();
-        }
+        state_lock.Signal();
     };
     std::cout << "add to sync wait now: " << msg_id << std::endl;
     transport::SynchroWait::Instance()->Add(msg_id, 3 * 1000 * 1000, callback, nodes.size());
