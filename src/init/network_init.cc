@@ -455,7 +455,6 @@ void NetworkInit::CreateNewElectBlock() {
         test_new_elect_tick_.CutOff(
                 1000 * 1000,
                 std::bind(&NetworkInit::CreateNewElectBlock, this));
-        std::cout << "create ec block failed!" << std::endl;
         return;
     }
     network::Route::Instance()->Send(msg);
