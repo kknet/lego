@@ -401,14 +401,10 @@ void BaseDht::ProcessBootstrapResponse(
             dht_msg.bootstrap_res().local_ip(),
             static_cast<uint16_t>(dht_msg.bootstrap_res().local_port()),
             pubkey_ptr);
-    if (Join(node) != kDhtSuccess) {
-        DHT_ERROR("join node failed!");
-        return;
-    }
-
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("3 end", header);
     std::lock_guard<std::mutex> guard(join_res_mutex_);
     if (joined_) {
+        Join(node);
         return;
     }
 
@@ -430,6 +426,7 @@ void BaseDht::ProcessBootstrapResponse(
     join_res_con_.notify_all();
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("4 end", header);
     joined_ = true;
+    Join(node);
 }
 
 void BaseDht::ProcessRefreshNeighborsRequest(
@@ -802,13 +799,6 @@ bool BaseDht::CheckDestination(const std::string& des_dht_key, bool check_closes
 void BaseDht::RefreshNeighbors() {
     Dht tmp_dht = *readonly_dht_;  // change must copy
     if (!tmp_dht.empty()) {
-        if (!local_node_->first_node && !joined_) {
-            refresh_neighbors_tick_.CutOff(
-                    kRefreshNeighborPeriod,
-                    std::bind(&BaseDht::RefreshNeighbors, shared_from_this()));
-            return;
-        }
-
         auto close_nodes = DhtFunction::GetClosestNodes(
                 tmp_dht,
                 local_node_->dht_key,
