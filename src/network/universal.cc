@@ -199,9 +199,6 @@ void Uniersal::HandleMessage(transport::protobuf::Header& msg) {
 void Uniersal::ProcessGetNetworkNodesRequest(
         transport::protobuf::Header& header,
         protobuf::NetworkMessage& network_msg) {
-    if (header.client()) {
-        std::cout << "client get nodes coming." << std::endl;
-    }
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end", header);
     dht::BaseDhtPtr dht = UniversalManager::Instance()->GetUniversal(kUniversalNetworkId);
     auto universal_dht = std::dynamic_pointer_cast<Uniersal>(dht);
@@ -223,9 +220,6 @@ void Uniersal::ProcessGetNetworkNodesRequest(
         return;
     }
 
-    if (header.client()) {
-        std::cout << "nodes get success, send res." << std::endl;
-    }
     transport::protobuf::Header msg;
     SetFrequently(msg);
     NetworkProto::CreateGetNetworkNodesResponse(local_node_, header, nodes, msg);
