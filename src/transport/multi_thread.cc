@@ -238,15 +238,17 @@ int MultiThreadHandler::HandleClientMessage(
             DHT_ERROR("receive client message. from[%s][%d]", message_ptr->from_ip().c_str(), message_ptr->from_port());
         }
     } else {
-        auto client_node = ClientRelay::Instance()->GetClient(message_ptr->client_dht_key());
-        if (client_node != nullptr) {
-            message_ptr->set_des_dht_key(message_ptr->client_dht_key());
-            auto& msg = *message_ptr;
-            transport_->Send(client_node->ip, client_node->port, 0, msg);
-            if (message_ptr->type() != common::kDhtMessage) {
-                DHT_ERROR("send to client message. to[%s][%d]", client_node->ip.c_str(), client_node->port);
+        if (message_ptr->client_handled()) {
+            auto client_node = ClientRelay::Instance()->GetClient(message_ptr->client_dht_key());
+            if (client_node != nullptr) {
+                message_ptr->set_des_dht_key(message_ptr->client_dht_key());
+                auto& msg = *message_ptr;
+                transport_->Send(client_node->ip, client_node->port, 0, msg);
+                if (message_ptr->type() != common::kDhtMessage) {
+                    DHT_ERROR("send to client message. to[%s][%d]", client_node->ip.c_str(), client_node->port);
+                }
+                return kTransportClientSended;
             }
-            return kTransportClientSended;
         }
     }
 #endif
