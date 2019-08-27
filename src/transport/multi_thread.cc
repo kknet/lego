@@ -1,5 +1,6 @@
 #include "transport/multi_thread.h"
 
+#include "common/utils.h"
 #include "transport/transport_utils.h"
 #include "transport/processor.h"
 #include "transport/message_filter.h"
@@ -232,13 +233,17 @@ int MultiThreadHandler::HandleClientMessage(
         message_ptr->set_src_dht_key(dht->local_node()->dht_key);
         message_ptr->set_client_relayed(true);
         message_ptr->set_client_proxy(true);
-        DHT_ERROR("receive client message. from[%s][%d]", message_ptr->from_ip().c_str(), message_ptr->from_port());
+        if (message_ptr->type() != common::kDhtMessage) {
+            DHT_ERROR("receive client message. from[%s][%d]", message_ptr->from_ip().c_str(), message_ptr->from_port());
+        }
     } else {
         auto client_node = ClientRelay::Instance()->GetClient(message_ptr->client_dht_key());
         if (client_node != nullptr) {
             auto& msg = *message_ptr;
             transport_->Send(client_node->ip, client_node->port, 0, msg);
-            DHT_ERROR("send to client message. from[%s][%d]", client_node->ip.c_str(), client_node->port);
+            if (message_ptr->type() != common::kDhtMessage) {
+                DHT_ERROR("send to client message. to[%s][%d]", client_node->ip.c_str(), client_node->port);
+            }
             return kTransportClientSended;
         }
     }

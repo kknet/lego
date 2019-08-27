@@ -62,6 +62,7 @@ VpnClient* VpnClient::Instance() {
 void VpnClient::HandleMessage(transport::protobuf::Header& header) {
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("client end", header);
     if (header.type() == common::kServiceMessage) {
+        std::cout << "receive service message." << std::endl;
         root_dht_->HandleMessage(header);
     }
 
@@ -289,8 +290,9 @@ int VpnClient::GetVpnNodes(
     uint32_t msg_id = common::GlobalInfo::Instance()->MessageId();
     for (uint32_t i = 0; i < nodes.size(); ++i) {
         transport::protobuf::Header msg;
-        ClientProto::CreateGetVpnInfoRequest(root_dht_->local_node(), nodes[i], msg_id, msg);
-        root_dht_->SendToClosestNode(msg);
+        auto uni_dht = network::UniversalManager::Instance()->GetUniversal(network::kUniversalNetworkId);
+        ClientProto::CreateGetVpnInfoRequest(uni_dht->local_node(), nodes[i], msg_id, msg);
+        uni_dht->SendToClosestNode(msg);
     }
 
     common::StateLock state_lock(0);
