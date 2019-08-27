@@ -37,7 +37,6 @@ public:
         msg.set_type(common::kServiceMessage);
         msg.set_client(local_node->client_mode);
         msg.set_hop_count(0);
-        msg.set_universal(true);
         protobuf::ServiceMessage svr_msg;
         auto vpn_req = svr_msg.mutable_vpn_req();
         vpn_req->set_pubkey(security::Schnorr::Instance()->str_pubkey());

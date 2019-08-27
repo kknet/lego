@@ -21,7 +21,7 @@ public:
         msg.set_des_dht_key_hash(common::Hash::Hash64(header.src_dht_key()));
         msg.set_priority(transport::kTransportPriorityMiddle);
         msg.set_id(header.id());
-        msg.set_universal(header.universal());
+        msg.set_universal(true);
         msg.set_type(common::kServiceMessage);
         if (header.client()) {
             msg.set_from_ip(header.from_ip());
