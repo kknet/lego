@@ -32,7 +32,7 @@ void ElectProto::CreateElectBlock(
         const dht::NodePtr& local_node,
         transport::protobuf::Header& msg) {
     msg.set_src_dht_key(local_node->dht_key);
-    dht::DhtKeyManager dht_key(network::kNodeNetworkId, 0);
+    dht::DhtKeyManager dht_key(4, 0);
     msg.set_des_dht_key(dht_key.StrKey());
     msg.set_priority(transport::kTransportPriorityHigh);
     msg.set_id(common::GlobalInfo::Instance()->MessageId());
@@ -41,13 +41,12 @@ void ElectProto::CreateElectBlock(
     msg.set_universal(true);
     msg.set_hop_count(0);
 
-    auto dht = network::DhtManager::Instance()->GetDht(
-			common::GlobalInfo::Instance()->network_id());
+    auto dht = network::DhtManager::Instance()->GetDht(4);
 	if (!dht) {
 		std::cout << "get network: " << common::GlobalInfo::Instance()->network_id() << " failed" << std::endl;
 	}
 	assert(dht);
-    auto readonly_dht = dht->readonly_dht();
+    auto readonly_dht = dht->readonly_hash_sort_dht();
     if (readonly_dht->size() < 2) {
         return;
     }

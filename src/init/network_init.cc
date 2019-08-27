@@ -445,7 +445,11 @@ void NetworkInit::CreateNewElectBlock() {
     }
 
     transport::protobuf::Header msg;
-    auto dht = network::UniversalManager::Instance()->GetUniversal(network::kNodeNetworkId);
+    auto dht = network::DhtManager::Instance()->GetDht(network::GetConsensusShardNetworkId(""));
+    if (!dht) {
+        assert(false);
+        return;
+    }
     elect::ElectProto::CreateElectBlock(dht->local_node(), msg);
     if (!msg.has_data()) {
         test_new_elect_tick_.CutOff(
