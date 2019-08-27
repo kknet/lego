@@ -265,7 +265,7 @@ int UdpTransport::Send(
 #endif // LEGO_TRACE_MESSAGE
         int res = uv_udp_try_send(&uv_udp_, buf, kSendBufCount, (const struct sockaddr*)&addr);
         if (res <= 0) {
-            assert(false);
+            TRANSPORT_ERROR("udp transport send message failed!");
         }
         LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE(std::string("udp send res: ") + std::to_string(res), proto);
 //         if (ttl != 0) {

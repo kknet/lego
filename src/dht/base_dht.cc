@@ -414,13 +414,9 @@ void BaseDht::ProcessBootstrapResponse(
             local_node_->public_ip);
     auto local_dht_key = DhtKeyManager(local_node_->dht_key);
     if (node_country != ip::kInvalidCountryCode) {
-        std::cout << "node bootstrap res: " << local_node_->public_ip << ":"
-            << common::global_code_to_country_map[node_country] << std::endl;
         local_dht_key.SetCountryId(node_country);
-    } else {
-        std::cout << "node bootstrap res: " << local_node_->public_ip << ":"
-            << " get country by ip failed!" << std::endl;
     }
+
     local_node_->dht_key = local_dht_key.StrKey();
     local_node_->dht_key_hash = common::Hash::Hash64(local_node_->dht_key);
     join_res_con_.notify_all();
@@ -474,29 +470,6 @@ void BaseDht::ProcessRefreshNeighborsRequest(
             dht_msg.refresh_neighbors_req().des_dht_key(),
             kRefreshNeighborsDefaultCount + 1);
     if (close_nodes.empty()) {
-        auto net_id = DhtKeyManager::DhtKeyGetNetId(local_node_->dht_key);
-        if (net_id == network::kVpnNetworkId) {
-            if (tmp_dht.size() > dht_msg.refresh_neighbors_req().count()) {
-                DHT_ERROR("receive refresh nodes message[%u] nead size[%d] local_size[%d] from[%s][%d] to[%s][%d]",
-                    header.id(),
-                    dht_msg.refresh_neighbors_req().count(),
-                    tmp_dht.size(),
-                    local_node_->public_ip.c_str(),
-                    local_node_->public_port,
-                    header.from_ip().c_str(),
-                    header.from_port());
-                assert(false);
-            } else {
-                DHT_ERROR("no nodes receive refresh nodes message[%u] nead size[%d] local_size[%d] from[%s][%d] to[%s][%d]",
-                    header.id(),
-                    dht_msg.refresh_neighbors_req().count(),
-                    tmp_dht.size(),
-                    local_node_->public_ip.c_str(),
-                    local_node_->public_port,
-                    header.from_ip().c_str(),
-                    header.from_port());
-            }
-        }
         return;
     }
     transport::protobuf::Header res;
@@ -527,10 +500,6 @@ void BaseDht::ProcessRefreshNeighborsResponse(
     // check sign
     auto pubkey_ptr = std::make_shared<security::PublicKey>(header.pubkey());
     const auto& res_nodes = dht_msg.refresh_neighbors_res().nodes();
-    auto net_id = DhtKeyManager::DhtKeyGetNetId(local_node_->dht_key);
-    if (net_id == network::kVpnNetworkId) {
-        DHT_ERROR("refresh neighbors get nodes: %d", res_nodes.size());
-    }
     for (int32_t i = 0; i < res_nodes.size(); ++i) {
         NodePtr node = std::make_shared<Node>(
                 res_nodes[i].id(),
@@ -551,11 +520,6 @@ void BaseDht::ProcessRefreshNeighborsResponse(
         DhtProto::CreateConnectRequest(local_node_, node, false, msg);
         transport_->Send(node->public_ip, node->public_port, 0, msg);
         SendToClosestNode(msg);
-        if (net_id == network::kVpnNetworkId) {
-            DHT_ERROR("[%s][%d] connect to node[%s][%d]",
-                local_node_->public_ip.c_str(), local_node_->public_port,
-                node->public_ip.c_str(), node->public_port);
-        }
     }
 }
 
@@ -623,12 +587,6 @@ void BaseDht::ProcessHeartbeatResponse(
 void BaseDht::ProcessConnectRequest(
         transport::protobuf::Header& header,
         protobuf::DhtMessage& dht_msg) {
-    auto net_id = DhtKeyManager::DhtKeyGetNetId(local_node_->dht_key);
-    if (net_id == network::kVpnNetworkId) {
-        DHT_ERROR("[%s][%d] coming connect to node[%s][%d]",
-            local_node_->public_ip.c_str(), local_node_->public_port,
-            dht_msg.connect_req().public_ip().c_str(), dht_msg.connect_req().public_port());
-    }
     if (header.des_dht_key() != local_node_->dht_key) {
         if (dht_msg.connect_req().direct()) {
             LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("stop direct", header);
@@ -660,11 +618,6 @@ void BaseDht::ProcessConnectRequest(
             dht_msg.connect_req().local_ip(),
             static_cast<uint16_t>(dht_msg.connect_req().local_port()),
             pubkey_ptr);
-    if (net_id == network::kVpnNetworkId) {
-        DHT_ERROR("[%s][%d] receive connect to node[%s][%d]",
-            local_node_->public_ip.c_str(), local_node_->public_port,
-            node->public_ip.c_str(), node->public_port);
-    }
     Join(node);
     nat_detection_->AddTarget(node);
 }
@@ -727,29 +680,6 @@ int BaseDht::CheckJoin(NodePtr& node) {
     }
 
     if (NodeJoined(node)) {
-        auto net_id = DhtKeyManager::DhtKeyGetNetId(local_node_->dht_key);
-        if (net_id == network::kVpnNetworkId) {
-            std::unique_lock<std::mutex> lock_map(node_map_mutex_);
-            std::unique_lock<std::mutex> lock_dht(dht_mutex_);
-            auto iter = node_map_.find(node->dht_key_hash);
-            assert(iter != node_map_.end());
-            for (auto iter = dht_.begin(); iter != dht_.end(); ++iter) {
-                if ((*iter)->dht_key_hash == node->dht_key_hash) {
-                    DHT_WARN("node has joined[map_size: %d][dht_size: %d]"
-                        "[ptr_map_size: %d][ptr_dht_size: %d][%s][%s][%d][%llu]",
-                        node_map_.size(),
-                        dht_.size(),
-                        readonly_dht_->size(),
-                        readony_node_map_->size(),
-                        common::Encode::HexEncode(node->dht_key).c_str(),
-                        node->public_ip.c_str(),
-                        node->public_port,
-                        node->dht_key_hash);
-                    return kDhtNodeJoined;
-                }
-            }
-            assert(false);
-        }
         return kDhtNodeJoined;
     }
 
@@ -853,10 +783,8 @@ void BaseDht::Heartbeat() {
     uint8_t country;
     GetNetIdAndCountry(net_id, country);
     auto local_net_id = DhtKeyManager::DhtKeyGetNetId(local_node_->dht_key);
-    if (local_net_id == network::kVpnNetworkId) {
-        DHT_ERROR("[net_id: %u][country: %d] nodes_size[%d] [universal:%d]",
-            local_net_id, country, tmp_dht_ptr->size(), IsUniversal());
-    }
+    DHT_ERROR("[net_id: %u][country: %d] nodes_size[%d] [universal:%d]",
+        local_net_id, country, tmp_dht_ptr->size(), IsUniversal());
     heartbeat_tick_.CutOff(
             kHeartbeatPeriod,
             std::bind(&BaseDht::Heartbeat, shared_from_this()));
