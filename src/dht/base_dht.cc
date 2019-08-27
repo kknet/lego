@@ -477,8 +477,10 @@ void BaseDht::ProcessRefreshNeighborsRequest(
             dht_msg.refresh_neighbors_req().des_dht_key(),
             kRefreshNeighborsDefaultCount + 1);
     if (close_nodes.empty()) {
-        if (tmp_dht.size() > dht_msg.refresh_neighbors_req().count()) {
-            DHT_ERROR("receive refresh nodes message[%u] nead size[%d] local_size[%d] from[%s][%d] to[%s][%d]",
+        auto net_id = DhtKeyManager::DhtKeyGetNetId(local_node_->dht_key);
+        if (net_id == network::kVpnNetworkId) {
+            if (tmp_dht.size() > dht_msg.refresh_neighbors_req().count()) {
+                DHT_ERROR("receive refresh nodes message[%u] nead size[%d] local_size[%d] from[%s][%d] to[%s][%d]",
                     header.id(),
                     dht_msg.refresh_neighbors_req().count(),
                     tmp_dht.size(),
@@ -486,7 +488,17 @@ void BaseDht::ProcessRefreshNeighborsRequest(
                     local_node_->public_port,
                     header.from_ip().c_str(),
                     header.from_port());
-            assert(false);
+                assert(false);
+            } else {
+                DHT_ERROR("no nodes receive refresh nodes message[%u] nead size[%d] local_size[%d] from[%s][%d] to[%s][%d]",
+                    header.id(),
+                    dht_msg.refresh_neighbors_req().count(),
+                    tmp_dht.size(),
+                    local_node_->public_ip.c_str(),
+                    local_node_->public_port,
+                    header.from_ip().c_str(),
+                    header.from_port());
+            }
         }
         return;
     }

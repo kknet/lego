@@ -1,6 +1,7 @@
 #include "dht/proto/dht_proto.h"
 
 #include "security/schnorr.h"
+#include "dht/dht_key.h"
 
 namespace lego {
 
@@ -82,10 +83,10 @@ void DhtProto::CreateBootstrapResponse(
 }
 
 void DhtProto::CreateRefreshNeighborsRequest(
-        const Dht& dht,
-        const NodePtr& local_node,
-        const NodePtr& des_node,
-        transport::protobuf::Header& msg) {
+    const Dht& dht,
+    const NodePtr& local_node,
+    const NodePtr& des_node,
+    transport::protobuf::Header& msg) {
     msg.set_src_dht_key(local_node->dht_key);
     msg.set_des_dht_key(des_node->dht_key);
     msg.set_priority(transport::kTransportPriorityHighest);
@@ -114,13 +115,16 @@ void DhtProto::CreateRefreshNeighborsRequest(
     refresh_nei_req->set_des_dht_key(local_node->dht_key);
     refresh_nei_req->set_count(dht.size() + 1);
     msg.set_data(dht_msg.SerializeAsString());
-    DHT_ERROR("send refresh nodes message[%u] local size[%d] from[%s][%d] to[%s][%d]",
+    auto net_id = DhtKeyManager::DhtKeyGetNetId(local_node->dht_key);
+    if (net_id == 4099) {
+        DHT_ERROR("send refresh nodes message[%u] local size[%d] from[%s][%d] to[%s][%d]",
             msg.id(),
             refresh_nei_req->count(),
             local_node->public_ip.c_str(),
             local_node->public_port,
             des_node->public_ip.c_str(),
             des_node->public_port);
+    }
 #ifdef LEGO_TRACE_MESSAGE
     auto debug_info = (std::string("RefreshNeighborsRequest:") +
         local_node->public_ip + std::string("-") +
