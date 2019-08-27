@@ -21,7 +21,7 @@ BloomFilter::BloomFilter(const std::vector<uint64_t>& data, uint32_t hash_count)
 BloomFilter::~BloomFilter() {}
 
 void BloomFilter::Add(uint64_t hash) {
-    uint32_t hash_high = static_cast<uint32_t>(hash >> 32 & 0x00000000FFFFFFFF);
+    uint32_t hash_high = static_cast<uint32_t>((hash >> 32) & 0x00000000FFFFFFFF);
     uint32_t hash_low = static_cast<uint32_t>(hash & 0x00000000FFFFFFFF);
     for (uint32_t i = 0; i < hash_count_; ++i) {
         uint32_t index = (hash_high + i * hash_low);
@@ -32,7 +32,7 @@ void BloomFilter::Add(uint64_t hash) {
 }
 
 bool BloomFilter::Contain(uint64_t hash) {
-    uint32_t hash_high = static_cast<uint32_t>(hash >> 32 & 0x00000000FFFFFFFF);
+    uint32_t hash_high = static_cast<uint32_t>((hash >> 32) & 0x00000000FFFFFFFF);
     uint32_t hash_low = static_cast<uint32_t>(hash & 0x00000000FFFFFFFF);
     for (uint32_t i = 0; i < hash_count_; ++i) {
         uint32_t index = (hash_high + i * hash_low);

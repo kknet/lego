@@ -707,18 +707,29 @@ int BaseDht::CheckJoin(NodePtr& node) {
     }
 
     if (NodeJoined(node)) {
-        std::unique_lock<std::mutex> lock_map(node_map_mutex_);
-        std::unique_lock<std::mutex> lock_dht(dht_mutex_);
-        DHT_WARN("node has joined[map_size: %d][dht_size: %d]"
-                "[ptr_map_size: %d][ptr_dht_size: %d][%s][%s][%d][%llu]",
-                node_map_.size(),
-                dht_.size(),
-                readonly_dht_->size(),
-                readony_node_map_->size(),
-                common::Encode::HexEncode(node->dht_key).c_str(),
-                node->public_ip.c_str(),
-                node->public_port,
-                node->dht_key_hash);
+        auto net_id = DhtKeyManager::DhtKeyGetNetId(local_node_->dht_key);
+        if (net_id == network::kVpnNetworkId) {
+            std::unique_lock<std::mutex> lock_map(node_map_mutex_);
+            std::unique_lock<std::mutex> lock_dht(dht_mutex_);
+            auto iter = node_map_.find(node->dht_key_hash);
+            assert(iter != node_map_.end());
+            for (auto iter = dht_.begin(); iter != dht_.end(); ++iter) {
+                if ((*iter)->dht_key_hash == node->dht_key_hash) {
+                    DHT_WARN("node has joined[map_size: %d][dht_size: %d]"
+                        "[ptr_map_size: %d][ptr_dht_size: %d][%s][%s][%d][%llu]",
+                        node_map_.size(),
+                        dht_.size(),
+                        readonly_dht_->size(),
+                        readony_node_map_->size(),
+                        common::Encode::HexEncode(node->dht_key).c_str(),
+                        node->public_ip.c_str(),
+                        node->public_port,
+                        node->dht_key_hash);
+                    return kDhtNodeJoined;
+                }
+            }
+            assert(false);
+        }
         return kDhtNodeJoined;
     }
 
