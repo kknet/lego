@@ -230,10 +230,6 @@ void Uniersal::ProcessGetNetworkNodesRequest(
 void Uniersal::ProcessGetNetworkNodesResponse(
         transport::protobuf::Header& header,
         protobuf::NetworkMessage& network_msg) {
-    if (header.client()) {
-        std::cout << "client get nodes response coming." << std::endl;
-    }
-
     if (header.des_dht_key() != local_node_->dht_key) {
         SendToClosestNode(header);
         return;
