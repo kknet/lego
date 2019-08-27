@@ -146,12 +146,6 @@ void MultiThreadHandler::HandleRemoteMessage(
 		return;
 	}
 
-    if (message_ptr->type() == common::kServiceMessage) {
-        if (message_ptr->client_relayed()) {
-            std::cout << "receive client relayed message 1111." << std::endl;
-        }
-    }
-
 	if (message_ptr->hop_count() >= kMaxHops) {
 		TRANSPORT_ERROR("Message max hot discard!");
 		return;
@@ -244,9 +238,6 @@ int MultiThreadHandler::HandleClientMessage(
             DHT_ERROR("receive client message. from[%s][%d]", message_ptr->from_ip().c_str(), message_ptr->from_port());
         }
     } else {
-        if (message_ptr->type() == common::kServiceMessage) {
-            std::cout << "receive relayed message to client." << std::endl;
-        }
         auto client_node = ClientRelay::Instance()->GetClient(message_ptr->client_dht_key());
         if (client_node != nullptr) {
             message_ptr->set_des_dht_key(message_ptr->client_dht_key());

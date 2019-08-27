@@ -220,16 +220,28 @@ void BaseDht::SendToClosestNode(transport::protobuf::Header& message) {
         return;
     }
 
-    NodePtr node = FindNodeDirect(message);
-    if (!node) {
+    NodePtr node = nullptr;
+    if (local_node_->client_mode) {
         std::set<std::string> exclude;
         Dht tmp_dht = *readonly_dht_;  // change must copy
         node = DhtFunction::GetClosestNode(
                 tmp_dht,
-                message.des_dht_key(),
+                local_node_->dht_key,
                 local_node_->dht_key,
                 true,
                 exclude);
+    } else {
+        node = FindNodeDirect(message);
+        if (!node) {
+            std::set<std::string> exclude;
+            Dht tmp_dht = *readonly_dht_;  // change must copy
+            node = DhtFunction::GetClosestNode(
+                    tmp_dht,
+                    message.des_dht_key(),
+                    local_node_->dht_key,
+                    true,
+                    exclude);
+        }
     }
 
     if (!node) {
@@ -240,10 +252,7 @@ void BaseDht::SendToClosestNode(transport::protobuf::Header& message) {
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("send to closest node", message);
     assert(node->dht_key_hash != local_node_->dht_key_hash);
     transport_->Send(node->public_ip, node->public_port, 0, message);
-    if (message.type() == common::kServiceMessage) {
-        std::cout << "send by closest node:" << node->public_ip.c_str() << ":" << node->public_port << std::endl;
-        DHT_ERROR("send by closest node[%s][%d]", node->public_ip.c_str(), node->public_port);
-    }
+    std::cout << "send by closest node:" << node->public_ip.c_str() << ":" << node->public_port << std::endl;
 }
 
 NodePtr BaseDht::FindNodeDirect(transport::protobuf::Header& message) {
@@ -666,14 +675,6 @@ int BaseDht::CheckJoin(NodePtr& node) {
     if (node->client_mode) {
         DHT_ERROR("node is client mode error!");
         return kDhtError;
-    }
-
-    if (local_node_->client_mode) {
-        auto local_country = DhtKeyManager::DhtKeyGetCountry(local_node_->dht_key);
-        auto node_country = DhtKeyManager::DhtKeyGetCountry(node->dht_key);
-        if (local_country != node_country) {
-            return kDhtError;
-        }
     }
 
     if (node->nat_type == kNatTypeUnknown) {

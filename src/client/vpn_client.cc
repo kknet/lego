@@ -64,6 +64,7 @@ void VpnClient::HandleMessage(transport::protobuf::Header& header) {
     if (header.type() == common::kServiceMessage) {
         std::cout << "receive service message." << std::endl;
         root_dht_->HandleMessage(header);
+        transport::SynchroWait::Instance()->Callback(header.id(), header);
     }
 
     if (header.type() == common::kBlockMessage) {

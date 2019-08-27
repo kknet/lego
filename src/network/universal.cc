@@ -199,23 +199,11 @@ void Uniersal::HandleMessage(transport::protobuf::Header& msg) {
 void Uniersal::ProcessGetNetworkNodesRequest(
         transport::protobuf::Header& header,
         protobuf::NetworkMessage& network_msg) {
-    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end", header);
-    dht::BaseDhtPtr dht = UniversalManager::Instance()->GetUniversal(kUniversalNetworkId);
-    auto universal_dht = std::dynamic_pointer_cast<Uniersal>(dht);
-    if (!universal_dht->HasNetworkId(network_msg.get_net_nodes_req().net_id())) {
-        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end 1", header);
-        SendToClosestNode(header);
-        return;
-    }
-
     std::vector<dht::NodePtr> nodes = LocalGetNetworkNodes(
             network_msg.get_net_nodes_req().net_id(),
             network_msg.get_net_nodes_req().country(),
             network_msg.get_net_nodes_req().count());
     if (nodes.empty()) {
-        if (header.client()) {
-            std::cout << "nodes empty, sent to close." << std::endl;
-        }
         SendToClosestNode(header);
         return;
     }
