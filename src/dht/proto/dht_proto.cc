@@ -112,7 +112,15 @@ void DhtProto::CreateRefreshNeighborsRequest(
         refresh_nei_req->add_bloomfilter(bloomfilter_vec[i]);
     }
     refresh_nei_req->set_des_dht_key(local_node->dht_key);
+    refresh_nei_req->set_count(dht.size() + 1);
     msg.set_data(dht_msg.SerializeAsString());
+    DHT_ERROR("send refresh nodes message[%u] local size[%d] from[%s][%d] to[%s][%d]",
+            msg.id(),
+            refresh_nei_req->count(),
+            local_node->public_ip.c_str(),
+            local_node->public_port,
+            des_node->public_ip.c_str(),
+            des_node->public_port);
 #ifdef LEGO_TRACE_MESSAGE
     auto debug_info = (std::string("RefreshNeighborsRequest:") +
         local_node->public_ip + std::string("-") +

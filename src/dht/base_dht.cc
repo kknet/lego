@@ -475,8 +475,19 @@ void BaseDht::ProcessRefreshNeighborsRequest(
     auto close_nodes = DhtFunction::GetClosestNodes(
             tmp_dht,
             dht_msg.refresh_neighbors_req().des_dht_key(),
-            dht_msg.refresh_neighbors_req().count() + 1);
+            kRefreshNeighborsDefaultCount + 1);
     if (close_nodes.empty()) {
+        if (tmp_dht.size() > dht_msg.refresh_neighbors_req().count()) {
+            DHT_ERROR("receive refresh nodes message[%u] nead size[%d] local_size[%d] from[%s][%d] to[%s][%d]",
+                    header.id(),
+                    dht_msg.refresh_neighbors_req().count(),
+                    tmp_dht.size(),
+                    local_node_->public_ip.c_str(),
+                    local_node_->public_port,
+                    header.from_ip().c_str(),
+                    header.from_port());
+            assert(false);
+        }
         return;
     }
     transport::protobuf::Header res;
