@@ -522,7 +522,9 @@ void BaseDht::ProcessRefreshNeighborsResponse(
                 res_nodes[i].local_ip(),
                 res_nodes[i].local_port(),
                 pubkey_ptr);
-        Join(node);
+        if (CheckJoin(node) != kDhtSuccess) {
+            continue;
+        }
         AddDetectionTarget(node);
         transport::protobuf::Header msg;
         SetFrequently(msg);
@@ -644,10 +646,7 @@ void BaseDht::ProcessConnectRequest(
             node->public_ip.c_str(), node->public_port);
     }
     Join(node);
-//     if (dht_msg.connect_req().direct()) {
-//     } else {
-//         nat_detection_->AddTarget(node);
-//     }
+    nat_detection_->AddTarget(node);
 }
 
 bool BaseDht::NodeValid(NodePtr& node) {
