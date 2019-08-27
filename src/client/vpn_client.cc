@@ -285,6 +285,7 @@ int VpnClient::GetVpnNodes(
         transport::protobuf::Header msg;
         ClientProto::CreateGetVpnInfoRequest(root_dht_->local_node(), nodes[i], msg_id, msg);
         root_dht_->transport()->Send(nodes[i]->public_ip, nodes[i]->public_port, 0, msg);
+        std::cout << "send vpn info req to: " << nodes[i]->public_ip << ":" << nodes[i]->public_port << std::endl;
     }
 
     common::StateLock state_lock(0);
