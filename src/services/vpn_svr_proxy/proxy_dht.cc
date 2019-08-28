@@ -84,7 +84,7 @@ void ProxyDht::HandleGetSocksRequest(
     network::Route::Instance()->Send(res_msg);
     PROXY_ERROR("send res get vpn config info.");
     auto netid = dht::DhtKeyManager::DhtKeyGetNetId(res_msg.des_dht_key());
-    std::cout << "send to des network: " << netid << std::endl;
+    std::cout << "send to des network: " << netid << ":" << res_msg.client_handled() << std::endl;
 }
 
 }  // namespace vpn

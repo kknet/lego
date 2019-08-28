@@ -362,7 +362,7 @@ int VpnClient::GetVpnNodes(
         }
     };
     std::cout << "add to sync wait now: " << msg_id << std::endl;
-    transport::SynchroWait::Instance()->Add(msg_id, 1 * 1000 * 1000, callback, nodes.size());
+    transport::SynchroWait::Instance()->Add(msg_id, 3 * 1000 * 1000, callback, nodes.size());
     state_lock.Wait();
     return kClientSuccess;
 }

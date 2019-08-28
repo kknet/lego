@@ -235,7 +235,6 @@ int UdpTransport::Send(
     proto.clear_to_port();
     proto.clear_handled();
     proto.clear_client_proxy();
-    proto.clear_client_handled();
     if (!proto.has_hash()) {
         proto.set_hash(GetMessageHash(proto));
     }
