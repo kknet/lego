@@ -210,8 +210,8 @@ void VpnClient::WriteDefaultLogConf(
         return;
     }
     std::string log_str = ("# log4cpp.properties\n"
-        "log4cpp.rootCategory = WARN\n"
-        "log4cpp.category.sub1 = WARN, programLog\n"
+        "log4cpp.rootCategory = DEBUG\n"
+        "log4cpp.category.sub1 = DEBUG, programLog\n"
         "log4cpp.appender.rootAppender = ConsoleAppender\n"
         "log4cpp.appender.rootAppender.layout = PatternLayout\n"
         "log4cpp.appender.rootAppender.layout.ConversionPattern = %d [%p] %m%n\n"
@@ -362,7 +362,7 @@ int VpnClient::GetVpnNodes(
         }
     };
     std::cout << "add to sync wait now: " << msg_id << std::endl;
-    transport::SynchroWait::Instance()->Add(msg_id, 3 * 1000 * 1000, callback, nodes.size());
+    transport::SynchroWait::Instance()->Add(msg_id, 1000 * 1000, callback, nodes.size());
     state_lock.Wait();
     return kClientSuccess;
 }

@@ -180,7 +180,6 @@ void MultiThreadHandler::HandleRemoteMessage(
 		}
 	}
 
-
 	if (message_ptr->client()) {
 		if (HandleClientMessage(message_ptr, from_ip, from_port) != kTransportSuccess) {
 			const auto& msg = *message_ptr;
@@ -238,9 +237,6 @@ int MultiThreadHandler::HandleClientMessage(
         }
     } else {
         if (message_ptr->client_handled()) {
-            if (message_ptr->type() == common::kServiceMessage) {
-                std::cout << "client handleded. now send to client." << std::endl;
-            }
             auto client_node = ClientRelay::Instance()->GetClient(message_ptr->client_dht_key());
             if (client_node != nullptr) {
                 message_ptr->set_des_dht_key(message_ptr->client_dht_key());
@@ -250,10 +246,6 @@ int MultiThreadHandler::HandleClientMessage(
                     DHT_ERROR("send to client message. to[%s][%d]", client_node->ip.c_str(), client_node->port);
                 }
                 return kTransportClientSended;
-            }
-        } else {
-            if (message_ptr->type() == common::kServiceMessage) {
-                std::cout << "client not handled, just go." << std::endl;
             }
         }
     }
