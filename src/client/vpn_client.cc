@@ -181,7 +181,9 @@ std::string VpnClient::Init(
         CLIENT_ERROR("InitNetworkSingleton failed!");
         return "ERROR";
     }
-    return common::Encode::HexEncode(common::GlobalInfo::Instance()->id());
+    return (common::Encode::HexEncode(common::GlobalInfo::Instance()->id()) +
+            "," +
+            common::Encode::HexEncode(security::Schnorr::Instance()->str_prikey()));
 }
 
 bool VpnClient::ConfigExists(const std::string& conf_path) {
