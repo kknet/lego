@@ -630,18 +630,8 @@ void VpnClient::CheckTxExists() {
         }
     }
 
-    if (!got_block_) {
-        GetAccountHeight();
-        GetAccountBlockWithHeight();
-    } else {
-        check_times_++;
-    }
-
-    if (check_times_ > 10) {
-        GetAccountHeight();
-        GetAccountBlockWithHeight();
-        check_times_ = 0;
-    }
+    GetAccountHeight();
+    GetAccountBlockWithHeight();
     check_tx_tick_.CutOff(kCheckTxPeriod, std::bind(&VpnClient::CheckTxExists, this));
 }
 
