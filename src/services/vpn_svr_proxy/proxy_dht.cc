@@ -1,5 +1,7 @@
 #include "services/vpn_svr_proxy/proxy_dht.h"
 
+#include "common/global_info.h"
+#include "common/country_code.h"
 #include "security/ecdh_create_key.h"
 #include "security/schnorr.h"
 #include "security/aes.h"
@@ -78,6 +80,8 @@ void ProxyDht::HandleGetSocksRequest(
     }
     vpn_res->set_passwd(enc_passwd);
     vpn_res->set_pubkey(security::Schnorr::Instance()->str_pubkey());
+    vpn_res->set_country(common::global_code_to_country_map[
+            common::GlobalInfo::Instance()->country()]);
     transport::protobuf::Header res_msg;
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("getted socks", msg);
     service::ServiceProto::CreateGetVpnInfoRes(local_node(), svr_msg, msg, res_msg);

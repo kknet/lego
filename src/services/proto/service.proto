@@ -12,6 +12,7 @@ message GetVpnInfoResponse {
 	optional bytes encrypt_type = 3;
 	optional bytes passwd = 4;  // encrypt with ecdh key
 	optional bytes pubkey = 5;
+    optional bytes country = 6;
 }
 
 message ServiceMessage {
