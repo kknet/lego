@@ -349,6 +349,21 @@ class GetVpnInfoResponse : public ::google::protobuf::Message /* @@protoc_insert
   ::std::string* release_pubkey();
   void set_allocated_pubkey(::std::string* pubkey);
 
+  // optional bytes country = 6;
+  bool has_country() const;
+  void clear_country();
+  static const int kCountryFieldNumber = 6;
+  const ::std::string& country() const;
+  void set_country(const ::std::string& value);
+  #if LANG_CXX11
+  void set_country(::std::string&& value);
+  #endif
+  void set_country(const char* value);
+  void set_country(const void* value, size_t size);
+  ::std::string* mutable_country();
+  ::std::string* release_country();
+  void set_allocated_country(::std::string* country);
+
   // optional uint32 port = 2;
   bool has_port() const;
   void clear_port();
@@ -368,6 +383,8 @@ class GetVpnInfoResponse : public ::google::protobuf::Message /* @@protoc_insert
   void clear_has_passwd();
   void set_has_pubkey();
   void clear_has_pubkey();
+  void set_has_country();
+  void clear_has_country();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
@@ -376,6 +393,7 @@ class GetVpnInfoResponse : public ::google::protobuf::Message /* @@protoc_insert
   ::google::protobuf::internal::ArenaStringPtr encrypt_type_;
   ::google::protobuf::internal::ArenaStringPtr passwd_;
   ::google::protobuf::internal::ArenaStringPtr pubkey_;
+  ::google::protobuf::internal::ArenaStringPtr country_;
   ::google::protobuf::uint32 port_;
   friend struct ::protobuf_service_2eproto::TableStruct;
 };
@@ -662,13 +680,13 @@ inline void GetVpnInfoResponse::set_allocated_ip(::std::string* ip) {
 
 // optional uint32 port = 2;
 inline bool GetVpnInfoResponse::has_port() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
+  return (_has_bits_[0] & 0x00000020u) != 0;
 }
 inline void GetVpnInfoResponse::set_has_port() {
-  _has_bits_[0] |= 0x00000010u;
+  _has_bits_[0] |= 0x00000020u;
 }
 inline void GetVpnInfoResponse::clear_has_port() {
-  _has_bits_[0] &= ~0x00000010u;
+  _has_bits_[0] &= ~0x00000020u;
 }
 inline void GetVpnInfoResponse::clear_port() {
   port_ = 0u;
@@ -880,6 +898,72 @@ inline void GetVpnInfoResponse::set_allocated_pubkey(::std::string* pubkey) {
   }
   pubkey_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), pubkey);
   // @@protoc_insertion_point(field_set_allocated:lego.service.protobuf.GetVpnInfoResponse.pubkey)
+}
+
+// optional bytes country = 6;
+inline bool GetVpnInfoResponse::has_country() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void GetVpnInfoResponse::set_has_country() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void GetVpnInfoResponse::clear_has_country() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void GetVpnInfoResponse::clear_country() {
+  country_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_country();
+}
+inline const ::std::string& GetVpnInfoResponse::country() const {
+  // @@protoc_insertion_point(field_get:lego.service.protobuf.GetVpnInfoResponse.country)
+  return country_.GetNoArena();
+}
+inline void GetVpnInfoResponse::set_country(const ::std::string& value) {
+  set_has_country();
+  country_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.service.protobuf.GetVpnInfoResponse.country)
+}
+#if LANG_CXX11
+inline void GetVpnInfoResponse::set_country(::std::string&& value) {
+  set_has_country();
+  country_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.service.protobuf.GetVpnInfoResponse.country)
+}
+#endif
+inline void GetVpnInfoResponse::set_country(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_country();
+  country_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.service.protobuf.GetVpnInfoResponse.country)
+}
+inline void GetVpnInfoResponse::set_country(const void* value, size_t size) {
+  set_has_country();
+  country_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.service.protobuf.GetVpnInfoResponse.country)
+}
+inline ::std::string* GetVpnInfoResponse::mutable_country() {
+  set_has_country();
+  // @@protoc_insertion_point(field_mutable:lego.service.protobuf.GetVpnInfoResponse.country)
+  return country_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* GetVpnInfoResponse::release_country() {
+  // @@protoc_insertion_point(field_release:lego.service.protobuf.GetVpnInfoResponse.country)
+  if (!has_country()) {
+    return NULL;
+  }
+  clear_has_country();
+  return country_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void GetVpnInfoResponse::set_allocated_country(::std::string* country) {
+  if (country != NULL) {
+    set_has_country();
+  } else {
+    clear_has_country();
+  }
+  country_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), country);
+  // @@protoc_insertion_point(field_set_allocated:lego.service.protobuf.GetVpnInfoResponse.country)
 }
 
 // -------------------------------------------------------------------
