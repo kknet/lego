@@ -1399,6 +1399,21 @@ class GetTxBlockRequest : public ::google::protobuf::Message /* @@protoc_inserti
   ::std::string* release_block_hash();
   void set_allocated_block_hash(::std::string* block_hash);
 
+  // optional bytes account_address = 5;
+  bool has_account_address() const;
+  void clear_account_address();
+  static const int kAccountAddressFieldNumber = 5;
+  const ::std::string& account_address() const;
+  void set_account_address(const ::std::string& value);
+  #if LANG_CXX11
+  void set_account_address(::std::string&& value);
+  #endif
+  void set_account_address(const char* value);
+  void set_account_address(const void* value, size_t size);
+  ::std::string* mutable_account_address();
+  ::std::string* release_account_address();
+  void set_allocated_account_address(::std::string* account_address);
+
   // optional uint64 height = 4;
   bool has_height() const;
   void clear_height();
@@ -1423,12 +1438,15 @@ class GetTxBlockRequest : public ::google::protobuf::Message /* @@protoc_inserti
   void clear_has_from();
   void set_has_height();
   void clear_has_height();
+  void set_has_account_address();
+  void clear_has_account_address();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   ::google::protobuf::internal::ArenaStringPtr tx_gid_;
   ::google::protobuf::internal::ArenaStringPtr block_hash_;
+  ::google::protobuf::internal::ArenaStringPtr account_address_;
   ::google::protobuf::uint64 height_;
   bool from_;
   friend struct ::protobuf_client_2eproto::TableStruct;
@@ -4664,13 +4682,13 @@ inline void GetTxBlockRequest::set_allocated_block_hash(::std::string* block_has
 
 // optional bool from = 3;
 inline bool GetTxBlockRequest::has_from() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
 inline void GetTxBlockRequest::set_has_from() {
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000010u;
 }
 inline void GetTxBlockRequest::clear_has_from() {
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 inline void GetTxBlockRequest::clear_from() {
   from_ = false;
@@ -4688,13 +4706,13 @@ inline void GetTxBlockRequest::set_from(bool value) {
 
 // optional uint64 height = 4;
 inline bool GetTxBlockRequest::has_height() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
 inline void GetTxBlockRequest::set_has_height() {
-  _has_bits_[0] |= 0x00000004u;
+  _has_bits_[0] |= 0x00000008u;
 }
 inline void GetTxBlockRequest::clear_has_height() {
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline void GetTxBlockRequest::clear_height() {
   height_ = GOOGLE_ULONGLONG(0);
@@ -4708,6 +4726,72 @@ inline void GetTxBlockRequest::set_height(::google::protobuf::uint64 value) {
   set_has_height();
   height_ = value;
   // @@protoc_insertion_point(field_set:lego.client.protobuf.GetTxBlockRequest.height)
+}
+
+// optional bytes account_address = 5;
+inline bool GetTxBlockRequest::has_account_address() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void GetTxBlockRequest::set_has_account_address() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void GetTxBlockRequest::clear_has_account_address() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void GetTxBlockRequest::clear_account_address() {
+  account_address_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_account_address();
+}
+inline const ::std::string& GetTxBlockRequest::account_address() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.GetTxBlockRequest.account_address)
+  return account_address_.GetNoArena();
+}
+inline void GetTxBlockRequest::set_account_address(const ::std::string& value) {
+  set_has_account_address();
+  account_address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.GetTxBlockRequest.account_address)
+}
+#if LANG_CXX11
+inline void GetTxBlockRequest::set_account_address(::std::string&& value) {
+  set_has_account_address();
+  account_address_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.GetTxBlockRequest.account_address)
+}
+#endif
+inline void GetTxBlockRequest::set_account_address(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_account_address();
+  account_address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.GetTxBlockRequest.account_address)
+}
+inline void GetTxBlockRequest::set_account_address(const void* value, size_t size) {
+  set_has_account_address();
+  account_address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.GetTxBlockRequest.account_address)
+}
+inline ::std::string* GetTxBlockRequest::mutable_account_address() {
+  set_has_account_address();
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.GetTxBlockRequest.account_address)
+  return account_address_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* GetTxBlockRequest::release_account_address() {
+  // @@protoc_insertion_point(field_release:lego.client.protobuf.GetTxBlockRequest.account_address)
+  if (!has_account_address()) {
+    return NULL;
+  }
+  clear_has_account_address();
+  return account_address_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void GetTxBlockRequest::set_allocated_account_address(::std::string* account_address) {
+  if (account_address != NULL) {
+    set_has_account_address();
+  } else {
+    clear_has_account_address();
+  }
+  account_address_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), account_address);
+  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.GetTxBlockRequest.account_address)
 }
 
 // -------------------------------------------------------------------
