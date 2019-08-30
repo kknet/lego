@@ -416,11 +416,13 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::GetVpnInfoResponse, encrypt_type_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::GetVpnInfoResponse, passwd_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::GetVpnInfoResponse, pubkey_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::GetVpnInfoResponse, country_),
   0,
-  4,
+  5,
   1,
   2,
   3,
+  4,
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::ServiceMessage, _has_bits_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::ServiceMessage, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -556,16 +558,16 @@ static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROT
   { 17, 23, sizeof(::lego::client::protobuf::TxBft)},
   { 24, 48, sizeof(::lego::client::protobuf::BftMessage)},
   { 67, 73, sizeof(::lego::client::protobuf::GetVpnInfoRequest)},
-  { 74, 84, sizeof(::lego::client::protobuf::GetVpnInfoResponse)},
-  { 89, 96, sizeof(::lego::client::protobuf::ServiceMessage)},
-  { 98, 108, sizeof(::lego::client::protobuf::GetTxBlockRequest)},
-  { 113, 119, sizeof(::lego::client::protobuf::GetTxBlockResponse)},
-  { 120, 126, sizeof(::lego::client::protobuf::AccountHeightRequest)},
-  { 127, 133, sizeof(::lego::client::protobuf::AccountHeightResponse)},
-  { 134, 143, sizeof(::lego::client::protobuf::BlockMessage)},
-  { 147, 164, sizeof(::lego::client::protobuf::TxInfo)},
-  { 176, 193, sizeof(::lego::client::protobuf::TxBlock)},
-  { 205, 214, sizeof(::lego::client::protobuf::Block)},
+  { 74, 85, sizeof(::lego::client::protobuf::GetVpnInfoResponse)},
+  { 91, 98, sizeof(::lego::client::protobuf::ServiceMessage)},
+  { 100, 110, sizeof(::lego::client::protobuf::GetTxBlockRequest)},
+  { 115, 121, sizeof(::lego::client::protobuf::GetTxBlockResponse)},
+  { 122, 128, sizeof(::lego::client::protobuf::AccountHeightRequest)},
+  { 129, 135, sizeof(::lego::client::protobuf::AccountHeightResponse)},
+  { 136, 145, sizeof(::lego::client::protobuf::BlockMessage)},
+  { 149, 166, sizeof(::lego::client::protobuf::TxInfo)},
+  { 178, 195, sizeof(::lego::client::protobuf::TxBlock)},
+  { 207, 216, sizeof(::lego::client::protobuf::Block)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -621,43 +623,43 @@ void AddDescriptorsImpl() {
       "response\030\016 \001(\014\022\016\n\006bitmap\030\017 \003(\004\022\r\n\005agree\030"
       "\020 \001(\010\022\023\n\013bft_address\030\021 \001(\014\022\022\n\npool_index"
       "\030\022 \001(\r\022\014\n\004data\030\023 \001(\014\"#\n\021GetVpnInfoReques"
-      "t\022\016\n\006pubkey\030\001 \001(\014\"d\n\022GetVpnInfoResponse\022"
+      "t\022\016\n\006pubkey\030\001 \001(\014\"u\n\022GetVpnInfoResponse\022"
       "\n\n\002ip\030\001 \001(\014\022\014\n\004port\030\002 \001(\r\022\024\n\014encrypt_typ"
-      "e\030\003 \001(\014\022\016\n\006passwd\030\004 \001(\014\022\016\n\006pubkey\030\005 \001(\014\""
-      "\205\001\n\016ServiceMessage\0228\n\007vpn_req\030\001 \001(\0132\'.le"
-      "go.client.protobuf.GetVpnInfoRequest\0229\n\007"
-      "vpn_res\030\002 \001(\0132(.lego.client.protobuf.Get"
-      "VpnInfoResponse\"n\n\021GetTxBlockRequest\022\016\n\006"
-      "tx_gid\030\001 \001(\014\022\022\n\nblock_hash\030\002 \001(\014\022\014\n\004from"
-      "\030\003 \001(\010\022\016\n\006height\030\004 \001(\004\022\027\n\017account_addres"
-      "s\030\005 \001(\014\"#\n\022GetTxBlockResponse\022\r\n\005block\030\001"
-      " \001(\014\",\n\024AccountHeightRequest\022\024\n\014account_"
-      "addr\030\001 \001(\014\"(\n\025AccountHeightResponse\022\017\n\007h"
-      "eights\030\001 \003(\004\"\210\002\n\014BlockMessage\022:\n\tblock_r"
-      "eq\030\001 \001(\0132\'.lego.client.protobuf.GetTxBlo"
-      "ckRequest\022;\n\tblock_res\030\002 \001(\0132(.lego.clie"
-      "nt.protobuf.GetTxBlockResponse\022>\n\nheight"
-      "_req\030\003 \001(\0132*.lego.client.protobuf.Accoun"
-      "tHeightRequest\022\?\n\nheight_res\030\004 \001(\0132+.leg"
-      "o.client.protobuf.AccountHeightResponse\""
-      "\321\001\n\006TxInfo\022\017\n\007version\030\001 \001(\r\022\013\n\003gid\030\002 \001(\014"
-      "\022\014\n\004from\030\003 \001(\014\022\023\n\013from_pubkey\030\004 \001(\014\022\021\n\tf"
-      "rom_sign\030\005 \001(\014\022\n\n\002to\030\006 \001(\014\022\016\n\006amount\030\007 \001"
-      "(\004\022\021\n\tgas_limit\030\010 \001(\004\022\020\n\010gas_used\030\t \001(\004\022"
-      "\021\n\tgas_price\030\n \001(\004\022\017\n\007balance\030\013 \001(\004\022\016\n\006t"
-      "o_add\030\014 \001(\010\"\376\001\n\007TxBlock\022\017\n\007prehash\030\001 \001(\014"
-      "\022\017\n\007version\030\002 \001(\r\022\021\n\telect_ver\030\003 \001(\r\022\017\n\007"
-      "rc_hash\030\004 \001(\014\022\016\n\006bitmap\030\005 \003(\004\022\022\n\nagg_pub"
-      "key\030\006 \001(\014\022\020\n\010agg_sign\030\007 \001(\014\022\r\n\005tx_id\030\010 \001"
-      "(\004\022\017\n\007tx_hash\030\t \001(\014\022\024\n\014tx_root_hash\030\n \001("
-      "\014\022-\n\007tx_list\030\013 \003(\0132\034.lego.client.protobu"
-      "f.TxInfo\022\022\n\nnetwork_id\030\014 \001(\r\"i\n\005Block\022\014\n"
-      "\004hash\030\001 \001(\014\022\016\n\006height\030\002 \001(\004\022/\n\010tx_block\030"
-      "\003 \001(\0132\035.lego.client.protobuf.TxBlock\022\021\n\t"
-      "timestamp\030\004 \001(\004"
+      "e\030\003 \001(\014\022\016\n\006passwd\030\004 \001(\014\022\016\n\006pubkey\030\005 \001(\014\022"
+      "\017\n\007country\030\006 \001(\014\"\205\001\n\016ServiceMessage\0228\n\007v"
+      "pn_req\030\001 \001(\0132\'.lego.client.protobuf.GetV"
+      "pnInfoRequest\0229\n\007vpn_res\030\002 \001(\0132(.lego.cl"
+      "ient.protobuf.GetVpnInfoResponse\"n\n\021GetT"
+      "xBlockRequest\022\016\n\006tx_gid\030\001 \001(\014\022\022\n\nblock_h"
+      "ash\030\002 \001(\014\022\014\n\004from\030\003 \001(\010\022\016\n\006height\030\004 \001(\004\022"
+      "\027\n\017account_address\030\005 \001(\014\"#\n\022GetTxBlockRe"
+      "sponse\022\r\n\005block\030\001 \001(\014\",\n\024AccountHeightRe"
+      "quest\022\024\n\014account_addr\030\001 \001(\014\"(\n\025AccountHe"
+      "ightResponse\022\017\n\007heights\030\001 \003(\004\"\210\002\n\014BlockM"
+      "essage\022:\n\tblock_req\030\001 \001(\0132\'.lego.client."
+      "protobuf.GetTxBlockRequest\022;\n\tblock_res\030"
+      "\002 \001(\0132(.lego.client.protobuf.GetTxBlockR"
+      "esponse\022>\n\nheight_req\030\003 \001(\0132*.lego.clien"
+      "t.protobuf.AccountHeightRequest\022\?\n\nheigh"
+      "t_res\030\004 \001(\0132+.lego.client.protobuf.Accou"
+      "ntHeightResponse\"\321\001\n\006TxInfo\022\017\n\007version\030\001"
+      " \001(\r\022\013\n\003gid\030\002 \001(\014\022\014\n\004from\030\003 \001(\014\022\023\n\013from_"
+      "pubkey\030\004 \001(\014\022\021\n\tfrom_sign\030\005 \001(\014\022\n\n\002to\030\006 "
+      "\001(\014\022\016\n\006amount\030\007 \001(\004\022\021\n\tgas_limit\030\010 \001(\004\022\020"
+      "\n\010gas_used\030\t \001(\004\022\021\n\tgas_price\030\n \001(\004\022\017\n\007b"
+      "alance\030\013 \001(\004\022\016\n\006to_add\030\014 \001(\010\"\376\001\n\007TxBlock"
+      "\022\017\n\007prehash\030\001 \001(\014\022\017\n\007version\030\002 \001(\r\022\021\n\tel"
+      "ect_ver\030\003 \001(\r\022\017\n\007rc_hash\030\004 \001(\014\022\016\n\006bitmap"
+      "\030\005 \003(\004\022\022\n\nagg_pubkey\030\006 \001(\014\022\020\n\010agg_sign\030\007"
+      " \001(\014\022\r\n\005tx_id\030\010 \001(\004\022\017\n\007tx_hash\030\t \001(\014\022\024\n\014"
+      "tx_root_hash\030\n \001(\014\022-\n\007tx_list\030\013 \003(\0132\034.le"
+      "go.client.protobuf.TxInfo\022\022\n\nnetwork_id\030"
+      "\014 \001(\r\"i\n\005Block\022\014\n\004hash\030\001 \001(\014\022\016\n\006height\030\002"
+      " \001(\004\022/\n\010tx_block\030\003 \001(\0132\035.lego.client.pro"
+      "tobuf.TxBlock\022\021\n\ttimestamp\030\004 \001(\004"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 1935);
+      descriptor, 1952);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "client.proto", &protobuf_RegisterTypes);
 }
@@ -2698,6 +2700,7 @@ const int GetVpnInfoResponse::kPortFieldNumber;
 const int GetVpnInfoResponse::kEncryptTypeFieldNumber;
 const int GetVpnInfoResponse::kPasswdFieldNumber;
 const int GetVpnInfoResponse::kPubkeyFieldNumber;
+const int GetVpnInfoResponse::kCountryFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 GetVpnInfoResponse::GetVpnInfoResponse()
@@ -2728,6 +2731,10 @@ GetVpnInfoResponse::GetVpnInfoResponse(const GetVpnInfoResponse& from)
   if (from.has_pubkey()) {
     pubkey_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.pubkey_);
   }
+  country_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_country()) {
+    country_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.country_);
+  }
   port_ = from.port_;
   // @@protoc_insertion_point(copy_constructor:lego.client.protobuf.GetVpnInfoResponse)
 }
@@ -2737,6 +2744,7 @@ void GetVpnInfoResponse::SharedCtor() {
   encrypt_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   passwd_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   pubkey_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  country_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   port_ = 0u;
 }
 
@@ -2750,6 +2758,7 @@ void GetVpnInfoResponse::SharedDtor() {
   encrypt_type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   passwd_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   pubkey_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  country_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void GetVpnInfoResponse::SetCachedSize(int size) const {
@@ -2773,7 +2782,7 @@ void GetVpnInfoResponse::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 15u) {
+  if (cached_has_bits & 31u) {
     if (cached_has_bits & 0x00000001u) {
       ip_.ClearNonDefaultToEmptyNoArena();
     }
@@ -2785,6 +2794,9 @@ void GetVpnInfoResponse::Clear() {
     }
     if (cached_has_bits & 0x00000008u) {
       pubkey_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000010u) {
+      country_.ClearNonDefaultToEmptyNoArena();
     }
   }
   port_ = 0u;
@@ -2864,6 +2876,18 @@ bool GetVpnInfoResponse::MergePartialFromCodedStream(
         break;
       }
 
+      // optional bytes country = 6;
+      case 6: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_country()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -2898,7 +2922,7 @@ void GetVpnInfoResponse::SerializeWithCachedSizes(
   }
 
   // optional uint32 port = 2;
-  if (cached_has_bits & 0x00000010u) {
+  if (cached_has_bits & 0x00000020u) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->port(), output);
   }
 
@@ -2918,6 +2942,12 @@ void GetVpnInfoResponse::SerializeWithCachedSizes(
   if (cached_has_bits & 0x00000008u) {
     ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
       5, this->pubkey(), output);
+  }
+
+  // optional bytes country = 6;
+  if (cached_has_bits & 0x00000010u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      6, this->country(), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -2943,7 +2973,7 @@ void GetVpnInfoResponse::SerializeWithCachedSizes(
   }
 
   // optional uint32 port = 2;
-  if (cached_has_bits & 0x00000010u) {
+  if (cached_has_bits & 0x00000020u) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->port(), target);
   }
 
@@ -2968,6 +2998,13 @@ void GetVpnInfoResponse::SerializeWithCachedSizes(
         5, this->pubkey(), target);
   }
 
+  // optional bytes country = 6;
+  if (cached_has_bits & 0x00000010u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        6, this->country(), target);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
@@ -2985,7 +3022,7 @@ size_t GetVpnInfoResponse::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         _internal_metadata_.unknown_fields());
   }
-  if (_has_bits_[0 / 32] & 31u) {
+  if (_has_bits_[0 / 32] & 63u) {
     // optional bytes ip = 1;
     if (has_ip()) {
       total_size += 1 +
@@ -3012,6 +3049,13 @@ size_t GetVpnInfoResponse::ByteSizeLong() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::BytesSize(
           this->pubkey());
+    }
+
+    // optional bytes country = 6;
+    if (has_country()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->country());
     }
 
     // optional uint32 port = 2;
@@ -3050,7 +3094,7 @@ void GetVpnInfoResponse::MergeFrom(const GetVpnInfoResponse& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 31u) {
+  if (cached_has_bits & 63u) {
     if (cached_has_bits & 0x00000001u) {
       set_has_ip();
       ip_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.ip_);
@@ -3068,6 +3112,10 @@ void GetVpnInfoResponse::MergeFrom(const GetVpnInfoResponse& from) {
       pubkey_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.pubkey_);
     }
     if (cached_has_bits & 0x00000010u) {
+      set_has_country();
+      country_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.country_);
+    }
+    if (cached_has_bits & 0x00000020u) {
       port_ = from.port_;
     }
     _has_bits_[0] |= cached_has_bits;
@@ -3105,6 +3153,8 @@ void GetVpnInfoResponse::InternalSwap(GetVpnInfoResponse* other) {
   passwd_.Swap(&other->passwd_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
   pubkey_.Swap(&other->pubkey_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  country_.Swap(&other->country_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
   swap(port_, other->port_);
   swap(_has_bits_[0], other->_has_bits_[0]);
