@@ -86,8 +86,8 @@ void BlockManager::HandleGetHeightRequest(
     if (acc_ptr == nullptr) {
         return;
     }
-    protobuf::BlockMessage block_msg;
-    auto height_res = block_msg.mutable_height_res();
+    protobuf::BlockMessage block_msg_res;
+    auto height_res = block_msg_res.mutable_height_res();
     auto priqueue = acc_ptr->get_height_pri_queue();
     while (!priqueue.empty()) {
         height_res->add_heights(priqueue.top());
@@ -101,7 +101,7 @@ void BlockManager::HandleGetHeightRequest(
     BlockProto::CreateGetBlockResponse(
             dht_ptr->local_node(),
             header,
-            block_msg.SerializeAsString(), msg);
+            block_msg_res.SerializeAsString(), msg);
     dht_ptr->SendToClosestNode(msg);
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end", header);
 }
