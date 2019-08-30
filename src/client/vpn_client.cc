@@ -116,12 +116,12 @@ int VpnClient::GetSocket() {
     return transport_->GetSocket();
 }
 
-std::string VpnClient::GetBalance() {
+int64_t VpnClient::GetBalance() {
     std::lock_guard<std::mutex> guard(hight_block_map_mutex_);
     protobuf::Block block;
     auto iter = hight_block_map_.rbegin();
     if (!block.ParseFromString(iter->second)) {
-        return "";
+        return -1;
     }
 
     auto tx_list = block.tx_block().tx_list();
@@ -135,9 +135,9 @@ std::string VpnClient::GetBalance() {
             continue;
         }
 
-        return std::to_string(tx_list[i].balance());
+        return tx_list[i].balance();
     }
-    return "";
+    return -1;
 }
 
 std::string VpnClient::Transactions(uint32_t begin, uint32_t len) {
@@ -309,6 +309,7 @@ bool VpnClient::SetFirstInstall() {
     first_install_ = true;
     config.Set("lego", "first_instasll", first_install_);
     config.DumpConfig(config_path_);
+    return true;
 }
 
 bool VpnClient::ConfigExists(const std::string& conf_path) {

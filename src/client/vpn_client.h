@@ -94,7 +94,7 @@ public:
     }
     bool SetFirstInstall();
     std::string Transactions(uint32_t begin, uint32_t len);
-    std::string GetBalance();
+    int64_t GetBalance();
 
 private:
     VpnClient();
