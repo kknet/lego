@@ -125,6 +125,7 @@ std::string VpnClient::Init(
     WriteDefaultLogConf(log_conf_path, log_path);
     log4cpp::PropertyConfigurator::configure(log_conf_path);
     std::string private_key;
+    config_path_ = conf_path;
     if (ConfigExists(conf_path)) {
         if (!config.Init(conf_path)) {
             CLIENT_ERROR("init config failed!");
@@ -139,6 +140,7 @@ std::string VpnClient::Init(
         }
     }
 
+    config.Get("lego", "first_instasll", first_install_);
     config.Set("lego", "local_ip", local_ip);
     config.Set("lego", "local_port", local_port);
     config.Set("lego", "country", std::string("CN"));
@@ -184,6 +186,12 @@ std::string VpnClient::Init(
     return (common::Encode::HexEncode(common::GlobalInfo::Instance()->id()) +
             "," +
             common::Encode::HexEncode(security::Schnorr::Instance()->str_prikey()));
+}
+
+bool VpnClient::SetFirstInstall() {
+    first_install_ = true;
+    config.Set("lego", "first_instasll", first_install_);
+    config.DumpConfig(config_path_);
 }
 
 bool VpnClient::ConfigExists(const std::string& conf_path) {

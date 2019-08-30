@@ -85,6 +85,11 @@ public:
     TxInfoPtr GetBlockWithHash(const std::string& block_hash);
     int GetSocket();
     bool ConfigExists(const std::string& conf_path);
+    bool IsFirstInstall() {
+        return first_install_;
+    }
+
+    bool SetFirstInstall();
 
 private:
     VpnClient();
@@ -120,6 +125,8 @@ private:
     uint32_t recv_buff_size_{ kDefaultUdpRecvBufferSize };
     std::unordered_map<std::string, TxInfoPtr> tx_map_;
     std::mutex tx_map_mutex_;
+    bool first_install_{ false };
+    std::string config_path_;
 };
 
 }  // namespace client
