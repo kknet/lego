@@ -123,6 +123,9 @@ void Command::AddBaseCommands() {
             GetVpnNodes("US");
         }
     });
+    AddCommand("ltx", [this](const std::vector<std::string>& args) {
+        std::cout << client::VpnClient::Instance()->Transactions(0, 10) << std::endl;
+    });
     AddCommand("tx", [this](const std::vector<std::string>& args) {
         std::string tx_gid;
         std::string to;
