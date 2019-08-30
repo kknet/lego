@@ -60,7 +60,15 @@ bool MemberManager::IsLeader(
     uint32_t node_idx = rand % member_ptr->size();
     auto mem_ptr = (*member_ptr)[node_idx];
     assert(mem_ptr != nullptr);
-    return mem_ptr->id == node_id;
+    if (mem_ptr->id == node_id) {
+        return true;
+    }
+
+    BFT_ERROR("is not leader: %s", common::Encode::HexEncode(mem_ptr->id).c_str());
+    for (auto iter = member_ptr->begin(); iter != member_ptr->end(); ++iter) {
+        BFT_ERROR("%s", common::Encode::HexEncode((*iter)->id).c_str());
+    }
+    return false;
 }
 
 uint32_t MemberManager::GetMemberIndex(uint32_t network_id, const std::string& node_id) {

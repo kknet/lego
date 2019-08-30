@@ -76,6 +76,10 @@ bool TxPool::TxPoolEmpty() {
 }
 
 void TxPool::BftOver(BftInterfacePtr& bft_ptr) {
+    if (bft_ptr->status != kBftCommited) {
+        return;
+    }
+
     std::lock_guard<std::mutex> guard(tx_pool_mutex_);
     auto item_vec = bft_ptr->item_index_vec();
     for (uint32_t i = 0; i < item_vec.size(); ++i) {
