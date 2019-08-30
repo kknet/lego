@@ -202,7 +202,7 @@ public:
         protobuf::BlockMessage block_msg;
         auto block_req = block_msg.mutable_block_req();
         block_req->set_height(height);
-        block_req->set_ac
+        block_req->set_account_address(account_address);
         msg.set_data(block_msg.SerializeAsString());
 #ifdef LEGO_TRACE_MESSAGE
         msg.set_debug(std::string("GetBlockWithHeight: ") +
