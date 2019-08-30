@@ -62,13 +62,54 @@ VpnClient* VpnClient::Instance() {
 void VpnClient::HandleMessage(transport::protobuf::Header& header) {
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("client end", header);
     if (header.type() == common::kServiceMessage) {
-        std::cout << "receive service message." << std::endl;
-        transport::SynchroWait::Instance()->Callback(header.id(), header);
+        HandleServiceMessage(header);
     }
 
     if (header.type() == common::kBlockMessage) {
-        transport::SynchroWait::Instance()->Callback(header.id(), header);
+        HandleBlockMessage(header);
     }
+}
+
+void VpnClient::HandleBlockMessage(transport::protobuf::Header& header) {
+    protobuf::BlockMessage block_msg;
+    if (!block_msg.ParseFromString(header.data())) {
+        return;
+    }
+
+    if (block_msg.has_height_res()) {
+        HandleHeightResponse(block_msg.height_res());
+    }
+
+    if (block_msg.has_block_res()) {
+        HandleBlockResponse(block_msg.block_res());
+    }
+}
+
+void VpnClient::HandleBlockResponse(const protobuf::GetTxBlockResponse& block_res) {
+    protobuf::Block block;
+    if (!block.ParseFromString(block_res.block())) {
+        return;
+    }
+    std::lock_guard<std::mutex> guard(hight_block_map_mutex_);
+    hight_block_map_[block.height()] = block_res.block();
+    if (hight_block_map_.size() >= kHeightMaxSize) {
+        hight_block_map_.erase(hight_block_map_.begin());
+    }
+}
+
+void VpnClient::HandleHeightResponse(
+        const protobuf::AccountHeightResponse& height_res) {
+    std::lock_guard<std::mutex> guard(height_queue_mutex_);
+    for (int32_t i = 0; i < height_res.heights_size(); ++i) {
+        height_queue_.push(height_res.heights[i]);
+        if (height_queue_.size() > kHeightMaxSize) {
+            height_queue_.pop();
+        }
+    }
+}
+
+void VpnClient::HandleServiceMessage(transport::protobuf::Header& header) {
+    transport::SynchroWait::Instance()->Callback(header.id(), header);
 }
 
 int VpnClient::GetSocket() {
@@ -500,99 +541,7 @@ std::string VpnClient::Transaction(const std::string& to, uint64_t amount, std::
     return "OK";
 }
 
-std::string VpnClient::CheckTransaction(const std::string& hash, bool is_gid) {
-    auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
-            network::kUniversalNetworkId);
-    if (uni_dht == nullptr) {
-        return "ERROR";
-    }
-    transport::protobuf::Header msg;
-    uni_dht->SetFrequently(msg);
-    std::string tmp_hash = hash;
-    if (!is_gid) {
-        tmp_hash = std::string(hash.begin() + 2, hash.end());
-    }
-    ClientProto::GetBlockWithTxGid(uni_dht->local_node(), tmp_hash, is_gid, true, msg);
-    uni_dht->SendToClosestNode(msg);
-
-    common::StateLock state_lock(0);
-    bool block_finded = false;
-    auto callback = [&state_lock, &block_finded, this, hash, is_gid](
-        int status,
-        transport::protobuf::Header& header) {
-        do {
-            if (status != transport::kTransportSuccess) {
-                break;
-            }
-
-            if (header.type() != common::kBlockMessage) {
-                break;
-            }
-            protobuf::BlockMessage block_msg;
-            if (!block_msg.ParseFromString(header.data())) {
-                break;
-            }
-
-            if (block_msg.block_res().block().empty()) {
-                break;
-            }
-
-            client::protobuf::Block block;
-            if (!block.ParseFromString(block_msg.block_res().block())) {
-                break;
-            }
-
-            auto& tx_list = block.tx_block().tx_list();
-            for (int32_t i = 0; i < tx_list.size(); ++i) {
-                if (tx_list[i].from() == common::GlobalInfo::Instance()->id()) {
-                    CLIENT_INFO("get new tx block[%s][%d][%s]to[%s][balance: %llu]",
-                            common::Encode::HexEncode(hash).c_str(),
-                            is_gid,
-                            common::Encode::HexEncode(tx_list[i].from()).c_str(),
-                            common::Encode::HexEncode(tx_list[i].to()).c_str(),
-                            tx_list[i].balance());
-                    {
-                        std::lock_guard<std::mutex> guard(tx_map_mutex_);
-                        tx_map_[hash] = std::make_shared<TxInfo>(
-                                common::Encode::HexSubstr(tx_list[i].to()),
-                                tx_list[i].balance(),
-                                block.height(),
-                                common::Encode::HexEncode(block.hash()),
-                                std::make_shared<client::protobuf::Block>(block));
-                    }
-                }
-            }
-            block_finded = true;
-        } while (0);
-        state_lock.Signal();
-    };
-    transport::SynchroWait::Instance()->Add(msg.id(), 3 * 1000 * 1000, callback, 1);
-    state_lock.Wait();
-    if (!block_finded) {
-        return "ERROR";
-    }
-    return "OK";
-}
-
 void VpnClient::CheckTxExists() {
-    std::vector<std::string> tx_vec;
-    {
-        std::lock_guard<std::mutex> gaurd(tx_map_mutex_);
-        for (auto iter = tx_map_.begin(); iter != tx_map_.end(); ++iter) {
-            if (iter->second == nullptr) {
-                tx_vec.push_back(iter->first);
-            }
-        }
-    }
-
-    for (auto iter = tx_vec.begin(); iter != tx_vec.end(); ++iter) {
-        if ((*iter)[0] == 'b' && (*iter)[1] == '_') {
-            CheckTransaction(*iter, false);
-        } else {
-            CheckTransaction(*iter, true);
-        }
-    }
-
     {
         if (!root_dht_joined_) {
             auto boot_nodes = network::Bootstrap::Instance()->GetNetworkBootstrap(
@@ -646,11 +595,44 @@ TxInfoPtr VpnClient::GetBlockWithHash(const std::string& block_hash) {
 }
 
 void VpnClient::GetAccountHeight() {
-
+    auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+            network::kUniversalNetworkId);
+    if (uni_dht == nullptr) {
+        return;
+    }
+    transport::protobuf::Header msg;
+    uni_dht->SetFrequently(msg);
+    ClientProto::GetAccountHeight(uni_dht->local_node(), msg);
+    uni_dht->SendToClosestNode(msg);
 }
 
 void VpnClient::GetAccountBlockWithHeight() {
+    auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+            network::kUniversalNetworkId);
+    if (uni_dht == nullptr) {
+        return;
+    }
 
+    std::priority_queue<uint64_t> height_queue;
+    {
+        std::lock_guard<std::mutex> guard(height_queue_mutex_);
+        height_queue = height_queue_;
+    }
+
+    while (!height_queue.empty()) {
+        auto height = height_queue.top();
+        height_queue.pop();
+        {
+            auto iter = hight_block_map_.find(height);
+            if (iter != hight_block_map_.end()) {
+                continue;
+            }
+        }
+        transport::protobuf::Header msg;
+        uni_dht->SetFrequently(msg);
+        ClientProto::GetBlockWithHeight(uni_dht->local_node(), height, msg);
+        uni_dht->SendToClosestNode(msg);
+    }
 }
 
 }  // namespace client

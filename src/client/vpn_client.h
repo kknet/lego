@@ -7,6 +7,7 @@
 #include <mutex>
 #include <unordered_map>
 #include <map>
+#include <queue>
 
 namespace lego {
 
@@ -32,6 +33,8 @@ typedef std::shared_ptr<ClientUniversalDht> ClientUniversalDhtPtr;
 namespace protobuf {
     class Block;
     typedef std::shared_ptr<Block> BlockPtr;
+    class AccountHeightResponse;
+    class GetTxBlockResponse;
 }  // namespace protobuf
 
 struct VpnServerNode {
@@ -89,7 +92,6 @@ public:
     bool IsFirstInstall() {
         return first_install_;
     }
-
     bool SetFirstInstall();
 
 private:
@@ -97,6 +99,8 @@ private:
     ~VpnClient();
 
     void HandleMessage(transport::protobuf::Header& header);
+    void HandleBlockMessage(transport::protobuf::Header& header);
+    void HandleServiceMessage(transport::protobuf::Header& header);
     int InitTransport();
     int SetPriAndPubKey(const std::string& prikey);
     int InitNetworkSingleton();
@@ -105,18 +109,20 @@ private:
             std::vector<VpnServerNodePtr>& vpn_nodes);
     int CreateClientUniversalNetwork();
     void CheckTxExists();
-    std::string CheckTransaction(const std::string& hash, bool is_gid);
     void WriteDefaultLogConf(
             const std::string& log_conf_path,
             const std::string& log_path);
     void GetAccountHeight();
     void GetAccountBlockWithHeight();
+    void HandleHeightResponse(const protobuf::AccountHeightResponse& height_res);
+    void HandleBlockResponse(const protobuf::GetTxBlockResponse& block_res);
 
     static const uint32_t kDefaultUdpSendBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kDefaultUdpRecvBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kTestCreateAccountPeriod = 100u * 1000u;
     static const int64_t kTestNewElectPeriod = 10ll * 1000ll * 1000ll;
     static const uint32_t kCheckTxPeriod = 1 * 1000 * 1000;
+    static const uint32_t kHeightMaxSize = 1024u;
 
     transport::TransportPtr transport_{ nullptr };
     bool inited_{ false };
@@ -132,6 +138,8 @@ private:
     std::string config_path_;
     std::map<uint64_t, std::string> hight_block_map_;
     std::mutex hight_block_map_mutex_;
+    std::priority_queue<uint64_t> height_queue_;
+    std::mutex height_queue_mutex_;
 };
 
 }  // namespace client

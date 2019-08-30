@@ -25,6 +25,9 @@ private:
     int HandleGetBlockRequest(
             transport::protobuf::Header& header,
             protobuf::BlockMessage& block_msg);
+    void HandleGetHeightRequest(
+            transport::protobuf::Header& header,
+            protobuf::BlockMessage& block_msg);
 
     DISALLOW_COPY_AND_ASSIGN(BlockManager);
 };

@@ -72,6 +72,38 @@ void BlockManager::HandleMessage(transport::protobuf::Header& header) {
         LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("block handle", header);
         HandleGetBlockRequest(header, block_msg);
     }
+
+    if (block_msg.has_height_req()) {
+
+    }
+}
+
+void BlockManager::HandleGetHeightRequest(
+        transport::protobuf::Header& header,
+        protobuf::BlockMessage& block_msg) {
+    auto acc_ptr = AccountManager::Instance()->GetAcountInfo(
+            block_msg.height_req().account_addr());
+    if (acc_ptr == nullptr) {
+        return;
+    }
+    protobuf::BlockMessage block_msg;
+    auto height_res = block_msg.mutable_height_res();
+    auto priqueue = acc_ptr->get_height_pri_queue();
+    while (!priqueue.empty()) {
+        height_res->add_heights(priqueue.top());
+        priqueue.pop();
+    }
+
+    transport::protobuf::Header msg;
+    auto dht_ptr = network::UniversalManager::Instance()->GetUniversal(
+        network::kUniversalNetworkId);
+    assert(dht_ptr != nullptr);
+    BlockProto::CreateGetBlockResponse(
+            dht_ptr->local_node(),
+            header,
+            block_msg.SerializeAsString(), msg);
+    dht_ptr->SendToClosestNode(msg);
+    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end", header);
 }
 
 int BlockManager::HandleGetBlockRequest(
@@ -88,6 +120,22 @@ int BlockManager::HandleGetBlockRequest(
             tx_gid = common::GetTxDbKey(false, block_msg.block_req().tx_gid());
         }
         auto st = db::Db::Instance()->Get(tx_gid, &block_hash);
+        if (!st.ok()) {
+            LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("get block hash error", header);
+            return kBlockError;
+        }
+    } else if (block_msg.block_req().has_height()) {
+        if (!block_msg.block_req().has_account_address()) {
+            return kBlockError;
+        }
+        uint32_t netid = network::GetConsensusShardNetworkId(
+                block_msg.block_req().account_address());
+        uint32_t pool_idx = common::GetPoolIndex(block_msg.block_req().account_address());
+        std::string height_db_key = common::GetHeightDbKey(
+                netid,
+                pool_idx,
+                block_msg.block_req().height());
+        auto st = db::Db::Instance()->Get(height_db_key, &block_hash);
         if (!st.ok()) {
             LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("get block hash error", header);
             return kBlockError;
