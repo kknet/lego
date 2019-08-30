@@ -95,6 +95,7 @@ void VpnClient::HandleBlockResponse(const protobuf::GetTxBlockResponse& block_re
     if (hight_block_map_.size() >= kHeightMaxSize) {
         hight_block_map_.erase(hight_block_map_.begin());
     }
+    got_block_ = true;
 }
 
 void VpnClient::HandleHeightResponse(
@@ -632,8 +633,19 @@ void VpnClient::CheckTxExists() {
             }
         }
     }
-    GetAccountHeight();
-    GetAccountBlockWithHeight();
+
+    if (!got_block_) {
+        GetAccountHeight();
+        GetAccountBlockWithHeight();
+    } else {
+        check_times_++
+    }
+
+    if (check_times_ > 5) {
+        GetAccountHeight();
+        GetAccountBlockWithHeight();
+        check_times_ = 0;
+    }
     check_tx_tick_.CutOff(kCheckTxPeriod, std::bind(&VpnClient::CheckTxExists, this));
 }
 
