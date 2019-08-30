@@ -49,7 +49,7 @@ VpnClient::VpnClient() {
     network::Route::Instance()->RegisterMessage(
             common::kBlockMessage,
             std::bind(&VpnClient::HandleMessage, this, std::placeholders::_1));
-    check_tx_tick_.CutOff(kCheckTxPeriod, std::bind(&VpnClient::CheckTxExists, this));
+    check_tx_tick_.CutOff(1000 * 1000, std::bind(&VpnClient::CheckTxExists, this));
 }
 
 VpnClient::~VpnClient() {}
