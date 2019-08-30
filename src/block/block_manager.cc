@@ -42,7 +42,7 @@ int BlockManager::Init(common::Config& conf) {
                 return kBlockError;
             }
 
-            if (LoadAllTx(genesis_hash) != kBlockSuccess) {
+            if (LoadAllTx(genesis_hash, common::kTestForNetworkId, i) != kBlockSuccess) {
                 BLOCK_ERROR("load tx from db failed!");
                 return kBlockError;
             }
