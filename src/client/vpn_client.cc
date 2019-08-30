@@ -135,7 +135,7 @@ std::string VpnClient::GetBalance() {
             continue;
         }
 
-        return std::to_string(tx_list[i].balance);
+        return std::to_string(tx_list[i].balance());
     }
     return "";
 }
