@@ -2,6 +2,8 @@
 
 #include <memory>
 #include <atomic>
+#include <mutex>
+#include <queue>
 
 #include "common/utils.h"
 #include "common/log.h"
@@ -26,19 +28,6 @@ static const uint32_t kAccountHeightMaxSize = 128u;
 struct AccountInfo {
     AccountInfo(const std::string& acc, int64_t b, uint64_t h)
         : account_id(acc), balance(b), height(h) {}
-    void AddHeight(uint64_t height) {
-        std::lock_guard<std::mutex> guard(height_pri_queue_mutex);
-        height_pri_queue.push(height);
-        if (height_pri_queue.size() > kAccountHeightMaxSize) {
-            height_pri_queue.pop();
-        }
-    }
-
-    std::priority_queue<uint64_t> height_pri_queue() {
-        std::lock_guard<std::mutex> guard(height_pri_queue_mutex);
-        return height_pri_queue;
-    }
-
     std::string account_id;
     int64_t balance;
     uint64_t height;
@@ -49,6 +38,19 @@ struct AccountInfo {
     uint32_t new_height{ 0 };
     std::priority_queue<uint64_t> height_pri_queue;
     std::mutex height_pri_queue_mutex;
+
+    void AddHeight(uint64_t height) {
+        std::lock_guard<std::mutex> guard(height_pri_queue_mutex);
+        height_pri_queue.push(height);
+        if (height_pri_queue.size() > kAccountHeightMaxSize) {
+            height_pri_queue.pop();
+        }
+    }
+
+    std::priority_queue<uint64_t> get_height_pri_queue() {
+        std::lock_guard<std::mutex> guard(height_pri_queue_mutex);
+        return height_pri_queue;
+    }
 };
 typedef std::shared_ptr<AccountInfo> AccountInfoPtr;
 

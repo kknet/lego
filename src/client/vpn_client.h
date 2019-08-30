@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <mutex>
 #include <unordered_map>
+#include <map>
 
 namespace lego {
 
