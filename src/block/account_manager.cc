@@ -103,7 +103,7 @@ void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
         return;
     }
 
-    if (iter->second->height < acc_ptr->height) {
+    if (iter->second->height <= acc_ptr->height) {
         acc_ptr->in_count += iter->second->in_count;
         acc_ptr->out_count += iter->second->out_count;
         acc_ptr->in_lego += iter->second->in_lego;
