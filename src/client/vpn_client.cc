@@ -633,6 +633,7 @@ void VpnClient::CheckTxExists() {
     if (!got_block_) {
         GetAccountHeight();
         GetAccountBlockWithHeight();
+        CLIENT_ERROR("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
     } else {
         check_times_++;
     }
