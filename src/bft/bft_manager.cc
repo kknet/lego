@@ -4,6 +4,7 @@
 
 #include "common/hash.h"
 #include "common/global_info.h"
+#include "db/db.h"
 #include "statistics/statistics.h"
 #include "block/block_manager.h"
 #include "security/schnorr.h"
@@ -542,6 +543,14 @@ int BftManager::BackupPrecommit(
     return kBftSuccess;
 }
 
+void BftManager::AddHeightToDb(BftInterfacePtr& bft_ptr) {
+    std::string height_db_key = common::GetHeightDbKey(
+            bft_ptr->network_id(),
+            bft_ptr->pool_index(),
+            bft_ptr->prpare_block()->height());
+    db::Db::Instance()->Put(height_db_key, bft_ptr->prpare_block()->hash());
+}
+
 int BftManager::LeaderCommit(
         BftInterfacePtr& bft_ptr,
         transport::protobuf::Header& header,
@@ -586,6 +595,7 @@ int BftManager::LeaderCommit(
             BFT_ERROR("leader add block to db failed!");
             return kBftError;
         }
+        AddHeightToDb(bft_ptr);
         bft_ptr->set_status(kBftCommited);
         network::Route::Instance()->Send(msg);
         LeaderBroadcastToAcc(bft_ptr->prpare_block());
@@ -634,6 +644,7 @@ int BftManager::BackupCommit(
         BFT_ERROR("backup add block to db failed!");
         return kBftError;
     }
+    AddHeightToDb(bft_ptr);
     bft_ptr->set_status(kBftCommited);
     LeaderBroadcastToAcc(bft_ptr->prpare_block());
     LEGO_BFT_DEBUG_FOR_CONSENSUS("BackupCommit", bft_ptr);

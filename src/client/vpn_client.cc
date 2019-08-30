@@ -645,6 +645,14 @@ TxInfoPtr VpnClient::GetBlockWithHash(const std::string& block_hash) {
 
 }
 
+void VpnClient::GetAccountHeight() {
+
+}
+
+void VpnClient::GetAccountBlockWithHeight() {
+
+}
+
 }  // namespace client
 
 }  // namespace lego

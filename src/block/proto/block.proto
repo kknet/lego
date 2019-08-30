@@ -12,7 +12,17 @@ message GetTxBlockResponse {
 	optional bytes block = 1;
 }
 
+message AccountHeightRequest {
+	optional bytes account_addr = 1;
+}
+
+message AccountHeightResponse {
+	repeated uint64 heights = 1;
+}
+
 message BlockMessage {
 	optional GetTxBlockRequest block_req = 1;
 	optional GetTxBlockResponse block_res = 2;
+    optional AccountHeightRequest height_req = 3;
+	optional AccountHeightResponse height_res = 4;
 }

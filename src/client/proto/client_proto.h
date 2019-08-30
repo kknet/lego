@@ -153,6 +153,34 @@ public:
 #endif
     }
 
+    static void GetAccountHeight(
+            const dht::NodePtr& local_node,
+            transport::protobuf::Header& msg) {
+        msg.set_src_dht_key(local_node->dht_key);
+        std::string account_address = network::GetAccountAddressByPublicKey(
+            security::Schnorr::Instance()->str_pubkey());
+        uint32_t des_net_id = network::GetConsensusShardNetworkId(account_address);
+        dht::DhtKeyManager dht_key(
+                des_net_id,
+                common::GlobalInfo::Instance()->country());
+        msg.set_des_dht_key(dht_key.StrKey());
+        msg.set_priority(transport::kTransportPriorityLowest);
+        msg.set_id(common::GlobalInfo::Instance()->MessageId());
+        msg.set_type(common::kBlockMessage);
+        msg.set_client(local_node->client_mode);
+        msg.set_hop_count(0);
+        protobuf::AccountHeightRequest acc_height_req;
+        acc_height_req.set_account_addr(account_address);
+        msg.set_data(acc_height_req.SerializeAsString());
+#ifdef LEGO_TRACE_MESSAGE
+        msg.set_debug(std::string("GetBlockWithTxGid: ") +
+            local_node->public_ip + "-" +
+            std::to_string(local_node->public_port) + ", to " +
+            common::Encode::HexEncode(dht_key.StrKey()));
+        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("begin", msg);
+#endif
+    }
+
 private:
     ClientProto();
     ~ClientProto();

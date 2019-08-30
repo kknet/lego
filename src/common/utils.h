@@ -83,6 +83,14 @@ inline static std::string GetTxDbKey(bool from, const std::string& gid) {
     }
 }
 
+inline static std::string GetHeightDbKey(
+        uint32_t netid,
+        uint32_t pool_index,
+        uint64_t height) {
+    return std::string("H_" + std::to_string(netid) + "_" +
+            std::to_string(pool_index) + "+" + std::to_string(height));
+}
+
 uint64_t TimeStampMsec();
 uint64_t TimeStampUsec();
 uint32_t RandomCountry();

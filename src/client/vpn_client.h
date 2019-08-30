@@ -108,6 +108,8 @@ private:
     void WriteDefaultLogConf(
             const std::string& log_conf_path,
             const std::string& log_path);
+    void GetAccountHeight();
+    void GetAccountBlockWithHeight();
 
     static const uint32_t kDefaultUdpSendBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kDefaultUdpRecvBufferSize = 10u * 1024u * 1024u;
@@ -127,6 +129,8 @@ private:
     std::mutex tx_map_mutex_;
     bool first_install_{ false };
     std::string config_path_;
+    std::map<uint64_t, std::string> hight_block_map_;
+    std::mutex hight_block_map_mutex_;
 };
 
 }  // namespace client

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <unordered_map>
+#include <queue>
 
 #include "common/config.h"
 #include "block/block_utils.h"

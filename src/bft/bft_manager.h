@@ -34,6 +34,7 @@ public:
     MembersPtr GetNetworkMembers(uint32_t network_id) {
         return mem_manager_->GetNetworkMembers(network_id);
     }
+    void AddHeightToDb(BftInterfacePtr& bft_ptr);
 
 private:
     BftManager();

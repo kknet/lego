@@ -39,7 +39,7 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
         BLOCK_ERROR("tx block tx list is empty.");
         return kBlockError;
     }
-
+    
     statis::Statistics::Instance()->inc_tx_count(tx_list.size());
     for (int32_t i = 0; i < tx_list.size(); ++i) {
         if (tx_list[i].to_add()) {
@@ -99,6 +99,7 @@ void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
     auto iter = acc_map_.find(acc_ptr->account_id);
     if (iter == acc_map_.end()) {
         acc_map_[acc_ptr->account_id] = acc_ptr;
+        acc_map_[acc_ptr->account_id]->AddHeight(acc_ptr->height);
         return;
     }
 
@@ -115,6 +116,7 @@ void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
         acc_map_[acc_ptr->account_id]->out_lego += acc_ptr->out_lego;
         acc_map_[acc_ptr->account_id]->new_height = acc_ptr->new_height;
     }
+    acc_map_[acc_ptr->account_id]->AddHeight(acc_ptr->height);
 }
 
 TxBlockInfoPtr AccountManager::GetBlockInfo(uint32_t pool_idx) {
