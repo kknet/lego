@@ -104,7 +104,6 @@ void BlockManager::HandleGetHeightRequest(
             block_msg_res.SerializeAsString(),
             msg);
     dht_ptr->SendToClosestNode(msg);
-    std::cout << "handled get heiht request: " << height_res->heights_size() << std::endl;
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end", header);
 }
 
@@ -142,6 +141,7 @@ int BlockManager::HandleGetBlockRequest(
             LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("get block hash error", header);
             return kBlockError;
         }
+        std::cout << "handled get block request: " << height_db_key << std::endl;
     }
 
     if (block_hash.empty()) {
@@ -188,7 +188,7 @@ int BlockManager::LoadTxBlocks(const common::Config& conf) {
             return kBlockError;
         }
 
-        if (LoadAllTx(last_block_hash) != kBlockSuccess) {
+        if (LoadAllTx(last_block_hash, common::kTestForNetworkId, i) != kBlockSuccess) {
             BLOCK_ERROR("load tx from db failed!");
             return kBlockError;
         }
@@ -196,7 +196,10 @@ int BlockManager::LoadTxBlocks(const common::Config& conf) {
     return kBlockSuccess;
 }
 
-int BlockManager::LoadAllTx(const std::string& frist_hash) {
+int BlockManager::LoadAllTx(
+        const std::string& frist_hash,
+        uint32_t netid,
+        uint32_t pool_index) {
     std::string tmp_str = frist_hash;
     while (true) {
         std::string block_str;
@@ -219,6 +222,13 @@ int BlockManager::LoadAllTx(const std::string& frist_hash) {
         if (tmp_str.empty()) {
             break;
         }
+        
+        // for test just put
+        std::string height_db_key = common::GetHeightDbKey(
+                netid,
+                pool_index,
+                block_item.height());
+        db::Db::Instance()->Put(height_db_key, block_item.hash());
     }
     return kBlockSuccess;
 }

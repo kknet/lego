@@ -21,7 +21,10 @@ private:
     ~BlockManager();
     void HandleMessage(transport::protobuf::Header& header);
     int LoadTxBlocks(const common::Config& conf);
-    int LoadAllTx(const std::string& frist_hash);
+    int LoadAllTx(
+            const std::string& frist_hash,
+            uint32_t netid,
+            uint32_t pool_index);
     int HandleGetBlockRequest(
             transport::protobuf::Header& header,
             protobuf::BlockMessage& block_msg);
