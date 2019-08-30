@@ -545,9 +545,11 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::Block, hash_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::Block, height_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::Block, tx_block_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::Block, timestamp_),
   0,
   2,
   1,
+  3,
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   { 0, 11, sizeof(::lego::client::protobuf::NewTx)},
@@ -563,7 +565,7 @@ static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROT
   { 134, 143, sizeof(::lego::client::protobuf::BlockMessage)},
   { 147, 164, sizeof(::lego::client::protobuf::TxInfo)},
   { 176, 193, sizeof(::lego::client::protobuf::TxBlock)},
-  { 205, 213, sizeof(::lego::client::protobuf::Block)},
+  { 205, 214, sizeof(::lego::client::protobuf::Block)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -649,12 +651,13 @@ void AddDescriptorsImpl() {
       "key\030\006 \001(\014\022\020\n\010agg_sign\030\007 \001(\014\022\r\n\005tx_id\030\010 \001"
       "(\004\022\017\n\007tx_hash\030\t \001(\014\022\024\n\014tx_root_hash\030\n \001("
       "\014\022-\n\007tx_list\030\013 \003(\0132\034.lego.client.protobu"
-      "f.TxInfo\022\022\n\nnetwork_id\030\014 \001(\r\"V\n\005Block\022\014\n"
+      "f.TxInfo\022\022\n\nnetwork_id\030\014 \001(\r\"i\n\005Block\022\014\n"
       "\004hash\030\001 \001(\014\022\016\n\006height\030\002 \001(\004\022/\n\010tx_block\030"
-      "\003 \001(\0132\035.lego.client.protobuf.TxBlock"
+      "\003 \001(\0132\035.lego.client.protobuf.TxBlock\022\021\n\t"
+      "timestamp\030\004 \001(\004"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 1916);
+      descriptor, 1935);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "client.proto", &protobuf_RegisterTypes);
 }
@@ -6395,6 +6398,7 @@ void Block::InitAsDefaultInstance() {
 const int Block::kHashFieldNumber;
 const int Block::kHeightFieldNumber;
 const int Block::kTxBlockFieldNumber;
+const int Block::kTimestampFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Block::Block()
@@ -6418,15 +6422,17 @@ Block::Block(const Block& from)
   } else {
     tx_block_ = NULL;
   }
-  height_ = from.height_;
+  ::memcpy(&height_, &from.height_,
+    static_cast<size_t>(reinterpret_cast<char*>(&timestamp_) -
+    reinterpret_cast<char*>(&height_)) + sizeof(timestamp_));
   // @@protoc_insertion_point(copy_constructor:lego.client.protobuf.Block)
 }
 
 void Block::SharedCtor() {
   hash_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&tx_block_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&height_) -
-      reinterpret_cast<char*>(&tx_block_)) + sizeof(height_));
+      reinterpret_cast<char*>(&timestamp_) -
+      reinterpret_cast<char*>(&tx_block_)) + sizeof(timestamp_));
 }
 
 Block::~Block() {
@@ -6469,7 +6475,11 @@ void Block::Clear() {
       tx_block_->Clear();
     }
   }
-  height_ = GOOGLE_ULONGLONG(0);
+  if (cached_has_bits & 12u) {
+    ::memset(&height_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&timestamp_) -
+        reinterpret_cast<char*>(&height_)) + sizeof(timestamp_));
+  }
   _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
@@ -6522,6 +6532,20 @@ bool Block::MergePartialFromCodedStream(
         break;
       }
 
+      // optional uint64 timestamp = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
+          set_has_timestamp();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &timestamp_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -6566,6 +6590,11 @@ void Block::SerializeWithCachedSizes(
       3, this->_internal_tx_block(), output);
   }
 
+  // optional uint64 timestamp = 4;
+  if (cached_has_bits & 0x00000008u) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(4, this->timestamp(), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -6600,6 +6629,11 @@ void Block::SerializeWithCachedSizes(
         3, this->_internal_tx_block(), deterministic, target);
   }
 
+  // optional uint64 timestamp = 4;
+  if (cached_has_bits & 0x00000008u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(4, this->timestamp(), target);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
@@ -6617,7 +6651,7 @@ size_t Block::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         _internal_metadata_.unknown_fields());
   }
-  if (_has_bits_[0 / 32] & 7u) {
+  if (_has_bits_[0 / 32] & 15u) {
     // optional bytes hash = 1;
     if (has_hash()) {
       total_size += 1 +
@@ -6637,6 +6671,13 @@ size_t Block::ByteSizeLong() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt64Size(
           this->height());
+    }
+
+    // optional uint64 timestamp = 4;
+    if (has_timestamp()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt64Size(
+          this->timestamp());
     }
 
   }
@@ -6668,7 +6709,7 @@ void Block::MergeFrom(const Block& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 7u) {
+  if (cached_has_bits & 15u) {
     if (cached_has_bits & 0x00000001u) {
       set_has_hash();
       hash_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.hash_);
@@ -6678,6 +6719,9 @@ void Block::MergeFrom(const Block& from) {
     }
     if (cached_has_bits & 0x00000004u) {
       height_ = from.height_;
+    }
+    if (cached_has_bits & 0x00000008u) {
+      timestamp_ = from.timestamp_;
     }
     _has_bits_[0] |= cached_has_bits;
   }
@@ -6711,6 +6755,7 @@ void Block::InternalSwap(Block* other) {
     GetArenaNoVirtual());
   swap(tx_block_, other->tx_block_);
   swap(height_, other->height_);
+  swap(timestamp_, other->timestamp_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   _internal_metadata_.Swap(&other->_internal_metadata_);
 }
