@@ -118,6 +118,9 @@ int VpnClient::GetSocket() {
 
 int64_t VpnClient::GetBalance() {
     std::lock_guard<std::mutex> guard(hight_block_map_mutex_);
+    if (hight_block_map_.empty()) {
+        return -1;
+    }
     protobuf::Block block;
     auto iter = hight_block_map_.rbegin();
     if (!block.ParseFromString(iter->second)) {
