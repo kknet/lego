@@ -143,12 +143,14 @@ std::string VpnClient::Transactions(uint32_t begin, uint32_t len) {
                 continue;
             }
 
-            std::string tx_item = (timestamp + ",TRAN" + "," +
-                    common::Encode::HexEncode(tx_list[i].to()) + ",");
-
+            std::string tx_item;
             if (tx_list[i].from() == common::GlobalInfo::Instance()->id()) {
+                tx_item = (timestamp + ",TRAN" + "," +
+                        common::Encode::HexEncode(tx_list[i].to()) + ",");
                 tx_item += "-" + std::to_string(tx_list[i].amount());
             } else {
+                tx_item = (timestamp + ",TRAN" + "," +
+                        common::Encode::HexEncode(tx_list[i].from()) + ",");
                 tx_item += std::to_string(tx_list[i].amount());
             }
 
