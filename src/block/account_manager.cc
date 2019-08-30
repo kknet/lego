@@ -108,6 +108,7 @@ void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
         acc_ptr->out_count += iter->second->out_count;
         acc_ptr->in_lego += iter->second->in_lego;
         acc_ptr->out_lego += iter->second->out_lego;
+        acc_ptr->height_pri_queue = acc_map_[acc_ptr->account_id]->get_height_pri_queue();
         acc_map_[acc_ptr->account_id] = acc_ptr;
     } else {
         acc_map_[acc_ptr->account_id]->in_count += acc_ptr->in_count;
