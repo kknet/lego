@@ -59,6 +59,7 @@ message GetTxBlockRequest {
 	optional bytes block_hash = 2;
 	optional bool from = 3;
     optional uint64 height = 4;
+	optional bytes account_address = 5;
 }
 
 message GetTxBlockResponse {
