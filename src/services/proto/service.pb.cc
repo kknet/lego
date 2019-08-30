@@ -104,7 +104,13 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::service::protobuf::GetVpnInfoRequest, pubkey_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::service::protobuf::GetVpnInfoRequest, sign_challenge_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::service::protobuf::GetVpnInfoRequest, sign_response_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::service::protobuf::GetVpnInfoRequest, heartbeat_),
   0,
+  1,
+  2,
+  3,
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::service::protobuf::GetVpnInfoResponse, _has_bits_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::service::protobuf::GetVpnInfoResponse, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -133,9 +139,9 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   1,
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, 6, sizeof(::lego::service::protobuf::GetVpnInfoRequest)},
-  { 7, 18, sizeof(::lego::service::protobuf::GetVpnInfoResponse)},
-  { 24, 31, sizeof(::lego::service::protobuf::ServiceMessage)},
+  { 0, 9, sizeof(::lego::service::protobuf::GetVpnInfoRequest)},
+  { 13, 24, sizeof(::lego::service::protobuf::GetVpnInfoResponse)},
+  { 30, 37, sizeof(::lego::service::protobuf::ServiceMessage)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -165,18 +171,19 @@ void protobuf_RegisterTypes(const ::std::string&) {
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-      "\n\rservice.proto\022\025lego.service.protobuf\"#"
-      "\n\021GetVpnInfoRequest\022\016\n\006pubkey\030\001 \001(\014\"u\n\022G"
-      "etVpnInfoResponse\022\n\n\002ip\030\001 \001(\014\022\014\n\004port\030\002 "
-      "\001(\r\022\024\n\014encrypt_type\030\003 \001(\014\022\016\n\006passwd\030\004 \001("
-      "\014\022\016\n\006pubkey\030\005 \001(\014\022\017\n\007country\030\006 \001(\014\"\207\001\n\016S"
-      "erviceMessage\0229\n\007vpn_req\030\001 \001(\0132(.lego.se"
-      "rvice.protobuf.GetVpnInfoRequest\022:\n\007vpn_"
-      "res\030\002 \001(\0132).lego.service.protobuf.GetVpn"
-      "InfoResponse"
+      "\n\rservice.proto\022\025lego.service.protobuf\"e"
+      "\n\021GetVpnInfoRequest\022\016\n\006pubkey\030\001 \001(\014\022\026\n\016s"
+      "ign_challenge\030\002 \001(\014\022\025\n\rsign_response\030\003 \001"
+      "(\014\022\021\n\theartbeat\030\004 \001(\010\"u\n\022GetVpnInfoRespo"
+      "nse\022\n\n\002ip\030\001 \001(\014\022\014\n\004port\030\002 \001(\r\022\024\n\014encrypt"
+      "_type\030\003 \001(\014\022\016\n\006passwd\030\004 \001(\014\022\016\n\006pubkey\030\005 "
+      "\001(\014\022\017\n\007country\030\006 \001(\014\"\207\001\n\016ServiceMessage\022"
+      "9\n\007vpn_req\030\001 \001(\0132(.lego.service.protobuf"
+      ".GetVpnInfoRequest\022:\n\007vpn_res\030\002 \001(\0132).le"
+      "go.service.protobuf.GetVpnInfoResponse"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 332);
+      descriptor, 398);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "service.proto", &protobuf_RegisterTypes);
 }
@@ -202,6 +209,9 @@ void GetVpnInfoRequest::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int GetVpnInfoRequest::kPubkeyFieldNumber;
+const int GetVpnInfoRequest::kSignChallengeFieldNumber;
+const int GetVpnInfoRequest::kSignResponseFieldNumber;
+const int GetVpnInfoRequest::kHeartbeatFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 GetVpnInfoRequest::GetVpnInfoRequest()
@@ -220,11 +230,23 @@ GetVpnInfoRequest::GetVpnInfoRequest(const GetVpnInfoRequest& from)
   if (from.has_pubkey()) {
     pubkey_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.pubkey_);
   }
+  sign_challenge_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_sign_challenge()) {
+    sign_challenge_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sign_challenge_);
+  }
+  sign_response_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_sign_response()) {
+    sign_response_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sign_response_);
+  }
+  heartbeat_ = from.heartbeat_;
   // @@protoc_insertion_point(copy_constructor:lego.service.protobuf.GetVpnInfoRequest)
 }
 
 void GetVpnInfoRequest::SharedCtor() {
   pubkey_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  sign_challenge_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  sign_response_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  heartbeat_ = false;
 }
 
 GetVpnInfoRequest::~GetVpnInfoRequest() {
@@ -234,6 +256,8 @@ GetVpnInfoRequest::~GetVpnInfoRequest() {
 
 void GetVpnInfoRequest::SharedDtor() {
   pubkey_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  sign_challenge_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  sign_response_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void GetVpnInfoRequest::SetCachedSize(int size) const {
@@ -257,9 +281,18 @@ void GetVpnInfoRequest::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    pubkey_.ClearNonDefaultToEmptyNoArena();
+  if (cached_has_bits & 7u) {
+    if (cached_has_bits & 0x00000001u) {
+      pubkey_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      sign_challenge_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000004u) {
+      sign_response_.ClearNonDefaultToEmptyNoArena();
+    }
   }
+  heartbeat_ = false;
   _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
@@ -280,6 +313,44 @@ bool GetVpnInfoRequest::MergePartialFromCodedStream(
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_pubkey()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bytes sign_challenge = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_sign_challenge()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bytes sign_response = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_sign_response()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bool heartbeat = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
+          set_has_heartbeat();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &heartbeat_)));
         } else {
           goto handle_unusual;
         }
@@ -319,6 +390,23 @@ void GetVpnInfoRequest::SerializeWithCachedSizes(
       1, this->pubkey(), output);
   }
 
+  // optional bytes sign_challenge = 2;
+  if (cached_has_bits & 0x00000002u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      2, this->sign_challenge(), output);
+  }
+
+  // optional bytes sign_response = 3;
+  if (cached_has_bits & 0x00000004u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      3, this->sign_response(), output);
+  }
+
+  // optional bool heartbeat = 4;
+  if (cached_has_bits & 0x00000008u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(4, this->heartbeat(), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -341,6 +429,25 @@ void GetVpnInfoRequest::SerializeWithCachedSizes(
         1, this->pubkey(), target);
   }
 
+  // optional bytes sign_challenge = 2;
+  if (cached_has_bits & 0x00000002u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        2, this->sign_challenge(), target);
+  }
+
+  // optional bytes sign_response = 3;
+  if (cached_has_bits & 0x00000004u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        3, this->sign_response(), target);
+  }
+
+  // optional bool heartbeat = 4;
+  if (cached_has_bits & 0x00000008u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(4, this->heartbeat(), target);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
@@ -358,13 +465,34 @@ size_t GetVpnInfoRequest::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         _internal_metadata_.unknown_fields());
   }
-  // optional bytes pubkey = 1;
-  if (has_pubkey()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::BytesSize(
-        this->pubkey());
-  }
+  if (_has_bits_[0 / 32] & 15u) {
+    // optional bytes pubkey = 1;
+    if (has_pubkey()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->pubkey());
+    }
 
+    // optional bytes sign_challenge = 2;
+    if (has_sign_challenge()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->sign_challenge());
+    }
+
+    // optional bytes sign_response = 3;
+    if (has_sign_response()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->sign_response());
+    }
+
+    // optional bool heartbeat = 4;
+    if (has_heartbeat()) {
+      total_size += 1 + 1;
+    }
+
+  }
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
@@ -392,9 +520,24 @@ void GetVpnInfoRequest::MergeFrom(const GetVpnInfoRequest& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.has_pubkey()) {
-    set_has_pubkey();
-    pubkey_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.pubkey_);
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 15u) {
+    if (cached_has_bits & 0x00000001u) {
+      set_has_pubkey();
+      pubkey_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.pubkey_);
+    }
+    if (cached_has_bits & 0x00000002u) {
+      set_has_sign_challenge();
+      sign_challenge_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sign_challenge_);
+    }
+    if (cached_has_bits & 0x00000004u) {
+      set_has_sign_response();
+      sign_response_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sign_response_);
+    }
+    if (cached_has_bits & 0x00000008u) {
+      heartbeat_ = from.heartbeat_;
+    }
+    _has_bits_[0] |= cached_has_bits;
   }
 }
 
@@ -424,6 +567,11 @@ void GetVpnInfoRequest::InternalSwap(GetVpnInfoRequest* other) {
   using std::swap;
   pubkey_.Swap(&other->pubkey_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
+  sign_challenge_.Swap(&other->sign_challenge_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  sign_response_.Swap(&other->sign_response_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(heartbeat_, other->heartbeat_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   _internal_metadata_.Swap(&other->_internal_metadata_);
 }

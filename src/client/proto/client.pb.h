@@ -942,15 +942,61 @@ class GetVpnInfoRequest : public ::google::protobuf::Message /* @@protoc_inserti
   ::std::string* release_pubkey();
   void set_allocated_pubkey(::std::string* pubkey);
 
+  // optional bytes sign_challenge = 2;
+  bool has_sign_challenge() const;
+  void clear_sign_challenge();
+  static const int kSignChallengeFieldNumber = 2;
+  const ::std::string& sign_challenge() const;
+  void set_sign_challenge(const ::std::string& value);
+  #if LANG_CXX11
+  void set_sign_challenge(::std::string&& value);
+  #endif
+  void set_sign_challenge(const char* value);
+  void set_sign_challenge(const void* value, size_t size);
+  ::std::string* mutable_sign_challenge();
+  ::std::string* release_sign_challenge();
+  void set_allocated_sign_challenge(::std::string* sign_challenge);
+
+  // optional bytes sign_response = 3;
+  bool has_sign_response() const;
+  void clear_sign_response();
+  static const int kSignResponseFieldNumber = 3;
+  const ::std::string& sign_response() const;
+  void set_sign_response(const ::std::string& value);
+  #if LANG_CXX11
+  void set_sign_response(::std::string&& value);
+  #endif
+  void set_sign_response(const char* value);
+  void set_sign_response(const void* value, size_t size);
+  ::std::string* mutable_sign_response();
+  ::std::string* release_sign_response();
+  void set_allocated_sign_response(::std::string* sign_response);
+
+  // optional bool heartbeat = 4;
+  bool has_heartbeat() const;
+  void clear_heartbeat();
+  static const int kHeartbeatFieldNumber = 4;
+  bool heartbeat() const;
+  void set_heartbeat(bool value);
+
   // @@protoc_insertion_point(class_scope:lego.client.protobuf.GetVpnInfoRequest)
  private:
   void set_has_pubkey();
   void clear_has_pubkey();
+  void set_has_sign_challenge();
+  void clear_has_sign_challenge();
+  void set_has_sign_response();
+  void clear_has_sign_response();
+  void set_has_heartbeat();
+  void clear_has_heartbeat();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   ::google::protobuf::internal::ArenaStringPtr pubkey_;
+  ::google::protobuf::internal::ArenaStringPtr sign_challenge_;
+  ::google::protobuf::internal::ArenaStringPtr sign_response_;
+  bool heartbeat_;
   friend struct ::protobuf_client_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
@@ -4158,6 +4204,162 @@ inline void GetVpnInfoRequest::set_allocated_pubkey(::std::string* pubkey) {
   }
   pubkey_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), pubkey);
   // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.GetVpnInfoRequest.pubkey)
+}
+
+// optional bytes sign_challenge = 2;
+inline bool GetVpnInfoRequest::has_sign_challenge() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void GetVpnInfoRequest::set_has_sign_challenge() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void GetVpnInfoRequest::clear_has_sign_challenge() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void GetVpnInfoRequest::clear_sign_challenge() {
+  sign_challenge_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_sign_challenge();
+}
+inline const ::std::string& GetVpnInfoRequest::sign_challenge() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.GetVpnInfoRequest.sign_challenge)
+  return sign_challenge_.GetNoArena();
+}
+inline void GetVpnInfoRequest::set_sign_challenge(const ::std::string& value) {
+  set_has_sign_challenge();
+  sign_challenge_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.GetVpnInfoRequest.sign_challenge)
+}
+#if LANG_CXX11
+inline void GetVpnInfoRequest::set_sign_challenge(::std::string&& value) {
+  set_has_sign_challenge();
+  sign_challenge_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.GetVpnInfoRequest.sign_challenge)
+}
+#endif
+inline void GetVpnInfoRequest::set_sign_challenge(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_sign_challenge();
+  sign_challenge_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.GetVpnInfoRequest.sign_challenge)
+}
+inline void GetVpnInfoRequest::set_sign_challenge(const void* value, size_t size) {
+  set_has_sign_challenge();
+  sign_challenge_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.GetVpnInfoRequest.sign_challenge)
+}
+inline ::std::string* GetVpnInfoRequest::mutable_sign_challenge() {
+  set_has_sign_challenge();
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.GetVpnInfoRequest.sign_challenge)
+  return sign_challenge_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* GetVpnInfoRequest::release_sign_challenge() {
+  // @@protoc_insertion_point(field_release:lego.client.protobuf.GetVpnInfoRequest.sign_challenge)
+  if (!has_sign_challenge()) {
+    return NULL;
+  }
+  clear_has_sign_challenge();
+  return sign_challenge_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void GetVpnInfoRequest::set_allocated_sign_challenge(::std::string* sign_challenge) {
+  if (sign_challenge != NULL) {
+    set_has_sign_challenge();
+  } else {
+    clear_has_sign_challenge();
+  }
+  sign_challenge_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), sign_challenge);
+  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.GetVpnInfoRequest.sign_challenge)
+}
+
+// optional bytes sign_response = 3;
+inline bool GetVpnInfoRequest::has_sign_response() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void GetVpnInfoRequest::set_has_sign_response() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void GetVpnInfoRequest::clear_has_sign_response() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void GetVpnInfoRequest::clear_sign_response() {
+  sign_response_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_sign_response();
+}
+inline const ::std::string& GetVpnInfoRequest::sign_response() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.GetVpnInfoRequest.sign_response)
+  return sign_response_.GetNoArena();
+}
+inline void GetVpnInfoRequest::set_sign_response(const ::std::string& value) {
+  set_has_sign_response();
+  sign_response_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.GetVpnInfoRequest.sign_response)
+}
+#if LANG_CXX11
+inline void GetVpnInfoRequest::set_sign_response(::std::string&& value) {
+  set_has_sign_response();
+  sign_response_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.GetVpnInfoRequest.sign_response)
+}
+#endif
+inline void GetVpnInfoRequest::set_sign_response(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_sign_response();
+  sign_response_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.GetVpnInfoRequest.sign_response)
+}
+inline void GetVpnInfoRequest::set_sign_response(const void* value, size_t size) {
+  set_has_sign_response();
+  sign_response_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.GetVpnInfoRequest.sign_response)
+}
+inline ::std::string* GetVpnInfoRequest::mutable_sign_response() {
+  set_has_sign_response();
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.GetVpnInfoRequest.sign_response)
+  return sign_response_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* GetVpnInfoRequest::release_sign_response() {
+  // @@protoc_insertion_point(field_release:lego.client.protobuf.GetVpnInfoRequest.sign_response)
+  if (!has_sign_response()) {
+    return NULL;
+  }
+  clear_has_sign_response();
+  return sign_response_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void GetVpnInfoRequest::set_allocated_sign_response(::std::string* sign_response) {
+  if (sign_response != NULL) {
+    set_has_sign_response();
+  } else {
+    clear_has_sign_response();
+  }
+  sign_response_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), sign_response);
+  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.GetVpnInfoRequest.sign_response)
+}
+
+// optional bool heartbeat = 4;
+inline bool GetVpnInfoRequest::has_heartbeat() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void GetVpnInfoRequest::set_has_heartbeat() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void GetVpnInfoRequest::clear_has_heartbeat() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void GetVpnInfoRequest::clear_heartbeat() {
+  heartbeat_ = false;
+  clear_has_heartbeat();
+}
+inline bool GetVpnInfoRequest::heartbeat() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.GetVpnInfoRequest.heartbeat)
+  return heartbeat_;
+}
+inline void GetVpnInfoRequest::set_heartbeat(bool value) {
+  set_has_heartbeat();
+  heartbeat_ = value;
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.GetVpnInfoRequest.heartbeat)
 }
 
 // -------------------------------------------------------------------
