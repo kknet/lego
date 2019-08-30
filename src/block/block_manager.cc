@@ -223,7 +223,7 @@ int BlockManager::LoadAllTx(
         if (tmp_str.empty()) {
             break;
         }
-        
+        /*
         // for test just put
         std::string height_db_key = common::GetHeightDbKey(
                 netid,
@@ -231,6 +231,7 @@ int BlockManager::LoadAllTx(
                 block_item.height());
         db::Db::Instance()->Put(height_db_key, block_item.hash());
         std::cout << "add height key: " << height_db_key << std::endl;
+        */
     }
     return kBlockSuccess;
 }
