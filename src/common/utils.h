@@ -2,8 +2,10 @@
 
 #include <stdint.h>
 #include <string.h>
+#include <time.h>
 
 #include <string>
+#include <chrono>
 
 #ifndef DISALLOW_COPY_AND_ASSIGN
 #define DISALLOW_COPY_AND_ASSIGN(TypeName) \
@@ -97,6 +99,23 @@ inline static std::string TimestampToDatetime(time_t timestamp) {
     char time_str[64];
     memset(time_str, 0, sizeof(time_str));
     strftime(time_str, sizeof(time_str), "%Y-%m-%d %H:%M:%S", p);
+    return time_str;
+}
+
+inline static std::string MicTimestampToDatetime(int64_t timestamp) {
+    int64_t milli = timestamp + (int64_t)(8 * 60 * 60 * 1000);
+    auto mTime = std::chrono::milliseconds(milli);
+    auto tp = std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds>(mTime);
+    auto tt = std::chrono::system_clock::to_time_t(tp);
+    std::tm* now = std::gmtime(&tt);
+    char time_str[64];
+    snprintf(time_str, sizeof(time_str), "%4d%02d%02d %02d:%02d:%02d",
+            now->tm_year + 1900,
+            now->tm_mon + 1,
+            now->tm_mday,
+            now->tm_hour,
+            now->tm_min,
+            now->tm_sec);
     return time_str;
 }
 

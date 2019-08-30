@@ -131,7 +131,7 @@ std::string VpnClient::Transactions(uint32_t begin, uint32_t len) {
         }
 
         auto tx_list = block.tx_block().tx_list();
-        auto timestamp = common::TimestampToDatetime(block.timestamp());
+        auto timestamp = common::MicTimestampToDatetime(block.timestamp());
         for (int32_t i = 0; i < tx_list.size(); ++i) {
             if (tx_list[i].to().empty()) {
                 continue;
