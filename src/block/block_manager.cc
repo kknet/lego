@@ -139,6 +139,7 @@ int BlockManager::HandleGetBlockRequest(
         auto st = db::Db::Instance()->Get(height_db_key, &block_hash);
         if (!st.ok()) {
             LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("get block hash error", header);
+            std::cout << "failed handled get block request: " << height_db_key << std::endl;
             return kBlockError;
         }
         std::cout << "handled get block request: " << height_db_key << std::endl;
@@ -229,6 +230,7 @@ int BlockManager::LoadAllTx(
                 pool_index,
                 block_item.height());
         db::Db::Instance()->Put(height_db_key, block_item.hash());
+        std::cout << "add height key: " << height_db_key << std::endl;
     }
     return kBlockSuccess;
 }
