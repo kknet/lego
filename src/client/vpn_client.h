@@ -121,7 +121,7 @@ private:
     static const uint32_t kDefaultUdpRecvBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kTestCreateAccountPeriod = 100u * 1000u;
     static const int64_t kTestNewElectPeriod = 10ll * 1000ll * 1000ll;
-    static const uint32_t kCheckTxPeriod = 1 * 1000 * 1000;
+    static const uint32_t kCheckTxPeriod = 5 * 1000 * 1000;
     static const uint32_t kHeightMaxSize = 1024u;
 
     transport::TransportPtr transport_{ nullptr };

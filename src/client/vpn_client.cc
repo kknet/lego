@@ -554,6 +554,8 @@ void VpnClient::CheckTxExists() {
             }
         }
     }
+    GetAccountHeight();
+    GetAccountBlockWithHeight();
     check_tx_tick_.CutOff(kCheckTxPeriod, std::bind(&VpnClient::CheckTxExists, this));
 }
 
@@ -619,6 +621,7 @@ void VpnClient::GetAccountBlockWithHeight() {
         height_queue = height_queue_;
     }
 
+    uint32_t sended_req = 0;
     while (!height_queue.empty()) {
         auto height = height_queue.top();
         height_queue.pop();
@@ -632,6 +635,10 @@ void VpnClient::GetAccountBlockWithHeight() {
         uni_dht->SetFrequently(msg);
         ClientProto::GetBlockWithHeight(uni_dht->local_node(), height, msg);
         uni_dht->SendToClosestNode(msg);
+        ++sended_req;
+        if (sended_req > 30) {
+            break;
+        }
     }
 }
 
