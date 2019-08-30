@@ -35,6 +35,7 @@ namespace protobuf {
     typedef std::shared_ptr<Block> BlockPtr;
     class AccountHeightResponse;
     class GetTxBlockResponse;
+    class GetVpnInfoResponse;
 }  // namespace protobuf
 
 struct VpnServerNode {
@@ -106,9 +107,7 @@ private:
     int InitTransport();
     int SetPriAndPubKey(const std::string& prikey);
     int InitNetworkSingleton();
-    int GetVpnNodes(
-            const std::vector<dht::NodePtr>& nodes,
-            std::vector<VpnServerNodePtr>& vpn_nodes);
+    void GetVpnNodes();
     int CreateClientUniversalNetwork();
     void CheckTxExists();
     void WriteDefaultLogConf(
@@ -118,12 +117,14 @@ private:
     void GetAccountBlockWithHeight();
     void HandleHeightResponse(const protobuf::AccountHeightResponse& height_res);
     void HandleBlockResponse(const protobuf::GetTxBlockResponse& block_res);
+    void HandleGetVpnResponse(const protobuf::GetVpnInfoResponse& vpn_res);
 
     static const uint32_t kDefaultUdpSendBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kDefaultUdpRecvBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kTestCreateAccountPeriod = 100u * 1000u;
     static const int64_t kTestNewElectPeriod = 10ll * 1000ll * 1000ll;
     static const uint32_t kCheckTxPeriod = 500 * 1000;
+    static const uint32_t kGetVpnNodesPeriod = 3 * 1000 * 1000;
     static const uint32_t kHeightMaxSize = 1024u;
 
     transport::TransportPtr transport_{ nullptr };
@@ -144,6 +145,8 @@ private:
     std::mutex height_set_mutex_;
     uint32_t check_times_{ 0 };
     bool got_block_{ false };
+    std::map<std::string, std::vector<VpnServerNodePtr>> vpn_nodes_map_;
+    std::mutex vpn_nodes_map_mutex_;
 };
 
 }  // namespace client

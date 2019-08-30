@@ -41,6 +41,7 @@ namespace client {
 static const uint32_t kDefaultBufferSize = 1024u * 1024u;
 static common::Config config;
 static common::Tick check_tx_tick_;
+static common::Tick vpn_nodes_tick_;
 
 VpnClient::VpnClient() {
     network::Route::Instance()->RegisterMessage(
@@ -50,6 +51,7 @@ VpnClient::VpnClient() {
             common::kBlockMessage,
             std::bind(&VpnClient::HandleMessage, this, std::placeholders::_1));
     check_tx_tick_.CutOff(1000 * 1000, std::bind(&VpnClient::CheckTxExists, this));
+    vpn_nodes_tick_.CutOff(1000 * 1000, std::bind(&VpnClient::GetVpnNodes, this));
 }
 
 VpnClient::~VpnClient() {}
@@ -110,7 +112,52 @@ void VpnClient::HandleHeightResponse(
 }
 
 void VpnClient::HandleServiceMessage(transport::protobuf::Header& header) {
-    transport::SynchroWait::Instance()->Callback(header.id(), header);
+    protobuf::ServiceMessage svr_msg;
+    if (!svr_msg.ParseFromString(header.data())) {
+        return;
+    }
+
+    if (svr_msg.has_vpn_res()) {
+        HandleGetVpnResponse(svr_msg.vpn_res());
+    }
+}
+
+void VpnClient::HandleGetVpnResponse(const protobuf::GetVpnInfoResponse& vpn_res) {
+    if (vpn_res.ip().empty() ||
+            vpn_res.port() <= 0 ||
+            vpn_res.country().empty() ||
+            vpn_res.encrypt_type().empty() ||
+            vpn_res.passwd().empty()) {
+        return;
+    }
+
+    security::PublicKey pubkey;
+    if (pubkey.Deserialize(vpn_res.pubkey()) != 0) {
+        return;
+    }
+    // ecdh encrypt vpn password
+    std::string sec_key;
+    auto res = security::EcdhCreateKey::Instance()->CreateKey(pubkey, sec_key);
+    if (res != security::kSecuritySuccess) {
+        CLIENT_ERROR("create sec key failed!");
+        return;
+    }
+
+    std::string dec_passwd;
+    if (security::Aes::Decrypt(
+        vpn_res.passwd(),
+        sec_key,
+        dec_passwd) != security::kSecuritySuccess) {
+        CLIENT_ERROR("aes encrypt failed!");
+        return;
+    }
+    std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
+    auto iter = vpn_nodes_map_.find(vpn_res.country());
+    iter->second.push_back(std::make_shared<VpnServerNode>(
+            vpn_res.ip(),
+            vpn_res.port(),
+            vpn_res.encrypt_type(),
+            dec_passwd));
 }
 
 int VpnClient::GetSocket() {
@@ -385,116 +432,65 @@ std::string VpnClient::GetVpnServerNodes(
         const std::string& country,
         uint32_t count,
         std::vector<VpnServerNodePtr>& nodes) {
-    auto uni_dht = std::dynamic_pointer_cast<network::Uniersal>(
-            network::UniversalManager::Instance()->GetUniversal(
-            network::kUniversalNetworkId));
-    if (!uni_dht) {
-        return "get universal dht error";
+    {
+        std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
+        auto iter = vpn_nodes_map_.find(country);
+        if (iter == vpn_nodes_map_.end()) {
+            vpn_nodes_map_[country] = std::vector<VpnServerNodePtr>();
+        } else {
+            nodes = iter->second;
+            if (nodes.empty()) {
+                return "get vpn nodes failed!";
+            }
+            return "OK";
+        }
     }
 
-    std::vector<dht::NodePtr> dht_nodes = uni_dht->LocalGetNetworkNodes(
-            network::kVpnNetworkId,
-            common::global_country_map[country],
-            count);
-    if (dht_nodes.empty()) {
-        dht_nodes = uni_dht->RemoteGetNetworkNodes(
-                network::kVpnNetworkId,
-                common::global_country_map[country],
-                count);
-    }
-    CLIENT_ERROR("get dht_nodes: [%d]", dht_nodes.size());
-    if (dht_nodes.empty()) {
-        CLIENT_ERROR("get dht_nodes: vpn nodes empty!");
-        return "vpn nodes empty";
-    }
-    int res = GetVpnNodes(dht_nodes, nodes);
-    if (res != kClientSuccess) {
-        CLIENT_ERROR("get dht_nodes: get vpn nodes failed!");
-        return "get vpn nodes failed!";
-    }
-    return "OK";
+    return "get vpn nodes failed!";
 }
 
-int VpnClient::GetVpnNodes(
-        const std::vector<dht::NodePtr>& nodes,
-        std::vector<VpnServerNodePtr>& vpn_nodes) {
-    uint32_t msg_id = common::GlobalInfo::Instance()->MessageId();
-    for (uint32_t i = 0; i < nodes.size(); ++i) {
-        transport::protobuf::Header msg;
-        auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
-                network::kUniversalNetworkId);
-        ClientProto::CreateGetVpnInfoRequest(root_dht_->local_node(), nodes[i], msg_id, msg);
-        uni_dht->SendToClosestNode(msg);
+void VpnClient::GetVpnNodes() {
+    std::vector<std::string> country_vec;
+    {
+        std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
+        for (auto iter = vpn_nodes_map_.begin(); iter != vpn_nodes_map_.end(); ++iter) {
+            country_vec.push_back(iter->first);
+        }
     }
 
-    common::StateLock state_lock(0);
-    std::mutex re_mutex;
-    std::atomic<uint32_t> res_num{ 0 };
-    uint32_t expect_num = nodes.size();
-    auto callback = [&state_lock, &vpn_nodes, &re_mutex, &res_num, expect_num](
-            int status,
-            transport::protobuf::Header& header) {
-        do  {
-            if (status != transport::kTransportSuccess) {
-                break;
-            }
-
-            if (header.type() != common::kServiceMessage) {
-                break;
-            }
-
-            protobuf::ServiceMessage svr_msg;
-            if (!svr_msg.ParseFromString(header.data())) {
-                break;
-            }
-
-            if (!svr_msg.has_vpn_res()) {
-                break;
-            }
-
-            if (svr_msg.vpn_res().ip().empty() ||
-                    svr_msg.vpn_res().port() <= 0 ||
-                    svr_msg.vpn_res().encrypt_type().empty() ||
-                    svr_msg.vpn_res().passwd().empty()) {
-                break;
-            }
-
-            security::PublicKey pubkey;
-            if (pubkey.Deserialize(svr_msg.vpn_res().pubkey()) != 0) {
-                break;
-            }
-            // ecdh encrypt vpn password
-            std::string sec_key;
-            auto res = security::EcdhCreateKey::Instance()->CreateKey(pubkey, sec_key);
-            if (res != security::kSecuritySuccess) {
-                CLIENT_ERROR("create sec key failed!");
-                return;
-            }
-
-            std::string dec_passwd;
-            if (security::Aes::Decrypt(
-                    svr_msg.vpn_res().passwd(),
-                    sec_key,
-                    dec_passwd) != security::kSecuritySuccess) {
-                CLIENT_ERROR("aes encrypt failed!");
-                return;
-            }
-            LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("called", header);
-            std::lock_guard<std::mutex> guard(re_mutex);
-            vpn_nodes.push_back(std::make_shared<VpnServerNode>(
-                    svr_msg.vpn_res().ip(),
-                    svr_msg.vpn_res().port(),
-                    svr_msg.vpn_res().encrypt_type(),
-                    dec_passwd));
-        } while (0);
-        ++res_num;
-        if (res_num >= expect_num) {
-            state_lock.Signal();
+    for (uint32_t i = 0; i < country_vec.size(); ++i) {
+        auto country = country_vec[i];
+        auto uni_dht = std::dynamic_pointer_cast<network::Uniersal>(
+            network::UniversalManager::Instance()->GetUniversal(
+                network::kUniversalNetworkId));
+        if (!uni_dht) {
+            continue;
         }
-    };
-    transport::SynchroWait::Instance()->Add(msg_id, 1000 * 1000, callback, nodes.size());
-    state_lock.Wait();
-    return kClientSuccess;
+
+        auto dht_nodes = uni_dht->RemoteGetNetworkNodes(
+                network::kVpnNetworkId,
+                common::global_country_map[country],
+                4);
+        if (dht_nodes.empty()) {
+            CLIENT_ERROR("get dht_nodes: vpn nodes empty!");
+            continue;
+        }
+
+        uint32_t msg_id = common::GlobalInfo::Instance()->MessageId();
+        for (uint32_t i = 0; i < dht_nodes.size(); ++i) {
+            transport::protobuf::Header msg;
+            auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+                    network::kUniversalNetworkId);
+            ClientProto::CreateGetVpnInfoRequest(
+                    root_dht_->local_node(),
+                    dht_nodes[i],
+                    msg_id,
+                    msg);
+            uni_dht->SendToClosestNode(msg);
+        }
+    }
+
+    vpn_nodes_tick_.CutOff(kGetVpnNodesPeriod, std::bind(&VpnClient::GetVpnNodes, this));
 }
 
 int VpnClient::InitTransport() {
