@@ -101,7 +101,7 @@ void VpnClient::HandleHeightResponse(
         const protobuf::AccountHeightResponse& height_res) {
     std::lock_guard<std::mutex> guard(height_queue_mutex_);
     for (int32_t i = 0; i < height_res.heights_size(); ++i) {
-        height_queue_.push(height_res.heights[i]);
+        height_queue_.push(height_res.heights(i));
         if (height_queue_.size() > kHeightMaxSize) {
             height_queue_.pop();
         }
