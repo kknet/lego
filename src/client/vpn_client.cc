@@ -638,10 +638,10 @@ void VpnClient::CheckTxExists() {
         GetAccountHeight();
         GetAccountBlockWithHeight();
     } else {
-        check_times_++
+        check_times_++;
     }
 
-    if (check_times_ > 5) {
+    if (check_times_ > 10) {
         GetAccountHeight();
         GetAccountBlockWithHeight();
         check_times_ = 0;
