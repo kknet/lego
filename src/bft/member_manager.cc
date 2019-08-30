@@ -64,7 +64,9 @@ bool MemberManager::IsLeader(
         return true;
     }
 
-    BFT_ERROR("is not leader: %s", common::Encode::HexEncode(mem_ptr->id).c_str());
+    BFT_ERROR("is not leader: %s, %s",
+            common::Encode::HexEncode(node_id).c_str(),
+            common::Encode::HexEncode(mem_ptr->id).c_str());
     for (auto iter = member_ptr->begin(); iter != member_ptr->end(); ++iter) {
         BFT_ERROR("%s", common::Encode::HexEncode((*iter)->id).c_str());
     }
