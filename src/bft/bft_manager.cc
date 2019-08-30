@@ -586,7 +586,7 @@ int BftManager::LeaderCommit(
             BFT_ERROR("leader add block to db failed!");
             return kBftError;
         }
-        bft_ptr->status = kBftCommited;
+        bft_ptr->set_status(kBftCommited);
         network::Route::Instance()->Send(msg);
         LeaderBroadcastToAcc(bft_ptr->prpare_block());
         RemoveBft(bft_ptr->gid());
@@ -634,7 +634,7 @@ int BftManager::BackupCommit(
         BFT_ERROR("backup add block to db failed!");
         return kBftError;
     }
-    bft_ptr->status = kBftCommited;
+    bft_ptr->set_status(kBftCommited);
     LeaderBroadcastToAcc(bft_ptr->prpare_block());
     LEGO_BFT_DEBUG_FOR_CONSENSUS("BackupCommit", bft_ptr);
     statis::Statistics::Instance()->inc_period_tx_count(

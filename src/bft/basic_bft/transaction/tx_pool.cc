@@ -76,7 +76,7 @@ bool TxPool::TxPoolEmpty() {
 }
 
 void TxPool::BftOver(BftInterfacePtr& bft_ptr) {
-    if (bft_ptr->status != kBftCommited) {
+    if (bft_ptr->status() != kBftCommited) {
         return;
     }
 
