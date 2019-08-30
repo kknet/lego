@@ -131,7 +131,7 @@ std::string VpnClient::Transactions(uint32_t begin, uint32_t len) {
         }
 
         auto tx_list = block.tx_block().tx_list();
-        auto timestamp = block.timestamp();
+        auto timestamp = common::TimestampToDatetime(block.timestamp());
         for (int32_t i = 0; i < tx_list.size(); ++i) {
             if (tx_list[i].to().empty()) {
                 continue;
@@ -142,7 +142,7 @@ std::string VpnClient::Transactions(uint32_t begin, uint32_t len) {
                 continue;
             }
 
-            std::string tx_item = (std::to_string(timestamp) + ",TRAN" + "," +
+            std::string tx_item = (timestamp + ",TRAN" + "," +
                     common::Encode::HexEncode(tx_list[i].to()) + ",");
 
             if (tx_list[i].from() == common::GlobalInfo::Instance()->id()) {

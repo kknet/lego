@@ -91,6 +91,14 @@ inline static std::string GetHeightDbKey(
             std::to_string(pool_index) + "+" + std::to_string(height));
 }
 
+inline static std::string TimestampToDatetime(time_t timestamp) {
+    struct tm* p = localtime(&timestamp);
+    char time_str[64];
+    memset(time_str, 0, sizeof(time_str));
+    strftime(time_str, sizeof(time_str), "%Y-%m-%d %H:%M:%S", p);
+    return time_str;
+}
+
 uint64_t TimeStampMsec();
 uint64_t TimeStampUsec();
 uint32_t RandomCountry();
