@@ -116,6 +116,30 @@ int VpnClient::GetSocket() {
     return transport_->GetSocket();
 }
 
+std::string VpnClient::GetBalance() {
+    std::lock_guard<std::mutex> guard(hight_block_map_mutex_);
+    protobuf::Block block;
+    auto iter = hight_block_map_.rbegin();
+    if (!block.ParseFromString(iter->second)) {
+        return "";
+    }
+
+    auto tx_list = block.tx_block().tx_list();
+    for (int32_t i = tx_list.size() - 1; i >= 0; --i) {
+        if (tx_list[i].to().empty()) {
+            continue;
+        }
+
+        if (tx_list[i].to() != common::GlobalInfo::Instance()->id() &&
+            tx_list[i].from() != common::GlobalInfo::Instance()->id()) {
+            continue;
+        }
+
+        return std::to_string(tx_list[i].balance);
+    }
+    return "";
+}
+
 std::string VpnClient::Transactions(uint32_t begin, uint32_t len) {
     std::lock_guard<std::mutex> guard(hight_block_map_mutex_);
     uint32_t now_b = 0;
@@ -130,7 +154,7 @@ std::string VpnClient::Transactions(uint32_t begin, uint32_t len) {
         if (!block.ParseFromString(iter->second)) {
             continue;
         }
-
+        
         auto tx_list = block.tx_block().tx_list();
         auto timestamp = common::MicTimestampToDatetime(block.timestamp());
         for (int32_t i = 0; i < tx_list.size(); ++i) {
