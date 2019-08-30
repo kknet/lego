@@ -155,8 +155,8 @@ int BlockManager::HandleGetBlockRequest(
         return kBlockError;
     }
 
-    protobuf::BlockMessage block_msg;
-    auto block_res = block_msg.mutable_block_res();
+    protobuf::BlockMessage block_msg_res;
+    auto block_res = block_msg_res.mutable_block_res();
     block_res->set_block(block_data);
     transport::protobuf::Header msg;
     auto dht_ptr = network::UniversalManager::Instance()->GetUniversal(
@@ -165,7 +165,7 @@ int BlockManager::HandleGetBlockRequest(
     BlockProto::CreateGetBlockResponse(
             dht_ptr->local_node(),
             header,
-            block_msg.SerializeAsString(),
+            block_msg_res.SerializeAsString(),
             msg);
     dht_ptr->SendToClosestNode(msg);
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end", header);
