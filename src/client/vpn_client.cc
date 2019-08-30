@@ -119,6 +119,7 @@ int VpnClient::GetSocket() {
 std::string VpnClient::Transactions(uint32_t begin, uint32_t len) {
     std::lock_guard<std::mutex> guard(hight_block_map_mutex_);
     uint32_t now_b = 0;
+    uint32_t now_len = 0;
     std::string res_str;
     for (auto iter = hight_block_map_.rbegin(); iter != hight_block_map_.rend(); ++iter) {
         if (now_b < begin) {
@@ -156,6 +157,10 @@ std::string VpnClient::Transactions(uint32_t begin, uint32_t len) {
             } else {
                 res_str += ";" + tx_item;
             }
+        }
+        ++now_len;
+        if (now_len >= len) {
+            break;
         }
     }
     return res_str;
