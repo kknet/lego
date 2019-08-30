@@ -35,10 +35,7 @@ public:
             msg.set_client_handled(true);
         }
         msg.set_hop_count(0);
-        protobuf::BlockMessage block_msg;
-        auto block_res = block_msg.mutable_block_res();
-        block_res->set_block(block_data);
-        msg.set_data(block_msg.SerializeAsString());
+        msg.set_data(block_data);
 #ifdef LEGO_TRACE_MESSAGE
         msg.set_debug(std::string("GetBlockResponse: ") +
                 local_node->public_ip + "-" +

@@ -74,7 +74,7 @@ void BlockManager::HandleMessage(transport::protobuf::Header& header) {
     }
 
     if (block_msg.has_height_req()) {
-
+        HandleGetHeightRequest(header, block_msg);
     }
 }
 
@@ -101,8 +101,10 @@ void BlockManager::HandleGetHeightRequest(
     BlockProto::CreateGetBlockResponse(
             dht_ptr->local_node(),
             header,
-            block_msg_res.SerializeAsString(), msg);
+            block_msg_res.SerializeAsString(),
+            msg);
     dht_ptr->SendToClosestNode(msg);
+    std::cout << "handled get heiht request: " << height_res->heights_size() << std::endl;
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end", header);
 }
 
@@ -153,11 +155,18 @@ int BlockManager::HandleGetBlockRequest(
         return kBlockError;
     }
 
+    protobuf::BlockMessage block_msg;
+    auto block_res = block_msg.mutable_block_res();
+    block_res->set_block(block_data);
     transport::protobuf::Header msg;
     auto dht_ptr = network::UniversalManager::Instance()->GetUniversal(
             network::kUniversalNetworkId);
     assert(dht_ptr != nullptr);
-    BlockProto::CreateGetBlockResponse(dht_ptr->local_node(), header, block_data, msg);
+    BlockProto::CreateGetBlockResponse(
+            dht_ptr->local_node(),
+            header,
+            block_msg.SerializeAsString(),
+            msg);
     dht_ptr->SendToClosestNode(msg);
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end", header);
     return kBlockSuccess;

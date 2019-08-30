@@ -95,6 +95,7 @@ void VpnClient::HandleBlockResponse(const protobuf::GetTxBlockResponse& block_re
     if (hight_block_map_.size() >= kHeightMaxSize) {
         hight_block_map_.erase(hight_block_map_.begin());
     }
+    std::cout << "block response coming:" << block.height() << std::endl;
 }
 
 void VpnClient::HandleHeightResponse(
@@ -106,6 +107,7 @@ void VpnClient::HandleHeightResponse(
             height_queue_.pop();
         }
     }
+    std::cout << "height response coming:" << height_res.heights_size() << std::endl;
 }
 
 void VpnClient::HandleServiceMessage(transport::protobuf::Header& header) {
@@ -606,6 +608,7 @@ void VpnClient::GetAccountHeight() {
     uni_dht->SetFrequently(msg);
     ClientProto::GetAccountHeight(uni_dht->local_node(), msg);
     uni_dht->SendToClosestNode(msg);
+    std::cout << "sended get account height." << std::endl;
 }
 
 void VpnClient::GetAccountBlockWithHeight() {
@@ -635,6 +638,7 @@ void VpnClient::GetAccountBlockWithHeight() {
         uni_dht->SetFrequently(msg);
         ClientProto::GetBlockWithHeight(uni_dht->local_node(), height, msg);
         uni_dht->SendToClosestNode(msg);
+        std::cout << "sended get block with height." << std::endl;
         ++sended_req;
         if (sended_req > 30) {
             break;
