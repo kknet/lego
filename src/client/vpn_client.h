@@ -7,7 +7,7 @@
 #include <mutex>
 #include <unordered_map>
 #include <map>
-#include <queue>
+#include <set>
 
 namespace lego {
 
@@ -93,6 +93,7 @@ public:
         return first_install_;
     }
     bool SetFirstInstall();
+    std::string Transactions(uint32_t begin, uint32_t len);
 
 private:
     VpnClient();
@@ -138,8 +139,8 @@ private:
     std::string config_path_;
     std::map<uint64_t, std::string> hight_block_map_;
     std::mutex hight_block_map_mutex_;
-    std::priority_queue<uint64_t> height_queue_;
-    std::mutex height_queue_mutex_;
+    std::set<uint64_t> height_set_;
+    std::mutex height_set_mutex_;
 };
 
 }  // namespace client

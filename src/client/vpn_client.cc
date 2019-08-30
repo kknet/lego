@@ -95,19 +95,17 @@ void VpnClient::HandleBlockResponse(const protobuf::GetTxBlockResponse& block_re
     if (hight_block_map_.size() >= kHeightMaxSize) {
         hight_block_map_.erase(hight_block_map_.begin());
     }
-    std::cout << "block response coming:" << block.height() << std::endl;
 }
 
 void VpnClient::HandleHeightResponse(
         const protobuf::AccountHeightResponse& height_res) {
-    std::lock_guard<std::mutex> guard(height_queue_mutex_);
+    std::lock_guard<std::mutex> guard(height_set_mutex_);
     for (int32_t i = 0; i < height_res.heights_size(); ++i) {
-        height_queue_.push(height_res.heights(i));
-        if (height_queue_.size() > kHeightMaxSize) {
-            height_queue_.pop();
+        height_set_.insert(height_res.heights(i));
+        if (height_set_.size() > kHeightMaxSize) {
+            height_set_.erase(height_set_.begin());
         }
     }
-    std::cout << "height response coming:" << height_res.heights_size() << std::endl;
 }
 
 void VpnClient::HandleServiceMessage(transport::protobuf::Header& header) {
@@ -116,6 +114,51 @@ void VpnClient::HandleServiceMessage(transport::protobuf::Header& header) {
 
 int VpnClient::GetSocket() {
     return transport_->GetSocket();
+}
+
+std::string VpnClient::Transactions(uint32_t begin, uint32_t len) {
+    std::lock_guard<std::mutex> guard(hight_block_map_mutex_);
+    uint32_t now_b = 0;
+    std::string res_str;
+    for (auto iter = hight_block_map_.rbegin(); iter != hight_block_map_.rend(); ++iter) {
+        if (now_b < begin) {
+            ++now_b;
+            continue;
+        }
+        protobuf::Block block;
+        if (!block.ParseFromString(iter->second)) {
+            continue;
+        }
+
+        auto tx_list = block.tx_block().tx_list();
+        auto timestamp = block.timestamp();
+        for (int32_t i = 0; i < tx_list.size(); ++i) {
+            if (tx_list[i].to().empty()) {
+                continue;
+            }
+
+            if (tx_list[i].to() != common::GlobalInfo::Instance()->id() &&
+                    tx_list[i].from() != common::GlobalInfo::Instance()->id()) {
+                continue;
+            }
+
+            std::string tx_item = (std::to_string(timestamp) + ",TRAN" + "," +
+                    common::Encode::HexEncode(tx_list[i].to()) + ",";
+
+            if (tx_list[i].from() == common::GlobalInfo::Instance()->id()) {
+                tx_item += "-" + std::to_string(tx_list[i].amount());
+            } else {
+                tx_item += std::to_string(tx_list[i].amount());
+            }
+
+            if (res_str.empty()) {
+                res_str = tx_item;
+            } else {
+                res_str += ";" + tx_item;
+            }
+        }
+    }
+    return res_str;
 }
 
 std::string VpnClient::Init(const std::string& conf) {
@@ -323,7 +366,6 @@ std::string VpnClient::GetVpnServerNodes(
                 common::global_country_map[country],
                 count);
     }
-    std::cout << "get vpn nodes: " << dht_nodes.size() << std::endl;
     CLIENT_ERROR("get dht_nodes: [%d]", dht_nodes.size());
     if (dht_nodes.empty()) {
         CLIENT_ERROR("get dht_nodes: vpn nodes empty!");
@@ -414,7 +456,6 @@ int VpnClient::GetVpnNodes(
             state_lock.Signal();
         }
     };
-    std::cout << "add to sync wait now: " << msg_id << std::endl;
     transport::SynchroWait::Instance()->Add(msg_id, 1000 * 1000, callback, nodes.size());
     state_lock.Wait();
     return kClientSuccess;
@@ -608,7 +649,6 @@ void VpnClient::GetAccountHeight() {
     uni_dht->SetFrequently(msg);
     ClientProto::GetAccountHeight(uni_dht->local_node(), msg);
     uni_dht->SendToClosestNode(msg);
-    std::cout << "sended get account height." << std::endl;
 }
 
 void VpnClient::GetAccountBlockWithHeight() {
@@ -618,16 +658,15 @@ void VpnClient::GetAccountBlockWithHeight() {
         return;
     }
 
-    std::priority_queue<uint64_t> height_queue;
+    std::set<uint64_t> height_set;
     {
-        std::lock_guard<std::mutex> guard(height_queue_mutex_);
-        height_queue = height_queue_;
+        std::lock_guard<std::mutex> guard(height_set_mutex_);
+        height_set = height_set_;
     }
 
     uint32_t sended_req = 0;
-    while (!height_queue.empty()) {
-        auto height = height_queue.top();
-        height_queue.pop();
+    for (auto iter = height_set.rbegin(); iter != height_set.rend(); ++iter) {
+        auto height = *iter;
         {
             auto iter = hight_block_map_.find(height);
             if (iter != hight_block_map_.end()) {
@@ -638,7 +677,6 @@ void VpnClient::GetAccountBlockWithHeight() {
         uni_dht->SetFrequently(msg);
         ClientProto::GetBlockWithHeight(uni_dht->local_node(), height, msg);
         uni_dht->SendToClosestNode(msg);
-        std::cout << "sended get block with height." << std::endl;
         ++sended_req;
         if (sended_req > 30) {
             break;
