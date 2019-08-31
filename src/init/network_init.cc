@@ -24,6 +24,7 @@
 #include "bft/proto/bft_proto.h"
 #include "bft/basic_bft/transaction/proto/tx_proto.h"
 #include "root_congress/congress_init.h"
+#include "client/vpn_client.h"
 #include "init/init_utils.h"
 
 namespace lego {
@@ -497,6 +498,8 @@ int NetworkInit::SetPriAndPubKey(const std::string&) {
         conf_.Set("lego", "id", common::Encode::HexEncode(
                 common::GlobalInfo::Instance()->id()));
         conf_.DumpConfig(config_path_);
+        std::string gid;
+        client::VpnClient::Instance()->Transaction("", 0, gid);
     }
     return kInitSuccess;
 }
