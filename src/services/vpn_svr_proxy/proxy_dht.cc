@@ -5,7 +5,9 @@
 #include "security/ecdh_create_key.h"
 #include "security/schnorr.h"
 #include "security/aes.h"
+#include "security/public_key.h"
 #include "network/route.h"
+#include "client/vpn_client.h"
 #include "services/proto/service_proto.h"
 #include "services/proto/service.pb.h"
 #include "services/vpn_svr_proxy/proxy_utils.h"
@@ -18,7 +20,9 @@ namespace vpn {
 ProxyDht::ProxyDht(
         transport::TransportPtr& transport,
         dht::NodePtr& local_node)
-        : BaseDht(transport, local_node) {}
+        : BaseDht(transport, local_node) {
+    srand(time(NULL));
+}
 
 ProxyDht::~ProxyDht() {}
 
@@ -38,11 +42,66 @@ void ProxyDht::HandleMessage(transport::protobuf::Header& msg) {
     }
 }
 
+int ProxyDht::CheckSign(const service::protobuf::GetVpnInfoRequest& vpn_req) {
+    if (!vpn_req.has_sign_challenge() || !vpn_req.has_sign_response()) {
+        PROXY_ERROR("backup has no sign");
+        return kProxyError;
+    }
+
+    auto sign = security::Signature(vpn_req.sign_challenge(), vpn_req.sign_response());
+    auto sha128 = common::Hash::Hash128(vpn_req.pubkey());
+    security::PublicKey pubkey(vpn_req.pubkey());
+    if (!security::Schnorr::Instance()->Verify(sha128, sign, pubkey)) {
+        PROXY_ERROR("check signature error!");
+        return kProxyError;
+    }
+    return kProxySuccess;
+}
+
+int ProxyDht::ResetUserUseTimer(const service::protobuf::GetVpnInfoRequest& vpn_req) {
+    auto account_addr = network::GetAccountAddressByPublicKey(vpn_req.pubkey());
+    std::lock_guard<std::mutex> guard(account_vpn_use_map_mutex_);
+    auto iter = account_vpn_use_map_.find(account_addr);
+    if (iter == account_vpn_use_map_.end()) {
+        account_vpn_use_map_[account_addr] = std::make_shared<AccountVpnUseInfo>(
+                vpn_req.pubkey(),
+                vpn_req.sign_challenge(),
+                vpn_req.sign_response());
+        return;
+    }
+
+    double duration = std::chrono::duration<double, std::milli>(
+            std::chrono::steady_clock::now() - iter->second->prev_time).count();
+    if (duration <= 30000) {
+        iter->second->pre_duration += std::chrono::milliseconds(
+                static_cast<uint32_t>(duration));
+    }
+
+    if (iter->second->pre_duration.count() >= kStakingPeriod) {
+        std::string gid;
+        client::VpnClient::Instance()->Transaction(
+                account_addr,
+                (std::rand() % 20 + 5),
+                gid);
+        iter->second->pre_duration = std::chrono::milliseconds(0);
+    }
+    iter->second->prev_time = std::chrono::steady_clock::now();
+    return kProxySuccess;
+}
+
 void ProxyDht::HandleGetSocksRequest(
         transport::protobuf::Header& msg,
         service::protobuf::ServiceMessage& src_svr_msg) {
     if (!src_svr_msg.has_vpn_req()) {
         return;
+    }
+
+    if (CheckSign(src_svr_msg.vpn_req()) != kProxySuccess) {
+        return;
+    }
+
+    if (src_svr_msg.vpn_req().heartbeat()) {
+        return ResetUserUseTimer(src_svr_msg.vpn_req());
     }
 
     auto vpn_conf = ShadowsocksProxy::Instance()->GetShadowsocks();
@@ -86,9 +145,6 @@ void ProxyDht::HandleGetSocksRequest(
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("getted socks", msg);
     service::ServiceProto::CreateGetVpnInfoRes(local_node(), svr_msg, msg, res_msg);
     network::Route::Instance()->Send(res_msg);
-    PROXY_ERROR("send res get vpn config info.");
-    auto netid = dht::DhtKeyManager::DhtKeyGetNetId(res_msg.des_dht_key());
-    std::cout << "send to des network: " << netid << ":" << res_msg.client_handled() << std::endl;
 }
 
 }  // namespace vpn

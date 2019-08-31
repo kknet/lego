@@ -4,6 +4,9 @@ package lego.service.protobuf;
 
 message GetVpnInfoRequest {
     optional bytes pubkey = 1;
+    optional bytes sign_challenge = 2;
+    optional bytes sign_response = 3;
+    opitonal bool heartbeat = 4;
 }
 
 message GetVpnInfoResponse {
