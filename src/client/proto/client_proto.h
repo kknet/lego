@@ -221,7 +221,7 @@ public:
         msg.set_des_dht_key(des_dht_key);
         msg.set_priority(transport::kTransportPriorityLowest);
         msg.set_id(common::GlobalInfo::Instance()->MessageId());
-        msg.set_type(common::kBlockMessage);
+        msg.set_type(common::kServiceMessage);
         msg.set_client(local_node->client_mode);
         msg.set_hop_count(0);
         protobuf::ServiceMessage svr_msg;
