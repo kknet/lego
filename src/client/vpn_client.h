@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <map>
 #include <set>
+#include <deque>
 
 namespace lego {
 
@@ -127,6 +128,8 @@ private:
     void HandleGetVpnResponse(
             const protobuf::GetVpnInfoResponse& vpn_res,
             const std::string& dht_key);
+    void DumpVpnNodes();
+    void ReadVpnNodesFromConf();
 
     static const uint32_t kDefaultUdpSendBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kDefaultUdpRecvBufferSize = 10u * 1024u * 1024u;
@@ -154,7 +157,7 @@ private:
     std::mutex height_set_mutex_;
     uint32_t check_times_{ 0 };
     bool got_block_{ false };
-    std::map<std::string, std::vector<VpnServerNodePtr>> vpn_nodes_map_;
+    std::map<std::string, std::deque<VpnServerNodePtr>> vpn_nodes_map_;
     std::mutex vpn_nodes_map_mutex_;
 };
 
