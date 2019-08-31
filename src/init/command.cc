@@ -222,7 +222,7 @@ void Command::TxPeriod() {
 }
 
 void Command::VpnHeartbeat(const std::string& dht_key) {
-    client::VpnClient::Instance()->VpnHeartbeat(common::Encode::HexDecode(dht_key));
+    client::VpnClient::Instance()->VpnHeartbeat(dht_key);
 }
 
 void Command::GetVpnNodes(const std::string& country) {

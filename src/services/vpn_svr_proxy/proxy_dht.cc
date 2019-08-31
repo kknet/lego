@@ -86,6 +86,7 @@ int ProxyDht::ResetUserUseTimer(const service::protobuf::GetVpnInfoRequest& vpn_
         iter->second->pre_duration = std::chrono::milliseconds(0);
     }
     iter->second->prev_time = std::chrono::steady_clock::now();
+    std::cout << "reset user: " << common::Encode::HexEncode(account_addr) << " timer." << std::endl;
     return kProxySuccess;
 }
 
@@ -97,6 +98,7 @@ void ProxyDht::HandleGetSocksRequest(
     }
 
     if (src_svr_msg.vpn_req().heartbeat()) {
+        std::cout << "receive vpn req heartbeat." << std::endl;
         if (!CheckDestination(msg.des_dht_key(), false)) {
             SendToClosestNode(msg);
             return;

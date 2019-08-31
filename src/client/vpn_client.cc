@@ -118,7 +118,9 @@ void VpnClient::HandleServiceMessage(transport::protobuf::Header& header) {
     }
 
     if (svr_msg.has_vpn_res()) {
-        HandleGetVpnResponse(svr_msg.vpn_res(), header.src_dht_key());
+        HandleGetVpnResponse(
+                svr_msg.vpn_res(),
+                common::Encode::HexEncode(header.src_dht_key()));
     }
 }
 
@@ -169,7 +171,7 @@ void VpnClient::VpnHeartbeat(const std::string& dht_key) {
             network::kUniversalNetworkId);
     ClientProto::CreateVpnHeartbeat(
             root_dht_->local_node(),
-            dht_key,
+            common::Encode::HexDecode(dht_key),
             msg);
     uni_dht->SendToClosestNode(msg);
 }
