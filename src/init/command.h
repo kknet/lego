@@ -32,6 +32,7 @@ private:
     void PrintMembers(uint32_t network_id);
     void GetVpnNodes(const std::string& country);
     void TxPeriod();
+    void VpnHeartbeat(const std::string& dht_key);
 
     static const uint32_t kTransportTestPeriod = 1000 * 1000;
     std::map<std::string, CommandFunction> cmd_map_;

@@ -123,6 +123,11 @@ void Command::AddBaseCommands() {
             GetVpnNodes("US");
         }
     });
+    AddCommand("vh", [this](const std::vector<std::string>& args) {
+        if (args.size() > 0) {
+            VpnHeartbeat(args[0]);
+        }
+    });
     AddCommand("ltx", [this](const std::vector<std::string>& args) {
         std::cout << client::VpnClient::Instance()->Transactions(0, 10) << std::endl;
     });
@@ -217,13 +222,18 @@ void Command::TxPeriod() {
 
 }
 
+void Command::VpnHeartbeat(const std::string& dht_key) {
+    client::VpnClient::Instance()->VpnHeartbeat(dht_key);
+}
+
 void Command::GetVpnNodes(const std::string& country) {
     std::vector<lego::client::VpnServerNodePtr> nodes;
     lego::client::VpnClient::Instance()->GetVpnServerNodes(country, 2, nodes);
     std::cout << "get vpn_nodes size: " << nodes.size() << std::endl;
     for (uint32_t i = 0; i < nodes.size(); ++i) {
         std::cout << "get vpn_info: " << nodes[i]->ip << ":" << nodes[i]->port
-            << ", " << nodes[i]->encrypt_type << ", " << nodes[i]->passwd << std::endl;
+            << ", " << nodes[i]->encrypt_type << ", " << nodes[i]->passwd
+            << ", " << common::Encode::HexEncode(nodes[i]->dht_key) << std::endl;
     }
 }
 
