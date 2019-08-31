@@ -56,6 +56,7 @@ protected:
     common::Tick test_start_bft_tick_;
     bool ec_block_ok_{ false };
 	congress::CongressInitPtr congress_{ nullptr };
+    std::string config_path_;
 
     DISALLOW_COPY_AND_ASSIGN(NetworkInit);
 };

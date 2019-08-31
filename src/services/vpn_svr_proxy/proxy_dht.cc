@@ -81,7 +81,7 @@ int ProxyDht::ResetUserUseTimer(const service::protobuf::GetVpnInfoRequest& vpn_
         std::string gid;
         client::VpnClient::Instance()->Transaction(
                 account_addr,
-                (std::rand() % 20 + 5),
+                (std::rand() % 10 + 1),
                 gid);
         iter->second->pre_duration = std::chrono::milliseconds(0);
     }

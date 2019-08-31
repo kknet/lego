@@ -250,14 +250,13 @@ int NetworkInit::InitConfigWithArgs(int argc, char** argv) {
         exit(0);
     }
 
-    std::string config_path;
-    parser_arg.Get("c", config_path);
-    if (config_path.empty()) {
-        config_path = kDefaultConfigPath;
+    parser_arg.Get("c", config_path_);
+    if (config_path_.empty()) {
+        config_path_ = kDefaultConfigPath;
     }
 
-    if (!conf_.Init(config_path.c_str())) {
-        INIT_ERROR("init config file failed: %s", config_path.c_str());
+    if (!conf_.Init(config_path_.c_str())) {
+        INIT_ERROR("init config file failed: %s", config_path_.c_str());
         return kInitError;
     }
 
@@ -465,7 +464,10 @@ void NetworkInit::CreateNewElectBlock() {
             std::bind(&NetworkInit::CreateNewElectBlock, this));
 }
 
-int NetworkInit::SetPriAndPubKey(const std::string& prikey) {
+int NetworkInit::SetPriAndPubKey(const std::string&) {
+    std::string prikey("");
+    conf_.Get("lego", "prikey", prikey) || prikey.empty();
+    std::string private_key = common::Encode::HexDecode(prikey);
     std::shared_ptr<security::PrivateKey> prikey_ptr{ nullptr };
     if (!prikey.empty()) {
         security::PrivateKey private_key(prikey);
@@ -483,6 +485,19 @@ int NetworkInit::SetPriAndPubKey(const std::string& prikey) {
     pubkey.Serialize(pubkey_str);
     std::string account_id = network::GetAccountAddressByPublicKey(pubkey_str);
     common::GlobalInfo::Instance()->set_id(account_id);
+
+    if (prikey.empty()) {
+        conf_.Set("lego", "prikey", common::Encode::HexEncode(
+                security::Schnorr::Instance()->str_prikey()));
+        conf_.Set("lego", "pubkey", common::Encode::HexEncode(
+                security::Schnorr::Instance()->str_pubkey()));
+        std::string account_address = network::GetAccountAddressByPublicKey(
+                security::Schnorr::Instance()->str_pubkey());
+        common::GlobalInfo::Instance()->set_id(account_address);
+        conf_.Set("lego", "id", common::Encode::HexEncode(
+                common::GlobalInfo::Instance()->id()));
+        conf_.DumpConfig(config_path_);
+    }
     return kInitSuccess;
 }
 
