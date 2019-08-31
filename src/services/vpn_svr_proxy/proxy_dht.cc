@@ -97,6 +97,11 @@ void ProxyDht::HandleGetSocksRequest(
     }
 
     if (src_svr_msg.vpn_req().heartbeat()) {
+        if (!CheckDestination(msg.des_dht_key(), false)) {
+            SendToClosestNode(msg);
+            return;
+        }
+
         if (CheckSign(src_svr_msg.vpn_req()) != kProxySuccess) {
             return;
         }

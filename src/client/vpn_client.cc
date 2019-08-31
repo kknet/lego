@@ -164,7 +164,14 @@ void VpnClient::HandleGetVpnResponse(
 }
 
 void VpnClient::VpnHeartbeat(const std::string& dht_key) {
-
+    transport::protobuf::Header msg;
+    auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+            network::kUniversalNetworkId);
+    ClientProto::CreateVpnHeartbeat(
+            root_dht_->local_node(),
+            dht_key,
+            msg);
+    uni_dht->SendToClosestNode(msg);
 }
 
 int VpnClient::GetSocket() {

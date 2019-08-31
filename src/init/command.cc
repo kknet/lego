@@ -219,7 +219,6 @@ void Command::TxPeriod() {
     std::cout << "tx gid:" << tx_gid << " success transaction from: "
         << common::Encode::HexEncode(common::GlobalInfo::Instance()->id())
         << " to: " << to << " , amount: " << amount << std::endl;
-
 }
 
 void Command::VpnHeartbeat(const std::string& dht_key) {
