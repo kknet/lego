@@ -738,6 +738,10 @@ void VpnClient::ReadVpnNodesFromConf() {
 
         std::string vpn_nodes;
         config.Get("vpn", country_split[i], vpn_nodes);
+        if (vpn_nodes.empty()) {
+            continue;
+        }
+
         common::Split node_list(vpn_nodes.c_str(), ';', vpn_nodes.size());
         for (uint32_t node_idx = 0; node_idx < node_list.Count(); ++node_idx) {
             if (node_list.SubLen(node_idx) <= 10) {
