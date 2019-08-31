@@ -764,10 +764,10 @@ void VpnClient::ReadVpnNodesFromConf() {
             if (iter == vpn_nodes_map_.end()) {
                 vpn_nodes_map_[country_split[i]] = std::deque<VpnServerNodePtr>();
                 vpn_nodes_map_[country_split[i]].push_back(node_item);
-            } else {
-                iter->second.push_back(node_item);
+                continue;
             }
-
+                
+            iter->second.push_back(node_item);
             if (iter->second.size() > 16) {
                 iter->second.pop_front();
             }
