@@ -248,10 +248,10 @@ public:
         vpn_req->set_heartbeat(true);
         msg.set_data(svr_msg.SerializeAsString());
 #ifdef LEGO_TRACE_MESSAGE
-        msg.set_debug(std::string("GetBlockWithHeight: ") +
+        msg.set_debug(std::string("CreateVpnHeartbeat: ") +
             local_node->public_ip + "-" +
             std::to_string(local_node->public_port) + ", to " +
-            common::Encode::HexEncode(dht_key.StrKey()));
+            common::Encode::HexEncode(des_dht_key));
         LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("begin", msg);
 #endif
 
