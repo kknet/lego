@@ -707,6 +707,7 @@ void VpnClient::GetAccountBlockWithHeight() {
 }
 
 void VpnClient::DumpVpnNodes() {
+    return;
     std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
     std::string country_list;
     for (auto iter = vpn_nodes_map_.begin(); iter != vpn_nodes_map_.end(); ++iter) {
@@ -729,6 +730,7 @@ void VpnClient::DumpVpnNodes() {
 }
 
 void VpnClient::ReadVpnNodesFromConf() {
+    return;
     std::string country_list;
     config.Get("vpn", "country", country_list);
     common::Split country_split(country_list.c_str(), ',', country_list.size());
