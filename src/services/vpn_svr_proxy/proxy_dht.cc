@@ -96,11 +96,11 @@ void ProxyDht::HandleGetSocksRequest(
         return;
     }
 
-    if (CheckSign(src_svr_msg.vpn_req()) != kProxySuccess) {
-        return;
-    }
-
     if (src_svr_msg.vpn_req().heartbeat()) {
+        if (CheckSign(src_svr_msg.vpn_req()) != kProxySuccess) {
+            return;
+        }
+
         ResetUserUseTimer(src_svr_msg.vpn_req());
         return;
     }

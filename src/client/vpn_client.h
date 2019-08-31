@@ -43,12 +43,18 @@ struct VpnServerNode {
             const std::string& in_ip,
             uint16_t in_port,
             const std::string& enc_type,
-            const std::string& pwd)
-            : ip(in_ip), port(in_port), encrypt_type(enc_type), passwd(pwd) {}
+            const std::string& pwd,
+            const std::string& dkey)
+            : ip(in_ip),
+              port(in_port),
+              encrypt_type(enc_type),
+              passwd(pwd),
+              dht_key(dkey) {}
     std::string ip;
     uint16_t port;
     std::string encrypt_type;
     std::string passwd;
+    std::string dht_key;
 };
 typedef std::shared_ptr<VpnServerNode> VpnServerNodePtr;
 
@@ -96,6 +102,7 @@ public:
     bool SetFirstInstall();
     std::string Transactions(uint32_t begin, uint32_t len);
     int64_t GetBalance();
+    void VpnHeartbeat(const std::string& dht_key);
 
 private:
     VpnClient();
@@ -117,7 +124,9 @@ private:
     void GetAccountBlockWithHeight();
     void HandleHeightResponse(const protobuf::AccountHeightResponse& height_res);
     void HandleBlockResponse(const protobuf::GetTxBlockResponse& block_res);
-    void HandleGetVpnResponse(const protobuf::GetVpnInfoResponse& vpn_res);
+    void HandleGetVpnResponse(
+            const protobuf::GetVpnInfoResponse& vpn_res,
+            const std::string& dht_key);
 
     static const uint32_t kDefaultUdpSendBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kDefaultUdpRecvBufferSize = 10u * 1024u * 1024u;

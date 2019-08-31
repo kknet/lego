@@ -118,11 +118,13 @@ void VpnClient::HandleServiceMessage(transport::protobuf::Header& header) {
     }
 
     if (svr_msg.has_vpn_res()) {
-        HandleGetVpnResponse(svr_msg.vpn_res());
+        HandleGetVpnResponse(svr_msg.vpn_res(), header.src_dht_key());
     }
 }
 
-void VpnClient::HandleGetVpnResponse(const protobuf::GetVpnInfoResponse& vpn_res) {
+void VpnClient::HandleGetVpnResponse(
+        const protobuf::GetVpnInfoResponse& vpn_res,
+        const std::string& dht_key) {
     if (vpn_res.ip().empty() ||
             vpn_res.port() <= 0 ||
             vpn_res.country().empty() ||
@@ -157,7 +159,12 @@ void VpnClient::HandleGetVpnResponse(const protobuf::GetVpnInfoResponse& vpn_res
             vpn_res.ip(),
             vpn_res.port(),
             vpn_res.encrypt_type(),
-            dec_passwd));
+            dec_passwd,
+            dht_key));
+}
+
+void VpnClient::VpnHeartbeat(const std::string& dht_key) {
+
 }
 
 int VpnClient::GetSocket() {

@@ -212,6 +212,51 @@ public:
         LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("begin", msg);
 #endif
     }
+
+    static void CreateVpnHeartbeat(
+            const dht::NodePtr& local_node,
+            const std::string& des_dht_key,
+            transport::protobuf::Header& msg) {
+        msg.set_src_dht_key(local_node->dht_key);
+        msg.set_des_dht_key(des_dht_key);
+        msg.set_priority(transport::kTransportPriorityLowest);
+        msg.set_id(common::GlobalInfo::Instance()->MessageId());
+        msg.set_type(common::kBlockMessage);
+        msg.set_client(local_node->client_mode);
+        msg.set_hop_count(0);
+        protobuf::ServiceMessage svr_msg;
+        auto vpn_req = svr_msg.mutable_vpn_req();
+        vpn_req->set_pubkey(security::Schnorr::Instance()->str_pubkey());
+
+        auto hash128 = common::Hash::Hash128(security::Schnorr::Instance()->str_pubkey());
+        security::Signature sign;
+        auto& prikey = *security::Schnorr::Instance()->prikey();
+        auto& pubkey = *security::Schnorr::Instance()->pubkey();
+        if (!security::Schnorr::Instance()->Sign(
+                hash128,
+                prikey,
+                pubkey,
+                sign)) {
+            CLIENT_ERROR("leader pre commit signature failed!");
+            return;
+        }
+        std::string sign_challenge_str;
+        std::string sign_response_str;
+        sign.Serialize(sign_challenge_str, sign_response_str);
+        vpn_req->set_sign_challenge(sign_challenge_str);
+        vpn_req->set_sign_response(sign_response_str);
+        vpn_req->set_heartbeat(true);
+        msg.set_data(svr_msg.SerializeAsString());
+#ifdef LEGO_TRACE_MESSAGE
+        msg.set_debug(std::string("GetBlockWithHeight: ") +
+            local_node->public_ip + "-" +
+            std::to_string(local_node->public_port) + ", to " +
+            common::Encode::HexEncode(dht_key.StrKey()));
+        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("begin", msg);
+#endif
+
+    }
+
 private:
     ClientProto();
     ~ClientProto();

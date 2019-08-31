@@ -39,6 +39,9 @@ message BftMessage {
 
 message GetVpnInfoRequest {
     optional bytes pubkey = 1;
+    optional bytes sign_challenge = 2;
+    optional bytes sign_response = 3;
+    optional bool heartbeat = 4;
 }
 
 message GetVpnInfoResponse {
