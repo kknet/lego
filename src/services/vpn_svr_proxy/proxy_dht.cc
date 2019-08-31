@@ -67,7 +67,7 @@ int ProxyDht::ResetUserUseTimer(const service::protobuf::GetVpnInfoRequest& vpn_
                 vpn_req.pubkey(),
                 vpn_req.sign_challenge(),
                 vpn_req.sign_response());
-        return;
+        return kProxyError;
     }
 
     double duration = std::chrono::duration<double, std::milli>(
@@ -101,7 +101,8 @@ void ProxyDht::HandleGetSocksRequest(
     }
 
     if (src_svr_msg.vpn_req().heartbeat()) {
-        return ResetUserUseTimer(src_svr_msg.vpn_req());
+        ResetUserUseTimer(src_svr_msg.vpn_req());
+        return;
     }
 
     auto vpn_conf = ShadowsocksProxy::Instance()->GetShadowsocks();
