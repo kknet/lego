@@ -167,7 +167,8 @@ void VpnClient::HandleGetVpnResponse(
             vpn_res.port(),
             vpn_res.encrypt_type(),
             dec_passwd,
-            dht_key));
+            dht_key,
+            true));
     if (iter->second.size() > 16) {
         iter->second.pop_front();
     }
@@ -758,7 +759,8 @@ void VpnClient::ReadVpnNodesFromConf() {
                     common::StringUtil::ToUint16(item_split[4]),
                     item_split[1],
                     item_split[3],
-                    item_split[0]);
+                    item_split[0],
+                    false);
             std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
             auto iter = vpn_nodes_map_.find(country_split[i]);
             if (iter == vpn_nodes_map_.end()) {

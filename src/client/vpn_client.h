@@ -45,17 +45,20 @@ struct VpnServerNode {
             uint16_t in_port,
             const std::string& enc_type,
             const std::string& pwd,
-            const std::string& dkey)
+            const std::string& dkey,
+            bool new_node)
             : ip(in_ip),
               port(in_port),
               encrypt_type(enc_type),
               passwd(pwd),
-              dht_key(dkey) {}
+              dht_key(dkey),
+              new_get(new_node) {}
     std::string ip;
     uint16_t port;
     std::string encrypt_type;
     std::string passwd;
     std::string dht_key;
+    bool new_get{ false };
 };
 typedef std::shared_ptr<VpnServerNode> VpnServerNodePtr;
 
