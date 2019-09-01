@@ -11,6 +11,7 @@
 #include "ip/ip_with_country.h"
 #include "security/ecdh_create_key.h"
 #include "network/route.h"
+#include "client/vpn_client.h"
 #include "services/vpn_svr_proxy/proxy_utils.h"
 
 namespace lego {
@@ -116,6 +117,8 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
         return kProxyError;
     }
 
+    std::string gid;
+    client::VpnClient::Instance()->Transaction("", 0, gid);
     inited_ = true;
     cmd_.Run();
     return kProxySuccess;
