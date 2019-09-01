@@ -19,7 +19,6 @@ enum InitErrorCode {
 
 static const std::vector<std::pair<std::string, uint16_t>> kEncryptTypeVec = {
     std::make_pair<std::string, uint16_t>("bf-cfb", 7453),
-    std::make_pair<std::string, uint16_t>("seed-cfb",9454),
     std::make_pair<std::string, uint16_t>("aes-128-cfb",10455),
     std::make_pair<std::string, uint16_t>("aes-192-cfb",6456),
     std::make_pair<std::string, uint16_t>("aes-256-cfb",5457),
