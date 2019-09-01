@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <mutex>
 #include <unordered_map>
+#include <unordered_set>
 #include <map>
 #include <set>
 #include <deque>
@@ -134,6 +135,7 @@ private:
             const std::string& dht_key);
     void DumpVpnNodes();
     void ReadVpnNodesFromConf();
+    void DumpBootstrapNodes();
 
     static const uint32_t kDefaultUdpSendBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kDefaultUdpRecvBufferSize = 10u * 1024u * 1024u;
@@ -163,6 +165,7 @@ private:
     bool got_block_{ false };
     std::map<std::string, std::deque<VpnServerNodePtr>> vpn_nodes_map_;
     std::mutex vpn_nodes_map_mutex_;
+    std::unordered_set<std::string> bootstrap_set_;
 };
 
 }  // namespace client

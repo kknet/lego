@@ -34,10 +34,8 @@ private:
 
     void HandleMessage(transport::protobuf::Header& header);
     int StartShadowsocks();
-    int KillShadowsocks(const ShadowsocksConfPtr& socks_ptr);
     int RunCommand(const std::string& cmd, const std::string& succ_res);
     void CheckVpnStatus();
-    void ShiftVpnPeriod();
     int CreateVpnProxyNetwork();
     bool CheckVpnExists(const std::string& passwd);
 
@@ -45,11 +43,10 @@ private:
     static const int64_t kShowdowsocksShiftPeriod = 3600ll * 1000ll * 1000ll;
     static const uint32_t kCheckVpnServerStatusPeriod = 3u;
 
-    ShadowsocksConfPtr socks_[kMaxShadowsocksCount];
-    int32_t now_valid_begin_{ -1 };
+    std::vector<ShadowsocksConfPtr> socks_vec_;
+
     common::Tick tick_;
     common::Tick tick_status_;
-    std::mutex socks_mutex_;
     VpnProxyNodePtr vpn_proxy_{ nullptr };
     std::string vpn_bin_path_;
 

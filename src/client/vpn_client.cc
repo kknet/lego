@@ -44,6 +44,7 @@ static common::Config config;
 static common::Tick check_tx_tick_;
 static common::Tick vpn_nodes_tick_;
 static common::Tick dump_comfig_tick_;
+static common::Tick dump_bootstrap_tick_;
 
 VpnClient::VpnClient() {
     network::Route::Instance()->RegisterMessage(
@@ -57,6 +58,9 @@ VpnClient::VpnClient() {
     dump_comfig_tick_.CutOff(
             60ull * 1000ull * 1000ull,
             std::bind(&VpnClient::DumpVpnNodes, this));
+    dump_bootstrap_tick_.CutOff(
+            60ull * 1000ull * 1000ull,
+            std::bind(&VpnClient::DumpBootstrapNodes, this));
 }
 
 VpnClient::~VpnClient() {}
@@ -729,7 +733,6 @@ void VpnClient::GetAccountBlockWithHeight() {
 }
 
 void VpnClient::DumpVpnNodes() {
-    return;
     std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
     std::string country_list;
     for (auto iter = vpn_nodes_map_.begin(); iter != vpn_nodes_map_.end(); ++iter) {
@@ -752,7 +755,6 @@ void VpnClient::DumpVpnNodes() {
 }
 
 void VpnClient::ReadVpnNodesFromConf() {
-    return;
     std::string country_list;
     config.Get("vpn", "country", country_list);
     common::Split country_split(country_list.c_str(), ',', country_list.size());
@@ -799,6 +801,37 @@ void VpnClient::ReadVpnNodesFromConf() {
             }
         }
     }
+}
+
+void VpnClient::DumpBootstrapNodes() {
+    auto dht = network::UniversalManager::Instance()->GetUniversal(
+            network::kUniversalNetworkId);
+    auto dht_nodes = dht->readonly_dht();
+    bool has_new = false;
+    for (auto iter = dht_nodes->begin(); iter != dht_nodes->end(); ++iter) {
+        std::string node_info = (common::Encode::HexEncode((*iter)->id) + ":" +
+                (*iter)->public_ip + ":" +
+                std::to_string((*iter)->public_port));
+        auto siter = bootstrap_set_.find(node_info);
+        if (siter != bootstrap_set_.end()) {
+            continue;
+        }
+        bootstrap_set_.insert(node_info);
+        has_new = true;
+    }
+
+    if (has_new) {
+        std::string boot_str;
+        for (auto iter = bootstrap_set_.begin(); iter != bootstrap_set_.end(); ++iter) {
+            boot_str += *iter + ",";
+        }
+        config.Set("lego", "bootstrap_net", boot_str);
+        config.DumpConfig(config_path_);
+    }
+
+    dump_bootstrap_tick_.CutOff(
+            60ull * 1000ull * 1000ull,
+            std::bind(&VpnClient::DumpBootstrapNodes, this));
 }
 
 }  // namespace client

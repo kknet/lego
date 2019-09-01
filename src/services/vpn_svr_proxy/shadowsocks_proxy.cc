@@ -22,11 +22,6 @@ ShadowsocksProxy::ShadowsocksProxy() {
     network::Route::Instance()->RegisterMessage(
             common::kServiceMessage,
             std::bind(&ShadowsocksProxy::HandleMessage, this, std::placeholders::_1));
-
-    std::fill(socks_, socks_ + kMaxShadowsocksCount, nullptr);
-    tick_.CutOff(
-            kShowdowsocksShiftPeriod,
-            std::bind(&ShadowsocksProxy::ShiftVpnPeriod, this));
     tick_status_.CutOff(
             kCheckVpnServerStatusPeriod,
             std::bind(&ShadowsocksProxy::CheckVpnStatus, this));
@@ -125,72 +120,44 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
 }
 
 ShadowsocksConfPtr ShadowsocksProxy::GetShadowsocks() {
-    std::lock_guard<std::mutex> guard(socks_mutex_);
-    if (now_valid_begin_ >= 0) {
-        return socks_[now_valid_begin_];
+    if (socks_vec_.empty()) {
+        return nullptr;
     }
-    return nullptr;
+
+    srand(time(NULL));
+    auto rand_idx = std::rand() % socks_vec_.size();
+    return socks_vec_[rand_idx];
 }
 
 int ShadowsocksProxy::StartShadowsocks() {
-    ShadowsocksConfPtr socks_conf = std::make_shared<ShadowsocksConf>();
-    uint32_t rand_method = std::rand() % kEncryptTypeVec.size();
-    socks_conf->method = kEncryptTypeVec[rand_method];
-    uint16_t up_port = kPortRange.second - kPortRange.first;
-    socks_conf->port = std::rand() % up_port + kPortRange.first;
-    socks_conf->mode = kMode;
-    socks_conf->passwd = common::Encode::HexEncode(common::Random::RandomString(32));
-    socks_conf->timeout = 60;
-    if (!conf_.Get("lego", "vpn_bin_path", vpn_bin_path_) || vpn_bin_path_.empty()) {
-        PROXY_ERROR("get vpn bin path failed.");
-        return kProxyError;
-    }
-
-    std::string cmd = common::StringUtil::Format(
-            "nohup %s -s %s -p %d -k %s -m %s -t %d -u &",
-            vpn_bin_path_.c_str(),
-            common::GlobalInfo::Instance()->config_local_ip().c_str(),
-            socks_conf->port,
-            socks_conf->passwd.c_str(),
-            socks_conf->method.c_str(),
-            socks_conf->timeout);
-    if (RunCommand(cmd, "running from") != kProxySuccess) {
-        PROXY_ERROR("run cmd [%s] failed!", cmd.c_str());
-        return kProxyError;
-    }
-
-    PROXY_INFO("run cmd [%s] succ!", cmd.c_str());
-    ShadowsocksConfPtr old_socks = nullptr;
-    if (now_valid_begin_ >= 0) {
-        old_socks = socks_[now_valid_begin_];
-    }
-
-    {
-        std::lock_guard<std::mutex> guard(socks_mutex_);
-        if (now_valid_begin_ == -1) {
-            now_valid_begin_ = 0;
-        } else {
-            ++now_valid_begin_;
-            if (now_valid_begin_ >= static_cast<int32_t>(kMaxShadowsocksCount)) {
-                now_valid_begin_ = 0;
-            }
+    for (uint32_t i = 0; i < kEncryptTypeVec.size(); ++i) {
+        ShadowsocksConfPtr socks_conf = std::make_shared<ShadowsocksConf>();
+        socks_conf->method = kEncryptTypeVec[i].first;
+        socks_conf->port = kEncryptTypeVec[i].second;
+        socks_conf->mode = kMode;
+        socks_conf->passwd = common::Encode::HexEncode(common::Random::RandomString(32));
+        socks_conf->timeout = 60;
+        if (!conf_.Get("lego", "vpn_bin_path", vpn_bin_path_) || vpn_bin_path_.empty()) {
+            PROXY_ERROR("get vpn bin path failed.");
+            return kProxyError;
         }
-        socks_[now_valid_begin_] = socks_conf;
-    }
 
-    if (old_socks != nullptr) {
         std::string cmd = common::StringUtil::Format(
-                "ps -ef | grep %s | awk -F' ' '{print $2}' | xargs kill -9",
-                old_socks->passwd.c_str());
-        if (RunCommand(cmd, "") != kProxySuccess) {
+                "nohup %s -s %s -p %d -k %s -m %s -t %d -u &",
+                vpn_bin_path_.c_str(),
+                common::GlobalInfo::Instance()->config_local_ip().c_str(),
+                socks_conf->port,
+                socks_conf->passwd.c_str(),
+                socks_conf->method.c_str(),
+                socks_conf->timeout);
+        if (RunCommand(cmd, "running from") != kProxySuccess) {
             PROXY_ERROR("run cmd [%s] failed!", cmd.c_str());
             return kProxyError;
         }
+        socks_vec_.push_back(socks_conf);
+        PROXY_INFO("run cmd [%s] succ!", cmd.c_str());
     }
-    return kProxySuccess;
-}
 
-int ShadowsocksProxy::KillShadowsocks(const ShadowsocksConfPtr& socks_ptr) {
     return kProxySuccess;
 }
 
@@ -236,23 +203,10 @@ int ShadowsocksProxy::RunCommand(const std::string& cmd, const std::string& succ
 
 void ShadowsocksProxy::CheckVpnStatus() {
     {
-        for (uint32_t i = 0; i < kMaxShadowsocksCount; ++i) {
-            auto socks_conf = socks_[i];
-            if (socks_conf == nullptr) {
-                continue;
-            }
-            
-
+        for (uint32_t i = 0; i < socks_vec_.size(); ++i) {
+            auto socks_conf = socks_vec_[i];
             if (!CheckVpnExists(socks_conf->passwd)) {
-                std::string cmd = common::StringUtil::Format(
-                        "ps -ef | grep %s | awk -F' ' '{print $2}' | xargs kill -9",
-                        socks_conf->passwd.c_str());
-                if (RunCommand(cmd, "") != kProxySuccess) {
-                    PROXY_ERROR("run cmd [%s] failed!", cmd.c_str());
-                    continue;
-                }
-                std::this_thread::sleep_for(std::chrono::microseconds(100000ull));
-                cmd = common::StringUtil::Format(
+                auto cmd = common::StringUtil::Format(
                         "nohup %s -s %s -p %d -k %s -m %s -t %d -u &",
                         vpn_bin_path_.c_str(),
                         common::GlobalInfo::Instance()->config_local_ip().c_str(),
@@ -269,13 +223,6 @@ void ShadowsocksProxy::CheckVpnStatus() {
     tick_status_.CutOff(
             kCheckVpnServerStatusPeriod,
             std::bind(&ShadowsocksProxy::CheckVpnStatus, this));
-}
-
-void ShadowsocksProxy::ShiftVpnPeriod() {
-    StartShadowsocks();
-    tick_.CutOff(
-            kShowdowsocksShiftPeriod,
-            std::bind(&ShadowsocksProxy::ShiftVpnPeriod, this));
 }
 
 int ShadowsocksProxy::CreateVpnProxyNetwork() {
@@ -298,7 +245,7 @@ bool ShadowsocksProxy::CheckVpnExists(const std::string& passwd) {
     }
     for (uint32_t i = 0; i < 3; ++i) {
         if (RunCommand(cmd, vpn_bin_path) != kProxySuccess) {
-            std::this_thread::sleep_for(std::chrono::microseconds(100000ull));
+            std::this_thread::sleep_for(std::chrono::microseconds(1000000ull));
             continue;
         }
         return true;
