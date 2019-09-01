@@ -39,7 +39,7 @@ private:
     int CheckSign(const service::protobuf::GetVpnInfoRequest& vpn_req);
     int ResetUserUseTimer(const service::protobuf::GetVpnInfoRequest& vpn_req);
 
-    static const int64_t kStakingPeriod = 600ull * 1000ull * 1000ull;
+    static const int64_t kStakingPeriod = 600ull * 1000ull;
 
     std::unordered_map<std::string, AccountVpnUseInfoPtr> account_vpn_use_map_;
     std::mutex account_vpn_use_map_mutex_;
