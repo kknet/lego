@@ -4,6 +4,7 @@
 #include "common/encode.h"
 #include "transport/transport.h"
 #include "transport/processor.h"
+#include "transport/multi_thread.h"
 #include "dht/base_dht.h"
 #include "nat_traverse/proto/nat_proto.h"
 #include "nat_traverse/nat_utils.h"
@@ -12,10 +13,9 @@ namespace lego {
 
 namespace nat {
 
-Detection::Detection(dht::BaseDhtPtr base_dht, transport::TransportPtr& transport)
-        : node_map_(40960), base_dht_(base_dht), transport_(transport) {
+Detection::Detection(dht::BaseDhtPtr base_dht)
+        : node_map_(40960), base_dht_(base_dht) {
     assert(base_dht_);
-    assert(transport_);
     tick_.CutOff(kDetectionPeriod, std::bind(&Detection::Run, this));
     std::cout << "Detection tick_: " << tick_.tick_index() << std::endl;
 }
@@ -86,7 +86,8 @@ void Detection::SendTtlPacket(DetectionItemPtr& item) {
 //     if (item->detected_times > 7) {
 //         ttl = 0;
 //     }
-    transport_->Send(item->node->public_ip, item->node->public_port, 0, header);
+    transport::MultiThreadHandler::Instance()->transport()->Send(
+            item->node->public_ip, item->node->public_port, 0, header);
 }
 
 void Detection::HandleMessage(transport::protobuf::Header& header) {

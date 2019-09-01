@@ -12,6 +12,7 @@
 #include "ip/ip_with_country.h"
 #include "transport/processor.h"
 #include "transport/transport_utils.h"
+#include "transport/multi_thread.h"
 #include "broadcast/broadcast_utils.h"
 #include "nat_traverse/detection.h"
 #include "dht/dht_utils.h"
@@ -24,9 +25,7 @@ namespace lego {
 
 namespace dht {
 
-BaseDht::BaseDht(transport::TransportPtr& transport, NodePtr& local_node)
-        : transport_(transport), local_node_(local_node) {
-    assert(transport_);
+BaseDht::BaseDht(transport::TransportPtr& transport, NodePtr& local_node) : local_node_(local_node) {
     readonly_dht_ = std::make_shared<Dht>(dht_);
     readonly_hash_sort_dht_ = std::make_shared<Dht>(dht_);
     readony_node_map_ = std::make_shared<std::unordered_map<uint64_t, NodePtr>>(node_map_);
@@ -42,7 +41,7 @@ void BaseDht::RegisterDhtMessage() {
 }
 
 int BaseDht::Init() {
-    nat_detection_ = std::make_shared<nat::Detection>(shared_from_this(), transport_);
+    nat_detection_ = std::make_shared<nat::Detection>(shared_from_this());
     refresh_neighbors_tick_.CutOff(
             kRefreshNeighborPeriod,
             std::bind(&BaseDht::RefreshNeighbors, shared_from_this()));
@@ -180,7 +179,7 @@ int BaseDht::Bootstrap(const std::vector<NodePtr>& boot_nodes) {
         transport::protobuf::Header msg;
         SetFrequently(msg);
         DhtProto::CreateBootstrapRequest(local_node_, boot_nodes[i], msg);
-        if (transport_->Send(
+        if (transport::MultiThreadHandler::Instance()->transport()->Send(
                 boot_nodes[i]->public_ip,
                 boot_nodes[i]->public_port,
                 0,
@@ -251,7 +250,8 @@ void BaseDht::SendToClosestNode(transport::protobuf::Header& message) {
     }
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("send to closest node", message);
     assert(node->dht_key_hash != local_node_->dht_key_hash);
-    transport_->Send(node->public_ip, node->public_port, 0, message);
+    transport::MultiThreadHandler::Instance()->transport()->Send(
+            node->public_ip, node->public_port, 0, message);
 }
 
 NodePtr BaseDht::FindNodeDirect(transport::protobuf::Header& message) {
@@ -341,7 +341,8 @@ void BaseDht::ProcessBootstrapRequest(
     transport::protobuf::Header msg;
     SetFrequently(msg);
     DhtProto::CreateBootstrapResponse(local_node_, header, msg);
-    transport_->Send(header.from_ip(), header.from_port(), 0, msg);
+    transport::MultiThreadHandler::Instance()->transport()->Send(
+            header.from_ip(), header.from_port(), 0, msg);
 
     if (header.client()) {
         return;
@@ -491,7 +492,8 @@ void BaseDht::ProcessRefreshNeighborsRequest(
     transport::protobuf::Header res;
     SetFrequently(res);
     DhtProto::CreateRefreshNeighborsResponse(local_node_, header, close_nodes, res);
-    transport_->Send(header.from_ip(), header.from_port(), 0, res);
+    transport::MultiThreadHandler::Instance()->transport()->Send(
+            header.from_ip(), header.from_port(), 0, res);
 }
 
 void BaseDht::ProcessRefreshNeighborsResponse(
@@ -534,7 +536,8 @@ void BaseDht::ProcessRefreshNeighborsResponse(
         transport::protobuf::Header msg;
         SetFrequently(msg);
         DhtProto::CreateConnectRequest(local_node_, node, false, msg);
-        transport_->Send(node->public_ip, node->public_port, 0, msg);
+        transport::MultiThreadHandler::Instance()->transport()->Send(
+                node->public_ip, node->public_port, 0, msg);
         SendToClosestNode(msg);
     }
 }
@@ -572,7 +575,8 @@ void BaseDht::ProcessHeartbeatRequest(
     transport::protobuf::Header msg;
     SetFrequently(msg);
     DhtProto::CreateHeatbeatResponse(local_node_, header, msg);
-    transport_->Send(header.from_ip(), header.from_port(), 0, msg);
+    transport::MultiThreadHandler::Instance()->transport()->Send(
+            header.from_ip(), header.from_port(), 0, msg);
 }
 
 void BaseDht::ProcessHeartbeatResponse(
@@ -756,7 +760,7 @@ void BaseDht::RefreshNeighbors() {
                 tmp_dht,
                 local_node_,
                 close_nodes[rand_idx], msg);
-        transport_->Send(
+        transport::MultiThreadHandler::Instance()->transport()->Send(
                 close_nodes[rand_idx]->public_ip,
                 close_nodes[rand_idx]->public_port,
                 0,
@@ -793,7 +797,8 @@ void BaseDht::Heartbeat() {
         SetFrequently(msg);
         DhtProto::CreateHeatbeatRequest(local_node_, *iter, msg);
         ++(node->heartbeat_send_times);
-        transport_->Send(node->public_ip, node->public_port, 0, msg);
+        transport::MultiThreadHandler::Instance()->transport()->Send(
+                node->public_ip, node->public_port, 0, msg);
     }
     uint32_t net_id;
     uint8_t country;

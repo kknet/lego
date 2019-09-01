@@ -9,6 +9,7 @@
 #include "common/tick.h"
 #include "transport/proto/transport.pb.h"
 #include "transport/transport.h"
+#include "transport/multi_thread.h"
 #include "dht/node.h"
 #include "dht/proto/dht.pb.h"
 
@@ -53,7 +54,7 @@ public:
         return local_node_;
     }
     transport::TransportPtr transport() {
-        return transport_;
+        return transport::MultiThreadHandler::Instance()->transport();
     }
 
 protected:
@@ -96,7 +97,6 @@ protected:
     std::mutex dht_mutex_;
     DhtPtr readonly_dht_{ nullptr };
     DhtPtr readonly_hash_sort_dht_{ nullptr };
-    transport::TransportPtr transport_{ nullptr };
     NodePtr local_node_{ nullptr };
     std::unordered_map<uint64_t, NodePtr> node_map_;
     std::mutex node_map_mutex_;

@@ -34,7 +34,7 @@ typedef std::shared_ptr<DetectionItem> DetectionItemPtr;
 
 class Detection {
 public:
-    Detection(dht::BaseDhtPtr base_dht, transport::TransportPtr& transport);
+    Detection(dht::BaseDhtPtr base_dht);
     ~Detection();
     void Destroy();
     void AddTarget(dht::NodePtr& node);
@@ -57,7 +57,6 @@ private:
     std::unordered_map<uint64_t, DetectionItemPtr> node_map_;
     std::mutex node_map_mutex_;
     dht::BaseDhtPtr base_dht_{ nullptr };
-    transport::TransportPtr transport_{ nullptr };
     common::Tick tick_;
     bool destroy_{ false };
 
