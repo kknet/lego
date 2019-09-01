@@ -86,7 +86,7 @@ int ProxyDht::ResetUserUseTimer(const service::protobuf::GetVpnInfoRequest& vpn_
         iter->second->pre_duration = std::chrono::milliseconds(0);
     }
     iter->second->prev_time = std::chrono::steady_clock::now();
-    std::cout << "reset user: " << common::Encode::HexEncode(account_addr) << " timer: " << iter->second->pre_duration.count() << " : " << kStakingPeriod << std::endl;
+    std::cout << "reset user: " << common::Encode::HexEncode(account_addr) << " timer: " << iter->second->pre_duration.count() << " : " << duration << ":" << kStakingPeriod << std::endl;
     return kProxySuccess;
 }
 
