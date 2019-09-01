@@ -468,6 +468,7 @@ void NetworkInit::CreateNewElectBlock() {
 int NetworkInit::SetPriAndPubKey(const std::string&) {
     std::string prikey("");
     conf_.Get("lego", "prikey", prikey) || prikey.empty();
+    prikey = common::Encode::HexDecode(prikey);
     std::string private_key = common::Encode::HexDecode(prikey);
     std::shared_ptr<security::PrivateKey> prikey_ptr{ nullptr };
     if (!prikey.empty()) {
