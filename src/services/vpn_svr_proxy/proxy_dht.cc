@@ -7,7 +7,7 @@
 #include "security/aes.h"
 #include "security/public_key.h"
 #include "network/route.h"
-#include "client/vpn_client.h"
+#include "client/trans_client.h"
 #include "services/proto/service_proto.h"
 #include "services/proto/service.pb.h"
 #include "services/vpn_svr_proxy/proxy_utils.h"
@@ -79,14 +79,13 @@ int ProxyDht::ResetUserUseTimer(const service::protobuf::GetVpnInfoRequest& vpn_
 
     if (iter->second->pre_duration.count() >= kStakingPeriod) {
         std::string gid;
-        client::VpnClient::Instance()->Transaction(
+        client::TransactionClient::Instance()->Transaction(
                 account_addr,
                 (std::rand() % 10 + 1),
                 gid);
         iter->second->pre_duration = std::chrono::milliseconds(0);
     }
     iter->second->prev_time = std::chrono::steady_clock::now();
-    std::cout << "reset user: " << common::Encode::HexEncode(account_addr) << " timer: " << iter->second->pre_duration.count() << " : " << duration << ":" << kStakingPeriod << std::endl;
     return kProxySuccess;
 }
 
