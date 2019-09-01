@@ -30,15 +30,10 @@ int TransactionClient::Transaction(
         return kClientError;
     }
     tx_gid = common::CreateGID(security::Schnorr::Instance()->str_pubkey());
-    std::string to_addr;
-    if (!to.empty()) {
-        to_addr = common::Encode::HexDecode(to);
-    }
-
     ClientProto::CreateTxRequest(
             uni_dht->local_node(),
             tx_gid,
-            to_addr,
+            to,
             amount,
             rand_num,
             msg);
