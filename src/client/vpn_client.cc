@@ -503,8 +503,8 @@ int VpnClient::InitTransport() {
 
 int VpnClient::ResetTransport(const std::string& ip, uint16_t port) {
     auto tmp_udp_transport = std::make_shared<transport::UdpTransport>(
-            common::GlobalInfo::Instance()->config_local_ip(),
-            common::GlobalInfo::Instance()->config_local_port(),
+            ip,
+            port,
             send_buff_size_,
             recv_buff_size_);
     if (tmp_udp_transport->Init() != transport::kTransportSuccess) {
@@ -517,6 +517,8 @@ int VpnClient::ResetTransport(const std::string& ip, uint16_t port) {
         return kClientError;
     }
     transport::MultiThreadHandler::Instance()->ResetTransport(transport_);
+    common::GlobalInfo::Instance()->set_config_local_ip(ip);
+    common::GlobalInfo::Instance()->set_config_local_port(port);
     return kClientSuccess;
 }
 

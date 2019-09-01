@@ -56,6 +56,14 @@ public:
         return config_local_port_;
     }
 
+    void set_config_local_ip(const std::string& ip) {
+        config_local_ip_ = ip;
+    }
+
+    void set_config_local_port(uint16_t port) {
+        config_local_port_ = port;
+    }
+
     uint16_t http_port() {
         return http_port_;
     }
