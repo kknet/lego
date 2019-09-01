@@ -501,6 +501,25 @@ int VpnClient::InitTransport() {
     return kClientSuccess;
 }
 
+int VpnClient::ResetTransport(const std::string& ip, uint16_t port) {
+    auto tmp_udp_transport = std::make_shared<transport::UdpTransport>(
+            common::GlobalInfo::Instance()->config_local_ip(),
+            common::GlobalInfo::Instance()->config_local_port(),
+            send_buff_size_,
+            recv_buff_size_);
+    if (tmp_udp_transport->Init() != transport::kTransportSuccess) {
+        CLIENT_ERROR("init udp transport failed!");
+        return kClientError;
+    }
+
+    if (transport_->Start(false) != transport::kTransportSuccess) {
+        CLIENT_ERROR("start udp transport failed!");
+        return kClientError;
+    }
+    transport::MultiThreadHandler::Instance()->ResetTransport(transport_);
+    return kClientSuccess;
+}
+
 int VpnClient::SetPriAndPubKey(const std::string& prikey) {
     std::shared_ptr<security::PrivateKey> prikey_ptr{ nullptr };
     if (!prikey.empty()) {

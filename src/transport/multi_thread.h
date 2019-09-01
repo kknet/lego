@@ -55,6 +55,7 @@ public:
 			uint32_t len);
 	std::shared_ptr<protobuf::Header> GetMessageFromQueue();
     void Destroy();
+    void ResetTransport(TransportPtr& transport_ptr);
 
 private:
     MultiThreadHandler();

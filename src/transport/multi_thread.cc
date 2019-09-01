@@ -83,6 +83,10 @@ void MultiThreadHandler::Init(TransportPtr& transport_ptr) {
     TRANSPORT_INFO("MultiThreadHandler::Init() success");
 }
 
+void MultiThreadHandler::ResetTransport(TransportPtr& transport_ptr) {
+    transport_ = transport_ptr;
+}
+
 void MultiThreadHandler::Destroy() {
     std::unique_lock<std::mutex> lock(inited_mutex_);
     for (uint32_t i = 0; i < thread_vec_.size(); ++i) {
