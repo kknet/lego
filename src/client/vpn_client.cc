@@ -502,24 +502,24 @@ int VpnClient::InitTransport() {
 }
 
 int VpnClient::ResetTransport(const std::string& ip, uint16_t port) {
-    auto tmp_udp_transport = std::make_shared<transport::UdpTransport>(
+    transport::TransportPtr tmp_udp_transport = std::make_shared<transport::UdpTransport>(
             ip,
             port,
             send_buff_size_,
             recv_buff_size_);
     if (tmp_udp_transport->Init() != transport::kTransportSuccess) {
         CLIENT_ERROR("init udp transport failed!");
-        return kClientError;
+        return -1;
     }
 
-    if (transport_->Start(false) != transport::kTransportSuccess) {
+    if (tmp_udp_transport->Start(false) != transport::kTransportSuccess) {
         CLIENT_ERROR("start udp transport failed!");
-        return kClientError;
+        return -1;
     }
-    transport::MultiThreadHandler::Instance()->ResetTransport(transport_);
+    transport::MultiThreadHandler::Instance()->ResetTransport(tmp_udp_transport);
     common::GlobalInfo::Instance()->set_config_local_ip(ip);
     common::GlobalInfo::Instance()->set_config_local_port(port);
-    return kClientSuccess;
+    return tmp_udp_transport->GetSocket();
 }
 
 int VpnClient::SetPriAndPubKey(const std::string& prikey) {
