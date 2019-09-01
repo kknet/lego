@@ -519,6 +519,7 @@ int VpnClient::ResetTransport(const std::string& ip, uint16_t port) {
     transport::MultiThreadHandler::Instance()->ResetTransport(tmp_udp_transport);
     common::GlobalInfo::Instance()->set_config_local_ip(ip);
     common::GlobalInfo::Instance()->set_config_local_port(port);
+    transport_ = tmp_udp_transport;
     return tmp_udp_transport->GetSocket();
 }
 
