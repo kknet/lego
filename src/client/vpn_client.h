@@ -165,7 +165,6 @@ private:
     bool got_block_{ false };
     std::map<std::string, std::deque<VpnServerNodePtr>> vpn_nodes_map_;
     std::mutex vpn_nodes_map_mutex_;
-    std::unordered_set<std::string> bootstrap_set_;
 };
 
 }  // namespace client

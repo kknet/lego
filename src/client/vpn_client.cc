@@ -305,7 +305,10 @@ std::string VpnClient::Init(
     config.Set("lego", "first_node", false);
     config.Set("lego", "client", true);
     config.Set("lego", "id", std::string("test_id"));
-    config.Set("lego", "bootstrap", bootstrap);
+    std::string boot_net;
+    config.Get("lego", "bootstrap_net", boot_net);
+    boot_net += "," + bootstrap;
+    config.Set("lego", "bootstrap", boot_net);
     if (common::GlobalInfo::Instance()->Init(config) != common::kCommonSuccess) {
         CLIENT_ERROR("init global info failed!");
         return "ERROR";
@@ -807,22 +810,21 @@ void VpnClient::DumpBootstrapNodes() {
     auto dht = network::UniversalManager::Instance()->GetUniversal(
             network::kUniversalNetworkId);
     auto dht_nodes = dht->readonly_dht();
-    bool has_new = false;
+    std::unordered_set<std::string> bootstrap_set;
     for (auto iter = dht_nodes->begin(); iter != dht_nodes->end(); ++iter) {
-        std::string node_info = (common::Encode::HexEncode((*iter)->id) + ":" +
+        std::string node_info = ("id:" +
                 (*iter)->public_ip + ":" +
                 std::to_string((*iter)->public_port));
-        auto siter = bootstrap_set_.find(node_info);
-        if (siter != bootstrap_set_.end()) {
+        auto siter = bootstrap_set.find(node_info);
+        if (siter != bootstrap_set.end()) {
             continue;
         }
-        bootstrap_set_.insert(node_info);
-        has_new = true;
+        bootstrap_set.insert(node_info);
     }
 
-    if (has_new) {
+    if (!bootstrap_set.empty()) {
         std::string boot_str;
-        for (auto iter = bootstrap_set_.begin(); iter != bootstrap_set_.end(); ++iter) {
+        for (auto iter = bootstrap_set.begin(); iter != bootstrap_set.end(); ++iter) {
             boot_str += *iter + ",";
         }
         config.Set("lego", "bootstrap_net", boot_str);
