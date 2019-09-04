@@ -1,8 +1,7 @@
 #pragma once
 
+#include "ssr/server.h"
 #include "services/vpn_server/vpn_svr_utils.h"
-
-struct listen_ctx_t;
 
 namespace lego {
 
