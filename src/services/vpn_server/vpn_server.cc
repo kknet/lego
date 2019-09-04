@@ -1575,6 +1575,8 @@ static int StartUdpServer(const std::string& host, uint16_t port) {
     return 0;
 }
 
+static listen_ctx_t listen_ctx_;
+
 namespace lego {
 
 namespace vpn {

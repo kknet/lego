@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ssr/server.h"
 #include "services/vpn_server/vpn_svr_utils.h"
 
 namespace lego {
@@ -19,7 +18,6 @@ public:
             const std::string& method);
 
 private:
-    listen_ctx_t listen_ctx_;
     DISALLOW_COPY_AND_ASSIGN(VpnServer);
 };
 
