@@ -1593,7 +1593,7 @@ int VpnServer::Init(
         return kVpnsvrError;
     }
 
-    if (StartTcpServer(ip, port) != 0) {
+    if (StartTcpServer(ip, port, &listen_ctx_) != 0) {
         return kVpnsvrError;
     }
 

@@ -2,6 +2,8 @@
 
 #include "services/vpn_server/vpn_svr_utils.h"
 
+struct listen_ctx_t;
+
 namespace lego {
 
 namespace vpn {
@@ -18,7 +20,7 @@ public:
             const std::string& method);
 
 private:
-
+    listen_ctx_t listen_ctx_;
     DISALLOW_COPY_AND_ASSIGN(VpnServer);
 };
 
