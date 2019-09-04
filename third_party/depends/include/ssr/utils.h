@@ -213,9 +213,15 @@ void ss_color_info(void);
 void ss_color_error(void);
 void ss_color_reset(void);
 #else
+#ifdef ERROR
+#undef ERROR
+#endif
 void ERROR(const char *s);
 #endif
 
+#ifdef FATAL
+#undef FATAL
+#endif
 char *ss_itoa(int i);
 int ss_isnumeric(const char *s);
 int run_as(const char *user);
