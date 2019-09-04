@@ -1518,6 +1518,63 @@ accept_cb(EV_P_ ev_io *w, int revents)
     ev_timer_start(EV_A_ & server->recv_ctx->watcher);
 }
 
+static void InitSignal() {
+    ev_signal_init(&sigint_watcher, signal_cb, SIGINT);
+    ev_signal_init(&sigterm_watcher, signal_cb, SIGTERM);
+    ev_signal_start(EV_DEFAULT, &sigint_watcher);
+    ev_signal_start(EV_DEFAULT, &sigterm_watcher);
+}
+
+static int InitCrypto(
+        const std::string& password,
+        const std::string& key,
+        const std::string& method) {
+    crypto = crypto_init(password.c_str(), key.c_str(), method.c_str());
+    if (crypto == NULL) {
+        FATAL("failed to initialize ciphers");
+        return -1;
+    }
+    return 0;
+}
+
+static int StartTcpServer(
+        const std::string& host,
+        uint16_t port,
+        listen_ctx_t* listen_ctx) {
+    struct ev_loop *loop = EV_DEFAULT;
+    resolv_init(loop, NULL, ipv6first);
+
+    int listenfd;
+    listenfd = create_and_bind(host.c_str(), port, mptcp);
+    if (listenfd == -1) {
+        return -1;
+    }
+
+    if (listen(listenfd, SSMAXCONN) == -1) {
+        ERROR("listen()");
+        return -1;
+    }
+    setfastopen(listenfd);
+    setnonblocking(listenfd);
+
+    listen_ctx->timeout = 60;
+    listen_ctx->fd = listenfd;
+    listen_ctx->iface = iface;
+    listen_ctx->loop = loop;
+
+    ev_io_init(&listen_ctx->io, accept_cb, listenfd, EV_READ);
+    ev_io_start(loop, &listen_ctx->io);
+    return 0;
+}
+
+static int StartUdpServer(const std::string& host, uint16_t port) {
+    int err = init_udprelay(host.c_str(), port, 0, crypto, 60, NULL);
+    if (err == -1) {
+        return -1;
+    }
+    return 0;
+}
+
 namespace lego {
 
 namespace vpn {
@@ -1526,7 +1583,24 @@ VpnServer::VpnServer() {}
 
 VpnServer::~VpnServer() {}
 
-int VpnServer::Init() {
+int VpnServer::Init(
+        const std::string& ip,
+        uint16_t port,
+        const std::string& passwd,
+        const std::string& key,
+        const std::string& method) {
+    if (InitCrypto(passwd, key, method) != 0) {
+        return kVpnsvrError;
+    }
+
+    if (StartTcpServer(ip, port) != 0) {
+        return kVpnsvrError;
+    }
+
+    if (StartUdpServer(ip, port) != 0) {
+        return kVpnsvrError;
+    }
+
     return kVpnsvrSuccess;
 }
 
