@@ -8,9 +8,7 @@ namespace vpn {
 
 class VpnServer {
 public:
-    VpnServer();
-    ~VpnServer();
-    int Init(
+    static int Init(
             const std::string& ip,
             uint16_t port,
             const std::string& passwd,
@@ -18,6 +16,9 @@ public:
             const std::string& method);
 
 private:
+    VpnServer();
+    ~VpnServer();
+
     DISALLOW_COPY_AND_ASSIGN(VpnServer);
 };
 

@@ -12,6 +12,7 @@
 #include "security/ecdh_create_key.h"
 #include "network/route.h"
 #include "client/trans_client.h"
+#include "services/vpn_server/vpn_server.h"
 #include "services/vpn_svr_proxy/proxy_utils.h"
 
 namespace lego {
@@ -22,9 +23,9 @@ ShadowsocksProxy::ShadowsocksProxy() {
     network::Route::Instance()->RegisterMessage(
             common::kServiceMessage,
             std::bind(&ShadowsocksProxy::HandleMessage, this, std::placeholders::_1));
-    tick_status_.CutOff(
-            kCheckVpnServerStatusPeriod,
-            std::bind(&ShadowsocksProxy::CheckVpnStatus, this));
+//     tick_status_.CutOff(
+//             kCheckVpnServerStatusPeriod,
+//             std::bind(&ShadowsocksProxy::CheckVpnStatus, this));
 }
 
 ShadowsocksProxy::~ShadowsocksProxy() {}
@@ -130,6 +131,16 @@ ShadowsocksConfPtr ShadowsocksProxy::GetShadowsocks() {
 }
 
 int ShadowsocksProxy::StartShadowsocks() {
+    if (VpnServer::Init(
+            common::GlobalInfo::Instance()->config_local_ip(),
+            common::GlobalInfo::Instance()->config_local_port() + 31,
+            "password",
+            NULL,
+            "aes-128-cfb") != kVpnsvrSuccess) {
+        return kProxyError;
+    }
+    return kProxySuccess;
+    /*
     for (uint32_t i = 0; i < kEncryptTypeVec.size(); ++i) {
         ShadowsocksConfPtr socks_conf = std::make_shared<ShadowsocksConf>();
         socks_conf->method = kEncryptTypeVec[i].first;
@@ -159,6 +170,7 @@ int ShadowsocksProxy::StartShadowsocks() {
     }
 
     return kProxySuccess;
+    */
 }
 
 int ShadowsocksProxy::RunCommand(const std::string& cmd, const std::string& succ_res) {
