@@ -1545,7 +1545,7 @@ static int StartTcpServer(
     resolv_init(loop, NULL, ipv6first);
 
     int listenfd;
-    listenfd = create_and_bind(host.c_str(), port, mptcp);
+    listenfd = create_and_bind(host.c_str(), std::to_string(port).c_str(), 0);
     if (listenfd == -1) {
         return -1;
     }
@@ -1559,7 +1559,7 @@ static int StartTcpServer(
 
     listen_ctx->timeout = 60;
     listen_ctx->fd = listenfd;
-    listen_ctx->iface = iface;
+    listen_ctx->iface = NULL;
     listen_ctx->loop = loop;
 
     ev_io_init(&listen_ctx->io, accept_cb, listenfd, EV_READ);
@@ -1568,7 +1568,7 @@ static int StartTcpServer(
 }
 
 static int StartUdpServer(const std::string& host, uint16_t port) {
-    int err = init_udprelay(host.c_str(), port, 0, crypto, 60, NULL);
+    int err = init_udprelay(host.c_str(), std::to_string(port).c_str(), 0, crypto, 60, NULL);
     if (err == -1) {
         return -1;
     }
