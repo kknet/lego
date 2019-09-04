@@ -93,7 +93,7 @@ uint32_t RandomCountry() {
 }
 
 void itimeofday(long *sec, long *usec) {
-#if defined(__unix)
+#ifndef WIN32
 	struct timeval time;
 	gettimeofday(&time, NULL);
 	if (sec) *sec = time.tv_sec;
