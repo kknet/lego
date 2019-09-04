@@ -24,6 +24,7 @@
 #include <sys/un.h>
 #endif
 #include <libcork/core.h>
+#include <netinet/tcp.h>
 
 #if defined(HAVE_SYS_IOCTL_H) && defined(HAVE_NET_IF_H) && defined(__linux__)
 #include <net/if.h>
