@@ -569,7 +569,7 @@ connect_to_remote(EV_P_ struct addrinfo *res,
     if (!fast_open) {
         int r = connect(sockfd, res->ai_addr, res->ai_addrlen);
 
-        if (r == -1 && errno != CONNECT_IN_PROGRESS) {
+        if (r == -1) {
             ERROR("connect");
             close_and_free_remote(EV_A_ remote);
             return NULL;
@@ -918,7 +918,7 @@ server_recv_cb(EV_P_ ev_io *w, int revents)
         } else {
             ev_io_stop(EV_A_ & server_recv_ctx->io);
 
-            query_t *query = ss_malloc(sizeof(query_t));
+            query_t *query = (query_t*)ss_malloc(sizeof(query_t));
             memset(query, 0, sizeof(query_t));
             query->server = server;
             server->query = query;
@@ -1279,12 +1279,12 @@ new_remote(int fd)
         LOGI("new connection to remote, %d opened remote connections", remote_conn);
     }
 
-    remote_t *remote = ss_malloc(sizeof(remote_t));
+    remote_t *remote = (remote_t*)ss_malloc(sizeof(remote_t));
     memset(remote, 0, sizeof(remote_t));
 
-    remote->recv_ctx = ss_malloc(sizeof(remote_ctx_t));
-    remote->send_ctx = ss_malloc(sizeof(remote_ctx_t));
-    remote->buf      = ss_malloc(sizeof(buffer_t));
+    remote->recv_ctx = (remote_ctx_t*)ss_malloc(sizeof(remote_ctx_t));
+    remote->send_ctx = (remote_ctx_t*)ss_malloc(sizeof(remote_ctx_t));
+    remote->buf      = (buffer_t*)ss_malloc(sizeof(buffer_t));
     balloc(remote->buf, SOCKET_BUF_SIZE);
     memset(remote->recv_ctx, 0, sizeof(remote_ctx_t));
     memset(remote->send_ctx, 0, sizeof(remote_ctx_t));
@@ -1340,13 +1340,13 @@ new_server(int fd, listen_ctx_t *listener)
     }
 
     server_t *server;
-    server = ss_malloc(sizeof(server_t));
+    server = (server_t*)ss_malloc(sizeof(server_t));
 
     memset(server, 0, sizeof(server_t));
 
-    server->recv_ctx = ss_malloc(sizeof(server_ctx_t));
-    server->send_ctx = ss_malloc(sizeof(server_ctx_t));
-    server->buf      = ss_malloc(sizeof(buffer_t));
+    server->recv_ctx = (server_ctx_t*)ss_malloc(sizeof(server_ctx_t));
+    server->send_ctx = (server_ctx_t*)ss_malloc(sizeof(server_ctx_t));
+    server->buf      = (buffer_t*)ss_malloc(sizeof(buffer_t));
     memset(server->recv_ctx, 0, sizeof(server_ctx_t));
     memset(server->send_ctx, 0, sizeof(server_ctx_t));
     balloc(server->buf, SOCKET_BUF_SIZE);
