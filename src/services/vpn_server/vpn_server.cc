@@ -552,10 +552,7 @@ connect_to_remote(EV_P_ struct addrinfo *res,
             s = send(sockfd, server->buf->data, server->buf->len, 0);
 #endif
         if (s == -1) {
-            if (errno == CONNECT_IN_PROGRESS) {
-                // The remote server doesn't support tfo or it's the first connection to the server.
-                // It will automatically fall back to conventional TCP.
-            } else if (errno == EOPNOTSUPP || errno == EPROTONOSUPPORT ||
+            if (errno == EOPNOTSUPP || errno == EPROTONOSUPPORT ||
                        errno == ENOPROTOOPT) {
                 // Disable fast open as it's not supported
                 fast_open = 0;
