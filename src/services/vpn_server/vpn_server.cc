@@ -1,5 +1,6 @@
 #include "services/vpn_server/vpn_server.h"
 
+extern "C" {
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -1516,6 +1517,7 @@ accept_cb(EV_P_ ev_io *w, int revents)
     server_t *server = new_server(serverfd, listener);
     ev_io_start(EV_A_ & server->recv_ctx->io);
     ev_timer_start(EV_A_ & server->recv_ctx->watcher);
+}
 }
 
 static void InitSignal() {
