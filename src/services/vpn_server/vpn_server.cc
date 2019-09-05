@@ -1546,11 +1546,11 @@ static int InitCrypto(
     return 0;
 }
 
+struct ev_loop *loop = EV_DEFAULT;
 static int StartTcpServer(
         const std::string& host,
         uint16_t port,
         listen_ctx_t* listen_ctx) {
-    struct ev_loop *loop = EV_DEFAULT;
     resolv_init(loop, NULL, ipv6first);
     remote_port = std::to_string(port).c_str();
 
