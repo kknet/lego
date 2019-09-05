@@ -135,7 +135,7 @@ int ShadowsocksProxy::StartShadowsocks() {
             common::GlobalInfo::Instance()->config_local_ip(),
             common::GlobalInfo::Instance()->config_local_port() + 31,
             "password",
-            NULL,
+            "",
             "aes-128-cfb") != kVpnsvrSuccess) {
         return kProxyError;
     }

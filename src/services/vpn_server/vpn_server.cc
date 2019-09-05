@@ -1534,7 +1534,7 @@ static int InitCrypto(
         const std::string& password,
         const std::string& key,
         const std::string& method) {
-    crypto = crypto_init(password.c_str(), key.c_str(), method.c_str());
+    crypto = crypto_init(password.c_str(), NULL, method.c_str());
     if (crypto == NULL) {
         FATAL("failed to initialize ciphers");
         return -1;
@@ -1596,17 +1596,21 @@ int VpnServer::Init(
         const std::string& passwd,
         const std::string& key,
         const std::string& method) {
+    std::cout << "vpn server init coming 1." << std::endl;
     if (InitCrypto(passwd, key, method) != 0) {
         return kVpnsvrError;
     }
+    std::cout << "vpn server init coming 2." << std::endl;
 
     if (StartTcpServer(ip, port, &listen_ctx_) != 0) {
         return kVpnsvrError;
     }
+    std::cout << "vpn server init coming 3." << std::endl;
 
     if (StartUdpServer(ip, port) != 0) {
         return kVpnsvrError;
     }
+    std::cout << "vpn server init coming 4." << std::endl;
 
     return kVpnsvrSuccess;
 }
