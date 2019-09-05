@@ -583,7 +583,7 @@ void SetTosFromConnmark(remote_t *remote, server_t *server) {
 
 #endif
 
-static remote_t* IntConnection(server_t *server) {
+static remote_t* IntConnection(EV_P_ server_t *server, server_ctx_t *server_recv_ctx) {
     int offset = 0;
     int need_query = 0;
     char atyp = server->buf->data[offset++];
@@ -1705,12 +1705,7 @@ int VpnServer::Init(
 }
 
 int VpnServer::ParserReceivePacket(const char* buf) {
-    uint8_t name_len = *(uint8_t *)(buf->data);
-    buf->data = buf->data + 1;
-    buf->len -= 1;
-    std::cout << "get header: " << (uint32_t)name_len << std::endl;
-    std::cout << "buf->data: " << buf->data << std::endl;
-
+    return 0;
 }
 
 }  // namespace vpn
