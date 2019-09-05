@@ -1524,10 +1524,14 @@ accept_cb(EV_P_ ev_io *w, int revents)
 }
 
 static void InitSignal() {
+    signal(SIGPIPE, SIG_IGN);
+    signal(SIGABRT, SIG_IGN);
     ev_signal_init(&sigint_watcher, signal_cb, SIGINT);
     ev_signal_init(&sigterm_watcher, signal_cb, SIGTERM);
     ev_signal_start(EV_DEFAULT, &sigint_watcher);
     ev_signal_start(EV_DEFAULT, &sigterm_watcher);
+    ev_signal_init(&sigchld_watcher, signal_cb, SIGCHLD);
+    ev_signal_start(EV_DEFAULT, &sigchld_watcher);
 }
 
 static int InitCrypto(
@@ -1548,9 +1552,10 @@ static int StartTcpServer(
         listen_ctx_t* listen_ctx) {
     struct ev_loop *loop = EV_DEFAULT;
     resolv_init(loop, NULL, ipv6first);
+    remote_port = std::to_string(port).c_str();
 
     int listenfd;
-    listenfd = create_and_bind(host.c_str(), std::to_string(port).c_str(), 0);
+    listenfd = create_and_bind(host.c_str(), remote_port, 0);
     if (listenfd == -1) {
         return -1;
     }
@@ -1573,11 +1578,19 @@ static int StartTcpServer(
 }
 
 static int StartUdpServer(const std::string& host, uint16_t port) {
-    int err = init_udprelay(host.c_str(), std::to_string(port).c_str(), 0, crypto, 60, NULL);
+    int err = init_udprelay(host.c_str(), std::to_string(port).c_str(), 1500, crypto, 60, NULL);
     if (err == -1) {
         return -1;
     }
     return 0;
+}
+
+static void StartVpn() {
+    cork_dllist_init(&connections);
+    ev_run(loop, 0);
+    if (verbose) {
+        LOGI("closed gracefully");
+    }
 }
 
 static listen_ctx_t listen_ctx_;
@@ -1596,22 +1609,19 @@ int VpnServer::Init(
         const std::string& passwd,
         const std::string& key,
         const std::string& method) {
-    std::cout << "vpn server init coming 1." << std::endl;
     if (InitCrypto(passwd, key, method) != 0) {
         return kVpnsvrError;
     }
-    std::cout << "vpn server init coming 2." << std::endl;
 
     if (StartTcpServer(ip, port, &listen_ctx_) != 0) {
         return kVpnsvrError;
     }
-    std::cout << "vpn server init coming 3." << std::endl;
 
     if (StartUdpServer(ip, port) != 0) {
         return kVpnsvrError;
     }
-    std::cout << "vpn server init coming 4." << std::endl;
 
+    StartVpn();
     return kVpnsvrSuccess;
 }
 
