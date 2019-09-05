@@ -1552,7 +1552,7 @@ static int StartTcpServer(
         uint16_t port,
         listen_ctx_t* listen_ctx) {
     resolv_init(loop, NULL, ipv6first);
-    remote_port = std::to_string(port).c_str();
+    remote_port = (char*)std::to_string(port).c_str();
 
     int listenfd;
     listenfd = create_and_bind(host.c_str(), remote_port, 0);
