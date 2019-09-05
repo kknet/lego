@@ -53,13 +53,13 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
         return kProxyError;
     }
 
-    std::string cmd = common::StringUtil::Format(
-            "ps -ef | grep gpgk | awk -F' ' '{print $2}' | xargs kill -9");
-    auto res = system(cmd.c_str());
-    if (RunCommand(cmd, "") != kProxySuccess) {
-        PROXY_ERROR("run cmd [%s] failed!", cmd.c_str());
-        return kProxyError;
-    }
+//     std::string cmd = common::StringUtil::Format(
+//             "ps -ef | grep gpgk | awk -F' ' '{print $2}' | xargs kill -9");
+//     auto res = system(cmd.c_str());
+//     if (RunCommand(cmd, "") != kProxySuccess) {
+//         PROXY_ERROR("run cmd [%s] failed!", cmd.c_str());
+//         return kProxyError;
+//     }
 
     if (InitConfigWithArgs(argc, argv) != kProxySuccess) {
         PROXY_ERROR("init config with args failed!");

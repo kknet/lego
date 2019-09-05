@@ -39,6 +39,7 @@ extern "C" {
 #include "ssr/plugin.h"
 #include "ssr/server.h"
 #include "ssr/winsock.h"
+#include "ssr/resolv.h"
 
 #ifndef EAGAIN
 #define EAGAIN EWOULDBLOCK
@@ -67,6 +68,8 @@ extern "C" {
 #endif
 
 #endif
+
+int use_syslog = 0;
 
 static void signal_cb(EV_P_ ev_signal *w, int revents);
 static void accept_cb(EV_P_ ev_io *w, int revents);
