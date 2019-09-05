@@ -30,8 +30,8 @@ int DhtFunction::GetDhtBucket(const std::string& src_dht_key, NodePtr& node) {
 }
 
 uint32_t DhtFunction::PartialSort(const std::string& target, uint32_t count, Dht& dht) {
-        uint32_t min_count = std::min(count, static_cast<uint32_t>(dht.size()));
-    if (count <= 0) {
+    uint32_t min_count = std::min(count, static_cast<uint32_t>(dht.size()));
+    if (min_count <= 0) {
         return 0;
     }
 
@@ -166,6 +166,14 @@ std::vector<NodePtr> DhtFunction::GetClosestNodes(
         Dht& dht,
         const std::string& target,
         uint32_t number_to_get) {
+    if (dht.empty()) {
+        return std::vector<NodePtr>();
+    }
+
+    if (dht.size() <= number_to_get) {
+        return std::vector<NodePtr>(dht.begin(), dht.end());
+    }
+
     if (number_to_get == 0) {
         return std::vector<NodePtr>();
     }

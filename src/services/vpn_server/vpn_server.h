@@ -17,6 +17,7 @@ public:
             const std::string& passwd,
             const std::string& key,
             const std::string& method);
+    static int ParserReceivePacket(const char* buf);
 
 private:
     VpnServer();
