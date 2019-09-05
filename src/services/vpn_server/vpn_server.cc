@@ -146,83 +146,6 @@ static struct plugin_watcher_t {
 
 static struct cork_dllist connections;
 
-#ifndef __MINGW32__
-static void StatUpdateCallback(EV_P_ ev_timer *watcher, int revents) {
-    struct sockaddr_un svaddr, claddr;
-    int sfd = -1;
-    size_t msgLen;
-    char resp[SOCKET_BUF_SIZE];
-
-    if (verbose) {
-        LOGI("update traffic stat: tx: %" PRIu64 " rx: %" PRIu64 "", tx, rx);
-    }
-
-    snprintf(resp, SOCKET_BUF_SIZE, "stat: {\"%s\":%" PRIu64 "}", remote_port, tx + rx);
-    msgLen = strlen(resp) + 1;
-
-    ss_addr_t ip_addr = { .host = NULL,.port = NULL };
-    parse_addr(manager_addr, &ip_addr);
-
-    if (ip_addr.host == NULL || ip_addr.port == NULL) {
-        sfd = socket(AF_UNIX, SOCK_DGRAM, 0);
-        if (sfd == -1) {
-            ERROR("stat_socket");
-            return;
-        }
-
-        memset(&claddr, 0, sizeof(struct sockaddr_un));
-        claddr.sun_family = AF_UNIX;
-        snprintf(claddr.sun_path, sizeof(claddr.sun_path), "/tmp/shadowsocks.%s", remote_port);
-
-        unlink(claddr.sun_path);
-
-        if (bind(sfd, (struct sockaddr *)&claddr, sizeof(struct sockaddr_un)) == -1) {
-            ERROR("stat_bind");
-            close(sfd);
-            return;
-        }
-
-        memset(&svaddr, 0, sizeof(struct sockaddr_un));
-        svaddr.sun_family = AF_UNIX;
-        strncpy(svaddr.sun_path, manager_addr, sizeof(svaddr.sun_path) - 1);
-
-        if (sendto(sfd, resp, strlen(resp) + 1, 0, (struct sockaddr *)&svaddr,
-            sizeof(struct sockaddr_un)) != msgLen) {
-            ERROR("stat_sendto");
-            close(sfd);
-            return;
-        }
-
-        unlink(claddr.sun_path);
-    } else {
-        struct sockaddr_storage storage;
-        memset(&storage, 0, sizeof(struct sockaddr_storage));
-        if (get_sockaddr(ip_addr.host, ip_addr.port, &storage, 0, ipv6first) == -1) {
-            ERROR("failed to parse the manager addr");
-            return;
-        }
-
-        sfd = socket(storage.ss_family, SOCK_DGRAM, 0);
-
-        if (sfd == -1) {
-            ERROR("stat_socket");
-            return;
-        }
-
-        size_t addr_len = get_sockaddr_len((struct sockaddr *)&storage);
-        if (sendto(sfd, resp, strlen(resp) + 1, 0, (struct sockaddr *)&storage,
-            addr_len) != msgLen) {
-            ERROR("stat_sendto");
-            close(sfd);
-            return;
-        }
-    }
-
-    close(sfd);
-}
-
-#endif
-
 static void FreeConnections(struct ev_loop *loop) {
     struct cork_dllist_item *curr, *next;
     cork_dllist_foreach_void(&connections, curr, next) {
@@ -729,7 +652,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
                 CloseAndFreeRemote(EV_A_ remote);
                 CloseAndFreeServer(EV_A_ server);
             }
-        } else if (s < remote->buf->len) {
+        } else if (s < static_cast<int>(remote->buf->len)) {
             remote->buf->len -= s;
             remote->buf->idx = s;
             ev_io_stop(EV_A_ & server_recv_ctx->io);
@@ -784,7 +707,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         } else if ((atyp & ADDRTYPE_MASK) == 3) {
             // Domain name
             uint8_t name_len = *(uint8_t *)(server->buf->data + offset);
-            if (name_len + 4 <= server->buf->len) {
+            if (static_cast<uint32_t>(name_len + 4) <= server->buf->len) {
                 memcpy(host, server->buf->data + offset + 1, name_len);
                 offset += name_len + 1;
             }
@@ -862,7 +785,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
 
         offset += 2;
 
-        if (server->buf->len < offset) {
+        if (static_cast<int>(server->buf->len) < offset) {
             ReportAddr(server->fd, "invalid request length");
             StopServer(EV_A_ server);
             return;
@@ -949,7 +872,7 @@ static void ServerSendCallback(EV_P_ ev_io *w, int revents) {
                 CloseAndFreeServer(EV_A_ server);
             }
             return;
-        } else if (s < server->buf->len) {
+        } else if (s < static_cast<int>(server->buf->len)) {
             // partly sent, move memory, wait for the next time to send
             server->buf->len -= s;
             server->buf->idx += s;
@@ -1118,7 +1041,7 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
             CloseAndFreeServer(EV_A_ server);
             return;
         }
-    } else if (s < server->buf->len) {
+    } else if (s < static_cast<int>(server->buf->len)) {
         server->buf->len -= s;
         server->buf->idx = s;
         ev_io_stop(EV_A_ & remote_recv_ctx->io);
@@ -1222,7 +1145,7 @@ static void RemoteSendCallback(EV_P_ ev_io *w, int revents) {
                 CloseAndFreeServer(EV_A_ server);
             }
             return;
-        } else if (s < remote->buf->len) {
+        } else if (s < static_cast<int>(remote->buf->len)) {
             // partly sent, move memory, wait for the next time to send
             remote->buf->len -= s;
             remote->buf->idx += s;
@@ -1583,6 +1506,7 @@ int VpnServer::Init(
         const std::string& passwd,
         const std::string& key,
         const std::string& method) {
+    InitSignal();
     if (InitCrypto(passwd, key, method) != 0) {
         return kVpnsvrError;
     }
