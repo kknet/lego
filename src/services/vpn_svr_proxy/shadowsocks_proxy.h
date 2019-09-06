@@ -34,10 +34,8 @@ private:
 
     void HandleMessage(transport::protobuf::Header& header);
     int StartShadowsocks();
-    int RunCommand(const std::string& cmd, const std::string& succ_res);
-    void CheckVpnStatus();
     int CreateVpnProxyNetwork();
-    bool CheckVpnExists(const std::string& passwd);
+    int InitTcpRelay();
 
     static const uint32_t kMaxShadowsocksCount = 3u;
     static const int64_t kShowdowsocksShiftPeriod = 3600ll * 1000ll * 1000ll;

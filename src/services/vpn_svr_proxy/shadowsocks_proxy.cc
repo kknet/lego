@@ -14,6 +14,7 @@
 #include "client/trans_client.h"
 #include "services/vpn_server/vpn_server.h"
 #include "services/vpn_svr_proxy/proxy_utils.h"
+#include "services/vpn_route/route_tcp.h"
 
 namespace lego {
 
@@ -53,14 +54,6 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
         return kProxyError;
     }
 
-//     std::string cmd = common::StringUtil::Format(
-//             "ps -ef | grep gpgk | awk -F' ' '{print $2}' | xargs kill -9");
-//     auto res = system(cmd.c_str());
-//     if (RunCommand(cmd, "") != kProxySuccess) {
-//         PROXY_ERROR("run cmd [%s] failed!", cmd.c_str());
-//         return kProxyError;
-//     }
-
     if (InitConfigWithArgs(argc, argv) != kProxySuccess) {
         PROXY_ERROR("init config with args failed!");
         return kProxySuccess;
@@ -98,6 +91,11 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
         return kProxyError;
     }
 
+    if (InitTcpRelay() != kProxySuccess) {
+        PROXY_ERROR("init tcp relay failed!");
+        return kProxyError;
+    }
+
     if (StartShadowsocks() != kProxySuccess) {
         PROXY_ERROR("start shadowsocks failed!");
         return kProxyError;
@@ -120,14 +118,19 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
     return kProxySuccess;
 }
 
-ShadowsocksConfPtr ShadowsocksProxy::GetShadowsocks() {
-    if (socks_vec_.empty()) {
-        return nullptr;
+int ShadowsocksProxy::InitTcpRelay() {
+    int res = vpnroute::TcpRoute::Instance()->Init(
+            common::GlobalInfo::Instance()->config_local_ip(),
+            common::GlobalInfo::Instance()->config_local_port() + 32);
+    if (res != vpnroute::kVpnRouteSuccess) {
+        return kProxyError;
     }
 
-    srand(time(NULL));
-    auto rand_idx = std::rand() % socks_vec_.size();
-    return socks_vec_[rand_idx];
+    return kProxySuccess;
+}
+
+ShadowsocksConfPtr ShadowsocksProxy::GetShadowsocks() {
+    return nullptr;
 }
 
 int ShadowsocksProxy::StartShadowsocks() {
@@ -140,101 +143,6 @@ int ShadowsocksProxy::StartShadowsocks() {
         return kProxyError;
     }
     return kProxySuccess;
-    /*
-    for (uint32_t i = 0; i < kEncryptTypeVec.size(); ++i) {
-        ShadowsocksConfPtr socks_conf = std::make_shared<ShadowsocksConf>();
-        socks_conf->method = kEncryptTypeVec[i].first;
-        socks_conf->port = kEncryptTypeVec[i].second;
-        socks_conf->mode = kMode;
-        socks_conf->passwd = common::Encode::HexEncode(common::Random::RandomString(32));
-        socks_conf->timeout = 60;
-        if (!conf_.Get("lego", "vpn_bin_path", vpn_bin_path_) || vpn_bin_path_.empty()) {
-            PROXY_ERROR("get vpn bin path failed.");
-            return kProxyError;
-        }
-
-        std::string cmd = common::StringUtil::Format(
-                "nohup %s -s %s -p %d -k %s -m %s -t %d -u &",
-                vpn_bin_path_.c_str(),
-                common::GlobalInfo::Instance()->config_local_ip().c_str(),
-                socks_conf->port,
-                socks_conf->passwd.c_str(),
-                socks_conf->method.c_str(),
-                socks_conf->timeout);
-        if (RunCommand(cmd, "running from") != kProxySuccess) {
-            PROXY_ERROR("run cmd [%s] failed!", cmd.c_str());
-            return kProxyError;
-        }
-        socks_vec_.push_back(socks_conf);
-        PROXY_INFO("run cmd [%s] succ!", cmd.c_str());
-    }
-
-    return kProxySuccess;
-    */
-}
-
-int ShadowsocksProxy::RunCommand(const std::string& cmd, const std::string& succ_res) {
-    FILE *fp = popen(cmd.c_str(), "r");
-    if (fp == NULL) {
-        PROXY_ERROR("run cmd[%s] failed!", cmd.c_str());
-        return kProxyError;
-    }
-
-    if (succ_res.empty()) {
-        return kProxySuccess;
-    }
-
-    int fd = fileno(fp);
-    auto flags = fcntl(fd, F_GETFL, 0);
-    flags |= O_NONBLOCK;
-    fcntl(fd, F_SETFL, flags);
-    std::this_thread::sleep_for(std::chrono::microseconds(1000000ull));
-    char buff[1024] = { 0 };
-    bool succ_find = false;
-    std::string res_str;
-    while (fgets(buff, sizeof(buff), fp)) {
-        std::string tmp_res(buff);
-        if (tmp_res.empty()) {
-            break;
-        }
-        res_str += tmp_res;
-        auto rel = strstr(tmp_res.c_str(), succ_res.c_str());
-        if (rel != nullptr) {
-            succ_find = true;
-            break;
-        }
-    }
-    pclose(fp);
-
-    if (succ_find) {
-        return kProxySuccess;
-    }
-    PROXY_ERROR("run cmd[%s] failed[%s]", cmd.c_str(), res_str.c_str());
-    return kProxyError;
-}
-
-void ShadowsocksProxy::CheckVpnStatus() {
-    {
-        for (uint32_t i = 0; i < socks_vec_.size(); ++i) {
-            auto socks_conf = socks_vec_[i];
-            if (!CheckVpnExists(socks_conf->passwd)) {
-                auto cmd = common::StringUtil::Format(
-                        "nohup %s -s %s -p %d -k %s -m %s -t %d -u &",
-                        vpn_bin_path_.c_str(),
-                        common::GlobalInfo::Instance()->config_local_ip().c_str(),
-                        socks_conf->port,
-                        socks_conf->passwd.c_str(),
-                        socks_conf->method.c_str(),
-                        socks_conf->timeout);
-                if (RunCommand(cmd, "running from") != kProxySuccess) {
-                    PROXY_ERROR("run cmd [%s] failed!", cmd.c_str());
-                }
-            }
-        }
-    }
-    tick_status_.CutOff(
-            kCheckVpnServerStatusPeriod,
-            std::bind(&ShadowsocksProxy::CheckVpnStatus, this));
 }
 
 int ShadowsocksProxy::CreateVpnProxyNetwork() {
@@ -246,23 +154,6 @@ int ShadowsocksProxy::CreateVpnProxyNetwork() {
     }
 
     return kProxySuccess;
-}
-
-bool ShadowsocksProxy::CheckVpnExists(const std::string& passwd) {
-    std::string cmd = common::StringUtil::Format("ps -ef | grep %s", passwd.c_str());
-    std::string vpn_bin_path;
-    if (!conf_.Get("lego", "vpn_bin_path", vpn_bin_path) || vpn_bin_path.empty()) {
-        PROXY_ERROR("get vpn bin path failed.");
-        return true;
-    }
-    for (uint32_t i = 0; i < 3; ++i) {
-        if (RunCommand(cmd, vpn_bin_path) != kProxySuccess) {
-            std::this_thread::sleep_for(std::chrono::microseconds(1000000ull));
-            continue;
-        }
-        return true;
-    }
-    return false;
 }
 
 }  // namespace vpn

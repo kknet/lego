@@ -347,6 +347,7 @@ static remote_t * ConnectToRemote(EV_P_ struct addrinfo *res, server_t *server) 
         if (outbound_block_match_host(ipstr) == 1) {
             if (verbose)
                 LOGI("outbound blocked %s", ipstr);
+            std::cout << "acl return null" << std::endl;
             return NULL;
         }
     }
@@ -356,6 +357,7 @@ static remote_t * ConnectToRemote(EV_P_ struct addrinfo *res, server_t *server) 
     if (sockfd == -1) {
         ERROR("socket");
         close(sockfd);
+        std::cout << "socket return null" << std::endl;
         return NULL;
     }
 
@@ -377,6 +379,7 @@ static remote_t * ConnectToRemote(EV_P_ struct addrinfo *res, server_t *server) 
         if (bind_to_addr(local_addr, sockfd) == -1) {
             ERROR("bind_to_addr");
             close(sockfd);
+            std::cout << "bind_to_addr return null" << std::endl;
             return NULL;
         }
     }
@@ -386,6 +389,7 @@ static remote_t * ConnectToRemote(EV_P_ struct addrinfo *res, server_t *server) 
         if (setinterface(sockfd, iface) == -1) {
             ERROR("setinterface");
             close(sockfd);
+            std::cout << "setinterface return null" << std::endl;
             return NULL;
     }
 }
@@ -491,6 +495,7 @@ static remote_t * ConnectToRemote(EV_P_ struct addrinfo *res, server_t *server) 
         if (r == -1 && errno != CONNECT_IN_PROGRESS) {
             ERROR("connect");
             CloseAndFreeRemote(EV_A_ remote);
+            std::cout << "connect last return null, r: " << r << ", errno: " << errno << ", " << "res->ai_addr: " << res->ai_addr << ", res->ai_addrlen: " << res->ai_addrlen << std::endl;
             return NULL;
         }
     }
@@ -583,18 +588,11 @@ void SetTosFromConnmark(remote_t *remote, server_t *server) {
 
 #endif
 
-static void IntConnection(EV_P_ server_t *server, server_ctx_t *server_recv_ctx) {
-    int offset = 0;
-    int need_query = 0;
-    char atyp = server->buf->data[offset++];
-    char host[255] = { 0 };
-    uint16_t port = 0;
-    struct addrinfo info;
+static void GetRemoteAddrAndPort(EV_P_ char* host, server_t* server, int& offset, struct addrinfo& info, int& need_query) {
     struct sockaddr_storage storage;
-    memset(&info, 0, sizeof(struct addrinfo));
     memset(&storage, 0, sizeof(struct sockaddr_storage));
-
-    // get remote addr and port
+    char atyp = server->buf->data[offset++];
+        // get remote addr and port
     if ((atyp & ADDRTYPE_MASK) == 1) {
         // IP V4
         struct sockaddr_in *addr = (struct sockaddr_in *)&storage;
@@ -605,8 +603,7 @@ static void IntConnection(EV_P_ server_t *server, server_ctx_t *server_recv_ctx)
             inet_ntop(AF_INET, (const void *)(server->buf->data + offset),
                 host, INET_ADDRSTRLEN);
             offset += in_addr_len;
-        }
-        else {
+        } else {
             ReportAddr(server->fd, "invalid length for ipv4 address");
             StopServer(EV_A_ server);
             return;
@@ -685,13 +682,25 @@ static void IntConnection(EV_P_ server_t *server, server_ctx_t *server_recv_ctx)
         info.ai_addrlen = sizeof(struct sockaddr_in6);
         info.ai_addr = (struct sockaddr *)addr;
     }
+}
 
-    if (offset == 1) {
+static void IntConnection(EV_P_ server_t *server, server_ctx_t *server_recv_ctx, int offset) {
+    int need_query = 0;
+    char host[255] = { 0 };
+    uint16_t port = 0;
+    struct addrinfo info;
+    memset(&info, 0, sizeof(struct addrinfo));
+
+    int tmp_offset = offset;
+    GetRemoteAddrAndPort(EV_A_ host, server, tmp_offset, info, need_query);
+
+    if (tmp_offset == offset + 1) {
         ReportAddr(server->fd, "invalid address type");
         StopServer(EV_A_ server);
         return;
     }
 
+    offset = tmp_offset;
     port = ntohs(load16_be(server->buf->data + offset));
 
     offset += 2;
@@ -705,15 +714,11 @@ static void IntConnection(EV_P_ server_t *server, server_ctx_t *server_recv_ctx)
         memmove(server->buf->data, server->buf->data + offset, server->buf->len);
     }
 
-    if (verbose) {
-        if ((atyp & ADDRTYPE_MASK) == 4)
-            LOGI("[%s] connect to [%s]:%d", remote_port, host, ntohs(port));
-        else
-            LOGI("[%s] connect to %s:%d", remote_port, host, ntohs(port));
-    }
+    LOGI("[%s] connect to %s:%d", remote_port, host, ntohs(port));
+    std::cout << "need_query: " << need_query << std::endl;
 
     if (!need_query) {
-        remote_t *remote = ConnectToRemote(EV_A_ & info, server);
+        remote_t *remote = ConnectToRemote(EV_A_ &info, server);
 
         if (remote == NULL) {
             LOGE("connect error");
@@ -793,11 +798,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     buf->len = r;
 
     int err = crypto->decrypt(buf, server->d_ctx, SOCKET_BUF_SIZE);
-//     uint8_t name_len = *(uint8_t *)(buf->data);
-//     buf->data = buf->data + 1;
-//     buf->len -= 1;
-//     std::cout << "get header: " << (uint32_t)name_len << std::endl;
-//     std::cout << "buf->data: " << buf->data << std::endl;
 
     if (err == CRYPTO_ERROR) {
         ReportAddr(server->fd, "authentication error");
@@ -811,6 +811,14 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         }
         server->frag++;
         return;
+    }
+    
+    int header_offset = 0;
+    uint8_t skip_num = 0;
+    if (server->stage == STAGE_INIT) {
+        skip_num = *(uint8_t *)(buf->data);
+        std::cout << "skip_num: " << (uint32_t)skip_num << ":" << buf->len << std::endl;
+        header_offset = 1;
     }
 
     // handshake and transmit data
@@ -835,7 +843,11 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         }
         return;
     } else if (server->stage == STAGE_INIT) {
-        IntConnection(EV_A_ server, server_recv_ctx);
+        IntConnection(EV_A_ server, server_recv_ctx, header_offset);
+        if (server->remote == NULL) {
+            std::cout << "create remote server failed!" << std::endl;
+            return;
+        }
         return;
     }
     // should not reach here
