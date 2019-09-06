@@ -54,6 +54,7 @@ private:
     int CreateServer(const std::string& local_ip, uint16_t port);
 
     static const uint32_t kBackblog = 128;
+    static const uint32_t kRelaySkipHeader = 7u;
 
     uv_loop_t* server_loop_;
     uv_loop_t* client_loop_;

@@ -31,7 +31,7 @@ void TcpRoute::EchoRead(uv_stream_t* client, ssize_t nread, const uv_buf_t* buf)
         uv_write_t* req = (uv_write_t*)malloc(sizeof(uv_write_t));
         uint8_t head_tag = *(uint8_t*)buf->base;
         if (head_tag == 1) {
-            if (nread >= 7) {
+            if (nread >= kRelaySkipHeader) {
                 char host[255] = { 0 };
                 uint16_t port = 0;
                 inet_ntop(AF_INET, (const void *)(buf->base + 1), host, INET_ADDRSTRLEN);
@@ -90,11 +90,11 @@ void TcpRoute::RemoteOnConnect(uv_connect_t* req, int status) {
         free(remote_tcp->u.reserved[1]);
         return;
     }
-    if (*left_len > 7) {
+    if (*left_len > kRelaySkipHeader) {
         char buffer[1024];
         uv_buf_t buf = uv_buf_init(buffer, sizeof(buffer));
-        buf.len = *left_len - 7;
-        buf.base = ((char*)remote_tcp->u.reserved[1]) + 7;
+        buf.len = *left_len - kRelaySkipHeader;
+        buf.base = ((char*)remote_tcp->u.reserved[1]) + kRelaySkipHeader;
         uv_stream_t* tcp = req->handle;
         uv_write_t write_req;
         int buf_count = 1;
