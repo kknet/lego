@@ -10,9 +10,10 @@ namespace lego {
 namespace vpnroute {
 
 struct ServerInfo {
-    uv_tcp_t* remote_socket;
-    uv_connect_t* remote_connect;
-    uv_tcp_t* client;
+    ServerInfo() {}
+    uv_tcp_t* remote_socket{ nullptr };
+    uv_connect_t* remote_connect{ nullptr };
+    uv_tcp_t* client{ nullptr };
 };
 typedef std::shared_ptr<ServerInfo> ServerInfoPtr;
 
@@ -39,13 +40,16 @@ private:
     static int CreateRemote(
             const std::string& remote_ip,
             uint16_t remote_port,
-            ServerInfo* svr_info);
+            uv_tcp_t* client,
+            char* left_data,
+            uint32_t left_len);
     static void RemoteEchoRead(uv_stream_t *server, ssize_t nread, const uv_buf_t* buf);
     static void RemoteAllocBuffer(uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf);
     static void RemoteOnWriteEnd(uv_write_t *req, int status);
     static void RemoteOnConnect(uv_connect_t * req, int status);
 
     static void CloseClient(uv_handle_t* handle);
+    static void CloseRemote(uv_handle_t* handle);
 
     int CreateServer(const std::string& local_ip, uint16_t port);
 
