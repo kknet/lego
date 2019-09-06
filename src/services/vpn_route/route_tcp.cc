@@ -10,6 +10,7 @@ void TcpRoute::AllocBuffer(uv_handle_t* handle, size_t suggested_size, uv_buf_t*
 }
 
 void TcpRoute::EchoWrite(uv_write_t* req, int status) {
+    std::cout << "echo write." << status << std::endl;
     if (status) {
         fprintf(stderr, "Write error %s\n", uv_strerror(status));
         CloseClient((uv_handle_t*)req->handle);
@@ -18,11 +19,9 @@ void TcpRoute::EchoWrite(uv_write_t* req, int status) {
 }
 
 void TcpRoute::EchoRead(uv_stream_t* client, ssize_t nread, const uv_buf_t* buf) {
+    std::cout << "echo read." << nread << std::endl;
     if (nread < 0) {
-        if (nread != UV_EOF) {
-            fprintf(stderr, "Read error %s\n", uv_err_name(nread));
-            CloseClient((uv_handle_t*)client);
-        }
+        CloseClient((uv_handle_t*)client);
     } else if (nread > 0) {
         uv_write_t* req = (uv_write_t* ) malloc(sizeof(uv_write_t));
         uv_buf_t wrbuf = uv_buf_init(buf->base, nread);

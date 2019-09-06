@@ -64,7 +64,7 @@ int main() {
     std::cout << "connect." << std::endl;
     uv_run(loop, UV_RUN_DEFAULT);
     std::cout << "uv run." << std::endl;
-    while (true) {
-        sleep(1);
-    }
+    sleep(1);
+    uv_close((uv_handle_t*)socket, NULL);
+    std::cout << "uv closed." << std::endl;
 }
