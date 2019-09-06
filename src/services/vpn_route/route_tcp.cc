@@ -216,10 +216,10 @@ int TcpRoute::CreateServer(const std::string& local_ip, uint16_t port) {
 }
 
 int TcpRoute::Init(const std::string& local_ip, uint16_t port) {
+    client_loop_ = uv_default_loop();
     if (CreateServer(local_ip, port) != kVpnRouteSuccess) {
         return kVpnRouteError;
     }
-    client_loop_ = uv_default_loop();
     return kVpnRouteSuccess;
 }
 
