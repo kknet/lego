@@ -1,10 +1,13 @@
 #include "services/vpn_route/route_tcp.h"
 
-#include "ssr/utils.h"
-
 namespace lego {
 
 namespace vpnroute {
+
+static uint16_t load16_be(const void *s) {
+    const uint8_t *in = (const uint8_t *)s;
+    return ((uint16_t)in[0] << 8) | ((uint16_t)in[1]);
+}
 
 void TcpRoute::AllocBuffer(uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf) {
     buf->base = (char*)malloc(suggested_size);
