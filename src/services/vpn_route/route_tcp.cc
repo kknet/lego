@@ -107,13 +107,20 @@ void TcpRoute::OnNewConnection(uv_stream_t* server, int status) {
 }
 
 void TcpRoute::CloseClient(uv_handle_t* handle) {
+    if (handle == NULL) {
+        return;
+    }
+
     std::cout << "close client." << std::endl;
     uv_tcp_t* client = (uv_tcp_t*)handle;
     if (client->u.reserved[0] != NULL) {
         delete client->u.reserved[0];
         client->u.reserved[0] = NULL;
     }
-    uv_close((uv_handle_t*)handle, NULL);
+
+    if (uv_is_closing(handle) == 0) {
+        uv_close(handle, NULL);
+    }
 }
 
 TcpRoute* TcpRoute::Instance() {
