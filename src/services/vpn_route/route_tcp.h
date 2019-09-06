@@ -37,7 +37,7 @@ private:
     static void EchoRead(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf);
     static void EchoWrite(uv_write_t *req, int status);
     static void OnNewConnection(uv_stream_t *server, int status);
-    static int CreateRemote(
+    static void CreateRemote(
             const std::string& remote_ip,
             uint16_t remote_port,
             uv_tcp_t* client,

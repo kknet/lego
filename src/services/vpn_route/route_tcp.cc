@@ -101,7 +101,7 @@ void TcpRoute::RemoteOnConnect(uv_connect_t* req, int status) {
     free(remote_tcp->u.reserved[1]);
 }
 
-int TcpRoute::CreateRemote(
+void TcpRoute::CreateRemote(
         const std::string& remote_ip,
         uint16_t remote_port,
         uv_tcp_t* client,
