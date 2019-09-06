@@ -96,6 +96,7 @@ void TcpRoute::OnNewConnection(uv_stream_t* server, int status) {
     }
 
     uv_tcp_t* client = (uv_tcp_t*)malloc(sizeof(uv_tcp_t));
+    client->u.reserved[0] = NULL;
     uv_tcp_init(TcpRoute::Instance()->server_loop(), client);
     if (uv_accept(server, (uv_stream_t*)client) == 0) {
         uv_read_start((uv_stream_t*)client, TcpRoute::AllocBuffer, TcpRoute::EchoRead);
@@ -107,6 +108,12 @@ void TcpRoute::OnNewConnection(uv_stream_t* server, int status) {
 }
 
 void TcpRoute::CloseClient(uv_handle_t* handle) {
+    std::cout << "close client." << std::endl;
+    uv_tcp_t* client = (uv_tcp_t*)handle;
+    if (client->u.reserved[0] != NULL) {
+        delete client->u.reserved[0];
+        client->u.reserved[0] = NULL;
+    }
     uv_close((uv_handle_t*)handle, NULL);
 }
 
