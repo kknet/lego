@@ -5,6 +5,16 @@
 #include <iostream>
 #include <uv/uv.h>
 
+#pragma pack(push) 
+#pragma pack(1)
+struct SendData {
+    uint8_t skip_num;
+    uint32_t ip;
+    uint16_t port;
+    char data[1024 * 16];
+};
+#pragma pack(pop)
+
 void echo_read(uv_stream_t *server, ssize_t nread, const uv_buf_t* buf) {
     if (nread == -1) {
         fprintf(stderr, "error echo_read");
@@ -39,11 +49,17 @@ void on_connect(uv_connect_t * req, int status) {
         std::cout << "on_connect error." << std::endl;
         return;
     }
+
+    SendData send_data;
+    send_data.skip_num = 1;
+    send_data.ip = inet_addr("167.71.232.145");
+    send_data.port = 9033;
     char buffer[100];
     uv_buf_t buf = uv_buf_init(buffer, sizeof(buffer));
     char *message = "hello";
-    buf.len = strlen(message);
-    buf.base = message;
+    memcpy(send_data.data, message, strlen(message));
+    buf.len = 7 + strlen(message);
+    buf.base = (char*)&send_data;
     uv_stream_t *tcp = req->handle;
     uv_write_t write_req;
     int buf_count = 1;
