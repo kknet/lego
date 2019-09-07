@@ -64,9 +64,7 @@ void TcpRoute::EchoRead(uv_stream_t* client, ssize_t nread, const uv_buf_t* buf)
                     remote_tcp->u.reserved[3] = req_list;
                 }
                 ListType* req_list = (ListType*)remote_tcp->u.reserved[3];
-                uv_buf_t* wrbuf = new uv_buf_t();
-                wrbuf->base = buf->base;
-                wrbuf->len = nread;
+                uv_buf_t wrbuf = uv_buf_init(buf->base, nread);
                 req_list->push_back(wrbuf);
                 std::cout << "not real connect: " << req_list->size() << std::endl;
                 return;
@@ -127,10 +125,10 @@ void TcpRoute::RemoteOnWriteConnectEnd(uv_write_t *req, int status) {
         }
         std::cout << "write pre list to remote:" << req_list->size() << std::endl;
         for (auto iter = req_list->begin(); iter != req_list->end(); ++iter) {
-            uv_buf_t* buf = (*iter);
+            uv_buf_t& buf = (*iter);
             uv_write_t* wreq = (uv_write_t*)malloc(sizeof(uv_write_t));
-            uv_write(wreq, remote_stream, buf, 1, TcpRoute::RemoteOnWriteEnd);
-            free(buf->base);
+            uv_write(wreq, remote_stream, &buf, 1, TcpRoute::RemoteOnWriteEnd);
+            free(buf.base);
         }
         delete req_list;
         remote_tcp->u.reserved[3] = NULL;

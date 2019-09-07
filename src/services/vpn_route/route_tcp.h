@@ -31,7 +31,7 @@ public:
     }
 
 private:
-    typedef std::list<uv_buf_t*> ListType;
+    typedef std::list<uv_buf_t> ListType;
 
     TcpRoute();
     ~TcpRoute();
