@@ -770,6 +770,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     }
 
     ssize_t r = recv(server->fd, buf->data, SOCKET_BUF_SIZE, 0);
+    std::cout << "1111 receive client data: " << r << std::endl;
 
     if (r == 0) {
         // connection closed
@@ -796,7 +797,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
 
     tx += r;
     buf->len = r;
-
+    std::cout << "receive client data: " << r << std::endl;
     int err = crypto->decrypt(buf, server->d_ctx, SOCKET_BUF_SIZE);
 
     if (err == CRYPTO_ERROR) {
@@ -1386,6 +1387,7 @@ static void AcceptCallback(EV_P_ ev_io *w, int revents) {
         return;
     }
 
+    std::cout << "new connection coming." << std::endl;
     char *peer_name = GetPeerName(serverfd);
     if (peer_name != NULL) {
         if (acl) {

@@ -13,6 +13,13 @@ struct SendData {
     uint16_t port;
     char data[1024 * 16];
 };
+
+struct SendData2 {
+    uint8_t skip_num;
+    uint8_t type;
+    uint32_t ip;
+    uint16_t port;
+};
 #pragma pack(pop)
 
 void echo_read(uv_stream_t *server, ssize_t nread, const uv_buf_t* buf) {
@@ -54,11 +61,16 @@ void on_connect(uv_connect_t * req, int status) {
     send_data.skip_num = 1;
     send_data.ip = inet_addr("167.71.232.145");
     send_data.port = 9033;
+
+    SendData2 send_data_2;
+    send_data_2.skip_num = 0;
+    send_data_2.type = 1;
+    send_data_2.ip = inet_addr("42.81.172.207");
+    send_data_2.port = 443;
     char buffer[100];
     uv_buf_t buf = uv_buf_init(buffer, sizeof(buffer));
-    char *message = "hello";
-    memcpy(send_data.data, message, strlen(message));
-    buf.len = 7 + strlen(message);
+    memcpy(send_data.data, (char*)&send_data_2, sizeof(send_data_2));
+    buf.len = 7 + sizeof(send_data_2);
     buf.base = (char*)&send_data;
     uv_stream_t *tcp = req->handle;
     uv_write_t write_req;

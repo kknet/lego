@@ -81,6 +81,11 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
         return kProxyError;
     }
 
+//     if (InitTcpRelay() != kProxySuccess) {
+//         PROXY_ERROR("init tcp relay failed!");
+//         return kProxyError;
+//     }
+
     if (InitTransport() != kProxySuccess) {
         PROXY_ERROR("init transport failed!");
         return kProxyError;

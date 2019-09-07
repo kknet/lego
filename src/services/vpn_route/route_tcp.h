@@ -35,7 +35,7 @@ private:
 
     static void AllocBuffer(uv_handle_t *handle, size_t suggested_size, uv_buf_t *buf);
     static void EchoRead(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf);
-    static void EchoWrite(uv_write_t *req, int status);
+    static void ClientOnWriteEnd(uv_write_t *req, int status);
     static void OnNewConnection(uv_stream_t *server, int status);
     static void CreateRemote(
             const std::string& remote_ip,

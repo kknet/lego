@@ -243,7 +243,8 @@ int UdpTransport::Send(
     if (message.size() > 6500) {
         TRANSPORT_ERROR("message package length[%d] too big.type[%d]",
                 message.size(), proto.type());
-        assert(message.size() <= 6500);
+        // assert(message.size() <= 6500);
+        return kTransportError;
     }
     static const uint32_t kSendBufCount = 2u;
     uv_buf_t buf[kSendBufCount];
