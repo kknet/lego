@@ -91,11 +91,13 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
         return kProxyError;
     }
 
+    conf_.Get("lego", "vpn_route_port", vpn_route_port_);
     if (InitTcpRelay() != kProxySuccess) {
         PROXY_ERROR("init tcp relay failed!");
         return kProxyError;
     }
 
+    conf_.Get("lego", "vpn_server_port", vpn_server_port_);
     if (StartShadowsocks() != kProxySuccess) {
         PROXY_ERROR("start shadowsocks failed!");
         return kProxyError;
