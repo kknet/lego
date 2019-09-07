@@ -222,8 +222,10 @@ void TcpRoute::CloseClient(uv_handle_t* handle, bool remote_close) {
 
     uv_tcp_t* client = (uv_tcp_t*)handle;
     if (client->u.reserved[0] != NULL) {
-        ServerInfo* svr_info = (ServerInfo*)client->u.reserved[0];
-        delete svr_info;
+        ServerInfo* svr_info = static_cast<ServerInfo*>(client->u.reserved[0]);
+        if (svr_info != NULL) {
+            delete svr_info;
+        }
         client->u.reserved[0] = NULL;
     }
 
