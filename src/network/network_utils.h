@@ -42,6 +42,7 @@ static const uint32_t kServiceShardEndNetworkId = kNetworkMaxDhtCount;  // less
 
 enum ServiceNetworkType {
     kVpnNetworkId = kServiceShardBeginNetworkId,
+    kVpnRouteNetworkId,
 };
 
 inline static uint32_t GetConsensusShardNetworkId(const std::string& account_address) {

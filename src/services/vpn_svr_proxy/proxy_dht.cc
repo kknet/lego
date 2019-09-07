@@ -12,6 +12,7 @@
 #include "services/proto/service.pb.h"
 #include "services/vpn_svr_proxy/proxy_utils.h"
 #include "services/vpn_svr_proxy/shadowsocks_proxy.h"
+#include "services/account_with_secret.h"
 
 namespace lego {
 
@@ -111,45 +112,24 @@ void ProxyDht::HandleGetSocksRequest(
         return;
     }
 
-    auto vpn_conf = ShadowsocksProxy::Instance()->GetShadowsocks();
-    if (vpn_conf == nullptr) {
-        PROXY_ERROR("there is no vpn service started!");
-        return;
-    }
-
+    uint16_t route_port = 0;
+    uint16_t server_port = 0;
+    ShadowsocksProxy::Instance()->GetShadowsocks(route_port, server_port);
     service::protobuf::ServiceMessage svr_msg;
     auto vpn_res = svr_msg.mutable_vpn_res();
-    vpn_res->set_ip(local_node()->public_ip);
-    vpn_res->set_port(vpn_conf->port);
-    vpn_res->set_encrypt_type(vpn_conf->method);
-    security::PublicKey pubkey;
-    if (pubkey.Deserialize(src_svr_msg.vpn_req().pubkey()) != 0) {
-        PROXY_ERROR("invalid public key.");
+    vpn_res->set_svr_port(server_port);
+    vpn_res->set_route_port(route_port);
+    auto peer_ptr = service::AccountWithSecret::Instance()->NewPeer(
+            src_svr_msg.vpn_req().pubkey());
+    if (peer_ptr == nullptr) {
         return;
     }
 
-    // ecdh encrypt vpn password
-    std::string sec_key;
-    auto res = security::EcdhCreateKey::Instance()->CreateKey(pubkey, sec_key);
-    if (res != security::kSecuritySuccess) {
-        PROXY_ERROR("create sec key failed!");
-        return;
-    }
-
-    std::string enc_passwd;
-    if (security::Aes::Encrypt(
-            vpn_conf->passwd,
-            sec_key,
-            enc_passwd) != security::kSecuritySuccess) {
-        PROXY_ERROR("aes encrypt failed!");
-        return;
-    }
-    vpn_res->set_passwd(enc_passwd);
+    vpn_res->set_secnum(peer_ptr->sec_num);
     vpn_res->set_pubkey(security::Schnorr::Instance()->str_pubkey());
     vpn_res->set_country(common::global_code_to_country_map[
             common::GlobalInfo::Instance()->country()]);
     transport::protobuf::Header res_msg;
-    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("getted socks", msg);
     service::ServiceProto::CreateGetVpnInfoRes(local_node(), svr_msg, msg, res_msg);
     network::Route::Instance()->Send(res_msg);
 }

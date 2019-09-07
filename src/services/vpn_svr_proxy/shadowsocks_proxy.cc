@@ -101,11 +101,6 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
         return kProxyError;
     }
 
-    if (CreateVpnProxyNetwork() != kProxySuccess) {
-        PROXY_ERROR("create vpn proxy network failed!");
-        return kProxyError;
-    }
-
     if (InitCommand() != kProxySuccess) {
         PROXY_ERROR("InitNetworkSingleton failed!");
         return kProxyError;
@@ -119,40 +114,51 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
 }
 
 int ShadowsocksProxy::InitTcpRelay() {
+    if (vpn_route_port_ == 0) {
+        return kProxySuccess;
+    }
+
     int res = vpnroute::TcpRoute::Instance()->Init(
             common::GlobalInfo::Instance()->config_local_ip(),
-            common::GlobalInfo::Instance()->config_local_port() + 32);
+            vpn_route_port_);
     if (res != vpnroute::kVpnRouteSuccess) {
         return kProxyError;
     }
 
+    vpn_route_ = std::make_shared<VpnProxyNode>(network::kVpnRouteNetworkId);
+    if (vpn_route_->Init() != network::kNetworkSuccess) {
+        vpn_route_ = nullptr;
+        PROXY_ERROR("node join network [%u] failed!", network::kVpnRouteNetworkId);
+        return kProxyError;
+    }
     return kProxySuccess;
 }
 
-ShadowsocksConfPtr ShadowsocksProxy::GetShadowsocks() {
-    return nullptr;
+void ShadowsocksProxy::GetShadowsocks(uint16_t& route_port, uint16_t& vpn_port) {
+    route_port = vpn_route_port_;
+    vpn_port = vpn_server_port_;
 }
 
 int ShadowsocksProxy::StartShadowsocks() {
+    if (vpn_server_port_ == 0) {
+        return kProxySuccess;
+    }
+
     if (VpnServer::Init(
             common::GlobalInfo::Instance()->config_local_ip(),
-            common::GlobalInfo::Instance()->config_local_port() + 31,
+            vpn_server_port_,
             "password",
             "",
             "aes-128-cfb") != kVpnsvrSuccess) {
         return kProxyError;
     }
-    return kProxySuccess;
-}
 
-int ShadowsocksProxy::CreateVpnProxyNetwork() {
     vpn_proxy_ = std::make_shared<VpnProxyNode>(network::kVpnNetworkId);
     if (vpn_proxy_->Init() != network::kNetworkSuccess) {
         vpn_proxy_ = nullptr;
         PROXY_ERROR("node join network [%u] failed!", network::kVpnNetworkId);
         return kProxyError;
     }
-
     return kProxySuccess;
 }
 

@@ -767,7 +767,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     }
 
     ssize_t r = recv(server->fd, buf->data, SOCKET_BUF_SIZE, 0);
-
     if (r == 0) {
         // connection closed
         CloseAndFreeRemote(EV_A_ remote);
@@ -809,9 +808,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     }
     
     int header_offset = 0;
-    uint8_t skip_num = 0;
     if (server->stage == STAGE_INIT) {
-        skip_num = *(uint8_t *)(buf->data);
         header_offset = 1;
     }
 
