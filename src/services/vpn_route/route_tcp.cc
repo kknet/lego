@@ -40,11 +40,13 @@ void TcpRoute::EchoRead(uv_stream_t* client, ssize_t nread, const uv_buf_t* buf)
             }
         } else {
             if (svr_info == NULL) {
+                std::cout << "0 not real connect." << std::endl;
                 return;
             }
 
             uv_tcp_t* remote_tcp = (uv_tcp_t*)svr_info->remote_socket;
             if (remote_tcp == NULL) {
+                std::cout << "1 not real connect." << std::endl;
                 return;
             }
 
