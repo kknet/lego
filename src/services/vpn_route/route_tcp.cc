@@ -136,6 +136,8 @@ void TcpRoute::RemoteOnConnect(uv_connect_t* req, int status) {
         int buf_count = 1;
         uv_write(req, tcp, &buf, buf_count, TcpRoute::RemoteOnWriteEnd);
     }
+    
+    uv_read_start(req->handle, TcpRoute::RemoteAllocBuffer, TcpRoute::RemoteEchoRead);
     delete left_len;
     free(remote_tcp->u.reserved[1]);
     remote_tcp->u.reserved[1] = NULL;
