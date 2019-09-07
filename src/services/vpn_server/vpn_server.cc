@@ -41,7 +41,6 @@ extern "C" {
 #include "ssr/utils.h"
 #include "ssr/acl.h"
 #include "ssr/plugin.h"
-#include "ssr/server.h"
 #include "ssr/winsock.h"
 
 #ifndef EAGAIN
@@ -80,6 +79,9 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
+
+#include "ssr/server.h"
+
 static void SignalCallback(EV_P_ ev_signal *w, int revents);
 static void AcceptCallback(EV_P_ ev_io *w, int revents);
 static void ServerSendCallback(EV_P_ ev_io *w, int revents);
