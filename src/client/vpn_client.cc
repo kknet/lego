@@ -349,6 +349,10 @@ std::string VpnClient::Init(
             common::Encode::HexEncode(security::Schnorr::Instance()->str_prikey()));
 }
 
+std::string VpnClient::GetPublicKey() {
+    return common::Encode::HexEncode(security::Schnorr::Instance()->str_pubkey());
+}
+
 bool VpnClient::SetFirstInstall() {
     first_install_ = true;
     config.Set("lego", "first_instasll", first_install_);

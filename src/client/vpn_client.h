@@ -108,6 +108,7 @@ public:
     int64_t GetBalance();
     void VpnHeartbeat(const std::string& dht_key);
     int ResetTransport(const std::string& ip, uint16_t port);
+    std::string GetPublicKey();
 
 private:
     VpnClient();
