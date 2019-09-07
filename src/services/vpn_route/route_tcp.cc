@@ -245,7 +245,9 @@ void TcpRoute::CloseRemote(uv_handle_t* handle) {
     }
 
     ServerInfo* svr_info = (ServerInfo*)((uv_tcp_t*)handle)->u.reserved[0];
-    CloseClient((uv_handle_t*)svr_info->client, true);
+    if (svr_info != NULL) {
+        CloseClient((uv_handle_t*)svr_info->client, true);
+    }
 }
 
 
