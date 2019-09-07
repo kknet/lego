@@ -56,6 +56,8 @@ void TcpRoute::EchoRead(uv_stream_t* client, ssize_t nread, const uv_buf_t* buf)
                 uv_stream_t* remote_stream = (uv_stream_t*)svr_info->remote_socket;
                 uv_buf_t wrbuf = uv_buf_init(buf->base, nread);
                 uv_write(req, remote_stream, &wrbuf, buf_count, TcpRoute::RemoteOnWriteEnd);
+            } else {
+                std::cout << "2 not real connect." << std::endl;
             }
         }
     }
