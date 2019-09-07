@@ -121,11 +121,11 @@ void TcpRoute::RemoteOnWriteConnectEnd(uv_write_t *req, int status) {
     uv_tcp_t* remote_tcp = (uv_tcp_t*)req->handle;
     uv_stream_t* remote_stream = (uv_stream_t*)req->handle;
     if (remote_tcp->u.reserved[3] != NULL) {
-        ListType* req_list = (ListType*)remote_tcp->u.reserved[3];
+        ListType* req_list = static_cast<ListType*>(remote_tcp->u.reserved[3]);
         if (req_list == NULL) {
             return;
         }
-
+        std::cout << "write pre list to remote:" << req_list->size() << std::endl;
         for (auto iter = req_list->begin(); iter != req_list->end(); ++iter) {
             uv_buf_t* buf = (*iter);
             uv_write_t* wreq = (uv_write_t*)malloc(sizeof(uv_write_t));
@@ -140,9 +140,9 @@ void TcpRoute::RemoteOnWriteConnectEnd(uv_write_t *req, int status) {
 
 void TcpRoute::RemoteOnConnect(uv_connect_t* req, int status) {
     uv_tcp_t* remote_tcp = (uv_tcp_t*)req->handle;
-    uint32_t* left_len = (uint32_t*)remote_tcp->u.reserved[2];
+    uint32_t* left_len = static_cast<uint32_t*>(remote_tcp->u.reserved[2]);
     if (status < 0 || remote_tcp->u.reserved[2] == NULL || remote_tcp->u.reserved[1] == NULL) {
-        if (remote_tcp->u.reserved[2] != NULL) {
+        if (left_len != NULL) {
             delete left_len;
         }
 
@@ -156,17 +156,18 @@ void TcpRoute::RemoteOnConnect(uv_connect_t* req, int status) {
     }
 
     if (*left_len > kRelaySkipHeader && *left_len < 1024) {
-        char buffer[1024 * 16];
-        uv_buf_t buf = uv_buf_init(buffer, sizeof(buffer));
-        buf.len = *left_len - kRelaySkipHeader;
-        buf.base = ((char*)remote_tcp->u.reserved[1]) + kRelaySkipHeader;
+        uv_buf_t buf = uv_buf_init(
+                ((char*)remote_tcp->u.reserved[1]) + kRelaySkipHeader,
+                *left_len - kRelaySkipHeader);
         uv_stream_t* tcp = req->handle;
         uv_write_t* tmp_req = (uv_write_t*)malloc(sizeof(uv_write_t));
         int buf_count = 1;
         uv_write(tmp_req, tcp, &buf, buf_count, TcpRoute::RemoteOnWriteConnectEnd);
     }
     uv_read_start(req->handle, TcpRoute::RemoteAllocBuffer, TcpRoute::RemoteEchoRead);
-    delete left_len;
+    if (left_len != NULL) {
+        delete left_len;
+    }
     free(remote_tcp->u.reserved[1]);
     remote_tcp->u.reserved[1] = NULL;
     remote_tcp->u.reserved[2] = NULL;
