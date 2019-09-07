@@ -38,6 +38,7 @@ extern "C" {
 #endif
 
 #include "ssr/netutils.h"
+#include "ssr/crypto.h"
 #include "ssr/utils.h"
 #include "ssr/acl.h"
 #include "ssr/plugin.h"

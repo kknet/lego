@@ -65,8 +65,8 @@ typedef mbedtls_md_info_t digest_type_t;
 #define CRYPTO_NEED_MORE -1
 #define CRYPTO_OK         0
 
-#define min(a, b) (((a) < (b)) ? (a) : (b))
-#define max(a, b) (((a) > (b)) ? (a) : (b))
+// #define min(a, b) (((a) < (b)) ? (a) : (b))
+// #define max(a, b) (((a) > (b)) ? (a) : (b))
 
 #define SUBKEY_INFO "ss-subkey"
 #define IV_INFO "ss-iv"
