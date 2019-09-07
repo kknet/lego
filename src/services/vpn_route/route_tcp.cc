@@ -132,9 +132,9 @@ void TcpRoute::RemoteOnConnect(uv_connect_t* req, int status) {
         buf.len = *left_len - kRelaySkipHeader;
         buf.base = ((char*)remote_tcp->u.reserved[1]) + kRelaySkipHeader;
         uv_stream_t* tcp = req->handle;
-        uv_write_t write_req;
+        uv_write_t* req = (uv_write_t*)malloc(sizeof(uv_write_t));
         int buf_count = 1;
-        uv_write(&write_req, tcp, &buf, buf_count, TcpRoute::RemoteOnWriteEnd);
+        uv_write(req, tcp, &buf, buf_count, TcpRoute::RemoteOnWriteEnd);
     }
     delete left_len;
     free(remote_tcp->u.reserved[1]);
