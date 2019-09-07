@@ -1262,7 +1262,7 @@ static server_t * NewServer(int fd, listen_ctx_t *listener) {
     crypto->ctx_init(crypto->cipher, server->e_ctx, 1);
     crypto->ctx_init(crypto->cipher, server->d_ctx, 0);
 
-    int request_timeout = min(MAX_REQUEST_TIMEOUT, listener->timeout)
+    int request_timeout = std::min(MAX_REQUEST_TIMEOUT, listener->timeout)
         + rand() % MAX_REQUEST_TIMEOUT;
 
     ev_io_init(&server->recv_ctx->io, ServerRecvCallback, fd, EV_READ);
