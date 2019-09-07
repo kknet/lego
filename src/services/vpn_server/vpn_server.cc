@@ -714,9 +714,6 @@ static void IntConnection(EV_P_ server_t *server, server_ctx_t *server_recv_ctx,
         memmove(server->buf->data, server->buf->data + offset, server->buf->len);
     }
 
-    LOGI("[%s] connect to %s:%d", remote_port, host, ntohs(port));
-    std::cout << "need_query: " << need_query << std::endl;
-
     if (!need_query) {
         remote_t *remote = ConnectToRemote(EV_A_ &info, server);
 
@@ -770,7 +767,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     }
 
     ssize_t r = recv(server->fd, buf->data, SOCKET_BUF_SIZE, 0);
-    std::cout << "1111 receive client data: " << r << std::endl;
 
     if (r == 0) {
         // connection closed
@@ -797,9 +793,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
 
     tx += r;
     buf->len = r;
-    std::cout << "receive client data: " << r << std::endl;
     int err = crypto->decrypt(buf, server->d_ctx, SOCKET_BUF_SIZE);
-
     if (err == CRYPTO_ERROR) {
         ReportAddr(server->fd, "authentication error");
         StopServer(EV_A_ server);
@@ -818,7 +812,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     uint8_t skip_num = 0;
     if (server->stage == STAGE_INIT) {
         skip_num = *(uint8_t *)(buf->data);
-        std::cout << "skip_num: " << (uint32_t)skip_num << ":" << buf->len << std::endl;
         header_offset = 1;
     }
 

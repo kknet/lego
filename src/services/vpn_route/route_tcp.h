@@ -1,7 +1,8 @@
 #pragma once
 
 #include <memory>
-#include <list>
+#include <vector>
+#include <thread>
 
 #include "uv/uv.h"
 #include "services/vpn_route/vpn_route_utils.h"
@@ -23,7 +24,7 @@ public:
     }
 
 private:
-    typedef std::list<uv_buf_t> ListType;
+    typedef std::vector<uv_buf_t> ListType;
 
     TcpRoute();
     ~TcpRoute();
@@ -48,13 +49,16 @@ private:
     static void CloseRemote(uv_handle_t* handle);
 
     int CreateServer(const std::string& local_ip, uint16_t port);
+    void StartUv();
 
-    static const uint32_t kBackblog = 128;
+    static const uint32_t kBackblog = 128u;
     static const uint32_t kRelaySkipHeader = 7u;
+    static const uint32_t kMaxReservedBuf = 128u;
 
     uv_loop_t* server_loop_;
     uv_loop_t* client_loop_;
     uv_tcp_t server_;
+    std::shared_ptr<std::thread> uv_thread_{ nullptr };
 
     DISALLOW_COPY_AND_ASSIGN(TcpRoute);
 

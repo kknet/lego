@@ -33,7 +33,7 @@ void TcpRoute::EchoRead(uv_stream_t* client, ssize_t nread, const uv_buf_t* buf)
                 inet_ntop(AF_INET, (const void *)(buf->base + 1), host, INET_ADDRSTRLEN);
                 port = load16_be(buf->base + 5);
                 CreateRemote(host, port, (uv_tcp_t*)client, buf->base, nread);
-                return;  // don't free buf
+                return;
             } else {
                 CloseClient((uv_handle_t*)client);
             }
@@ -59,10 +59,11 @@ void TcpRoute::EchoRead(uv_stream_t* client, ssize_t nread, const uv_buf_t* buf)
                     remote_tcp->u.reserved[3] = req_list;
                 }
                 ListType* req_list = (ListType*)remote_tcp->u.reserved[3];
-                uv_buf_t wrbuf = uv_buf_init(buf->base, nread);
-                req_list->push_back(wrbuf);
-                std::cout << "not real connect: " << req_list->size() << std::endl;
-                return;
+                if (req_list->size() < kMaxReservedBuf) {
+                    uv_buf_t wrbuf = uv_buf_init(buf->base, nread);
+                    req_list->push_back(wrbuf);
+                    return;
+                }
             }
         }
     }
@@ -118,7 +119,7 @@ void TcpRoute::RemoteOnWriteConnectEnd(uv_write_t *req, int status) {
         if (req_list == NULL) {
             return;
         }
-        std::cout << "write pre list to remote:" << req_list->size() << std::endl;
+
         for (auto iter = req_list->begin(); iter != req_list->end(); ++iter) {
             uv_buf_t& buf = (*iter);
             uv_write_t* wreq = (uv_write_t*)malloc(sizeof(uv_write_t));
@@ -237,6 +238,10 @@ TcpRoute::TcpRoute() {}
 
 TcpRoute::~TcpRoute() {}
 
+void TcpRoute::StartUv() {
+    uv_run(server_loop_, UV_RUN_DEFAULT);
+}
+
 int TcpRoute::CreateServer(const std::string& local_ip, uint16_t port) {
     server_loop_ = client_loop_;
     if (uv_tcp_init(server_loop_, &server_) != 0) {
@@ -256,11 +261,10 @@ int TcpRoute::CreateServer(const std::string& local_ip, uint16_t port) {
 
     int r = uv_listen((uv_stream_t*)&server_, kBackblog, TcpRoute::OnNewConnection);
     if (r) {
-        fprintf(stderr, "error uv_listen");
         return kVpnRouteError;
     }
 
-    uv_run(server_loop_, UV_RUN_DEFAULT);
+    uv_thread_ = std::make_shared<std::thread>(std::bind(&TcpRoute::StartUv, this));
     return kVpnRouteSuccess;
 }
 
