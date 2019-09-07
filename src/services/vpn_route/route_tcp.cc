@@ -16,7 +16,6 @@ void TcpRoute::AllocBuffer(uv_handle_t* handle, size_t suggested_size, uv_buf_t*
 
 void TcpRoute::ClientOnWriteEnd(uv_write_t* req, int status) {
     if (status) {
-        fprintf(stderr, "Write error %s\n", uv_strerror(status));
         CloseClient((uv_handle_t*)req->handle);
     }
     free(req);
@@ -34,7 +33,6 @@ void TcpRoute::EchoRead(uv_stream_t* client, ssize_t nread, const uv_buf_t* buf)
                 uint16_t port = 0;
                 inet_ntop(AF_INET, (const void *)(buf->base + 1), host, INET_ADDRSTRLEN);
                 port = load16_be(buf->base + 5);
-                std::cout << "connect remote server: " << host << ":" << port << std::endl;
                 CreateRemote(host, port, (uv_tcp_t*)client, buf->base, nread);
                 return;  // don't free buf
             } else {
@@ -68,7 +66,6 @@ void TcpRoute::EchoRead(uv_stream_t* client, ssize_t nread, const uv_buf_t* buf)
 void TcpRoute::RemoteEchoRead(uv_stream_t* server, ssize_t nread, const uv_buf_t* buf) {
     do  {
         if (nread < 0) {
-            std::cout << "remote read error." << std::endl;
             CloseRemote((uv_handle_t*)server);
             break;
         }
@@ -76,7 +73,6 @@ void TcpRoute::RemoteEchoRead(uv_stream_t* server, ssize_t nread, const uv_buf_t
         uv_tcp_t* svr_tcp = (uv_tcp_t*)server;
         ServerInfo* svr_info = (ServerInfo*)(svr_tcp->u.reserved[0]);
         if (svr_info == NULL) {
-            std::cout << "remote read error." << std::endl;
             CloseRemote((uv_handle_t*)server);
             break;
         }
@@ -86,7 +82,6 @@ void TcpRoute::RemoteEchoRead(uv_stream_t* server, ssize_t nread, const uv_buf_t
         uv_stream_t* client_stream = (uv_stream_t*)svr_info->client;
         uv_buf_t wrbuf = uv_buf_init(buf->base, nread);
         uv_write(req, client_stream, &wrbuf, buf_count, TcpRoute::ClientOnWriteEnd);
-        std::cout << "write to client: " << nread << std::endl;
     } while (0);
 
     if (buf->base) {
@@ -101,18 +96,15 @@ void TcpRoute::RemoteAllocBuffer(uv_handle_t* handle, size_t suggested_size, uv_
 
 void TcpRoute::RemoteOnWriteEnd(uv_write_t* req, int status) {
     if (status == -1) {
-        std::cout << "remote write error." << std::endl;
         CloseRemote((uv_handle_t*)req->handle);
     }
     free(req);
-    // uv_read_start(req->handle, TcpRoute::RemoteAllocBuffer, TcpRoute::RemoteEchoRead);
 }
 
 void TcpRoute::RemoteOnConnect(uv_connect_t* req, int status) {
     uv_tcp_t* remote_tcp = (uv_tcp_t*)req->handle;
     uint32_t* left_len = (uint32_t*)remote_tcp->u.reserved[2];
     if (status < 0 || remote_tcp->u.reserved[2] == NULL || remote_tcp->u.reserved[1] == NULL) {
-        fprintf(stderr, "error on_write_end");
         if (remote_tcp->u.reserved[2] != NULL) {
             delete left_len;
         }
@@ -125,7 +117,6 @@ void TcpRoute::RemoteOnConnect(uv_connect_t* req, int status) {
         return;
     }
 
-    std::cout << "remote connect and now write more data: " << status << ":" << *left_len << std::endl;
     if (*left_len > kRelaySkipHeader && *left_len < 1024) {
         char buffer[1024 * 16];
         uv_buf_t buf = uv_buf_init(buffer, sizeof(buffer));
@@ -163,7 +154,6 @@ void TcpRoute::CreateRemote(
     *left_int = left_len;
     svr_info->remote_socket->u.reserved[1] = left_data;
     svr_info->remote_socket->u.reserved[2] = left_int;
-    std::cout << "should write left data: " << left_len << ":" << (left_len - kRelaySkipHeader) << std::endl;
     uv_tcp_connect(
             svr_info->remote_connect,
             svr_info->remote_socket,
@@ -173,8 +163,6 @@ void TcpRoute::CreateRemote(
 
 void TcpRoute::OnNewConnection(uv_stream_t* server, int status) {
     if (status < 0) {
-        std::cout << "new connection error." << std::endl;
-        fprintf(stderr, "New connection error %s\n", uv_strerror(status));
         return;
     }
 
@@ -195,7 +183,6 @@ void TcpRoute::CloseClient(uv_handle_t* handle) {
 
     uv_tcp_t* client = (uv_tcp_t*)handle;
     if (client->u.reserved[0] != NULL) {
-        std::cout << "closed remote." << std::endl;
         ServerInfo* svr_info = (ServerInfo*)client->u.reserved[0];
         free(svr_info->remote_connect);
         delete svr_info;
@@ -203,7 +190,6 @@ void TcpRoute::CloseClient(uv_handle_t* handle) {
     }
 
     if (uv_is_closing(handle) == 0) {
-        std::cout << "closed client." << std::endl;
         uv_close(handle, NULL);
     }
 }
