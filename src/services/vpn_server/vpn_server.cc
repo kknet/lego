@@ -796,7 +796,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     tx += r;
     buf->len = r;
     int err = crypto->decrypt(buf, server->d_ctx, SOCKET_BUF_SIZE);
-    if (err == CRYPTO_ERROR) {
+    if (err == -2) {
         ReportAddr(server->fd, "authentication error");
         StopServer(EV_A_ server);
         return;
