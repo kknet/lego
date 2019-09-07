@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <list>
 
 #include "uv/uv.h"
 #include "services/vpn_route/vpn_route_utils.h"
@@ -17,6 +18,12 @@ struct ServerInfo {
 };
 typedef std::shared_ptr<ServerInfo> ServerInfoPtr;
 
+struct PreBuferInfo {
+    PreBuferInfo(uv_buf_t* ibuf, int n) : buf(ibuf), nread(n) {}
+    uv_buf_t* buf;
+    ssize_t nread;
+};
+
 class TcpRoute {
 public:
     static TcpRoute* Instance();
@@ -30,6 +37,8 @@ public:
     }
 
 private:
+    typedef std::list<PreBuferInfo> ListType;
+
     TcpRoute();
     ~TcpRoute();
 
@@ -46,6 +55,7 @@ private:
     static void RemoteEchoRead(uv_stream_t *server, ssize_t nread, const uv_buf_t* buf);
     static void RemoteAllocBuffer(uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf);
     static void RemoteOnWriteEnd(uv_write_t *req, int status);
+    static void RemoteOnWriteConnectEnd(uv_write_t *req, int status);
     static void RemoteOnConnect(uv_connect_t * req, int status);
 
     static void CloseClient(uv_handle_t* handle);

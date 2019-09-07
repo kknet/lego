@@ -57,7 +57,19 @@ void TcpRoute::EchoRead(uv_stream_t* client, ssize_t nread, const uv_buf_t* buf)
                 uv_buf_t wrbuf = uv_buf_init(buf->base, nread);
                 uv_write(req, remote_stream, &wrbuf, buf_count, TcpRoute::RemoteOnWriteEnd);
             } else {
+                if (buf->base == NULL) {
+                    return;
+                }
+
+                if (remote_tcp->u.reserved[3] == NULL) {
+                    ListType* req_list = new ListType();
+                    remote_tcp->u.reserved[3] = req_list;
+                }
+                ListType* req_list = (ListType*)remote_tcp->u.reserved[3];
+                PreBuferInfo pre_buf((uv_buf_t*)buf, nread);
+                req_list->push_back(pre_buf);
                 std::cout << "2 not real connect." << std::endl;
+                return;
             }
         }
     }
@@ -105,6 +117,29 @@ void TcpRoute::RemoteOnWriteEnd(uv_write_t* req, int status) {
     free(req);
 }
 
+void TcpRoute::RemoteOnWriteConnectEnd(uv_write_t *req, int status) {
+    uv_tcp_t* remote_tcp = (uv_tcp_t*)req->handle;
+    uv_stream_t* remote_stream = (uv_stream_t*)req->handle;
+    if (remote_tcp->u.reserved[3] != NULL) {
+        ListType* req_list = (ListType*)remote_tcp->u.reserved[3];
+        if (req_list == NULL) {
+            return;
+        }
+
+        for (auto iter = req_list->begin(); iter != req_list->end(); ++iter) {
+            uv_buf_t* buf = (*iter).buf;
+            ssize_t nread = (*iter).nread;
+            uv_buf_t wrbuf = uv_buf_init(buf->base, nread);
+            uv_write_t* wreq = (uv_write_t*)malloc(sizeof(uv_write_t));
+            uv_write(wreq, remote_stream, &wrbuf, 1, TcpRoute::RemoteOnWriteEnd);
+            free(buf->base);
+        }
+        delete req_list;
+        remote_tcp->u.reserved[3] = NULL;
+    }
+    free(req);
+}
+
 void TcpRoute::RemoteOnConnect(uv_connect_t* req, int status) {
     uv_tcp_t* remote_tcp = (uv_tcp_t*)req->handle;
     uint32_t* left_len = (uint32_t*)remote_tcp->u.reserved[2];
@@ -129,9 +164,8 @@ void TcpRoute::RemoteOnConnect(uv_connect_t* req, int status) {
         uv_stream_t* tcp = req->handle;
         uv_write_t* req = (uv_write_t*)malloc(sizeof(uv_write_t));
         int buf_count = 1;
-        uv_write(req, tcp, &buf, buf_count, TcpRoute::RemoteOnWriteEnd);
+        uv_write(req, tcp, &buf, buf_count, TcpRoute::RemoteOnWriteConnectEnd);
     }
-    
     uv_read_start(req->handle, TcpRoute::RemoteAllocBuffer, TcpRoute::RemoteEchoRead);
     delete left_len;
     free(remote_tcp->u.reserved[1]);
@@ -158,6 +192,7 @@ void TcpRoute::CreateRemote(
     *left_int = left_len;
     svr_info->remote_socket->u.reserved[1] = left_data;
     svr_info->remote_socket->u.reserved[2] = left_int;
+    svr_info->remote_socket->u.reserved[3] = NULL;
     uv_tcp_connect(
             svr_info->remote_connect,
             svr_info->remote_socket,
