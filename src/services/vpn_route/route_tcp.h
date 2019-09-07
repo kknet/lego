@@ -44,7 +44,7 @@ private:
     static void RemoteOnWriteConnectEnd(uv_write_t *req, int status);
     static void RemoteOnConnect(uv_connect_t * req, int status);
 
-    static void CloseClient(uv_handle_t* handle, bool remote_close = false);
+    static void CloseClient(uv_handle_t* handle);
     static void CloseRemote(uv_handle_t* handle);
 
     int CreateServer(const std::string& local_ip, uint16_t port);

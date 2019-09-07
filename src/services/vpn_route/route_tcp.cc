@@ -207,7 +207,7 @@ void TcpRoute::OnNewConnection(uv_stream_t* server, int status) {
     }
 }
 
-void TcpRoute::CloseClient(uv_handle_t* handle, bool remote_close) {
+void TcpRoute::CloseClient(uv_handle_t* handle) {
     if (handle == NULL) {
         return;
     }
