@@ -69,6 +69,7 @@ void TcpRoute::EchoRead(uv_stream_t* client, ssize_t nread, const uv_buf_t* buf)
                 wrbuf->len = nread;
                 req_list->push_back(wrbuf);
                 std::cout << "not real connect: " << req_list->size() << std::endl;
+                return;
             }
         }
     }
