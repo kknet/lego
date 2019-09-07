@@ -814,7 +814,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     std::string pubkey;
     if (server->stage == STAGE_INIT) {
         pubkey = std::string((char*)buf->data, lego::security::kPublicKeySize);
-        header_offset = security::kPublicKeySize;
+        header_offset = lego::security::kPublicKeySize;
     }
 
     // handshake and transmit data
