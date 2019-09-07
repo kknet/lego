@@ -813,7 +813,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     int header_offset = 0;
     std::string pubkey;
     if (server->stage == STAGE_INIT) {
-        pubkey = std::string((char*)buf->data, security::kPublicKeySize);
+        pubkey = std::string((char*)buf->data, lego::security::kPublicKeySize);
         header_offset = security::kPublicKeySize;
     }
 
@@ -839,7 +839,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         }
         return;
     } else if (server->stage == STAGE_INIT) {
-        auto client_ptr = service::AccountWithSecret::Instance()->NewPeer(pubkey);
+        auto client_ptr = lego::service::AccountWithSecret::Instance()->NewPeer(pubkey);
         if (client_ptr == nullptr) {
             return;
         }
