@@ -151,6 +151,7 @@ void TcpRoute::RemoteOnConnect(uv_connect_t* req, int status) {
         }
         remote_tcp->u.reserved[1] = NULL;
         remote_tcp->u.reserved[2] = NULL;
+        free(req);
         return;
     }
 
@@ -160,15 +161,16 @@ void TcpRoute::RemoteOnConnect(uv_connect_t* req, int status) {
         buf.len = *left_len - kRelaySkipHeader;
         buf.base = ((char*)remote_tcp->u.reserved[1]) + kRelaySkipHeader;
         uv_stream_t* tcp = req->handle;
-        uv_write_t* req = (uv_write_t*)malloc(sizeof(uv_write_t));
+        uv_write_t* tmp_req = (uv_write_t*)malloc(sizeof(uv_write_t));
         int buf_count = 1;
-        uv_write(req, tcp, &buf, buf_count, TcpRoute::RemoteOnWriteConnectEnd);
+        uv_write(tmp_req, tcp, &buf, buf_count, TcpRoute::RemoteOnWriteConnectEnd);
     }
     uv_read_start(req->handle, TcpRoute::RemoteAllocBuffer, TcpRoute::RemoteEchoRead);
     delete left_len;
     free(remote_tcp->u.reserved[1]);
     remote_tcp->u.reserved[1] = NULL;
     remote_tcp->u.reserved[2] = NULL;
+    free(req);
 }
 
 void TcpRoute::CreateRemote(
@@ -180,7 +182,7 @@ void TcpRoute::CreateRemote(
     ServerInfo* svr_info = new ServerInfo();
     svr_info->remote_socket = (uv_tcp_t*)malloc(sizeof(uv_tcp_t));
     uv_tcp_init(TcpRoute::Instance()->client_loop(), svr_info->remote_socket);
-    svr_info->remote_connect = (uv_connect_t*)malloc(sizeof(uv_connect_t));
+    uv_connect_t* remote_connect = (uv_connect_t*)malloc(sizeof(uv_connect_t));
     struct sockaddr_in dest;
     uv_ip4_addr(remote_ip.c_str(), remote_port, &dest);
     client->u.reserved[0] = svr_info;
@@ -192,7 +194,7 @@ void TcpRoute::CreateRemote(
     svr_info->remote_socket->u.reserved[2] = left_int;
     svr_info->remote_socket->u.reserved[3] = NULL;
     uv_tcp_connect(
-            svr_info->remote_connect,
+            remote_connect,
             svr_info->remote_socket,
             (const struct sockaddr*)&dest,
             TcpRoute::RemoteOnConnect);
@@ -221,7 +223,6 @@ void TcpRoute::CloseClient(uv_handle_t* handle, bool remote_close) {
     uv_tcp_t* client = (uv_tcp_t*)handle;
     if (client->u.reserved[0] != NULL) {
         ServerInfo* svr_info = (ServerInfo*)client->u.reserved[0];
-        free(svr_info->remote_connect);
         delete svr_info;
         client->u.reserved[0] = NULL;
     }
