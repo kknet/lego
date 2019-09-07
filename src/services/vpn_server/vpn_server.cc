@@ -81,6 +81,7 @@ extern "C" {
 }
 #endif
 
+#include "security/crypto_utils.h"
 #include "services/account_with_secret.h"
 
 static void SignalCallback(EV_P_ ev_signal *w, int revents);
