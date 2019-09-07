@@ -40,13 +40,11 @@ void TcpRoute::EchoRead(uv_stream_t* client, ssize_t nread, const uv_buf_t* buf)
             }
         } else {
             if (svr_info == NULL) {
-                std::cout << "0 not real connect." << std::endl;
                 return;
             }
 
             uv_tcp_t* remote_tcp = (uv_tcp_t*)svr_info->remote_socket;
             if (remote_tcp == NULL) {
-                std::cout << "1 not real connect." << std::endl;
                 return;
             }
 
@@ -66,10 +64,11 @@ void TcpRoute::EchoRead(uv_stream_t* client, ssize_t nread, const uv_buf_t* buf)
                     remote_tcp->u.reserved[3] = req_list;
                 }
                 ListType* req_list = (ListType*)remote_tcp->u.reserved[3];
-                PreBuferInfo pre_buf((uv_buf_t*)buf, nread);
-                req_list->push_back(pre_buf);
-                std::cout << "2 not real connect." << std::endl;
-                return;
+                uv_buf_t* wrbuf = new uv_buf_t();
+                wrbuf->base = buf->base;
+                wrbuf->len = nread;
+                req_list->push_back(wrbuf);
+                std::cout << "not real connect: " << req_list->size() << std::endl;
             }
         }
     }
@@ -127,11 +126,9 @@ void TcpRoute::RemoteOnWriteConnectEnd(uv_write_t *req, int status) {
         }
 
         for (auto iter = req_list->begin(); iter != req_list->end(); ++iter) {
-            uv_buf_t* buf = (*iter).buf;
-            ssize_t nread = (*iter).nread;
-            uv_buf_t wrbuf = uv_buf_init(buf->base, nread);
+            uv_buf_t* buf = (*iter);
             uv_write_t* wreq = (uv_write_t*)malloc(sizeof(uv_write_t));
-            uv_write(wreq, remote_stream, &wrbuf, 1, TcpRoute::RemoteOnWriteEnd);
+            uv_write(wreq, remote_stream, buf, 1, TcpRoute::RemoteOnWriteEnd);
             free(buf->base);
         }
         delete req_list;

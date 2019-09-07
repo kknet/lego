@@ -18,12 +18,6 @@ struct ServerInfo {
 };
 typedef std::shared_ptr<ServerInfo> ServerInfoPtr;
 
-struct PreBuferInfo {
-    PreBuferInfo(uv_buf_t* ibuf, int n) : buf(ibuf), nread(n) {}
-    uv_buf_t* buf;
-    ssize_t nread;
-};
-
 class TcpRoute {
 public:
     static TcpRoute* Instance();
@@ -37,7 +31,7 @@ public:
     }
 
 private:
-    typedef std::list<PreBuferInfo> ListType;
+    typedef std::list<uv_buf_t*> ListType;
 
     TcpRoute();
     ~TcpRoute();
