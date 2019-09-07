@@ -26,8 +26,7 @@ void TcpRoute::EchoRead(uv_stream_t* client, ssize_t nread, const uv_buf_t* buf)
         CloseClient((uv_handle_t*)client);
     } else if (nread > 0) {
         uint8_t head_tag = *(uint8_t*)buf->base;
-        ServerInfo* svr_info = (ServerInfo*)client->u.reserved[0];
-        if (svr_info == NULL && head_tag == 1) {
+        if (client->u.reserved[0] == NULL && head_tag == 1) {
             if (nread >= kRelaySkipHeader) {
                 char host[255] = { 0 };
                 uint16_t port = 0;
@@ -39,11 +38,7 @@ void TcpRoute::EchoRead(uv_stream_t* client, ssize_t nread, const uv_buf_t* buf)
                 CloseClient((uv_handle_t*)client);
             }
         } else {
-            if (svr_info == NULL) {
-                return;
-            }
-
-            uv_tcp_t* remote_tcp = (uv_tcp_t*)svr_info->remote_socket;
+            uv_tcp_t* remote_tcp = static_cast<uv_tcp_t*>(client->u.reserved[0]);
             if (remote_tcp == NULL) {
                 return;
             }
@@ -51,7 +46,7 @@ void TcpRoute::EchoRead(uv_stream_t* client, ssize_t nread, const uv_buf_t* buf)
             if (remote_tcp->u.reserved[1] == NULL) {
                 uv_write_t* req = (uv_write_t*)malloc(sizeof(uv_write_t));
                 int buf_count = 1;
-                uv_stream_t* remote_stream = (uv_stream_t*)svr_info->remote_socket;
+                uv_stream_t* remote_stream = (uv_stream_t*)remote_tcp;
                 uv_buf_t wrbuf = uv_buf_init(buf->base, nread);
                 uv_write(req, remote_stream, &wrbuf, buf_count, TcpRoute::RemoteOnWriteEnd);
             } else {
@@ -85,15 +80,15 @@ void TcpRoute::RemoteEchoRead(uv_stream_t* server, ssize_t nread, const uv_buf_t
         }
 
         uv_tcp_t* svr_tcp = (uv_tcp_t*)server;
-        ServerInfo* svr_info = (ServerInfo*)(svr_tcp->u.reserved[0]);
-        if (svr_info == NULL) {
+        uv_tcp_t* client_tcp = static_cast<uv_tcp_t*>(svr_tcp->u.reserved[0]);
+        if (client_tcp == NULL) {
             CloseRemote((uv_handle_t*)server);
             break;
         }
 
         uv_write_t* req = (uv_write_t*)malloc(sizeof(uv_write_t));
         int buf_count = 1;
-        uv_stream_t* client_stream = (uv_stream_t*)svr_info->client;
+        uv_stream_t* client_stream = (uv_stream_t*)client_tcp;
         uv_buf_t wrbuf = uv_buf_init(buf->base, nread);
         uv_write(req, client_stream, &wrbuf, buf_count, TcpRoute::ClientOnWriteEnd);
     } while (0);
@@ -178,23 +173,21 @@ void TcpRoute::CreateRemote(
         uv_tcp_t* client,
         char* left_data,
         uint32_t left_len) {
-    ServerInfo* svr_info = new ServerInfo();
-    svr_info->remote_socket = (uv_tcp_t*)malloc(sizeof(uv_tcp_t));
-    uv_tcp_init(TcpRoute::Instance()->client_loop(), svr_info->remote_socket);
+    uv_tcp_t* remote_socket = (uv_tcp_t*)malloc(sizeof(uv_tcp_t));
+    uv_tcp_init(TcpRoute::Instance()->client_loop(), remote_socket);
     uv_connect_t* remote_connect = (uv_connect_t*)malloc(sizeof(uv_connect_t));
     struct sockaddr_in dest;
     uv_ip4_addr(remote_ip.c_str(), remote_port, &dest);
-    client->u.reserved[0] = svr_info;
-    svr_info->client = client;
-    svr_info->remote_socket->u.reserved[0] = svr_info;
+    client->u.reserved[0] = remote_socket;
+    remote_socket->u.reserved[0] = client;
     uint32_t* left_int = new uint32_t;
     *left_int = left_len;
-    svr_info->remote_socket->u.reserved[1] = left_data;
-    svr_info->remote_socket->u.reserved[2] = left_int;
-    svr_info->remote_socket->u.reserved[3] = NULL;
+    remote_socket->u.reserved[1] = left_data;
+    remote_socket->u.reserved[2] = left_int;
+    remote_socket->u.reserved[3] = NULL;
     uv_tcp_connect(
             remote_connect,
-            svr_info->remote_socket,
+            remote_socket,
             (const struct sockaddr*)&dest,
             TcpRoute::RemoteOnConnect);
 }
@@ -219,19 +212,6 @@ void TcpRoute::CloseClient(uv_handle_t* handle, bool remote_close) {
         return;
     }
 
-    uv_tcp_t* client = (uv_tcp_t*)handle;
-    if (client->u.reserved[0] != NULL) {
-        ServerInfo* svr_info = static_cast<ServerInfo*>(client->u.reserved[0]);
-        if (svr_info != NULL) {
-            delete svr_info;
-        }
-        client->u.reserved[0] = NULL;
-    }
-
-    if (remote_close) {
-        return;
-    }
-
     if (uv_is_closing(handle) == 0) {
         uv_close(handle, NULL);
     }
@@ -244,11 +224,6 @@ void TcpRoute::CloseRemote(uv_handle_t* handle) {
 
     if (uv_is_closing(handle) == 0) {
         uv_close(handle, NULL);
-    }
-
-    ServerInfo* svr_info = (ServerInfo*)((uv_tcp_t*)handle)->u.reserved[0];
-    if (svr_info != NULL) {
-        CloseClient((uv_handle_t*)svr_info->client, true);
     }
 }
 

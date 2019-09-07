@@ -10,14 +10,6 @@ namespace lego {
 
 namespace vpnroute {
 
-struct ServerInfo {
-    ServerInfo() {}
-    uv_tcp_t* remote_socket{ nullptr };
-    uv_connect_t* remote_connect{ nullptr };
-    uv_tcp_t* client{ nullptr };
-};
-typedef std::shared_ptr<ServerInfo> ServerInfoPtr;
-
 class TcpRoute {
 public:
     static TcpRoute* Instance();
