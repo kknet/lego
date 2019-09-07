@@ -213,7 +213,7 @@ void TcpRoute::OnNewConnection(uv_stream_t* server, int status) {
     }
 }
 
-void TcpRoute::CloseClient(uv_handle_t* handle) {
+void TcpRoute::CloseClient(uv_handle_t* handle, bool remote_close) {
     if (handle == NULL) {
         return;
     }
@@ -224,6 +224,10 @@ void TcpRoute::CloseClient(uv_handle_t* handle) {
         free(svr_info->remote_connect);
         delete svr_info;
         client->u.reserved[0] = NULL;
+    }
+
+    if (remote_close) {
+        return;
     }
 
     if (uv_is_closing(handle) == 0) {
@@ -241,7 +245,7 @@ void TcpRoute::CloseRemote(uv_handle_t* handle) {
     }
 
     ServerInfo* svr_info = (ServerInfo*)((uv_tcp_t*)handle)->u.reserved[0];
-    CloseClient((uv_handle_t*)svr_info->client);
+    CloseClient((uv_handle_t*)svr_info->client, true);
 }
 
 
