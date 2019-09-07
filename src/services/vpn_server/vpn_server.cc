@@ -80,7 +80,7 @@ extern "C" {
 }
 #endif
 
-#include "ssr/server.h"
+#include "services/account_with_secret.h"
 
 static void SignalCallback(EV_P_ ev_signal *w, int revents);
 static void AcceptCallback(EV_P_ ev_io *w, int revents);

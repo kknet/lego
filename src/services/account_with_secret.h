@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <mutex>
 
-#include "ssr/server.h"
+#include "services/vpn_server/server.h"
 
 namespace lego {
 
