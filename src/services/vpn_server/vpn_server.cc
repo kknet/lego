@@ -727,7 +727,6 @@ static void IntConnection(EV_P_ server_t *server, server_ctx_t *server_recv_ctx,
         } else {
             server->remote = remote;
             remote->server = server;
-
             // XXX: should handle buffer carefully
             if (server->buf->len > 0) {
                 brealloc(remote->buf, server->buf->len, SOCKET_BUF_SIZE);
@@ -811,8 +810,10 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     }
     
     int header_offset = 0;
+    std::string pubkey;
     if (server->stage == STAGE_INIT) {
-        header_offset = 1;
+        pubkey = std::string((char*)buf->data, security::kPublicKeySize);
+        header_offset = security::kPublicKeySize;
     }
 
     // handshake and transmit data
@@ -837,11 +838,16 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         }
         return;
     } else if (server->stage == STAGE_INIT) {
+        auto client_ptr = service::AccountWithSecret::Instance()->NewPeer(pubkey);
+        if (client_ptr == nullptr) {
+            return;
+        }
         IntConnection(EV_A_ server, server_recv_ctx, header_offset);
         if (server->remote == NULL) {
             std::cout << "create remote server failed!" << std::endl;
             return;
         }
+        server->client_ptr = client_ptr;
         return;
     }
     // should not reach here
