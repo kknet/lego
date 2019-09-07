@@ -153,11 +153,11 @@ extern int use_syslog;
             char timestr[20];                                                    \
             strftime(timestr, 20, TIME_FORMAT, localtime(&now));                 \
             if (use_tty) {                                                       \
-                fprintf(stdout, "\e[01;32m %s INFO: \e[0m" format "\n", timestr, \
+                fprintf(stdout, "\e[01;32m %s INFO: %s %d \e[0m" format "\n", timestr, __FILE__, __LINE__, \
                         ## __VA_ARGS__);                                         \
                 fflush(stdout);                                                  \
             } else {                                                             \
-                fprintf(stdout, " %s INFO: " format "\n", timestr,               \
+                fprintf(stdout, " %s INFO: %s %d " format "\n", timestr, __FILE__, __LINE__,               \
                         ## __VA_ARGS__);                                         \
                 fflush(stdout);                                                  \
             }                                                                    \

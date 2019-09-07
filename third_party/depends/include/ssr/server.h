@@ -23,6 +23,10 @@
 #ifndef _SERVER_H
 #define _SERVER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <time.h>
 #include <libcork/ds.h>
 
@@ -42,6 +46,42 @@
 #include "netutils.h"
 
 #include "common.h"
+#ifdef __cplusplus
+}
+#endif
+
+#include <memory>
+#include <string>
+
+#include "common/utils.h"
+#include "common/random.h"
+#include "common/tick.h"
+#include "security/ecdh_create_key.h"
+#include "security/public_key.h"
+#include "network/network_utils.h"
+
+static const uint32_t kPeerTimeout = 30 * 1000 * 1000;  // 30s
+
+struct PeerInfo {
+    PeerInfo(const std::string& pub) : pubkey(pub) {}
+    bool init() {
+        sec_num = lego::common::Random::RandomInt32();
+        account = lego::network::GetAccountAddressByPublicKey(pubkey);
+        lego::security::PublicKey pub_key(pubkey);
+        auto res = lego::security::EcdhCreateKey::Instance()->CreateKey(pub_key, seckey);
+        if (res != lego::security::kSecuritySuccess) {
+            return false;
+        }
+        timeout = std::chrono::steady_clock::now() + std::chrono::microseconds(kPeerTimeout);
+        return true;
+    }
+    std::string pubkey;
+    std::string seckey;
+    int32_t sec_num;
+    std::string account;
+    std::chrono::steady_clock::time_point timeout;
+};
+typedef std::shared_ptr<PeerInfo> PeerInfoPtr;
 
 typedef struct listen_ctx {
     ev_io io;
@@ -91,6 +131,7 @@ typedef struct server {
     struct query *query;
 
     struct cork_dllist_item entries;
+    PeerInfoPtr client_ptr;
 #ifdef USE_NFCONNTRACK_TOS
     struct dscptracker *tracker;
 #endif
