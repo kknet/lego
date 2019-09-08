@@ -541,6 +541,38 @@ void VpnClient::GetVpnNodes() {
         }
     }
 
+    for (uint32_t i = 0; i < country_vec.size(); ++i) {
+        auto country = country_vec[i];
+        auto uni_dht = std::dynamic_pointer_cast<network::Uniersal>(
+            network::UniversalManager::Instance()->GetUniversal(
+                network::kUniversalNetworkId));
+        if (!uni_dht) {
+            continue;
+        }
+
+        auto dht_nodes = uni_dht->RemoteGetNetworkNodes(
+                network::kVpnRouteNetworkId,
+                common::global_country_map[country],
+                4);
+        if (dht_nodes.empty()) {
+            CLIENT_ERROR("get dht_nodes: vpn nodes empty!");
+            continue;
+        }
+
+        uint32_t msg_id = common::GlobalInfo::Instance()->MessageId();
+        for (uint32_t i = 0; i < dht_nodes.size(); ++i) {
+            transport::protobuf::Header msg;
+            auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+                    network::kUniversalNetworkId);
+            ClientProto::CreateGetVpnInfoRequest(
+                    root_dht_->local_node(),
+                    dht_nodes[i],
+                    msg_id,
+                    msg);
+            uni_dht->SendToClosestNode(msg);
+        }
+    }
+
     vpn_nodes_tick_.CutOff(kGetVpnNodesPeriod, std::bind(&VpnClient::GetVpnNodes, this));
 }
 
