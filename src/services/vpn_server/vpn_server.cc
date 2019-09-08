@@ -86,6 +86,8 @@ extern "C" {
 #include "security/aes.h"
 #include "services/account_with_secret.h"
 
+using namespace lego;
+
 static void SignalCallback(EV_P_ ev_signal *w, int revents);
 static void AcceptCallback(EV_P_ ev_io *w, int revents);
 static void ServerSendCallback(EV_P_ ev_io *w, int revents);
@@ -804,7 +806,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     if (server->stage == STAGE_INIT) {
         pubkey = std::string((char*)buf->data, lego::security::kPublicKeySize);
         header_offset = lego::security::kPublicKeySize;
-        client_ptr = service::AccountWithSecret::Instance()->NewPeer(pubkey);
+        client_ptr = lego::service::AccountWithSecret::Instance()->NewPeer(pubkey);
         if (client_ptr == nullptr) {
             std::cout << "invalid public key: " << common::Encode::HexEncode(pubkey) << std::endl;
             return;
@@ -1050,7 +1052,7 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
 
     if (lego::security::Aes::Encrypt(
             server->buf->data,
-            server->buf->len£¬
+            server->buf->len,
             server->client_ptr->seckey,
             server->client_ptr->seckey.size(),
             server->buf->data) != lego::security::kSecuritySuccess) {
