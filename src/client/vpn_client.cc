@@ -557,7 +557,8 @@ void VpnClient::GetNetworkNodes(
                 common::global_country_map[country],
                 4);
         if (dht_nodes.empty()) {
-            CLIENT_ERROR("get dht_nodes: vpn nodes empty!");
+            CLIENT_ERROR("get dht_nodes[%s][%d]: vpn nodes empty!",
+                    country.c_str(), network_id);
             continue;
         }
         uint32_t msg_id = common::GlobalInfo::Instance()->MessageId();
