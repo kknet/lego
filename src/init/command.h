@@ -31,6 +31,7 @@ private:
     void PrintDht(uint32_t network_id);
     void PrintMembers(uint32_t network_id);
     void GetVpnNodes(const std::string& country);
+    void GetRouteNodes(const std::string& country);
     void TxPeriod();
     void VpnHeartbeat(const std::string& dht_key);
 
