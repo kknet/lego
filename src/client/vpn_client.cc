@@ -136,6 +136,7 @@ void VpnClient::HandleServiceMessage(transport::protobuf::Header& header) {
 void VpnClient::HandleGetVpnResponse(
         const protobuf::GetVpnInfoResponse& vpn_res,
         const std::string& dht_key) {
+    std::cout << "vpn nodes response coming. " << std::endl;
     if (vpn_res.ip().empty() ||
             vpn_res.country().empty() ||
             vpn_res.pubkey().empty()) {
@@ -508,7 +509,6 @@ void VpnClient::GetVpnNodes() {
         }
     }
 
-    std::cout << "get vpn nodes country_vec: " << country_vec.size() << std::endl;
     for (uint32_t i = 0; i < country_vec.size(); ++i) {
         auto country = country_vec[i];
         auto uni_dht = std::dynamic_pointer_cast<network::Uniersal>(
@@ -526,7 +526,6 @@ void VpnClient::GetVpnNodes() {
             CLIENT_ERROR("get dht_nodes: vpn nodes empty!");
             continue;
         }
-        std::cout << "get vpn nodes send: " << dht_nodes.size() << std::endl;
         uint32_t msg_id = common::GlobalInfo::Instance()->MessageId();
         for (uint32_t i = 0; i < dht_nodes.size(); ++i) {
             transport::protobuf::Header msg;
@@ -538,6 +537,7 @@ void VpnClient::GetVpnNodes() {
                     msg_id,
                     msg);
             uni_dht->SendToClosestNode(msg);
+            std::cout << "send get vpn info: " << dht_nodes[i]->public_ip << ":" << dht_nodes[i]->public_port << std::endl;
         }
     }
 

@@ -117,6 +117,9 @@ void ProxyDht::HandleGetSocksRequest(
     ShadowsocksProxy::Instance()->GetShadowsocks(route_port, server_port);
     service::protobuf::ServiceMessage svr_msg;
     auto vpn_res = svr_msg.mutable_vpn_res();
+    auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+            network::kUniversalNetworkId);
+    vpn_res->set_ip(uni_dht->local_node()->public_ip);
     vpn_res->set_svr_port(server_port);
     vpn_res->set_route_port(route_port);
     auto peer_ptr = service::AccountWithSecret::Instance()->NewPeer(
