@@ -271,13 +271,35 @@ TEST_F(TestMultiSign, TestEcdhCreateKey) {
     std::cout << sec_key1.size() << ":" << common::Encode::HexEncode(sec_key1) << std::endl;
     ASSERT_EQ(sec_key1, sec_key2);
 
-    for (uint32_t i = 1; i < 100; ++i) {
-        std::string test_aes = common::Random::RandomString(i);
-        std::string enc_out;
-        ASSERT_EQ(Aes::Encrypt(test_aes, sec_key1, enc_out), kSecuritySuccess);
-        std::string dec_out;
-        ASSERT_EQ(Aes::Decrypt(enc_out, sec_key1, dec_out), kSecuritySuccess);
-        ASSERT_EQ(test_aes, dec_out);
+    for (int i = 1; i < 100; ++i) {
+        {
+            std::string test_aes = common::Random::RandomString(i);
+            std::string enc_out;
+            ASSERT_EQ(Aes::Encrypt(test_aes, sec_key1, enc_out), kSecuritySuccess);
+            std::string dec_out;
+            ASSERT_EQ(Aes::Decrypt(enc_out, sec_key1, dec_out), kSecuritySuccess);
+            ASSERT_EQ(test_aes, dec_out);
+        }
+
+        {
+            std::string test_aes = common::Random::RandomString(i);
+            char* tmp_out_enc = (char*)malloc(128);
+            memset(tmp_out_enc, 0, test_aes.size());
+            ASSERT_EQ(Aes::Encrypt(
+                    (char*)test_aes.c_str(),
+                    test_aes.size(),
+                    (char*)sec_key1.c_str(),
+                    sec_key1.size(),
+                    tmp_out_enc), kSecuritySuccess);
+           
+            char* tmp_out_dec = (char*)malloc(128);
+            ASSERT_EQ(
+                    Aes::Decrypt(tmp_out_enc, i, (char*)sec_key1.c_str(), sec_key1.size(), tmp_out_enc),
+                    kSecuritySuccess);
+            ASSERT_EQ(test_aes, std::string(tmp_out_enc, i));
+            free(tmp_out_enc);
+            free(tmp_out_dec);
+        }
     }
 }
 

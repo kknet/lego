@@ -81,7 +81,9 @@ extern "C" {
 }
 #endif
 
+#include "common/encode.h"
 #include "security/crypto_utils.h"
+#include "security/aes.h"
 #include "services/account_with_secret.h"
 
 static void SignalCallback(EV_P_ ev_signal *w, int revents);
@@ -795,27 +797,48 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
 
     tx += r;
     buf->len = r;
-    int err = crypto->decrypt(buf, server->d_ctx, SOCKET_BUF_SIZE);
-    if (err == -2) {
-        ReportAddr(server->fd, "authentication error");
-        StopServer(EV_A_ server);
-        return;
-    } else if (err == CRYPTO_NEED_MORE) {
-        if (server->stage != STAGE_STREAM && server->frag > MAX_FRAG) {
-            ReportAddr(server->fd, "malicious fragmentation");
-            StopServer(EV_A_ server);
-            return;
-        }
-        server->frag++;
-        return;
-    }
-    
+
     int header_offset = 0;
     std::string pubkey;
+    PeerInfoPtr client_ptr = nullptr;
     if (server->stage == STAGE_INIT) {
         pubkey = std::string((char*)buf->data, lego::security::kPublicKeySize);
         header_offset = lego::security::kPublicKeySize;
+        client_ptr = service::AccountWithSecret::Instance()->NewPeer(pubkey);
+        if (client_ptr == nullptr) {
+            std::cout << "invalid public key: " << common::Encode::HexEncode(pubkey) << std::endl;
+            return;
+        }
+    } else {
+        client_ptr = server->client_ptr;
     }
+
+    if (lego::security::Aes::Decrypt(
+            buf->data + header_offset,
+            r - header_offset
+            client_ptr->seckey,
+            client_ptr->seckey.size(),
+            buf->data) != lego::security::kSecuritySuccess) {
+        ReportAddr(server->fd, "authentication error");
+        StopServer(EV_A_ server);
+        return;
+    }
+    buf->len = r - header_offset;
+//     int err = crypto->decrypt(buf, server->d_ctx, SOCKET_BUF_SIZE);
+//     if (err == -2) {
+//         ReportAddr(server->fd, "authentication error");
+//         StopServer(EV_A_ server);
+//         return;
+//     } else if (err == CRYPTO_NEED_MORE) {
+//         if (server->stage != STAGE_STREAM && server->frag > MAX_FRAG) {
+//             ReportAddr(server->fd, "malicious fragmentation");
+//             StopServer(EV_A_ server);
+//             return;
+//         }
+//         server->frag++;
+//         return;
+//     }
+    
 
     // handshake and transmit data
     if (server->stage == STAGE_STREAM) {
@@ -839,11 +862,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         }
         return;
     } else if (server->stage == STAGE_INIT) {
-        auto client_ptr = lego::service::AccountWithSecret::Instance()->NewPeer(pubkey);
-        if (client_ptr == nullptr) {
-            return;
-        }
-        IntConnection(EV_A_ server, server_recv_ctx, header_offset);
+        IntConnection(EV_A_ server, server_recv_ctx, 0);
         if (server->remote == NULL) {
             std::cout << "create remote server failed!" << std::endl;
             return;
@@ -1025,14 +1044,30 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
     }
 
     server->buf->len = r;
-    int err = crypto->encrypt(server->buf, server->e_ctx, SOCKET_BUF_SIZE);
+    if (server->client_ptr == nullptr) {
+        return;
+    }
 
-    if (err) {
+    if (lego::security::Aes::Encrypt(
+            server->buf->data,
+            server->buf->len£¬
+            server->client_ptr->seckey,
+            server->client_ptr->seckey.size(),
+            server->buf->data) != lego::security::kSecuritySuccess) {
         LOGE("invalid password or cipher");
         CloseAndFreeRemote(EV_A_ remote);
         CloseAndFreeServer(EV_A_ server);
         return;
     }
+
+//     int err = crypto->encrypt(server->buf, server->e_ctx, SOCKET_BUF_SIZE);
+// 
+//     if (err) {
+//         LOGE("invalid password or cipher");
+//         CloseAndFreeRemote(EV_A_ remote);
+//         CloseAndFreeServer(EV_A_ server);
+//         return;
+//     }
 
 #ifdef USE_NFCONNTRACK_TOS
     SetTosFromConnmark(remote, server);
@@ -1266,8 +1301,8 @@ static server_t * NewServer(int fd, listen_ctx_t *listener) {
 
     server->e_ctx = (cipher_ctx_t*)ss_malloc(sizeof(cipher_ctx_t));
     server->d_ctx = (cipher_ctx_t*)ss_malloc(sizeof(cipher_ctx_t));
-    crypto->ctx_init(crypto->cipher, server->e_ctx, 1);
-    crypto->ctx_init(crypto->cipher, server->d_ctx, 0);
+//     crypto->ctx_init(crypto->cipher, server->e_ctx, 1);
+//     crypto->ctx_init(crypto->cipher, server->d_ctx, 0);
 
     int request_timeout = std::min(MAX_REQUEST_TIMEOUT, listener->timeout)
         + rand() % MAX_REQUEST_TIMEOUT;
@@ -1300,11 +1335,11 @@ static void FreeServer(server_t *server) {
         server->remote->server = NULL;
     }
     if (server->e_ctx != NULL) {
-        crypto->ctx_release(server->e_ctx);
+//         crypto->ctx_release(server->e_ctx);
         ss_free(server->e_ctx);
     }
     if (server->d_ctx != NULL) {
-        crypto->ctx_release(server->d_ctx);
+//         crypto->ctx_release(server->d_ctx);
         ss_free(server->d_ctx);
     }
     if (server->buf != NULL) {
@@ -1427,11 +1462,11 @@ static int InitCrypto(
         const std::string& password,
         const std::string& key,
         const std::string& method) {
-    crypto = crypto_init(password.c_str(), NULL, method.c_str());
-    if (crypto == NULL) {
-        LOGI("failed to initialize ciphers");
-        return -1;
-    }
+//     crypto = crypto_init(password.c_str(), NULL, method.c_str());
+//     if (crypto == NULL) {
+//         LOGI("failed to initialize ciphers");
+//         return -1;
+//     }
     return 0;
 }
 
