@@ -170,10 +170,6 @@ std::vector<NodePtr> DhtFunction::GetClosestNodes(
         return std::vector<NodePtr>();
     }
 
-    if (dht.size() <= number_to_get) {
-        return std::vector<NodePtr>(dht.begin(), dht.end());
-    }
-
     if (number_to_get == 0) {
         return std::vector<NodePtr>();
     }

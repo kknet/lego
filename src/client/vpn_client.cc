@@ -315,7 +315,6 @@ std::string VpnClient::Init(
     std::string boot_net;
     config.Get("lego", "bootstrap_net", boot_net);
     boot_net += "," + bootstrap;
-    config.Set("lego", "bootstrap", boot_net);
     if (common::GlobalInfo::Instance()->Init(config) != common::kCommonSuccess) {
         CLIENT_ERROR("init global info failed!");
         return "ERROR";
@@ -509,6 +508,7 @@ void VpnClient::GetVpnNodes() {
         }
     }
 
+    std::cout << "get vpn nodes country_vec: " << country_vec.size() << std::endl;
     for (uint32_t i = 0; i < country_vec.size(); ++i) {
         auto country = country_vec[i];
         auto uni_dht = std::dynamic_pointer_cast<network::Uniersal>(
@@ -526,7 +526,7 @@ void VpnClient::GetVpnNodes() {
             CLIENT_ERROR("get dht_nodes: vpn nodes empty!");
             continue;
         }
-
+        std::cout << "get vpn nodes send: " << dht_nodes.size() << std::endl;
         uint32_t msg_id = common::GlobalInfo::Instance()->MessageId();
         for (uint32_t i = 0; i < dht_nodes.size(); ++i) {
             transport::protobuf::Header msg;

@@ -2,6 +2,7 @@
 
 #include "common/global_info.h"
 #include "common/state_lock.h"
+#include "common/country_code.h"
 #include "ip/ip_utils.h"
 #include "transport/synchro_wait.h"
 #include "dht/dht_key.h"
@@ -203,6 +204,10 @@ void Uniersal::ProcessGetNetworkNodesRequest(
             network_msg.get_net_nodes_req().net_id(),
             network_msg.get_net_nodes_req().country(),
             network_msg.get_net_nodes_req().count());
+    if (network_msg.get_net_nodes_req().country() != ip::kInvalidCountryCode) {
+        std::cout << "get network nodes request coming: " << common::global_code_to_country_map[network_msg.get_net_nodes_req().country()] << "," << nodes.size() << std::endl;
+    }
+
     if (nodes.empty()) {
         SendToClosestNode(header);
         return;

@@ -229,7 +229,9 @@ void BaseDht::SendToClosestNode(transport::protobuf::Header& message) {
                 local_node_->dht_key,
                 true,
                 exclude);
-    } else {
+    }
+    
+    if (node == nullptr) {
         node = FindNodeDirect(message);
         if (!node) {
             std::set<std::string> exclude;

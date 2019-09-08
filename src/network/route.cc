@@ -106,6 +106,7 @@ void Route::HandleMessage(transport::protobuf::Header& header) {
                 std::string("no dht, route by universal: ") +
                 std::to_string(header.universal()),
                 header);
+        std::cout << "no dht found: " << dht::DhtKeyManager::DhtKeyGetNetId(header.des_dht_key()) << ", routing by universal." << std::endl;
         RouteByUniversal(header);
         return;
     }
