@@ -60,7 +60,7 @@ VpnClient::VpnClient() {
             std::bind(&VpnClient::DumpVpnNodes, this));
     dump_bootstrap_tick_.CutOff(
             60ull * 1000ull * 1000ull,
-            std::bind(&VpnClient::DumpGetVpnServerNodesBootstrapNodes, this));
+            std::bind(&VpnClient::DumpBootstrapNodes, this));
 }
 
 VpnClient::~VpnClient() {}
@@ -161,7 +161,7 @@ void VpnClient::HandleGetVpnResponse(
                 vpn_res.ip(),
                 vpn_res.svr_port(),
                 vpn_res.route_port(),
-                sec_key,
+                common::Encode::HexEncode(sec_key),
                 dht_key,
                 true));
         if (iter->second.size() > 16) {
@@ -176,7 +176,7 @@ void VpnClient::HandleGetVpnResponse(
                 vpn_res.ip(),
                 vpn_res.svr_port(),
                 vpn_res.route_port(),
-                sec_key,
+                common::Encode::HexEncode(sec_key),
                 dht_key,
                 true));
         if (iter->second.size() > 16) {
@@ -797,9 +797,9 @@ void VpnClient::DumpVpnNodes() {
         std::string conf_str;
         for (auto qiter = iter->second.rbegin(); qiter != iter->second.rend(); ++qiter) {
             std::string tmp_str;
-            tmp_str = (*qiter)->dht_key + "," + (*qiter)->encrypt_type + "," +
-                    (*qiter)->ip + "," + (*qiter)->passwd + "," +
-                    std::to_string((*qiter)->port);
+            tmp_str = (*qiter)->dht_key + "," + (*qiter)->seckey + "," +
+                    (*qiter)->ip + "," +
+                    std::to_string((*qiter)->svr_port);
             conf_str += tmp_str + ";";
         }
         config.Set("vpn", iter->first, conf_str);
