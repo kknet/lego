@@ -465,7 +465,7 @@ std::string VpnClient::GetVpnServerNodes(
         uint32_t count,
         bool route,
         std::vector<VpnServerNodePtr>& nodes) {
-    if (route) {
+    if (!route) {
         std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
         auto iter = vpn_nodes_map_.find(country);
         if (iter == vpn_nodes_map_.end()) {
