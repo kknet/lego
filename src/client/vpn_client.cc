@@ -813,9 +813,11 @@ void VpnClient::DumpVpnNodes() {
         std::string conf_str;
         for (auto qiter = iter->second.rbegin(); qiter != iter->second.rend(); ++qiter) {
             std::string tmp_str;
-            tmp_str = (*qiter)->dht_key + "," + (*qiter)->seckey + "," +
+            tmp_str = ((*qiter)->dht_key + "," +
+                    (*qiter)->seckey + "," +
+                    (*qiter)->pubkey + "," +
                     (*qiter)->ip + "," +
-                    std::to_string((*qiter)->svr_port);
+                    std::to_string((*qiter)->svr_port));
             conf_str += tmp_str + ";";
         }
         config.Set("vpn", iter->first, conf_str);
@@ -859,11 +861,12 @@ void VpnClient::ReadVpnNodesFromConf() {
             }
 
             auto node_item = std::make_shared<VpnServerNode>(
-                    item_split[2],
-                    common::StringUtil::ToUint16(item_split[3]),
+                    item_split[3],
+                    common::StringUtil::ToUint16(item_split[4]),
                     0,
                     item_split[1],
                     item_split[0],
+                    item_split[2],
                     false);
             std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
             auto iter = vpn_nodes_map_.find(country_split[i]);
