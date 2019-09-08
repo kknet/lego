@@ -240,8 +240,9 @@ void Command::GetVpnNodes(const std::string& country) {
     for (uint32_t i = 0; i < nodes.size(); ++i) {
         std::cout << "get vpn_info: " << nodes[i]->ip << ":" << nodes[i]->svr_port
             << ", " << nodes[i]->svr_port << ", "
-            << nodes[i]->seckey
-            << ", " << nodes[i]->dht_key << std::endl;
+            << nodes[i]->seckey << ", "
+            << nodes[i]->pubkey << ", "
+            << nodes[i]->dht_key << std::endl;
     }
 }
 
@@ -252,8 +253,9 @@ void Command::GetRouteNodes(const std::string& country) {
     for (uint32_t i = 0; i < nodes.size(); ++i) {
         std::cout << "get vpn_info: " << nodes[i]->ip << ":" << nodes[i]->svr_port
             << ", " << nodes[i]->svr_port << ", "
-            << nodes[i]->seckey
-            << ", " << nodes[i]->dht_key << std::endl;
+            << nodes[i]->seckey << ", "
+            << nodes[i]->pubkey << ", "
+            << nodes[i]->dht_key << std::endl;
     }
 }
 
