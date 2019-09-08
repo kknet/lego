@@ -847,6 +847,10 @@ void VpnClient::DumpVpnNodes() {
 void VpnClient::ReadVpnNodesFromConf() {
     std::string country_list;
     config.Get("vpn", "country", country_list);
+    if (country_list.empty()) {
+        return;
+    }
+
     common::Split country_split(country_list.c_str(), ',', country_list.size());
     for (uint32_t i = 0; i < country_split.Count(); ++i) {
         if (country_split.SubLen(i) <= 1) {
