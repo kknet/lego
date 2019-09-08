@@ -158,30 +158,34 @@ void VpnClient::HandleGetVpnResponse(
     if (vpn_res.svr_port() > 0) {
         std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
         auto iter = vpn_nodes_map_.find(vpn_res.country());
-        iter->second.push_back(std::make_shared<VpnServerNode>(
-                vpn_res.ip(),
-                vpn_res.svr_port(),
-                vpn_res.route_port(),
-                common::Encode::HexEncode(sec_key),
-                dht_key,
-                true));
-        if (iter->second.size() > 16) {
-            iter->second.pop_front();
+        if (iter != vpn_nodes_map_.end()) {
+            iter->second.push_back(std::make_shared<VpnServerNode>(
+                    vpn_res.ip(),
+                    vpn_res.svr_port(),
+                    vpn_res.route_port(),
+                    common::Encode::HexEncode(sec_key),
+                    dht_key,
+                    true));
+            if (iter->second.size() > 16) {
+                iter->second.pop_front();
+            }
         }
     }
 
     if (vpn_res.route_port() > 0) {
         std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
         auto iter = route_nodes_map_.find(vpn_res.country());
-        iter->second.push_back(std::make_shared<VpnServerNode>(
-                vpn_res.ip(),
-                vpn_res.svr_port(),
-                vpn_res.route_port(),
-                common::Encode::HexEncode(sec_key),
-                dht_key,
-                true));
-        if (iter->second.size() > 16) {
-            iter->second.pop_front();
+        if (iter != route_nodes_map_.end()) {
+            iter->second.push_back(std::make_shared<VpnServerNode>(
+                    vpn_res.ip(),
+                    vpn_res.svr_port(),
+                    vpn_res.route_port(),
+                    common::Encode::HexEncode(sec_key),
+                    dht_key,
+                    true));
+            if (iter->second.size() > 16) {
+                iter->second.pop_front();
+            }
         }
     }
 }

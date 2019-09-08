@@ -123,6 +123,14 @@ void Command::AddBaseCommands() {
             GetVpnNodes("US");
         }
     });
+    AddCommand("rn", [this](const std::vector<std::string>& args) {
+        if (args.size() > 0) {
+            GetRouteNodes(args[0]);
+        }
+        else {
+            GetRouteNodes("US");
+        }
+    });
     AddCommand("vh", [this](const std::vector<std::string>& args) {
         if (args.size() > 0) {
             VpnHeartbeat(args[0]);
@@ -228,6 +236,18 @@ void Command::VpnHeartbeat(const std::string& dht_key) {
 void Command::GetVpnNodes(const std::string& country) {
     std::vector<lego::client::VpnServerNodePtr> nodes;
     lego::client::VpnClient::Instance()->GetVpnServerNodes(country, 2, false, nodes);
+    std::cout << "get vpn_nodes size: " << nodes.size() << std::endl;
+    for (uint32_t i = 0; i < nodes.size(); ++i) {
+        std::cout << "get vpn_info: " << nodes[i]->ip << ":" << nodes[i]->svr_port
+            << ", " << nodes[i]->svr_port << ", "
+            << nodes[i]->seckey
+            << ", " << nodes[i]->dht_key << std::endl;
+    }
+}
+
+void Command::GetRouteNodes(const std::string& country) {
+    std::vector<lego::client::VpnServerNodePtr> nodes;
+    lego::client::VpnClient::Instance()->GetVpnServerNodes(country, 2, true, nodes);
     std::cout << "get vpn_nodes size: " << nodes.size() << std::endl;
     for (uint32_t i = 0; i < nodes.size(); ++i) {
         std::cout << "get vpn_info: " << nodes[i]->ip << ":" << nodes[i]->svr_port
