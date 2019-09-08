@@ -816,7 +816,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     }
 
     if (lego::security::Aes::Decrypt(
-            buf->data + header_offset,
+            (char*)buf->data + header_offset,
             static_cast<int>(r - header_offset),
             client_ptr->seckey.c_str(),
             client_ptr->seckey.size(),
@@ -1051,7 +1051,7 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
     }
 
     if (lego::security::Aes::Encrypt(
-            server->buf->data,
+            (char*)server->buf->data,
             server->buf->len,
             server->client_ptr->seckey.c_str(),
             server->client_ptr->seckey.size(),
