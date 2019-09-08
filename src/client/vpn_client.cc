@@ -487,7 +487,6 @@ std::string VpnClient::GetVpnServerNodes(
         if (iter == vpn_nodes_map_.end()) {
             vpn_nodes_map_[country] = std::deque<VpnServerNodePtr>();
             std::vector<std::string> ct_vec = { country };
-            GetNetworkNodes(ct_vec, network::kVpnNetworkId);
         } else {
             for (auto qiter = iter->second.begin(); qiter != iter->second.end(); ++qiter) {
                 nodes.push_back(*qiter);
@@ -504,7 +503,6 @@ std::string VpnClient::GetVpnServerNodes(
         if (iter == route_nodes_map_.end()) {
             route_nodes_map_[country] = std::deque<VpnServerNodePtr>();
             std::vector<std::string> ct_vec = { country };
-            GetNetworkNodes(ct_vec, network::kVpnRouteNetworkId);
         } else {
             for (auto qiter = iter->second.begin(); qiter != iter->second.end(); ++qiter) {
                 nodes.push_back(*qiter);
