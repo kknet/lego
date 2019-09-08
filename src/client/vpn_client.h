@@ -109,6 +109,9 @@ public:
     void VpnHeartbeat(const std::string& dht_key);
     int ResetTransport(const std::string& ip, uint16_t port);
     std::string GetPublicKey();
+    std::string GetSecretKey(const std::string& peer_pubkey);
+    std::string EncryptData(const std::string& seckey, const std::string& data);
+    std::string DecryptData(const std::string& seckey, const std::string& data);
 
 private:
     VpnClient();

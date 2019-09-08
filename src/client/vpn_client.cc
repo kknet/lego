@@ -353,6 +353,34 @@ std::string VpnClient::GetPublicKey() {
     return common::Encode::HexEncode(security::Schnorr::Instance()->str_pubkey());
 }
 
+std::string VpnClient::GetSecretKey(const std::string& peer_pubkey) {
+    std::string sec_key;
+    security::PublicKey pubkey(peer_pubkey);
+    if (security::EcdhCreateKey::Instance()->CreateKey(
+            pubkey,
+            sec_key) != security::kSecuritySuccess) {
+        return "ERROR";
+    }
+
+    return common::Encode::HexEncode(sec_key);
+}
+
+std::string VpnClient::EncryptData(const std::string& seckey, const std::string& data) {
+    std::string enc_out;
+    if (security::Aes::Encrypt(data, seckey, enc_out) != security::kSecuritySuccess) {
+        return "ERROR";
+    }
+    return common::Encode::HexEncode(enc_out);
+}
+
+std::string VpnClient::DecryptData(const std::string& seckey, const std::string& data) {
+    std::string dec_out;
+    if (security::Aes::Decrypt(data, seckey, dec_out) != security::kSecuritySuccess) {
+        return "ERROR";
+    }
+    return common::Encode::HexEncode(dec_out);
+}
+
 bool VpnClient::SetFirstInstall() {
     first_install_ = true;
     config.Set("lego", "first_instasll", first_install_);
