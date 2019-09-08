@@ -43,21 +43,21 @@ namespace protobuf {
 struct VpnServerNode {
     VpnServerNode(
             const std::string& in_ip,
-            uint16_t in_port,
-            const std::string& enc_type,
-            const std::string& pwd,
+            uint16_t s_port,
+            uint16_t r_port,
+            const std::string& skey,
             const std::string& dkey,
             bool new_node)
             : ip(in_ip),
-              port(in_port),
-              encrypt_type(enc_type),
-              passwd(pwd),
+              svr_port(s_port),
+              route_port(r_port),
+              seckey(skey),
               dht_key(dkey),
               new_get(new_node) {}
     std::string ip;
-    uint16_t port;
-    std::string encrypt_type;
-    std::string passwd;
+    uint16_t svr_port;
+    uint16_t route_port;
+    std::string seckey;
     std::string dht_key;
     bool new_get{ false };
 };
@@ -93,6 +93,7 @@ public:
     std::string GetVpnServerNodes(
             const std::string& country,
             uint32_t count,
+            bool route,
             std::vector<VpnServerNodePtr>& nodes);
     std::string Transaction(const std::string& to, uint64_t amount, std::string& tx_gid);
     std::string GetTransactionInfo(const std::string& tx_gid);
@@ -168,6 +169,8 @@ private:
     bool got_block_{ false };
     std::map<std::string, std::deque<VpnServerNodePtr>> vpn_nodes_map_;
     std::mutex vpn_nodes_map_mutex_;
+    std::map<std::string, std::deque<VpnServerNodePtr>> route_nodes_map_;
+    std::mutex route_nodes_map_mutex_;
 };
 
 }  // namespace client

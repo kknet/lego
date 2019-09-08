@@ -227,11 +227,12 @@ void Command::VpnHeartbeat(const std::string& dht_key) {
 
 void Command::GetVpnNodes(const std::string& country) {
     std::vector<lego::client::VpnServerNodePtr> nodes;
-    lego::client::VpnClient::Instance()->GetVpnServerNodes(country, 2, nodes);
+    lego::client::VpnClient::Instance()->GetVpnServerNodes(country, 2, false, nodes);
     std::cout << "get vpn_nodes size: " << nodes.size() << std::endl;
     for (uint32_t i = 0; i < nodes.size(); ++i) {
-        std::cout << "get vpn_info: " << nodes[i]->ip << ":" << nodes[i]->port
-            << ", " << nodes[i]->encrypt_type << ", " << nodes[i]->passwd
+        std::cout << "get vpn_info: " << nodes[i]->ip << ":" << nodes[i]->svr_port
+            << ", " << nodes[i]->svr_port << ", "
+            << common::Encode::HexEncode(nodes[i]->seckey)
             << ", " << common::Encode::HexEncode(nodes[i]->dht_key) << std::endl;
     }
 }

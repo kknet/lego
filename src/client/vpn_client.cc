@@ -60,7 +60,7 @@ VpnClient::VpnClient() {
             std::bind(&VpnClient::DumpVpnNodes, this));
     dump_bootstrap_tick_.CutOff(
             60ull * 1000ull * 1000ull,
-            std::bind(&VpnClient::DumpBootstrapNodes, this));
+            std::bind(&VpnClient::DumpGetVpnServerNodesBootstrapNodes, this));
 }
 
 VpnClient::~VpnClient() {}
@@ -137,10 +137,8 @@ void VpnClient::HandleGetVpnResponse(
         const protobuf::GetVpnInfoResponse& vpn_res,
         const std::string& dht_key) {
     if (vpn_res.ip().empty() ||
-            vpn_res.port() <= 0 ||
             vpn_res.country().empty() ||
-            vpn_res.encrypt_type().empty() ||
-            vpn_res.passwd().empty()) {
+            vpn_res.pubkey().empty()) {
         return;
     }
 
@@ -156,25 +154,34 @@ void VpnClient::HandleGetVpnResponse(
         return;
     }
 
-    std::string dec_passwd;
-    if (security::Aes::Decrypt(
-        vpn_res.passwd(),
-        sec_key,
-        dec_passwd) != security::kSecuritySuccess) {
-        CLIENT_ERROR("aes encrypt failed!");
-        return;
+    if (vpn_res.svr_port() > 0) {
+        std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
+        auto iter = vpn_nodes_map_.find(vpn_res.country());
+        iter->second.push_back(std::make_shared<VpnServerNode>(
+                vpn_res.ip(),
+                vpn_res.svr_port(),
+                vpn_res.route_port(),
+                sec_key,
+                dht_key,
+                true));
+        if (iter->second.size() > 16) {
+            iter->second.pop_front();
+        }
     }
-    std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
-    auto iter = vpn_nodes_map_.find(vpn_res.country());
-    iter->second.push_back(std::make_shared<VpnServerNode>(
-            vpn_res.ip(),
-            vpn_res.port(),
-            vpn_res.encrypt_type(),
-            dec_passwd,
-            dht_key,
-            true));
-    if (iter->second.size() > 16) {
-        iter->second.pop_front();
+
+    if (vpn_res.route_port() > 0) {
+        std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
+        auto iter = route_nodes_map_.find(vpn_res.country());
+        iter->second.push_back(std::make_shared<VpnServerNode>(
+                vpn_res.ip(),
+                vpn_res.svr_port(),
+                vpn_res.route_port(),
+                sec_key,
+                dht_key,
+                true));
+        if (iter->second.size() > 16) {
+            iter->second.pop_front();
+        }
     }
 }
 
@@ -456,11 +463,27 @@ std::string VpnClient::GetTransactionInfo(const std::string& tx_gid) {
 std::string VpnClient::GetVpnServerNodes(
         const std::string& country,
         uint32_t count,
+        bool route,
         std::vector<VpnServerNodePtr>& nodes) {
-    {
+    if (route) {
         std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
         auto iter = vpn_nodes_map_.find(country);
         if (iter == vpn_nodes_map_.end()) {
+            vpn_nodes_map_[country] = std::deque<VpnServerNodePtr>();
+        } else {
+            for (auto qiter = iter->second.begin(); qiter != iter->second.end(); ++qiter) {
+                nodes.push_back(*qiter);
+            }
+
+            if (nodes.empty()) {
+                return "get vpn nodes failed!";
+            }
+            return "OK";
+        }
+    } else {
+        std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
+        auto iter = route_nodes_map_.find(country);
+        if (iter == route_nodes_map_.end()) {
             vpn_nodes_map_[country] = std::deque<VpnServerNodePtr>();
         } else {
             for (auto qiter = iter->second.begin(); qiter != iter->second.end(); ++qiter) {
