@@ -46,11 +46,11 @@ message GetVpnInfoRequest {
 
 message GetVpnInfoResponse {
 	optional bytes ip = 1;
-	optional uint32 port = 2;
-	optional bytes encrypt_type = 3;
-	optional bytes passwd = 4;  // encrypt with ecdh key
-	optional bytes pubkey = 5;
-    optional bytes country = 6;
+	optional uint32 svr_port = 2;
+	optional uint32 route_port = 3;
+    optional bytes country = 4;
+    optional int32 secnum = 5;
+    optional bytes pubkey = 6;
 }
 
 message ServiceMessage {
