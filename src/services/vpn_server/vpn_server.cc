@@ -817,7 +817,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
 
     if (lego::security::Aes::Decrypt(
             buf->data + header_offset,
-            r - header_offset
+            r - header_offset,
             client_ptr->seckey,
             client_ptr->seckey.size(),
             buf->data) != lego::security::kSecuritySuccess) {
