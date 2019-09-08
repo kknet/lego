@@ -327,6 +327,7 @@ std::string VpnClient::Init(
     config.Set("lego", "country", std::string("CN"));
     config.Set("lego", "first_node", false);
     config.Set("lego", "client", true);
+    config.Set("lego", "bootstrap", bootstrap);
     config.Set("lego", "id", std::string("test_id"));
     std::string boot_net;
     config.Get("lego", "bootstrap_net", boot_net);
