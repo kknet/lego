@@ -840,9 +840,9 @@ void VpnClient::ReadVpnNodesFromConf() {
 
             auto node_item = std::make_shared<VpnServerNode>(
                     item_split[2],
-                    common::StringUtil::ToUint16(item_split[4]),
+                    common::StringUtil::ToUint16(item_split[3]),
+                    0,
                     item_split[1],
-                    item_split[3],
                     item_split[0],
                     false);
             std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
