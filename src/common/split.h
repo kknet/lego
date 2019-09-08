@@ -17,6 +17,10 @@ public:
         if (len == 0) {
             len = strlen(in);
         }
+
+        if (len <= 0) {
+            return;
+        }
         assert(len > 0);
         buf_ = new char[len + 1];
         Parser(in, len);
