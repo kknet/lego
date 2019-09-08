@@ -806,8 +806,6 @@ void BaseDht::Heartbeat() {
     uint8_t country;
     GetNetIdAndCountry(net_id, country);
     auto local_net_id = DhtKeyManager::DhtKeyGetNetId(local_node_->dht_key);
-    DHT_ERROR("[net_id: %u][country: %d] nodes_size[%d] [universal:%d]",
-        local_net_id, country, tmp_dht_ptr->size(), IsUniversal());
     heartbeat_tick_.CutOff(
             kHeartbeatPeriod,
             std::bind(&BaseDht::Heartbeat, shared_from_this()));

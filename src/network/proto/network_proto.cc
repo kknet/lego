@@ -40,13 +40,6 @@ void NetworkProto::CreateGetNetworkNodesRequest(
     get_nodes_req->set_count(count);
     get_nodes_req->set_country(country);
     msg.set_data(net_msg.SerializeAsString());
-#ifdef LEGO_TRACE_MESSAGE
-    msg.set_debug(std::string("GetNetworkNodesRequest:") +
-            local_node->public_ip + "-" +
-            std::to_string(local_node->public_port) + ", to " +
-            common::Encode::HexEncode(dht_key.StrKey()));
-    DHT_ERROR("begin: %s", msg.debug().c_str());
-#endif
 }
 
 void NetworkProto::CreateGetNetworkNodesResponse(
@@ -85,13 +78,6 @@ void NetworkProto::CreateGetNetworkNodesResponse(
         proto_node->set_pubkey(nodes[i]->pubkey_str);
     }
     msg.set_data(net_msg.SerializeAsString());
-#ifdef LEGO_TRACE_MESSAGE
-    msg.set_debug(std::string("GetNetworkNodesResponse:") +
-            local_node->public_ip + "-" +
-            std::to_string(local_node->public_port) + ", to " +
-            common::Encode::HexEncode(header.src_dht_key()));
-    DHT_DEBUG("begin: %s", msg.debug().c_str());
-#endif
 }
 
 }  // namespace network

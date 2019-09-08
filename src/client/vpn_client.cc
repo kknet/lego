@@ -708,16 +708,6 @@ std::string VpnClient::Transaction(const std::string& to, uint64_t amount, std::
             rand_num,
             msg);
     network::Route::Instance()->Send(msg);
-    {
-        std::lock_guard<std::mutex> guard(tx_map_mutex_);
-        tx_map_.insert(std::make_pair(tx_gid, nullptr));
-    }
-    tx_gid = common::Encode::HexEncode(tx_gid);
-    CLIENT_ERROR("send new tx: %s, from: %s, to: %s, amount: %llu",
-            tx_gid.c_str(),
-            common::Encode::HexEncode(common::GlobalInfo::Instance()->id()).c_str(),
-            to.c_str(),
-            amount);
     return "OK";
 }
 
