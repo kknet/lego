@@ -818,7 +818,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     if (lego::security::Aes::Decrypt(
             (char*)buf->data + header_offset,
             static_cast<int>(r - header_offset),
-            client_ptr->seckey.c_str(),
+            (char*)client_ptr->seckey.c_str(),
             client_ptr->seckey.size(),
             buf->data) != lego::security::kSecuritySuccess) {
         ReportAddr(server->fd, "authentication error");
@@ -1053,7 +1053,7 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
     if (lego::security::Aes::Encrypt(
             (char*)server->buf->data,
             server->buf->len,
-            server->client_ptr->seckey.c_str(),
+            (char*)server->client_ptr->seckey.c_str(),
             server->client_ptr->seckey.size(),
             server->buf->data) != lego::security::kSecuritySuccess) {
         LOGE("invalid password or cipher");
