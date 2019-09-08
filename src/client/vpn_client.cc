@@ -169,7 +169,6 @@ void VpnClient::HandleGetVpnResponse(
                 iter->second.pop_front();
             }
         }
-        std::cout << "vpn nodes response coming. " << std::endl;
     }
 
     if (vpn_res.route_port() > 0) {
@@ -187,7 +186,6 @@ void VpnClient::HandleGetVpnResponse(
                 iter->second.pop_front();
             }
         }
-        std::cout << "route nodes response coming. " << std::endl;
     }
 }
 
@@ -475,6 +473,8 @@ std::string VpnClient::GetVpnServerNodes(
         auto iter = vpn_nodes_map_.find(country);
         if (iter == vpn_nodes_map_.end()) {
             vpn_nodes_map_[country] = std::deque<VpnServerNodePtr>();
+            std::vector<std::string> ct_vec = { country };
+            GetNetworkNodes(ct_vec, network::kVpnNetworkId);
         } else {
             for (auto qiter = iter->second.begin(); qiter != iter->second.end(); ++qiter) {
                 nodes.push_back(*qiter);
@@ -489,7 +489,9 @@ std::string VpnClient::GetVpnServerNodes(
         std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
         auto iter = route_nodes_map_.find(country);
         if (iter == route_nodes_map_.end()) {
-            vpn_nodes_map_[country] = std::deque<VpnServerNodePtr>();
+            route_nodes_map_[country] = std::deque<VpnServerNodePtr>();
+            std::vector<std::string> ct_vec = { country };
+            GetNetworkNodes(ct_vec, network::kVpnRouteNetworkId);
         } else {
             for (auto qiter = iter->second.begin(); qiter != iter->second.end(); ++qiter) {
                 nodes.push_back(*qiter);
@@ -514,37 +516,7 @@ void VpnClient::GetVpnNodes() {
         }
     }
 
-    for (uint32_t i = 0; i < country_vec.size(); ++i) {
-        auto country = country_vec[i];
-        auto uni_dht = std::dynamic_pointer_cast<network::Uniersal>(
-            network::UniversalManager::Instance()->GetUniversal(
-                network::kUniversalNetworkId));
-        if (!uni_dht) {
-            continue;
-        }
-
-        auto dht_nodes = uni_dht->RemoteGetNetworkNodes(
-                network::kVpnNetworkId,
-                common::global_country_map[country],
-                4);
-        if (dht_nodes.empty()) {
-            CLIENT_ERROR("get dht_nodes: vpn nodes empty!");
-            continue;
-        }
-        uint32_t msg_id = common::GlobalInfo::Instance()->MessageId();
-        for (uint32_t i = 0; i < dht_nodes.size(); ++i) {
-            transport::protobuf::Header msg;
-            auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
-                    network::kUniversalNetworkId);
-            ClientProto::CreateGetVpnInfoRequest(
-                    root_dht_->local_node(),
-                    dht_nodes[i],
-                    msg_id,
-                    msg);
-            uni_dht->SendToClosestNode(msg);
-        }
-    }
-
+    GetNetworkNodes(country_vec, network::kVpnNetworkId);
     {
         country_vec.clear();
         std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
@@ -553,6 +525,13 @@ void VpnClient::GetVpnNodes() {
         }
     }
 
+    GetNetworkNodes(country_vec, network::kVpnRouteNetworkId);
+    vpn_nodes_tick_.CutOff(kGetVpnNodesPeriod, std::bind(&VpnClient::GetVpnNodes, this));
+}
+
+void VpnClient::GetNetworkNodes(
+        const std::vector<std::string>& country_vec,
+        uint32_t network_id) {
     for (uint32_t i = 0; i < country_vec.size(); ++i) {
         auto country = country_vec[i];
         auto uni_dht = std::dynamic_pointer_cast<network::Uniersal>(
@@ -563,7 +542,7 @@ void VpnClient::GetVpnNodes() {
         }
 
         auto dht_nodes = uni_dht->RemoteGetNetworkNodes(
-                network::kVpnRouteNetworkId,
+                network_id,
                 common::global_country_map[country],
                 4);
         if (dht_nodes.empty()) {
@@ -581,11 +560,8 @@ void VpnClient::GetVpnNodes() {
                     msg_id,
                     msg);
             uni_dht->SendToClosestNode(msg);
-            std::cout << "send get route info: " << dht_nodes[i]->public_ip << ":" << dht_nodes[i]->public_port << std::endl;
         }
     }
-
-    vpn_nodes_tick_.CutOff(kGetVpnNodesPeriod, std::bind(&VpnClient::GetVpnNodes, this));
 }
 
 int VpnClient::InitTransport() {
