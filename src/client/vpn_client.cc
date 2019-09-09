@@ -557,10 +557,8 @@ void VpnClient::GetNetworkNodes(
                 common::global_country_map[country],
                 4);
         if (dht_nodes.empty()) {
-            CLIENT_ERROR("get [%s][%d] nodes error.", country.c_str(), network_id);
             continue;
         }
-        CLIENT_ERROR("DDDDDDDDDDDDDDDDDD get [%s][%d] nodes success.", country.c_str(), network_id);
 
         uint32_t msg_id = common::GlobalInfo::Instance()->MessageId();
         for (uint32_t i = 0; i < dht_nodes.size(); ++i) {
@@ -573,8 +571,6 @@ void VpnClient::GetNetworkNodes(
                     msg_id,
                     msg);
             uni_dht->SendToClosestNode(msg);
-            CLIENT_ERROR("get dht_nodes from[%s][%d]",
-                dht_nodes[i]->public_ip.c_str(), dht_nodes[i]->public_port);
         }
     }
 }

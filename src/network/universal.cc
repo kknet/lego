@@ -7,6 +7,7 @@
 #include "transport/synchro_wait.h"
 #include "dht/dht_key.h"
 #include "dht/dht_function.h"
+#include "dht/dht_function.h"
 #include "network/network_utils.h"
 #include "network/universal_manager.h"
 #include "network/proto/network_proto.h"
@@ -151,6 +152,7 @@ std::vector<dht::NodePtr> Uniersal::RemoteGetNetworkNodes(
             }
 
             const auto& res_nodes = network_msg.get_net_nodes_res().nodes();
+            NETWORK_ERROR("get nodes response coming.%d", res_nodes.size());
             for (int32_t i = 0; i < res_nodes.size(); ++i) {
                 auto pubkey_ptr = std::make_shared<security::PublicKey>(res_nodes[i].pubkey());
                 nodes.push_back(std::make_shared<dht::Node>(
@@ -167,8 +169,9 @@ std::vector<dht::NodePtr> Uniersal::RemoteGetNetworkNodes(
         } while (0);
         state_lock.Signal();
     };
-    transport::SynchroWait::Instance()->Add(msg.id(), 1000 * 1000, callback, 1);
+    transport::SynchroWait::Instance()->Add(msg.id(), 3 * 1000 * 1000, callback, 1);
     state_lock.Wait();
+    NETWORK_ERROR("get nodes response coming. return %d", nodes.size());
     return nodes;
 }
 
@@ -205,6 +208,20 @@ void Uniersal::ProcessGetNetworkNodesRequest(
             network_msg.get_net_nodes_req().country(),
             network_msg.get_net_nodes_req().count());
     if (nodes.empty()) {
+        bool closest = false;
+        auto tmp_dht = *readonly_dht_;
+        if (dht::DhtFunction::IsClosest(
+                header.des_dht_key(),
+                local_node_->dht_key,
+                tmp_dht,
+                closest) == dht::kDhtSuccess && closest) {
+            transport::protobuf::Header msg;
+            SetFrequently(msg);
+            NetworkProto::CreateGetNetworkNodesResponse(local_node_, header, nodes, msg);
+            SendToClosestNode(msg);
+            return;
+        }
+
         SendToClosestNode(header);
         return;
     }
