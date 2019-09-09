@@ -811,6 +811,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             std::cout << "invalid public key: " << common::Encode::HexEncode(pubkey) << std::endl;
             return;
         }
+        std::cout << "get public key: " << common::Encode::HexEncode(pubkey) << std::endl;
     } else {
         client_ptr = server->client_ptr;
     }
