@@ -723,6 +723,7 @@ static void IntConnection(EV_P_ server_t *server, server_ctx_t *server_recv_ctx,
     }
 
     if (!need_query) {
+        std::cout << "connect to remote: " << host << ":" << port << std::endl;
         remote_t *remote = ConnectToRemote(EV_A_ &info, server);
 
         if (remote == NULL) {

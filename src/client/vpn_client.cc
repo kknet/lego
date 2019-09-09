@@ -388,19 +388,69 @@ std::string VpnClient::GetSecretKey(const std::string& peer_pubkey) {
     return common::Encode::HexEncode(sec_key);
 }
 
-std::string VpnClient::EncryptData(const std::string& seckey, const std::string& data) {
-    std::string enc_out;
-    if (security::Aes::Encrypt(data, seckey, enc_out) != security::kSecuritySuccess) {
-        return "ERROR";
+int VpnClient::EncryptData(char* seckey, int seclen, char* data, int data_len, char* out) {
+    if (security::Aes::Encrypt(
+            data,
+            data_len,
+            seckey,
+            seclen,
+            out) != security::kSecuritySuccess) {
+        return -1;
     }
-    return common::Encode::HexEncode(enc_out);
+
+    return 0;
 }
 
-std::string VpnClient::DecryptData(const std::string& seckey, const std::string& data) {
-    std::string dec_out;
-    if (security::Aes::Decrypt(data, seckey, dec_out) != security::kSecuritySuccess) {
+int VpnClient::DecryptData(char* seckey, int seclen, char* data, int data_len, char* out) {
+    if (security::Aes::Decrypt(
+            data,
+            data_len,
+            seckey,
+            seclen,
+            out) != security::kSecuritySuccess) {
+        return -1;
+    }
+
+    return 0;
+}
+
+std::string VpnClient::EncryptData(const std::string& seckey, const std::string& data_in) {
+    std::string data = common::Encode::HexDecode(data_in);
+    CLIENT_ERROR("encrypt data coming: %s", data.c_str());
+    uint32_t data_size = (data.size() / 32) * 32 + 32;
+    char* tmp_out_enc = (char*)malloc(data_size);
+    memset(tmp_out_enc, 0, data_size);
+    std::string tmp_sec = common::Encode::HexDecode(seckey);
+    if (security::Aes::Encrypt(
+            (char*)data.c_str(),
+            data.size(),
+            (char*)tmp_sec.c_str(),
+            tmp_sec.size(),
+            tmp_out_enc) != security::kSecuritySuccess) {
+        free(tmp_out_enc);
         return "ERROR";
     }
+    free(tmp_out_enc);
+    return common::Encode::HexEncode(std::string(tmp_out_enc, data_size));
+}
+
+std::string VpnClient::DecryptData(const std::string& seckey, const std::string& data_in) {
+    std::string data = common::Encode::HexDecode(data_in);
+    uint32_t data_size = (data.size() / 32) * 32 + 32;
+    char* tmp_out_enc = (char*)malloc(data_size);
+    memset(tmp_out_enc, 0, data_size);
+    std::string tmp_sec = common::Encode::HexDecode(seckey);
+    if (security::Aes::Decrypt(
+            (char*)data.c_str(),
+            data.size(),
+            (char*)tmp_sec.c_str(),
+            tmp_sec.size(),
+            tmp_out_enc) != security::kSecuritySuccess) {
+        free(tmp_out_enc);
+        return "ERROR";
+    }
+    free(tmp_out_enc);
+    std::string dec_out(tmp_out_enc, data.size());
     return common::Encode::HexEncode(dec_out);
 }
 

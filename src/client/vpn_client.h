@@ -116,6 +116,8 @@ public:
     std::string GetSecretKey(const std::string& peer_pubkey);
     std::string EncryptData(const std::string& seckey, const std::string& data);
     std::string DecryptData(const std::string& seckey, const std::string& data);
+    int EncryptData(char* seckey, int seclen, char* data, int data_len, char* out);
+    int DecryptData(char* seckey, int seclen, char* data, int data_len, char* out);
 
 private:
     VpnClient();

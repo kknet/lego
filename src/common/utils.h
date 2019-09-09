@@ -126,6 +126,7 @@ uint32_t RandomCountry();
 void itimeofday(long *sec, long *usec);
 int64_t iclock64(void);
 uint32_t iclock();
+void SignalRegister();
 
 }  // namespace common
 

@@ -1,5 +1,6 @@
 #include "common/utils.h"
 
+#include <signal.h>
 #include <atomic>
 #include <cstdint>
 #include <mutex>
@@ -129,6 +130,18 @@ int64_t iclock64(void) {
 uint32_t iclock() {
 	return static_cast<uint32_t>(iclock64() & 0xfffffffful);
 }
+
+static void SignalCallback(int sig_int) {
+    exit(0);
+}
+
+void SignalRegister() {
+    signal(SIGPIPE, SIG_IGN);
+    signal(SIGABRT, SIG_IGN);
+    signal(SIGINT, SignalCallback);
+    signal(SIGTERM, SignalCallback);
+}
+
 }  // namespace common
 
 }  // namespace lego
