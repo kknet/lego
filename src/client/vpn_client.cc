@@ -57,7 +57,7 @@ VpnClient::VpnClient() {
     vpn_nodes_tick_.CutOff(1000 * 1000, std::bind(&VpnClient::GetVpnNodes, this));
     dump_config_tick_.CutOff(
             60ull * 1000ull * 1000ull,
-            std::bind(&VpnClient::DumpVpnNodes, this));
+            std::bind(&VpnClient::DumpNodeToConfig, this));
     dump_bootstrap_tick_.CutOff(
             60ull * 1000ull * 1000ull,
             std::bind(&VpnClient::DumpBootstrapNodes, this));
@@ -850,6 +850,7 @@ void VpnClient::DumpVpnNodes() {
         config.Set("vpn", iter->first, conf_str);
         country_list += iter->first + ",";
     }
+    config.Set("vpn", "country", country_list);
 }
 
 void VpnClient::DumpRouteNodes() {
