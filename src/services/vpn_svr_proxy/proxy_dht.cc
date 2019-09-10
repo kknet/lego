@@ -93,12 +93,12 @@ int ProxyDht::ResetUserUseTimer(const service::protobuf::GetVpnInfoRequest& vpn_
 void ProxyDht::HandleGetSocksRequest(
         transport::protobuf::Header& msg,
         service::protobuf::ServiceMessage& src_svr_msg) {
+    std::cout << "receive vpn request." << std::endl;
     if (!src_svr_msg.has_vpn_req()) {
         return;
     }
 
     if (src_svr_msg.vpn_req().heartbeat()) {
-        std::cout << "receive vpn req heartbeat." << std::endl;
         if (!CheckDestination(msg.des_dht_key(), false)) {
             SendToClosestNode(msg);
             return;
@@ -122,8 +122,9 @@ void ProxyDht::HandleGetSocksRequest(
     vpn_res->set_ip(uni_dht->local_node()->public_ip);
     vpn_res->set_svr_port(server_port);
     vpn_res->set_route_port(route_port);
-    auto peer_ptr = service::AccountWithSecret::Instance()->GetPeerInfo(
-            src_svr_msg.vpn_req().pubkey());
+    auto peer_ptr = service::AccountWithSecret::Instance()->NewPeer(
+            src_svr_msg.vpn_req().pubkey(),
+            src_svr_msg.vpn_req().method());
     if (peer_ptr == nullptr) {
         return;
     }
@@ -135,6 +136,7 @@ void ProxyDht::HandleGetSocksRequest(
     transport::protobuf::Header res_msg;
     service::ServiceProto::CreateGetVpnInfoRes(local_node(), svr_msg, msg, res_msg);
     network::Route::Instance()->Send(res_msg);
+    std::cout << "send vpn response." << std::endl;
 }
 
 }  // namespace vpn

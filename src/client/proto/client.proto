@@ -42,6 +42,7 @@ message GetVpnInfoRequest {
     optional bytes sign_challenge = 2;
     optional bytes sign_response = 3;
     optional bool heartbeat = 4;
+    optional bytes method = 4;
 }
 
 message GetVpnInfoResponse {

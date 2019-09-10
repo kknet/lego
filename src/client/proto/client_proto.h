@@ -41,6 +41,7 @@ public:
         protobuf::ServiceMessage svr_msg;
         auto vpn_req = svr_msg.mutable_vpn_req();
         vpn_req->set_pubkey(security::Schnorr::Instance()->str_pubkey());
+        vpn_req->set_method("aes-128-cfb");
         msg.set_data(svr_msg.SerializeAsString());
 #ifdef LEGO_TRACE_MESSAGE
         msg.set_debug(std::string("CreateGetVpnInfoRequest:") +
