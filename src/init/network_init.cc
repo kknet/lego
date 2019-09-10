@@ -439,7 +439,8 @@ void NetworkInit::TestStartBft() {
 }
 
 void NetworkInit::CreateNewElectBlock() {
-    if (!common::GlobalInfo::Instance()->config_first_node()) {
+    // for test
+    if (common::GlobalInfo::Instance()->config_local_ip() != "192.168.0.218") {
         return;
     }
 
