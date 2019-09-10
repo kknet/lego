@@ -163,6 +163,7 @@ void VpnClient::HandleGetVpnResponse(
             common::Encode::HexEncode(vpn_res.pubkey()),
             true);
     if (vpn_res.svr_port() > 0) {
+        CLIENT_ERROR("vpn server node response coming: %s", vpn_res.country().c_str());
         std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
         auto iter = vpn_nodes_map_.find(vpn_res.country());
         if (iter != vpn_nodes_map_.end()) {
@@ -182,6 +183,7 @@ void VpnClient::HandleGetVpnResponse(
     }
 
     if (vpn_res.route_port() > 0) {
+        CLIENT_ERROR("vpn route node response coming: %s", vpn_res.country().c_str());
         std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
         auto iter = route_nodes_map_.find(vpn_res.country());
         if (iter != route_nodes_map_.end()) {
