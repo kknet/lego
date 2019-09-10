@@ -13,6 +13,7 @@ class AccountWithSecret {
 public:
     static AccountWithSecret* Instance();
     PeerInfoPtr NewPeer(const std::string& pubkey, const std::string& method);
+    PeerInfoPtr GetPeerInfo(const std::string& pubkey);
 
 private:
     AccountWithSecret();

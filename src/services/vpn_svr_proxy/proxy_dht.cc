@@ -122,7 +122,7 @@ void ProxyDht::HandleGetSocksRequest(
     vpn_res->set_ip(uni_dht->local_node()->public_ip);
     vpn_res->set_svr_port(server_port);
     vpn_res->set_route_port(route_port);
-    auto peer_ptr = service::AccountWithSecret::Instance()->NewPeer(
+    auto peer_ptr = service::AccountWithSecret::Instance()->GetPeerInfo(
             src_svr_msg.vpn_req().pubkey());
     if (peer_ptr == nullptr) {
         return;
