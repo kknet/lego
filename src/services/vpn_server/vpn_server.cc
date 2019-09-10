@@ -818,15 +818,21 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             return;
         }
         pubkey = std::string((char*)buf->data, lego::security::kPublicKeySize);
-        client_ptr = lego::service::AccountWithSecret::Instance()->GetPeerInfo(pubkey);
+        uint8_t method_len = *(uint8_t *)(buf->data + header_offset);
+        if (method_len + header_offset + 1 >= buf->len) {
+            return;
+        }
+        std::string method = std::string((char*)buf->data + header_offset + 1, method_len);
+        client_ptr = lego::service::AccountWithSecret::Instance()->NewPeer(pubkey, method);
         if (client_ptr == nullptr) {
-            std::cout << "invalid public key: " << common::Encode::HexEncode(pubkey) << std::endl;
+            std::cout << "invalid public key: " << common::Encode::HexEncode(pubkey) << ":" << method << std::endl;
             return;
         }
 
         server->client_ptr = client_ptr;
         client_ptr->crypto->ctx_init(client_ptr->crypto->cipher, server->e_ctx, 1);
         client_ptr->crypto->ctx_init(client_ptr->crypto->cipher, server->d_ctx, 0);
+        header_offset += method_len + 1;
         memmove(buf->data, buf->data + header_offset, r - header_offset);
         buf->len = r - header_offset;
     } else {
