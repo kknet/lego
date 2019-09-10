@@ -572,7 +572,7 @@ void VpnClient::GetNetworkNodes(
         if (dht_nodes.empty()) {
             continue;
         }
-        CLIENT_ERROR("get nodes [country: %s][network: %d][%d]", country, network_id, dht_nodes.size());
+        CLIENT_ERROR("get nodes [country: %s][network: %d][%d]", country.c_str(), network_id, dht_nodes.size());
         uint32_t msg_id = common::GlobalInfo::Instance()->MessageId();
         for (uint32_t i = 0; i < dht_nodes.size(); ++i) {
             transport::protobuf::Header msg;
