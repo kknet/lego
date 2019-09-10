@@ -9,7 +9,7 @@ AccountWithSecret* AccountWithSecret::Instance() {
     return &ins;
 }
 
-PeerInfoPtr AccountWithSecret::NewPeer(const std::string& pubkey) {
+PeerInfoPtr AccountWithSecret::NewPeer(const std::string& pubkey, const std::string& method) {
     std::lock_guard<std::mutex> guard(pubkey_sec_map_mutex_);
     auto iter = pubkey_sec_map_.find(pubkey);
     if (iter != pubkey_sec_map_.end()) {
@@ -17,7 +17,7 @@ PeerInfoPtr AccountWithSecret::NewPeer(const std::string& pubkey) {
                 std::chrono::microseconds(kPeerTimeout));
         return iter->second;
     }
-    auto peer_ptr = std::make_shared<PeerInfo>(pubkey);
+    auto peer_ptr = std::make_shared<PeerInfo>(pubkey, method);
     if (!peer_ptr->init()) {
         return nullptr;
     }

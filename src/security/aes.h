@@ -12,6 +12,8 @@ public:
     static int Decrypt(const std::string& src, const std::string& key, std::string& out);
     static int Encrypt(char* str_in, int len, char* key, int key_len, char* out);
     static int Decrypt(char* str_in, int len, char* key, int key_len, char* out);
+    static int CfbEncrypt(char* str_in, int len, char* key, int key_len, char* out);
+    static int CfbDecrypt(char* str_in, int len, char* key, int key_len, char* out);
 
 private:
     Aes();

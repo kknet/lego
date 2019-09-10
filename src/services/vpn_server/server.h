@@ -63,7 +63,7 @@ extern "C" {
 static const uint32_t kPeerTimeout = 30 * 1000 * 1000;  // 30s
 
 struct PeerInfo {
-    PeerInfo(const std::string& pub) : pubkey(pub) {}
+    PeerInfo(const std::string& pub, const std::string& mtd) : pubkey(pub), method(mtd) {}
     bool init() {
         sec_num = lego::common::Random::RandomInt32();
         account = lego::network::GetAccountAddressByPublicKey(pubkey);
@@ -72,7 +72,14 @@ struct PeerInfo {
         if (res != lego::security::kSecuritySuccess) {
             return false;
         }
+
+        seckey = common::Encode::HexEncode(seckey);
         timeout = std::chrono::steady_clock::now() + std::chrono::microseconds(kPeerTimeout);
+        crypto = crypto_init(seckey.c_str(), NULL, method.c_str());
+        if (crypto == NULL) {
+            return false;
+        }
+
         return true;
     }
     std::string pubkey;
@@ -80,6 +87,8 @@ struct PeerInfo {
     int32_t sec_num;
     std::string account;
     std::chrono::steady_clock::time_point timeout;
+    crypto_t* crypto;
+    std::string method;
 };
 typedef std::shared_ptr<PeerInfo> PeerInfoPtr;
 

@@ -5,6 +5,7 @@
 #include <vector>
 
 #include <gtest/gtest.h>
+#include "openssl/aes.h"
 
 #include "common/random.h"
 #include "security/schnorr.h"
@@ -271,7 +272,7 @@ TEST_F(TestMultiSign, TestEcdhCreateKey) {
     std::cout << sec_key1.size() << ":" << common::Encode::HexEncode(sec_key1) << std::endl;
     ASSERT_EQ(sec_key1, sec_key2);
 
-    for (int i = 1; i < 1000; ++i) {
+    for (int i = 1; i < 100; ++i) {
 //         {
 //             std::string test_aes = common::Random::RandomString(i);
 //             std::string enc_out;
@@ -283,19 +284,21 @@ TEST_F(TestMultiSign, TestEcdhCreateKey) {
 
         {
             std::string test_aes = common::Random::RandomString(i);
-            uint32_t data_size = (i / 32) * 32 + 32;
+            uint32_t data_size = (i / AES_BLOCK_SIZE) * AES_BLOCK_SIZE + AES_BLOCK_SIZE;
             char* tmp_out_enc = (char*)malloc(data_size);
             memset(tmp_out_enc, 0, data_size);
-            ASSERT_EQ(Aes::Encrypt(
+            ASSERT_EQ(Aes::CfbEncrypt(
                     (char*)test_aes.c_str(),
                     test_aes.size(),
                     (char*)sec_key1.c_str(),
                     sec_key1.size(),
                     tmp_out_enc), kSecuritySuccess);
             std::string enc_out(tmp_out_enc, data_size);
+            std::cout << common::Encode::HexEncode(test_aes) << ":" << common::Encode::HexEncode(enc_out) << std::endl;
+
             memset(tmp_out_enc, 0, data_size);
             ASSERT_EQ(
-                    Aes::Decrypt((char*)enc_out.c_str(), i, (char*)sec_key1.c_str(), sec_key1.size(), tmp_out_enc),
+                    Aes::CfbDecrypt((char*)enc_out.c_str(), i, (char*)sec_key1.c_str(), sec_key1.size(), tmp_out_enc),
                     kSecuritySuccess);
             std::string enc_out2(i, 0);
             memcpy((char*)&enc_out2[0], tmp_out_enc, i);

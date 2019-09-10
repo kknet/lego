@@ -12,7 +12,7 @@ namespace service {
 class AccountWithSecret {
 public:
     static AccountWithSecret* Instance();
-    PeerInfoPtr NewPeer(const std::string& pubkey);
+    PeerInfoPtr NewPeer(const std::string& pubkey, const std::string& method);
 
 private:
     AccountWithSecret();
