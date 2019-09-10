@@ -56,6 +56,7 @@ extern "C" {
 #include "common/utils.h"
 #include "common/random.h"
 #include "common/tick.h"
+#include "common/encode.h"
 #include "security/ecdh_create_key.h"
 #include "security/public_key.h"
 #include "network/network_utils.h"
