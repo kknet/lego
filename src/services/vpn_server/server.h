@@ -68,7 +68,11 @@ struct PeerInfo {
     bool init() {
         sec_num = lego::common::Random::RandomInt32();
         account = lego::network::GetAccountAddressByPublicKey(pubkey);
-        lego::security::PublicKey pub_key(pubkey);
+        lego::security::PublicKey pub_key;
+        if (pub_key.Deserialize(pubkey) != 0) {
+            return false;
+        }
+
         auto res = lego::security::EcdhCreateKey::Instance()->CreateKey(pub_key, seckey);
         if (res != lego::security::kSecuritySuccess) {
             return false;

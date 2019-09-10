@@ -43,7 +43,7 @@ static const uint32_t kDefaultBufferSize = 1024u * 1024u;
 static common::Config config;
 static common::Tick check_tx_tick_;
 static common::Tick vpn_nodes_tick_;
-static common::Tick dump_comfig_tick_;
+static common::Tick dump_config_tick_;
 static common::Tick dump_bootstrap_tick_;
 
 VpnClient::VpnClient() {
@@ -55,7 +55,7 @@ VpnClient::VpnClient() {
             std::bind(&VpnClient::HandleMessage, this, std::placeholders::_1));
     check_tx_tick_.CutOff(1000 * 1000, std::bind(&VpnClient::CheckTxExists, this));
     vpn_nodes_tick_.CutOff(1000 * 1000, std::bind(&VpnClient::GetVpnNodes, this));
-    dump_comfig_tick_.CutOff(
+    dump_config_tick_.CutOff(
             60ull * 1000ull * 1000ull,
             std::bind(&VpnClient::DumpVpnNodes, this));
     dump_bootstrap_tick_.CutOff(
@@ -321,6 +321,7 @@ std::string VpnClient::Init(
     }
 
     ReadVpnNodesFromConf();
+    ReadRouteNodesFromConf();
     config.Get("lego", "first_instasll", first_install_);
     config.Set("lego", "local_ip", local_ip);
     config.Set("lego", "local_port", local_port);
@@ -412,46 +413,6 @@ int VpnClient::DecryptData(char* seckey, int seclen, char* data, int data_len, c
     }
 
     return 0;
-}
-
-std::string VpnClient::EncryptData(const std::string& seckey, const std::string& data_in) {
-    std::string data = common::Encode::HexDecode(data_in);
-    CLIENT_ERROR("encrypt data coming: %s", data.c_str());
-    uint32_t data_size = (data.size() / 32) * 32 + 32;
-    char* tmp_out_enc = (char*)malloc(data_size);
-    memset(tmp_out_enc, 0, data_size);
-    std::string tmp_sec = common::Encode::HexDecode(seckey);
-    if (security::Aes::Encrypt(
-            (char*)data.c_str(),
-            data.size(),
-            (char*)tmp_sec.c_str(),
-            tmp_sec.size(),
-            tmp_out_enc) != security::kSecuritySuccess) {
-        free(tmp_out_enc);
-        return "ERROR";
-    }
-    free(tmp_out_enc);
-    return common::Encode::HexEncode(std::string(tmp_out_enc, data_size));
-}
-
-std::string VpnClient::DecryptData(const std::string& seckey, const std::string& data_in) {
-    std::string data = common::Encode::HexDecode(data_in);
-    uint32_t data_size = (data.size() / 32) * 32 + 32;
-    char* tmp_out_enc = (char*)malloc(data_size);
-    memset(tmp_out_enc, 0, data_size);
-    std::string tmp_sec = common::Encode::HexDecode(seckey);
-    if (security::Aes::Decrypt(
-            (char*)data.c_str(),
-            data.size(),
-            (char*)tmp_sec.c_str(),
-            tmp_sec.size(),
-            tmp_out_enc) != security::kSecuritySuccess) {
-        free(tmp_out_enc);
-        return "ERROR";
-    }
-    free(tmp_out_enc);
-    std::string dec_out(tmp_out_enc, data.size());
-    return common::Encode::HexEncode(dec_out);
 }
 
 bool VpnClient::SetFirstInstall() {
@@ -861,6 +822,15 @@ void VpnClient::GetAccountBlockWithHeight() {
     }
 }
 
+void VpnClient::DumpNodeToConfig() {
+    DumpVpnNodes();
+    DumpRouteNodes()
+    config.DumpConfig(config_path_);
+    dump_config_tick_.CutOff(
+            60ull * 1000ull * 1000ull,
+            std::bind(&VpnClient::DumpNodeToConfig, this));
+}
+
 void VpnClient::DumpVpnNodes() {
     std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
     std::string country_list;
@@ -878,11 +848,80 @@ void VpnClient::DumpVpnNodes() {
         config.Set("vpn", iter->first, conf_str);
         country_list += iter->first + ",";
     }
-    config.Set("vpn", "country", country_list);
-    config.DumpConfig(config_path_);
-    dump_comfig_tick_.CutOff(
-            60ull * 1000ull * 1000ull,
-            std::bind(&VpnClient::DumpVpnNodes, this));
+}
+
+void VpnClient::DumpRouteNodes() {
+    std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
+    std::string country_list;
+    for (auto iter = route_nodes_map_.begin(); iter != route_nodes_map_.end(); ++iter) {
+        std::string conf_str;
+        for (auto qiter = iter->second.rbegin(); qiter != iter->second.rend(); ++qiter) {
+            std::string tmp_str;
+            tmp_str = ((*qiter)->dht_key + "," +
+                    (*qiter)->seckey + "," +
+                    (*qiter)->pubkey + "," +
+                    (*qiter)->ip + "," +
+                    std::to_string((*qiter)->route_port));
+            conf_str += tmp_str + ";";
+        }
+        config.Set("route", iter->first, conf_str);
+        country_list += iter->first + ",";
+    }
+    config.Set("route", "country", country_list);
+}
+
+void VpnClient::ReadRouteNodesFromConf() {
+    std::string country_list;
+    config.Get("route", "country", country_list);
+    if (country_list.empty()) {
+        return;
+    }
+
+    common::Split country_split(country_list.c_str(), ',', country_list.size());
+    for (uint32_t i = 0; i < country_split.Count(); ++i) {
+        if (country_split.SubLen(i) <= 1) {
+            continue;
+        }
+
+        std::string route_nodes;
+        config.Get("route", country_split[i], route_nodes);
+        if (route_nodes.empty()) {
+            continue;
+        }
+
+        common::Split node_list(route_nodes.c_str(), ';', route_nodes.size());
+        for (uint32_t node_idx = 0; node_idx < node_list.Count(); ++node_idx) {
+            if (node_list.SubLen(node_idx) <= 10) {
+                continue;
+            }
+
+            common::Split item_split(node_list[node_idx], ',', node_list.SubLen(node_idx));
+            if (item_split.Count() < 5) {
+                continue;
+            }
+
+            auto node_item = std::make_shared<VpnServerNode>(
+                    item_split[3],
+                    0,
+                    common::StringUtil::ToUint16(item_split[4]),
+                    item_split[1],
+                    item_split[0],
+                    item_split[2],
+                    false);
+            std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
+            auto iter = route_nodes_map_.find(country_split[i]);
+            if (iter == route_nodes_map_.end()) {
+                route_nodes_map_[country_split[i]] = std::deque<VpnServerNodePtr>();
+                route_nodes_map_[country_split[i]].push_back(node_item);
+                continue;
+            }
+
+            iter->second.push_back(node_item);
+            if (iter->second.size() > 16) {
+                iter->second.pop_front();
+            }
+        }
+    }
 }
 
 void VpnClient::ReadVpnNodesFromConf() {
@@ -967,6 +1006,10 @@ void VpnClient::DumpBootstrapNodes() {
     dump_bootstrap_tick_.CutOff(
             60ull * 1000ull * 1000ull,
             std::bind(&VpnClient::DumpBootstrapNodes, this));
+}
+
+std::string VpnClient::GetRouting(const std::string& start, const std::string& end) {
+
 }
 
 }  // namespace client

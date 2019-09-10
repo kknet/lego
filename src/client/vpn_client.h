@@ -114,10 +114,9 @@ public:
     int ResetTransport(const std::string& ip, uint16_t port);
     std::string GetPublicKey();
     std::string GetSecretKey(const std::string& peer_pubkey);
-    std::string EncryptData(const std::string& seckey, const std::string& data);
-    std::string DecryptData(const std::string& seckey, const std::string& data);
     int EncryptData(char* seckey, int seclen, char* data, int data_len, char* out);
     int DecryptData(char* seckey, int seclen, char* data, int data_len, char* out);
+    std::string GetRouting(const std::string& start, const std::string& end);
 
 private:
     VpnClient();
@@ -142,8 +141,11 @@ private:
     void HandleGetVpnResponse(
             const protobuf::GetVpnInfoResponse& vpn_res,
             const std::string& dht_key);
+    void DumpNodeToConfig();
     void DumpVpnNodes();
+    void DumpRouteNodes();
     void ReadVpnNodesFromConf();
+    void ReadRouteNodesFromConf();
     void DumpBootstrapNodes();
     void GetNetworkNodes(const std::vector<std::string>& country_vec, uint32_t network_id);
 

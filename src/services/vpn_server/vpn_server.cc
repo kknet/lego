@@ -781,17 +781,20 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     }
 
     ssize_t r = recv(server->fd, buf->data, SOCKET_BUF_SIZE, 0);
+
     if (r == 0) {
         // connection closed
         CloseAndFreeRemote(EV_A_ remote);
         CloseAndFreeServer(EV_A_ server);
         return;
-    } else if (r == -1) {
+    }
+    else if (r == -1) {
         if (errno == EAGAIN || errno == EWOULDBLOCK) {
             // no data
             // continue to wait for recv
             return;
-        } else {
+        }
+        else {
             ERROR("server recv");
             CloseAndFreeRemote(EV_A_ remote);
             CloseAndFreeServer(EV_A_ server);
@@ -807,52 +810,42 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     tx += r;
     buf->len = r;
 
-    std::cout << "receive new data: " << r << std::endl;
     std::string pubkey;
     PeerInfoPtr client_ptr = nullptr;
     if (server->stage == STAGE_INIT) {
+        int header_offset = lego::security::kPublicKeySize;
         if (r <= lego::security::kPublicKeySize) {
-            std::cout << "handle data 1: " << std::endl;
             return;
         }
         pubkey = std::string((char*)buf->data, lego::security::kPublicKeySize);
-        int header_offset = lego::security::kPublicKeySize;
-        client_ptr = lego::service::AccountWithSecret::Instance()->NewPeer(pubkey, "aes-256-cfb");
+        client_ptr = lego::service::AccountWithSecret::Instance()->NewPeer(pubkey, "aes-128-cfb");
         if (client_ptr == nullptr) {
             std::cout << "invalid public key: " << common::Encode::HexEncode(pubkey) << std::endl;
             return;
         }
-        std::cout << "handle data 2: " << std::endl;
 
         server->client_ptr = client_ptr;
         client_ptr->crypto->ctx_init(client_ptr->crypto->cipher, server->e_ctx, 1);
         client_ptr->crypto->ctx_init(client_ptr->crypto->cipher, server->d_ctx, 0);
-        memcpy(buf->data, buf->data + header_offset, r - header_offset);
+        memmove(buf->data, buf->data + header_offset, r - header_offset);
         buf->len = r - header_offset;
-        std::cout << "handle data 3: " << std::endl;
-
-        std::cout << "get public key: " << common::Encode::HexEncode(pubkey) << std::endl;
     } else {
         client_ptr = server->client_ptr;
         if (client_ptr == nullptr) {
-            std::cout << "other data coming. but client ptr is not inited!" << std::endl;
             return;
-        } else {
-            std::cout << "other data coming. data length: " << r << std::endl;
         }
     }
 
-    crypto_t* crypto = server->client_ptr->crypto;
-    if (crypto == NULL) {
-        return;
-    }
+    crypto_t* tmp_crypto = client_ptr->crypto;
+    int err = tmp_crypto->decrypt(buf, server->d_ctx, SOCKET_BUF_SIZE);
+//     int err = crypto->decrypt(buf, server->d_ctx, SOCKET_BUF_SIZE);
 
-    int err = crypto->decrypt(buf, server->d_ctx, SOCKET_BUF_SIZE);
     if (err == -2) {
         ReportAddr(server->fd, "authentication error");
         StopServer(EV_A_ server);
         return;
-    } else if (err == CRYPTO_NEED_MORE) {
+    }
+    else if (err == CRYPTO_NEED_MORE) {
         if (server->stage != STAGE_STREAM && server->frag > MAX_FRAG) {
             ReportAddr(server->fd, "malicious fragmentation");
             StopServer(EV_A_ server);
@@ -865,36 +858,222 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     // handshake and transmit data
     if (server->stage == STAGE_STREAM) {
         int s = send(remote->fd, remote->buf->data, remote->buf->len, 0);
-        std::cout << "send to remote: " << s << std::endl;
         if (s == -1) {
             if (errno == EAGAIN || errno == EWOULDBLOCK) {
                 // no data, wait for send
                 remote->buf->idx = 0;
                 ev_io_stop(EV_A_ & server_recv_ctx->io);
                 ev_io_start(EV_A_ & remote->send_ctx->io);
-            } else {
+            }
+            else {
                 ERROR("server_recv_send");
                 CloseAndFreeRemote(EV_A_ remote);
                 CloseAndFreeServer(EV_A_ server);
             }
-        } else if (s < static_cast<int>(remote->buf->len)) {
+        }
+        else if (s < remote->buf->len) {
             remote->buf->len -= s;
             remote->buf->idx = s;
             ev_io_stop(EV_A_ & server_recv_ctx->io);
             ev_io_start(EV_A_ & remote->send_ctx->io);
         }
         return;
-    } else if (server->stage == STAGE_INIT) {
-        IntConnection(EV_A_ server, server_recv_ctx, 0);
-        if (server->remote == NULL) {
-            std::cout << "create remote server failed!" << std::endl;
+    }
+    else if (server->stage == STAGE_INIT) {
+        /*
+         * Shadowsocks TCP Relay Header:
+         *
+         *    +------+----------+----------+
+         *    | ATYP | DST.ADDR | DST.PORT |
+         *    +------+----------+----------+
+         *    |  1   | Variable |    2     |
+         *    +------+----------+----------+
+         *
+         */
+
+        int offset = 0;
+        int need_query = 0;
+        char atyp = server->buf->data[offset++];
+        char host[255] = { 0 };
+        uint16_t port = 0;
+        struct addrinfo info;
+        struct sockaddr_storage storage;
+        memset(&info, 0, sizeof(struct addrinfo));
+        memset(&storage, 0, sizeof(struct sockaddr_storage));
+
+        // get remote addr and port
+        if ((atyp & ADDRTYPE_MASK) == 1) {
+            // IP V4
+            struct sockaddr_in *addr = (struct sockaddr_in *)&storage;
+            size_t in_addr_len = sizeof(struct in_addr);
+            addr->sin_family = AF_INET;
+            if (server->buf->len >= in_addr_len + 3) {
+                memcpy(&addr->sin_addr, server->buf->data + offset, in_addr_len);
+                inet_ntop(AF_INET, (const void *)(server->buf->data + offset),
+                    host, INET_ADDRSTRLEN);
+                offset += in_addr_len;
+            }
+            else {
+                ReportAddr(server->fd, "invalid length for ipv4 address");
+                StopServer(EV_A_ server);
+                return;
+            }
+            memcpy(&addr->sin_port, server->buf->data + offset, sizeof(uint16_t));
+            info.ai_family = AF_INET;
+            info.ai_socktype = SOCK_STREAM;
+            info.ai_protocol = IPPROTO_TCP;
+            info.ai_addrlen = sizeof(struct sockaddr_in);
+            info.ai_addr = (struct sockaddr *)addr;
+        }
+        else if ((atyp & ADDRTYPE_MASK) == 3) {
+            // Domain name
+            uint8_t name_len = *(uint8_t *)(server->buf->data + offset);
+            if (name_len + 4 <= server->buf->len) {
+                memcpy(host, server->buf->data + offset + 1, name_len);
+                offset += name_len + 1;
+            }
+            else {
+                ReportAddr(server->fd, "invalid host name length");
+                StopServer(EV_A_ server);
+                return;
+            }
+            if (acl && outbound_block_match_host(host) == 1) {
+                if (verbose)
+                    LOGI("outbound blocked %s", host);
+                CloseAndFreeServer(EV_A_ server);
+                return;
+            }
+            struct cork_ip ip;
+            if (cork_ip_init(&ip, host) != -1) {
+                info.ai_socktype = SOCK_STREAM;
+                info.ai_protocol = IPPROTO_TCP;
+                if (ip.version == 4) {
+                    struct sockaddr_in *addr = (struct sockaddr_in *)&storage;
+                    inet_pton(AF_INET, host, &(addr->sin_addr));
+                    memcpy(&addr->sin_port, server->buf->data + offset, sizeof(uint16_t));
+                    addr->sin_family = AF_INET;
+                    info.ai_family = AF_INET;
+                    info.ai_addrlen = sizeof(struct sockaddr_in);
+                    info.ai_addr = (struct sockaddr *)addr;
+                }
+                else if (ip.version == 6) {
+                    struct sockaddr_in6 *addr = (struct sockaddr_in6 *)&storage;
+                    inet_pton(AF_INET6, host, &(addr->sin6_addr));
+                    memcpy(&addr->sin6_port, server->buf->data + offset, sizeof(uint16_t));
+                    addr->sin6_family = AF_INET6;
+                    info.ai_family = AF_INET6;
+                    info.ai_addrlen = sizeof(struct sockaddr_in6);
+                    info.ai_addr = (struct sockaddr *)addr;
+                }
+            }
+            else {
+                if (!validate_hostname(host, name_len)) {
+                    ReportAddr(server->fd, "invalid host name");
+                    StopServer(EV_A_ server);
+                    return;
+                }
+                need_query = 1;
+            }
+        }
+        else if ((atyp & ADDRTYPE_MASK) == 4) {
+            // IP V6
+            struct sockaddr_in6 *addr = (struct sockaddr_in6 *)&storage;
+            size_t in6_addr_len = sizeof(struct in6_addr);
+            addr->sin6_family = AF_INET6;
+            if (server->buf->len >= in6_addr_len + 3) {
+                memcpy(&addr->sin6_addr, server->buf->data + offset, in6_addr_len);
+                inet_ntop(AF_INET6, (const void *)(server->buf->data + offset),
+                    host, INET6_ADDRSTRLEN);
+                offset += in6_addr_len;
+            }
+            else {
+                LOGE("invalid header with addr type %d", atyp);
+                ReportAddr(server->fd, "invalid length for ipv6 address");
+                StopServer(EV_A_ server);
+                return;
+            }
+            memcpy(&addr->sin6_port, server->buf->data + offset, sizeof(uint16_t));
+            info.ai_family = AF_INET6;
+            info.ai_socktype = SOCK_STREAM;
+            info.ai_protocol = IPPROTO_TCP;
+            info.ai_addrlen = sizeof(struct sockaddr_in6);
+            info.ai_addr = (struct sockaddr *)addr;
+        }
+
+        if (offset == 1) {
+            ReportAddr(server->fd, "invalid address type");
+            StopServer(EV_A_ server);
             return;
         }
+
+        port = ntohs(load16_be(server->buf->data + offset));
+
+        offset += 2;
+
+        if (server->buf->len < offset) {
+            ReportAddr(server->fd, "invalid request length");
+            StopServer(EV_A_ server);
+            return;
+        }
+        else {
+            server->buf->len -= offset;
+            memmove(server->buf->data, server->buf->data + offset, server->buf->len);
+        }
+
+        if (verbose) {
+            if ((atyp & ADDRTYPE_MASK) == 4)
+                LOGI("[%s] connect to [%s]:%d", remote_port, host, ntohs(port));
+            else
+                LOGI("[%s] connect to %s:%d", remote_port, host, ntohs(port));
+        }
+
+        if (!need_query) {
+            remote_t *remote = ConnectToRemote(EV_A_ & info, server);
+
+            if (remote == NULL) {
+                LOGE("connect error");
+                CloseAndFreeServer(EV_A_ server);
+                return;
+            }
+            else {
+                server->remote = remote;
+                remote->server = server;
+
+                // XXX: should handle buffer carefully
+                if (server->buf->len > 0) {
+                    brealloc(remote->buf, server->buf->len, SOCKET_BUF_SIZE);
+                    memcpy(remote->buf->data, server->buf->data + server->buf->idx,
+                        server->buf->len);
+                    remote->buf->len = server->buf->len;
+                    remote->buf->idx = 0;
+                    server->buf->len = 0;
+                    server->buf->idx = 0;
+                }
+
+                // waiting on remote connected event
+                ev_io_stop(EV_A_ & server_recv_ctx->io);
+                ev_io_start(EV_A_ & remote->send_ctx->io);
+            }
+        }
+        else {
+            ev_io_stop(EV_A_ & server_recv_ctx->io);
+
+            query_t *query = (query_t*)ss_malloc(sizeof(query_t));
+            memset(query, 0, sizeof(query_t));
+            query->server = server;
+            server->query = query;
+            snprintf(query->hostname, MAX_HOSTNAME_LEN, "%s", host);
+
+            server->stage = STAGE_RESOLVE;
+            resolv_start(host, port, ResolvCallback, ResolvFreeCallback, query);
+        }
+
         return;
     }
     // should not reach here
     FATAL("server context error");
 }
+
 
 static void ServerSendCallback(EV_P_ ev_io *w, int revents) {
     server_ctx_t *server_send_ctx = (server_ctx_t *)w;
@@ -1070,12 +1249,13 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
         return;
     }
 
-    crypto_t* crypto = server->client_ptr->crypto;
-    if (crypto == NULL) {
+    crypto_t* tmp_crypto = server->client_ptr->crypto;
+    if (tmp_crypto == NULL) {
         return;
     }
 
-    int err = crypto->encrypt(server->buf, server->e_ctx, SOCKET_BUF_SIZE);
+//     int err = crypto->encrypt(server->buf, server->e_ctx, SOCKET_BUF_SIZE);
+    int err = tmp_crypto->encrypt(server->buf, server->e_ctx, SOCKET_BUF_SIZE);
     if (err) {
         LOGE("invalid password or cipher");
         CloseAndFreeRemote(EV_A_ remote);
@@ -1315,6 +1495,8 @@ static server_t * NewServer(int fd, listen_ctx_t *listener) {
 
     server->e_ctx = (cipher_ctx_t*)ss_malloc(sizeof(cipher_ctx_t));
     server->d_ctx = (cipher_ctx_t*)ss_malloc(sizeof(cipher_ctx_t));
+    crypto->ctx_init(crypto->cipher, server->e_ctx, 1);
+    crypto->ctx_init(crypto->cipher, server->d_ctx, 0);
 
     int request_timeout = std::min(MAX_REQUEST_TIMEOUT, listener->timeout)
         + rand() % MAX_REQUEST_TIMEOUT;
@@ -1347,21 +1529,23 @@ static void FreeServer(server_t *server) {
         server->remote->server = NULL;
     }
 
-    crypto_t* crypto = NULL;
+    crypto_t* tmp_crypto = NULL;
     if (server->client_ptr != nullptr) {
-        crypto = server->client_ptr->crypto;
+        tmp_crypto = server->client_ptr->crypto;
     }
 
     if (server->e_ctx != NULL) {
-        if (crypto != NULL) {
-            crypto->ctx_release(server->e_ctx);
+        if (tmp_crypto != NULL) {
+            tmp_crypto->ctx_release(server->e_ctx);
         }
+        crypto->ctx_release(server->e_ctx);
         ss_free(server->e_ctx);
     }
     if (server->d_ctx != NULL) {
-        if (crypto != NULL) {
-            crypto->ctx_release(server->d_ctx);
+        if (tmp_crypto != NULL) {
+            tmp_crypto->ctx_release(server->d_ctx);
         }
+        crypto->ctx_release(server->d_ctx);
         ss_free(server->d_ctx);
     }
     if (server->buf != NULL) {
@@ -1444,7 +1628,6 @@ static void AcceptCallback(EV_P_ ev_io *w, int revents) {
         return;
     }
 
-    std::cout << "new connection coming." << std::endl;
     char *peer_name = GetPeerName(serverfd);
     if (peer_name != NULL) {
         if (acl) {
@@ -1484,11 +1667,11 @@ static int InitCrypto(
         const std::string& password,
         const std::string& key,
         const std::string& method) {
-//     crypto = crypto_init(password.c_str(), NULL, method.c_str());
-//     if (crypto == NULL) {
-//         LOGI("failed to initialize ciphers");
-//         return -1;
-//     }
+    crypto = crypto_init("8246c339fa67fb295de905c0956befbffc2bf24e0c9b8aee7fbfdc66506512eb", NULL, "aes-128-cfb");
+    if (crypto == NULL) {
+        LOGI("failed to initialize ciphers");
+        return -1;
+    }
     return 0;
 }
 
