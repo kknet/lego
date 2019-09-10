@@ -818,7 +818,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             return;
         }
         pubkey = std::string((char*)buf->data, lego::security::kPublicKeySize);
-        client_ptr = lego::service::AccountWithSecret::Instance()->NewPeer(pubkey, "aes-128-cfb");
+        client_ptr = lego::service::AccountWithSecret::Instance()->GetPeerInfo(pubkey);
         if (client_ptr == nullptr) {
             std::cout << "invalid public key: " << common::Encode::HexEncode(pubkey) << std::endl;
             return;
