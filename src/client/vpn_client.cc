@@ -1009,7 +1009,7 @@ void VpnClient::DumpBootstrapNodes() {
 }
 
 std::string VpnClient::GetRouting(const std::string& start, const std::string& end) {
-
+    return "";
 }
 
 }  // namespace client
