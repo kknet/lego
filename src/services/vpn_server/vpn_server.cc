@@ -641,10 +641,11 @@ static void GetRemoteAddrAndPort(EV_P_ char* host, server_t* server, int& offset
             return;
         }
         struct cork_ip ip;
-        if (cork_ip_init(&ip, host) != -1) {
+        int res = cork_ip_init(&ip, host);
+        std::cout << "host : " << host << " is: " << res << std::endl;
+        if (res != -1) {
             info.ai_socktype = SOCK_STREAM;
             info.ai_protocol = IPPROTO_TCP;
-            std::cout << "host : " << host << " is: " << ip.version << std::endl;
             if (ip.version == 4) {
                 struct sockaddr_in *addr = (struct sockaddr_in *)&storage;
                 inet_pton(AF_INET, host, &(addr->sin_addr));
@@ -806,9 +807,14 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     tx += r;
     buf->len = r;
 
+    std::cout << "receive new data: " << r << std::endl;
     std::string pubkey;
     PeerInfoPtr client_ptr = nullptr;
     if (server->stage == STAGE_INIT) {
+        if (r <= lego::security::kPublicKeySize) {
+            std::cout << "handle data 1: " << std::endl;
+            return;
+        }
         pubkey = std::string((char*)buf->data, lego::security::kPublicKeySize);
         int header_offset = lego::security::kPublicKeySize;
         client_ptr = lego::service::AccountWithSecret::Instance()->NewPeer(pubkey, "aes-256-cfb");
@@ -816,12 +822,15 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             std::cout << "invalid public key: " << common::Encode::HexEncode(pubkey) << std::endl;
             return;
         }
+        std::cout << "handle data 2: " << std::endl;
 
         server->client_ptr = client_ptr;
         client_ptr->crypto->ctx_init(client_ptr->crypto->cipher, server->e_ctx, 1);
         client_ptr->crypto->ctx_init(client_ptr->crypto->cipher, server->d_ctx, 0);
         memcpy(buf->data, buf->data + header_offset, r - header_offset);
         buf->len = r - header_offset;
+        std::cout << "handle data 3: " << std::endl;
+
         std::cout << "get public key: " << common::Encode::HexEncode(pubkey) << std::endl;
     } else {
         client_ptr = server->client_ptr;
@@ -856,6 +865,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     // handshake and transmit data
     if (server->stage == STAGE_STREAM) {
         int s = send(remote->fd, remote->buf->data, remote->buf->len, 0);
+        std::cout << "send to remote: " << s << std::endl;
         if (s == -1) {
             if (errno == EAGAIN || errno == EWOULDBLOCK) {
                 // no data, wait for send
@@ -1359,10 +1369,6 @@ static void FreeServer(server_t *server) {
         ss_free(server->buf);
     }
 
-    if (crypto != NULL) {
-        ss_free(crypto);
-        crypto = NULL;
-    }
     ss_free(server->recv_ctx);
     ss_free(server->send_ctx);
     ss_free(server);
