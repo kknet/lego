@@ -163,7 +163,6 @@ void VpnClient::HandleGetVpnResponse(
             common::Encode::HexEncode(vpn_res.pubkey()),
             true);
     if (vpn_res.svr_port() > 0) {
-        CLIENT_ERROR("vpn server node response coming: %s", vpn_res.country().c_str());
         std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
         auto iter = vpn_nodes_map_.find(vpn_res.country());
         if (iter != vpn_nodes_map_.end()) {
@@ -183,7 +182,6 @@ void VpnClient::HandleGetVpnResponse(
     }
 
     if (vpn_res.route_port() > 0) {
-        CLIENT_ERROR("vpn route node response coming: %s", vpn_res.country().c_str());
         std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
         auto iter = route_nodes_map_.find(vpn_res.country());
         if (iter != route_nodes_map_.end()) {
@@ -574,7 +572,7 @@ void VpnClient::GetNetworkNodes(
         if (dht_nodes.empty()) {
             continue;
         }
-        CLIENT_ERROR("get nodes [country: %s][network: %d][%d]", country.c_str(), network_id, dht_nodes.size());
+
         uint32_t msg_id = common::GlobalInfo::Instance()->MessageId();
         for (uint32_t i = 0; i < dht_nodes.size(); ++i) {
             transport::protobuf::Header msg;
@@ -645,9 +643,6 @@ int VpnClient::SetPriAndPubKey(const std::string& prikey) {
     auto pubkey_ptr = std::make_shared<security::PublicKey>(pubkey);
     security::Schnorr::Instance()->set_prikey(prikey_ptr);
     security::Schnorr::Instance()->set_pubkey(pubkey_ptr);
-
-    CLIENT_INFO("new prikey[%s]", common::Encode::HexEncode(security::Schnorr::Instance()->str_prikey()).c_str());
-    CLIENT_INFO("new pubkey[%s]", common::Encode::HexEncode(security::Schnorr::Instance()->str_pubkey()).c_str());
 
     std::string pubkey_str;
     pubkey.Serialize(pubkey_str);
