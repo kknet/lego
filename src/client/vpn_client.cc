@@ -824,7 +824,7 @@ void VpnClient::GetAccountBlockWithHeight() {
 
 void VpnClient::DumpNodeToConfig() {
     DumpVpnNodes();
-    DumpRouteNodes()
+    DumpRouteNodes();
     config.DumpConfig(config_path_);
     dump_config_tick_.CutOff(
             60ull * 1000ull * 1000ull,
