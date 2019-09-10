@@ -93,7 +93,6 @@ int ProxyDht::ResetUserUseTimer(const service::protobuf::GetVpnInfoRequest& vpn_
 void ProxyDht::HandleGetSocksRequest(
         transport::protobuf::Header& msg,
         service::protobuf::ServiceMessage& src_svr_msg) {
-    std::cout << "receive vpn request." << std::endl;
     if (!src_svr_msg.has_vpn_req()) {
         return;
     }
@@ -136,7 +135,6 @@ void ProxyDht::HandleGetSocksRequest(
     transport::protobuf::Header res_msg;
     service::ServiceProto::CreateGetVpnInfoRes(local_node(), svr_msg, msg, res_msg);
     network::Route::Instance()->Send(res_msg);
-    std::cout << "send vpn response." << std::endl;
 }
 
 }  // namespace vpn
