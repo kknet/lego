@@ -152,7 +152,6 @@ std::vector<dht::NodePtr> Uniersal::RemoteGetNetworkNodes(
             }
 
             const auto& res_nodes = network_msg.get_net_nodes_res().nodes();
-            NETWORK_ERROR("get nodes response coming.%d", res_nodes.size());
             for (int32_t i = 0; i < res_nodes.size(); ++i) {
                 auto pubkey_ptr = std::make_shared<security::PublicKey>(res_nodes[i].pubkey());
                 nodes.push_back(std::make_shared<dht::Node>(
@@ -171,7 +170,6 @@ std::vector<dht::NodePtr> Uniersal::RemoteGetNetworkNodes(
     };
     transport::SynchroWait::Instance()->Add(msg.id(), 3 * 1000 * 1000, callback, 1);
     state_lock.Wait();
-    NETWORK_ERROR("get nodes response coming. return %d", nodes.size());
     return nodes;
 }
 
