@@ -212,6 +212,21 @@ class GetVpnInfoRequest : public ::google::protobuf::Message /* @@protoc_inserti
   ::std::string* release_sign_response();
   void set_allocated_sign_response(::std::string* sign_response);
 
+  // optional bytes method = 5;
+  bool has_method() const;
+  void clear_method();
+  static const int kMethodFieldNumber = 5;
+  const ::std::string& method() const;
+  void set_method(const ::std::string& value);
+  #if LANG_CXX11
+  void set_method(::std::string&& value);
+  #endif
+  void set_method(const char* value);
+  void set_method(const void* value, size_t size);
+  ::std::string* mutable_method();
+  ::std::string* release_method();
+  void set_allocated_method(::std::string* method);
+
   // optional bool heartbeat = 4;
   bool has_heartbeat() const;
   void clear_heartbeat();
@@ -229,6 +244,8 @@ class GetVpnInfoRequest : public ::google::protobuf::Message /* @@protoc_inserti
   void clear_has_sign_response();
   void set_has_heartbeat();
   void clear_has_heartbeat();
+  void set_has_method();
+  void clear_has_method();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
@@ -236,6 +253,7 @@ class GetVpnInfoRequest : public ::google::protobuf::Message /* @@protoc_inserti
   ::google::protobuf::internal::ArenaStringPtr pubkey_;
   ::google::protobuf::internal::ArenaStringPtr sign_challenge_;
   ::google::protobuf::internal::ArenaStringPtr sign_response_;
+  ::google::protobuf::internal::ArenaStringPtr method_;
   bool heartbeat_;
   friend struct ::protobuf_service_2eproto::TableStruct;
 };
@@ -772,13 +790,13 @@ inline void GetVpnInfoRequest::set_allocated_sign_response(::std::string* sign_r
 
 // optional bool heartbeat = 4;
 inline bool GetVpnInfoRequest::has_heartbeat() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
 inline void GetVpnInfoRequest::set_has_heartbeat() {
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000010u;
 }
 inline void GetVpnInfoRequest::clear_has_heartbeat() {
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 inline void GetVpnInfoRequest::clear_heartbeat() {
   heartbeat_ = false;
@@ -792,6 +810,72 @@ inline void GetVpnInfoRequest::set_heartbeat(bool value) {
   set_has_heartbeat();
   heartbeat_ = value;
   // @@protoc_insertion_point(field_set:lego.service.protobuf.GetVpnInfoRequest.heartbeat)
+}
+
+// optional bytes method = 5;
+inline bool GetVpnInfoRequest::has_method() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void GetVpnInfoRequest::set_has_method() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void GetVpnInfoRequest::clear_has_method() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void GetVpnInfoRequest::clear_method() {
+  method_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_method();
+}
+inline const ::std::string& GetVpnInfoRequest::method() const {
+  // @@protoc_insertion_point(field_get:lego.service.protobuf.GetVpnInfoRequest.method)
+  return method_.GetNoArena();
+}
+inline void GetVpnInfoRequest::set_method(const ::std::string& value) {
+  set_has_method();
+  method_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.service.protobuf.GetVpnInfoRequest.method)
+}
+#if LANG_CXX11
+inline void GetVpnInfoRequest::set_method(::std::string&& value) {
+  set_has_method();
+  method_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.service.protobuf.GetVpnInfoRequest.method)
+}
+#endif
+inline void GetVpnInfoRequest::set_method(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_method();
+  method_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.service.protobuf.GetVpnInfoRequest.method)
+}
+inline void GetVpnInfoRequest::set_method(const void* value, size_t size) {
+  set_has_method();
+  method_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.service.protobuf.GetVpnInfoRequest.method)
+}
+inline ::std::string* GetVpnInfoRequest::mutable_method() {
+  set_has_method();
+  // @@protoc_insertion_point(field_mutable:lego.service.protobuf.GetVpnInfoRequest.method)
+  return method_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* GetVpnInfoRequest::release_method() {
+  // @@protoc_insertion_point(field_release:lego.service.protobuf.GetVpnInfoRequest.method)
+  if (!has_method()) {
+    return NULL;
+  }
+  clear_has_method();
+  return method_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void GetVpnInfoRequest::set_allocated_method(::std::string* method) {
+  if (method != NULL) {
+    set_has_method();
+  } else {
+    clear_has_method();
+  }
+  method_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), method);
+  // @@protoc_insertion_point(field_set_allocated:lego.service.protobuf.GetVpnInfoRequest.method)
 }
 
 // -------------------------------------------------------------------
