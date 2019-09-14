@@ -825,7 +825,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         std::string method = std::string((char*)buf->data + header_offset + 1, method_len);
         client_ptr = lego::service::AccountWithSecret::Instance()->NewPeer(common::Encode::HexDecode(pubkey), method);
         if (client_ptr == nullptr) {
-            std::cout << "invalid public key: " << pubkey << ":" << method << std::endl;
+            std::cout << "invalid public key: " << header_offset << ", " << pubkey << ":" << method << std::endl;
             return;
         }
 

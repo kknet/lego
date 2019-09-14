@@ -78,7 +78,7 @@ struct PeerInfo {
             return false;
         }
 
-        seckey = lego::common::Encode::HexEncode(seckey);
+        seckey = "password";//lego::common::Encode::HexEncode(seckey);
         timeout = std::chrono::steady_clock::now() + std::chrono::microseconds(kPeerTimeout);
         crypto = crypto_init(seckey.c_str(), NULL, method.c_str());
         if (crypto == NULL) {
