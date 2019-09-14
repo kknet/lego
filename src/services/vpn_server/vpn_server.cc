@@ -813,19 +813,19 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     std::string pubkey;
     PeerInfoPtr client_ptr = nullptr;
     if (server->stage == STAGE_INIT) {
-        int header_offset = lego::security::kPublicKeySize;
-        if (r <= lego::security::kPublicKeySize) {
+        int header_offset = lego::security::kPublicKeySize * 2;
+        if (r <= header_offset) {
             return;
         }
-        pubkey = std::string((char*)buf->data, lego::security::kPublicKeySize);
+        pubkey = std::string((char*)buf->data, header_offset);
         uint8_t method_len = *(uint8_t *)(buf->data + header_offset);
         if (method_len + header_offset + 1 >= buf->len) {
             return;
         }
         std::string method = std::string((char*)buf->data + header_offset + 1, method_len);
-        client_ptr = lego::service::AccountWithSecret::Instance()->NewPeer(pubkey, method);
+        client_ptr = lego::service::AccountWithSecret::Instance()->NewPeer(common::Encode::HexDecode(pubkey), method);
         if (client_ptr == nullptr) {
-            std::cout << "invalid public key: " << common::Encode::HexEncode(pubkey) << ":" << method << std::endl;
+            std::cout << "invalid public key: " << pubkey << ":" << method << std::endl;
             return;
         }
 
