@@ -355,14 +355,14 @@ std::string VpnClient::Init(
     if (vpn_us_nodes.size() < 128) {
         InitRouteAndVpnServer();
     }
-    ReadVpnNodesFromConf();
-    ReadRouteNodesFromConf();
-    config.DumpConfig(conf_path);
 
     if (security::EcdhCreateKey::Instance()->Init() != security::kSecuritySuccess) {
         CLIENT_ERROR("init ecdh create secret key failed!");
         return "ERROR";
     }
+    ReadVpnNodesFromConf();
+    ReadRouteNodesFromConf();
+    config.DumpConfig(conf_path);
 
     if (InitTransport() != kClientSuccess) {
         CLIENT_ERROR("InitTransport failed!");
