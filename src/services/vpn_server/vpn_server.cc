@@ -43,6 +43,7 @@ extern "C" {
 #include "ssr/acl.h"
 #include "ssr/plugin.h"
 #include "ssr/winsock.h"
+#include "ssr/stream.h"
 
 #ifndef EAGAIN
 #define EAGAIN EWOULDBLOCK
@@ -819,7 +820,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         std::string method;
         if (method_len + header_offset + 1 < buf->len) {
             method = std::string((char*)buf->data + header_offset + 1, method_len);
-            for (i = 0; i < STREAM_CIPHER_NUM; i++) {
+            for (int i = 0; i < STREAM_CIPHER_NUM; i++) {
                 if (strcmp(method.c_str(), supported_stream_ciphers[i]) == 0) {
                     valid = true;
                     break;
@@ -832,7 +833,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             method_len = *(uint8_t *)(buf->data + header_offset);
             if (method_len + header_offset + 1 < buf->len) {
                 method = std::string((char*)buf->data + header_offset + 1, method_len);
-                for (i = 0; i < STREAM_CIPHER_NUM; i++) {
+                for (int i = 0; i < STREAM_CIPHER_NUM; i++) {
                     if (strcmp(method.c_str(), supported_stream_ciphers[i]) == 0) {
                         valid = true;
                         break;
