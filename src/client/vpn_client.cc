@@ -933,11 +933,18 @@ void VpnClient::ReadRouteNodesFromConf() {
                 continue;
             }
 
+            std::string seckey;
+            security::PublicKey pubkey(item_split[2]);
+            int res = security::EcdhCreateKey::Instance()->CreateKey(pubkey, seckey);
+            if (res != security::kSecuritySuccess) {
+                continue;
+            }
+
             auto node_item = std::make_shared<VpnServerNode>(
                     item_split[3],
                     0,
                     common::StringUtil::ToUint16(item_split[4]),
-                    item_split[1],
+                    seckey,
                     item_split[0],
                     item_split[2],
                     false);
@@ -987,11 +994,18 @@ void VpnClient::ReadVpnNodesFromConf() {
                 continue;
             }
 
+            std::string seckey;
+            security::PublicKey pubkey(item_split[2]);
+            int res = security::EcdhCreateKey::Instance()->CreateKey(pubkey, seckey);
+            if (res != security::kSecuritySuccess) {
+                continue;
+            }
+
             auto node_item = std::make_shared<VpnServerNode>(
                     item_split[3],
                     common::StringUtil::ToUint16(item_split[4]),
                     0,
-                    item_split[1],
+                    seckey,
                     item_split[0],
                     item_split[2],
                     false);
