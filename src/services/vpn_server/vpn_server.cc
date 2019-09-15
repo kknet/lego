@@ -883,11 +883,8 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         auto now_point = std::chrono::steady_clock::now();
         auto& user_account = client_ptr->account;
         auto iter = account_bindwidth_map.find(user_account);
-
-        auto iter = account_bindwidth_map.find(user_account);
         if (iter == account_bindwidth_map.end()) {
             account_bindwidth_map[user_account] = std::make_shared<BandwidthInfo>(r, 0);
-            iter = account_bindwidth_map.find(user_account);
             if (RemoveNotAliveAccount(now_point)) {
                 // exceeded max user account, new join failed
                 return;
