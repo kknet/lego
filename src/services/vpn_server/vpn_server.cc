@@ -834,23 +834,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     tx += r;
     buf->len = r;
 
-    auto now_point = std::chrono::steady_clock::now();
-    auto iter = account_bindwidth_map.find(server->account);
-    if (iter == account_bindwidth_map.end()) {
-        account_bindwidth_map[server->account] = std::make_shared<BandwidthInfo>(r, 0);
-        iter = account_bindwidth_map.find(server->account);
-        if (RemoveNotAliveAccount(now_point)) {
-            // exceeded max user account, new join failed
-            return;
-        }
-    } else {
-        iter->second->up_bandwidth += r;
-        if (iter->second->begin_time < now_point) {
-            iter->second->begin_time = now_point;
-            // transaction now with bandwidth
-        }
-    }
-
     std::string pubkey;
     PeerInfoPtr client_ptr = nullptr;
     if (server->stage == STAGE_INIT) {
@@ -894,6 +877,26 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         if (client_ptr == nullptr) {
             std::cout << "invalid public key: " << header_offset << ", " << pubkey << ":" << method << std::endl;
             return;
+        }
+
+        auto now_point = std::chrono::steady_clock::now();
+        auto& user_account = client_ptr->account;
+        auto iter = account_bindwidth_map.find(user_account);
+
+        auto iter = account_bindwidth_map.find(user_account);
+        if (iter == account_bindwidth_map.end()) {
+            account_bindwidth_map[user_account] = std::make_shared<BandwidthInfo>(r, 0);
+            iter = account_bindwidth_map.find(user_account);
+            if (RemoveNotAliveAccount(now_point)) {
+                // exceeded max user account, new join failed
+                return;
+            }
+        } else {
+            iter->second->up_bandwidth += r;
+            if (iter->second->begin_time < now_point) {
+                iter->second->begin_time = now_point;
+                // transaction now with bandwidth
+            }
         }
 
         server->client_ptr = client_ptr;
@@ -1311,54 +1314,6 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
 
     rx += r;
 
-    auto now_tick = std::chrono::steady_clock::now();
-    auto iter = account_bindwidth_map.find(server->account);
-    if (iter == account_bindwidth_map.end()) {
-        account_bindwidth_map[server->account] = std::make_shared<BandwidthInfo>(0, r);
-        iter = account_bindwidth_map.find(server->account);
-    } else {
-        iter->second->down_bandwidth += r;
-        if (iter->second->begin_time < now_point) {
-            // transaction now with bandwidth
-            uint32_t rand_band = std::rand() % iter->second->down_bandwidth;
-            std::string gid;
-            if (rand_band > 0) {
-                uint32_t rand_coin = std::rand() % 2;
-                if (rand_coin > 0) {
-                    lego::client::TransactionClient::Instance()->Transaction(
-                            server->account, rand_coin, gid);
-                }
-            }
-
-            if (rand_band > 10 * 1024 && rand_band < 1024 * 1024) {
-                uint32_t rand_coin = std::rand() % 5;
-                if (rand_coin > 0) {
-                    lego::client::TransactionClient::Instance()->Transaction(
-                            server->account, rand_coin, gid);
-                }
-            }
-
-            if (rand_band > 1024 * 1024 && rand_band < 50 * 1024 * 1024) {
-                uint32_t rand_coin = std::rand() % 7;
-                if (rand_coin > 0) {
-                    lego::client::TransactionClient::Instance()->Transaction(
-                            server->account, rand_coin, gid);
-                }
-            }
-
-            if (rand_band > 50 * 1024 * 1024) {
-                uint32_t rand_coin = std::rand() % 10;
-                if (rand_coin > 0) {
-                    lego::client::TransactionClient::Instance()->Transaction(
-                            server->account, rand_coin, gid);
-                }
-            }
-
-            iter->second->up_bandwidth = 0;
-            iter->second->down_bandwidth = 0;
-            iter->second->begin_time = now_point;
-        }
-    }
 
     // Ignore any new packet if the server is stopped
     if (server->stage == STAGE_STOP) {
@@ -1370,6 +1325,56 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
         return;
     }
 
+    auto now_tick = std::chrono::steady_clock::now();
+    auto& user_account = server->client_ptr->account;
+    auto iter = account_bindwidth_map.find(user_account);
+    if (iter == account_bindwidth_map.end()) {
+        account_bindwidth_map[user_account] = std::make_shared<BandwidthInfo>(0, r);
+        iter = account_bindwidth_map.find(user_account);
+    }
+    else {
+        iter->second->down_bandwidth += r;
+        if (iter->second->begin_time < now_point) {
+            // transaction now with bandwidth
+            uint32_t rand_band = std::rand() % iter->second->down_bandwidth;
+            std::string gid;
+            if (rand_band > 0) {
+                uint32_t rand_coin = std::rand() % 2;
+                if (rand_coin > 0) {
+                    lego::client::TransactionClient::Instance()->Transaction(
+                        user_account, rand_coin, gid);
+                }
+            }
+
+            if (rand_band > 10 * 1024 && rand_band < 1024 * 1024) {
+                uint32_t rand_coin = std::rand() % 5;
+                if (rand_coin > 0) {
+                    lego::client::TransactionClient::Instance()->Transaction(
+                        user_account, rand_coin, gid);
+                }
+            }
+
+            if (rand_band > 1024 * 1024 && rand_band < 50 * 1024 * 1024) {
+                uint32_t rand_coin = std::rand() % 7;
+                if (rand_coin > 0) {
+                    lego::client::TransactionClient::Instance()->Transaction(
+                        user_account, rand_coin, gid);
+                }
+            }
+
+            if (rand_band > 50 * 1024 * 1024) {
+                uint32_t rand_coin = std::rand() % 10;
+                if (rand_coin > 0) {
+                    lego::client::TransactionClient::Instance()->Transaction(
+                        user_account, rand_coin, gid);
+                }
+            }
+
+            iter->second->up_bandwidth = 0;
+            iter->second->down_bandwidth = 0;
+            iter->second->begin_time = now_point;
+        }
+    }
     crypto_t* tmp_crypto = server->client_ptr->crypto;
     if (tmp_crypto == NULL) {
         return;
