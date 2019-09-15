@@ -156,6 +156,9 @@ static struct plugin_watcher_t {
 
 static struct cork_dllist connections;
 
+static std::unordered_map<std::string, BandwidthInfoPtr> account_bindwidth_map;
+static const uint32_t kMaxConnectAccount = 1024u;  // single server just 1024 user
+
 static void FreeConnections(struct ev_loop *loop) {
     struct cork_dllist_item *curr, *next;
     cork_dllist_foreach_void(&connections, curr, next) {
@@ -769,6 +772,26 @@ static void IntConnection(EV_P_ server_t *server, server_ctx_t *server_recv_ctx,
     return;
 }
 
+static bool RemoveNotAliveAccount(const std::chrono::time_point& now_point) {
+    if (account_bindwidth_map.size() <= kMaxConnectAccount) {
+        return false;
+    }
+
+    for (auto iter = account_bindwidth_map.begin(); iter != account_bindwidth_map.end();) {
+        if (iter->second->begin_time < now_point) {
+            account_bindwidth_map.erase(iter++);
+        } else {
+            ++iter;
+        }
+    }
+
+    if (account_bindwidth_map.size() > kMaxConnectAccount) {
+        return true;
+    }
+    
+    return false;
+}
+
 static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     server_ctx_t *server_recv_ctx = (server_ctx_t *)w;
     server_t *server = server_recv_ctx->server;
@@ -810,6 +833,23 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
 
     tx += r;
     buf->len = r;
+
+    auto now_point = std::chrono::steady_clock::now();
+    auto iter = account_bindwidth_map.find(server->account);
+    if (iter == account_bindwidth_map.end()) {
+        account_bindwidth_map[server->account] = std::make_shared<BandwidthInfo>(r, 0);
+        iter = account_bindwidth_map.find(server->account);
+        if (RemoveNotAliveAccount(now_point)) {
+            // exceeded max user account, new join failed
+            return;
+        }
+    } else {
+        iter->second->up_bandwidth += r;
+        if (iter->second->begin_time < now_point) {
+            iter->second->begin_time = now_point;
+            // transaction now with bandwidth
+        }
+    }
 
     std::string pubkey;
     PeerInfoPtr client_ptr = nullptr;
@@ -911,8 +951,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             ev_io_start(EV_A_ & remote->send_ctx->io);
         }
         return;
-    }
-    else if (server->stage == STAGE_INIT) {
+    } else if (server->stage == STAGE_INIT) {
         /*
          * Shadowsocks TCP Relay Header:
          *
@@ -1271,6 +1310,55 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
     }
 
     rx += r;
+
+    auto now_tick = std::chrono::steady_clock::now();
+    auto iter = account_bindwidth_map.find(server->account);
+    if (iter == account_bindwidth_map.end()) {
+        account_bindwidth_map[server->account] = std::make_shared<BandwidthInfo>(0, r);
+        iter = account_bindwidth_map.find(server->account);
+    } else {
+        iter->second->down_bandwidth += r;
+        if (iter->second->begin_time < now_point) {
+            // transaction now with bandwidth
+            uint32_t rand_band = std::rand() % iter->second->down_bandwidth;
+            std::string gid;
+            if (rand_band > 0) {
+                uint32_t rand_coin = std::rand() % 2;
+                if (rand_coin > 0) {
+                    lego::client::TransactionClient::Instance()->Transaction(
+                            server->account, rand_coin, gid);
+                }
+            }
+
+            if (rand_band > 10 * 1024 && rand_band < 1024 * 1024) {
+                uint32_t rand_coin = std::rand() % 5;
+                if (rand_coin > 0) {
+                    lego::client::TransactionClient::Instance()->Transaction(
+                            server->account, rand_coin, gid);
+                }
+            }
+
+            if (rand_band > 1024 * 1024 && rand_band < 50 * 1024 * 1024) {
+                uint32_t rand_coin = std::rand() % 7;
+                if (rand_coin > 0) {
+                    lego::client::TransactionClient::Instance()->Transaction(
+                            server->account, rand_coin, gid);
+                }
+            }
+
+            if (rand_band > 50 * 1024 * 1024) {
+                uint32_t rand_coin = std::rand() % 10;
+                if (rand_coin > 0) {
+                    lego::client::TransactionClient::Instance()->Transaction(
+                            server->account, rand_coin, gid);
+                }
+            }
+
+            iter->second->up_bandwidth = 0;
+            iter->second->down_bandwidth = 0;
+            iter->second->begin_time = now_point;
+        }
+    }
 
     // Ignore any new packet if the server is stopped
     if (server->stage == STAGE_STOP) {

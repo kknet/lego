@@ -52,6 +52,7 @@ extern "C" {
 
 #include <memory>
 #include <string>
+#include <atomic>
 
 #include "common/utils.h"
 #include "common/random.h"
@@ -62,9 +63,11 @@ extern "C" {
 #include "network/network_utils.h"
 
 static const uint32_t kPeerTimeout = 30 * 1000 * 1000;  // 30s
+static const int64_t kTransactionTimeout = 600ll * 1000ll * 1000ll;  // 10 min
 
 struct PeerInfo {
-    PeerInfo(const std::string& pub, const std::string& mtd) : pubkey(pub), method(mtd) {}
+    PeerInfo(const std::string& pub, const std::string& mtd)
+            : pubkey(pub), method(mtd) {}
     bool init() {
         sec_num = lego::common::Random::RandomInt32();
         account = lego::network::GetAccountAddressByPublicKey(pubkey);
@@ -96,6 +99,19 @@ struct PeerInfo {
     std::string method;
 };
 typedef std::shared_ptr<PeerInfo> PeerInfoPtr;
+
+struct BandwidthInfo {
+    BandwidthInfo(uint32_t up, uint32_t down) {
+        up_bandwidth = up;
+        down_bandwidth = down;
+        begin_time = (std::chrono::steady_clock::now() +
+                std::chrono::microseconds(kTransactionTimeout));
+    }
+    uint32_t up_bandwidth;
+    uint32_t down_bandwidth;
+    std::chrono::steady_clock::time_point begin_time;
+};
+typedef std::shared_ptr<BandwidthInfo> BandwidthInfoPtr;
 
 typedef struct listen_ctx {
     ev_io io;
