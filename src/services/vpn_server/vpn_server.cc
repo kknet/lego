@@ -83,6 +83,7 @@ extern "C" {
 #endif
 
 #include "common/encode.h"
+#include "client/trans_client.h"
 #include "security/crypto_utils.h"
 #include "security/aes.h"
 #include "services/account_with_secret.h"
