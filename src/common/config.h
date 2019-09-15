@@ -38,7 +38,7 @@ public:
     bool Get(const std::string& field, const std::string& key, float& value) const;
     bool Get(const std::string& field, const std::string& key, double& value) const;
 
-    bool Set(const std::string& field, const std::string& key, std::string value);
+    bool Set(const std::string& field, const std::string& key, const std::string& value);
     bool Set(const std::string& field, const std::string& key, int16_t value);
     bool Set(const std::string& field, const std::string& key, uint16_t value);
     bool Set(const std::string& field, const std::string& key, bool value);

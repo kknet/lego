@@ -212,7 +212,7 @@ bool Config::Get(const std::string& field, const std::string& key, double& value
     return false;
 }
 
-bool Config::Set(const std::string& field, const std::string& key, std::string value) {
+bool Config::Set(const std::string& field, const std::string& key, const std::string& value) {
     auto iter = config_map_.find(field);
     if (iter == config_map_.end()) {
         auto ins_iter = config_map_.insert(std::make_pair(
