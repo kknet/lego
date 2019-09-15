@@ -934,7 +934,7 @@ void VpnClient::ReadRouteNodesFromConf() {
             }
 
             std::string seckey;
-            security::PublicKey pubkey(item_split[2]);
+            security::PublicKey pubkey(common::Encode::HexDecode(item_split[2]));
             int res = security::EcdhCreateKey::Instance()->CreateKey(pubkey, seckey);
             if (res != security::kSecuritySuccess) {
                 continue;
@@ -995,7 +995,7 @@ void VpnClient::ReadVpnNodesFromConf() {
             }
 
             std::string seckey;
-            security::PublicKey pubkey(item_split[2]);
+            security::PublicKey pubkey(common::Encode::HexDecode(item_split[2]));
             int res = security::EcdhCreateKey::Instance()->CreateKey(pubkey, seckey);
             if (res != security::kSecuritySuccess) {
                 continue;
