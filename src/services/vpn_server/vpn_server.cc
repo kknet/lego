@@ -825,7 +825,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
                     valid = true;
                     pubkey = std::string((char*)buf->data, header_offset);
                     client_ptr = lego::service::AccountWithSecret::Instance()->NewPeer(common::Encode::HexDecode(pubkey), method);
-                    std::cout << "0000 get valid method: " << method << std::endl;
                     break;
                 }
             }
@@ -841,7 +840,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
                         valid = true;
                         pubkey = std::string((char*)buf->data, header_offset);
                         client_ptr = lego::service::AccountWithSecret::Instance()->NewPeer(pubkey, method);
-                        std::cout << "1111 get valid method: " << method << std::endl;
                         break;
                     }
                 }
