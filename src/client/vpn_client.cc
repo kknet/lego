@@ -320,6 +320,11 @@ std::string VpnClient::Init(
         }
     }
 
+    std::string vpn_us_nodes;
+    config.Get("vpn", "US", vpn_us_nodes);
+    if (vpn_us_nodes.size() < 10) {
+        InitRouteAndVpnServer();
+    }
     ReadVpnNodesFromConf();
     ReadRouteNodesFromConf();
     config.Get("lego", "first_instasll", first_install_);
@@ -352,7 +357,6 @@ std::string VpnClient::Init(
     common::GlobalInfo::Instance()->set_id(account_address);
     config.Set("lego", "id", common::Encode::HexEncode(
             common::GlobalInfo::Instance()->id()));
-    InitRouteAndVpnServer();
     config.DumpConfig(conf_path);
 
     if (security::EcdhCreateKey::Instance()->Init() != security::kSecuritySuccess) {
