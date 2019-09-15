@@ -32,7 +32,6 @@ void TcpRoute::EchoRead(uv_stream_t* client, ssize_t nread, const uv_buf_t* buf)
                 uint16_t port = 0;
                 inet_ntop(AF_INET, (const void *)(buf->base + 1), host, INET_ADDRSTRLEN);
                 port = load16_be(buf->base + 5);
-                std::cout << "receive host and port: " << host << ":" << port << std::endl;
                 CreateRemote(host, port, (uv_tcp_t*)client, buf->base, nread);
                 return;
             } else {
