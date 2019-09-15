@@ -773,7 +773,7 @@ static void IntConnection(EV_P_ server_t *server, server_ctx_t *server_recv_ctx,
     return;
 }
 
-static bool RemoveNotAliveAccount(const std::chrono::time_point& now_point) {
+static bool RemoveNotAliveAccount(const std::chrono::steady_clock::time_point& now_point) {
     if (account_bindwidth_map.size() <= kMaxConnectAccount) {
         return false;
     }
@@ -1323,7 +1323,7 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
         return;
     }
 
-    auto now_tick = std::chrono::steady_clock::now();
+    auto now_point = std::chrono::steady_clock::now();
     auto& user_account = server->client_ptr->account;
     auto iter = account_bindwidth_map.find(user_account);
     if (iter == account_bindwidth_map.end()) {
