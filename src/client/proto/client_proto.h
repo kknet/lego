@@ -123,6 +123,8 @@ public:
     static void CreateVpnLoginRequest(
             const dht::NodePtr& local_node,
             const std::string& gid,
+            const std::string& svr_account,
+            const std::vector<std::string>& route_accounts,
             transport::protobuf::Header& msg) {
         msg.set_src_dht_key(local_node->dht_key);
         std::string account_address = network::GetAccountAddressByPublicKey(

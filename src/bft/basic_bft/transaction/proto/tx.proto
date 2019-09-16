@@ -81,6 +81,7 @@ message NewTx {
 	optional bytes to_acc_addr = 5;
 	optional uint64 lego_count = 6;
 	optional uint32 type = 7;
+    repeated AccountAttributes attr = 8;
 }
 
 message ToAccountTx {
