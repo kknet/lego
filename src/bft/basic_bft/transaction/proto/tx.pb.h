@@ -1889,6 +1889,13 @@ class NewTx : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
   ::google::protobuf::uint64 lego_count() const;
   void set_lego_count(::google::protobuf::uint64 value);
 
+  // optional uint32 type = 7;
+  bool has_type() const;
+  void clear_type();
+  static const int kTypeFieldNumber = 7;
+  ::google::protobuf::uint32 type() const;
+  void set_type(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:lego.bft.protobuf.NewTx)
  private:
   void set_has_gid();
@@ -1903,6 +1910,8 @@ class NewTx : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
   void clear_has_to_acc_addr();
   void set_has_lego_count();
   void clear_has_lego_count();
+  void set_has_type();
+  void clear_has_type();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
@@ -1913,6 +1922,7 @@ class NewTx : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
   ::google::protobuf::internal::ArenaStringPtr from_sign_;
   ::google::protobuf::internal::ArenaStringPtr to_acc_addr_;
   ::google::protobuf::uint64 lego_count_;
+  ::google::protobuf::uint32 type_;
   friend struct ::protobuf_tx_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
@@ -4394,6 +4404,30 @@ inline void NewTx::set_lego_count(::google::protobuf::uint64 value) {
   set_has_lego_count();
   lego_count_ = value;
   // @@protoc_insertion_point(field_set:lego.bft.protobuf.NewTx.lego_count)
+}
+
+// optional uint32 type = 7;
+inline bool NewTx::has_type() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void NewTx::set_has_type() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void NewTx::clear_has_type() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void NewTx::clear_type() {
+  type_ = 0u;
+  clear_has_type();
+}
+inline ::google::protobuf::uint32 NewTx::type() const {
+  // @@protoc_insertion_point(field_get:lego.bft.protobuf.NewTx.type)
+  return type_;
+}
+inline void NewTx::set_type(::google::protobuf::uint32 value) {
+  set_has_type();
+  type_ = value;
+  // @@protoc_insertion_point(field_set:lego.bft.protobuf.NewTx.type)
 }
 
 // -------------------------------------------------------------------
