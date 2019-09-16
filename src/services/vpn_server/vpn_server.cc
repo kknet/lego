@@ -842,39 +842,14 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         bool valid = false;
         uint8_t method_len = *(uint8_t *)(buf->data + header_offset);
         std::string method;
-        if (method_len + header_offset + 1 < buf->len) {
-            method = std::string((char*)buf->data + header_offset + 1, method_len);
-            for (int i = 0; i < STREAM_CIPHER_NUM; i++) {
-                if (strcmp(method.c_str(), supported_stream_ciphers[i]) == 0) {
-                    valid = true;
-                    pubkey = std::string((char*)buf->data, header_offset);
-                    client_ptr = lego::service::AccountWithSecret::Instance()->NewPeer(common::Encode::HexDecode(pubkey), method);
-                    break;
-                }
-            }
-        }
-
-        if (!valid) {
-            header_offset = lego::security::kPublicKeySize;
-            method_len = *(uint8_t *)(buf->data + header_offset);
-            if (method_len + header_offset + 1 < buf->len) {
-                method = std::string((char*)buf->data + header_offset + 1, method_len);
-                for (int i = 0; i < STREAM_CIPHER_NUM; i++) {
-                    if (strcmp(method.c_str(), supported_stream_ciphers[i]) == 0) {
-                        valid = true;
-                        pubkey = std::string((char*)buf->data, header_offset);
-                        client_ptr = lego::service::AccountWithSecret::Instance()->NewPeer(pubkey, method);
-                        break;
-                    }
-                }
-            }
-        }
-        
-        if (!valid) {
-            std::cout << "invalid public key and method." << std::endl;
+        if (method_len + header_offset + 1 >= buf->len) {
             return;
         }
-
+        method = std::string((char*)buf->data + header_offset + 1, method_len);
+        pubkey = std::string((char*)buf->data, header_offset);
+        client_ptr = lego::service::AccountWithSecret::Instance()->NewPeer(
+                common::Encode::HexDecode(pubkey),
+                method);
         if (client_ptr == nullptr) {
             std::cout << "invalid public key: " << header_offset << ", " << pubkey << ":" << method << std::endl;
             return;
