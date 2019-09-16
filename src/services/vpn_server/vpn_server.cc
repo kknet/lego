@@ -1344,7 +1344,7 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
 
             iter->second->up_bandwidth = 0;
             iter->second->down_bandwidth = 0;
-            iter->second->begin_time = now_point + std::chrono::microseconds(kTransactionTimeout));
+            iter->second->begin_time = now_point + std::chrono::microseconds(kTransactionTimeout);
         }
     }
     crypto_t* tmp_crypto = server->client_ptr->crypto;
