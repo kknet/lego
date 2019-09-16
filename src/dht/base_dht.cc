@@ -435,8 +435,12 @@ void BaseDht::ProcessBootstrapResponse(
     local_node_->dht_key_hash = common::Hash::Hash64(local_node_->dht_key);
     join_res_con_.notify_all();
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("4 end", header);
-    joined_ = true;
-    Join(node);
+    if (Join(node) != kDhtSuccess) {
+        std::cout << "node joined with bootstrap failed!" << std::endl;
+    } else {
+        std::cout << "node joined with bootstrap success!" << std::endl;
+        joined_ = true;
+    }
 }
 
 void BaseDht::ProcessRefreshNeighborsRequest(
