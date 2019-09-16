@@ -34,7 +34,8 @@ int DispatchPool::Dispatch(const protobuf::TxInfo& tx_info) {
         tx_info.from_pubkey(),
         tx_info.from_sign(),
         tx_info.to(),
-        tx_info.amount());
+        tx_info.amount(),
+        tx_info.type());
     tx_ptr->add_to_acc_addr = tx_info.to_add();
     return tx_pool_.AddTx(tx_ptr);
 }
@@ -53,7 +54,8 @@ int DispatchPool::AddTx(const bft::protobuf::BftMessage& bft_msg) {
             tx_bft.new_tx().from_pubkey(),
             tx_bft.new_tx().from_sign(),
             tx_bft.new_tx().to_acc_addr(),
-            tx_bft.new_tx().lego_count());
+            tx_bft.new_tx().lego_count(),
+            tx_bft.new_tx().type());
     return tx_pool_.AddTx(tx_ptr);
 }
 

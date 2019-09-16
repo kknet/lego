@@ -242,12 +242,21 @@ int TxBft::CheckTxInfo(
     for (int32_t i = 0; i < tx_info.attr_size(); ++i) {
         auto iter = local_tx_info->attr_map.find(tx_info.attr(i).key());
         if (iter == local_tx_info->attr_map.end()) {
+            BFT_ERROR("local tx bft key[%s] not equal to leader key!",
+                    tx_info.attr(i).key().c_str());
             return kBftLeaderInfoInvalid;
         }
 
         if (iter->second != tx_info.attr(i).value()) {
+            BFT_ERROR("local tx bft value[%s] not equal to leader value[%s]!",
+                    iter->second.c_str(), .attr(i).value().c_str());
             return kBftLeaderInfoInvalid;
         }
+    }
+
+    if (local_tx_info->bft_type != tx_info.type()) {
+        BFT_ERROR("local tx bft type not equal to leader tx bft type!");
+        return kBftLeaderInfoInvalid;
     }
 
     block::AccountInfoPtr acc_ptr{ nullptr };

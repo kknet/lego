@@ -163,6 +163,7 @@ void TxProto::CreateTxBlock(
                 tx_attr->set_value(iter->second);
             }
         }
+        tx.set_type(tx_vec[i]->bft_type);
         auto add_tx = tx_list->Add();
         *add_tx = tx;
     }

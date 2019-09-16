@@ -27,13 +27,15 @@ struct TxItem {
             const std::string& in_from_pubkey,
             const std::string& in_from_sign,
             const std::string& in_to_acc_addr,
-            uint64_t in_lego_count)
+            uint64_t in_lego_count,
+            uint32_t type)
             : gid(in_gid),
               from_acc_addr(in_from_acc_addr),
               from_pubkey(in_from_pubkey),
               from_sign(in_from_sign),
               to_acc_addr(in_to_acc_addr),
-              lego_count(in_lego_count) {
+              lego_count(in_lego_count),
+              bft_type(type) {
         delta_time = (std::chrono::steady_clock::now() +
                 std::chrono::microseconds(kBftStartDeltaTime));
         time_valid += common::TimeStampUsec() + kBftStartDeltaTime;
@@ -56,9 +58,10 @@ struct TxItem {
     // delay to wait all node ready
     std::chrono::steady_clock::time_point delta_time;
     uint64_t time_valid{ 0 };
-    uint64_t index;
+    uint64_t index{ 0 };
 	uint32_t create_acc_network_id{ 0 };
     std::map<std::string, std::string> attr_map;
+    uint32_t bft_type{ kTransaction };
 };
 
 typedef std::shared_ptr<TxItem> TxItemPtr;

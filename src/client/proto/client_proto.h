@@ -58,6 +58,7 @@ public:
             const std::string& to,
             uint64_t amount,
             uint64_t rand_num,
+            uint32_t type,
             transport::protobuf::Header& msg) {
         msg.set_src_dht_key(local_node->dht_key);
         std::string account_address = network::GetAccountAddressByPublicKey(
@@ -88,6 +89,7 @@ public:
         new_tx->set_from_pubkey(security::Schnorr::Instance()->str_pubkey());
         new_tx->set_to_acc_addr(to);
         new_tx->set_lego_count(amount);
+        new_tx->set_type(type);
         auto data = tx_bft.SerializeAsString();
         bft_msg.set_data(data);
         auto hash128 = common::Hash::Hash128(data);
