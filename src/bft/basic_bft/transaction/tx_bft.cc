@@ -205,10 +205,11 @@ int TxBft::CheckBlockInfo(const protobuf::Block& block_info) {
 int TxBft::CheckTxInfo(
         const protobuf::Block& block_info,
         const protobuf::TxInfo& tx_info) {
-    if (!DispatchPool::Instance()->HasTx(
+    auto local_tx_info = DispatchPool::Instance()->GetTx(
             pool_index(),
             tx_info.to_add(),
-            tx_info.gid())) {
+            tx_info.gid());
+    if (local_tx_info == nullptr) {
         BFT_ERROR("prepare not has tx[%s]to[%s][%s]!",
                 common::Encode::HexEncode(tx_info.from()).c_str(),
                 common::Encode::HexEncode(tx_info.to()).c_str(),
@@ -216,44 +217,42 @@ int TxBft::CheckTxInfo(
         return kBftTxNotExists;
     }
 
+    if (local_tx_info->lego_count != tx_info.amount()) {
+        BFT_ERROR("local tx balance[%llu] not equal to leader[%llu]!",
+                local_tx_info->lego_count, tx_info.amount());
+        return kBftLeaderInfoInvalid;
+    }
+
+    if (local_tx_info->from_acc_addr != tx_info.from()) {
+        BFT_ERROR("local tx  from not equal to leader from account!");
+        return kBftLeaderInfoInvalid;
+    }
+
+    if (local_tx_info->to_acc_addr != tx_info.to()) {
+        BFT_ERROR("local tx  to not equal to leader to account!");
+        return kBftLeaderInfoInvalid;
+    }
+
+    if (local_tx_info->attr_map.size() != tx_info.attr_size()) {
+        BFT_ERROR("local tx attrs not equal to leader attrs[%d][%d]!",
+                local_tx_info->attr_map.size(), tx_info.attr_size());
+        return kBftLeaderInfoInvalid;
+    }
+
+    for (int32_t i = 0; i < tx_info.attr_size(); ++i) {
+        auto iter = local_tx_info->attr_map.find(tx_info.attr(i).key());
+        if (iter == local_tx_info->attr_map.end()) {
+            return kBftLeaderInfoInvalid;
+        }
+
+        if (iter->second != tx_info.attr(i).value()) {
+            return kBftLeaderInfoInvalid;
+        }
+    }
+
     block::AccountInfoPtr acc_ptr{ nullptr };
     if (tx_info.has_to() && !tx_info.to().empty()) {
-//         if (tx_info.to_add()) {
-//             // check from consensus result(from broadcast to this shard)
-//             // check to network id, if not then broadcast to destination network
-//             // check to pool index
-//             if (common::GetPoolIndex(tx_info.to()) != pool_index()) {
-//                 return kBftPoolIndexError;
-//             }
-//             // just add
-//             acc_ptr = block::AccountManager::Instance()->GetAcountInfo(tx_info.to());
-//             if (acc_ptr == nullptr) {
-//                 return kBftAccountNotExists;
-//             }
-// 
-//             if (acc_ptr->balance + tx_info.amount() != tx_info.balance()) {
-//                 return kBftAccountBalanceError;
-//             }
-//         } else {
-//             // check from balance
-//             // check to pool index
-//             if (common::GetPoolIndex(tx_info.from()) != pool_index()) {
-//                 return kBftPoolIndexError;
-//             }
-// 
-//             acc_ptr = block::AccountManager::Instance()->GetAcountInfo(tx_info.from());
-//             if (acc_ptr == nullptr) {
-//                 return kBftAccountNotExists;
-//             }
-// 
-//             if (acc_ptr->balance < static_cast<int64_t>(tx_info.amount())) {
-//                 return kBftAccountBalanceError;
-//             }
-// 
-//             if (acc_ptr->balance - tx_info.amount() != tx_info.balance()) {
-//                 return kBftAccountBalanceError;
-//             }
-//         }
+
     } else {
         // check amount is 0
         // new account address
