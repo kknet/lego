@@ -61,7 +61,7 @@ struct TxItem {
     uint64_t index{ 0 };
 	uint32_t create_acc_network_id{ 0 };
     std::map<std::string, std::string> attr_map;
-    uint32_t bft_type{ kTransaction };
+    uint32_t bft_type{ common::kConsensusTransaction };
 };
 
 typedef std::shared_ptr<TxItem> TxItemPtr;
