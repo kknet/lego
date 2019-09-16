@@ -138,6 +138,10 @@ int DhtFunction::IsClosest(
 
     std::set<std::string> exclude;
     NodePtr closest_node(GetClosestNode(dht, target, local_dht_key, true, exclude));
+    if (closest_node == nullptr) {
+        return kDhtError;
+    }
+
     closest = (closest_node->bucket == -1) ||
             CloserToTarget(local_dht_key, closest_node->dht_key, target);
     return kDhtSuccess;
