@@ -743,12 +743,18 @@ std::string VpnClient::Transaction(const std::string& to, uint64_t amount, std::
         to_addr = common::Encode::HexDecode(to);
     }
 
+    uint32_t type = common::kConsensusTransaction;
+    if (to.empty()) {
+        type = common::kConsensusCreateAcount;
+    }
+
     ClientProto::CreateTxRequest(
             uni_dht->local_node(),
             tx_gid,
             to_addr,
             amount,
             rand_num,
+            type,
             msg);
     network::Route::Instance()->Send(msg);
     return "OK";

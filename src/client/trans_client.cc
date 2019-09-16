@@ -30,12 +30,18 @@ int TransactionClient::Transaction(
         return kClientError;
     }
     tx_gid = common::CreateGID(security::Schnorr::Instance()->str_pubkey());
+    uint32_t type = common::kConsensusTransaction;
+    if (to.empty()) {
+        type = common::kConsensusCreateAcount;
+    }
+
     ClientProto::CreateTxRequest(
             uni_dht->local_node(),
             tx_gid,
             to,
             amount,
             rand_num,
+            type,
             msg);
     network::Route::Instance()->Send(msg);
     tx_gid = common::Encode::HexEncode(tx_gid);

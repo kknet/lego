@@ -72,6 +72,13 @@ enum CommonErrorCode {
     kCommonError = 1,
 };
 
+enum ConsensusType {
+    kConsensusTransaction = 0,
+    kConsensusCreateAcount = 1,
+    kConsensusMining = 2,
+    kConsensusLogin = 3,
+};
+
 static const uint32_t kImmutablePoolSize = 64u;
 static const uint32_t kInvalidPoolIndex = kImmutablePoolSize + 1;
 static const uint32_t kTestForNetworkId = 4u;
