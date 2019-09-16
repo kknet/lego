@@ -23,6 +23,7 @@ public:
     void BftOver(BftInterfacePtr& bft_ptr);
     bool LockPool(uint32_t pool_index);
     bool TxValid(TxItemPtr& tx_ptr);
+    TxItemPtr GetTx(uint32_t pool_index, bool to, const std::string& gid);
 
 private:
     TxPool* tx_pool_{ nullptr };

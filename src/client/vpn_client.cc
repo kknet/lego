@@ -373,6 +373,7 @@ std::string VpnClient::Init(
         CLIENT_ERROR("InitNetworkSingleton failed!");
         return "ERROR";
     }
+    
     return (common::global_code_to_country_map[common::GlobalInfo::Instance()->country()] +
             "," +
             common::Encode::HexEncode(common::GlobalInfo::Instance()->id()) +

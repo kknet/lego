@@ -59,7 +59,7 @@ bool TxPoolManager::TxValid(TxItemPtr& tx_ptr) {
 // 		}
 
         auto acc_info = block::AccountManager::Instance()->GetAcountInfo(account_addr);
-        if (acc_info != nullptr) {
+        if (acc_info != nullptr && tx_ptr->attr_map.empty()) {
 //             BFT_ERROR("tx invalid. account address exists");
             return false;
         }
@@ -127,6 +127,11 @@ bool TxPoolManager::HasTx(const std::string& acc_addr, bool to, const std::strin
 bool TxPoolManager::HasTx(uint32_t pool_index, bool to, const std::string& tx_gid) {
     assert(pool_index < common::kImmutablePoolSize);
     return tx_pool_[pool_index].HasTx(to, tx_gid);
+}
+
+TxItemPtr TxPoolManager::GetTx(uint32_t pool_index, bool to, const std::string& gid) {
+    assert(pool_index < common::kImmutablePoolSize);
+    return tx_pool_[pool_index].GetTx(to, gid);
 }
 
 void TxPoolManager::BftOver(BftInterfacePtr& bft_ptr) {

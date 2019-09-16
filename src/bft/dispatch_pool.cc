@@ -69,6 +69,10 @@ bool DispatchPool::HasTx(uint32_t pool_index, bool to, const std::string& gid) {
     return tx_pool_.HasTx(pool_index, to, gid);
 }
 
+TxItemPtr DispatchPool::GetTx(uint32_t pool_index, bool to, const std::string& gid) {
+    return tx_pool_.GetTx(pool_index, to, gid);
+}
+
 void DispatchPool::BftOver(BftInterfacePtr& bft_ptr) {
     if (bft_ptr->name() == kTransactionPbftAddress) {
         tx_pool_.BftOver(bft_ptr);

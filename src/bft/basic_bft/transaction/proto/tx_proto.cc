@@ -155,6 +155,14 @@ void TxProto::CreateTxBlock(
             }
         }
         tx.set_to_add(tx_vec[i]->add_to_acc_addr);
+        if (!tx_vec[i]->attr_map.empty()) {
+            for (auto iter = tx_vec[i]->attr_map.begin();
+                    iter != tx_vec[i]->attr_map.end(); ++iter) {
+                auto tx_attr = tx.add_attr();
+                tx_attr->set_key(iter->first);
+                tx_attr->set_value(iter->second);
+            }
+        }
         auto add_tx = tx_list->Add();
         *add_tx = tx;
     }

@@ -22,15 +22,15 @@ int TxPool::AddTx(TxItemPtr& tx_ptr) {
     if (tx_ptr->add_to_acc_addr) {
         uni_gid = std::string("t_") + tx_ptr->gid;
     }
-    auto iter = added_tx_set_.find(uni_gid);
-    if (iter != added_tx_set_.end()) {
+    auto iter = added_tx_map_.find(uni_gid);
+    if (iter != added_tx_map_.end()) {
         BFT_ERROR("tx gid[%d][%s] has added!",
                 tx_ptr->add_to_acc_addr,
                 common::Encode::HexEncode(uni_gid).c_str());
         return kBftTxAdded;
     }
-    added_tx_set_.insert(uni_gid);
     uint64_t tx_index = pool_index_gen_.fetch_add(1);
+    added_tx_map_.insert(std::make_pair(uni_gid, tx_index));
     tx_pool_[tx_index] = tx_ptr;
     tx_ptr->index = tx_index;
     return kBftSuccess;
@@ -66,8 +66,22 @@ bool TxPool::HasTx(bool to, const std::string& tx_gid) {
         uni_gid = std::string("t_") + tx_gid;
     }
     std::lock_guard<std::mutex> guard(tx_pool_mutex_);
-    auto iter = added_tx_set_.find(uni_gid);
-    return iter != added_tx_set_.end();
+    auto iter = added_tx_map_.find(uni_gid);
+    return iter != added_tx_map_.end();
+}
+
+TxItemPtr TxPool::GetTx(bool to, const std::string& tx_gid) {
+    std::string uni_gid = tx_gid;
+    if (to) {
+        uni_gid = std::string("t_") + tx_gid;
+    }
+    std::lock_guard<std::mutex> guard(tx_pool_mutex_);
+    auto iter = added_tx_map_.find(uni_gid);
+    auto item_iter = tx_pool_.find(iter->second);
+    if (item_iter != tx_pool_.end()) {
+        return item_iter->second;
+    }
+    return nullptr;
 }
 
 bool TxPool::TxPoolEmpty() {
@@ -85,9 +99,9 @@ void TxPool::BftOver(BftInterfacePtr& bft_ptr) {
     for (uint32_t i = 0; i < item_vec.size(); ++i) {
         auto iter = tx_pool_.find(item_vec[i]);
         if (iter != tx_pool_.end()) {
-//             auto set_iter = added_tx_set_.find(iter->second->gid);
-//             if (set_iter != added_tx_set_.end()) {
-//                 added_tx_set_.erase(set_iter);
+//             auto set_iter = added_tx_map_.find(iter->second->gid);
+//             if (set_iter != added_tx_map_.end()) {
+//                 added_tx_map_.erase(set_iter);
 //             }
             tx_pool_.erase(iter);
         }

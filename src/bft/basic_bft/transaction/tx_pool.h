@@ -42,6 +42,10 @@ struct TxItem {
 			create_acc_network_id = network::GetConsensusShardNetworkId(in_from_acc_addr);
 		}
     }
+
+    void add_attr(const std::string& key, const std::string& val) {
+        attr_map[key] = val;
+    }
     std::string gid;
     std::string from_acc_addr;
     std::string from_pubkey;
@@ -54,6 +58,7 @@ struct TxItem {
     uint64_t time_valid{ 0 };
     uint64_t index;
 	uint32_t create_acc_network_id{ 0 };
+    std::map<std::string, std::string> attr_map;
 };
 
 typedef std::shared_ptr<TxItem> TxItemPtr;
@@ -67,6 +72,7 @@ public:
     void GetTx(std::vector<TxItemPtr>& res_vec);
     bool TxPoolEmpty();
     bool HasTx(bool to, const std::string& tx_gid);
+    TxItemPtr GetTx(bool to, const std::string& tx_gid);
     void BftOver(BftInterfacePtr& bft_ptr);
     void set_pool_index(uint32_t pool_idx) {
         pool_index_ = pool_idx;
@@ -76,7 +82,7 @@ private:
     static std::atomic<uint64_t> pool_index_gen_;
 
     std::map<uint64_t, TxItemPtr> tx_pool_;
-    std::set<std::string> added_tx_set_;
+    std::unordered_map<std::string, uint64_t> added_tx_map_;
     std::mutex tx_pool_mutex_;
     uint32_t pool_index_;
 
