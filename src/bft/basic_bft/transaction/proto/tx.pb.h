@@ -1807,6 +1807,18 @@ class NewTx : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
 
   // accessors -------------------------------------------------------
 
+  // repeated .lego.bft.protobuf.AccountAttributes attr = 8;
+  int attr_size() const;
+  void clear_attr();
+  static const int kAttrFieldNumber = 8;
+  ::lego::bft::protobuf::AccountAttributes* mutable_attr(int index);
+  ::google::protobuf::RepeatedPtrField< ::lego::bft::protobuf::AccountAttributes >*
+      mutable_attr();
+  const ::lego::bft::protobuf::AccountAttributes& attr(int index) const;
+  ::lego::bft::protobuf::AccountAttributes* add_attr();
+  const ::google::protobuf::RepeatedPtrField< ::lego::bft::protobuf::AccountAttributes >&
+      attr() const;
+
   // optional bytes gid = 1;
   bool has_gid() const;
   void clear_gid();
@@ -1916,6 +1928,7 @@ class NewTx : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::lego::bft::protobuf::AccountAttributes > attr_;
   ::google::protobuf::internal::ArenaStringPtr gid_;
   ::google::protobuf::internal::ArenaStringPtr from_acc_addr_;
   ::google::protobuf::internal::ArenaStringPtr from_pubkey_;
@@ -4428,6 +4441,36 @@ inline void NewTx::set_type(::google::protobuf::uint32 value) {
   set_has_type();
   type_ = value;
   // @@protoc_insertion_point(field_set:lego.bft.protobuf.NewTx.type)
+}
+
+// repeated .lego.bft.protobuf.AccountAttributes attr = 8;
+inline int NewTx::attr_size() const {
+  return attr_.size();
+}
+inline void NewTx::clear_attr() {
+  attr_.Clear();
+}
+inline ::lego::bft::protobuf::AccountAttributes* NewTx::mutable_attr(int index) {
+  // @@protoc_insertion_point(field_mutable:lego.bft.protobuf.NewTx.attr)
+  return attr_.Mutable(index);
+}
+inline ::google::protobuf::RepeatedPtrField< ::lego::bft::protobuf::AccountAttributes >*
+NewTx::mutable_attr() {
+  // @@protoc_insertion_point(field_mutable_list:lego.bft.protobuf.NewTx.attr)
+  return &attr_;
+}
+inline const ::lego::bft::protobuf::AccountAttributes& NewTx::attr(int index) const {
+  // @@protoc_insertion_point(field_get:lego.bft.protobuf.NewTx.attr)
+  return attr_.Get(index);
+}
+inline ::lego::bft::protobuf::AccountAttributes* NewTx::add_attr() {
+  // @@protoc_insertion_point(field_add:lego.bft.protobuf.NewTx.attr)
+  return attr_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::lego::bft::protobuf::AccountAttributes >&
+NewTx::attr() const {
+  // @@protoc_insertion_point(field_list:lego.bft.protobuf.NewTx.attr)
+  return attr_;
 }
 
 // -------------------------------------------------------------------

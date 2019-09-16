@@ -25,9 +25,9 @@ extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_BackupTxPrepare;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_LeaderTxCommit;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_LeaderTxPreCommit;
-extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_NewTx;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_TxPrepareItem;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_Block;
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_NewTx;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_ToAccountTx;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_TxBlock;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_TxInfo;
@@ -261,8 +261,9 @@ static void InitDefaultsNewTx() {
   ::lego::bft::protobuf::NewTx::InitAsDefaultInstance();
 }
 
-::google::protobuf::internal::SCCInfo<0> scc_info_NewTx =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsNewTx}, {}};
+::google::protobuf::internal::SCCInfo<1> scc_info_NewTx =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsNewTx}, {
+      &protobuf_tx_2eproto::scc_info_AccountAttributes.base,}};
 
 static void InitDefaultsToAccountTx() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -463,6 +464,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::NewTx, to_acc_addr_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::NewTx, lego_count_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::NewTx, type_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::NewTx, attr_),
   0,
   1,
   2,
@@ -470,6 +472,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   4,
   5,
   6,
+  ~0u,
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::ToAccountTx, _has_bits_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::ToAccountTx, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -508,9 +511,9 @@ static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROT
   { 111, 117, sizeof(::lego::bft::protobuf::LeaderTxPreCommit)},
   { 118, 124, sizeof(::lego::bft::protobuf::BackupTxPreCommit)},
   { 125, 131, sizeof(::lego::bft::protobuf::LeaderTxCommit)},
-  { 132, 144, sizeof(::lego::bft::protobuf::NewTx)},
-  { 151, 157, sizeof(::lego::bft::protobuf::ToAccountTx)},
-  { 158, 170, sizeof(::lego::bft::protobuf::TxBft)},
+  { 132, 145, sizeof(::lego::bft::protobuf::NewTx)},
+  { 153, 159, sizeof(::lego::bft::protobuf::ToAccountTx)},
+  { 160, 172, sizeof(::lego::bft::protobuf::TxBft)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -575,25 +578,26 @@ void AddDescriptorsImpl() {
       "uf.Block\"!\n\017BackupTxPrepare\022\016\n\006status\030\001 "
       "\001(\005\"#\n\021LeaderTxPreCommit\022\016\n\006status\030\001 \001(\005"
       "\"#\n\021BackupTxPreCommit\022\016\n\006status\030\001 \001(\005\" \n"
-      "\016LeaderTxCommit\022\016\n\006status\030\001 \001(\005\"\212\001\n\005NewT"
+      "\016LeaderTxCommit\022\016\n\006status\030\001 \001(\005\"\276\001\n\005NewT"
       "x\022\013\n\003gid\030\001 \001(\014\022\025\n\rfrom_acc_addr\030\002 \001(\014\022\023\n"
       "\013from_pubkey\030\003 \001(\014\022\021\n\tfrom_sign\030\004 \001(\014\022\023\n"
       "\013to_acc_addr\030\005 \001(\014\022\022\n\nlego_count\030\006 \001(\004\022\014"
-      "\n\004type\030\007 \001(\r\"6\n\013ToAccountTx\022\'\n\005block\030\001 \001"
-      "(\0132\030.lego.bft.protobuf.Block\"\203\003\n\005TxBft\022("
-      "\n\006new_tx\030\001 \001(\0132\030.lego.bft.protobuf.NewTx"
-      "\022-\n\005to_tx\030\002 \001(\0132\036.lego.bft.protobuf.ToAc"
-      "countTx\0227\n\013ltx_prepare\030\003 \001(\0132\".lego.bft."
-      "protobuf.LeaderTxPrepare\0227\n\013btx_prepare\030"
-      "\004 \001(\0132\".lego.bft.protobuf.BackupTxPrepar"
-      "e\022;\n\rltx_precommit\030\005 \001(\0132$.lego.bft.prot"
-      "obuf.LeaderTxPreCommit\022;\n\rbtx_precommit\030"
-      "\006 \001(\0132$.lego.bft.protobuf.BackupTxPreCom"
-      "mit\0225\n\nltx_commit\030\007 \001(\0132!.lego.bft.proto"
-      "buf.LeaderTxCommit"
+      "\n\004type\030\007 \001(\r\0222\n\004attr\030\010 \003(\0132$.lego.bft.pr"
+      "otobuf.AccountAttributes\"6\n\013ToAccountTx\022"
+      "\'\n\005block\030\001 \001(\0132\030.lego.bft.protobuf.Block"
+      "\"\203\003\n\005TxBft\022(\n\006new_tx\030\001 \001(\0132\030.lego.bft.pr"
+      "otobuf.NewTx\022-\n\005to_tx\030\002 \001(\0132\036.lego.bft.p"
+      "rotobuf.ToAccountTx\0227\n\013ltx_prepare\030\003 \001(\013"
+      "2\".lego.bft.protobuf.LeaderTxPrepare\0227\n\013"
+      "btx_prepare\030\004 \001(\0132\".lego.bft.protobuf.Ba"
+      "ckupTxPrepare\022;\n\rltx_precommit\030\005 \001(\0132$.l"
+      "ego.bft.protobuf.LeaderTxPreCommit\022;\n\rbt"
+      "x_precommit\030\006 \001(\0132$.lego.bft.protobuf.Ba"
+      "ckupTxPreCommit\0225\n\nltx_commit\030\007 \001(\0132!.le"
+      "go.bft.protobuf.LeaderTxCommit"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 1618);
+      descriptor, 1670);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "tx.proto", &protobuf_RegisterTypes);
 }
@@ -4351,6 +4355,7 @@ const int NewTx::kFromSignFieldNumber;
 const int NewTx::kToAccAddrFieldNumber;
 const int NewTx::kLegoCountFieldNumber;
 const int NewTx::kTypeFieldNumber;
+const int NewTx::kAttrFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 NewTx::NewTx()
@@ -4363,7 +4368,8 @@ NewTx::NewTx()
 NewTx::NewTx(const NewTx& from)
   : ::google::protobuf::Message(),
       _internal_metadata_(NULL),
-      _has_bits_(from._has_bits_) {
+      _has_bits_(from._has_bits_),
+      attr_(from.attr_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   gid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.has_gid()) {
@@ -4435,6 +4441,7 @@ void NewTx::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  attr_.Clear();
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 31u) {
     if (cached_has_bits & 0x00000001u) {
@@ -4560,6 +4567,18 @@ bool NewTx::MergePartialFromCodedStream(
         break;
       }
 
+      // repeated .lego.bft.protobuf.AccountAttributes attr = 8;
+      case 8: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(66u /* 66 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+                input, add_attr()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -4627,6 +4646,15 @@ void NewTx::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(7, this->type(), output);
   }
 
+  // repeated .lego.bft.protobuf.AccountAttributes attr = 8;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->attr_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      8,
+      this->attr(static_cast<int>(i)),
+      output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -4687,6 +4715,14 @@ void NewTx::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(7, this->type(), target);
   }
 
+  // repeated .lego.bft.protobuf.AccountAttributes attr = 8;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->attr_size()); i < n; i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        8, this->attr(static_cast<int>(i)), deterministic, target);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
@@ -4704,6 +4740,17 @@ size_t NewTx::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         _internal_metadata_.unknown_fields());
   }
+  // repeated .lego.bft.protobuf.AccountAttributes attr = 8;
+  {
+    unsigned int count = static_cast<unsigned int>(this->attr_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          this->attr(static_cast<int>(i)));
+    }
+  }
+
   if (_has_bits_[0 / 32] & 127u) {
     // optional bytes gid = 1;
     if (has_gid()) {
@@ -4782,6 +4829,7 @@ void NewTx::MergeFrom(const NewTx& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  attr_.MergeFrom(from.attr_);
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 127u) {
     if (cached_has_bits & 0x00000001u) {
@@ -4838,6 +4886,7 @@ void NewTx::Swap(NewTx* other) {
 }
 void NewTx::InternalSwap(NewTx* other) {
   using std::swap;
+  CastToBase(&attr_)->InternalSwap(CastToBase(&other->attr_));
   gid_.Swap(&other->gid_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
   from_acc_addr_.Swap(&other->from_acc_addr_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
