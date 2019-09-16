@@ -20,21 +20,27 @@
 // @@protoc_insertion_point(includes)
 
 namespace protobuf_tx_2eproto {
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_AccountAttributes;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_BackupTxPreCommit;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_BackupTxPrepare;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_LeaderTxCommit;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_LeaderTxPreCommit;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_NewTx;
-extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_TxInfo;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_TxPrepareItem;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_Block;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_ToAccountTx;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_TxBlock;
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_TxInfo;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_tx_2eproto ::google::protobuf::internal::SCCInfo<2> scc_info_LeaderTxPrepare;
 }  // namespace protobuf_tx_2eproto
 namespace lego {
 namespace bft {
 namespace protobuf {
+class AccountAttributesDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<AccountAttributes>
+      _instance;
+} _AccountAttributes_default_instance_;
 class TxInfoDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<TxInfo>
@@ -99,6 +105,20 @@ class TxBftDefaultTypeInternal {
 }  // namespace bft
 }  // namespace lego
 namespace protobuf_tx_2eproto {
+static void InitDefaultsAccountAttributes() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::lego::bft::protobuf::_AccountAttributes_default_instance_;
+    new (ptr) ::lego::bft::protobuf::AccountAttributes();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::lego::bft::protobuf::AccountAttributes::InitAsDefaultInstance();
+}
+
+::google::protobuf::internal::SCCInfo<0> scc_info_AccountAttributes =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsAccountAttributes}, {}};
+
 static void InitDefaultsTxInfo() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -110,8 +130,9 @@ static void InitDefaultsTxInfo() {
   ::lego::bft::protobuf::TxInfo::InitAsDefaultInstance();
 }
 
-::google::protobuf::internal::SCCInfo<0> scc_info_TxInfo =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsTxInfo}, {}};
+::google::protobuf::internal::SCCInfo<1> scc_info_TxInfo =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsTxInfo}, {
+      &protobuf_tx_2eproto::scc_info_AccountAttributes.base,}};
 
 static void InitDefaultsTxBlock() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -280,6 +301,7 @@ static void InitDefaultsTxBft() {
       &protobuf_tx_2eproto::scc_info_LeaderTxCommit.base,}};
 
 void InitDefaults() {
+  ::google::protobuf::internal::InitSCC(&scc_info_AccountAttributes.base);
   ::google::protobuf::internal::InitSCC(&scc_info_TxInfo.base);
   ::google::protobuf::internal::InitSCC(&scc_info_TxBlock.base);
   ::google::protobuf::internal::InitSCC(&scc_info_Block.base);
@@ -294,9 +316,18 @@ void InitDefaults() {
   ::google::protobuf::internal::InitSCC(&scc_info_TxBft.base);
 }
 
-::google::protobuf::Metadata file_level_metadata[12];
+::google::protobuf::Metadata file_level_metadata[13];
 
 const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::AccountAttributes, _has_bits_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::AccountAttributes, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::AccountAttributes, key_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::AccountAttributes, value_),
+  0,
+  1,
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::TxInfo, _has_bits_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::TxInfo, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -315,6 +346,8 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::TxInfo, balance_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::TxInfo, to_add_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::TxInfo, netwok_id_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::TxInfo, type_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::TxInfo, attr_),
   5,
   0,
   1,
@@ -328,6 +361,8 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   11,
   6,
   12,
+  13,
+  ~0u,
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::TxBlock, _has_bits_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::bft::protobuf::TxBlock, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -461,21 +496,23 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   6,
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, 18, sizeof(::lego::bft::protobuf::TxInfo)},
-  { 31, 48, sizeof(::lego::bft::protobuf::TxBlock)},
-  { 60, 69, sizeof(::lego::bft::protobuf::Block)},
-  { 73, 80, sizeof(::lego::bft::protobuf::TxPrepareItem)},
-  { 82, 89, sizeof(::lego::bft::protobuf::LeaderTxPrepare)},
-  { 91, 97, sizeof(::lego::bft::protobuf::BackupTxPrepare)},
-  { 98, 104, sizeof(::lego::bft::protobuf::LeaderTxPreCommit)},
-  { 105, 111, sizeof(::lego::bft::protobuf::BackupTxPreCommit)},
-  { 112, 118, sizeof(::lego::bft::protobuf::LeaderTxCommit)},
-  { 119, 130, sizeof(::lego::bft::protobuf::NewTx)},
-  { 136, 142, sizeof(::lego::bft::protobuf::ToAccountTx)},
-  { 143, 155, sizeof(::lego::bft::protobuf::TxBft)},
+  { 0, 7, sizeof(::lego::bft::protobuf::AccountAttributes)},
+  { 9, 29, sizeof(::lego::bft::protobuf::TxInfo)},
+  { 44, 61, sizeof(::lego::bft::protobuf::TxBlock)},
+  { 73, 82, sizeof(::lego::bft::protobuf::Block)},
+  { 86, 93, sizeof(::lego::bft::protobuf::TxPrepareItem)},
+  { 95, 102, sizeof(::lego::bft::protobuf::LeaderTxPrepare)},
+  { 104, 110, sizeof(::lego::bft::protobuf::BackupTxPrepare)},
+  { 111, 117, sizeof(::lego::bft::protobuf::LeaderTxPreCommit)},
+  { 118, 124, sizeof(::lego::bft::protobuf::BackupTxPreCommit)},
+  { 125, 131, sizeof(::lego::bft::protobuf::LeaderTxCommit)},
+  { 132, 143, sizeof(::lego::bft::protobuf::NewTx)},
+  { 149, 155, sizeof(::lego::bft::protobuf::ToAccountTx)},
+  { 156, 168, sizeof(::lego::bft::protobuf::TxBft)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
+  reinterpret_cast<const ::google::protobuf::Message*>(&::lego::bft::protobuf::_AccountAttributes_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::lego::bft::protobuf::_TxInfo_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::lego::bft::protobuf::_TxBlock_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::lego::bft::protobuf::_Block_default_instance_),
@@ -505,53 +542,56 @@ void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) GOOGLE_PROTOBUF_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 12);
+  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 13);
 }
 
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-      "\n\010tx.proto\022\021lego.bft.protobuf\"\344\001\n\006TxInfo"
-      "\022\017\n\007version\030\001 \001(\r\022\013\n\003gid\030\002 \001(\014\022\014\n\004from\030\003"
-      " \001(\014\022\023\n\013from_pubkey\030\004 \001(\014\022\021\n\tfrom_sign\030\005"
-      " \001(\014\022\n\n\002to\030\006 \001(\014\022\016\n\006amount\030\007 \001(\004\022\021\n\tgas_"
-      "limit\030\010 \001(\004\022\020\n\010gas_used\030\t \001(\004\022\021\n\tgas_pri"
-      "ce\030\n \001(\004\022\017\n\007balance\030\013 \001(\004\022\016\n\006to_add\030\014 \001("
-      "\010\022\021\n\tnetwok_id\030\r \001(\r\"\373\001\n\007TxBlock\022\017\n\007preh"
-      "ash\030\001 \001(\014\022\017\n\007version\030\002 \001(\r\022\021\n\telect_ver\030"
-      "\003 \001(\r\022\017\n\007rc_hash\030\004 \001(\014\022\016\n\006bitmap\030\005 \003(\004\022\022"
-      "\n\nagg_pubkey\030\006 \001(\014\022\020\n\010agg_sign\030\007 \001(\014\022\r\n\005"
-      "tx_id\030\010 \001(\004\022\017\n\007tx_hash\030\t \001(\014\022\024\n\014tx_root_"
-      "hash\030\n \001(\014\022*\n\007tx_list\030\013 \003(\0132\031.lego.bft.p"
-      "rotobuf.TxInfo\022\022\n\nnetwork_id\030\014 \001(\r\"f\n\005Bl"
-      "ock\022\014\n\004hash\030\001 \001(\014\022\016\n\006height\030\002 \001(\004\022,\n\010tx_"
-      "block\030\003 \001(\0132\032.lego.bft.protobuf.TxBlock\022"
-      "\021\n\ttimestamp\030\004 \001(\004\".\n\rTxPrepareItem\022\020\n\010a"
-      "cc_addr\030\001 \001(\014\022\013\n\003gid\030\002 \001(\014\"i\n\017LeaderTxPr"
-      "epare\022-\n\003txs\030\001 \003(\0132 .lego.bft.protobuf.T"
-      "xPrepareItem\022\'\n\005block\030\002 \001(\0132\030.lego.bft.p"
-      "rotobuf.Block\"!\n\017BackupTxPrepare\022\016\n\006stat"
-      "us\030\001 \001(\005\"#\n\021LeaderTxPreCommit\022\016\n\006status\030"
-      "\001 \001(\005\"#\n\021BackupTxPreCommit\022\016\n\006status\030\001 \001"
-      "(\005\" \n\016LeaderTxCommit\022\016\n\006status\030\001 \001(\005\"|\n\005"
-      "NewTx\022\013\n\003gid\030\001 \001(\014\022\025\n\rfrom_acc_addr\030\002 \001("
-      "\014\022\023\n\013from_pubkey\030\003 \001(\014\022\021\n\tfrom_sign\030\004 \001("
-      "\014\022\023\n\013to_acc_addr\030\005 \001(\014\022\022\n\nlego_count\030\006 \001"
-      "(\004\"6\n\013ToAccountTx\022\'\n\005block\030\001 \001(\0132\030.lego."
-      "bft.protobuf.Block\"\203\003\n\005TxBft\022(\n\006new_tx\030\001"
-      " \001(\0132\030.lego.bft.protobuf.NewTx\022-\n\005to_tx\030"
-      "\002 \001(\0132\036.lego.bft.protobuf.ToAccountTx\0227\n"
-      "\013ltx_prepare\030\003 \001(\0132\".lego.bft.protobuf.L"
-      "eaderTxPrepare\0227\n\013btx_prepare\030\004 \001(\0132\".le"
-      "go.bft.protobuf.BackupTxPrepare\022;\n\rltx_p"
-      "recommit\030\005 \001(\0132$.lego.bft.protobuf.Leade"
-      "rTxPreCommit\022;\n\rbtx_precommit\030\006 \001(\0132$.le"
-      "go.bft.protobuf.BackupTxPreCommit\0225\n\nltx"
-      "_commit\030\007 \001(\0132!.lego.bft.protobuf.Leader"
-      "TxCommit"
+      "\n\010tx.proto\022\021lego.bft.protobuf\"/\n\021Account"
+      "Attributes\022\013\n\003key\030\001 \001(\014\022\r\n\005value\030\002 \001(\014\"\246"
+      "\002\n\006TxInfo\022\017\n\007version\030\001 \001(\r\022\013\n\003gid\030\002 \001(\014\022"
+      "\014\n\004from\030\003 \001(\014\022\023\n\013from_pubkey\030\004 \001(\014\022\021\n\tfr"
+      "om_sign\030\005 \001(\014\022\n\n\002to\030\006 \001(\014\022\016\n\006amount\030\007 \001("
+      "\004\022\021\n\tgas_limit\030\010 \001(\004\022\020\n\010gas_used\030\t \001(\004\022\021"
+      "\n\tgas_price\030\n \001(\004\022\017\n\007balance\030\013 \001(\004\022\016\n\006to"
+      "_add\030\014 \001(\010\022\021\n\tnetwok_id\030\r \001(\r\022\014\n\004type\030\016 "
+      "\001(\r\0222\n\004attr\030\017 \003(\0132$.lego.bft.protobuf.Ac"
+      "countAttributes\"\373\001\n\007TxBlock\022\017\n\007prehash\030\001"
+      " \001(\014\022\017\n\007version\030\002 \001(\r\022\021\n\telect_ver\030\003 \001(\r"
+      "\022\017\n\007rc_hash\030\004 \001(\014\022\016\n\006bitmap\030\005 \003(\004\022\022\n\nagg"
+      "_pubkey\030\006 \001(\014\022\020\n\010agg_sign\030\007 \001(\014\022\r\n\005tx_id"
+      "\030\010 \001(\004\022\017\n\007tx_hash\030\t \001(\014\022\024\n\014tx_root_hash\030"
+      "\n \001(\014\022*\n\007tx_list\030\013 \003(\0132\031.lego.bft.protob"
+      "uf.TxInfo\022\022\n\nnetwork_id\030\014 \001(\r\"f\n\005Block\022\014"
+      "\n\004hash\030\001 \001(\014\022\016\n\006height\030\002 \001(\004\022,\n\010tx_block"
+      "\030\003 \001(\0132\032.lego.bft.protobuf.TxBlock\022\021\n\tti"
+      "mestamp\030\004 \001(\004\".\n\rTxPrepareItem\022\020\n\010acc_ad"
+      "dr\030\001 \001(\014\022\013\n\003gid\030\002 \001(\014\"i\n\017LeaderTxPrepare"
+      "\022-\n\003txs\030\001 \003(\0132 .lego.bft.protobuf.TxPrep"
+      "areItem\022\'\n\005block\030\002 \001(\0132\030.lego.bft.protob"
+      "uf.Block\"!\n\017BackupTxPrepare\022\016\n\006status\030\001 "
+      "\001(\005\"#\n\021LeaderTxPreCommit\022\016\n\006status\030\001 \001(\005"
+      "\"#\n\021BackupTxPreCommit\022\016\n\006status\030\001 \001(\005\" \n"
+      "\016LeaderTxCommit\022\016\n\006status\030\001 \001(\005\"|\n\005NewTx"
+      "\022\013\n\003gid\030\001 \001(\014\022\025\n\rfrom_acc_addr\030\002 \001(\014\022\023\n\013"
+      "from_pubkey\030\003 \001(\014\022\021\n\tfrom_sign\030\004 \001(\014\022\023\n\013"
+      "to_acc_addr\030\005 \001(\014\022\022\n\nlego_count\030\006 \001(\004\"6\n"
+      "\013ToAccountTx\022\'\n\005block\030\001 \001(\0132\030.lego.bft.p"
+      "rotobuf.Block\"\203\003\n\005TxBft\022(\n\006new_tx\030\001 \001(\0132"
+      "\030.lego.bft.protobuf.NewTx\022-\n\005to_tx\030\002 \001(\013"
+      "2\036.lego.bft.protobuf.ToAccountTx\0227\n\013ltx_"
+      "prepare\030\003 \001(\0132\".lego.bft.protobuf.Leader"
+      "TxPrepare\0227\n\013btx_prepare\030\004 \001(\0132\".lego.bf"
+      "t.protobuf.BackupTxPrepare\022;\n\rltx_precom"
+      "mit\030\005 \001(\0132$.lego.bft.protobuf.LeaderTxPr"
+      "eCommit\022;\n\rbtx_precommit\030\006 \001(\0132$.lego.bf"
+      "t.protobuf.BackupTxPreCommit\0225\n\nltx_comm"
+      "it\030\007 \001(\0132!.lego.bft.protobuf.LeaderTxCom"
+      "mit"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 1488);
+      descriptor, 1603);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "tx.proto", &protobuf_RegisterTypes);
 }
@@ -573,6 +613,299 @@ namespace protobuf {
 
 // ===================================================================
 
+void AccountAttributes::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int AccountAttributes::kKeyFieldNumber;
+const int AccountAttributes::kValueFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+AccountAttributes::AccountAttributes()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_tx_2eproto::scc_info_AccountAttributes.base);
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:lego.bft.protobuf.AccountAttributes)
+}
+AccountAttributes::AccountAttributes(const AccountAttributes& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _has_bits_(from._has_bits_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  key_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_key()) {
+    key_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.key_);
+  }
+  value_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_value()) {
+    value_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.value_);
+  }
+  // @@protoc_insertion_point(copy_constructor:lego.bft.protobuf.AccountAttributes)
+}
+
+void AccountAttributes::SharedCtor() {
+  key_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  value_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+AccountAttributes::~AccountAttributes() {
+  // @@protoc_insertion_point(destructor:lego.bft.protobuf.AccountAttributes)
+  SharedDtor();
+}
+
+void AccountAttributes::SharedDtor() {
+  key_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  value_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void AccountAttributes::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const ::google::protobuf::Descriptor* AccountAttributes::descriptor() {
+  ::protobuf_tx_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_tx_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const AccountAttributes& AccountAttributes::default_instance() {
+  ::google::protobuf::internal::InitSCC(&protobuf_tx_2eproto::scc_info_AccountAttributes.base);
+  return *internal_default_instance();
+}
+
+
+void AccountAttributes::Clear() {
+// @@protoc_insertion_point(message_clear_start:lego.bft.protobuf.AccountAttributes)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 3u) {
+    if (cached_has_bits & 0x00000001u) {
+      key_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      value_.ClearNonDefaultToEmptyNoArena();
+    }
+  }
+  _has_bits_.Clear();
+  _internal_metadata_.Clear();
+}
+
+bool AccountAttributes::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:lego.bft.protobuf.AccountAttributes)
+  for (;;) {
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional bytes key = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_key()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bytes value = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_value()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:lego.bft.protobuf.AccountAttributes)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:lego.bft.protobuf.AccountAttributes)
+  return false;
+#undef DO_
+}
+
+void AccountAttributes::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:lego.bft.protobuf.AccountAttributes)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // optional bytes key = 1;
+  if (cached_has_bits & 0x00000001u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      1, this->key(), output);
+  }
+
+  // optional bytes value = 2;
+  if (cached_has_bits & 0x00000002u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      2, this->value(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:lego.bft.protobuf.AccountAttributes)
+}
+
+::google::protobuf::uint8* AccountAttributes::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:lego.bft.protobuf.AccountAttributes)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // optional bytes key = 1;
+  if (cached_has_bits & 0x00000001u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        1, this->key(), target);
+  }
+
+  // optional bytes value = 2;
+  if (cached_has_bits & 0x00000002u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        2, this->value(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:lego.bft.protobuf.AccountAttributes)
+  return target;
+}
+
+size_t AccountAttributes::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:lego.bft.protobuf.AccountAttributes)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  if (_has_bits_[0 / 32] & 3u) {
+    // optional bytes key = 1;
+    if (has_key()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->key());
+    }
+
+    // optional bytes value = 2;
+    if (has_value()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->value());
+    }
+
+  }
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void AccountAttributes::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:lego.bft.protobuf.AccountAttributes)
+  GOOGLE_DCHECK_NE(&from, this);
+  const AccountAttributes* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const AccountAttributes>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:lego.bft.protobuf.AccountAttributes)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:lego.bft.protobuf.AccountAttributes)
+    MergeFrom(*source);
+  }
+}
+
+void AccountAttributes::MergeFrom(const AccountAttributes& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:lego.bft.protobuf.AccountAttributes)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 3u) {
+    if (cached_has_bits & 0x00000001u) {
+      set_has_key();
+      key_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.key_);
+    }
+    if (cached_has_bits & 0x00000002u) {
+      set_has_value();
+      value_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.value_);
+    }
+  }
+}
+
+void AccountAttributes::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:lego.bft.protobuf.AccountAttributes)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void AccountAttributes::CopyFrom(const AccountAttributes& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:lego.bft.protobuf.AccountAttributes)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool AccountAttributes::IsInitialized() const {
+  return true;
+}
+
+void AccountAttributes::Swap(AccountAttributes* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void AccountAttributes::InternalSwap(AccountAttributes* other) {
+  using std::swap;
+  key_.Swap(&other->key_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  value_.Swap(&other->value_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(_has_bits_[0], other->_has_bits_[0]);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+}
+
+::google::protobuf::Metadata AccountAttributes::GetMetadata() const {
+  protobuf_tx_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_tx_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
 void TxInfo::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
@@ -589,6 +922,8 @@ const int TxInfo::kGasPriceFieldNumber;
 const int TxInfo::kBalanceFieldNumber;
 const int TxInfo::kToAddFieldNumber;
 const int TxInfo::kNetwokIdFieldNumber;
+const int TxInfo::kTypeFieldNumber;
+const int TxInfo::kAttrFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 TxInfo::TxInfo()
@@ -601,7 +936,8 @@ TxInfo::TxInfo()
 TxInfo::TxInfo(const TxInfo& from)
   : ::google::protobuf::Message(),
       _internal_metadata_(NULL),
-      _has_bits_(from._has_bits_) {
+      _has_bits_(from._has_bits_),
+      attr_(from.attr_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   gid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.has_gid()) {
@@ -624,8 +960,8 @@ TxInfo::TxInfo(const TxInfo& from)
     to_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.to_);
   }
   ::memcpy(&version_, &from.version_,
-    static_cast<size_t>(reinterpret_cast<char*>(&netwok_id_) -
-    reinterpret_cast<char*>(&version_)) + sizeof(netwok_id_));
+    static_cast<size_t>(reinterpret_cast<char*>(&type_) -
+    reinterpret_cast<char*>(&version_)) + sizeof(type_));
   // @@protoc_insertion_point(copy_constructor:lego.bft.protobuf.TxInfo)
 }
 
@@ -636,8 +972,8 @@ void TxInfo::SharedCtor() {
   from_sign_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   to_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&version_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&netwok_id_) -
-      reinterpret_cast<char*>(&version_)) + sizeof(netwok_id_));
+      reinterpret_cast<char*>(&type_) -
+      reinterpret_cast<char*>(&version_)) + sizeof(type_));
 }
 
 TxInfo::~TxInfo() {
@@ -673,6 +1009,7 @@ void TxInfo::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  attr_.Clear();
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 31u) {
     if (cached_has_bits & 0x00000001u) {
@@ -696,10 +1033,10 @@ void TxInfo::Clear() {
         reinterpret_cast<char*>(&amount_) -
         reinterpret_cast<char*>(&version_)) + sizeof(amount_));
   }
-  if (cached_has_bits & 7936u) {
+  if (cached_has_bits & 16128u) {
     ::memset(&gas_limit_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&netwok_id_) -
-        reinterpret_cast<char*>(&gas_limit_)) + sizeof(netwok_id_));
+        reinterpret_cast<char*>(&type_) -
+        reinterpret_cast<char*>(&gas_limit_)) + sizeof(type_));
   }
   _has_bits_.Clear();
   _internal_metadata_.Clear();
@@ -887,6 +1224,32 @@ bool TxInfo::MergePartialFromCodedStream(
         break;
       }
 
+      // optional uint32 type = 14;
+      case 14: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(112u /* 112 & 0xFF */)) {
+          set_has_type();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &type_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated .lego.bft.protobuf.AccountAttributes attr = 15;
+      case 15: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(122u /* 122 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+                input, add_attr()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -984,6 +1347,20 @@ void TxInfo::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(13, this->netwok_id(), output);
   }
 
+  // optional uint32 type = 14;
+  if (cached_has_bits & 0x00002000u) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(14, this->type(), output);
+  }
+
+  // repeated .lego.bft.protobuf.AccountAttributes attr = 15;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->attr_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      15,
+      this->attr(static_cast<int>(i)),
+      output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -1074,6 +1451,19 @@ void TxInfo::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(13, this->netwok_id(), target);
   }
 
+  // optional uint32 type = 14;
+  if (cached_has_bits & 0x00002000u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(14, this->type(), target);
+  }
+
+  // repeated .lego.bft.protobuf.AccountAttributes attr = 15;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->attr_size()); i < n; i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        15, this->attr(static_cast<int>(i)), deterministic, target);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
@@ -1091,6 +1481,17 @@ size_t TxInfo::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         _internal_metadata_.unknown_fields());
   }
+  // repeated .lego.bft.protobuf.AccountAttributes attr = 15;
+  {
+    unsigned int count = static_cast<unsigned int>(this->attr_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          this->attr(static_cast<int>(i)));
+    }
+  }
+
   if (_has_bits_[0 / 32] & 255u) {
     // optional bytes gid = 2;
     if (has_gid()) {
@@ -1147,7 +1548,7 @@ size_t TxInfo::ByteSizeLong() const {
     }
 
   }
-  if (_has_bits_[8 / 32] & 7936u) {
+  if (_has_bits_[8 / 32] & 16128u) {
     // optional uint64 gas_limit = 8;
     if (has_gas_limit()) {
       total_size += 1 +
@@ -1183,6 +1584,13 @@ size_t TxInfo::ByteSizeLong() const {
           this->netwok_id());
     }
 
+    // optional uint32 type = 14;
+    if (has_type()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->type());
+    }
+
   }
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   SetCachedSize(cached_size);
@@ -1211,6 +1619,7 @@ void TxInfo::MergeFrom(const TxInfo& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  attr_.MergeFrom(from.attr_);
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 255u) {
     if (cached_has_bits & 0x00000001u) {
@@ -1244,7 +1653,7 @@ void TxInfo::MergeFrom(const TxInfo& from) {
     }
     _has_bits_[0] |= cached_has_bits;
   }
-  if (cached_has_bits & 7936u) {
+  if (cached_has_bits & 16128u) {
     if (cached_has_bits & 0x00000100u) {
       gas_limit_ = from.gas_limit_;
     }
@@ -1259,6 +1668,9 @@ void TxInfo::MergeFrom(const TxInfo& from) {
     }
     if (cached_has_bits & 0x00001000u) {
       netwok_id_ = from.netwok_id_;
+    }
+    if (cached_has_bits & 0x00002000u) {
+      type_ = from.type_;
     }
     _has_bits_[0] |= cached_has_bits;
   }
@@ -1288,6 +1700,7 @@ void TxInfo::Swap(TxInfo* other) {
 }
 void TxInfo::InternalSwap(TxInfo* other) {
   using std::swap;
+  CastToBase(&attr_)->InternalSwap(CastToBase(&other->attr_));
   gid_.Swap(&other->gid_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
   from_.Swap(&other->from_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
@@ -1306,6 +1719,7 @@ void TxInfo::InternalSwap(TxInfo* other) {
   swap(gas_price_, other->gas_price_);
   swap(balance_, other->balance_);
   swap(netwok_id_, other->netwok_id_);
+  swap(type_, other->type_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   _internal_metadata_.Swap(&other->_internal_metadata_);
 }
@@ -5189,6 +5603,9 @@ void TxBft::InternalSwap(TxBft* other) {
 }  // namespace lego
 namespace google {
 namespace protobuf {
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::lego::bft::protobuf::AccountAttributes* Arena::CreateMaybeMessage< ::lego::bft::protobuf::AccountAttributes >(Arena* arena) {
+  return Arena::CreateInternal< ::lego::bft::protobuf::AccountAttributes >(arena);
+}
 template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::lego::bft::protobuf::TxInfo* Arena::CreateMaybeMessage< ::lego::bft::protobuf::TxInfo >(Arena* arena) {
   return Arena::CreateInternal< ::lego::bft::protobuf::TxInfo >(arena);
 }
