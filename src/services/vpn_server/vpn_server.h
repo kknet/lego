@@ -9,6 +9,8 @@ namespace lego {
 
 namespace vpn {
 
+
+
 class VpnServer {
 public:
     static int Init(
