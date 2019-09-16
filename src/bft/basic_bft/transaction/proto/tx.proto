@@ -2,6 +2,11 @@ syntax = "proto2";
 
 package lego.bft.protobuf;
 
+message AccountAttributes {
+    optional bytes key = 1;
+	optional bytes value = 2;
+}
+
 message TxInfo {
 	optional uint32 version = 1;
 	optional bytes gid = 2;
@@ -16,6 +21,8 @@ message TxInfo {
 	optional uint64 balance = 11;
 	optional bool to_add = 12;
 	optional uint32 netwok_id = 13;
+    optional uint32 type = 14;
+    repeated AccountAttributes attr = 15;
 }
 
 message TxBlock {
