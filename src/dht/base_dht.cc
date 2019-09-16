@@ -687,17 +687,17 @@ int BaseDht::CheckJoin(NodePtr& node) {
     }
 
     if (node->nat_type == kNatTypeUnknown) {
-        DHT_WARN("invalid node nat type.");
+        DHT_ERROR("invalid node nat type.");
         return kDhtInvalidNat;
     }
 
     if (!NodeValid(node)) {
-        DHT_WARN("node invalid.");
+        DHT_ERROR("node invalid.");
         return kDhtError;
     }
 
     if (node->dht_key_hash == local_node_->dht_key_hash) {
-        DHT_WARN("self join[%s][%s][%llu][%llu]",
+        DHT_ERROR("self join[%s][%s][%llu][%llu]",
                 common::Encode::HexEncode(node->dht_key).c_str(),
                 common::Encode::HexEncode(local_node_->dht_key).c_str(),
                 node->dht_key_hash,
@@ -710,7 +710,7 @@ int BaseDht::CheckJoin(NodePtr& node) {
     }
 
     if (DhtFunction::GetDhtBucket(local_node_->dht_key, node) != kDhtSuccess) {
-        DHT_WARN("compute node dht bucket index failed!");
+        DHT_ERROR("compute node dht bucket index failed!");
         return kDhtError;
     }
 
@@ -719,7 +719,7 @@ int BaseDht::CheckJoin(NodePtr& node) {
         DhtFunction::PartialSort(local_node_->dht_key, dht_.size(), dht_);
         uint32_t replace_pos = dht_.size() + 1;
         if (!DhtFunction::Displacement(local_node_->dht_key, dht_, node, replace_pos)) {
-            DHT_WARN("Displacement failed[%s]",
+            DHT_ERROR("Displacement failed[%s]",
                     common::Encode::HexEncode(node->id).c_str());
             return kDhtError;
         }
