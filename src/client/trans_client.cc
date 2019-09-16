@@ -48,6 +48,16 @@ int TransactionClient::Transaction(
     return kClientSuccess;
 }
 
+int TransactionClient::VpnLogin(
+        const std::string& svr_account,
+        const std::vector<std::string>& route_vec) {
+    return kClientSuccess;
+}
+
+int TransactionClient::VpnLogout() {
+    return kClientSuccess;
+}
+
 }  // namespace client
 
 }  // namespace lego

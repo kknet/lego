@@ -2,6 +2,11 @@ syntax = "proto2";
 
 package lego.client.protobuf;
 
+message AccountAttributes {
+    optional bytes key = 1;
+	optional bytes value = 2;
+}
+
 message NewTx {
 	optional bytes gid = 1;
 	optional bytes from_acc_addr = 2;
@@ -10,6 +15,7 @@ message NewTx {
 	optional bytes to_acc_addr = 5;
 	optional uint64 lego_count = 6;
 	optional uint32 type = 7;
+    repeated AccountAttributes attr = 8;
 }
 
 message TxBft {
