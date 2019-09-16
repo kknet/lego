@@ -20,19 +20,25 @@
 // @@protoc_insertion_point(includes)
 
 namespace protobuf_client_2eproto {
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_client_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_AccountAttributes;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_client_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_AccountHeightRequest;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_client_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_AccountHeightResponse;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_client_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_GetTxBlockRequest;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_client_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_GetTxBlockResponse;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_client_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_GetVpnInfoRequest;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_client_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_GetVpnInfoResponse;
-extern PROTOBUF_INTERNAL_EXPORT_protobuf_client_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_NewTx;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_client_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_TxInfo;
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_client_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_NewTx;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_client_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_TxBlock;
 }  // namespace protobuf_client_2eproto
 namespace lego {
 namespace client {
 namespace protobuf {
+class AccountAttributesDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<AccountAttributes>
+      _instance;
+} _AccountAttributes_default_instance_;
 class NewTxDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<NewTx>
@@ -107,6 +113,20 @@ class BlockDefaultTypeInternal {
 }  // namespace client
 }  // namespace lego
 namespace protobuf_client_2eproto {
+static void InitDefaultsAccountAttributes() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::lego::client::protobuf::_AccountAttributes_default_instance_;
+    new (ptr) ::lego::client::protobuf::AccountAttributes();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::lego::client::protobuf::AccountAttributes::InitAsDefaultInstance();
+}
+
+::google::protobuf::internal::SCCInfo<0> scc_info_AccountAttributes =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsAccountAttributes}, {}};
+
 static void InitDefaultsNewTx() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -118,8 +138,9 @@ static void InitDefaultsNewTx() {
   ::lego::client::protobuf::NewTx::InitAsDefaultInstance();
 }
 
-::google::protobuf::internal::SCCInfo<0> scc_info_NewTx =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsNewTx}, {}};
+::google::protobuf::internal::SCCInfo<1> scc_info_NewTx =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsNewTx}, {
+      &protobuf_client_2eproto::scc_info_AccountAttributes.base,}};
 
 static void InitDefaultsTxBft() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -313,6 +334,7 @@ static void InitDefaultsBlock() {
       &protobuf_client_2eproto::scc_info_TxBlock.base,}};
 
 void InitDefaults() {
+  ::google::protobuf::internal::InitSCC(&scc_info_AccountAttributes.base);
   ::google::protobuf::internal::InitSCC(&scc_info_NewTx.base);
   ::google::protobuf::internal::InitSCC(&scc_info_TxBft.base);
   ::google::protobuf::internal::InitSCC(&scc_info_BftMessage.base);
@@ -329,9 +351,18 @@ void InitDefaults() {
   ::google::protobuf::internal::InitSCC(&scc_info_Block.base);
 }
 
-::google::protobuf::Metadata file_level_metadata[14];
+::google::protobuf::Metadata file_level_metadata[15];
 
 const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::AccountAttributes, _has_bits_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::AccountAttributes, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::AccountAttributes, key_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::AccountAttributes, value_),
+  0,
+  1,
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::NewTx, _has_bits_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::NewTx, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -344,6 +375,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::NewTx, to_acc_addr_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::NewTx, lego_count_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::NewTx, type_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::NewTx, attr_),
   0,
   1,
   2,
@@ -351,6 +383,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   4,
   5,
   6,
+  ~0u,
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::TxBft, _has_bits_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::client::protobuf::TxBft, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -564,23 +597,25 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   3,
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, 12, sizeof(::lego::client::protobuf::NewTx)},
-  { 19, 25, sizeof(::lego::client::protobuf::TxBft)},
-  { 26, 50, sizeof(::lego::client::protobuf::BftMessage)},
-  { 69, 79, sizeof(::lego::client::protobuf::GetVpnInfoRequest)},
-  { 84, 95, sizeof(::lego::client::protobuf::GetVpnInfoResponse)},
-  { 101, 108, sizeof(::lego::client::protobuf::ServiceMessage)},
-  { 110, 120, sizeof(::lego::client::protobuf::GetTxBlockRequest)},
-  { 125, 131, sizeof(::lego::client::protobuf::GetTxBlockResponse)},
-  { 132, 138, sizeof(::lego::client::protobuf::AccountHeightRequest)},
-  { 139, 145, sizeof(::lego::client::protobuf::AccountHeightResponse)},
-  { 146, 155, sizeof(::lego::client::protobuf::BlockMessage)},
-  { 159, 176, sizeof(::lego::client::protobuf::TxInfo)},
-  { 188, 205, sizeof(::lego::client::protobuf::TxBlock)},
-  { 217, 226, sizeof(::lego::client::protobuf::Block)},
+  { 0, 7, sizeof(::lego::client::protobuf::AccountAttributes)},
+  { 9, 22, sizeof(::lego::client::protobuf::NewTx)},
+  { 30, 36, sizeof(::lego::client::protobuf::TxBft)},
+  { 37, 61, sizeof(::lego::client::protobuf::BftMessage)},
+  { 80, 90, sizeof(::lego::client::protobuf::GetVpnInfoRequest)},
+  { 95, 106, sizeof(::lego::client::protobuf::GetVpnInfoResponse)},
+  { 112, 119, sizeof(::lego::client::protobuf::ServiceMessage)},
+  { 121, 131, sizeof(::lego::client::protobuf::GetTxBlockRequest)},
+  { 136, 142, sizeof(::lego::client::protobuf::GetTxBlockResponse)},
+  { 143, 149, sizeof(::lego::client::protobuf::AccountHeightRequest)},
+  { 150, 156, sizeof(::lego::client::protobuf::AccountHeightResponse)},
+  { 157, 166, sizeof(::lego::client::protobuf::BlockMessage)},
+  { 170, 187, sizeof(::lego::client::protobuf::TxInfo)},
+  { 199, 216, sizeof(::lego::client::protobuf::TxBlock)},
+  { 228, 237, sizeof(::lego::client::protobuf::Block)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
+  reinterpret_cast<const ::google::protobuf::Message*>(&::lego::client::protobuf::_AccountAttributes_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::lego::client::protobuf::_NewTx_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::lego::client::protobuf::_TxBft_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::lego::client::protobuf::_BftMessage_default_instance_),
@@ -612,67 +647,69 @@ void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) GOOGLE_PROTOBUF_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 14);
+  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 15);
 }
 
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-      "\n\014client.proto\022\024lego.client.protobuf\"\212\001\n"
-      "\005NewTx\022\013\n\003gid\030\001 \001(\014\022\025\n\rfrom_acc_addr\030\002 \001"
-      "(\014\022\023\n\013from_pubkey\030\003 \001(\014\022\021\n\tfrom_sign\030\004 \001"
-      "(\014\022\023\n\013to_acc_addr\030\005 \001(\014\022\022\n\nlego_count\030\006 "
-      "\001(\004\022\014\n\004type\030\007 \001(\r\"4\n\005TxBft\022+\n\006new_tx\030\001 \001"
-      "(\0132\033.lego.client.protobuf.NewTx\"\351\002\n\nBftM"
-      "essage\022\013\n\003gid\030\001 \001(\014\022\014\n\004rand\030\002 \001(\004\022\016\n\006sta"
-      "tus\030\003 \001(\005\022\016\n\006leader\030\004 \001(\010\022\016\n\006net_id\030\005 \001("
-      "\r\022\017\n\007node_id\030\006 \001(\014\022\016\n\006pubkey\030\007 \001(\014\022\026\n\016si"
-      "gn_challenge\030\010 \001(\014\022\025\n\rsign_response\030\t \001("
-      "\014\022\016\n\006secret\030\n \001(\014\022\021\n\tchallenge\030\013 \001(\014\022\020\n\010"
-      "response\030\014 \001(\014\022\032\n\022agg_sign_challenge\030\r \001"
-      "(\014\022\031\n\021agg_sign_response\030\016 \001(\014\022\016\n\006bitmap\030"
-      "\017 \003(\004\022\r\n\005agree\030\020 \001(\010\022\023\n\013bft_address\030\021 \001("
-      "\014\022\022\n\npool_index\030\022 \001(\r\022\014\n\004data\030\023 \001(\014\"u\n\021G"
-      "etVpnInfoRequest\022\016\n\006pubkey\030\001 \001(\014\022\026\n\016sign"
-      "_challenge\030\002 \001(\014\022\025\n\rsign_response\030\003 \001(\014\022"
-      "\021\n\theartbeat\030\004 \001(\010\022\016\n\006method\030\005 \001(\014\"w\n\022Ge"
-      "tVpnInfoResponse\022\n\n\002ip\030\001 \001(\014\022\020\n\010svr_port"
-      "\030\002 \001(\r\022\022\n\nroute_port\030\003 \001(\r\022\017\n\007country\030\004 "
-      "\001(\014\022\016\n\006secnum\030\005 \001(\005\022\016\n\006pubkey\030\006 \001(\014\"\205\001\n\016"
-      "ServiceMessage\0228\n\007vpn_req\030\001 \001(\0132\'.lego.c"
-      "lient.protobuf.GetVpnInfoRequest\0229\n\007vpn_"
-      "res\030\002 \001(\0132(.lego.client.protobuf.GetVpnI"
-      "nfoResponse\"n\n\021GetTxBlockRequest\022\016\n\006tx_g"
-      "id\030\001 \001(\014\022\022\n\nblock_hash\030\002 \001(\014\022\014\n\004from\030\003 \001"
-      "(\010\022\016\n\006height\030\004 \001(\004\022\027\n\017account_address\030\005 "
-      "\001(\014\"#\n\022GetTxBlockResponse\022\r\n\005block\030\001 \001(\014"
-      "\",\n\024AccountHeightRequest\022\024\n\014account_addr"
-      "\030\001 \001(\014\"(\n\025AccountHeightResponse\022\017\n\007heigh"
-      "ts\030\001 \003(\004\"\210\002\n\014BlockMessage\022:\n\tblock_req\030\001"
-      " \001(\0132\'.lego.client.protobuf.GetTxBlockRe"
-      "quest\022;\n\tblock_res\030\002 \001(\0132(.lego.client.p"
-      "rotobuf.GetTxBlockResponse\022>\n\nheight_req"
-      "\030\003 \001(\0132*.lego.client.protobuf.AccountHei"
-      "ghtRequest\022\?\n\nheight_res\030\004 \001(\0132+.lego.cl"
-      "ient.protobuf.AccountHeightResponse\"\321\001\n\006"
-      "TxInfo\022\017\n\007version\030\001 \001(\r\022\013\n\003gid\030\002 \001(\014\022\014\n\004"
-      "from\030\003 \001(\014\022\023\n\013from_pubkey\030\004 \001(\014\022\021\n\tfrom_"
-      "sign\030\005 \001(\014\022\n\n\002to\030\006 \001(\014\022\016\n\006amount\030\007 \001(\004\022\021"
-      "\n\tgas_limit\030\010 \001(\004\022\020\n\010gas_used\030\t \001(\004\022\021\n\tg"
-      "as_price\030\n \001(\004\022\017\n\007balance\030\013 \001(\004\022\016\n\006to_ad"
-      "d\030\014 \001(\010\"\376\001\n\007TxBlock\022\017\n\007prehash\030\001 \001(\014\022\017\n\007"
-      "version\030\002 \001(\r\022\021\n\telect_ver\030\003 \001(\r\022\017\n\007rc_h"
-      "ash\030\004 \001(\014\022\016\n\006bitmap\030\005 \003(\004\022\022\n\nagg_pubkey\030"
-      "\006 \001(\014\022\020\n\010agg_sign\030\007 \001(\014\022\r\n\005tx_id\030\010 \001(\004\022\017"
-      "\n\007tx_hash\030\t \001(\014\022\024\n\014tx_root_hash\030\n \001(\014\022-\n"
-      "\007tx_list\030\013 \003(\0132\034.lego.client.protobuf.Tx"
-      "Info\022\022\n\nnetwork_id\030\014 \001(\r\"i\n\005Block\022\014\n\004has"
-      "h\030\001 \001(\014\022\016\n\006height\030\002 \001(\004\022/\n\010tx_block\030\003 \001("
-      "\0132\035.lego.client.protobuf.TxBlock\022\021\n\ttime"
-      "stamp\030\004 \001(\004"
+      "\n\014client.proto\022\024lego.client.protobuf\"/\n\021"
+      "AccountAttributes\022\013\n\003key\030\001 \001(\014\022\r\n\005value\030"
+      "\002 \001(\014\"\301\001\n\005NewTx\022\013\n\003gid\030\001 \001(\014\022\025\n\rfrom_acc"
+      "_addr\030\002 \001(\014\022\023\n\013from_pubkey\030\003 \001(\014\022\021\n\tfrom"
+      "_sign\030\004 \001(\014\022\023\n\013to_acc_addr\030\005 \001(\014\022\022\n\nlego"
+      "_count\030\006 \001(\004\022\014\n\004type\030\007 \001(\r\0225\n\004attr\030\010 \003(\013"
+      "2\'.lego.client.protobuf.AccountAttribute"
+      "s\"4\n\005TxBft\022+\n\006new_tx\030\001 \001(\0132\033.lego.client"
+      ".protobuf.NewTx\"\351\002\n\nBftMessage\022\013\n\003gid\030\001 "
+      "\001(\014\022\014\n\004rand\030\002 \001(\004\022\016\n\006status\030\003 \001(\005\022\016\n\006lea"
+      "der\030\004 \001(\010\022\016\n\006net_id\030\005 \001(\r\022\017\n\007node_id\030\006 \001"
+      "(\014\022\016\n\006pubkey\030\007 \001(\014\022\026\n\016sign_challenge\030\010 \001"
+      "(\014\022\025\n\rsign_response\030\t \001(\014\022\016\n\006secret\030\n \001("
+      "\014\022\021\n\tchallenge\030\013 \001(\014\022\020\n\010response\030\014 \001(\014\022\032"
+      "\n\022agg_sign_challenge\030\r \001(\014\022\031\n\021agg_sign_r"
+      "esponse\030\016 \001(\014\022\016\n\006bitmap\030\017 \003(\004\022\r\n\005agree\030\020"
+      " \001(\010\022\023\n\013bft_address\030\021 \001(\014\022\022\n\npool_index\030"
+      "\022 \001(\r\022\014\n\004data\030\023 \001(\014\"u\n\021GetVpnInfoRequest"
+      "\022\016\n\006pubkey\030\001 \001(\014\022\026\n\016sign_challenge\030\002 \001(\014"
+      "\022\025\n\rsign_response\030\003 \001(\014\022\021\n\theartbeat\030\004 \001"
+      "(\010\022\016\n\006method\030\005 \001(\014\"w\n\022GetVpnInfoResponse"
+      "\022\n\n\002ip\030\001 \001(\014\022\020\n\010svr_port\030\002 \001(\r\022\022\n\nroute_"
+      "port\030\003 \001(\r\022\017\n\007country\030\004 \001(\014\022\016\n\006secnum\030\005 "
+      "\001(\005\022\016\n\006pubkey\030\006 \001(\014\"\205\001\n\016ServiceMessage\0228"
+      "\n\007vpn_req\030\001 \001(\0132\'.lego.client.protobuf.G"
+      "etVpnInfoRequest\0229\n\007vpn_res\030\002 \001(\0132(.lego"
+      ".client.protobuf.GetVpnInfoResponse\"n\n\021G"
+      "etTxBlockRequest\022\016\n\006tx_gid\030\001 \001(\014\022\022\n\nbloc"
+      "k_hash\030\002 \001(\014\022\014\n\004from\030\003 \001(\010\022\016\n\006height\030\004 \001"
+      "(\004\022\027\n\017account_address\030\005 \001(\014\"#\n\022GetTxBloc"
+      "kResponse\022\r\n\005block\030\001 \001(\014\",\n\024AccountHeigh"
+      "tRequest\022\024\n\014account_addr\030\001 \001(\014\"(\n\025Accoun"
+      "tHeightResponse\022\017\n\007heights\030\001 \003(\004\"\210\002\n\014Blo"
+      "ckMessage\022:\n\tblock_req\030\001 \001(\0132\'.lego.clie"
+      "nt.protobuf.GetTxBlockRequest\022;\n\tblock_r"
+      "es\030\002 \001(\0132(.lego.client.protobuf.GetTxBlo"
+      "ckResponse\022>\n\nheight_req\030\003 \001(\0132*.lego.cl"
+      "ient.protobuf.AccountHeightRequest\022\?\n\nhe"
+      "ight_res\030\004 \001(\0132+.lego.client.protobuf.Ac"
+      "countHeightResponse\"\321\001\n\006TxInfo\022\017\n\007versio"
+      "n\030\001 \001(\r\022\013\n\003gid\030\002 \001(\014\022\014\n\004from\030\003 \001(\014\022\023\n\013fr"
+      "om_pubkey\030\004 \001(\014\022\021\n\tfrom_sign\030\005 \001(\014\022\n\n\002to"
+      "\030\006 \001(\014\022\016\n\006amount\030\007 \001(\004\022\021\n\tgas_limit\030\010 \001("
+      "\004\022\020\n\010gas_used\030\t \001(\004\022\021\n\tgas_price\030\n \001(\004\022\017"
+      "\n\007balance\030\013 \001(\004\022\016\n\006to_add\030\014 \001(\010\"\376\001\n\007TxBl"
+      "ock\022\017\n\007prehash\030\001 \001(\014\022\017\n\007version\030\002 \001(\r\022\021\n"
+      "\telect_ver\030\003 \001(\r\022\017\n\007rc_hash\030\004 \001(\014\022\016\n\006bit"
+      "map\030\005 \003(\004\022\022\n\nagg_pubkey\030\006 \001(\014\022\020\n\010agg_sig"
+      "n\030\007 \001(\014\022\r\n\005tx_id\030\010 \001(\004\022\017\n\007tx_hash\030\t \001(\014\022"
+      "\024\n\014tx_root_hash\030\n \001(\014\022-\n\007tx_list\030\013 \003(\0132\034"
+      ".lego.client.protobuf.TxInfo\022\022\n\nnetwork_"
+      "id\030\014 \001(\r\"i\n\005Block\022\014\n\004hash\030\001 \001(\014\022\016\n\006heigh"
+      "t\030\002 \001(\004\022/\n\010tx_block\030\003 \001(\0132\035.lego.client."
+      "protobuf.TxBlock\022\021\n\ttimestamp\030\004 \001(\004"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 2051);
+      descriptor, 2155);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "client.proto", &protobuf_RegisterTypes);
 }
@@ -694,6 +731,299 @@ namespace protobuf {
 
 // ===================================================================
 
+void AccountAttributes::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int AccountAttributes::kKeyFieldNumber;
+const int AccountAttributes::kValueFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+AccountAttributes::AccountAttributes()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_client_2eproto::scc_info_AccountAttributes.base);
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:lego.client.protobuf.AccountAttributes)
+}
+AccountAttributes::AccountAttributes(const AccountAttributes& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _has_bits_(from._has_bits_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  key_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_key()) {
+    key_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.key_);
+  }
+  value_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_value()) {
+    value_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.value_);
+  }
+  // @@protoc_insertion_point(copy_constructor:lego.client.protobuf.AccountAttributes)
+}
+
+void AccountAttributes::SharedCtor() {
+  key_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  value_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+AccountAttributes::~AccountAttributes() {
+  // @@protoc_insertion_point(destructor:lego.client.protobuf.AccountAttributes)
+  SharedDtor();
+}
+
+void AccountAttributes::SharedDtor() {
+  key_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  value_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void AccountAttributes::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const ::google::protobuf::Descriptor* AccountAttributes::descriptor() {
+  ::protobuf_client_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_client_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const AccountAttributes& AccountAttributes::default_instance() {
+  ::google::protobuf::internal::InitSCC(&protobuf_client_2eproto::scc_info_AccountAttributes.base);
+  return *internal_default_instance();
+}
+
+
+void AccountAttributes::Clear() {
+// @@protoc_insertion_point(message_clear_start:lego.client.protobuf.AccountAttributes)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 3u) {
+    if (cached_has_bits & 0x00000001u) {
+      key_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      value_.ClearNonDefaultToEmptyNoArena();
+    }
+  }
+  _has_bits_.Clear();
+  _internal_metadata_.Clear();
+}
+
+bool AccountAttributes::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:lego.client.protobuf.AccountAttributes)
+  for (;;) {
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional bytes key = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_key()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bytes value = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_value()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:lego.client.protobuf.AccountAttributes)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:lego.client.protobuf.AccountAttributes)
+  return false;
+#undef DO_
+}
+
+void AccountAttributes::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:lego.client.protobuf.AccountAttributes)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // optional bytes key = 1;
+  if (cached_has_bits & 0x00000001u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      1, this->key(), output);
+  }
+
+  // optional bytes value = 2;
+  if (cached_has_bits & 0x00000002u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      2, this->value(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:lego.client.protobuf.AccountAttributes)
+}
+
+::google::protobuf::uint8* AccountAttributes::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:lego.client.protobuf.AccountAttributes)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // optional bytes key = 1;
+  if (cached_has_bits & 0x00000001u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        1, this->key(), target);
+  }
+
+  // optional bytes value = 2;
+  if (cached_has_bits & 0x00000002u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        2, this->value(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:lego.client.protobuf.AccountAttributes)
+  return target;
+}
+
+size_t AccountAttributes::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:lego.client.protobuf.AccountAttributes)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  if (_has_bits_[0 / 32] & 3u) {
+    // optional bytes key = 1;
+    if (has_key()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->key());
+    }
+
+    // optional bytes value = 2;
+    if (has_value()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->value());
+    }
+
+  }
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void AccountAttributes::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:lego.client.protobuf.AccountAttributes)
+  GOOGLE_DCHECK_NE(&from, this);
+  const AccountAttributes* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const AccountAttributes>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:lego.client.protobuf.AccountAttributes)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:lego.client.protobuf.AccountAttributes)
+    MergeFrom(*source);
+  }
+}
+
+void AccountAttributes::MergeFrom(const AccountAttributes& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:lego.client.protobuf.AccountAttributes)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 3u) {
+    if (cached_has_bits & 0x00000001u) {
+      set_has_key();
+      key_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.key_);
+    }
+    if (cached_has_bits & 0x00000002u) {
+      set_has_value();
+      value_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.value_);
+    }
+  }
+}
+
+void AccountAttributes::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:lego.client.protobuf.AccountAttributes)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void AccountAttributes::CopyFrom(const AccountAttributes& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:lego.client.protobuf.AccountAttributes)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool AccountAttributes::IsInitialized() const {
+  return true;
+}
+
+void AccountAttributes::Swap(AccountAttributes* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void AccountAttributes::InternalSwap(AccountAttributes* other) {
+  using std::swap;
+  key_.Swap(&other->key_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  value_.Swap(&other->value_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(_has_bits_[0], other->_has_bits_[0]);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+}
+
+::google::protobuf::Metadata AccountAttributes::GetMetadata() const {
+  protobuf_client_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_client_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
 void NewTx::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
@@ -704,6 +1034,7 @@ const int NewTx::kFromSignFieldNumber;
 const int NewTx::kToAccAddrFieldNumber;
 const int NewTx::kLegoCountFieldNumber;
 const int NewTx::kTypeFieldNumber;
+const int NewTx::kAttrFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 NewTx::NewTx()
@@ -716,7 +1047,8 @@ NewTx::NewTx()
 NewTx::NewTx(const NewTx& from)
   : ::google::protobuf::Message(),
       _internal_metadata_(NULL),
-      _has_bits_(from._has_bits_) {
+      _has_bits_(from._has_bits_),
+      attr_(from.attr_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   gid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.has_gid()) {
@@ -788,6 +1120,7 @@ void NewTx::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  attr_.Clear();
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 31u) {
     if (cached_has_bits & 0x00000001u) {
@@ -913,6 +1246,18 @@ bool NewTx::MergePartialFromCodedStream(
         break;
       }
 
+      // repeated .lego.client.protobuf.AccountAttributes attr = 8;
+      case 8: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(66u /* 66 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+                input, add_attr()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -980,6 +1325,15 @@ void NewTx::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(7, this->type(), output);
   }
 
+  // repeated .lego.client.protobuf.AccountAttributes attr = 8;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->attr_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      8,
+      this->attr(static_cast<int>(i)),
+      output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -1040,6 +1394,14 @@ void NewTx::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(7, this->type(), target);
   }
 
+  // repeated .lego.client.protobuf.AccountAttributes attr = 8;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->attr_size()); i < n; i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        8, this->attr(static_cast<int>(i)), deterministic, target);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
@@ -1057,6 +1419,17 @@ size_t NewTx::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         _internal_metadata_.unknown_fields());
   }
+  // repeated .lego.client.protobuf.AccountAttributes attr = 8;
+  {
+    unsigned int count = static_cast<unsigned int>(this->attr_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          this->attr(static_cast<int>(i)));
+    }
+  }
+
   if (_has_bits_[0 / 32] & 127u) {
     // optional bytes gid = 1;
     if (has_gid()) {
@@ -1135,6 +1508,7 @@ void NewTx::MergeFrom(const NewTx& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  attr_.MergeFrom(from.attr_);
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 127u) {
     if (cached_has_bits & 0x00000001u) {
@@ -1191,6 +1565,7 @@ void NewTx::Swap(NewTx* other) {
 }
 void NewTx::InternalSwap(NewTx* other) {
   using std::swap;
+  CastToBase(&attr_)->InternalSwap(CastToBase(&other->attr_));
   gid_.Swap(&other->gid_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
   from_acc_addr_.Swap(&other->from_acc_addr_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
@@ -7052,6 +7427,9 @@ void Block::InternalSwap(Block* other) {
 }  // namespace lego
 namespace google {
 namespace protobuf {
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::lego::client::protobuf::AccountAttributes* Arena::CreateMaybeMessage< ::lego::client::protobuf::AccountAttributes >(Arena* arena) {
+  return Arena::CreateInternal< ::lego::client::protobuf::AccountAttributes >(arena);
+}
 template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::lego::client::protobuf::NewTx* Arena::CreateMaybeMessage< ::lego::client::protobuf::NewTx >(Arena* arena) {
   return Arena::CreateInternal< ::lego::client::protobuf::NewTx >(arena);
 }

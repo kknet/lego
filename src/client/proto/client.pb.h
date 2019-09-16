@@ -38,7 +38,7 @@ namespace protobuf_client_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[14];
+  static const ::google::protobuf::internal::ParseTable schema[15];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -48,6 +48,9 @@ void AddDescriptors();
 namespace lego {
 namespace client {
 namespace protobuf {
+class AccountAttributes;
+class AccountAttributesDefaultTypeInternal;
+extern AccountAttributesDefaultTypeInternal _AccountAttributes_default_instance_;
 class AccountHeightRequest;
 class AccountHeightRequestDefaultTypeInternal;
 extern AccountHeightRequestDefaultTypeInternal _AccountHeightRequest_default_instance_;
@@ -95,6 +98,7 @@ extern TxInfoDefaultTypeInternal _TxInfo_default_instance_;
 }  // namespace lego
 namespace google {
 namespace protobuf {
+template<> ::lego::client::protobuf::AccountAttributes* Arena::CreateMaybeMessage<::lego::client::protobuf::AccountAttributes>(Arena*);
 template<> ::lego::client::protobuf::AccountHeightRequest* Arena::CreateMaybeMessage<::lego::client::protobuf::AccountHeightRequest>(Arena*);
 template<> ::lego::client::protobuf::AccountHeightResponse* Arena::CreateMaybeMessage<::lego::client::protobuf::AccountHeightResponse>(Arena*);
 template<> ::lego::client::protobuf::BftMessage* Arena::CreateMaybeMessage<::lego::client::protobuf::BftMessage>(Arena*);
@@ -116,6 +120,146 @@ namespace client {
 namespace protobuf {
 
 // ===================================================================
+
+class AccountAttributes : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:lego.client.protobuf.AccountAttributes) */ {
+ public:
+  AccountAttributes();
+  virtual ~AccountAttributes();
+
+  AccountAttributes(const AccountAttributes& from);
+
+  inline AccountAttributes& operator=(const AccountAttributes& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  AccountAttributes(AccountAttributes&& from) noexcept
+    : AccountAttributes() {
+    *this = ::std::move(from);
+  }
+
+  inline AccountAttributes& operator=(AccountAttributes&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const AccountAttributes& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const AccountAttributes* internal_default_instance() {
+    return reinterpret_cast<const AccountAttributes*>(
+               &_AccountAttributes_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    0;
+
+  void Swap(AccountAttributes* other);
+  friend void swap(AccountAttributes& a, AccountAttributes& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline AccountAttributes* New() const final {
+    return CreateMaybeMessage<AccountAttributes>(NULL);
+  }
+
+  AccountAttributes* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<AccountAttributes>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const AccountAttributes& from);
+  void MergeFrom(const AccountAttributes& from);
+  void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(AccountAttributes* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional bytes key = 1;
+  bool has_key() const;
+  void clear_key();
+  static const int kKeyFieldNumber = 1;
+  const ::std::string& key() const;
+  void set_key(const ::std::string& value);
+  #if LANG_CXX11
+  void set_key(::std::string&& value);
+  #endif
+  void set_key(const char* value);
+  void set_key(const void* value, size_t size);
+  ::std::string* mutable_key();
+  ::std::string* release_key();
+  void set_allocated_key(::std::string* key);
+
+  // optional bytes value = 2;
+  bool has_value() const;
+  void clear_value();
+  static const int kValueFieldNumber = 2;
+  const ::std::string& value() const;
+  void set_value(const ::std::string& value);
+  #if LANG_CXX11
+  void set_value(::std::string&& value);
+  #endif
+  void set_value(const char* value);
+  void set_value(const void* value, size_t size);
+  ::std::string* mutable_value();
+  ::std::string* release_value();
+  void set_allocated_value(::std::string* value);
+
+  // @@protoc_insertion_point(class_scope:lego.client.protobuf.AccountAttributes)
+ private:
+  void set_has_key();
+  void clear_has_key();
+  void set_has_value();
+  void clear_has_value();
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::HasBits<1> _has_bits_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  ::google::protobuf::internal::ArenaStringPtr key_;
+  ::google::protobuf::internal::ArenaStringPtr value_;
+  friend struct ::protobuf_client_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
 
 class NewTx : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:lego.client.protobuf.NewTx) */ {
  public:
@@ -159,7 +303,7 @@ class NewTx : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
                &_NewTx_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    0;
+    1;
 
   void Swap(NewTx* other);
   friend void swap(NewTx& a, NewTx& b) {
@@ -210,6 +354,18 @@ class NewTx : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
   // nested types ----------------------------------------------------
 
   // accessors -------------------------------------------------------
+
+  // repeated .lego.client.protobuf.AccountAttributes attr = 8;
+  int attr_size() const;
+  void clear_attr();
+  static const int kAttrFieldNumber = 8;
+  ::lego::client::protobuf::AccountAttributes* mutable_attr(int index);
+  ::google::protobuf::RepeatedPtrField< ::lego::client::protobuf::AccountAttributes >*
+      mutable_attr();
+  const ::lego::client::protobuf::AccountAttributes& attr(int index) const;
+  ::lego::client::protobuf::AccountAttributes* add_attr();
+  const ::google::protobuf::RepeatedPtrField< ::lego::client::protobuf::AccountAttributes >&
+      attr() const;
 
   // optional bytes gid = 1;
   bool has_gid() const;
@@ -320,6 +476,7 @@ class NewTx : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::lego::client::protobuf::AccountAttributes > attr_;
   ::google::protobuf::internal::ArenaStringPtr gid_;
   ::google::protobuf::internal::ArenaStringPtr from_acc_addr_;
   ::google::protobuf::internal::ArenaStringPtr from_pubkey_;
@@ -373,7 +530,7 @@ class TxBft : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
                &_TxBft_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    1;
+    2;
 
   void Swap(TxBft* other);
   friend void swap(TxBft& a, TxBft& b) {
@@ -492,7 +649,7 @@ class BftMessage : public ::google::protobuf::Message /* @@protoc_insertion_poin
                &_BftMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    3;
 
   void Swap(BftMessage* other);
   friend void swap(BftMessage& a, BftMessage& b) {
@@ -885,7 +1042,7 @@ class GetVpnInfoRequest : public ::google::protobuf::Message /* @@protoc_inserti
                &_GetVpnInfoRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    4;
 
   void Swap(GetVpnInfoRequest* other);
   friend void swap(GetVpnInfoRequest& a, GetVpnInfoRequest& b) {
@@ -1071,7 +1228,7 @@ class GetVpnInfoResponse : public ::google::protobuf::Message /* @@protoc_insert
                &_GetVpnInfoResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    5;
 
   void Swap(GetVpnInfoResponse* other);
   friend void swap(GetVpnInfoResponse& a, GetVpnInfoResponse& b) {
@@ -1259,7 +1416,7 @@ class ServiceMessage : public ::google::protobuf::Message /* @@protoc_insertion_
                &_ServiceMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    6;
 
   void Swap(ServiceMessage* other);
   friend void swap(ServiceMessage& a, ServiceMessage& b) {
@@ -1393,7 +1550,7 @@ class GetTxBlockRequest : public ::google::protobuf::Message /* @@protoc_inserti
                &_GetTxBlockRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    7;
 
   void Swap(GetTxBlockRequest* other);
   friend void swap(GetTxBlockRequest& a, GetTxBlockRequest& b) {
@@ -1571,7 +1728,7 @@ class GetTxBlockResponse : public ::google::protobuf::Message /* @@protoc_insert
                &_GetTxBlockResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    8;
 
   void Swap(GetTxBlockResponse* other);
   friend void swap(GetTxBlockResponse& a, GetTxBlockResponse& b) {
@@ -1693,7 +1850,7 @@ class AccountHeightRequest : public ::google::protobuf::Message /* @@protoc_inse
                &_AccountHeightRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    9;
 
   void Swap(AccountHeightRequest* other);
   friend void swap(AccountHeightRequest& a, AccountHeightRequest& b) {
@@ -1815,7 +1972,7 @@ class AccountHeightResponse : public ::google::protobuf::Message /* @@protoc_ins
                &_AccountHeightResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    10;
 
   void Swap(AccountHeightResponse* other);
   friend void swap(AccountHeightResponse& a, AccountHeightResponse& b) {
@@ -1932,7 +2089,7 @@ class BlockMessage : public ::google::protobuf::Message /* @@protoc_insertion_po
                &_BlockMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    11;
 
   void Swap(BlockMessage* other);
   friend void swap(BlockMessage& a, BlockMessage& b) {
@@ -2096,7 +2253,7 @@ class TxInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
                &_TxInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    12;
 
   void Swap(TxInfo* other);
   friend void swap(TxInfo& a, TxInfo& b) {
@@ -2360,7 +2517,7 @@ class TxBlock : public ::google::protobuf::Message /* @@protoc_insertion_point(c
                &_TxBlock_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    13;
 
   void Swap(TxBlock* other);
   friend void swap(TxBlock& a, TxBlock& b) {
@@ -2638,7 +2795,7 @@ class Block : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
                &_Block_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    14;
 
   void Swap(Block* other);
   friend void swap(Block& a, Block& b) {
@@ -2760,6 +2917,142 @@ class Block : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
+// AccountAttributes
+
+// optional bytes key = 1;
+inline bool AccountAttributes::has_key() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void AccountAttributes::set_has_key() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void AccountAttributes::clear_has_key() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void AccountAttributes::clear_key() {
+  key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_key();
+}
+inline const ::std::string& AccountAttributes::key() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.AccountAttributes.key)
+  return key_.GetNoArena();
+}
+inline void AccountAttributes::set_key(const ::std::string& value) {
+  set_has_key();
+  key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.AccountAttributes.key)
+}
+#if LANG_CXX11
+inline void AccountAttributes::set_key(::std::string&& value) {
+  set_has_key();
+  key_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.AccountAttributes.key)
+}
+#endif
+inline void AccountAttributes::set_key(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_key();
+  key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.AccountAttributes.key)
+}
+inline void AccountAttributes::set_key(const void* value, size_t size) {
+  set_has_key();
+  key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.AccountAttributes.key)
+}
+inline ::std::string* AccountAttributes::mutable_key() {
+  set_has_key();
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.AccountAttributes.key)
+  return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* AccountAttributes::release_key() {
+  // @@protoc_insertion_point(field_release:lego.client.protobuf.AccountAttributes.key)
+  if (!has_key()) {
+    return NULL;
+  }
+  clear_has_key();
+  return key_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void AccountAttributes::set_allocated_key(::std::string* key) {
+  if (key != NULL) {
+    set_has_key();
+  } else {
+    clear_has_key();
+  }
+  key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
+  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.AccountAttributes.key)
+}
+
+// optional bytes value = 2;
+inline bool AccountAttributes::has_value() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void AccountAttributes::set_has_value() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void AccountAttributes::clear_has_value() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void AccountAttributes::clear_value() {
+  value_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_value();
+}
+inline const ::std::string& AccountAttributes::value() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.AccountAttributes.value)
+  return value_.GetNoArena();
+}
+inline void AccountAttributes::set_value(const ::std::string& value) {
+  set_has_value();
+  value_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.AccountAttributes.value)
+}
+#if LANG_CXX11
+inline void AccountAttributes::set_value(::std::string&& value) {
+  set_has_value();
+  value_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.AccountAttributes.value)
+}
+#endif
+inline void AccountAttributes::set_value(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_value();
+  value_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.AccountAttributes.value)
+}
+inline void AccountAttributes::set_value(const void* value, size_t size) {
+  set_has_value();
+  value_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.AccountAttributes.value)
+}
+inline ::std::string* AccountAttributes::mutable_value() {
+  set_has_value();
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.AccountAttributes.value)
+  return value_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* AccountAttributes::release_value() {
+  // @@protoc_insertion_point(field_release:lego.client.protobuf.AccountAttributes.value)
+  if (!has_value()) {
+    return NULL;
+  }
+  clear_has_value();
+  return value_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void AccountAttributes::set_allocated_value(::std::string* value) {
+  if (value != NULL) {
+    set_has_value();
+  } else {
+    clear_has_value();
+  }
+  value_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.AccountAttributes.value)
+}
+
+// -------------------------------------------------------------------
+
 // NewTx
 
 // optional bytes gid = 1;
@@ -3138,6 +3431,36 @@ inline void NewTx::set_type(::google::protobuf::uint32 value) {
   set_has_type();
   type_ = value;
   // @@protoc_insertion_point(field_set:lego.client.protobuf.NewTx.type)
+}
+
+// repeated .lego.client.protobuf.AccountAttributes attr = 8;
+inline int NewTx::attr_size() const {
+  return attr_.size();
+}
+inline void NewTx::clear_attr() {
+  attr_.Clear();
+}
+inline ::lego::client::protobuf::AccountAttributes* NewTx::mutable_attr(int index) {
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.NewTx.attr)
+  return attr_.Mutable(index);
+}
+inline ::google::protobuf::RepeatedPtrField< ::lego::client::protobuf::AccountAttributes >*
+NewTx::mutable_attr() {
+  // @@protoc_insertion_point(field_mutable_list:lego.client.protobuf.NewTx.attr)
+  return &attr_;
+}
+inline const ::lego::client::protobuf::AccountAttributes& NewTx::attr(int index) const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.NewTx.attr)
+  return attr_.Get(index);
+}
+inline ::lego::client::protobuf::AccountAttributes* NewTx::add_attr() {
+  // @@protoc_insertion_point(field_add:lego.client.protobuf.NewTx.attr)
+  return attr_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::lego::client::protobuf::AccountAttributes >&
+NewTx::attr() const {
+  // @@protoc_insertion_point(field_list:lego.client.protobuf.NewTx.attr)
+  return attr_;
 }
 
 // -------------------------------------------------------------------
@@ -6755,6 +7078,8 @@ inline void Block::set_timestamp(::google::protobuf::uint64 value) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
