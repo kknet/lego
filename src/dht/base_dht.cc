@@ -650,12 +650,12 @@ void BaseDht::ProcessConnectRequest(
 
 bool BaseDht::NodeValid(NodePtr& node) {
     if (node->dht_key.size() != kDhtKeySize) {
-        DHT_WARN("dht key size must[%u] now[%u]", kDhtKeySize, node->dht_key.size());
+        DHT_ERROR("dht key size must[%u] now[%u]", kDhtKeySize, node->dht_key.size());
         return false;
     }
 
     if (node->public_ip.empty() || node->public_port <= 0) {
-        DHT_WARN("node[%s] public ip or port invalid!",
+        DHT_ERROR("node[%s] public ip or port invalid!",
                 common::Encode::HexEncode(node->id).c_str());
         return false;
     }
@@ -664,7 +664,7 @@ bool BaseDht::NodeValid(NodePtr& node) {
     auto dht_key_country_code = DhtKeyManager::DhtKeyGetCountry(node->dht_key);
     if (country_id != ip::kInvalidCountryCode) {
         if (country_id != dht_key_country_code) {
-            DHT_WARN("node public ip[%s] country [%d] not equal to node dht key country[%d]",
+            DHT_ERROR("node public ip[%s] country [%d] not equal to node dht key country[%d]",
                     node->public_ip.c_str(),
                     country_id,
                     dht_key_country_code);
