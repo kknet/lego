@@ -1303,7 +1303,6 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
     auto iter = account_bindwidth_map.find(user_account);
     if (iter == account_bindwidth_map.end()) {
         account_bindwidth_map[user_account] = std::make_shared<BandwidthInfo>(0, r);
-        iter = account_bindwidth_map.find(user_account);
     } else {
         iter->second->down_bandwidth += r;
         if (iter->second->begin_time < now_point) {

@@ -309,7 +309,6 @@ std::string VpnClient::Init(
     if (ConfigExists(conf_path)) {
         if (!config.Init(conf_path)) {
             CLIENT_ERROR("init config failed!");
-            return "ERROR";
         }
 
         std::string priky("");
