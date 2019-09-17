@@ -2305,6 +2305,18 @@ class TxInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
 
   // accessors -------------------------------------------------------
 
+  // repeated .lego.client.protobuf.AccountAttributes attr = 15;
+  int attr_size() const;
+  void clear_attr();
+  static const int kAttrFieldNumber = 15;
+  ::lego::client::protobuf::AccountAttributes* mutable_attr(int index);
+  ::google::protobuf::RepeatedPtrField< ::lego::client::protobuf::AccountAttributes >*
+      mutable_attr();
+  const ::lego::client::protobuf::AccountAttributes& attr(int index) const;
+  ::lego::client::protobuf::AccountAttributes* add_attr();
+  const ::google::protobuf::RepeatedPtrField< ::lego::client::protobuf::AccountAttributes >&
+      attr() const;
+
   // optional bytes gid = 2;
   bool has_gid() const;
   void clear_gid();
@@ -2429,6 +2441,20 @@ class TxInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   ::google::protobuf::uint64 balance() const;
   void set_balance(::google::protobuf::uint64 value);
 
+  // optional uint32 netwok_id = 13;
+  bool has_netwok_id() const;
+  void clear_netwok_id();
+  static const int kNetwokIdFieldNumber = 13;
+  ::google::protobuf::uint32 netwok_id() const;
+  void set_netwok_id(::google::protobuf::uint32 value);
+
+  // optional uint32 type = 14;
+  bool has_type() const;
+  void clear_type();
+  static const int kTypeFieldNumber = 14;
+  ::google::protobuf::uint32 type() const;
+  void set_type(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:lego.client.protobuf.TxInfo)
  private:
   void set_has_version();
@@ -2455,10 +2481,15 @@ class TxInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   void clear_has_balance();
   void set_has_to_add();
   void clear_has_to_add();
+  void set_has_netwok_id();
+  void clear_has_netwok_id();
+  void set_has_type();
+  void clear_has_type();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::lego::client::protobuf::AccountAttributes > attr_;
   ::google::protobuf::internal::ArenaStringPtr gid_;
   ::google::protobuf::internal::ArenaStringPtr from_;
   ::google::protobuf::internal::ArenaStringPtr from_pubkey_;
@@ -2471,6 +2502,8 @@ class TxInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   ::google::protobuf::uint64 gas_used_;
   ::google::protobuf::uint64 gas_price_;
   ::google::protobuf::uint64 balance_;
+  ::google::protobuf::uint32 netwok_id_;
+  ::google::protobuf::uint32 type_;
   friend struct ::protobuf_client_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
@@ -6341,6 +6374,84 @@ inline void TxInfo::set_to_add(bool value) {
   set_has_to_add();
   to_add_ = value;
   // @@protoc_insertion_point(field_set:lego.client.protobuf.TxInfo.to_add)
+}
+
+// optional uint32 netwok_id = 13;
+inline bool TxInfo::has_netwok_id() const {
+  return (_has_bits_[0] & 0x00001000u) != 0;
+}
+inline void TxInfo::set_has_netwok_id() {
+  _has_bits_[0] |= 0x00001000u;
+}
+inline void TxInfo::clear_has_netwok_id() {
+  _has_bits_[0] &= ~0x00001000u;
+}
+inline void TxInfo::clear_netwok_id() {
+  netwok_id_ = 0u;
+  clear_has_netwok_id();
+}
+inline ::google::protobuf::uint32 TxInfo::netwok_id() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.TxInfo.netwok_id)
+  return netwok_id_;
+}
+inline void TxInfo::set_netwok_id(::google::protobuf::uint32 value) {
+  set_has_netwok_id();
+  netwok_id_ = value;
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.TxInfo.netwok_id)
+}
+
+// optional uint32 type = 14;
+inline bool TxInfo::has_type() const {
+  return (_has_bits_[0] & 0x00002000u) != 0;
+}
+inline void TxInfo::set_has_type() {
+  _has_bits_[0] |= 0x00002000u;
+}
+inline void TxInfo::clear_has_type() {
+  _has_bits_[0] &= ~0x00002000u;
+}
+inline void TxInfo::clear_type() {
+  type_ = 0u;
+  clear_has_type();
+}
+inline ::google::protobuf::uint32 TxInfo::type() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.TxInfo.type)
+  return type_;
+}
+inline void TxInfo::set_type(::google::protobuf::uint32 value) {
+  set_has_type();
+  type_ = value;
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.TxInfo.type)
+}
+
+// repeated .lego.client.protobuf.AccountAttributes attr = 15;
+inline int TxInfo::attr_size() const {
+  return attr_.size();
+}
+inline void TxInfo::clear_attr() {
+  attr_.Clear();
+}
+inline ::lego::client::protobuf::AccountAttributes* TxInfo::mutable_attr(int index) {
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.TxInfo.attr)
+  return attr_.Mutable(index);
+}
+inline ::google::protobuf::RepeatedPtrField< ::lego::client::protobuf::AccountAttributes >*
+TxInfo::mutable_attr() {
+  // @@protoc_insertion_point(field_mutable_list:lego.client.protobuf.TxInfo.attr)
+  return &attr_;
+}
+inline const ::lego::client::protobuf::AccountAttributes& TxInfo::attr(int index) const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.TxInfo.attr)
+  return attr_.Get(index);
+}
+inline ::lego::client::protobuf::AccountAttributes* TxInfo::add_attr() {
+  // @@protoc_insertion_point(field_add:lego.client.protobuf.TxInfo.attr)
+  return attr_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::lego::client::protobuf::AccountAttributes >&
+TxInfo::attr() const {
+  // @@protoc_insertion_point(field_list:lego.client.protobuf.TxInfo.attr)
+  return attr_;
 }
 
 // -------------------------------------------------------------------
