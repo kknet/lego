@@ -601,178 +601,6 @@ void SetTosFromConnmark(remote_t *remote, server_t *server) {
 
 #endif
 
-static void GetRemoteAddrAndPort(EV_P_ char* host, server_t* server, int& offset, struct addrinfo& info, int& need_query) {
-    struct sockaddr_storage storage;
-    memset(&storage, 0, sizeof(struct sockaddr_storage));
-    char atyp = server->buf->data[offset++];
-        // get remote addr and port
-    if ((atyp & ADDRTYPE_MASK) == 1) {
-        // IP V4
-        std::cout << "ip mask is ipv4" << std::endl;
-        struct sockaddr_in *addr = (struct sockaddr_in *)&storage;
-        size_t in_addr_len = sizeof(struct in_addr);
-        addr->sin_family = AF_INET;
-        if (server->buf->len >= in_addr_len + 3) {
-            memcpy(&addr->sin_addr, server->buf->data + offset, in_addr_len);
-            inet_ntop(AF_INET, (const void *)(server->buf->data + offset),
-                host, INET_ADDRSTRLEN);
-            offset += in_addr_len;
-        } else {
-            ReportAddr(server->fd, "invalid length for ipv4 address");
-            StopServer(EV_A_ server);
-            return;
-        }
-        memcpy(&addr->sin_port, server->buf->data + offset, sizeof(uint16_t));
-        info.ai_family = AF_INET;
-        info.ai_socktype = SOCK_STREAM;
-        info.ai_protocol = IPPROTO_TCP;
-        info.ai_addrlen = sizeof(struct sockaddr_in);
-        info.ai_addr = (struct sockaddr *)addr;
-    } else if ((atyp & ADDRTYPE_MASK) == 3) {
-        // Domain name
-        uint8_t name_len = *(uint8_t *)(server->buf->data + offset);
-        if (static_cast<uint32_t>(name_len + 4) <= server->buf->len) {
-            memcpy(host, server->buf->data + offset + 1, name_len);
-            offset += name_len + 1;
-        } else {
-            ReportAddr(server->fd, "invalid host name length");
-            StopServer(EV_A_ server);
-            return;
-        }
-        if (acl && outbound_block_match_host(host) == 1) {
-            if (verbose)
-                LOGI("outbound blocked %s", host);
-            CloseAndFreeServer(EV_A_ server);
-            return;
-        }
-        struct cork_ip ip;
-        int res = cork_ip_init(&ip, host);
-        std::cout << "host : " << host << " is: " << res << std::endl;
-        if (res != -1) {
-            info.ai_socktype = SOCK_STREAM;
-            info.ai_protocol = IPPROTO_TCP;
-            if (ip.version == 4) {
-                struct sockaddr_in *addr = (struct sockaddr_in *)&storage;
-                inet_pton(AF_INET, host, &(addr->sin_addr));
-                memcpy(&addr->sin_port, server->buf->data + offset, sizeof(uint16_t));
-                addr->sin_family = AF_INET;
-                info.ai_family = AF_INET;
-                info.ai_addrlen = sizeof(struct sockaddr_in);
-                info.ai_addr = (struct sockaddr *)addr;
-            } else if (ip.version == 6) {
-                struct sockaddr_in6 *addr = (struct sockaddr_in6 *)&storage;
-                inet_pton(AF_INET6, host, &(addr->sin6_addr));
-                memcpy(&addr->sin6_port, server->buf->data + offset, sizeof(uint16_t));
-                addr->sin6_family = AF_INET6;
-                info.ai_family = AF_INET6;
-                info.ai_addrlen = sizeof(struct sockaddr_in6);
-                info.ai_addr = (struct sockaddr *)addr;
-            }
-        } else {
-            if (!validate_hostname(host, name_len)) {
-                ReportAddr(server->fd, "invalid host name");
-                StopServer(EV_A_ server);
-                return;
-            }
-            need_query = 1;
-        }
-    } else if ((atyp & ADDRTYPE_MASK) == 4) {
-        std::cout << "ip mask is ipv6." << std::endl;
-
-        // IP V6
-        struct sockaddr_in6 *addr = (struct sockaddr_in6 *)&storage;
-        size_t in6_addr_len = sizeof(struct in6_addr);
-        addr->sin6_family = AF_INET6;
-        if (server->buf->len >= in6_addr_len + 3) {
-            memcpy(&addr->sin6_addr, server->buf->data + offset, in6_addr_len);
-            inet_ntop(AF_INET6, (const void *)(server->buf->data + offset), host, INET6_ADDRSTRLEN);
-            offset += in6_addr_len;
-        } else {
-            LOGE("invalid header with addr type %d", atyp);
-            ReportAddr(server->fd, "invalid length for ipv6 address");
-            StopServer(EV_A_ server);
-            return;
-        }
-        memcpy(&addr->sin6_port, server->buf->data + offset, sizeof(uint16_t));
-        info.ai_family = AF_INET6;
-        info.ai_socktype = SOCK_STREAM;
-        info.ai_protocol = IPPROTO_TCP;
-        info.ai_addrlen = sizeof(struct sockaddr_in6);
-        info.ai_addr = (struct sockaddr *)addr;
-    }
-}
-
-static void IntConnection(EV_P_ server_t *server, server_ctx_t *server_recv_ctx, int offset) {
-    int need_query = 0;
-    char host[255] = { 0 };
-    uint16_t port = 0;
-    struct addrinfo info;
-    memset(&info, 0, sizeof(struct addrinfo));
-
-    int tmp_offset = offset;
-    GetRemoteAddrAndPort(EV_A_ host, server, tmp_offset, info, need_query);
-
-    if (tmp_offset == offset + 1) {
-        std::cout << "invalid data." << std::endl;
-        ReportAddr(server->fd, "invalid address type");
-        StopServer(EV_A_ server);
-        return;
-    }
-
-    offset = tmp_offset;
-    port = load16_be(server->buf->data + offset);
-
-    offset += 2;
-
-    if (static_cast<int>(server->buf->len) < offset) {
-        ReportAddr(server->fd, "invalid request length");
-        StopServer(EV_A_ server);
-        return;
-    } else {
-        server->buf->len -= offset;
-        memmove(server->buf->data, server->buf->data + offset, server->buf->len);
-    }
-
-    if (!need_query) {
-        std::cout << "connect to remote: " << host << ":" << port << std::endl;
-        remote_t *remote = ConnectToRemote(EV_A_ &info, server);
-
-        if (remote == NULL) {
-            LOGE("connect error");
-            CloseAndFreeServer(EV_A_ server);
-            return;
-        } else {
-            server->remote = remote;
-            remote->server = server;
-            // XXX: should handle buffer carefully
-            if (server->buf->len > 0) {
-                brealloc(remote->buf, server->buf->len, SOCKET_BUF_SIZE);
-                memcpy(remote->buf->data, server->buf->data + server->buf->idx, server->buf->len);
-                remote->buf->len = server->buf->len;
-                remote->buf->idx = 0;
-                server->buf->len = 0;
-                server->buf->idx = 0;
-            }
-
-            // waiting on remote connected event
-            ev_io_stop(EV_A_ & server_recv_ctx->io);
-            ev_io_start(EV_A_ & remote->send_ctx->io);
-        }
-    } else {
-        ev_io_stop(EV_A_ & server_recv_ctx->io);
-
-        query_t *query = (query_t*)ss_malloc(sizeof(query_t));
-        memset(query, 0, sizeof(query_t));
-        query->server = server;
-        server->query = query;
-        snprintf(query->hostname, MAX_HOSTNAME_LEN, "%s", host);
-
-        server->stage = STAGE_RESOLVE;
-        resolv_start(host, port, ResolvCallback, ResolvFreeCallback, query);
-    }
-    return;
-}
-
 static bool RemoveNotAliveAccount(const std::chrono::steady_clock::time_point& now_point) {
     if (account_bindwidth_map.size() <= kMaxConnectAccount) {
         return false;
@@ -842,7 +670,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         bool valid = false;
         uint8_t method_len = *(uint8_t *)(buf->data + header_offset);
         std::string method;
-        if (method_len + header_offset + 1 >= buf->len) {
+        if (method_len + header_offset + 1 >= static_cast<int>(buf->len)) {
             return;
         }
         method = std::string((char*)buf->data + header_offset + 1, method_len);
@@ -926,7 +754,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
                 CloseAndFreeServer(EV_A_ server);
             }
         }
-        else if (s < remote->buf->len) {
+        else if (s < static_cast<int>(remote->buf->len)) {
             remote->buf->len -= s;
             remote->buf->idx = s;
             ev_io_stop(EV_A_ & server_recv_ctx->io);
@@ -982,7 +810,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         else if ((atyp & ADDRTYPE_MASK) == 3) {
             // Domain name
             uint8_t name_len = *(uint8_t *)(server->buf->data + offset);
-            if (name_len + 4 <= server->buf->len) {
+            if (name_len + 4 <= static_cast<int>(server->buf->len)) {
                 memcpy(host, server->buf->data + offset + 1, name_len);
                 offset += name_len + 1;
             }
@@ -1064,7 +892,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
 
         offset += 2;
 
-        if (server->buf->len < offset) {
+        if (static_cast<int>(server->buf->len) < offset) {
             ReportAddr(server->fd, "invalid request length");
             StopServer(EV_A_ server);
             return;
