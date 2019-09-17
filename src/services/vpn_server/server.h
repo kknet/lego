@@ -115,6 +115,7 @@ struct BandwidthInfo {
 typedef std::shared_ptr<BandwidthInfo> BandwidthInfoPtr;
 
 struct StakingItem {
+    StakingItem(const std::string& t, uint64_t count) : to(t), amount(count) {}
     std::string to;
     uint64_t amount;
 };
