@@ -139,6 +139,15 @@ void Command::AddBaseCommands() {
     AddCommand("ltx", [this](const std::vector<std::string>& args) {
         std::cout << client::VpnClient::Instance()->Transactions(0, 10) << std::endl;
     });
+    AddCommand("vl", [this](const std::vector<std::string>& args) {
+        std::vector<std::string> route_vec;
+        route_vec.push_back("test_route1");
+        route_vec.push_back("test_route2");
+        std::string account = "test_account";
+        std::string gid;
+        std::cout << client::VpnClient::Instance()->VpnLogin(account, route_vec, gid) << std::endl;
+        std::cout << "gid:" << gid << std::endl;
+    });
     AddCommand("tx", [this](const std::vector<std::string>& args) {
         std::string tx_gid;
         std::string to;
@@ -196,6 +205,8 @@ void Command::AddBaseCommands() {
             std::cout << "\tfrom: " << common::Encode::HexEncode(tx_list[i].from()) << std::endl;
             std::cout << "\tto: " << common::Encode::HexEncode(tx_list[i].to()) << std::endl;
             std::cout << "\tamount: " << tx_list[i].amount() << std::endl;
+            std::cout << "\ttype: " << tx_list[i].type() << std::endl;
+            std::cout << "\tattr size: " << tx_list[i].attr_size() << std::endl;
             std::cout << std::endl;
         }
     });

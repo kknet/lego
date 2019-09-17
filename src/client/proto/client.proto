@@ -106,6 +106,9 @@ message TxInfo {
     optional uint64 gas_price = 10;
 	optional uint64 balance = 11;
 	optional bool to_add = 12;
+    optional uint32 netwok_id = 13;
+    optional uint32 type = 14;
+    repeated AccountAttributes attr = 15;
 }
 
 message TxBlock {
