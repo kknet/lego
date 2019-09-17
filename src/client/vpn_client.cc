@@ -106,6 +106,13 @@ void VpnClient::HandleBlockResponse(const protobuf::GetTxBlockResponse& block_re
     if (hight_block_map_.size() >= kHeightMaxSize) {
         hight_block_map_.erase(hight_block_map_.begin());
     }
+
+    auto block_ptr = std::make_shared<protobuf::Block>(block_res.block());
+    std::lock_guard<std::mutex> guard(tx_map_mutex_);
+    auto& tx_list = block_ptr->tx_block().tx_list();
+    for (int32_t i = 0; i < tx_list.size(); ++i) {
+        tx_map_[tx_list[i].gid()] = block_ptr;
+    }
     got_block_ = true;
 }
 
@@ -507,15 +514,10 @@ std::string VpnClient::GetTransactionInfo(const std::string& tx_gid) {
             return "";
         }
 
-        std::string tmp_str = iter->second->to + "\t" +
-                std::to_string(iter->second->balance) + "\t" +
-                std::to_string(iter->second->height) + "\t" +
-                iter->second->block_hash + "\t" +
-                tx_gid;
         auto tmp_ptr = iter->second;
         tx_map_.erase(iter);
         CLIENT_ERROR("get transaction info success[%s]", tx_gid.c_str());
-        return tmp_str;
+        return "";
     } else {
         tx_map_[tmp_gid] = nullptr;
     }
@@ -806,7 +808,7 @@ int VpnClient::VpnLogout() {
     return kClientSuccess;
 }
 
-TxInfoPtr VpnClient::GetBlockWithGid(const std::string& tx_gid) {
+protobuf::BlockPtr VpnClient::GetBlockWithGid(const std::string& tx_gid) {
     auto tmp_gid = common::Encode::HexDecode(tx_gid);
     std::lock_guard<std::mutex> guard(tx_map_mutex_);
     auto iter = tx_map_.find(tmp_gid);
@@ -824,7 +826,7 @@ TxInfoPtr VpnClient::GetBlockWithGid(const std::string& tx_gid) {
     return nullptr;
 }
 
-TxInfoPtr VpnClient::GetBlockWithHash(const std::string& block_hash) {
+protobuf::BlockPtr VpnClient::GetBlockWithHash(const std::string& block_hash) {
     auto tmp_gid = std::string("b_") + common::Encode::HexDecode(block_hash);
     std::lock_guard<std::mutex> guard(tx_map_mutex_);
     auto iter = tx_map_.find(tmp_gid);

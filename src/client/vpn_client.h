@@ -100,8 +100,8 @@ public:
             std::vector<VpnServerNodePtr>& nodes);
     std::string Transaction(const std::string& to, uint64_t amount, std::string& tx_gid);
     std::string GetTransactionInfo(const std::string& tx_gid);
-    TxInfoPtr GetBlockWithGid(const std::string& gid);
-    TxInfoPtr GetBlockWithHash(const std::string& block_hash);
+    protobuf::BlockPtr GetBlockWithGid(const std::string& gid);
+    protobuf::BlockPtr GetBlockWithHash(const std::string& block_hash);
     int GetSocket();
     bool ConfigExists(const std::string& conf_path);
     bool IsFirstInstall() {
@@ -171,7 +171,7 @@ private:
     bool client_mode_{ true };
     uint32_t send_buff_size_{ kDefaultUdpSendBufferSize };
     uint32_t recv_buff_size_{ kDefaultUdpRecvBufferSize };
-    std::unordered_map<std::string, TxInfoPtr> tx_map_;
+    std::unordered_map<std::string, protobuf::BlockPtr> tx_map_;
     std::mutex tx_map_mutex_;
     bool first_install_{ false };
     std::string config_path_;

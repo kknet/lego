@@ -178,7 +178,7 @@ void Command::AddBaseCommands() {
             is_gid = common::StringUtil::ToBool(args[1]);
         }
 
-        client::TxInfoPtr block_ptr = nullptr;
+        std::shared_ptr<client::protobuf::Block> block_ptr = nullptr;
         if (is_gid) {
             block_ptr = lego::client::VpnClient::Instance()->GetBlockWithGid(hash);
         } else {
@@ -194,12 +194,11 @@ void Command::AddBaseCommands() {
             }
         }
         std::cout << "get block info success." << std::endl;
-        auto block = block_ptr->block_ptr;
-        std::cout << "block height: " << block->height() << std::endl;
-        std::cout << "block hash: " << common::Encode::HexEncode(block->hash()) << std::endl;
-        std::cout << "prev hash: " << common::Encode::HexEncode(block->tx_block().prehash()) << std::endl;
-        std::cout << "transaction size: " << block->tx_block().tx_list_size() << std::endl;
-        auto tx_list = block->tx_block().tx_list();
+        std::cout << "block height: " << block_ptr->height() << std::endl;
+        std::cout << "block hash: " << common::Encode::HexEncode(block_ptr->hash()) << std::endl;
+        std::cout << "prev hash: " << common::Encode::HexEncode(block_ptr->tx_block().prehash()) << std::endl;
+        std::cout << "transaction size: " << block_ptr->tx_block().tx_list_size() << std::endl;
+        auto tx_list = block_ptr->tx_block().tx_list();
         for (int32_t i = 0; i < tx_list.size(); ++i) {
             std::cout << "\ttransaction gid: " << common::Encode::HexEncode(tx_list[i].gid()) << std::endl;
             std::cout << "\tfrom: " << common::Encode::HexEncode(tx_list[i].from()) << std::endl;
