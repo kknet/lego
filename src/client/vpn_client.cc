@@ -107,8 +107,8 @@ void VpnClient::HandleBlockResponse(const protobuf::GetTxBlockResponse& block_re
         hight_block_map_.erase(hight_block_map_.begin());
     }
 
-    auto block_ptr = std::make_shared<protobuf::Block>(block_res.block());
-    std::lock_guard<std::mutex> guard(tx_map_mutex_);
+    auto block_ptr = std::make_shared<protobuf::Block>(block);
+    std::lock_guard<std::mutex> tmp_map_guard(tx_map_mutex_);
     auto& tx_list = block_ptr->tx_block().tx_list();
     for (int32_t i = 0; i < tx_list.size(); ++i) {
         tx_map_[tx_list[i].gid()] = block_ptr;
