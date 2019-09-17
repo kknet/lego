@@ -50,7 +50,25 @@ int TransactionClient::Transaction(
 
 int TransactionClient::VpnLogin(
         const std::string& svr_account,
-        const std::vector<std::string>& route_vec) {
+        const std::vector<std::string>& route_vec,
+        std::string& login_gid) {
+    transport::protobuf::Header msg;
+    uint64_t rand_num = 0;
+    auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+            network::kUniversalNetworkId);
+    if (uni_dht == nullptr) {
+        return kClientError;
+    }
+    login_gid = common::CreateGID(security::Schnorr::Instance()->str_pubkey());
+    uint32_t type = common::kConsensusTransaction;
+    ClientProto::CreateVpnLoginRequest(
+            uni_dht->local_node(),
+            login_gid,
+            svr_account,
+            route_vec,
+            msg);
+    network::Route::Instance()->Send(msg);
+    login_gid = common::Encode::HexEncode(login_gid);
     return kClientSuccess;
 }
 
