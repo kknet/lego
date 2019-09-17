@@ -778,6 +778,34 @@ void VpnClient::CheckTxExists() {
     check_tx_tick_.CutOff(kCheckTxPeriod, std::bind(&VpnClient::CheckTxExists, this));
 }
 
+int VpnClient::VpnLogin(
+        const std::string& svr_account,
+        const std::vector<std::string>& route_vec,
+        std::string& login_gid) {
+    transport::protobuf::Header msg;
+    uint64_t rand_num = 0;
+    auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+        network::kUniversalNetworkId);
+    if (uni_dht == nullptr) {
+        return kClientError;
+    }
+    login_gid = common::CreateGID(security::Schnorr::Instance()->str_pubkey());
+    uint32_t type = common::kConsensusTransaction;
+    ClientProto::CreateVpnLoginRequest(
+        uni_dht->local_node(),
+        login_gid,
+        svr_account,
+        route_vec,
+        msg);
+    network::Route::Instance()->Send(msg);
+    login_gid = common::Encode::HexEncode(login_gid);
+    return kClientSuccess;
+}
+
+int VpnClient::VpnLogout() {
+    return kClientSuccess;
+}
+
 TxInfoPtr VpnClient::GetBlockWithGid(const std::string& tx_gid) {
     auto tmp_gid = common::Encode::HexDecode(tx_gid);
     std::lock_guard<std::mutex> guard(tx_map_mutex_);
@@ -812,7 +840,6 @@ TxInfoPtr VpnClient::GetBlockWithHash(const std::string& block_hash) {
         tx_map_[tmp_gid] = nullptr;
     }
     return nullptr;
-
 }
 
 void VpnClient::GetAccountHeight() {

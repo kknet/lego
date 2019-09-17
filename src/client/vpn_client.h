@@ -117,6 +117,11 @@ public:
     int EncryptData(char* seckey, int seclen, char* data, int data_len, char* out);
     int DecryptData(char* seckey, int seclen, char* data, int data_len, char* out);
     std::string GetRouting(const std::string& start, const std::string& end);
+    int VpnLogin(
+            const std::string& svr_account,
+            const std::vector<std::string>& route_vec,
+            std::string& login_gid);
+    int VpnLogout();
 
 private:
     VpnClient();
