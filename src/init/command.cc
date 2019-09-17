@@ -206,6 +206,9 @@ void Command::AddBaseCommands() {
             std::cout << "\tamount: " << tx_list[i].amount() << std::endl;
             std::cout << "\ttype: " << tx_list[i].type() << std::endl;
             std::cout << "\tattr size: " << tx_list[i].attr_size() << std::endl;
+            for (int32_t j = 0; j < tx_list[i].attr_size(); ++j) {
+                std::cout << "\t\t" << tx_list[i].attr[j].key() << ": " << tx_list[i].attr[j].value() << std::endl;
+            }
             std::cout << std::endl;
         }
     });
