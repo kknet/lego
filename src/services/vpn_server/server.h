@@ -101,17 +101,24 @@ struct PeerInfo {
 typedef std::shared_ptr<PeerInfo> PeerInfoPtr;
 
 struct BandwidthInfo {
-    BandwidthInfo(uint32_t up, uint32_t down) {
-        up_bandwidth = up;
-        down_bandwidth = down;
+    BandwidthInfo(uint32_t up, uint32_t down, const std::string& acc_id)
+            : up_bandwidth(up), down_bandwidth(down), account_id(acc_id) {
         begin_time = (std::chrono::steady_clock::now() +
                 std::chrono::microseconds(kTransactionTimeout));
     }
     uint32_t up_bandwidth;
     uint32_t down_bandwidth;
     std::chrono::steady_clock::time_point begin_time;
+    bool login_valid{ true };
+    std::string account_id;
 };
 typedef std::shared_ptr<BandwidthInfo> BandwidthInfoPtr;
+
+struct StakingItem {
+    std::string to;
+    uint64_t amount;
+};
+typedef std::shared_ptr<StakingItem> StakingItemPtr;
 
 typedef struct listen_ctx {
     ev_io io;

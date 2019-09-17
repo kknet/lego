@@ -146,7 +146,7 @@ int ShadowsocksProxy::StartShadowsocks() {
         return kProxySuccess;
     }
 
-    if (VpnServer::Init(
+    if (VpnServer::Instance()->Init(
             common::GlobalInfo::Instance()->config_local_ip(),
             vpn_server_port_,
             "password",

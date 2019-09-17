@@ -859,12 +859,18 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         auto& user_account = client_ptr->account;
         auto iter = account_bindwidth_map.find(user_account);
         if (iter == account_bindwidth_map.end()) {
-            account_bindwidth_map[user_account] = std::make_shared<BandwidthInfo>(r, 0);
+            auto acc_item = std::make_shared<BandwidthInfo>(r, 0, user_account);
+            account_bindwidth_map[user_account] = acc_item;
             if (RemoveNotAliveAccount(now_point)) {
                 // exceeded max user account, new join failed
                 return;
             }
+            lego::vpn::VpnServer::Instance()->bandwidth_queue().push(acc_item);
         } else {
+            if (!iter->second->login_valid) {
+                return;
+            }
+
             iter->second->up_bandwidth += r;
             if (iter->second->begin_time < now_point) {
                 iter->second->begin_time = now_point;
@@ -1287,7 +1293,6 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
 
     rx += r;
 
-
     // Ignore any new packet if the server is stopped
     if (server->stage == STAGE_STOP) {
         return;
@@ -1302,43 +1307,33 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
     auto& user_account = server->client_ptr->account;
     auto iter = account_bindwidth_map.find(user_account);
     if (iter == account_bindwidth_map.end()) {
-        account_bindwidth_map[user_account] = std::make_shared<BandwidthInfo>(0, r);
+        return;
     } else {
         iter->second->down_bandwidth += r;
         if (iter->second->begin_time < now_point) {
             // transaction now with bandwidth
             uint32_t rand_band = std::rand() % iter->second->down_bandwidth;
             std::string gid;
-            if (rand_band > 0 && rand_band <= 10 * 1024) {
-                uint32_t rand_coin = std::rand() % 2;
-                if (rand_coin > 0) {
-                    lego::client::TransactionClient::Instance()->Transaction(
-                        user_account, rand_coin, gid);
-                }
+            uint32_t rand_coin = 0;
+            if (rand_band > 0u && rand_band <= 50u * 1024u * 1024u) {
+                rand_coin = std::rand() % 2;
             }
 
-            if (rand_band > 10 * 1024 && rand_band <= 1024 * 1024) {
-                uint32_t rand_coin = std::rand() % 5;
-                if (rand_coin > 0) {
-                    lego::client::TransactionClient::Instance()->Transaction(
-                        user_account, rand_coin, gid);
-                }
+            if (rand_band > 50u * 1024u * 1024u && rand_band <= 100u * 1024u * 1024u) {
+                rand_coin = std::rand() % 3;
             }
 
-            if (rand_band > 1024 * 1024 && rand_band <= 50 * 1024 * 1024) {
-                uint32_t rand_coin = std::rand() % 7;
-                if (rand_coin > 0) {
-                    lego::client::TransactionClient::Instance()->Transaction(
-                        user_account, rand_coin, gid);
-                }
+            if (rand_band > 100u * 1024u * 1024u && rand_band <= 500u * 1024u * 1024u) {
+                rand_coin = std::rand() % 5;
             }
 
-            if (rand_band > 50 * 1024 * 1024) {
-                uint32_t rand_coin = std::rand() % 10;
-                if (rand_coin > 0) {
-                    lego::client::TransactionClient::Instance()->Transaction(
-                        user_account, rand_coin, gid);
-                }
+            if (rand_band > 500u * 1024u * 1024u) {
+                rand_coin = std::rand() % 7;
+            }
+
+            if (rand_coin > 0) {
+                lego::vpn::VpnServer::Instance()->staking_queue().push(
+                        std::make_shared<StakingItem>(user_account, rand_coin));
             }
 
             iter->second->up_bandwidth = 0;
@@ -1848,6 +1843,11 @@ VpnServer::~VpnServer() {
     StopVpn();
 }
 
+VpnServer* VpnServer::Instance() {
+    static VpnServer ins;
+    return &ins;
+}
+
 int VpnServer::Init(
         const std::string& ip,
         uint16_t port,
@@ -1873,6 +1873,14 @@ int VpnServer::Init(
 
 int VpnServer::ParserReceivePacket(const char* buf) {
     return 0;
+}
+
+void VpnServer::CheckTransactions() {
+
+}
+
+void VpnServer::CheckAccountValid() {
+
 }
 
 }  // namespace vpn
