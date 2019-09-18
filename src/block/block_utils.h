@@ -4,6 +4,7 @@
 #include <atomic>
 #include <mutex>
 #include <queue>
+#include <unordered_map>
 
 #include "common/utils.h"
 #include "common/log.h"
@@ -38,6 +39,7 @@ struct AccountInfo {
     uint32_t new_height{ 0 };
     std::priority_queue<uint64_t> height_pri_queue;
     std::mutex height_pri_queue_mutex;
+    std::unordered_map<std::string, uint64_t> attrs_with_height;
 
     void AddHeight(uint64_t height) {
         std::lock_guard<std::mutex> guard(height_pri_queue_mutex);

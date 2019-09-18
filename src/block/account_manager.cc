@@ -78,7 +78,14 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
             } else {
                 acc_ptr->new_height = block_item.height();
             }
+
+            // now just sender can modify attrs
+            for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
+                // every attr just check last block
+                acc_ptr->attrs_with_height[tx_list[i].attr(i).key()] = block_item.height();
+            }
             AddAccount(acc_ptr);
+
             uint32_t pool_idx = common::GetPoolIndex(tx_list[i].from());
             auto bptr = std::make_shared<TxBlockInfo>(
                     block_item.hash(),

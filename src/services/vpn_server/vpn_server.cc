@@ -87,6 +87,7 @@ extern "C" {
 #include "security/crypto_utils.h"
 #include "security/aes.h"
 #include "services/account_with_secret.h"
+#include "sync/key_value_sync.h"
 
 using namespace lego;
 
@@ -1320,8 +1321,7 @@ static void RemoteSendCallback(EV_P_ ev_io *w, int revents) {
                     server->stage = STAGE_STREAM;
                     ev_io_start(EV_A_ & remote->recv_ctx->io);
                 }
-            }
-            else {
+            } else {
                 LOGE("invalid server");
                 CloseAndFreeRemote(EV_A_ remote);
                 CloseAndFreeServer(EV_A_ server);
@@ -1696,6 +1696,12 @@ int VpnServer::Init(
     }
 
     vpn_svr_thread = std::make_shared<std::thread>(&StartVpn);
+    staking_tick_.CutOff(
+            kStakingCheckingPeriod,
+            std::bind(&VpnServer::CheckTransactions, this));
+    bandwidth_tick_.CutOff(
+            kStakingCheckingPeriod,
+            std::bind(&VpnServer::CheckAccountValid, this));
     return kVpnsvrSuccess;
 }
 
@@ -1704,11 +1710,35 @@ int VpnServer::ParserReceivePacket(const char* buf) {
 }
 
 void VpnServer::CheckTransactions() {
-
+    StakingItemPtr staking_item = nullptr;
+    while (staking_queue_.pop(&staking_item)) {
+        if (staking_item != nullptr) {
+            std::string gid;
+            lego::client::TransactionClient::Instance()->Transaction(
+                    staking_item->to,
+                    staking_item->amount,
+                    gid);
+            // check and retry transaction success
+            // gid_map_.insert(std::make_pair(gid, staking_item));
+        }
+    }
+    staking_tick_.CutOff(
+            kStakingCheckingPeriod,
+            std::bind(&VpnServer::CheckTransactions, this));
 }
 
 void VpnServer::CheckAccountValid() {
-
+    BandwidthInfoPtr account_info = nullptr;
+    while (bandwidth_queue_.pop(&account_info)) {
+        if (account_info != nullptr) {
+            uint32_t network_id = network::GetConsensusShardNetworkId(
+                    account_info->account_id);
+            sync::KeyValueSync::Instance()->AddSync(network_id, account_info->)
+        }
+    }
+    bandwidth_tick_.CutOff(
+            kStakingCheckingPeriod,
+            std::bind(&VpnServer::CheckAccountValid, this));
 }
 
 }  // namespace vpn

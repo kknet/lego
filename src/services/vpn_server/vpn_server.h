@@ -2,7 +2,9 @@
 
 #include <thread>
 #include <memory>
+#include <unordered_map>
 
+#include "common/tick.h"
 #include "common/thread_safe_queue.h"
 #include "services/vpn_server/vpn_svr_utils.h"
 #include "services/vpn_server/server.h"
@@ -35,8 +37,15 @@ private:
     void CheckTransactions();
     void CheckAccountValid();
 
+    static const uint32_t kStakingCheckingPeriod = 10 * 1000 * 1000;
+    static const uint32_t kAccountCheckPeriod = 10 * 1000 * 1000;
+
     common::ThreadSafeQueue<StakingItemPtr> staking_queue_;
     common::ThreadSafeQueue<BandwidthInfoPtr> bandwidth_queue_;
+    common::Tick staking_tick_;
+    common::Tick bandwidth_tick_;
+    std::unordered_map<std::string, StakingItemPtr> gid_map_;
+    std::unordered_map<std::string, BandwidthInfoPtr> account_map_;
 
     DISALLOW_COPY_AND_ASSIGN(VpnServer);
 };
