@@ -1754,12 +1754,12 @@ void VpnServer::CheckTransactions() {
 void VpnServer::HandleVpnLoginResponse(
         transport::protobuf::Header& header,
         block::protobuf::AccountAttrResponse& attr_res) {
-    if (attr_res->attr_key() != common::kVpnLoginAttrKey) {
+    if (attr_res.attr_key() != common::kVpnLoginAttrKey) {
         return;
     }
 
     std::lock_guard<std::mutex> guard(account_map_mutex_);
-    auto iter = account_map_.find(attr_res->account());
+    auto iter = account_map_.find(attr_res.account());
     if (iter == account_map_.end()) {
         return;
     }
@@ -1775,7 +1775,7 @@ void VpnServer::HandleVpnLoginResponse(
     auto& tx_list = block.tx_block().tx_list();
     for (int32_t i = tx_list.size() - 1; i >= 0; --i) {
         if (tx_list[i].attr_size() > 0) {
-            if (tx_list[i].from() != attr_res->account()) {
+            if (tx_list[i].from() != attr_res.account()) {
                 continue;
             }
 
