@@ -1703,10 +1703,10 @@ int VpnServer::Init(
     vpn_svr_thread = std::make_shared<std::thread>(&StartVpn);
     staking_tick_.CutOff(
             kStakingCheckingPeriod,
-            std::bind(&VpnServer::CheckTransactions, this));
+            std::bind(&VpnServer::CheckTransactions, VpnServer::Instance()));
     bandwidth_tick_.CutOff(
             kStakingCheckingPeriod,
-            std::bind(&VpnServer::CheckAccountValid, this));
+            std::bind(&VpnServer::CheckAccountValid, VpnServer::Instance()));
     return kVpnsvrSuccess;
 }
 
@@ -1747,7 +1747,7 @@ void VpnServer::CheckTransactions() {
     }
     staking_tick_.CutOff(
             kStakingCheckingPeriod,
-            std::bind(&VpnServer::CheckTransactions, this));
+            std::bind(&VpnServer::CheckTransactions, VpnServer::Instance()));
 }
 
 void VpnServer::HandleVpnLoginResponse(
@@ -1787,7 +1787,7 @@ void VpnServer::CheckAccountValid() {
     }
     bandwidth_tick_.CutOff(
             kStakingCheckingPeriod,
-            std::bind(&VpnServer::CheckAccountValid, this));
+            std::bind(&VpnServer::CheckAccountValid, VpnServer::Instance()));
 }
 
 }  // namespace vpn
