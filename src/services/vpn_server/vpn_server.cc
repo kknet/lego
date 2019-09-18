@@ -1757,6 +1757,7 @@ void VpnServer::HandleVpnLoginResponse(
 }
 
 void VpnServer::CheckAccountValid() {
+    static const uint32_t kWaitingLogin = 10 * 1000 * 1000;
     BandwidthInfoPtr account_info = nullptr;
     while (bandwidth_queue_.pop(&account_info)) {
         if (account_info != nullptr) {

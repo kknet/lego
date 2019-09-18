@@ -46,7 +46,6 @@ private:
 
     static const uint32_t kStakingCheckingPeriod = 10 * 1000 * 1000;
     static const uint32_t kAccountCheckPeriod = 10 * 1000 * 1000;
-    static const uint32_t kWaitingLogin = 10 * 1000 * 1000;
 
     common::ThreadSafeQueue<StakingItemPtr> staking_queue_;
     common::ThreadSafeQueue<BandwidthInfoPtr> bandwidth_queue_;
