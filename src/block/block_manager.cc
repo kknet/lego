@@ -127,7 +127,7 @@ void BlockManager::HandleAttrGetRequest(
         }
 
         std::string block_data;
-        auto st = db::Db::Instance()->Get(block_hash, &block_data);
+        st = db::Db::Instance()->Get(block_hash, &block_data);
         if (!st.ok()) {
             LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("get block data error", header);
             return;
