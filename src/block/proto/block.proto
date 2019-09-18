@@ -23,16 +23,16 @@ message AccountHeightResponse {
 }
 
 message AccountAttrRequest {
-    optional bytes account = 0;
-    optional bytes attr_key = 1;
-    optional uint64 height = 2;
+    optional bytes account = 1;
+    optional bytes attr_key = 2;
+    optional uint64 height = 3;
 }
 
 message AccountAttrResponse {
-    optional bytes account = 0;
-    optional bytes attr_key = 1;
-    optional uint64 height = 2;
-    optional bytes block = 3;
+    optional bytes account = 1;
+    optional bytes attr_key = 2;
+    optional uint64 height = 3;
+    optional bytes block = 4;
 }
 
 message BlockMessage {
