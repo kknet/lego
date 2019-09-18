@@ -6,6 +6,7 @@
 
 #include "common/tick.h"
 #include "common/thread_safe_queue.h"
+#include "block/proto/block.pb.h"
 #include "services/vpn_server/vpn_svr_utils.h"
 #include "services/vpn_server/server.h"
 
@@ -23,6 +24,10 @@ public:
             const std::string& key,
             const std::string& method);
     int ParserReceivePacket(const char* buf);
+    void HandleVpnLoginResponse(
+            transport::protobuf::Header& header,
+            block::protobuf::AccountAttrResponse& attr_res);
+
     common::ThreadSafeQueue<StakingItemPtr>& staking_queue() {
         return staking_queue_;
     }
@@ -36,9 +41,11 @@ private:
     ~VpnServer();
     void CheckTransactions();
     void CheckAccountValid();
+    void SendGetAccountAttrLastBlock(const std::string& account, uint64_t height);
 
     static const uint32_t kStakingCheckingPeriod = 10 * 1000 * 1000;
     static const uint32_t kAccountCheckPeriod = 10 * 1000 * 1000;
+    static const uint32_t kWaitingLogin = 10 * 1000 * 1000;
 
     common::ThreadSafeQueue<StakingItemPtr> staking_queue_;
     common::ThreadSafeQueue<BandwidthInfoPtr> bandwidth_queue_;

@@ -88,6 +88,11 @@ extern "C" {
 #include "security/aes.h"
 #include "services/account_with_secret.h"
 #include "sync/key_value_sync.h"
+#include "network/universal_manager.h"
+#include "network/route.h"
+#include "dht/base_dht.h"
+#include "block/proto/block.pb.h"
+#include "block/proto/block_proto.h"
 
 using namespace lego;
 
@@ -1709,6 +1714,24 @@ int VpnServer::ParserReceivePacket(const char* buf) {
     return 0;
 }
 
+void VpnServer::SendGetAccountAttrLastBlock(const std::string& account, uint64_t height) {
+    uint64_t rand_num = 0;
+    auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+            network::kUniversalNetworkId);
+    if (uni_dht == nullptr) {
+        return;
+    }
+
+    transport::protobuf::Header msg;
+    block::BlockProto::AccountAttrRequest(
+            uni_dht->local_node(),
+            account,
+            "vpn_login",
+            height,
+            msg);
+    network::Route::Instance()->Send(msg);
+}
+
 void VpnServer::CheckTransactions() {
     StakingItemPtr staking_item = nullptr;
     while (staking_queue_.pop(&staking_item)) {
@@ -1727,13 +1750,39 @@ void VpnServer::CheckTransactions() {
             std::bind(&VpnServer::CheckTransactions, this));
 }
 
+void VpnServer::HandleVpnLoginResponse(
+        transport::protobuf::Header& header,
+        block::protobuf::AccountAttrResponse& attr_res) {
+
+}
+
 void VpnServer::CheckAccountValid() {
     BandwidthInfoPtr account_info = nullptr;
     while (bandwidth_queue_.pop(&account_info)) {
         if (account_info != nullptr) {
-            uint32_t network_id = network::GetConsensusShardNetworkId(
-                    account_info->account_id);
-            sync::KeyValueSync::Instance()->AddSync(network_id, account_info->)
+            auto iter = account_map_.find(account_info->account_id);
+            if (iter != account_map_.end()) {
+                continue;
+            }
+            account_info->join_time = std::chrono::steady_clock::now() +
+                    std::chrono::microseconds(kWaitingLogin);
+            account_map_[account_info->account_id] = account_info;
+        }
+    }
+
+    auto now_point = std::chrono::steady_clock::now();
+    for (auto iter = account_map_.begin(); iter != account_map_.end();) {
+        if ((iter->second->begin_time + std::chrono::microseconds(10000)) < now_point) {
+            account_map_.erase(iter++);
+            continue;
+        }
+
+        if (iter->second->join_time < now_point) {
+            SendGetAccountAttrLastBlock(
+                    iter->second->account_id,
+                    iter->second->vpn_login_height);
+            iter->second->join_time = (std::chrono::steady_clock::now() +
+                std::chrono::microseconds(kWaitingLogin));
         }
     }
     bandwidth_tick_.CutOff(

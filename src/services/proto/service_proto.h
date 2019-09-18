@@ -35,13 +35,6 @@ public:
         msg.set_hop_count(0);
         msg.set_des_node_id(header.src_node_id());  // client must fill this field
         msg.set_data(svr_msg.SerializeAsString());
-#ifdef LEGO_TRACE_MESSAGE
-        msg.set_debug(std::string("CreateGetVpnInfoRes:") +
-                local_node->public_ip + "-" +
-                std::to_string(local_node->public_port) + ", to " +
-                common::Encode::HexEncode(header.src_dht_key()));
-        DHT_DEBUG("begin: %s", msg.debug().c_str());
-#endif
     }
 
 private:
