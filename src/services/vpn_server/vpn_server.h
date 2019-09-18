@@ -7,6 +7,7 @@
 #include "common/tick.h"
 #include "common/thread_safe_queue.h"
 #include "block/proto/block.pb.h"
+#include "transport/proto/transport.pb.h"
 #include "services/vpn_server/vpn_svr_utils.h"
 #include "services/vpn_server/server.h"
 
