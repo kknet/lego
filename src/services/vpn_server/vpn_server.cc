@@ -93,6 +93,7 @@ extern "C" {
 #include "dht/base_dht.h"
 #include "block/proto/block.pb.h"
 #include "block/proto/block_proto.h"
+#include "bft/basic_bft/transaction/proto/tx.pb.h"
 
 using namespace lego;
 
@@ -1726,7 +1727,7 @@ void VpnServer::SendGetAccountAttrLastBlock(const std::string& account, uint64_t
     block::BlockProto::AccountAttrRequest(
             uni_dht->local_node(),
             account,
-            "vpn_login",
+            common::kVpnLoginAttrKey,
             height,
             msg);
     network::Route::Instance()->Send(msg);
@@ -1753,10 +1754,57 @@ void VpnServer::CheckTransactions() {
 void VpnServer::HandleVpnLoginResponse(
         transport::protobuf::Header& header,
         block::protobuf::AccountAttrResponse& attr_res) {
+    if (attr_res->attr_key() != common::kVpnLoginAttrKey) {
+        return;
+    }
 
+    std::lock_guard<std::mutex> guard(account_map_mutex_);
+    auto iter = account_map_.find(attr_res->account());
+    if (iter == account_map_.end()) {
+        return;
+    }
+
+    bft::protobuf::Block block;
+    if (!block.ParseFromString(attr_res.block())) {
+        return;
+    }
+
+    // TODO(): check block multi sign
+
+    std::string login_svr_id;
+    auto& tx_list = block.tx_block().tx_list();
+    for (int32_t i = tx_list.size() - 1; i >= 0; --i) {
+        if (tx_list[i].attr_size() > 0) {
+            if (tx_list[i].from() != attr_res->account()) {
+                continue;
+            }
+
+            for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
+                if (tx_list[i].attr(attr_idx).key() == common::kVpnLoginAttrKey) {
+                    login_svr_id = tx_list[i].attr(attr_idx).value();
+                    break;
+                }
+            }
+        }
+
+        if (!login_svr_id.empty()) {
+            break;
+        }
+    }
+
+    if (login_svr_id != common::GlobalInfo::Instance()->id()) {
+        ++iter->second->invalid_times;
+        if (iter->second->invalid_times > 5) {
+            iter->second->login_valid = false;
+            account_map_.erase(iter);
+        }
+        return;
+    }
+    iter->second->invalid_times = 0;
 }
 
 void VpnServer::CheckAccountValid() {
+    std::lock_guard<std::mutex> guard(account_map_mutex_);
     static const uint32_t kWaitingLogin = 10 * 1000 * 1000;
     BandwidthInfoPtr account_info = nullptr;
     while (bandwidth_queue_.pop(&account_info)) {

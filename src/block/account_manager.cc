@@ -82,6 +82,7 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
             // now just sender can modify attrs
             for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
                 // every attr just check last block
+                std::lock_guard<std::mutex> acc_guard(acc_ptr->attrs_with_height_mutex);
                 acc_ptr->attrs_with_height[tx_list[i].attr(i).key()] = block_item.height();
             }
             AddAccount(acc_ptr);

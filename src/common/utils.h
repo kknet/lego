@@ -82,6 +82,7 @@ enum ConsensusType {
 static const uint32_t kImmutablePoolSize = 64u;
 static const uint32_t kInvalidPoolIndex = kImmutablePoolSize + 1;
 static const uint32_t kTestForNetworkId = 4u;
+static const std::string kVpnLoginAttrKey = "vpn_login";
 
 uint32_t GetPoolIndex(const std::string& acc_addr);
 std::string CreateGID(const std::string& pubkey);

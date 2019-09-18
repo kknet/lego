@@ -53,6 +53,7 @@ private:
     common::Tick bandwidth_tick_;
     std::unordered_map<std::string, StakingItemPtr> gid_map_;
     std::unordered_map<std::string, BandwidthInfoPtr> account_map_;
+    std::mutex account_map_mutex_;
 
     DISALLOW_COPY_AND_ASSIGN(VpnServer);
 };

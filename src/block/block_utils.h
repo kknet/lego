@@ -40,6 +40,7 @@ struct AccountInfo {
     std::priority_queue<uint64_t> height_pri_queue;
     std::mutex height_pri_queue_mutex;
     std::unordered_map<std::string, uint64_t> attrs_with_height;
+    std::mutex attrs_with_height_mutex;
 
     void AddHeight(uint64_t height) {
         std::lock_guard<std::mutex> guard(height_pri_queue_mutex);

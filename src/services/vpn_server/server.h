@@ -113,6 +113,7 @@ struct BandwidthInfo {
     std::string account_id;
     std::chrono::steady_clock::time_point join_time;
     uint64_t vpn_login_height{ 0 };
+    uint32_t invalid_times{ 0 };
 };
 typedef std::shared_ptr<BandwidthInfo> BandwidthInfoPtr;
 
