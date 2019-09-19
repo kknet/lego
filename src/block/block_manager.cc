@@ -109,13 +109,14 @@ void BlockManager::HandleMessage(transport::protobuf::Header& header) {
 void BlockManager::HandleAttrGetRequest(
         transport::protobuf::Header& header,
         protobuf::BlockMessage& block_msg) {
-    std::cout << "receive get account attr request." << std::endl;
+    std::cout << "receive get account attr request. 1" << std::endl;
     if (!block_msg.has_acc_attr_req()) {
         return;
     }
 
     auto account_ptr = block::AccountManager::Instance()->GetAcountInfo(
             block_msg.acc_attr_req().account());
+    std::cout << "receive get account attr request. 2" << common::Encode::HexEncode(block_msg.acc_attr_req().account()) << std::endl;
     if (account_ptr == nullptr) {
         return;
     }
@@ -129,10 +130,9 @@ void BlockManager::HandleAttrGetRequest(
         }
     }
 
+    std::cout << "receive get account attr request. 3: " << height << ":" << block_msg.acc_attr_req().height() << std::endl;
     if (height > block_msg.acc_attr_req().height()) {
-        if (!block_msg.block_req().has_account_address()) {
-            return;
-        }
+        std::cout << "receive get account attr request. 4" << std::endl;
         uint32_t netid = network::GetConsensusShardNetworkId(
                 block_msg.acc_attr_req().account());
         uint32_t pool_idx = common::GetPoolIndex(block_msg.acc_attr_req().account());
@@ -147,6 +147,7 @@ void BlockManager::HandleAttrGetRequest(
             return;
         }
 
+        std::cout << "receive get account attr request. 5" << std::endl;
         if (block_hash.empty()) {
             return;
         }
@@ -157,6 +158,7 @@ void BlockManager::HandleAttrGetRequest(
             LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("get block data error", header);
             return;
         }
+        std::cout << "receive get account attr request. 6" << std::endl;
 
         protobuf::BlockMessage block_msg_res;
         auto attr_res = block_msg_res.mutable_acc_attr_res();
