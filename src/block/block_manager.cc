@@ -139,7 +139,7 @@ void BlockManager::HandleAttrGetRequest(
         std::string height_db_key = common::GetHeightDbKey(
                 netid,
                 pool_idx,
-                block_msg.block_req().height());
+                height);
         std::string block_hash;
         auto st = db::Db::Instance()->Get(height_db_key, &block_hash);
         if (!st.ok()) {
