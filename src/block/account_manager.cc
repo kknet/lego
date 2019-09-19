@@ -127,6 +127,7 @@ void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
         acc_map_[acc_ptr->account_id]->in_lego += acc_ptr->in_lego;
         acc_map_[acc_ptr->account_id]->out_lego += acc_ptr->out_lego;
         acc_map_[acc_ptr->account_id]->new_height = acc_ptr->new_height;
+        acc_map_[acc_ptr->account_id]->attrs_with_height = acc_ptr->attrs_with_height;
     }
     acc_map_[acc_ptr->account_id]->AddHeight(acc_ptr->height);
 }
