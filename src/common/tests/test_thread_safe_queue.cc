@@ -46,8 +46,10 @@ static void thread2() {
     while (read_num < 100000) {
         std::string item;
         if (test_queue.pop(&item)) {
-            std::cout << "get item: " << item << std::endl;
             ++read_num;
+            if (read_num % 10000 == 0) {
+                std::cout << "get item: " << read_num << std::endl;
+            }
         }
     }
 }
