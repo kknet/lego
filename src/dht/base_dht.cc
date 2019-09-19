@@ -94,7 +94,6 @@ int BaseDht::Join(NodePtr& node) {
     nat_detection_->Remove(node->dht_key_hash);
     auto iter = node_map_.insert(std::make_pair(node->dht_key_hash, node));
     if (!iter.second) {
-        assert(false);
         return kDhtNodeJoined;
     }
     dht_.push_back(node);
