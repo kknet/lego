@@ -4,6 +4,7 @@
 #include "db/db.h"
 #include "dht/dht_key.h"
 #include "dht/base_dht.h"
+#include "dht/node.h"
 #include "network/route.h"
 #include "network/universal_manager.h"
 #include "network/network_utils.h"
