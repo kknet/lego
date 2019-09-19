@@ -36,14 +36,14 @@ common::ThreadSafeQueue<std::string> test_queue;
 
 static void thread1() {
     int i = 0;
-    while (i++ < 100000) {
+    while (i++ < 1000000) {
         test_queue.push("test_string_" + std::to_string(i));
     }
 }
 
 static void thread2() {
     int read_num = 0;
-    while (read_num < 100000) {
+    while (read_num < 1000000) {
         std::string item;
         if (test_queue.pop(&item)) {
             ++read_num;
