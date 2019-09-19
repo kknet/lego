@@ -177,7 +177,8 @@ void BlockManager::HandleAttrGetRequest(
                 block_msg_res.SerializeAsString(),
                 msg);
         network::Route::Instance()->Send(msg);
-        std::cout << "sent response message" << std::endl;
+        auto des_net_id = dht::DhtKeyManager::DhtKeyGetNetId(msg.des_dht_key());
+        std::cout << "sent response message: " << des_net_id << ":" << common::Encode::HexEncode(msg.des_dht_key()) << std::endl;
     }
 }
 
