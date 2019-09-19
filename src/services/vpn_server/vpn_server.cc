@@ -1840,7 +1840,7 @@ void VpnServer::HandleVpnLoginResponse(
         << common::Encode::HexEncode(login_svr_id)
         << ":" << block.height() << ", "
         << common::Encode::HexEncode(login_svr_id) << ":"
-        << common::Encode::HexEncode(common::GlobalInfo::Instance()->id()) << ":" << ::endl;
+        << common::Encode::HexEncode(common::GlobalInfo::Instance()->id()) << ":" << std::endl;
 
     if (login_svr_id != common::GlobalInfo::Instance()->id()) {
         ++iter->second->invalid_times;
