@@ -142,18 +142,28 @@ void Command::AddBaseCommands() {
         std::cout << client::VpnClient::Instance()->Transactions(0, 10) << std::endl;
     });
     AddCommand("vl", [this](const std::vector<std::string>& args) {
+        if (args.size() <= 0) {
+            return;
+        }
+
         std::vector<std::string> route_vec;
         route_vec.push_back("test_route1");
         route_vec.push_back("test_route2");
         std::string account = "test_account";
         std::string gid;
         std::cout << client::VpnClient::Instance()->VpnLogin(
-                common::GlobalInfo::Instance()->id(),
-                route_vec, gid) << std::endl;
+                common::Encode::HexDecode(args[0]),
+                route_vec,
+                gid) << std::endl;
         std::cout << "gid:" << gid << std::endl;
     });
     AddCommand("vs", [this](const std::vector<std::string>& args) {
-        auto acc_item = std::make_shared<BandwidthInfo>(10, 10, common::GlobalInfo::Instance()->id());
+        if (args.size() <= 0) {
+            return;
+        }
+
+        auto acc_item = std::make_shared<BandwidthInfo>(
+                10, 10, common::Encode::HexDecode(args[0]));
         lego::vpn::VpnServer::Instance()->bandwidth_queue().push(acc_item);
 
     });
