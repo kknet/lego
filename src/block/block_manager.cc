@@ -3,6 +3,7 @@
 #include "common/encode.h"
 #include "db/db.h"
 #include "dht/dht_key.h"
+#include "dht/base_dht.h"
 #include "network/route.h"
 #include "network/universal_manager.h"
 #include "network/network_utils.h"
@@ -14,6 +15,7 @@
 #include "block/genesis_block.h"
 #include "block/proto/block.pb.h"
 #include "block/proto/block_proto.h"
+#include "services/vpn_server/vpn_server.h"
 
 namespace lego {
 
@@ -79,6 +81,27 @@ void BlockManager::HandleMessage(transport::protobuf::Header& header) {
 
     if (block_msg.has_acc_attr_req()) {
         HandleAttrGetRequest(header, block_msg);
+    }
+
+    if (block_msg.has_acc_attr_res()) {
+        dht::BaseDhtPtr dht_ptr = nullptr;
+        uint32_t netid = dht::DhtKeyManager::DhtKeyGetNetId(header.des_dht_key());
+        if (header.universal() == 0) {
+            dht_ptr = network::UniversalManager::Instance()->GetUniversal(netid);
+        } else {
+            dht_ptr = network::DhtManager::Instance()->GetDht(netid);
+        }
+
+        if (dht_ptr == nullptr) {
+            network::Route::Instance()->Send(header);
+            return;
+        }
+
+        if (header.des_dht_key() == dht_ptr->local_node()->dht_key()) {
+            vpn::VpnServer::Instance()->HandleVpnLoginResponse(header, block_msg);
+            return;
+        }
+        dht_ptr->SendToClosestNode(header);
     }
 }
 

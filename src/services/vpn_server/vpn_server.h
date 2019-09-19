@@ -27,7 +27,7 @@ public:
     int ParserReceivePacket(const char* buf);
     void HandleVpnLoginResponse(
             transport::protobuf::Header& header,
-            block::protobuf::AccountAttrResponse& attr_res);
+            block::protobuf::BlockMessage& block_msg);
 
     common::ThreadSafeQueue<StakingItemPtr>& staking_queue() {
         return staking_queue_;

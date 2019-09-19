@@ -1753,7 +1753,8 @@ void VpnServer::CheckTransactions() {
 
 void VpnServer::HandleVpnLoginResponse(
         transport::protobuf::Header& header,
-        block::protobuf::AccountAttrResponse& attr_res) {
+        block::protobuf::BlockMessage& block_msg) {
+    auto& attr_res = block_msg.acc_attr_res();
     if (attr_res.attr_key() != common::kVpnLoginAttrKey) {
         return;
     }
