@@ -98,7 +98,7 @@ void BlockManager::HandleMessage(transport::protobuf::Header& header) {
             return;
         }
 
-        if (header.des_dht_key() == dht_ptr->local_node()->dht_key()) {
+        if (header.des_dht_key() == dht_ptr->local_node()->dht_key) {
             vpn::VpnServer::Instance()->HandleVpnLoginResponse(header, block_msg);
             return;
         }
