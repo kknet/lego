@@ -1727,7 +1727,6 @@ void VpnServer::HandleMessage(transport::protobuf::Header& header) {
     }
 
     if (block_msg.has_acc_attr_res()) {
-        std::cout << "attr response coming." << std::endl;
         dht::BaseDhtPtr dht_ptr = nullptr;
         uint32_t netid = dht::DhtKeyManager::DhtKeyGetNetId(header.des_dht_key());
         if (netid == network::kUniversalNetworkId || netid == network::kNodeNetworkId) {
@@ -1741,14 +1740,12 @@ void VpnServer::HandleMessage(transport::protobuf::Header& header) {
         }
 
         if (dht_ptr == nullptr) {
-            std::cout << "dht ptr is null." << netid << std::endl;
             network::Route::Instance()->Send(header);
             return;
         }
 
         if (header.des_dht_key() == dht_ptr->local_node()->dht_key) {
-            std::cout << "dht key is null." << netid << std::endl;
-            vpn::VpnServer::Instance()->HandleVpnLoginResponse(header, block_msg);
+            HandleVpnLoginResponse(header, block_msg);
             return;
         }
         dht_ptr->SendToClosestNode(header);
@@ -1841,7 +1838,9 @@ void VpnServer::HandleVpnLoginResponse(
 
     std::cout << "receive login block : "
         << common::Encode::HexEncode(login_svr_id)
-        << ":" << block.height() << std::endl;
+        << ":" << block.height() << ", "
+        << common::Encode::HexEncode(login_svr_id) << ":"
+        << common::Encode::HexEncode(common::GlobalInfo::Instance()->id()) << ":" << ::endl;
 
     if (login_svr_id != common::GlobalInfo::Instance()->id()) {
         ++iter->second->invalid_times;
