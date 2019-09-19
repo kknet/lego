@@ -13,9 +13,9 @@ struct QueueItem {
 template<class T>
 class ThreadSafeQueue {
 public:
-    ThreadSafeQueue() : front_(new QueueItem<T>()), tail_(new QueueItem<T>()) {
+    ThreadSafeQueue() : front_(new QueueItem<T>()) {
         front_->next = nullptr;
-        tail_->next = nullptr;
+        tail_ = front_;
     }
 
     ~ThreadSafeQueue() {
@@ -48,8 +48,8 @@ public:
     }
 
 private:
-    struct QueueItem<T>* volatile front_;
-    struct QueueItem<T>* volatile tail_;
+    struct QueueItem<T>* volatile front_{ nullptr };
+    struct QueueItem<T>* volatile tail_{ nullptr };
 
     DISALLOW_COPY_AND_ASSIGN(ThreadSafeQueue);
 };
