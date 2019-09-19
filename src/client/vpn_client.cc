@@ -794,11 +794,11 @@ int VpnClient::VpnLogin(
     login_gid = common::CreateGID(security::Schnorr::Instance()->str_pubkey());
     uint32_t type = common::kConsensusTransaction;
     ClientProto::CreateVpnLoginRequest(
-        uni_dht->local_node(),
-        login_gid,
-        svr_account,
-        route_vec,
-        msg);
+            uni_dht->local_node(),
+            login_gid,
+            svr_account,
+            route_vec,
+            msg);
     network::Route::Instance()->Send(msg);
     login_gid = common::Encode::HexEncode(login_gid);
     return kClientSuccess;

@@ -236,7 +236,7 @@ int BftManager::InitBft(
     }
 
     if (DispatchPool::Instance()->Dispatch(header, bft_msg) != kBftSuccess) {
-//         BFT_ERROR("dispatch pool failed!");
+        BFT_ERROR("dispatch pool failed!");
     }
 
     if (!mem_manager_->IsLeader(
