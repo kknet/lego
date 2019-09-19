@@ -90,6 +90,7 @@ extern "C" {
 #include "sync/key_value_sync.h"
 #include "network/universal_manager.h"
 #include "network/route.h"
+#include "network/dht_manager.h"
 #include "dht/base_dht.h"
 #include "block/proto/block.pb.h"
 #include "block/proto/block_proto.h"
