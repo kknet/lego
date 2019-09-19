@@ -1675,7 +1675,7 @@ namespace vpn {
 VpnServer::VpnServer() {
     network::Route::Instance()->RegisterMessage(
             common::kBlockMessage,
-            std::bind(&VpnServer::HandleMessage, VpnServer::Instance(), std::placeholders::_1));
+            std::bind(&VpnServer::HandleMessage, this, std::placeholders::_1));
 }
 
 VpnServer::~VpnServer() {
