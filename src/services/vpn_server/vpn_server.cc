@@ -1836,12 +1836,6 @@ void VpnServer::HandleVpnLoginResponse(
         }
     }
 
-    std::cout << "receive login block : "
-        << common::Encode::HexEncode(login_svr_id)
-        << ":" << block.height() << ", "
-        << common::Encode::HexEncode(login_svr_id) << ":"
-        << common::Encode::HexEncode(common::GlobalInfo::Instance()->id()) << ":" << std::endl;
-
     if (login_svr_id != common::GlobalInfo::Instance()->id()) {
         ++iter->second->invalid_times;
         if (iter->second->invalid_times > 5) {
@@ -1867,8 +1861,6 @@ void VpnServer::CheckAccountValid() {
             account_info->join_time = std::chrono::steady_clock::now() +
                     std::chrono::microseconds(kWaitingLogin);
             account_map_[account_info->account_id] = account_info;
-            std::cout << "add new account info: "
-                << common::Encode::HexEncode(account_info->account_id) << std::endl;
         }
     }
 
@@ -1884,9 +1876,6 @@ void VpnServer::CheckAccountValid() {
             SendGetAccountAttrLastBlock(
                     iter->second->account_id,
                     iter->second->vpn_login_height);
-            std::cout << "send get account login: "
-                << common::Encode::HexEncode(iter->second->account_id)
-                << ":" << iter->second->vpn_login_height << std::endl;
             iter->second->join_time = (std::chrono::steady_clock::now() +
                 std::chrono::microseconds(kWaitingLogin));
         }
