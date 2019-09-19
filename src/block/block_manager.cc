@@ -109,6 +109,7 @@ void BlockManager::HandleMessage(transport::protobuf::Header& header) {
 void BlockManager::HandleAttrGetRequest(
         transport::protobuf::Header& header,
         protobuf::BlockMessage& block_msg) {
+    std::cout << "receive get account attr request." << std::endl;
     if (!block_msg.has_acc_attr_req()) {
         return;
     }
@@ -172,7 +173,8 @@ void BlockManager::HandleAttrGetRequest(
                 header,
                 block_msg_res.SerializeAsString(),
                 msg);
-        dht_ptr->SendToClosestNode(msg);
+        network::Route::Instance()->Send(msg);
+        std::cout << "sent response message" << std::endl;
     }
 }
 

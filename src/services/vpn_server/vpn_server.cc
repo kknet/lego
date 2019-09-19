@@ -1717,7 +1717,7 @@ int VpnServer::ParserReceivePacket(const char* buf) {
 
 void VpnServer::SendGetAccountAttrLastBlock(const std::string& account, uint64_t height) {
     uint64_t rand_num = 0;
-    auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+    auto uni_dht = network::DhtManager::Instance()->GetUniversal(
             network::kUniversalNetworkId);
     if (uni_dht == nullptr) {
         return;
