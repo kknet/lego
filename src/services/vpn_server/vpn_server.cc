@@ -1822,12 +1822,15 @@ void VpnServer::CheckAccountValid() {
             account_info->join_time = std::chrono::steady_clock::now() +
                     std::chrono::microseconds(kWaitingLogin);
             account_map_[account_info->account_id] = account_info;
+            std::cout << "add new account info: "
+                << common::Encode::HexEncode(account_info->account_id) << std::endl;
         }
     }
 
     auto now_point = std::chrono::steady_clock::now();
     for (auto iter = account_map_.begin(); iter != account_map_.end();) {
-        if ((iter->second->begin_time + std::chrono::microseconds(10000)) < now_point) {
+        if ((iter->second->begin_time +
+                std::chrono::microseconds(10 * 1000 * 1000)) < now_point) {
             account_map_.erase(iter++);
             continue;
         }
@@ -1842,6 +1845,7 @@ void VpnServer::CheckAccountValid() {
             iter->second->join_time = (std::chrono::steady_clock::now() +
                 std::chrono::microseconds(kWaitingLogin));
         }
+        ++iter;
     }
     bandwidth_tick_.CutOff(
             kStakingCheckingPeriod,
