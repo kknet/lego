@@ -1718,9 +1718,11 @@ int VpnServer::ParserReceivePacket(const char* buf) {
 
 void VpnServer::SendGetAccountAttrLastBlock(const std::string& account, uint64_t height) {
     uint64_t rand_num = 0;
-    auto uni_dht = network::DhtManager::Instance()->GetUniversal(
-            network::kUniversalNetworkId);
+    auto uni_dht = lego::network::DhtManager::Instance()->GetDht(
+            lego::network::kVpnNetworkId);
     if (uni_dht == nullptr) {
+        VPNSVR_ERROR("not found vpn server dht.");
+        std::cout << "not found vpn server dht." << std::endl;
         return;
     }
 
