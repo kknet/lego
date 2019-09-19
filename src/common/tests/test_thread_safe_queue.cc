@@ -53,6 +53,8 @@ static void thread2() {
 TEST_F(TestThreadSafeQueue, Hash32) {
     std::thread t1(thread1);
     std::thread t2(thread2);
+    t1.join();
+    t2.join();
 }
 
 }  // namespace test
