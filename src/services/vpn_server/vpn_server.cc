@@ -1836,6 +1836,10 @@ void VpnServer::HandleVpnLoginResponse(
         }
     }
 
+    std::cout << "receive login block : "
+        << common::Encode::HexEncode(login_svr_id)
+        << ":" << block.height() << std::endl;
+
     if (login_svr_id != common::GlobalInfo::Instance()->id()) {
         ++iter->second->invalid_times;
         if (iter->second->invalid_times > 5) {
@@ -1845,6 +1849,7 @@ void VpnServer::HandleVpnLoginResponse(
         return;
     }
     iter->second->invalid_times = 0;
+    iter->second->vpn_login_height = block.height();
 
 }
 
