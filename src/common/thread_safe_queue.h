@@ -39,7 +39,6 @@ public:
             return false;
         }
 
-
         auto p = front_;
         *e = p->data;
         front_ = p->next;

@@ -17,6 +17,8 @@
 #include "init/init_utils.h"
 #include "client/vpn_client.h"
 #include "client/proto/client.pb.h"
+#include "services/vpn_server/server.h"
+#include "services/vpn_server/vpn_server.h"
 
 namespace lego {
 
@@ -145,8 +147,15 @@ void Command::AddBaseCommands() {
         route_vec.push_back("test_route2");
         std::string account = "test_account";
         std::string gid;
-        std::cout << client::VpnClient::Instance()->VpnLogin(account, route_vec, gid) << std::endl;
+        std::cout << client::VpnClient::Instance()->VpnLogin(
+                common::GlobalInfo::Instance()->id(),
+                route_vec, gid) << std::endl;
         std::cout << "gid:" << gid << std::endl;
+    });
+    AddCommand("vs", [this](const std::vector<std::string>& args) {
+        auto acc_item = std::make_shared<BandwidthInfo>(10, 10, common::GlobalInfo::Instance()->id());
+        lego::vpn::VpnServer::Instance()->bandwidth_queue().push(acc_item);
+
     });
     AddCommand("tx", [this](const std::vector<std::string>& args) {
         std::string tx_gid;
