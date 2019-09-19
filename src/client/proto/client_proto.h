@@ -155,20 +155,8 @@ public:
         new_tx->set_from_pubkey(security::Schnorr::Instance()->str_pubkey());
         new_tx->set_type(common::kConsensusLogin);
         auto server_attr = new_tx->add_attr();
-        server_attr->set_key("server");
+        server_attr->set_key(common::kVpnLoginAttrKey);
         server_attr->set_value(svr_account);
-        std::string route_accs;
-        for (auto iter = route_accounts.begin(); iter != route_accounts.end(); ++iter) {
-            if (route_accs.empty()) {
-                route_accs = *iter;
-            } else {
-                route_accs += "," + *iter;
-            }
-        }
-        auto route_attr = new_tx->add_attr();
-        route_attr->set_key("routes");
-        route_attr->set_value(route_accs);
-
         auto data = tx_bft.SerializeAsString();
         bft_msg.set_data(data);
         auto hash128 = common::Hash::Hash128(data);

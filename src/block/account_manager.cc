@@ -84,6 +84,9 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
                 // every attr just check last block
                 std::lock_guard<std::mutex> acc_guard(acc_ptr->attrs_with_height_mutex);
                 acc_ptr->attrs_with_height[tx_list[i].attr(i).key()] = block_item.height();
+                std::cout << "add account attr: " << tx_list[i].attr(i).key() << ", value: "
+                        << common::Encode::HexEncode(tx_list[i].attr(i).value())
+                        << ", height: " << block_item.height() << std::endl;
             }
             AddAccount(acc_ptr);
 
