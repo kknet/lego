@@ -120,6 +120,11 @@ void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
         acc_ptr->in_lego += iter->second->in_lego;
         acc_ptr->out_lego += iter->second->out_lego;
         acc_ptr->height_pri_queue = acc_map_[acc_ptr->account_id]->get_height_pri_queue();
+        std::lock_guard<std::mutex> guard(acc_map_[acc_ptr->account_id]->attrs_with_height_mutex);
+        for (auto iter = acc_map_[acc_ptr->account_id]->attrs_with_height.begin();
+                iter != acc_map_[acc_ptr->account_id]->attrs_with_height.end(); ++iter) {
+            acc_ptr->attrs_with_height[iter->first] = iter->second;
+        }
         acc_map_[acc_ptr->account_id] = acc_ptr;
     } else {
         acc_map_[acc_ptr->account_id]->in_count += acc_ptr->in_count;
@@ -127,7 +132,14 @@ void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
         acc_map_[acc_ptr->account_id]->in_lego += acc_ptr->in_lego;
         acc_map_[acc_ptr->account_id]->out_lego += acc_ptr->out_lego;
         acc_map_[acc_ptr->account_id]->new_height = acc_ptr->new_height;
-        acc_map_[acc_ptr->account_id]->attrs_with_height = acc_ptr->attrs_with_height;
+        std::lock_guard<std::mutex> guard(acc_map_[acc_ptr->account_id]->attrs_with_height_mutex);
+        for (auto iter = acc_ptr->attrs_with_height.begin();
+                iter != acc_ptr->attrs_with_height.end(); ++iter) {
+            auto e_iter = acc_map_[acc_ptr->account_id]->attrs_with_height.find(iter->first);
+            if (e_iter == acc_map_[acc_ptr->account_id]->attrs_with_height.end()) {
+                acc_map_[acc_ptr->account_id]->attrs_with_height[iter->first] = iter->second;
+            }
+        }
     }
     acc_map_[acc_ptr->account_id]->AddHeight(acc_ptr->height);
 }
