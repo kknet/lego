@@ -123,7 +123,10 @@ void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
         std::lock_guard<std::mutex> guard(acc_map_[acc_ptr->account_id]->attrs_with_height_mutex);
         for (auto iter = acc_map_[acc_ptr->account_id]->attrs_with_height.begin();
                 iter != acc_map_[acc_ptr->account_id]->attrs_with_height.end(); ++iter) {
-            acc_ptr->attrs_with_height[iter->first] = iter->second;
+            auto e_iter = acc_ptr->attrs_with_height.find(iter->first);
+            if (e_iter == acc_ptr->attrs_with_height.end()) {
+                acc_ptr->attrs_with_height[iter->first] = iter->second;
+            }
         }
         acc_map_[acc_ptr->account_id] = acc_ptr;
     } else {
