@@ -16,7 +16,6 @@
 #include "block/genesis_block.h"
 #include "block/proto/block.pb.h"
 #include "block/proto/block_proto.h"
-#include "services/vpn_server/vpn_server.h"
 
 namespace lego {
 
@@ -86,30 +85,6 @@ void BlockManager::HandleMessage(transport::protobuf::Header& header) {
 
     if (block_msg.has_acc_attr_res()) {
         std::cout << "attr response coming." << std::endl;
-        dht::BaseDhtPtr dht_ptr = nullptr;
-        uint32_t netid = dht::DhtKeyManager::DhtKeyGetNetId(header.des_dht_key());
-        if (netid == network::kUniversalNetworkId || netid == network::kNodeNetworkId) {
-            dht_ptr = network::UniversalManager::Instance()->GetUniversal(netid);
-        } else {
-            if (header.universal() == 0) {
-                dht_ptr = network::UniversalManager::Instance()->GetUniversal(netid);
-            } else {
-                dht_ptr = network::DhtManager::Instance()->GetDht(netid);
-            }
-        }
-
-        if (dht_ptr == nullptr) {
-            std::cout << "dht ptr is null." << netid << std::endl;
-            network::Route::Instance()->Send(header);
-            return;
-        }
-
-        if (header.des_dht_key() == dht_ptr->local_node()->dht_key) {
-            std::cout << "dht key is null." << netid << std::endl;
-            vpn::VpnServer::Instance()->HandleVpnLoginResponse(header, block_msg);
-            return;
-        }
-        dht_ptr->SendToClosestNode(header);
     }
 }
 

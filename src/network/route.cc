@@ -59,7 +59,9 @@ int Route::SendToLocal(transport::protobuf::Header& message) {
 int Route::Send(transport::protobuf::Header& message) {
     uint32_t des_net_id = dht::DhtKeyManager::DhtKeyGetNetId(message.des_dht_key());
     dht::BaseDhtPtr dht_ptr{ nullptr };
-    if (message.universal()) {
+    if (message.universal() ||
+            des_net_id == network::kUniversalNetworkId ||
+            des_net_id == network::kNodeNetworkId) {
         dht_ptr = UniversalManager::Instance()->GetUniversal(des_net_id);
     } else {
         dht_ptr = DhtManager::Instance()->GetDht(des_net_id);

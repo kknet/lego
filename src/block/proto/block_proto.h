@@ -37,13 +37,6 @@ public:
         }
         msg.set_hop_count(0);
         msg.set_data(block_data);
-#ifdef LEGO_TRACE_MESSAGE
-        msg.set_debug(std::string("GetBlockResponse: ") +
-                local_node->public_ip + "-" +
-                std::to_string(local_node->public_port) + ", to " +
-                common::Encode::HexEncode(msg.des_dht_key()));
-        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("begin", msg);
-#endif
     }
 
     static void AccountAttrRequest(

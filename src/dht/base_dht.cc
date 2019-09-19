@@ -251,6 +251,9 @@ void BaseDht::SendToClosestNode(transport::protobuf::Header& message) {
     }
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("send to closest node", message);
     assert(node->dht_key_hash != local_node_->dht_key_hash);
+    if (message.type() == common::kBlockMessage) {
+        std::cout << "sent to: " << node->public_ip << ":" << node->public_port << std::endl;
+    }
     transport::MultiThreadHandler::Instance()->transport()->Send(
             node->public_ip, node->public_port, 0, message);
 }

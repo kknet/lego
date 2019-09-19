@@ -1672,7 +1672,11 @@ namespace lego {
 
 namespace vpn {
 
-VpnServer::VpnServer() {}
+VpnServer::VpnServer() {
+    network::Route::Instance()->RegisterMessage(
+            common::kBlockMessage,
+            std::bind(&VpnServer::HandleMessage, VpnServer::Instance(), std::placeholders::_1));
+}
 
 VpnServer::~VpnServer() {
     StopVpn();
@@ -1710,6 +1714,45 @@ int VpnServer::Init(
             kStakingCheckingPeriod,
             std::bind(&VpnServer::CheckAccountValid, VpnServer::Instance()));
     return kVpnsvrSuccess;
+}
+
+void VpnServer::HandleMessage(transport::protobuf::Header& header) {
+    if (header.type() != common::kBlockMessage) {
+        return;
+    }
+
+    block::protobuf::BlockMessage block_msg;
+    if (!block_msg.ParseFromString(header.data())) {
+        return;
+    }
+
+    if (block_msg.has_acc_attr_res()) {
+        std::cout << "attr response coming." << std::endl;
+        dht::BaseDhtPtr dht_ptr = nullptr;
+        uint32_t netid = dht::DhtKeyManager::DhtKeyGetNetId(header.des_dht_key());
+        if (netid == network::kUniversalNetworkId || netid == network::kNodeNetworkId) {
+            dht_ptr = network::UniversalManager::Instance()->GetUniversal(netid);
+        } else {
+            if (header.universal() == 0) {
+                dht_ptr = network::UniversalManager::Instance()->GetUniversal(netid);
+            } else {
+                dht_ptr = network::DhtManager::Instance()->GetDht(netid);
+            }
+        }
+
+        if (dht_ptr == nullptr) {
+            std::cout << "dht ptr is null." << netid << std::endl;
+            network::Route::Instance()->Send(header);
+            return;
+        }
+
+        if (header.des_dht_key() == dht_ptr->local_node()->dht_key) {
+            std::cout << "dht key is null." << netid << std::endl;
+            vpn::VpnServer::Instance()->HandleVpnLoginResponse(header, block_msg);
+            return;
+        }
+        dht_ptr->SendToClosestNode(header);
+    }
 }
 
 int VpnServer::ParserReceivePacket(const char* buf) {

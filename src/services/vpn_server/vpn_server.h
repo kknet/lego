@@ -43,6 +43,7 @@ private:
     void CheckTransactions();
     void CheckAccountValid();
     void SendGetAccountAttrLastBlock(const std::string& account, uint64_t height);
+    void HandleMessage(transport::protobuf::Header& header);
 
     static const uint32_t kStakingCheckingPeriod = 10 * 1000 * 1000;
     static const uint32_t kAccountCheckPeriod = 10 * 1000 * 1000;
