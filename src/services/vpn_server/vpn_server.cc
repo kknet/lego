@@ -117,12 +117,7 @@ static void CloseAndFreeServer(EV_P_ server_t *server);
 static void ResolvCallback(struct sockaddr *addr, void *data);
 static void ResolvFreeCallback(void *data);
 
-int verbose = 0;
 int reuse_port = 0;
-
-int is_bind_local_addr = 0;
-struct sockaddr_storage local_addr_v4;
-struct sockaddr_storage local_addr_v6;
 
 // static crypto_t *crypto;
 
@@ -142,7 +137,6 @@ static int server_conn = 0;
 static char *plugin = NULL;
 static char *remote_port = NULL;
 static char *manager_addr = NULL;
-uint64_t tx = 0;
 uint64_t rx = 0;
 int use_syslog = 0;
 
@@ -163,7 +157,6 @@ static struct plugin_watcher_t {
 } plugin_watcher;
 #endif
 
-static std::unordered_map<std::string, BandwidthInfoPtr> account_bindwidth_map;
 static const uint32_t kMaxConnectAccount = 1024u;  // single server just 1024 user
 
 static void FreeConnections(struct ev_loop *loop, struct cork_dllist* connections) {
@@ -364,8 +357,6 @@ static remote_t * ConnectToRemote(EV_P_ struct addrinfo *res, server_t *server) 
         }
 
         if (outbound_block_match_host(ipstr) == 1) {
-            if (verbose)
-                LOGI("outbound blocked %s", ipstr);
             return NULL;
         }
     }
@@ -389,16 +380,6 @@ static remote_t * ConnectToRemote(EV_P_ struct addrinfo *res, server_t *server) 
 
     if (SetNonblocking(sockfd) == -1)
         ERROR("SetNonblocking");
-
-    if (is_bind_local_addr) {
-        struct sockaddr_storage *local_addr =
-            res->ai_family == AF_INET ? &local_addr_v4 : &local_addr_v6;
-        if (bind_to_addr(local_addr, sockfd) == -1) {
-            ERROR("bind_to_addr");
-            close(sockfd);
-            return NULL;
-        }
-    }
 
 #ifdef SET_INTERFACE
     if (iface) {
@@ -603,7 +584,9 @@ void SetTosFromConnmark(remote_t *remote, server_t *server) {
 
 #endif
 
-static bool RemoveNotAliveAccount(const std::chrono::steady_clock::time_point& now_point) {
+static bool RemoveNotAliveAccount(
+        const std::chrono::steady_clock::time_point& now_point,
+        std::unordered_map<std::string, BandwidthInfoPtr>& account_bindwidth_map) {
     if (account_bindwidth_map.size() <= kMaxConnectAccount) {
         return false;
     }
@@ -662,7 +645,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         return;
     }
 
-    tx += r;
     buf->len = r;
 
     std::string pubkey;
@@ -686,11 +668,11 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
 
         auto now_point = std::chrono::steady_clock::now();
         auto& user_account = client_ptr->account;
-        auto iter = account_bindwidth_map.find(user_account);
-        if (iter == account_bindwidth_map.end()) {
+        auto iter = server->svr_item->account_bindwidth_map.find(user_account);
+        if (iter == server->svr_item->account_bindwidth_map.end()) {
             auto acc_item = std::make_shared<BandwidthInfo>(r, 0, user_account);
-            account_bindwidth_map[user_account] = acc_item;
-            if (RemoveNotAliveAccount(now_point)) {
+            server->svr_item->account_bindwidth_map[user_account] = acc_item;
+            if (RemoveNotAliveAccount(now_point, server->svr_item->account_bindwidth_map)) {
                 // exceeded max user account, new join failed
                 return;
             }
@@ -820,8 +802,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
                 return;
             }
             if (acl && outbound_block_match_host(host) == 1) {
-                if (verbose)
-                    LOGI("outbound blocked %s", host);
                 CloseAndFreeServer(EV_A_ server);
                 return;
             }
@@ -900,13 +880,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         else {
             server->buf->len -= offset;
             memmove(server->buf->data, server->buf->data + offset, server->buf->len);
-        }
-
-        if (verbose) {
-            if ((atyp & ADDRTYPE_MASK) == 4)
-                LOGI("[%s] connect to [%s]:%d", remote_port, host, ntohs(port));
-            else
-                LOGI("[%s] connect to %s:%d", remote_port, host, ntohs(port));
         }
 
         if (!need_query) {
@@ -1013,10 +986,6 @@ static void ServerTimeoutCallback(EV_P_ ev_timer *watcher, int revents) {
     server_t *server = server_ctx->server;
     remote_t *remote = server->remote;
 
-    if (verbose) {
-        LOGI("TCP connection timeout");
-    }
-
     CloseAndFreeRemote(EV_A_ remote);
     CloseAndFreeServer(EV_A_ server);
 }
@@ -1044,10 +1013,6 @@ static void ResolvCallback(struct sockaddr *addr, void *data) {
         LOGE("unable to resolve %s", query->hostname);
         CloseAndFreeServer(EV_A_ server);
     } else {
-        if (verbose) {
-            LOGI("successfully resolved %s", query->hostname);
-        }
-
         struct addrinfo info;
         memset(&info, 0, sizeof(struct addrinfo));
         info.ai_socktype = SOCK_STREAM;
@@ -1619,9 +1584,6 @@ static listen_ctx_t listen_ctx_;
 static void StartVpn() {
     cork_dllist_init(&listen_ctx_.svr_item->connections);
     ev_run(listen_ctx_.loop, 0);
-    if (verbose) {
-        LOGI("closed gracefully");
-    }
 }
 
 
