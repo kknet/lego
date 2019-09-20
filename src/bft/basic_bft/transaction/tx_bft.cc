@@ -275,10 +275,10 @@ int TxBft::CheckTxInfo(
 // 			return kBftNetwokInvalid;
 // 		}
 
-        acc_ptr = block::AccountManager::Instance()->GetAcountInfo(tx_info.from());
-        if (acc_ptr != nullptr) {
-            return kBftAccountExists;
-        }
+//         acc_ptr = block::AccountManager::Instance()->GetAcountInfo(tx_info.from());
+//         if (acc_ptr != nullptr) {
+//             return kBftAccountExists;
+//         }
 
 // 		auto hash_network_id = network::GetConsensusShardNetworkId(tx_info.from());
 // 		if (hash_network_id != tx_info.netwok_id()) {

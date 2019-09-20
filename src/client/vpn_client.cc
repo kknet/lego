@@ -803,6 +803,7 @@ int VpnClient::VpnLogin(
             msg);
     network::Route::Instance()->Send(msg);
     login_gid = common::Encode::HexEncode(login_gid);
+    CLIENT_ERROR("sent vpn login request: %s", svr_account.c_str());
     return kClientSuccess;
 }
 
