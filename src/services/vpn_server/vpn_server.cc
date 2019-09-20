@@ -163,14 +163,12 @@ static struct plugin_watcher_t {
 } plugin_watcher;
 #endif
 
-static struct cork_dllist connections;
-
 static std::unordered_map<std::string, BandwidthInfoPtr> account_bindwidth_map;
 static const uint32_t kMaxConnectAccount = 1024u;  // single server just 1024 user
 
-static void FreeConnections(struct ev_loop *loop) {
+static void FreeConnections(struct ev_loop *loop, struct cork_dllist* connections) {
     struct cork_dllist_item *curr, *next;
-    cork_dllist_foreach_void(&connections, curr, next) {
+    cork_dllist_foreach_void(connections, curr, next) {
         server_t *server = cork_container_of(curr, server_t, entries);
         remote_t *remote = server->remote;
         CloseAndFreeServer(loop, server);
@@ -1333,11 +1331,6 @@ static void RemoteSendCallback(EV_P_ ev_io *w, int revents) {
 }
 
 static remote_t * NewRemote(int fd) {
-    if (verbose) {
-        remote_conn++;
-        LOGI("new connection to remote, %d opened remote connections", remote_conn);
-    }
-
     remote_t *remote = (remote_t*)ss_malloc(sizeof(remote_t));
     memset(remote, 0, sizeof(remote_t));
 
@@ -1379,19 +1372,10 @@ static void CloseAndFreeRemote(EV_P_ remote_t *remote) {
         ev_io_stop(EV_A_ & remote->recv_ctx->io);
         close(remote->fd);
         FreeRemote(remote);
-        if (verbose) {
-            remote_conn--;
-            LOGI("close a connection to remote, %d opened remote connections", remote_conn);
-        }
     }
 }
 
 static server_t * NewServer(int fd, listen_ctx_t *listener) {
-    if (verbose) {
-        server_conn++;
-        LOGI("new connection from client, %d opened client connections", server_conn);
-    }
-
     server_t *server;
     server = (server_t*)ss_malloc(sizeof(server_t));
 
@@ -1413,7 +1397,7 @@ static server_t * NewServer(int fd, listen_ctx_t *listener) {
     server->query = NULL;
     server->listen_ctx = listener;
     server->remote = NULL;
-
+    server->svr_item = listener->svr_item;
     server->e_ctx = (cipher_ctx_t*)ss_malloc(sizeof(cipher_ctx_t));
     server->d_ctx = (cipher_ctx_t*)ss_malloc(sizeof(cipher_ctx_t));
 //     crypto->ctx_init(crypto->cipher, server->e_ctx, 1);
@@ -1427,7 +1411,7 @@ static server_t * NewServer(int fd, listen_ctx_t *listener) {
     ev_timer_init(&server->recv_ctx->watcher, ServerTimeoutCallback,
         request_timeout, 0);
 
-    cork_dllist_add(&connections, &server->entries);
+    cork_dllist_add(&server->svr_item->connections, &server->entries);
 
     return server;
 }
@@ -1490,10 +1474,6 @@ static void CloseAndFreeServer(EV_P_ server_t *server) {
         ev_timer_stop(EV_A_ & server->recv_ctx->watcher);
         close(server->fd);
         FreeServer(server);
-        if (verbose) {
-            server_conn--;
-            LOGI("close a connection from client, %d opened client connections", server_conn);
-        }
     }
 }
 
@@ -1596,11 +1576,11 @@ static void InitSignal() {
 //     return 0;
 // }
 
-struct ev_loop *loop = ev_loop_new(EVBACKEND_EPOLL);
 static int StartTcpServer(
         const std::string& host,
         uint16_t port,
         listen_ctx_t* listen_ctx) {
+    struct ev_loop *loop = ev_loop_new(EVBACKEND_EPOLL);
     resolv_init(loop, NULL, ipv6first);
     remote_port = (char*)std::to_string(port).c_str();
 
@@ -1621,7 +1601,7 @@ static int StartTcpServer(
     listen_ctx->fd = listenfd;
     listen_ctx->iface = NULL;
     listen_ctx->loop = loop;
-
+    listen_ctx->svr_item = std::make_shared<server_item_t>();
     ev_io_init(&listen_ctx->io, AcceptCallback, listenfd, EV_READ);
     ev_io_start(loop, &listen_ctx->io);
     return 0;
@@ -1635,21 +1615,21 @@ static int StartTcpServer(
 //     return 0;
 // }
 
+static listen_ctx_t listen_ctx_;
 static void StartVpn() {
-    cork_dllist_init(&connections);
-    ev_run(loop, 0);
+    cork_dllist_init(&listen_ctx_.svr_item->connections);
+    ev_run(listen_ctx_.loop, 0);
     if (verbose) {
         LOGI("closed gracefully");
     }
 }
 
-static listen_ctx_t listen_ctx_;
 
 static void StopVpn() {
-        resolv_shutdown(loop);
-        ev_io_stop(loop, &listen_ctx_.io);
+        resolv_shutdown(listen_ctx_.loop);
+        ev_io_stop(listen_ctx_.loop, &listen_ctx_.io);
         close(listen_ctx_.fd);
-        FreeConnections(loop);
+        FreeConnections(listen_ctx_.loop, &listen_ctx_.svr_item->connections);
         free_udprelay();
 #ifdef __MINGW32__
         if (plugin_watcher.valid) {

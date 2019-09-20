@@ -130,6 +130,7 @@ typedef struct server_item {
     struct cork_dllist connections;
     std::unordered_map<std::string, BandwidthInfoPtr> account_bindwidth_map;
 } server_item_t;
+typedef std::shared_ptr<server_item_t> server_item_ptr_t;
 
 typedef struct listen_ctx {
     ev_io io;
@@ -137,7 +138,7 @@ typedef struct listen_ctx {
     int timeout;
     char *iface;
     struct ev_loop *loop;
-    server_item_t* svr_item;
+    server_item_ptr_t svr_item;
 } listen_ctx_t;
 
 typedef struct server_ctx {
@@ -181,6 +182,7 @@ typedef struct server {
 
     struct cork_dllist_item entries;
     PeerInfoPtr client_ptr;
+    server_item_ptr_t svr_item;
 #ifdef USE_NFCONNTRACK_TOS
     struct dscptracker *tracker;
 #endif
