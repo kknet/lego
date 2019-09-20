@@ -119,14 +119,6 @@ static int ipv6first = 0;
 int fast_open = 0;
 static int no_delay = 0;
 
-uint64_t tx = 0;
-uint64_t rx = 0;
-int use_syslog = 0;
-
-#ifndef __MINGW32__
-ev_timer stat_update_watcher;
-#endif
-
 static struct ev_signal sigint_watcher;
 static struct ev_signal sigterm_watcher;
 #ifndef __MINGW32__
@@ -603,7 +595,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         return;
     }
 
-    tx += r;
     buf->len = r;
 
     std::string pubkey;
@@ -1038,8 +1029,6 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
         }
     }
 
-    rx += r;
-
     // Ignore any new packet if the server is stopped
     if (server->stage == STAGE_STOP) {
         return;
@@ -1396,11 +1385,6 @@ static void SignalCallback(EV_P_ ev_signal *w, int revents) {
         switch (w->signum) {
 #ifndef __MINGW32__
         case SIGCHLD:
-            if (!is_plugin_running()) {
-                LOGE("plugin service exit unexpectedly");
-            }
-            else
-                return;
 #endif
         case SIGINT:
         case SIGTERM:
