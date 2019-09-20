@@ -176,7 +176,7 @@ static void ReportAddr(int fd, const char *info) {
     char *peer_name;
     peer_name = GetPeerName(fd);
     if (peer_name != NULL) {
-        LOGE("failed to handshake with %s: %s", peer_name, info);
+        VPNSVR_ERROR("failed to handshake with %s: %s", peer_name, info);
     }
 }
 
@@ -193,7 +193,7 @@ int SetFastopen(int fd) {
 
         if (s == -1) {
             if (errno == EPROTONOSUPPORT || errno == ENOPROTOOPT) {
-                LOGE("fast open is not supported on this platform");
+                VPNSVR_ERROR("fast open is not supported on this platform");
                 fast_open = 0;
             } else {
                 ERROR("setsockopt");
@@ -230,12 +230,12 @@ int CreateAndBind(const char *host, const char *port, int mptcp) {
     s = getaddrinfo(host, port, &hints, &result);
 
     if (s != 0) {
-        LOGE("failed to resolve server name %s", host);
+        VPNSVR_ERROR("failed to resolve server name %s", host);
         return -1;
     }
 
     if (result == NULL) {
-        LOGE("Cannot bind");
+        VPNSVR_ERROR("Cannot bind");
         return -1;
     }
 
@@ -365,7 +365,7 @@ static remote_t * ConnectToRemote(EV_P_ struct addrinfo *res, server_t *server) 
             // Load ConnectEx function
             LPFN_CONNECTEX ConnectEx = winsock_getconnectex();
             if (ConnectEx == NULL) {
-                LOGE("Cannot load ConnectEx() function");
+                VPNSVR_ERROR("Cannot load ConnectEx() function");
                 err = WSAENOPROTOOPT;
                 break;
             }
@@ -428,7 +428,7 @@ static remote_t * ConnectToRemote(EV_P_ struct addrinfo *res, server_t *server) 
                 errno == ENOPROTOOPT) {
                 // Disable fast open as it's not supported
                 fast_open = 0;
-                LOGE("fast open is not supported on this platform");
+                VPNSVR_ERROR("fast open is not supported on this platform");
             } else {
                 ERROR("fast_open_connect");
             }
@@ -477,11 +477,11 @@ void ConntrackQuery(server_t *server) {
             nfct_callback_register(h, NFCT_T_ALL, SetMarkDscpCallback, (void *)server);
             int x = nfct_query(h, NFCT_Q_GET, tracker->ct);
             if (x == -1) {
-                LOGE("QOS: Failed to retrieve connection mark %s", strerror(errno));
+                VPNSVR_ERROR("QOS: Failed to retrieve connection mark %s", strerror(errno));
             }
             nfct_close(h);
         } else {
-            LOGE("QOS: Failed to open conntrack handle for upstream netfilter mark retrieval.");
+            VPNSVR_ERROR("QOS: Failed to open conntrack handle for upstream netfilter mark retrieval.");
         }
     }
 }
@@ -525,7 +525,7 @@ void SetTosFromConnmark(remote_t *remote, server_t *server) {
                         nfct_set_attr_u8(server->tracker->ct, ATTR_L4PROTO, IPPROTO_TCP);
                         ConntrackQuery(server);
                     } else {
-                        LOGE("Failed to allocate new conntrack for upstream netfilter mark retrieval.");
+                        VPNSVR_ERROR("Failed to allocate new conntrack for upstream netfilter mark retrieval.");
                         server->tracker->ct = NULL;
                     }
                 }
@@ -794,7 +794,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
                 offset += in6_addr_len;
             }
             else {
-                LOGE("invalid header with addr type %d", atyp);
+                VPNSVR_ERROR("invalid header with addr type %d", atyp);
                 ReportAddr(server->fd, "invalid length for ipv6 address");
                 StopServer(EV_A_ server);
                 return;
@@ -831,7 +831,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             remote_t *remote = ConnectToRemote(EV_A_ & info, server);
 
             if (remote == NULL) {
-                LOGE("connect error");
+                VPNSVR_ERROR("connect error");
                 CloseAndFreeServer(EV_A_ server);
                 return;
             }
@@ -881,7 +881,7 @@ static void ServerSendCallback(EV_P_ ev_io *w, int revents) {
     remote_t *remote = server->remote;
 
     if (remote == NULL) {
-        LOGE("invalid server");
+        VPNSVR_ERROR("invalid server");
         CloseAndFreeServer(EV_A_ server);
         return;
     }
@@ -916,7 +916,7 @@ static void ServerSendCallback(EV_P_ ev_io *w, int revents) {
                 ev_io_start(EV_A_ & remote->recv_ctx->io);
                 return;
             } else {
-                LOGE("invalid remote");
+                VPNSVR_ERROR("invalid remote");
                 CloseAndFreeRemote(EV_A_ remote);
                 CloseAndFreeServer(EV_A_ server);
                 return;
@@ -955,7 +955,7 @@ static void ResolvCallback(struct sockaddr *addr, void *data) {
     struct ev_loop *loop = server->listen_ctx->loop;
 
     if (addr == NULL) {
-        LOGE("unable to resolve %s", query->hostname);
+        VPNSVR_ERROR("unable to resolve %s", query->hostname);
         CloseAndFreeServer(EV_A_ server);
     } else {
         struct addrinfo info;
@@ -1003,7 +1003,7 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
     server_t *server = remote->server;
 
     if (server == NULL) {
-        LOGE("invalid server");
+        VPNSVR_ERROR("invalid server");
         CloseAndFreeRemote(EV_A_ remote);
         return;
     }
@@ -1084,7 +1084,7 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
 
     int err = tmp_crypto->encrypt(server->buf, server->e_ctx, SOCKET_BUF_SIZE);
     if (err) {
-        LOGE("invalid password or cipher");
+        VPNSVR_ERROR("invalid password or cipher");
         CloseAndFreeRemote(EV_A_ remote);
         CloseAndFreeServer(EV_A_ server);
         return;
@@ -1129,7 +1129,7 @@ static void RemoteSendCallback(EV_P_ ev_io *w, int revents) {
     server_t *server = remote->server;
 
     if (server == NULL) {
-        LOGE("invalid server");
+        VPNSVR_ERROR("invalid server");
         CloseAndFreeRemote(EV_A_ remote);
         return;
     }
@@ -1228,7 +1228,7 @@ static void RemoteSendCallback(EV_P_ ev_io *w, int revents) {
                     ev_io_start(EV_A_ & remote->recv_ctx->io);
                 }
             } else {
-                LOGE("invalid server");
+                VPNSVR_ERROR("invalid server");
                 CloseAndFreeRemote(EV_A_ remote);
                 CloseAndFreeServer(EV_A_ server);
             }
@@ -1409,7 +1409,7 @@ static void plugin_watcher_cb(EV_P_ ev_io *w, int revents) {
     }
     recv(fd, buf, 1, 0);
     closesocket(fd);
-    LOGE("plugin service exit unexpectedly");
+    VPNSVR_ERROR("plugin service exit unexpectedly");
     ev_signal_stop(EV_DEFAULT, &sigint_watcher);
     ev_signal_stop(EV_DEFAULT, &sigterm_watcher);
     ev_io_stop(EV_DEFAULT, &plugin_watcher.io);
@@ -1467,7 +1467,7 @@ static int StartTcpServer(
     }
 
     if (listen(listenfd, SSMAXCONN) == -1) {
-        LOGI("listen()");
+        VPNSVR_INFO("listen()");
         return -1;
     }
     SetFastopen(listenfd);
