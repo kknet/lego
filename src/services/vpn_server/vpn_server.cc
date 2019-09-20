@@ -118,6 +118,7 @@ static void ResolvFreeCallback(void *data);
 static int ipv6first = 0;
 int fast_open = 0;
 static int no_delay = 0;
+int use_syslog = 0;
 
 static struct ev_signal sigint_watcher;
 static struct ev_signal sigterm_watcher;
