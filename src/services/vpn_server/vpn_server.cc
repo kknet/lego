@@ -702,6 +702,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
                 return;
             }
             lego::vpn::VpnServer::Instance()->bandwidth_queue().push(acc_item);
+            std::cout << "new account add to queue: " << common::Encode::HexEncode(user_account) << std::endl;
         } else {
             if (!iter->second->login_valid) {
                 return;
@@ -735,8 +736,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         ReportAddr(server->fd, "authentication error");
         StopServer(EV_A_ server);
         return;
-    }
-    else if (err == CRYPTO_NEED_MORE) {
+    } else if (err == CRYPTO_NEED_MORE) {
         if (server->stage != STAGE_STREAM && server->frag > MAX_FRAG) {
             ReportAddr(server->fd, "malicious fragmentation");
             StopServer(EV_A_ server);
@@ -1774,6 +1774,8 @@ void VpnServer::SendGetAccountAttrLastBlock(const std::string& account, uint64_t
             height,
             msg);
     network::Route::Instance()->Send(msg);
+    std::cout << "sent to get account attr: " << common::Encode::HexEncode(account) << std::endl;
+
 }
 
 void VpnServer::CheckTransactions() {
@@ -1866,6 +1868,7 @@ void VpnServer::CheckAccountValid() {
             account_info->join_time = std::chrono::steady_clock::now() +
                     std::chrono::microseconds(kWaitingLogin);
             account_map_[account_info->account_id] = account_info;
+            std::cout << "add account to map: " << common::Encode::HexEncode(account_info->account_id) << std::endl;
         }
     }
 

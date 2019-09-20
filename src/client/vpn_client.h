@@ -48,6 +48,7 @@ struct VpnServerNode {
             const std::string& skey,
             const std::string& dkey,
             const std::string& pkey,
+            const std::string& id,
             bool new_node)
             : ip(in_ip),
               svr_port(s_port),
@@ -55,6 +56,7 @@ struct VpnServerNode {
               seckey(skey),
               dht_key(dkey),
               pubkey(pkey),
+              acccount_id(id),
               new_get(new_node) {}
     std::string ip;
     uint16_t svr_port;
@@ -62,6 +64,7 @@ struct VpnServerNode {
     std::string seckey;
     std::string dht_key;
     std::string pubkey;
+    std::string acccount_id;
     bool new_get{ false };
 };
 typedef std::shared_ptr<VpnServerNode> VpnServerNodePtr;
