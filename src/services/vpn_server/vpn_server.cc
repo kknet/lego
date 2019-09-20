@@ -1583,6 +1583,7 @@ static void StopVpn(listen_ctx_t& listen_ctx) {
 }
 
 std::shared_ptr<std::thread> vpn_svr_thread;
+static listen_ctx_t listen_ctx_;
 
 namespace lego {
 
@@ -1595,7 +1596,7 @@ VpnServer::VpnServer() {
 }
 
 VpnServer::~VpnServer() {
-    StopVpn();
+    StopVpn(listen_ctx_);
 }
 
 VpnServer* VpnServer::Instance() {
@@ -1603,7 +1604,6 @@ VpnServer* VpnServer::Instance() {
     return &ins;
 }
 
-static listen_ctx_t listen_ctx_;
 
 int VpnServer::Init(
         const std::string& ip,
