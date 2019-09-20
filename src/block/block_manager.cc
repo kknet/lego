@@ -109,7 +109,7 @@ void BlockManager::HandleAttrGetRequest(
             height = iter->second;
         }
     }
-
+    std::cout << "receive get attr request: " << common::Encode::HexEncode(block_msg.acc_attr_req().account()) << ":" << height << std::endl;
     if (height > block_msg.acc_attr_req().height()) {
         uint32_t netid = network::GetConsensusShardNetworkId(
                 block_msg.acc_attr_req().account());

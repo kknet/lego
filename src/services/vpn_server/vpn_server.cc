@@ -1852,7 +1852,6 @@ void VpnServer::HandleVpnLoginResponse(
     }
     iter->second->invalid_times = 0;
     iter->second->vpn_login_height = block.height();
-
 }
 
 void VpnServer::CheckAccountValid() {
