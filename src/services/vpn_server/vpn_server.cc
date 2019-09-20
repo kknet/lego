@@ -1596,7 +1596,7 @@ static void InitSignal() {
 //     return 0;
 // }
 
-struct ev_loop *loop = EV_DEFAULT;
+struct ev_loop *loop = ev_loop_new(EVBACKEND_EPOLL);
 static int StartTcpServer(
         const std::string& host,
         uint16_t port,
@@ -1688,9 +1688,6 @@ int VpnServer::Init(
         const std::string& key,
         const std::string& method) {
     InitSignal();
-    if (InitCrypto(passwd, key, method) != 0) {
-        return kVpnsvrError;
-    }
 
     if (StartTcpServer(ip, port, &listen_ctx_) != 0) {
         return kVpnsvrError;

@@ -27,8 +27,8 @@
 extern "C" {
 #endif
 
-#include <time.h>
 #include <libcork/ds.h>
+#include <time.h>
 
 #ifdef HAVE_LIBEV_EV_H
 #include <libev/ev.h>
@@ -44,6 +44,7 @@ extern "C" {
 #include "ssr/crypto.h"
 #include "ssr/jconf.h"
 #include "ssr/resolv.h"
+#include <libcork/core.h>
 
 #include "ssr/common.h"
 #ifdef __cplusplus
@@ -53,6 +54,7 @@ extern "C" {
 #include <memory>
 #include <string>
 #include <atomic>
+#include <unordered_map>
 
 #include "common/utils.h"
 #include "common/random.h"
@@ -124,12 +126,18 @@ struct StakingItem {
 };
 typedef std::shared_ptr<StakingItem> StakingItemPtr;
 
+typedef struct server_item {
+    struct cork_dllist connections;
+    std::unordered_map<std::string, BandwidthInfoPtr> account_bindwidth_map;
+} server_item_t;
+
 typedef struct listen_ctx {
     ev_io io;
     int fd;
     int timeout;
     char *iface;
     struct ev_loop *loop;
+    server_item_t* svr_item;
 } listen_ctx_t;
 
 typedef struct server_ctx {
