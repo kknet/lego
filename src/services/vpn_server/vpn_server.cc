@@ -117,8 +117,6 @@ static void CloseAndFreeServer(EV_P_ server_t *server);
 static void ResolvCallback(struct sockaddr *addr, void *data);
 static void ResolvFreeCallback(void *data);
 
-int reuse_port = 0;
-
 // static crypto_t *crypto;
 
 static int acl = 0;
@@ -298,13 +296,6 @@ int CreateAndBind(const char *host, const char *port, int mptcp) {
 #ifdef SO_NOSIGPIPE
         setsockopt(listen_sock, SOL_SOCKET, SO_NOSIGPIPE, &opt, sizeof(opt));
 #endif
-        if (reuse_port) {
-            int err = set_reuseport(listen_sock);
-            if (err == 0) {
-                LOGI("tcp port reuse enabled");
-            }
-        }
-
         if (mptcp == 1) {
             int i = 0;
             while ((mptcp = mptcp_enabled_values[i]) > 0) {
