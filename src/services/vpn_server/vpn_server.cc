@@ -1562,8 +1562,7 @@ static int StartTcpServer(
 //     return 0;
 // }
 
-static void StartVpn(listen_ctx_t& listen_ctx) {
-    cork_dllist_init(&listen_ctx.svr_item->connections);
+static void StartVpn() {
     ev_run(loop, 0);
 }
 
@@ -1616,7 +1615,7 @@ int VpnServer::Init(
     if (StartTcpServer(ip, port, &listen_ctx_) != 0) {
         return kVpnsvrError;
     }
-
+    cork_dllist_init(&listen_ctx_.svr_item->connections);
     vpn_svr_thread = std::make_shared<std::thread>(&StartVpn);
     staking_tick_.CutOff(
             kStakingCheckingPeriod,
