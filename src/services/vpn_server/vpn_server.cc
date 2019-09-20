@@ -1098,8 +1098,8 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
 
     auto now_point = std::chrono::steady_clock::now();
     auto& user_account = server->client_ptr->account;
-    auto iter = account_bindwidth_map.find(user_account);
-    if (iter == account_bindwidth_map.end()) {
+    auto iter = server->svr_item->account_bindwidth_map.find(user_account);
+    if (iter == server->svr_item->account_bindwidth_map.end()) {
         return;
     } else {
         iter->second->down_bandwidth += r;
