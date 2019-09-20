@@ -368,7 +368,6 @@ static remote_t * ConnectToRemote(EV_P_ struct addrinfo *res, server_t *server) 
         if (outbound_block_match_host(ipstr) == 1) {
             if (verbose)
                 LOGI("outbound blocked %s", ipstr);
-            std::cout << "acl return null" << std::endl;
             return NULL;
         }
     }
@@ -378,7 +377,6 @@ static remote_t * ConnectToRemote(EV_P_ struct addrinfo *res, server_t *server) 
     if (sockfd == -1) {
         ERROR("socket");
         close(sockfd);
-        std::cout << "socket return null" << std::endl;
         return NULL;
     }
 
@@ -400,7 +398,6 @@ static remote_t * ConnectToRemote(EV_P_ struct addrinfo *res, server_t *server) 
         if (bind_to_addr(local_addr, sockfd) == -1) {
             ERROR("bind_to_addr");
             close(sockfd);
-            std::cout << "bind_to_addr return null" << std::endl;
             return NULL;
         }
     }
@@ -516,7 +513,6 @@ static remote_t * ConnectToRemote(EV_P_ struct addrinfo *res, server_t *server) 
         if (r == -1 && errno != CONNECT_IN_PROGRESS) {
             ERROR("connect");
             CloseAndFreeRemote(EV_A_ remote);
-            std::cout << "connect last return null, r: " << r << ", errno: " << errno << ", " << "res->ai_addr: " << res->ai_addr << ", res->ai_addrlen: " << res->ai_addrlen << std::endl;
             return NULL;
         }
     }
@@ -687,7 +683,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
                 common::Encode::HexDecode(pubkey),
                 method);
         if (client_ptr == nullptr) {
-            std::cout << "invalid public key: " << header_offset << ", " << pubkey << ":" << method << std::endl;
             return;
         }
 
@@ -702,7 +697,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
                 return;
             }
             lego::vpn::VpnServer::Instance()->bandwidth_queue().push(acc_item);
-            std::cout << "new account add to queue: " << common::Encode::HexEncode(user_account) << std::endl;
         } else {
             if (!iter->second->login_valid) {
                 return;
@@ -1762,7 +1756,6 @@ void VpnServer::SendGetAccountAttrLastBlock(const std::string& account, uint64_t
             lego::network::kVpnNetworkId);
     if (uni_dht == nullptr) {
         VPNSVR_ERROR("not found vpn server dht.");
-        std::cout << "not found vpn server dht." << std::endl;
         return;
     }
 
@@ -1774,8 +1767,6 @@ void VpnServer::SendGetAccountAttrLastBlock(const std::string& account, uint64_t
             height,
             msg);
     network::Route::Instance()->Send(msg);
-    std::cout << "sent to get account attr: " << common::Encode::HexEncode(account) << std::endl;
-
 }
 
 void VpnServer::CheckTransactions() {
@@ -1838,10 +1829,6 @@ void VpnServer::HandleVpnLoginResponse(
         }
     }
 
-    std::cout << "receive login block : "
-        << common::Encode::HexEncode(login_svr_id)
-        << ":" << block.height() << std::endl;
-
     if (login_svr_id != common::GlobalInfo::Instance()->id()) {
         ++iter->second->invalid_times;
         if (iter->second->invalid_times > 5) {
@@ -1867,7 +1854,6 @@ void VpnServer::CheckAccountValid() {
             account_info->join_time = std::chrono::steady_clock::now() +
                     std::chrono::microseconds(kWaitingLogin);
             account_map_[account_info->account_id] = account_info;
-            std::cout << "add account to map: " << common::Encode::HexEncode(account_info->account_id) << std::endl;
         }
     }
 

@@ -49,7 +49,6 @@ int BlockManager::Init(common::Config& conf) {
                 return kBlockError;
             }
         }
-        std::cout << "init block manager success." << std::endl;
         return kBlockSuccess;
     }
 
@@ -109,7 +108,6 @@ void BlockManager::HandleAttrGetRequest(
             height = iter->second;
         }
     }
-    std::cout << "receive get attr request: " << common::Encode::HexEncode(block_msg.acc_attr_req().account()) << ":" << height << std::endl;
     if (height > block_msg.acc_attr_req().height()) {
         uint32_t netid = network::GetConsensusShardNetworkId(
                 block_msg.acc_attr_req().account());
@@ -217,10 +215,8 @@ int BlockManager::HandleGetBlockRequest(
         auto st = db::Db::Instance()->Get(height_db_key, &block_hash);
         if (!st.ok()) {
             LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("get block hash error", header);
-            std::cout << "failed handled get block request: " << height_db_key << std::endl;
             return kBlockError;
         }
-        std::cout << "handled get block request: " << height_db_key << std::endl;
     }
 
     if (block_hash.empty()) {
