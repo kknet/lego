@@ -129,13 +129,6 @@ static int ret_val = 0;
 #ifdef HAVE_SETRLIMIT
 static int nofile = 0;
 #endif
-static int remote_conn = 0;
-static int server_conn = 0;
-
-static char *plugin = NULL;
-static char *remote_port = NULL;
-static char *manager_addr = NULL;
-uint64_t rx = 0;
 int use_syslog = 0;
 
 #ifndef __MINGW32__
@@ -1075,8 +1068,6 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
         }
     }
 
-    rx += r;
-
     // Ignore any new packet if the server is stopped
     if (server->stage == STAGE_STOP) {
         return;
@@ -1538,7 +1529,7 @@ static int StartTcpServer(
         listen_ctx_t* listen_ctx) {
     struct ev_loop *loop = ev_loop_new(EVBACKEND_EPOLL);
     resolv_init(loop, NULL, ipv6first);
-    remote_port = (char*)std::to_string(port).c_str();
+    const char* remote_port = (char*)std::to_string(port).c_str();
 
     int listenfd;
     listenfd = CreateAndBind(host.c_str(), remote_port, 0);
