@@ -40,8 +40,6 @@ extern "C" {
 #include "ssr/netutils.h"
 #include "ssr/crypto.h"
 #include "ssr/utils.h"
-#include "ssr/acl.h"
-#include "ssr/plugin.h"
 #include "ssr/winsock.h"
 #include "ssr/stream.h"
 
@@ -117,29 +115,10 @@ static void CloseAndFreeServer(EV_P_ server_t *server);
 static void ResolvCallback(struct sockaddr *addr, void *data);
 static void ResolvFreeCallback(void *data);
 
-int verbose = 0;
-int reuse_port = 0;
-
-int is_bind_local_addr = 0;
-struct sockaddr_storage local_addr_v4;
-struct sockaddr_storage local_addr_v6;
-
-static int acl = 0;
-static int mode = TCP_ONLY;
 static int ipv6first = 0;
 int fast_open = 0;
 static int no_delay = 0;
-static int ret_val = 0;
 
-#ifdef HAVE_SETRLIMIT
-static int nofile = 0;
-#endif
-static int remote_conn = 0;
-static int server_conn = 0;
-
-static char *plugin = NULL;
-static char *remote_port = NULL;
-static char *manager_addr = NULL;
 uint64_t tx = 0;
 uint64_t rx = 0;
 int use_syslog = 0;
@@ -305,12 +284,6 @@ int CreateAndBind(const char *host, const char *port, int mptcp) {
 #ifdef SO_NOSIGPIPE
         setsockopt(listen_sock, SOL_SOCKET, SO_NOSIGPIPE, &opt, sizeof(opt));
 #endif
-        if (reuse_port) {
-            int err = set_reuseport(listen_sock);
-            if (err == 0) {
-                LOGI("tcp port reuse enabled");
-            }
-        }
 
         if (mptcp == 1) {
             int i = 0;
@@ -348,28 +321,6 @@ static remote_t * ConnectToRemote(EV_P_ struct addrinfo *res, server_t *server) 
     const char *iface = server->listen_ctx->iface;
 #endif
 
-    if (acl) {
-        char ipstr[INET6_ADDRSTRLEN];
-        memset(ipstr, 0, INET6_ADDRSTRLEN);
-
-        if (res->ai_addr->sa_family == AF_INET) {
-            struct sockaddr_in s;
-            memcpy(&s, res->ai_addr, sizeof(struct sockaddr_in));
-            inet_ntop(AF_INET, &s.sin_addr, ipstr, INET_ADDRSTRLEN);
-        }
-        else if (res->ai_addr->sa_family == AF_INET6) {
-            struct sockaddr_in6 s;
-            memcpy(&s, res->ai_addr, sizeof(struct sockaddr_in6));
-            inet_ntop(AF_INET6, &s.sin6_addr, ipstr, INET6_ADDRSTRLEN);
-        }
-
-        if (outbound_block_match_host(ipstr) == 1) {
-            if (verbose)
-                LOGI("outbound blocked %s", ipstr);
-            return NULL;
-        }
-    }
-
     // initialize remote socks
     sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
     if (sockfd == -1) {
@@ -389,16 +340,6 @@ static remote_t * ConnectToRemote(EV_P_ struct addrinfo *res, server_t *server) 
 
     if (SetNonblocking(sockfd) == -1)
         ERROR("SetNonblocking");
-
-    if (is_bind_local_addr) {
-        struct sockaddr_storage *local_addr =
-            res->ai_family == AF_INET ? &local_addr_v4 : &local_addr_v6;
-        if (bind_to_addr(local_addr, sockfd) == -1) {
-            ERROR("bind_to_addr");
-            close(sockfd);
-            return NULL;
-        }
-    }
 
 #ifdef SET_INTERFACE
     if (iface) {
@@ -818,12 +759,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
                 StopServer(EV_A_ server);
                 return;
             }
-            if (acl && outbound_block_match_host(host) == 1) {
-                if (verbose)
-                    LOGI("outbound blocked %s", host);
-                CloseAndFreeServer(EV_A_ server);
-                return;
-            }
             struct cork_ip ip;
             if (cork_ip_init(&ip, host) != -1) {
                 info.ai_socktype = SOCK_STREAM;
@@ -899,13 +834,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         else {
             server->buf->len -= offset;
             memmove(server->buf->data, server->buf->data + offset, server->buf->len);
-        }
-
-        if (verbose) {
-            if ((atyp & ADDRTYPE_MASK) == 4)
-                LOGI("[%s] connect to [%s]:%d", remote_port, host, ntohs(port));
-            else
-                LOGI("[%s] connect to %s:%d", remote_port, host, ntohs(port));
         }
 
         if (!need_query) {
@@ -1012,10 +940,6 @@ static void ServerTimeoutCallback(EV_P_ ev_timer *watcher, int revents) {
     server_t *server = server_ctx->server;
     remote_t *remote = server->remote;
 
-    if (verbose) {
-        LOGI("TCP connection timeout");
-    }
-
     CloseAndFreeRemote(EV_A_ remote);
     CloseAndFreeServer(EV_A_ server);
 }
@@ -1043,10 +967,6 @@ static void ResolvCallback(struct sockaddr *addr, void *data) {
         LOGE("unable to resolve %s", query->hostname);
         CloseAndFreeServer(EV_A_ server);
     } else {
-        if (verbose) {
-            LOGI("successfully resolved %s", query->hostname);
-        }
-
         struct addrinfo info;
         memset(&info, 0, sizeof(struct addrinfo));
         info.ai_socktype = SOCK_STREAM;
@@ -1329,11 +1249,6 @@ static void RemoteSendCallback(EV_P_ ev_io *w, int revents) {
 }
 
 static remote_t * NewRemote(int fd) {
-    if (verbose) {
-        remote_conn++;
-        LOGI("new connection to remote, %d opened remote connections", remote_conn);
-    }
-
     remote_t *remote = (remote_t*)ss_malloc(sizeof(remote_t));
     memset(remote, 0, sizeof(remote_t));
 
@@ -1375,19 +1290,10 @@ static void CloseAndFreeRemote(EV_P_ remote_t *remote) {
         ev_io_stop(EV_A_ & remote->recv_ctx->io);
         close(remote->fd);
         FreeRemote(remote);
-        if (verbose) {
-            remote_conn--;
-            LOGI("close a connection to remote, %d opened remote connections", remote_conn);
-        }
     }
 }
 
 static server_t * NewServer(int fd, listen_ctx_t *listener) {
-    if (verbose) {
-        server_conn++;
-        LOGI("new connection from client, %d opened client connections", server_conn);
-    }
-
     server_t *server;
     server = (server_t*)ss_malloc(sizeof(server_t));
 
@@ -1482,10 +1388,6 @@ static void CloseAndFreeServer(EV_P_ server_t *server) {
         ev_timer_stop(EV_A_ & server->recv_ctx->watcher);
         close(server->fd);
         FreeServer(server);
-        if (verbose) {
-            server_conn--;
-            LOGI("close a connection from client, %d opened client connections", server_conn);
-        }
     }
 }
 
@@ -1496,7 +1398,6 @@ static void SignalCallback(EV_P_ ev_signal *w, int revents) {
         case SIGCHLD:
             if (!is_plugin_running()) {
                 LOGE("plugin service exit unexpectedly");
-                ret_val = -1;
             }
             else
                 return;
@@ -1525,7 +1426,6 @@ static void plugin_watcher_cb(EV_P_ ev_io *w, int revents) {
     recv(fd, buf, 1, 0);
     closesocket(fd);
     LOGE("plugin service exit unexpectedly");
-    ret_val = -1;
     ev_signal_stop(EV_DEFAULT, &sigint_watcher);
     ev_signal_stop(EV_DEFAULT, &sigterm_watcher);
     ev_io_stop(EV_DEFAULT, &plugin_watcher.io);
@@ -1543,14 +1443,6 @@ static void AcceptCallback(EV_P_ ev_io *w, int revents) {
 
     char *peer_name = GetPeerName(serverfd);
     if (peer_name != NULL) {
-        if (acl) {
-            if ((get_acl_mode() == BLACK_LIST && acl_match_host(peer_name) == 1)
-                || (get_acl_mode() == WHITE_LIST && acl_match_host(peer_name) >= 0)) {
-                LOGE("Access denied from %s", peer_name);
-                close(serverfd);
-                return;
-            }
-        }
     }
 
     int opt = 1;
@@ -1582,7 +1474,7 @@ static int StartTcpServer(
         uint16_t port,
         listen_ctx_t* listen_ctx) {
     resolv_init(loop, NULL, ipv6first);
-    remote_port = (char*)std::to_string(port).c_str();
+    char* remote_port = (char*)std::to_string(port).c_str();
 
     int listenfd;
     listenfd = CreateAndBind(host.c_str(), remote_port, 0);
@@ -1618,9 +1510,6 @@ static int StartUdpServer(const std::string& host, uint16_t port) {
 static void StartVpn() {
     cork_dllist_init(&connections);
     ev_run(loop, 0);
-    if (verbose) {
-        LOGI("closed gracefully");
-    }
 }
 
 static listen_ctx_t listen_ctx_;
@@ -1668,7 +1557,6 @@ int VpnServer::Init(
         const std::string& key,
         const std::string& method) {
     InitSignal();
-
     if (StartTcpServer(ip, port, &listen_ctx_) != 0) {
         return kVpnsvrError;
     }
