@@ -129,7 +129,7 @@ static crypto_t *crypto;
 static int acl = 0;
 static int mode = TCP_ONLY;
 static int ipv6first = 0;
-int fast_open = 1;
+int fast_open = 0;
 static int no_delay = 0;
 static int ret_val = 0;
 
