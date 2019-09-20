@@ -124,8 +124,6 @@ int is_bind_local_addr = 0;
 struct sockaddr_storage local_addr_v4;
 struct sockaddr_storage local_addr_v6;
 
-static crypto_t *crypto;
-
 static int acl = 0;
 static int mode = TCP_ONLY;
 static int ipv6first = 0;
@@ -724,7 +722,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
 
     crypto_t* tmp_crypto = client_ptr->crypto;
     int err = tmp_crypto->decrypt(buf, server->d_ctx, SOCKET_BUF_SIZE);
-//     int err = crypto->decrypt(buf, server->d_ctx, SOCKET_BUF_SIZE);
 
     if (err == -2) {
         ReportAddr(server->fd, "authentication error");
@@ -1176,7 +1173,6 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
         return;
     }
 
-//     int err = crypto->encrypt(server->buf, server->e_ctx, SOCKET_BUF_SIZE);
     int err = tmp_crypto->encrypt(server->buf, server->e_ctx, SOCKET_BUF_SIZE);
     if (err) {
         LOGE("invalid password or cipher");
@@ -1416,8 +1412,6 @@ static server_t * NewServer(int fd, listen_ctx_t *listener) {
 
     server->e_ctx = (cipher_ctx_t*)ss_malloc(sizeof(cipher_ctx_t));
     server->d_ctx = (cipher_ctx_t*)ss_malloc(sizeof(cipher_ctx_t));
-    crypto->ctx_init(crypto->cipher, server->e_ctx, 1);
-    crypto->ctx_init(crypto->cipher, server->d_ctx, 0);
 
     int request_timeout = std::min(MAX_REQUEST_TIMEOUT, listener->timeout)
         + rand() % MAX_REQUEST_TIMEOUT;
@@ -1459,14 +1453,12 @@ static void FreeServer(server_t *server) {
         if (tmp_crypto != NULL) {
             tmp_crypto->ctx_release(server->e_ctx);
         }
-        crypto->ctx_release(server->e_ctx);
         ss_free(server->e_ctx);
     }
     if (server->d_ctx != NULL) {
         if (tmp_crypto != NULL) {
             tmp_crypto->ctx_release(server->d_ctx);
         }
-        crypto->ctx_release(server->d_ctx);
         ss_free(server->d_ctx);
     }
     if (server->buf != NULL) {
@@ -1584,18 +1576,6 @@ static void InitSignal() {
     ev_signal_start(EV_DEFAULT, &sigchld_watcher);
 }
 
-static int InitCrypto(
-        const std::string& password,
-        const std::string& key,
-        const std::string& method) {
-    crypto = crypto_init("8246c339fa67fb295de905c0956befbffc2bf24e0c9b8aee7fbfdc66506512eb", NULL, "aes-128-cfb");
-    if (crypto == NULL) {
-        LOGI("failed to initialize ciphers");
-        return -1;
-    }
-    return 0;
-}
-
 struct ev_loop *loop = EV_DEFAULT;
 static int StartTcpServer(
         const std::string& host,
@@ -1628,10 +1608,10 @@ static int StartTcpServer(
 }
 
 static int StartUdpServer(const std::string& host, uint16_t port) {
-    int err = init_udprelay(host.c_str(), std::to_string(port).c_str(), 1500, crypto, 60, NULL);
-    if (err == -1) {
-        return -1;
-    }
+//     int err = init_udprelay(host.c_str(), std::to_string(port).c_str(), 1500, crypto, 60, NULL);
+//     if (err == -1) {
+//         return -1;
+//     }
     return 0;
 }
 
@@ -1688,15 +1668,8 @@ int VpnServer::Init(
         const std::string& key,
         const std::string& method) {
     InitSignal();
-    if (InitCrypto(passwd, key, method) != 0) {
-        return kVpnsvrError;
-    }
 
     if (StartTcpServer(ip, port, &listen_ctx_) != 0) {
-        return kVpnsvrError;
-    }
-
-    if (StartUdpServer(ip, port) != 0) {
         return kVpnsvrError;
     }
 
