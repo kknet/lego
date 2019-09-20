@@ -196,7 +196,7 @@ int SetFastopen(int fd) {
                 VPNSVR_ERROR("fast open is not supported on this platform");
                 fast_open = 0;
             } else {
-                ERROR("setsockopt");
+                VPNSVR_ERROR("setsockopt");
             }
         }
     }
@@ -287,7 +287,7 @@ int CreateAndBind(const char *host, const char *port, int mptcp) {
                 i++;
             }
             if (mptcp == 0) {
-                ERROR("failed to enable multipath TCP");
+                VPNSVR_ERROR("failed to enable multipath TCP");
             }
         }
 
@@ -296,7 +296,7 @@ int CreateAndBind(const char *host, const char *port, int mptcp) {
             /* We managed to bind successfully! */
             break;
         } else {
-            ERROR("bind");
+            VPNSVR_ERROR("bind");
             FATAL("failed to bind address");
         }
 
@@ -316,7 +316,7 @@ static remote_t * ConnectToRemote(EV_P_ struct addrinfo *res, server_t *server) 
     // initialize remote socks
     sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
     if (sockfd == -1) {
-        ERROR("socket");
+        VPNSVR_ERROR("socket");
         close(sockfd);
         return NULL;
     }
@@ -331,12 +331,12 @@ static remote_t * ConnectToRemote(EV_P_ struct addrinfo *res, server_t *server) 
     // setup remote socks
 
     if (SetNonblocking(sockfd) == -1)
-        ERROR("SetNonblocking");
+        VPNSVR_ERROR("SetNonblocking");
 
 #ifdef SET_INTERFACE
     if (iface) {
         if (setinterface(sockfd, iface) == -1) {
-            ERROR("setinterface");
+            VPNSVR_ERROR("setinterface");
             close(sockfd);
             std::cout << "setinterface return null" << std::endl;
             return NULL;
@@ -359,7 +359,7 @@ static remote_t * ConnectToRemote(EV_P_ struct addrinfo *res, server_t *server) 
             // Set fast open option
             if (setsockopt(sockfd, IPPROTO_TCP, TCP_FASTOPEN,
                 &optval, sizeof(optval)) != 0) {
-                ERROR("setsockopt");
+                VPNSVR_ERROR("setsockopt");
                 break;
             }
             // Load ConnectEx function
@@ -371,7 +371,7 @@ static remote_t * ConnectToRemote(EV_P_ struct addrinfo *res, server_t *server) 
             }
             // ConnectEx requires a bound socket
             if (winsock_dummybind(sockfd, res->ai_addr) != 0) {
-                ERROR("bind");
+                VPNSVR_ERROR("bind");
                 break;
             }
             // Call ConnectEx to send data
@@ -388,7 +388,7 @@ static remote_t * ConnectToRemote(EV_P_ struct addrinfo *res, server_t *server) 
                 err = CONNECT_IN_PROGRESS;
                 break;
             }
-            ERROR("ConnectEx");
+            VPNSVR_ERROR("ConnectEx");
         } while (0);
         // Set error number
         if (err) {
@@ -430,7 +430,7 @@ static remote_t * ConnectToRemote(EV_P_ struct addrinfo *res, server_t *server) 
                 fast_open = 0;
                 VPNSVR_ERROR("fast open is not supported on this platform");
             } else {
-                ERROR("fast_open_connect");
+                VPNSVR_ERROR("fast_open_connect");
             }
         } else {
             server->buf->idx += s;
@@ -442,7 +442,7 @@ static remote_t * ConnectToRemote(EV_P_ struct addrinfo *res, server_t *server) 
         int r = connect(sockfd, res->ai_addr, res->ai_addrlen);
 
         if (r == -1 && errno != CONNECT_IN_PROGRESS) {
-            ERROR("connect");
+            VPNSVR_ERROR("connect");
             CloseAndFreeRemote(EV_A_ remote);
             return NULL;
         }
@@ -462,7 +462,7 @@ int SetMarkDscpCallback(enum nf_conntrack_msg_type type, struct nf_conntrack *ct
         tracker->dscp = tracker->mark & 0x00ff;
         int tos = (tracker->dscp) << 2;
         if (setsockopt(server->fd, IPPROTO_IP, IP_TOS, &tos, sizeof(tos)) != 0) {
-            ERROR("iptable setsockopt IP_TOS");
+            VPNSVR_ERROR("iptable setsockopt IP_TOS");
         }
     }
     return NFCT_CB_CONTINUE;
@@ -583,7 +583,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             return;
         }
         else {
-            ERROR("server recv");
+            VPNSVR_ERROR("server recv");
             CloseAndFreeRemote(EV_A_ remote);
             CloseAndFreeServer(EV_A_ server);
             return;
@@ -680,7 +680,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
                 ev_io_start(EV_A_ & remote->send_ctx->io);
             }
             else {
-                ERROR("server_recv_send");
+                VPNSVR_ERROR("server_recv_send");
                 CloseAndFreeRemote(EV_A_ remote);
                 CloseAndFreeServer(EV_A_ server);
             }
@@ -897,7 +897,7 @@ static void ServerSendCallback(EV_P_ ev_io *w, int revents) {
             server->buf->len, 0);
         if (s == -1) {
             if (errno != EAGAIN && errno != EWOULDBLOCK) {
-                ERROR("server_send_send");
+                VPNSVR_ERROR("server_send_send");
                 CloseAndFreeRemote(EV_A_ remote);
                 CloseAndFreeServer(EV_A_ server);
             }
@@ -955,7 +955,7 @@ static void ResolvCallback(struct sockaddr *addr, void *data) {
     struct ev_loop *loop = server->listen_ctx->loop;
 
     if (addr == NULL) {
-        VPNSVR_ERROR("unable to resolve %s", query->hostname);
+        VPNSVR_ERROR("unable to resolve %s", (char*)query->hostname);
         CloseAndFreeServer(EV_A_ server);
     } else {
         struct addrinfo info;
@@ -1022,7 +1022,7 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
             return;
         }
         else {
-            ERROR("remote recv");
+            VPNSVR_ERROR("remote recv");
             CloseAndFreeRemote(EV_A_ remote);
             CloseAndFreeServer(EV_A_ server);
             return;
@@ -1102,7 +1102,7 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
             ev_io_stop(EV_A_ & remote_recv_ctx->io);
             ev_io_start(EV_A_ & server->send_ctx->io);
         } else {
-            ERROR("remote_recv_send");
+            VPNSVR_ERROR("remote_recv_send");
             CloseAndFreeRemote(EV_A_ remote);
             CloseAndFreeServer(EV_A_ server);
             return;
@@ -1151,7 +1151,7 @@ static void RemoteSendCallback(EV_P_ ev_io *w, int revents) {
                     // XXX: ConnectEx still not connected, wait for next time
                     return;
                 } else {
-                    ERROR("WSAGetOverlappedResult");
+                    VPNSVR_ERROR("WSAGetOverlappedResult");
                     // not connected
                     CloseAndFreeRemote(EV_A_ remote);
                     CloseAndFreeServer(EV_A_ server);
@@ -1162,7 +1162,7 @@ static void RemoteSendCallback(EV_P_ ev_io *w, int revents) {
             // Make getpeername work
             if (setsockopt(remote->fd, SOL_SOCKET,
                 SO_UPDATE_CONNECT_CONTEXT, NULL, 0) != 0) {
-                ERROR("setsockopt");
+                VPNSVR_ERROR("setsockopt");
             }
         }
 #endif
@@ -1186,7 +1186,7 @@ static void RemoteSendCallback(EV_P_ ev_io *w, int revents) {
                 return;
             }
         } else {
-            ERROR("getpeername");
+            VPNSVR_ERROR("getpeername");
             // not connected
             CloseAndFreeRemote(EV_A_ remote);
             CloseAndFreeServer(EV_A_ server);
@@ -1205,7 +1205,7 @@ static void RemoteSendCallback(EV_P_ ev_io *w, int revents) {
             remote->buf->len, 0);
         if (s == -1) {
             if (errno != EAGAIN && errno != EWOULDBLOCK) {
-                ERROR("remote_send_send");
+                VPNSVR_ERROR("remote_send_send");
                 // close and free
                 CloseAndFreeRemote(EV_A_ remote);
                 CloseAndFreeServer(EV_A_ server);
@@ -1421,7 +1421,7 @@ static void AcceptCallback(EV_P_ ev_io *w, int revents) {
     listen_ctx_t *listener = (listen_ctx_t *)w;
     int serverfd = accept(listener->fd, NULL, NULL);
     if (serverfd == -1) {
-        ERROR("accept");
+        VPNSVR_ERROR("accept");
         return;
     }
 
