@@ -1049,6 +1049,8 @@ void VpnClient::ReadVpnNodesFromConf() {
                     common::Encode::HexEncode(seckey),
                     item_split[0],
                     item_split[2],
+                    common::Encode::HexEncode(network::GetAccountAddressByPublicKey(
+                            common::Encode::HexDecode(item_split[2]))),
                     false);
             std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
             auto iter = vpn_nodes_map_.find(country_split[i]);
