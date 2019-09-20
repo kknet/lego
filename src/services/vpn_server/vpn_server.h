@@ -3,6 +3,7 @@
 #include <thread>
 #include <memory>
 #include <unordered_map>
+#include <queue>
 
 #include "common/tick.h"
 #include "common/thread_safe_queue.h"
@@ -55,6 +56,7 @@ private:
     std::unordered_map<std::string, StakingItemPtr> gid_map_;
     std::unordered_map<std::string, BandwidthInfoPtr> account_map_;
     std::mutex account_map_mutex_;
+    std::deque<listen_ctx_t> listen_ctx_queue;
 
     DISALLOW_COPY_AND_ASSIGN(VpnServer);
 };

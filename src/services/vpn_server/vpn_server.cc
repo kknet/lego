@@ -1523,11 +1523,11 @@ static void InitSignal() {
 //     return 0;
 // }
 
+struct ev_loop *loop = ev_loop_new(EVBACKEND_EPOLL);
 static int StartTcpServer(
         const std::string& host,
         uint16_t port,
         listen_ctx_t* listen_ctx) {
-    struct ev_loop *loop = ev_loop_new(EVBACKEND_EPOLL);
     resolv_init(loop, NULL, ipv6first);
     const char* remote_port = (char*)std::to_string(port).c_str();
 
@@ -1562,18 +1562,16 @@ static int StartTcpServer(
 //     return 0;
 // }
 
-static listen_ctx_t listen_ctx_;
-static void StartVpn() {
-    cork_dllist_init(&listen_ctx_.svr_item->connections);
-    ev_run(listen_ctx_.loop, 0);
+static void StartVpn(listen_ctx_t& listen_ctx) {
+    cork_dllist_init(&listen_ctx.svr_item->connections);
+    ev_run(loop, 0);
 }
 
-
-static void StopVpn() {
-        resolv_shutdown(listen_ctx_.loop);
-        ev_io_stop(listen_ctx_.loop, &listen_ctx_.io);
-        close(listen_ctx_.fd);
-        FreeConnections(listen_ctx_.loop, &listen_ctx_.svr_item->connections);
+static void StopVpn(listen_ctx_t& listen_ctx) {
+        resolv_shutdown(loop);
+        ev_io_stop(loop, &listen_ctx.io);
+        close(listen_ctx.fd);
+        FreeConnections(loop, &listen_ctx.svr_item->connections);
         free_udprelay();
 #ifdef __MINGW32__
         if (plugin_watcher.valid) {
@@ -1604,6 +1602,8 @@ VpnServer* VpnServer::Instance() {
     static VpnServer ins;
     return &ins;
 }
+
+static listen_ctx_t listen_ctx_;
 
 int VpnServer::Init(
         const std::string& ip,
