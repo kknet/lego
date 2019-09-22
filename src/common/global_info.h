@@ -102,14 +102,6 @@ public:
 		return consensus_shard_count_;
 	}
 
-    bool global_stop() {
-        return global_stop_;
-    }
-
-    void set_global_stop() {
-        global_stop_ = true;
-    }
-
 private:
     GlobalInfo();
     ~GlobalInfo();
@@ -131,7 +123,6 @@ private:
 	uint32_t network_id_{ 0 };
 	std::mutex network_id_set_mutex_;
 	uint32_t consensus_shard_count_{ 0 };
-    volatile bool global_stop_{ false };
 
     DISALLOW_COPY_AND_ASSIGN(GlobalInfo);
 };

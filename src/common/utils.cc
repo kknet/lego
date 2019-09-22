@@ -27,6 +27,8 @@ namespace lego {
 
 namespace common {
     
+volatile bool global_stop = false;
+
 uint64_t TimeStampMsec() {
 #ifdef _WIN32
     struct timeval tv;
@@ -133,7 +135,7 @@ uint32_t iclock() {
 }
 
 static void SignalCallback(int sig_int) {
-    common::GlobalInfo::Instance()->set_global_stop();
+    global_stop = true;
 }
 
 void SignalRegister() {
