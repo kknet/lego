@@ -1426,6 +1426,7 @@ static void CloseAndFreeServer(EV_P_ server_t *server) {
 }
 
 static void SignalCallback(EV_P_ ev_signal *w, int revents) {
+    std::cout << "signal catched and now exit." << std::endl;
     if (revents & EV_SIGNAL) {
         switch (w->signum) {
 #ifndef __MINGW32__
@@ -1625,7 +1626,7 @@ int VpnServer::Init(
         const std::string& passwd,
         const std::string& key,
         const std::string& method) {
-    InitSignal();
+    //InitSignal();
     default_ctx_ = std::make_shared<listen_ctx_t>();
     if (StartTcpServer(ip, kDefaultVpnPort, default_ctx_.get()) != 0) {
         return kVpnsvrError;
