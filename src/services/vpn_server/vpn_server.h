@@ -46,6 +46,10 @@ public:
         return last_listen_ptr_;
     }
 
+    std::shared_ptr<listen_ctx_t> default_ctx() {
+        return default_ctx_;
+    }
+
 private:
     VpnServer();
     ~VpnServer();
