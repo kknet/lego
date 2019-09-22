@@ -1632,7 +1632,7 @@ int VpnServer::Init(
     if (StartTcpServer(ip, common::kDefaultVpnPort, default_ctx_.get()) != 0) {
         return kVpnsvrError;
     }
-    default_ctx_->vpn_port = kDefaultVpnPort;
+    default_ctx_->vpn_port = common::kDefaultVpnPort;
     cork_dllist_init(&default_ctx_->svr_item->connections);
     default_ctx_->thread_ptr = std::make_shared<std::thread>(&StartVpn, default_ctx_.get());
     InitSignal(default_ctx_);
@@ -1817,7 +1817,7 @@ void VpnServer::CheckAccountValid() {
 }
 
 void VpnServer::RotationServer() {
-    if (listen_ctx_queue.size() >= kMaxRotationCount) {
+    if (listen_ctx_queue.size() >= common::kMaxRotationCount) {
         auto listen_item = listen_ctx_queue.front();
         listen_ctx_queue.pop_front();
         StopVpn(listen_item.get());
@@ -1844,7 +1844,7 @@ void VpnServer::RotationServer() {
     }
 
     new_vpn_server_tick_.CutOff(
-            kRotationPeriod,
+            common::kRotationPeriod,
             std::bind(&VpnServer::RotationServer, VpnServer::Instance()));
 }
 

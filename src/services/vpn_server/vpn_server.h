@@ -61,8 +61,6 @@ private:
 
     static const uint32_t kStakingCheckingPeriod = 10 * 1000 * 1000;
     static const uint32_t kAccountCheckPeriod = 10 * 1000 * 1000;
-    static const int64_t kRotationPeriod = 24ll * 3600ll * 1000ll * 1000ll;
-    static const uint32_t kMaxRotationCount = 4u;
 
     common::ThreadSafeQueue<StakingItemPtr> staking_queue_;
     common::ThreadSafeQueue<BandwidthInfoPtr> bandwidth_queue_;
