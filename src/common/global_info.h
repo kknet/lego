@@ -106,7 +106,7 @@ public:
         return global_stop_;
     }
 
-    void global_stop() {
+    void set_global_stop() {
         global_stop_ = true;
     }
 
