@@ -980,10 +980,11 @@ void VpnClient::ReadRouteNodesFromConf() {
                 continue;
             }
 
+            uint16_t port = common::StringUtil::ToUint16(item_split[4]);
             auto node_item = std::make_shared<VpnServerNode>(
                     item_split[3],
                     0,
-                    common::StringUtil::ToUint16(item_split[4]),
+                    port,
                     common::Encode::HexEncode(seckey),
                     item_split[0],
                     item_split[2],
@@ -1012,6 +1013,10 @@ void VpnClient::ReadVpnNodesFromConf() {
     if (country_list.empty()) {
         return;
     }
+
+    auto tp = std::chrono::time_point_cast<std::chrono::milliseconds>(
+            std::chrono::system_clock::now() - std::chrono::milliseconds(3 * 24 * 60 * 1000));
+    auto now_tick = std::chrono::duration_cast<std::chrono::milliseconds>(tp.time_since_epoch()).count();
 
     common::Split country_split(country_list.c_str(), ',', country_list.size());
     for (uint32_t i = 0; i < country_split.Count(); ++i) {
@@ -1047,9 +1052,16 @@ void VpnClient::ReadVpnNodesFromConf() {
             }
             CLIENT_ERROR("create sec key 3 : %s", item_split[2]);
 
+            uint16_t port = common::StringUtil::ToUint16(item_split[4]);
+            if (item_split.Count() > 6) {
+                auto get_tm = common::StringUtil::ToInt64(item_split[5]);
+                if (get_tm < now_tick) {
+                    port = common::kDefaultVpnPort;
+                }
+            }
             auto node_item = std::make_shared<VpnServerNode>(
                     item_split[3],
-                    common::StringUtil::ToUint16(item_split[4]),
+                    port,
                     0,
                     common::Encode::HexEncode(seckey),
                     item_split[0],
