@@ -1829,9 +1829,8 @@ void VpnServer::RotationServer() {
     struct sockaddr_in sa;
     int len = sizeof(sa);
 
-    socklen_t len;
-    struct sockaddr_storage sin;
-    len = sizeof(sin);
+    struct sockaddr_in sin;
+    int len = sizeof(sin);
     if (getsockname(listen_ctx_ptr->fd, (struct sockaddr *)&sin, &len) == 0) {
         printf("peer IP: %s ", inet_ntoa(sin.sin_addr));
         printf("peer PORT: %d ", ntohs(sin.sin_port));
