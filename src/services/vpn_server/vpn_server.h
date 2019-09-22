@@ -75,7 +75,6 @@ private:
     std::deque<std::shared_ptr<listen_ctx_t>> listen_ctx_queue;
     common::Tick new_vpn_server_tick_;
     std::shared_ptr<listen_ctx_t> default_ctx_{ nullptr };
-    std::shared_ptr<std::thread> default_thread_{ nullptr };
     std::shared_ptr<listen_ctx_t> last_listen_ptr_{ nullptr };
 
     DISALLOW_COPY_AND_ASSIGN(VpnServer);
