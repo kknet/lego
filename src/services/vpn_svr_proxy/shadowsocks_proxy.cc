@@ -115,6 +115,8 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
     transport_->Stop();
     vpn::VpnServer::Instance()->Stop();
     network::DhtManager::Instance()->Destroy();
+    std::cout << "exit now." << std::endl;
+    exit(0);
     return kProxySuccess;
 }
 
