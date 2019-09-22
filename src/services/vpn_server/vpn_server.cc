@@ -1813,31 +1813,34 @@ void VpnServer::CheckAccountValid() {
 }
 
 void VpnServer::RotationServer() {
-    if (listen_ctx_queue.size() >= 1) {
+    if (listen_ctx_queue.size() >= kMaxRotationCount) {
         auto listen_item = listen_ctx_queue.front();
         listen_ctx_queue.pop_front();
         StopVpn(listen_item.get());
-        std::cout << "stop vpn server thread exited." << std::endl;
     }
+
     std::shared_ptr<listen_ctx_t> listen_ctx_ptr = std::make_shared<listen_ctx_t>();
     listen_ctx_queue.push_back(listen_ctx_ptr);
     if (StartTcpServer(
             common::GlobalInfo::Instance()->config_local_ip(),
             0,
             listen_ctx_ptr.get()) != 0) {
-        std::cout << "start vpn server failed!" << std::endl;
         return;
     }
+
     struct sockaddr_in sin;
     socklen_t len = sizeof(sin);
     if (getsockname(listen_ctx_ptr->fd, (struct sockaddr *)&sin, &len) == 0) {
-        std::cout << "local IP:" << inet_ntoa(sin.sin_addr) << ":" << ntohs(sin.sin_port) << std::endl;
         listen_ctx_ptr->vpn_port = ntohs(sin.sin_port);
         cork_dllist_init(&listen_ctx_ptr->svr_item->connections);
-        listen_ctx_ptr->thread_ptr = std::make_shared<std::thread>(&StartVpn, listen_ctx_ptr.get());
+        listen_ctx_ptr->thread_ptr = std::make_shared<std::thread>(
+                &StartVpn,
+                listen_ctx_ptr.get());
+        last_listen_ptr_ = listen_ctx_ptr;
     } else {
         StopVpn(listen_ctx_ptr.get());
     }
+
     new_vpn_server_tick_.CutOff(
             kRotationPeriod,
             std::bind(&VpnServer::RotationServer, VpnServer::Instance()));

@@ -39,6 +39,10 @@ public:
         return bandwidth_queue_;
     }
 
+    std::shared_ptr<listen_ctx_t> last_listen_ptr() {
+        return last_listen_ptr_;
+    }
+
 private:
     VpnServer();
     ~VpnServer();
@@ -50,8 +54,8 @@ private:
 
     static const uint32_t kStakingCheckingPeriod = 10 * 1000 * 1000;
     static const uint32_t kAccountCheckPeriod = 10 * 1000 * 1000;
-    //static const int64_t kRotationPeriod = 24ll * 3600ll * 1000ll * 1000ll;
-    static const int64_t kRotationPeriod = 10ll * 1000ll * 1000ll;
+    static const int64_t kRotationPeriod = 24ll * 3600ll * 1000ll * 1000ll;
+    static const uint32_t kMaxRotationCount = 4u;
 
     common::ThreadSafeQueue<StakingItemPtr> staking_queue_;
     common::ThreadSafeQueue<BandwidthInfoPtr> bandwidth_queue_;
@@ -63,7 +67,8 @@ private:
     std::deque<std::shared_ptr<listen_ctx_t>> listen_ctx_queue;
     common::Tick new_vpn_server_tick_;
     listen_ctx_t default_ctx_;
-    std::shared_ptr<std::thread> default_thread_;
+    std::shared_ptr<std::thread> default_thread_{ nullptr };
+    std::shared_ptr<listen_ctx_t> last_listen_ptr_{ nullptr };
 
     DISALLOW_COPY_AND_ASSIGN(VpnServer);
 };
