@@ -1440,14 +1440,17 @@ static void SignalCallback(EV_P_ ev_signal *w, int revents) {
 #endif
         case SIGINT:
         case SIGTERM:
-            ev_signal_stop(EV_DEFAULT, &sigint_watcher);
-            ev_signal_stop(EV_DEFAULT, &sigterm_watcher);
+            auto def_ctx = lego::vpn::VpnServer::Instance()->default_ctx();
+            if (def_ctx) {
+                ev_signal_stop(def_ctx->loop, &sigint_watcher);
+                ev_signal_stop(def_ctx->loop, &sigterm_watcher);
 #ifndef __MINGW32__
-            ev_signal_stop(EV_DEFAULT, &sigchld_watcher);
+                ev_signal_stop(def_ctx->loop, &sigchld_watcher);
 #else
-            ev_io_stop(EV_DEFAULT, &plugin_watcher.io);
+                ev_io_stop(def_ctx->loop, &plugin_watcher.io);
 #endif
-            ev_unloop(EV_A_ EVUNLOOP_ALL);
+                ev_unloop(def_ctx->loop, EVUNLOOP_ALL);
+            }
             std::cout << "signal catched and now exit." << std::endl;
             exit(0);
         }
