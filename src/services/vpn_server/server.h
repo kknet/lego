@@ -141,6 +141,7 @@ typedef struct listen_ctx {
     server_item_ptr_t svr_item;
     std::shared_ptr<std::thread> thread_ptr; 
     ev_async async_watcher;
+    uint16_t vpn_port;
 } listen_ctx_t;
 
 typedef struct server_ctx {

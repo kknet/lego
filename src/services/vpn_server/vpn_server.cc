@@ -1829,13 +1829,13 @@ void VpnServer::RotationServer() {
     struct sockaddr_in sin;
     socklen_t len = sizeof(sin);
     if (getsockname(listen_ctx_ptr->fd, (struct sockaddr *)&sin, &len) == 0) {
-        printf("peer IP: %s ", inet_ntoa(sin.sin_addr));
-        printf("peer PORT: %d ", ntohs(sin.sin_port));
+        std::cout << "local IP:" << inet_ntoa(sin.sin_addr) << ":" << ntohs(sin.sin_port) << std::endl;
+        listen_ctx_ptr->vpn_port = ntohs(sin.sin_port);
+        cork_dllist_init(&listen_ctx_ptr->svr_item->connections);
+        listen_ctx_ptr->thread_ptr = std::make_shared<std::thread>(&StartVpn, listen_ctx_ptr.get());
     } else {
-        std::cout << "get fd info failed!" << std::endl;
+        StopVpn(listen_ctx_ptr.get());
     }
-    cork_dllist_init(&listen_ctx_ptr->svr_item->connections);
-    listen_ctx_ptr->thread_ptr = std::make_shared<std::thread>(&StartVpn, listen_ctx_ptr.get());
     new_vpn_server_tick_.CutOff(
             kRotationPeriod,
             std::bind(&VpnServer::RotationServer, VpnServer::Instance()));
