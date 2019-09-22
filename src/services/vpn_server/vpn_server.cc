@@ -1805,7 +1805,8 @@ void VpnServer::RotationServer() {
     if (listen_ctx_queue.size() >= 4) {
         auto listen_item = listen_ctx_queue.front();
         listen_ctx_queue.pop_front();
-
+        StopVpn(listen_item.get());
+        listen_ctx_ptr->thread_ptr->join();
     }
     std::shared_ptr<listen_ctx_t> listen_ctx_ptr = std::make_shared<listen_ctx_t>();
     listen_ctx_queue.push_back(listen_ctx_ptr);
