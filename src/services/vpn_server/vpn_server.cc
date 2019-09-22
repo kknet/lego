@@ -1563,15 +1563,27 @@ static int StartTcpServer(
 //     return 0;
 // }
 
+
 static void StartVpn(listen_ctx_t* listen_ctx) {
     ev_run(listen_ctx->loop, 0);
+    std::cout << "stop loop now." << std::endl;
+}
+
+static void AsyncCallback(struct ev_loop *loop, ev_async*, int) {
+    ev_break(loop, EVBREAK_ALL);
 }
 
 static void StopVpn(listen_ctx_t* listen_ctx) {
-        resolv_shutdown(listen_ctx->loop);
-        ev_io_stop(listen_ctx->loop, &listen_ctx->io);
-        close(listen_ctx->fd);
-        FreeConnections(listen_ctx->loop, &listen_ctx->svr_item->connections);
+    ev_async_init(&listen_ctx->async_watcher, AsyncCallback);
+    ev_async_start(listen_ctx->loop, &listen_ctx->async_watcher);
+    ev_async_send(listen_ctx->loop, &listen_ctx->async_watcher);
+    std::cout << "stoped loop now. waiting...." << std::endl;
+
+    ev_io_stop(listen_ctx->loop, &listen_ctx->io);
+    listen_ctx->thread_ptr->join();
+    resolv_shutdown(listen_ctx->loop);
+    close(listen_ctx->fd);
+    FreeConnections(listen_ctx->loop, &listen_ctx->svr_item->connections);
 //         free_udprelay();
 #ifdef __MINGW32__
         if (plugin_watcher.valid) {
@@ -1802,7 +1814,7 @@ void VpnServer::CheckAccountValid() {
 }
 
 void VpnServer::RotationServer() {
-    if (listen_ctx_queue.size() >= 4) {
+    if (listen_ctx_queue.size() >= 1) {
         auto listen_item = listen_ctx_queue.front();
         listen_ctx_queue.pop_front();
         StopVpn(listen_item.get());
