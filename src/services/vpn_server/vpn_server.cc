@@ -1826,9 +1826,6 @@ void VpnServer::RotationServer() {
         std::cout << "start vpn server failed!" << std::endl;
         return;
     }
-    struct sockaddr_in sa;
-    int len = sizeof(sa);
-
     struct sockaddr_in sin;
     int len = sizeof(sin);
     if (getsockname(listen_ctx_ptr->fd, (struct sockaddr *)&sin, &len) == 0) {
