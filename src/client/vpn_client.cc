@@ -178,7 +178,7 @@ void VpnClient::HandleGetVpnResponse(
                     iter->second.begin(),
                     iter->second.end(),
                     [node_ptr](const VpnServerNodePtr& ptr) {
-                        return node_ptr->dht_key == ptr->dht_key;
+                        return node_ptr->ip == ptr->ip && node_ptr->svr_port == ptr->svr_port;
                     });
             if (e_iter == iter->second.end()) {
                 iter->second.push_back(node_ptr);
