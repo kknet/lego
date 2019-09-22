@@ -84,7 +84,7 @@ static const uint32_t kInvalidPoolIndex = kImmutablePoolSize + 1;
 static const uint32_t kTestForNetworkId = 4u;
 static const std::string kVpnLoginAttrKey = "vpn_login";
 extern volatile bool global_stop;
-static const uint16_t kDefaultVpnPort = 9107;
+static const uint16_t kDefaultVpnPort = 9034;
 static const int64_t kRotationPeriod = 24ll * 3600ll * 1000ll * 1000ll;
 static const uint32_t kMaxRotationCount = 4u;
 
