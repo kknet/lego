@@ -83,6 +83,7 @@ extern "C" {
 #endif
 
 #include "common/encode.h"
+#include "common/global_info.h"
 #include "client/trans_client.h"
 #include "security/crypto_utils.h"
 #include "security/aes.h"
@@ -1592,7 +1593,7 @@ VpnServer::VpnServer() {
 }
 
 VpnServer::~VpnServer() {
-    StopVpn(default_ctx_.get());
+    StopVpn(&default_ctx_);
     while (!listen_ctx_queue.empty()) {
         auto listen_ctx_ptr = listen_ctx_queue.front();
         listen_ctx_queue.pop_front();
@@ -1616,7 +1617,7 @@ int VpnServer::Init(
     if (StartTcpServer(ip, port, &default_ctx_) != 0) {
         return kVpnsvrError;
     }
-    cork_dllist_init(&default_ctx_.connections);
+    cork_dllist_init(&default_ctx_.svr_item->connections);
     default_thread_ = std::make_shared<std::thread>(&StartVpn, &default_ctx_);
     default_thread_->detach();
     staking_tick_.CutOff(
@@ -1808,9 +1809,19 @@ void VpnServer::RotationServer() {
     }
     std::shared_ptr<listen_ctx_t> listen_ctx_ptr = std::make_shared<listen_ctx_t>();
     listen_ctx_queue.push_back(listen_ctx_ptr);
-    if (StartTcpServer(ip, port, listen_ctx_ptr.get()) != 0) {
+    if (StartTcpServer(
+            common::GlobalInfo::Instance()->config_local_ip(),
+            0,
+            listen_ctx_ptr.get()) != 0) {
         return kVpnsvrError;
     }
+    struct sockaddr_in sa;
+    int len = sizeof(sa);
+    if (!getpeername(listen_ctx_ptr->fd, (struct sockaddr *)&sa, &len)) {
+        printf("peer IP: %s ", inet_ntoa(sa.sin_addr));
+        printf("peer PORT: %d ", ntohs(sa.sin_port));
+    }
+
     cork_dllist_init(&listen_ctx_ptr->svr_item->connections);
     listen_ctx_ptr->thread_ptr = std::make_shared<std::thread>(&StartVpn, listen_ctx_ptr.get());
     new_vpn_server_tick_.CutOff(
