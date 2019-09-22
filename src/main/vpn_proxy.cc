@@ -5,7 +5,7 @@
 
 int main(int argc, char** argv) {
     log4cpp::PropertyConfigurator::configure("./conf/log4cpp.properties");
-//     lego::common::SignalRegister();
+    lego::common::SignalRegister();
     lego::vpn::ShadowsocksProxy::Instance()->Init(argc, argv);
     return 0;
 }

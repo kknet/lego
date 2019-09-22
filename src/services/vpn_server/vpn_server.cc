@@ -1504,15 +1504,15 @@ static void AcceptCallback(EV_P_ ev_io *w, int revents) {
     ev_timer_start(EV_A_ & server->recv_ctx->watcher);
 }
 
-static void InitSignal() {
+static void InitSignal(std::shared_ptr<listen_ctx_t> default_ctx) {
     signal(SIGPIPE, SIG_IGN);
     signal(SIGABRT, SIG_IGN);
     ev_signal_init(&sigint_watcher, SignalCallback, SIGINT);
     ev_signal_init(&sigterm_watcher, SignalCallback, SIGTERM);
-    ev_signal_start(EV_DEFAULT, &sigint_watcher);
-    ev_signal_start(EV_DEFAULT, &sigterm_watcher);
+    ev_signal_start(default_ctx->loop, &sigint_watcher);
+    ev_signal_start(default_ctx->loop, &sigterm_watcher);
     ev_signal_init(&sigchld_watcher, SignalCallback, SIGCHLD);
-    ev_signal_start(EV_DEFAULT, &sigchld_watcher);
+    ev_signal_start(default_ctx->loop, &sigchld_watcher);
 }
 
 // static int InitCrypto(
@@ -1626,7 +1626,6 @@ int VpnServer::Init(
         const std::string& passwd,
         const std::string& key,
         const std::string& method) {
-    InitSignal();
     default_ctx_ = std::make_shared<listen_ctx_t>();
     if (StartTcpServer(ip, kDefaultVpnPort, default_ctx_.get()) != 0) {
         return kVpnsvrError;
@@ -1635,6 +1634,8 @@ int VpnServer::Init(
     cork_dllist_init(&default_ctx_->svr_item->connections);
     default_thread_ = std::make_shared<std::thread>(&StartVpn, default_ctx_.get());
     default_thread_->detach();
+    InitSignal(default_ctx_);
+
     staking_tick_.CutOff(
             kStakingCheckingPeriod,
             std::bind(&VpnServer::CheckTransactions, VpnServer::Instance()));
