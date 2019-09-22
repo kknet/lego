@@ -1628,7 +1628,7 @@ int VpnServer::Init(
     if (StartTcpServer(ip, port, default_ctx_.get()) != 0) {
         return kVpnsvrError;
     }
-    cork_dllist_init(default_ctx_->svr_item->connections);
+    cork_dllist_init(&default_ctx_->svr_item->connections);
     default_thread_ = std::make_shared<std::thread>(&StartVpn, default_ctx_.get());
     default_thread_->detach();
     staking_tick_.CutOff(
