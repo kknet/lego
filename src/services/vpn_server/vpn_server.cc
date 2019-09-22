@@ -1447,6 +1447,8 @@ static void SignalCallback(EV_P_ ev_signal *w, int revents) {
             ev_io_stop(EV_DEFAULT, &plugin_watcher.io);
 #endif
             ev_unloop(EV_A_ EVUNLOOP_ALL);
+            std::cout << "signal catched and now exit." << std::endl;
+            exit(0);
         }
     }
 }
