@@ -139,6 +139,7 @@ typedef struct listen_ctx {
     char *iface;
     struct ev_loop *loop;
     server_item_ptr_t svr_item;
+    std::shared_ptr<std::thread> thread_ptr;
 } listen_ctx_t;
 
 typedef struct server_ctx {

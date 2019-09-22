@@ -615,8 +615,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             // no data
             // continue to wait for recv
             return;
-        }
-        else {
+        } else {
             ERROR("server recv");
             CloseAndFreeRemote(EV_A_ remote);
             CloseAndFreeServer(EV_A_ server);
@@ -661,6 +660,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
                 return;
             }
             lego::vpn::VpnServer::Instance()->bandwidth_queue().push(acc_item);
+            std::cout << "new client coming." << common::Encode::HexEncode(user_account) << std::endl;
         } else {
             if (!iter->second->login_valid) {
                 return;
@@ -1523,11 +1523,11 @@ static void InitSignal() {
 //     return 0;
 // }
 
-struct ev_loop *loop = ev_loop_new(EVBACKEND_EPOLL);
 static int StartTcpServer(
         const std::string& host,
         uint16_t port,
         listen_ctx_t* listen_ctx) {
+    struct ev_loop *loop = ev_loop_new(EVBACKEND_EPOLL);
     resolv_init(loop, NULL, ipv6first);
     const char* remote_port = (char*)std::to_string(port).c_str();
 
@@ -1562,15 +1562,15 @@ static int StartTcpServer(
 //     return 0;
 // }
 
-static void StartVpn() {
-    ev_run(loop, 0);
+static void StartVpn(listen_ctx_t* listen_ctx) {
+    ev_run(listen_ctx->loop, 0);
 }
 
-static void StopVpn(listen_ctx_t& listen_ctx) {
-        resolv_shutdown(loop);
-        ev_io_stop(loop, &listen_ctx.io);
-        close(listen_ctx.fd);
-        FreeConnections(loop, &listen_ctx.svr_item->connections);
+static void StopVpn(listen_ctx_t* listen_ctx) {
+        resolv_shutdown(listen_ctx->loop);
+        ev_io_stop(listen_ctx->loop, &listen_ctx->io);
+        close(listen_ctx->fd);
+        FreeConnections(listen_ctx->loop, &listen_ctx->svr_item->connections);
         free_udprelay();
 #ifdef __MINGW32__
         if (plugin_watcher.valid) {
@@ -1580,9 +1580,6 @@ static void StopVpn(listen_ctx_t& listen_ctx) {
         winsock_cleanup();
 #endif
 }
-
-std::shared_ptr<std::thread> vpn_svr_thread;
-static listen_ctx_t listen_ctx_;
 
 namespace lego {
 
@@ -1595,14 +1592,18 @@ VpnServer::VpnServer() {
 }
 
 VpnServer::~VpnServer() {
-    StopVpn(listen_ctx_);
+    StopVpn(default_ctx_.get());
+    while (!listen_ctx_queue.empty()) {
+        auto listen_ctx_ptr = listen_ctx_queue.front();
+        listen_ctx_queue.pop_front();
+        StopVpn(listen_ctx_ptr.get());
+    }
 }
 
 VpnServer* VpnServer::Instance() {
     static VpnServer ins;
     return &ins;
 }
-
 
 int VpnServer::Init(
         const std::string& ip,
@@ -1612,17 +1613,21 @@ int VpnServer::Init(
         const std::string& method) {
     InitSignal();
 
-    if (StartTcpServer(ip, port, &listen_ctx_) != 0) {
+    if (StartTcpServer(ip, port, &default_ctx_) != 0) {
         return kVpnsvrError;
     }
-    cork_dllist_init(&listen_ctx_.svr_item->connections);
-    vpn_svr_thread = std::make_shared<std::thread>(&StartVpn);
+    cork_dllist_init(&default_ctx_.connections);
+    default_thread_ = std::make_shared<std::thread>(&StartVpn, &default_ctx_);
+    default_thread_->detach();
     staking_tick_.CutOff(
             kStakingCheckingPeriod,
             std::bind(&VpnServer::CheckTransactions, VpnServer::Instance()));
     bandwidth_tick_.CutOff(
             kStakingCheckingPeriod,
             std::bind(&VpnServer::CheckAccountValid, VpnServer::Instance()));
+    new_vpn_server_tick_.CutOff(
+            kRotationPeriod,
+            std::bind(&VpnServer::RotationServer, VpnServer::Instance()));
     return kVpnsvrSuccess;
 }
 
@@ -1793,6 +1798,24 @@ void VpnServer::CheckAccountValid() {
     bandwidth_tick_.CutOff(
             kStakingCheckingPeriod,
             std::bind(&VpnServer::CheckAccountValid, VpnServer::Instance()));
+}
+
+void VpnServer::RotationServer() {
+    if (listen_ctx_queue.size() >= 4) {
+        auto listen_item = listen_ctx_queue.front();
+        listen_ctx_queue.pop_front();
+
+    }
+    std::shared_ptr<listen_ctx_t> listen_ctx_ptr = std::make_shared<listen_ctx_t>();
+    listen_ctx_queue.push_back(listen_ctx_ptr);
+    if (StartTcpServer(ip, port, listen_ctx_ptr.get()) != 0) {
+        return kVpnsvrError;
+    }
+    cork_dllist_init(&listen_ctx_ptr->svr_item->connections);
+    listen_ctx_ptr->thread_ptr = std::make_shared<std::thread>(&StartVpn, listen_ctx_ptr.get());
+    new_vpn_server_tick_.CutOff(
+            kRotationPeriod,
+            std::bind(&VpnServer::RotationServer, VpnServer::Instance()));
 }
 
 }  // namespace vpn

@@ -45,9 +45,11 @@ private:
     void CheckAccountValid();
     void SendGetAccountAttrLastBlock(const std::string& account, uint64_t height);
     void HandleMessage(transport::protobuf::Header& header);
+    void RotationServer();
 
     static const uint32_t kStakingCheckingPeriod = 10 * 1000 * 1000;
     static const uint32_t kAccountCheckPeriod = 10 * 1000 * 1000;
+    static const int64_t kRotationPeriod = 24ll * 3600ll * 1000ll * 1000ll;
 
     common::ThreadSafeQueue<StakingItemPtr> staking_queue_;
     common::ThreadSafeQueue<BandwidthInfoPtr> bandwidth_queue_;
@@ -56,7 +58,10 @@ private:
     std::unordered_map<std::string, StakingItemPtr> gid_map_;
     std::unordered_map<std::string, BandwidthInfoPtr> account_map_;
     std::mutex account_map_mutex_;
-    std::deque<listen_ctx_t> listen_ctx_queue;
+    std::deque<std::shared_ptr<listen_ctx_t>> listen_ctx_queue;
+    common::Tick new_vpn_server_tick_;
+    listen_ctx_t default_ctx_;
+    std::shared_ptr<std::thread> default_thread_;
 
     DISALLOW_COPY_AND_ASSIGN(VpnServer);
 };
