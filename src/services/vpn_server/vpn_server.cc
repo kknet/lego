@@ -1635,7 +1635,7 @@ int VpnServer::Init(
     default_ctx_->vpn_port = kDefaultVpnPort;
     cork_dllist_init(&default_ctx_->svr_item->connections);
     default_ctx_->thread_ptr = std::make_shared<std::thread>(&StartVpn, default_ctx_.get());
-    // InitSignal(default_ctx_);
+    InitSignal(default_ctx_);
 
     staking_tick_.CutOff(
             kStakingCheckingPeriod,
