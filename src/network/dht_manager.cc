@@ -27,6 +27,7 @@ void DhtManager::Init() {
 }
 
 void DhtManager::Destroy() {
+    std::cout << "DhtManager::Destroy: " << std::endl;
     {
         std::lock_guard<std::mutex> guard(dht_map_mutex_);
         dht_map_.clear();
