@@ -1818,8 +1818,6 @@ void VpnServer::RotationServer() {
         auto listen_item = listen_ctx_queue.front();
         listen_ctx_queue.pop_front();
         StopVpn(listen_item.get());
-        std::cout << "stop vpn server now" << std::endl;
-        listen_item->thread_ptr->join();
         std::cout << "stop vpn server thread exited." << std::endl;
     }
     std::shared_ptr<listen_ctx_t> listen_ctx_ptr = std::make_shared<listen_ctx_t>();
