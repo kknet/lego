@@ -1566,7 +1566,6 @@ static int StartTcpServer(
 
 static void StartVpn(listen_ctx_t* listen_ctx) {
     ev_run(listen_ctx->loop, 0);
-    std::cout << "stop loop now." << std::endl;
 }
 
 static void AsyncCallback(struct ev_loop *loop, ev_async*, int) {
@@ -1577,14 +1576,11 @@ static void StopVpn(listen_ctx_t* listen_ctx) {
     ev_async_init(&listen_ctx->async_watcher, AsyncCallback);
     ev_async_start(listen_ctx->loop, &listen_ctx->async_watcher);
     ev_async_send(listen_ctx->loop, &listen_ctx->async_watcher);
-    std::cout << "stoped loop now. waiting...." << std::endl;
-
     ev_io_stop(listen_ctx->loop, &listen_ctx->io);
     listen_ctx->thread_ptr->join();
     resolv_shutdown(listen_ctx->loop);
     close(listen_ctx->fd);
     FreeConnections(listen_ctx->loop, &listen_ctx->svr_item->connections);
-//         free_udprelay();
 #ifdef __MINGW32__
         if (plugin_watcher.valid) {
             closesocket(plugin_watcher.fd);
@@ -1611,6 +1607,7 @@ VpnServer::~VpnServer() {
         listen_ctx_queue.pop_front();
         StopVpn(listen_ctx_ptr.get());
     }
+    free_udprelay();
 }
 
 VpnServer* VpnServer::Instance() {
@@ -1832,13 +1829,12 @@ void VpnServer::RotationServer() {
     struct sockaddr_in sa;
     int len = sizeof(sa);
 
-    struct sockaddr_storage addr;
-    socklen_t addr_len = sizeof(struct sockaddr_storage);
-    memset(&addr, 0, len);
-    int err = getpeername(listen_ctx_ptr->fd, (struct sockaddr *)&addr, &addr_len);
-    if (err == 0) {
-        printf("peer IP: %s ", inet_ntoa(sa.sin_addr));
-        printf("peer PORT: %d ", ntohs(sa.sin_port));
+    socklen_t len;
+    struct sockaddr_storage sin;
+    len = sizeof(sin);
+    if (getsockname(listen_ctx_ptr->fd, (struct sockaddr *)&sin, &len) == 0) {
+        printf("peer IP: %s ", inet_ntoa(sin.sin_addr));
+        printf("peer PORT: %d ", ntohs(sin.sin_port));
     } else {
         std::cout << "get fd info failed!" << std::endl;
     }
