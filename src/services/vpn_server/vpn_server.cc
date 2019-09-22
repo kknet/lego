@@ -1626,7 +1626,7 @@ int VpnServer::Init(
         const std::string& passwd,
         const std::string& key,
         const std::string& method) {
-    //InitSignal();
+    InitSignal();
     default_ctx_ = std::make_shared<listen_ctx_t>();
     if (StartTcpServer(ip, kDefaultVpnPort, default_ctx_.get()) != 0) {
         return kVpnsvrError;
