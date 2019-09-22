@@ -29,6 +29,7 @@ public:
     void HandleVpnLoginResponse(
             transport::protobuf::Header& header,
             block::protobuf::BlockMessage& block_msg);
+    void Stop();
 
     common::ThreadSafeQueue<StakingItemPtr>& staking_queue() {
         return staking_queue_;

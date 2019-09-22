@@ -1600,7 +1600,14 @@ VpnServer::VpnServer() {
             std::bind(&VpnServer::HandleMessage, this, std::placeholders::_1));
 }
 
-VpnServer::~VpnServer() {
+VpnServer::~VpnServer() {}
+
+VpnServer* VpnServer::Instance() {
+    static VpnServer ins;
+    return &ins;
+}
+
+void VpnServer::Stop() {
     StopVpn(&default_ctx_);
     while (!listen_ctx_queue.empty()) {
         auto listen_ctx_ptr = listen_ctx_queue.front();
@@ -1608,11 +1615,6 @@ VpnServer::~VpnServer() {
         StopVpn(listen_ctx_ptr.get());
     }
     free_udprelay();
-}
-
-VpnServer* VpnServer::Instance() {
-    static VpnServer ins;
-    return &ins;
 }
 
 int VpnServer::Init(
