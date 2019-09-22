@@ -40,6 +40,9 @@ public:
     }
 
     std::shared_ptr<listen_ctx_t> last_listen_ptr() {
+        if (last_listen_ptr_ == nullptr) {
+            return default_ctx_;
+        }
         return last_listen_ptr_;
     }
 
@@ -66,7 +69,7 @@ private:
     std::mutex account_map_mutex_;
     std::deque<std::shared_ptr<listen_ctx_t>> listen_ctx_queue;
     common::Tick new_vpn_server_tick_;
-    listen_ctx_t default_ctx_;
+    std::shared_ptr<listen_ctx_t> default_ctx_{ nullptr };
     std::shared_ptr<std::thread> default_thread_{ nullptr };
     std::shared_ptr<listen_ctx_t> last_listen_ptr_{ nullptr };
 

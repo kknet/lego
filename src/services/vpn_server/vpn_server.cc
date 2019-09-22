@@ -1608,7 +1608,7 @@ VpnServer* VpnServer::Instance() {
 }
 
 void VpnServer::Stop() {
-    StopVpn(&default_ctx_);
+    StopVpn(default_ctx_.get());
     while (!listen_ctx_queue.empty()) {
         auto listen_ctx_ptr = listen_ctx_queue.front();
         listen_ctx_queue.pop_front();
@@ -1625,11 +1625,11 @@ int VpnServer::Init(
         const std::string& method) {
     InitSignal();
 
-    if (StartTcpServer(ip, port, &default_ctx_) != 0) {
+    if (StartTcpServer(ip, port, default_ctx_.get()) != 0) {
         return kVpnsvrError;
     }
-    cork_dllist_init(&default_ctx_.svr_item->connections);
-    default_thread_ = std::make_shared<std::thread>(&StartVpn, &default_ctx_);
+    cork_dllist_init(default_ctx_->svr_item->connections);
+    default_thread_ = std::make_shared<std::thread>(&StartVpn, default_ctx_.get());
     default_thread_->detach();
     staking_tick_.CutOff(
             kStakingCheckingPeriod,
