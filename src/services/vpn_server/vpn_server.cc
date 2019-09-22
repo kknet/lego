@@ -1452,7 +1452,6 @@ static void SignalCallback(EV_P_ ev_signal *w, int revents) {
                 ev_unloop(def_ctx->loop, EVUNLOOP_ALL);
             }
             std::cout << "signal catched and now exit." << std::endl;
-            exit(0);
         }
     }
 }
