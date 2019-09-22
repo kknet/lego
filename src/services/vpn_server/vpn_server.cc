@@ -1572,7 +1572,7 @@ static void StopVpn(listen_ctx_t* listen_ctx) {
         ev_io_stop(listen_ctx->loop, &listen_ctx->io);
         close(listen_ctx->fd);
         FreeConnections(listen_ctx->loop, &listen_ctx->svr_item->connections);
-        free_udprelay();
+//         free_udprelay();
 #ifdef __MINGW32__
         if (plugin_watcher.valid) {
             closesocket(plugin_watcher.fd);
@@ -1829,8 +1829,9 @@ void VpnServer::RotationServer() {
     if (err == 0) {
         printf("peer IP: %s ", inet_ntoa(sa.sin_addr));
         printf("peer PORT: %d ", ntohs(sa.sin_port));
+    } else {
+        std::cout << "get fd info failed!" << std::endl;
     }
-
     cork_dllist_init(&listen_ctx_ptr->svr_item->connections);
     listen_ctx_ptr->thread_ptr = std::make_shared<std::thread>(&StartVpn, listen_ctx_ptr.get());
     new_vpn_server_tick_.CutOff(
