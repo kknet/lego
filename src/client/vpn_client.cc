@@ -1041,27 +1041,17 @@ void VpnClient::ReadVpnNodesFromConf() {
                 continue;
             }
 
-            CLIENT_ERROR("create sec key 1 : %s", item_split[2]);
             std::string seckey;
             security::PublicKey pubkey(common::Encode::HexDecode(item_split[2]));
-            CLIENT_ERROR("create sec key 2 : %s", item_split[2]);
 
             int res = security::EcdhCreateKey::Instance()->CreateKey(pubkey, seckey);
             if (res != security::kSecuritySuccess) {
                 continue;
             }
-            CLIENT_ERROR("create sec key 3 : %s", item_split[2]);
 
-            uint16_t port = common::StringUtil::ToUint16(item_split[4]);
-            if (item_split.Count() > 6) {
-                auto get_tm = common::StringUtil::ToInt64(item_split[5]);
-                if (get_tm < now_tick) {
-                    port = common::kDefaultVpnPort;
-                }
-            }
             auto node_item = std::make_shared<VpnServerNode>(
                     item_split[3],
-                    port,
+                    common::kDefaultVpnPort,
                     0,
                     common::Encode::HexEncode(seckey),
                     item_split[0],
