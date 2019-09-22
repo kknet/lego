@@ -1,5 +1,7 @@
 #include "common/tick/thread_pool.h"
 
+#include "common/global_info.h"
+
 #include <set>
 #include <iostream>
 
@@ -29,6 +31,10 @@ void TickThreadPool::AddTick(uint32_t idx, int64_t cutoff_us, TickCallbackFuncti
 
 void TickThreadPool::Destroy() {
     std::lock_guard<std::mutex> guard(destroy_mutex_);
+    if (destroy_) {
+        return;
+    }
+
     destroy_ = true;
     for (auto iter = thread_pool_.begin(); iter != thread_pool_.end(); ++iter) {
         (*iter)->join();
@@ -50,7 +56,7 @@ TickThreadPool::~TickThreadPool() {
 }
 
 void TickThreadPool::Ticking() {
-    while (!destroy_) {
+    while (!common::GlobalInfo::Instance()->global_stop()) {
         uint32_t first_idx = 0;
         uint32_t now_idx = std::numeric_limits<uint32_t>::max();
         auto tick_item = Get(first_idx);

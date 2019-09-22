@@ -265,6 +265,7 @@ int TcpRoute::CreateServer(const std::string& local_ip, uint16_t port) {
     }
 
     uv_thread_ = std::make_shared<std::thread>(std::bind(&TcpRoute::StartUv, this));
+    uv_thread_->detach();
     return kVpnRouteSuccess;
 }
 

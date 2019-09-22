@@ -21,6 +21,7 @@
 #include "common/hash.h"
 #include "common/random.h"
 #include "common/country_code.h"
+#include "common/global_info.h"
 
 namespace lego {
 
@@ -132,7 +133,7 @@ uint32_t iclock() {
 }
 
 static void SignalCallback(int sig_int) {
-    exit(0);
+    common::GlobalInfo::Instance()->global_stop();
 }
 
 void SignalRegister() {

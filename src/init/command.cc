@@ -42,7 +42,7 @@ bool Command::Init(bool first_node, bool show_cmd, bool period_tick) {
 
 void Command::Run() {
     Help();
-    while (!destroy_) {
+    while (!common::GlobalInfo::Instance()->global_stop()) {
         if (!show_cmd_) {
             std::this_thread::sleep_for(std::chrono::microseconds(200000ll));
             continue;

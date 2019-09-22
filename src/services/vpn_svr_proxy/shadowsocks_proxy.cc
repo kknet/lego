@@ -112,7 +112,6 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
     client::TransactionClient::Instance()->Transaction("", 0, gid);
     inited_ = true;
     cmd_.Run();
-    cmd_.Destroy();
     vpn::VpnServer::Instance()->Stop();
     return kProxySuccess;
 }
