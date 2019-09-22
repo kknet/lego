@@ -903,7 +903,7 @@ void VpnClient::DumpNodeToConfig() {
 void VpnClient::DumpVpnNodes() {
     std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
     std::string country_list;
-    auto now_tick = std::chrono::steady_clock::now();
+    auto now_tick = std::chrono::steady_clock::now() - std::chrono::seconds(1);
     auto timestamp = std::chrono::duration_cast<std::chrono::seconds>(now_tick).count();
     for (auto iter = vpn_nodes_map_.begin(); iter != vpn_nodes_map_.end(); ++iter) {
         std::string conf_str;
