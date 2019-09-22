@@ -54,7 +54,7 @@ void IndependentTick::CutOff(int64_t wait_us, TickCallbackFunction func) {
 }
 
 void IndependentTick::TimerFlies() {
-    while (!common::GlobalInfo::Instance()->global_stop()) {
+    while (!common::global_stop) {
         std::vector<TickCallbackFunction> func_vec;
         {
             std::unique_lock<std::mutex> lock(timer_list_mutex_);

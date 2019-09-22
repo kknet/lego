@@ -34,8 +34,8 @@ void ThreadHandler::Join() {
 }
 
 void ThreadHandler::HandleMessage() {
-    while (!common::GlobalInfo::Instance()->global_stop()) {
-        while (!common::GlobalInfo::Instance()->global_stop()) {
+    while (!common::global_stop) {
+        while (!common::global_stop) {
             auto msg_ptr = MultiThreadHandler::Instance()->GetMessageFromQueue();
             if (!msg_ptr) {
                 break;

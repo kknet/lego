@@ -56,7 +56,7 @@ TickThreadPool::~TickThreadPool() {
 }
 
 void TickThreadPool::Ticking() {
-    while (!common::GlobalInfo::Instance()->global_stop()) {
+    while (!common::global_stop) {
         uint32_t first_idx = 0;
         uint32_t now_idx = std::numeric_limits<uint32_t>::max();
         auto tick_item = Get(first_idx);
