@@ -143,7 +143,10 @@ int ShadowsocksProxy::InitTcpRelay() {
 
 void ShadowsocksProxy::GetShadowsocks(uint16_t& route_port, uint16_t& vpn_port) {
     route_port = vpn_route_port_;
-    vpn_port = vpn_server_port_;
+    auto last_ptr = vpn::VpnServer::Instance()->last_listen_ptr();
+    if (last_ptr != nullptr) {
+        vpn_port = last_ptr->vpn_port;
+    }
 }
 
 int ShadowsocksProxy::StartShadowsocks() {

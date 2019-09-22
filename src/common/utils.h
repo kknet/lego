@@ -84,6 +84,7 @@ static const uint32_t kInvalidPoolIndex = kImmutablePoolSize + 1;
 static const uint32_t kTestForNetworkId = 4u;
 static const std::string kVpnLoginAttrKey = "vpn_login";
 extern volatile bool global_stop;
+static const uint16_t kDefaultVpnPort = 9107;
 
 uint32_t GetPoolIndex(const std::string& acc_addr);
 std::string CreateGID(const std::string& pubkey);

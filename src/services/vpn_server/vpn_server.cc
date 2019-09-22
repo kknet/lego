@@ -1629,7 +1629,7 @@ int VpnServer::Init(
         const std::string& key,
         const std::string& method) {
     default_ctx_ = std::make_shared<listen_ctx_t>();
-    if (StartTcpServer(ip, kDefaultVpnPort, default_ctx_.get()) != 0) {
+    if (StartTcpServer(ip, common::kDefaultVpnPort, default_ctx_.get()) != 0) {
         return kVpnsvrError;
     }
     default_ctx_->vpn_port = kDefaultVpnPort;
