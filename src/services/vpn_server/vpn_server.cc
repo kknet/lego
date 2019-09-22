@@ -1807,7 +1807,7 @@ void VpnServer::RotationServer() {
         listen_ctx_queue.pop_front();
         StopVpn(listen_item.get());
         std::cout << "stop vpn server now" << std::endl;
-        listen_ctx_ptr->thread_ptr->join();
+        listen_item->thread_ptr->join();
         std::cout << "stop vpn server thread exited." << std::endl;
     }
     std::shared_ptr<listen_ctx_t> listen_ctx_ptr = std::make_shared<listen_ctx_t>();
@@ -1823,9 +1823,9 @@ void VpnServer::RotationServer() {
     int len = sizeof(sa);
 
     struct sockaddr_storage addr;
-    socklen_t len = sizeof(struct sockaddr_storage);
+    socklen_t addr_len = sizeof(struct sockaddr_storage);
     memset(&addr, 0, len);
-    int err = getpeername(fd, (struct sockaddr *)&addr, &len);
+    int err = getpeername(listen_ctx_ptr->fd, (struct sockaddr *)&addr, &addr_len);
     if (err == 0) {
         printf("peer IP: %s ", inet_ntoa(sa.sin_addr));
         printf("peer PORT: %d ", ntohs(sa.sin_port));
