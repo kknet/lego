@@ -1624,10 +1624,11 @@ int VpnServer::Init(
         const std::string& key,
         const std::string& method) {
     InitSignal();
-
-    if (StartTcpServer(ip, port, default_ctx_.get()) != 0) {
+    
+    if (StartTcpServer(ip, kDefaultVpnPort, default_ctx_.get()) != 0) {
         return kVpnsvrError;
     }
+    default_ctx_->vpn_port = kDefaultVpnPort;
     cork_dllist_init(&default_ctx_->svr_item->connections);
     default_thread_ = std::make_shared<std::thread>(&StartVpn, default_ctx_.get());
     default_thread_->detach();
@@ -1637,9 +1638,7 @@ int VpnServer::Init(
     bandwidth_tick_.CutOff(
             kStakingCheckingPeriod,
             std::bind(&VpnServer::CheckAccountValid, VpnServer::Instance()));
-    new_vpn_server_tick_.CutOff(
-            kRotationPeriod,
-            std::bind(&VpnServer::RotationServer, VpnServer::Instance()));
+    VpnServer::RotationServer();
     return kVpnsvrSuccess;
 }
 
@@ -1824,21 +1823,19 @@ void VpnServer::RotationServer() {
     if (StartTcpServer(
             common::GlobalInfo::Instance()->config_local_ip(),
             0,
-            listen_ctx_ptr.get()) != 0) {
-        return;
-    }
-
-    struct sockaddr_in sin;
-    socklen_t len = sizeof(sin);
-    if (getsockname(listen_ctx_ptr->fd, (struct sockaddr *)&sin, &len) == 0) {
-        listen_ctx_ptr->vpn_port = ntohs(sin.sin_port);
-        cork_dllist_init(&listen_ctx_ptr->svr_item->connections);
-        listen_ctx_ptr->thread_ptr = std::make_shared<std::thread>(
-                &StartVpn,
-                listen_ctx_ptr.get());
-        last_listen_ptr_ = listen_ctx_ptr;
-    } else {
-        StopVpn(listen_ctx_ptr.get());
+            listen_ctx_ptr.get()) == 0) {
+        struct sockaddr_in sin;
+        socklen_t len = sizeof(sin);
+        if (getsockname(listen_ctx_ptr->fd, (struct sockaddr *)&sin, &len) == 0) {
+            listen_ctx_ptr->vpn_port = ntohs(sin.sin_port);
+            cork_dllist_init(&listen_ctx_ptr->svr_item->connections);
+            listen_ctx_ptr->thread_ptr = std::make_shared<std::thread>(
+                    &StartVpn,
+                    listen_ctx_ptr.get());
+            last_listen_ptr_ = listen_ctx_ptr;
+        } else {
+            StopVpn(listen_ctx_ptr.get());
+        }
     }
 
     new_vpn_server_tick_.CutOff(
