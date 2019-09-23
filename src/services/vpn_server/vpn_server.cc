@@ -1529,12 +1529,12 @@ static void InitSignal(std::shared_ptr<listen_ctx_t> default_ctx) {
 //     return 0;
 // }
 
+struct ev_loop *loop = EV_DEFAULT;
+
 static int StartTcpServer(
         const std::string& host,
         uint16_t port,
         listen_ctx_t* listen_ctx) {
-    struct ev_loop *loop = ev_loop_new(EVBACKEND_EPOLL);
-    resolv_init(loop, NULL, ipv6first);
     const char* remote_port = (char*)std::to_string(port).c_str();
 
     int listenfd;
@@ -1570,7 +1570,7 @@ static int StartTcpServer(
 
 
 static void StartVpn(listen_ctx_t* listen_ctx) {
-    ev_run(listen_ctx->loop, 0);
+    ev_run(loop, 0);
 }
 
 static void AsyncCallback(struct ev_loop *loop, ev_async*, int) {
@@ -1578,14 +1578,11 @@ static void AsyncCallback(struct ev_loop *loop, ev_async*, int) {
 }
 
 static void StopVpn(listen_ctx_t* listen_ctx) {
-    ev_async_init(&listen_ctx->async_watcher, AsyncCallback);
-    ev_async_start(listen_ctx->loop, &listen_ctx->async_watcher);
-    ev_async_send(listen_ctx->loop, &listen_ctx->async_watcher);
-    ev_io_stop(listen_ctx->loop, &listen_ctx->io);
-    listen_ctx->thread_ptr->join();
-    resolv_shutdown(listen_ctx->loop);
+    ev_io_stop(loop, &listen_ctx->io);
+//     listen_ctx->thread_ptr->join();
+//     resolv_shutdown(loop);
     close(listen_ctx->fd);
-    FreeConnections(listen_ctx->loop, &listen_ctx->svr_item->connections);
+    FreeConnections(loop, &listen_ctx->svr_item->connections);
 #ifdef __MINGW32__
         if (plugin_watcher.valid) {
             closesocket(plugin_watcher.fd);
@@ -1628,6 +1625,7 @@ int VpnServer::Init(
         const std::string& passwd,
         const std::string& key,
         const std::string& method) {
+    resolv_init(loop, NULL, ipv6first);
     default_ctx_ = std::make_shared<listen_ctx_t>();
     if (StartTcpServer(ip, common::kDefaultVpnPort, default_ctx_.get()) != 0) {
         return kVpnsvrError;
@@ -1833,10 +1831,11 @@ void VpnServer::RotationServer() {
         socklen_t len = sizeof(sin);
         if (getsockname(listen_ctx_ptr->fd, (struct sockaddr *)&sin, &len) == 0) {
             listen_ctx_ptr->vpn_port = ntohs(sin.sin_port);
+            std::cout << "start new vpn server port: " << listen_ctx_ptr->vpn_port << std::endl;
             cork_dllist_init(&listen_ctx_ptr->svr_item->connections);
-            listen_ctx_ptr->thread_ptr = std::make_shared<std::thread>(
-                    &StartVpn,
-                    listen_ctx_ptr.get());
+//             listen_ctx_ptr->thread_ptr = std::make_shared<std::thread>(
+//                     &StartVpn,
+//                     listen_ctx_ptr.get());
             last_listen_ptr_ = listen_ctx_ptr;
         } else {
             StopVpn(listen_ctx_ptr.get());

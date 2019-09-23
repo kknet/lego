@@ -171,6 +171,7 @@ void VpnClient::HandleGetVpnResponse(
             common::Encode::HexEncode(network::GetAccountAddressByPublicKey(vpn_res.pubkey())),
             true);
     if (vpn_res.svr_port() > 0) {
+        CLIENT_ERROR("get vpn node: %s:%d", node_ptr->ip.c_str(), node_ptr->svr_port);
         std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
         auto iter = vpn_nodes_map_.find(vpn_res.country());
         if (iter != vpn_nodes_map_.end()) {
@@ -1070,10 +1071,18 @@ void VpnClient::ReadVpnNodesFromConf() {
                 vpn_nodes_map_[country_split[i]].push_back(node_item);
                 continue;
             }
-                
-            iter->second.push_back(node_item);
-            if (iter->second.size() > 16) {
-                iter->second.pop_front();
+
+            auto e_iter = std::find_if(
+                    iter->second.begin(),
+                    iter->second.end(),
+                    [node_item](const VpnServerNodePtr& ptr) {
+                return node_item->ip == ptr->ip && node_item->svr_port == ptr->svr_port;
+            });
+            if (e_iter == iter->second.end()) {
+                iter->second.push_back(node_item);
+                if (iter->second.size() > 16) {
+                    iter->second.pop_front();
+                }
             }
         }
     }
