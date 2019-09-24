@@ -213,7 +213,6 @@ int NetworkInit::InitNetworkSingleton() {
         return kInitError;
     }
 
-    network::Route::Instance()->Init();
     if (network::UniversalManager::Instance()->CreateUniversalNetwork(
             conf_,
             transport_) != network::kNetworkSuccess) {

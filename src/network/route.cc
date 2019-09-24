@@ -18,8 +18,6 @@ Route* Route::Instance() {
 }
 
 void Route::Init() {
-    Destroy();
-    // all message come route
     RegisterMessage(
             common::kDhtMessage,
             std::bind(&Route::HandleDhtMessage, this, std::placeholders::_1));
@@ -143,7 +141,9 @@ void Route::UnRegisterMessage(uint32_t type) {
     message_processor_[type] = nullptr;
 }
 
-Route::Route() {}
+Route::Route() {
+    Init();
+}
 
 Route::~Route() {
     Destroy();

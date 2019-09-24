@@ -694,7 +694,6 @@ int VpnClient::InitNetworkSingleton() {
         return kClientError;
     }
 
-    network::Route::Instance()->Init();
     if (network::UniversalManager::Instance()->CreateUniversalNetwork(
             config,
             transport_) != network::kNetworkSuccess) {
