@@ -130,7 +130,7 @@ static int ret_val = 0;
 #ifdef HAVE_SETRLIMIT
 static int nofile = 0;
 #endif
-static int use_syslog = 0;
+extern int use_syslog;
 
 #ifndef __MINGW32__SetFastopen
 static ev_timer stat_update_watcher;
