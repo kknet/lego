@@ -19,7 +19,6 @@ DhtManager* DhtManager::Instance() {
 }
 
 void DhtManager::Init() {
-    Destroy();
     dhts_ = new dht::BaseDhtPtr[kNetworkMaxDhtCount];
     std::fill(dhts_, dhts_ + kNetworkMaxDhtCount, nullptr);
     tick_.CutOff(kNetworkDetectPeriod, std::bind(&DhtManager::NetworkDetection, this));
@@ -74,7 +73,9 @@ dht::BaseDhtPtr DhtManager::GetDht(uint32_t net_id) {
     return dhts_[net_id];
 }
 
-DhtManager::DhtManager() {}
+DhtManager::DhtManager() {
+    Init();
+}
 
 DhtManager::~DhtManager() {
     Destroy();
