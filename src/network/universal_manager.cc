@@ -157,7 +157,9 @@ std::vector<dht::NodePtr> UniversalManager::GetSameNetworkNodes(
     return Bootstrap::Instance()->GetNetworkBootstrap(network_id, count);
 }
 
-UniversalManager::UniversalManager() {}
+UniversalManager::UniversalManager() {
+    Init();
+}
 
 UniversalManager::~UniversalManager() {
     Destroy();
