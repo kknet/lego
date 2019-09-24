@@ -130,10 +130,10 @@ static int ret_val = 0;
 #ifdef HAVE_SETRLIMIT
 static int nofile = 0;
 #endif
-int use_syslog = 0;
+static int use_syslog = 0;
 
-#ifndef __MINGW32__
-ev_timer stat_update_watcher;
+#ifndef __MINGW32__SetFastopen
+static ev_timer stat_update_watcher;
 #endif
 
 static struct ev_signal sigint_watcher;
@@ -194,7 +194,7 @@ static void ReportAddr(int fd, const char *info) {
     }
 }
 
-int SetFastopen(int fd) {
+static int SetFastopen(int fd) {
     int s = 0;
 #ifdef TCP_FASTOPEN
     if (fast_open) {
@@ -219,7 +219,7 @@ int SetFastopen(int fd) {
 }
 
 #ifndef __MINGW32__
-int SetNonblocking(int fd) {
+static int SetNonblocking(int fd) {
     int flags;
     if (-1 == (flags = fcntl(fd, F_GETFL, 0))) {
         flags = 0;
@@ -228,7 +228,7 @@ int SetNonblocking(int fd) {
 }
 #endif
 
-int CreateAndBind(const char *host, const char *port, int mptcp) {
+static int CreateAndBind(const char *host, const char *port, int mptcp) {
     struct addrinfo hints;
     struct addrinfo *result, *rp, *ipv4v6bindall;
     int s, listen_sock;
@@ -1253,7 +1253,7 @@ static void InitSignal(std::shared_ptr<listen_ctx_t> default_ctx) {
     ev_signal_start(default_ctx->loop, &sigchld_watcher);
 }
 
-struct ev_loop *loop = ev_loop_new(EVBACKEND_EPOLL | EVFLAG_NOENV);
+static struct ev_loop *loop = ev_loop_new(EVBACKEND_EPOLL | EVFLAG_NOENV);
 static int StartTcpServer(
         const std::string& host,
         uint16_t port,
