@@ -15,6 +15,7 @@
 #include "services/vpn_server/vpn_server.h"
 #include "services/vpn_svr_proxy/proxy_utils.h"
 #include "services/vpn_route/route_tcp.h"
+#include "services/vpn_server/vpn_route.h"
 
 namespace lego {
 
@@ -125,9 +126,7 @@ int ShadowsocksProxy::InitTcpRelay() {
         return kProxySuccess;
     }
 
-    int res = vpnroute::TcpRoute::Instance()->Init(
-            common::GlobalInfo::Instance()->config_local_ip(),
-            vpn_route_port_);
+    int res = vpn::VpnRoute::Instance()->Init();
     if (res != vpnroute::kVpnRouteSuccess) {
         return kProxyError;
     }

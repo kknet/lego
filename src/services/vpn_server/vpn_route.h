@@ -19,12 +19,7 @@ namespace vpn {
 class VpnRoute {
 public:
     static VpnRoute* Instance();
-    int Init(
-            const std::string& ip,
-            uint16_t port,
-            const std::string& passwd,
-            const std::string& key,
-            const std::string& method);
+    int Init();
     void Stop();
 
     std::shared_ptr<listen_ctx_t> last_listen_ptr() {

@@ -1336,18 +1336,16 @@ void VpnRoute::Stop() {
     free_udprelay();
 }
 
-int VpnRoute::Init(
-        const std::string& ip,
-        uint16_t port,
-        const std::string& passwd,
-        const std::string& key,
-        const std::string& method) {
+int VpnRoute::Init() {
     resolv_init(loop, NULL, ipv6first);
     default_ctx_ = std::make_shared<listen_ctx_t>();
-    if (StartTcpServer(ip, common::kDefaultVpnPort, default_ctx_.get()) != 0) {
+    if (StartTcpServer(
+            common::GlobalInfo::Instance()->config_local_ip(),
+            common::kDefaultRoutePort,
+            default_ctx_.get()) != 0) {
         return kVpnsvrError;
     }
-    default_ctx_->vpn_port = common::kDefaultVpnPort;
+    default_ctx_->vpn_port = common::kDefaultRoutePort;
     cork_dllist_init(&default_ctx_->svr_item->connections);
     default_ctx_->thread_ptr = std::make_shared<std::thread>(&StartVpn, default_ctx_.get());
     InitSignal(default_ctx_);
