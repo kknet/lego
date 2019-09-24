@@ -1316,11 +1316,7 @@ namespace lego {
 
 namespace vpn {
 
-VpnRoute::VpnRoute() {
-    network::Route::Instance()->RegisterMessage(
-            common::kBlockMessage,
-            std::bind(&VpnRoute::HandleMessage, this, std::placeholders::_1));
-}
+VpnRoute::VpnRoute() {}
 
 VpnRoute::~VpnRoute() {}
 
