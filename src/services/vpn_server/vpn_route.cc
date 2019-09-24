@@ -1243,14 +1243,14 @@ static void AcceptCallback(EV_P_ ev_io *w, int revents) {
 }
 
 static void InitSignal(std::shared_ptr<listen_ctx_t> default_ctx) {
-    signal(SIGPIPE, SIG_IGN);
-    signal(SIGABRT, SIG_IGN);
-    ev_signal_init(&sigint_watcher, SignalCallback, SIGINT);
-    ev_signal_init(&sigterm_watcher, SignalCallback, SIGTERM);
-    ev_signal_start(default_ctx->loop, &sigint_watcher);
-    ev_signal_start(default_ctx->loop, &sigterm_watcher);
-    ev_signal_init(&sigchld_watcher, SignalCallback, SIGCHLD);
-    ev_signal_start(default_ctx->loop, &sigchld_watcher);
+//     signal(SIGPIPE, SIG_IGN);
+//     signal(SIGABRT, SIG_IGN);
+//     ev_signal_init(&sigint_watcher, SignalCallback, SIGINT);
+//     ev_signal_init(&sigterm_watcher, SignalCallback, SIGTERM);
+//     ev_signal_start(default_ctx->loop, &sigint_watcher);
+//     ev_signal_start(default_ctx->loop, &sigterm_watcher);
+//     ev_signal_init(&sigchld_watcher, SignalCallback, SIGCHLD);
+//     ev_signal_start(default_ctx->loop, &sigchld_watcher);
 }
 
 static struct ev_loop *loop = ev_loop_new(EVBACKEND_EPOLL | EVFLAG_NOENV);
