@@ -93,15 +93,18 @@ int ProxyDht::ResetUserUseTimer(const service::protobuf::GetVpnInfoRequest& vpn_
 void ProxyDht::HandleGetSocksRequest(
         transport::protobuf::Header& msg,
         service::protobuf::ServiceMessage& src_svr_msg) {
+    PROXY_ERROR("send vpn node response to client. 1 ");
     if (!src_svr_msg.has_vpn_req()) {
         return;
     }
 
+    PROXY_ERROR("send vpn node response to client.2 ");
     if (!CheckDestination(msg.des_dht_key(), false)) {
         SendToClosestNode(msg);
         return;
     }
 
+    PROXY_ERROR("send vpn node response to client. 3 ");
     if (src_svr_msg.vpn_req().heartbeat()) {
         if (CheckSign(src_svr_msg.vpn_req()) != kProxySuccess) {
             return;
@@ -111,6 +114,7 @@ void ProxyDht::HandleGetSocksRequest(
         return;
     }
 
+    PROXY_ERROR("send vpn node response to client. 4 ");
     uint16_t route_port = 0;
     uint16_t server_port = 0;
     ShadowsocksProxy::Instance()->GetShadowsocks(route_port, server_port);
@@ -135,6 +139,7 @@ void ProxyDht::HandleGetSocksRequest(
     transport::protobuf::Header res_msg;
     service::ServiceProto::CreateGetVpnInfoRes(local_node(), svr_msg, msg, res_msg);
     network::Route::Instance()->Send(res_msg);
+    PROXY_ERROR("send vpn node response to client.");
 }
 
 }  // namespace vpn

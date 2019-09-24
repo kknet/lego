@@ -1,4 +1,4 @@
-#include "services/vpn_server/vpn_server.h"
+#include "services/vpn_server/vpn_route.h"
 #include "common/string_utils.h"
 
 #ifdef __cplusplus
@@ -604,17 +604,13 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     }
 
     ssize_t r = recv(server->fd, buf->data, SOCKET_BUF_SIZE, 0);
-
     if (r == 0) {
         // connection closed
         CloseAndFreeRemote(EV_A_ remote);
         CloseAndFreeServer(EV_A_ server);
         return;
-    }
-    else if (r == -1) {
+    } else if (r == -1) {
         if (errno == EAGAIN || errno == EWOULDBLOCK) {
-            // no data
-            // continue to wait for recv
             return;
         } else {
             ERROR("server recv");
@@ -624,296 +620,99 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         }
     }
 
-    // Ignore any new packet if the server is stopped
     if (server->stage == STAGE_STOP) {
         return;
     }
 
     buf->len = r;
-
-    std::string pubkey;
-    PeerInfoPtr client_ptr = nullptr;
-    if (server->stage == STAGE_INIT) {
-        int header_offset = lego::security::kPublicKeySize * 2;
-        bool valid = false;
-        uint8_t method_len = *(uint8_t *)(buf->data + header_offset);
-        std::string method;
-        if (method_len + header_offset + 1 >= static_cast<int>(buf->len)) {
-            return;
-        }
-        method = std::string((char*)buf->data + header_offset + 1, method_len);
-        pubkey = std::string((char*)buf->data, header_offset);
-        client_ptr = lego::service::AccountWithSecret::Instance()->NewPeer(
-                common::Encode::HexDecode(pubkey),
-                method);
-        if (client_ptr == nullptr) {
-            return;
-        }
-
-        auto now_point = std::chrono::steady_clock::now();
-        auto& user_account = client_ptr->account;
-        auto iter = server->svr_item->account_bindwidth_map.find(user_account);
-        if (iter == server->svr_item->account_bindwidth_map.end()) {
-            auto acc_item = std::make_shared<BandwidthInfo>(r, 0, user_account);
-            server->svr_item->account_bindwidth_map[user_account] = acc_item;
-            if (RemoveNotAliveAccount(now_point, server->svr_item->account_bindwidth_map)) {
-                // exceeded max user account, new join failed
-                return;
-            }
-            lego::vpn::VpnServer::Instance()->bandwidth_queue().push(acc_item);
-            std::cout << "new client coming." << common::Encode::HexEncode(user_account) << std::endl;
-        } else {
-            if (!iter->second->login_valid) {
-                return;
-            }
-
-            iter->second->up_bandwidth += r;
-            if (iter->second->begin_time < now_point) {
-                iter->second->begin_time = now_point;
-                // transaction now with bandwidth
-            }
-        }
-
-        server->client_ptr = client_ptr;
-        client_ptr->crypto->ctx_init(client_ptr->crypto->cipher, server->e_ctx, 1);
-        client_ptr->crypto->ctx_init(client_ptr->crypto->cipher, server->d_ctx, 0);
-        header_offset += method_len + 1;
-        memmove(buf->data, buf->data + header_offset, r - header_offset);
-        buf->len = r - header_offset;
-    } else {
-        client_ptr = server->client_ptr;
-        if (client_ptr == nullptr) {
-            return;
-        }
-    }
-
-    crypto_t* tmp_crypto = client_ptr->crypto;
-    int err = tmp_crypto->decrypt(buf, server->d_ctx, SOCKET_BUF_SIZE);
-//     int err = crypto->decrypt(buf, server->d_ctx, SOCKET_BUF_SIZE);
-
-    if (err == -2) {
-        ReportAddr(server->fd, "authentication error");
-        StopServer(EV_A_ server);
-        return;
-    } else if (err == CRYPTO_NEED_MORE) {
-        if (server->stage != STAGE_STREAM && server->frag > MAX_FRAG) {
-            ReportAddr(server->fd, "malicious fragmentation");
-            StopServer(EV_A_ server);
-            return;
-        }
-        server->frag++;
-        return;
-    }
-
-    // handshake and transmit data
     if (server->stage == STAGE_STREAM) {
         int s = send(remote->fd, remote->buf->data, remote->buf->len, 0);
         if (s == -1) {
             if (errno == EAGAIN || errno == EWOULDBLOCK) {
-                // no data, wait for send
                 remote->buf->idx = 0;
                 ev_io_stop(EV_A_ & server_recv_ctx->io);
                 ev_io_start(EV_A_ & remote->send_ctx->io);
-            }
-            else {
+            } else {
                 ERROR("server_recv_send");
                 CloseAndFreeRemote(EV_A_ remote);
                 CloseAndFreeServer(EV_A_ server);
             }
-        }
-        else if (s < static_cast<int>(remote->buf->len)) {
+        } else if (s < static_cast<int>(remote->buf->len)) {
             remote->buf->len -= s;
             remote->buf->idx = s;
             ev_io_stop(EV_A_ & server_recv_ctx->io);
             ev_io_start(EV_A_ & remote->send_ctx->io);
         }
-        return;
     } else if (server->stage == STAGE_INIT) {
-        /*
-         * Shadowsocks TCP Relay Header:
-         *
-         *    +------+----------+----------+
-         *    | ATYP | DST.ADDR | DST.PORT |
-         *    +------+----------+----------+
-         *    |  1   | Variable |    2     |
-         *    +------+----------+----------+
-         *
-         */
-
         int offset = 0;
         int need_query = 0;
-        char atyp = server->buf->data[offset++];
         char host[255] = { 0 };
         uint16_t port = 0;
         struct addrinfo info;
         struct sockaddr_storage storage;
         memset(&info, 0, sizeof(struct addrinfo));
         memset(&storage, 0, sizeof(struct sockaddr_storage));
+        struct sockaddr_in *addr = (struct sockaddr_in *)&storage;
+        size_t in_addr_len = sizeof(struct in_addr);
+        addr->sin_family = AF_INET;
+        if (server->buf->len >= in_addr_len + 3) {
+            memcpy(&addr->sin_addr, server->buf->data + offset, in_addr_len);
+            inet_ntop(AF_INET, (const void *)(server->buf->data + offset), host, INET_ADDRSTRLEN);
+            offset += in_addr_len;
+        } else {
+            ReportAddr(server->fd, "invalid length for ipv4 address");
+            StopServer(EV_A_ server);
+            return;
+        }
+        memcpy(&addr->sin_port, server->buf->data + offset, sizeof(uint16_t));
+        info.ai_family = AF_INET;
+        info.ai_socktype = SOCK_STREAM;
+        info.ai_protocol = IPPROTO_TCP;
+        info.ai_addrlen = sizeof(struct sockaddr_in);
+        info.ai_addr = (struct sockaddr *)addr;
 
-        // get remote addr and port
-        if ((atyp & ADDRTYPE_MASK) == 1) {
-            // IP V4
-            struct sockaddr_in *addr = (struct sockaddr_in *)&storage;
-            size_t in_addr_len = sizeof(struct in_addr);
-            addr->sin_family = AF_INET;
-            if (server->buf->len >= in_addr_len + 3) {
-                memcpy(&addr->sin_addr, server->buf->data + offset, in_addr_len);
-                inet_ntop(AF_INET, (const void *)(server->buf->data + offset),
-                    host, INET_ADDRSTRLEN);
-                offset += in_addr_len;
-            }
-            else {
-                ReportAddr(server->fd, "invalid length for ipv4 address");
-                StopServer(EV_A_ server);
-                return;
-            }
-            memcpy(&addr->sin_port, server->buf->data + offset, sizeof(uint16_t));
-            info.ai_family = AF_INET;
-            info.ai_socktype = SOCK_STREAM;
-            info.ai_protocol = IPPROTO_TCP;
-            info.ai_addrlen = sizeof(struct sockaddr_in);
-            info.ai_addr = (struct sockaddr *)addr;
-        }
-        else if ((atyp & ADDRTYPE_MASK) == 3) {
-            // Domain name
-            uint8_t name_len = *(uint8_t *)(server->buf->data + offset);
-            if (name_len + 4 <= static_cast<int>(server->buf->len)) {
-                memcpy(host, server->buf->data + offset + 1, name_len);
-                offset += name_len + 1;
-            }
-            else {
-                ReportAddr(server->fd, "invalid host name length");
-                StopServer(EV_A_ server);
-                return;
-            }
-            if (acl && outbound_block_match_host(host) == 1) {
-                CloseAndFreeServer(EV_A_ server);
-                return;
-            }
-            struct cork_ip ip;
-            if (cork_ip_init(&ip, host) != -1) {
-                info.ai_socktype = SOCK_STREAM;
-                info.ai_protocol = IPPROTO_TCP;
-                if (ip.version == 4) {
-                    struct sockaddr_in *addr = (struct sockaddr_in *)&storage;
-                    inet_pton(AF_INET, host, &(addr->sin_addr));
-                    memcpy(&addr->sin_port, server->buf->data + offset, sizeof(uint16_t));
-                    addr->sin_family = AF_INET;
-                    info.ai_family = AF_INET;
-                    info.ai_addrlen = sizeof(struct sockaddr_in);
-                    info.ai_addr = (struct sockaddr *)addr;
-                }
-                else if (ip.version == 6) {
-                    struct sockaddr_in6 *addr = (struct sockaddr_in6 *)&storage;
-                    inet_pton(AF_INET6, host, &(addr->sin6_addr));
-                    memcpy(&addr->sin6_port, server->buf->data + offset, sizeof(uint16_t));
-                    addr->sin6_family = AF_INET6;
-                    info.ai_family = AF_INET6;
-                    info.ai_addrlen = sizeof(struct sockaddr_in6);
-                    info.ai_addr = (struct sockaddr *)addr;
-                }
-            }
-            else {
-                if (!validate_hostname(host, name_len)) {
-                    ReportAddr(server->fd, "invalid host name");
-                    StopServer(EV_A_ server);
-                    return;
-                }
-                need_query = 1;
-            }
-        }
-        else if ((atyp & ADDRTYPE_MASK) == 4) {
-            // IP V6
-            struct sockaddr_in6 *addr = (struct sockaddr_in6 *)&storage;
-            size_t in6_addr_len = sizeof(struct in6_addr);
-            addr->sin6_family = AF_INET6;
-            if (server->buf->len >= in6_addr_len + 3) {
-                memcpy(&addr->sin6_addr, server->buf->data + offset, in6_addr_len);
-                inet_ntop(AF_INET6, (const void *)(server->buf->data + offset),
-                    host, INET6_ADDRSTRLEN);
-                offset += in6_addr_len;
-            }
-            else {
-                LOGE("invalid header with addr type %d", atyp);
-                ReportAddr(server->fd, "invalid length for ipv6 address");
-                StopServer(EV_A_ server);
-                return;
-            }
-            memcpy(&addr->sin6_port, server->buf->data + offset, sizeof(uint16_t));
-            info.ai_family = AF_INET6;
-            info.ai_socktype = SOCK_STREAM;
-            info.ai_protocol = IPPROTO_TCP;
-            info.ai_addrlen = sizeof(struct sockaddr_in6);
-            info.ai_addr = (struct sockaddr *)addr;
-        }
-
-        if (offset == 1) {
+        if (offset == 0) {
             ReportAddr(server->fd, "invalid address type");
             StopServer(EV_A_ server);
             return;
         }
 
         port = ntohs(load16_be(server->buf->data + offset));
-
         offset += 2;
 
         if (static_cast<int>(server->buf->len) < offset) {
             ReportAddr(server->fd, "invalid request length");
             StopServer(EV_A_ server);
             return;
-        }
-        else {
+        } else {
             server->buf->len -= offset;
             memmove(server->buf->data, server->buf->data + offset, server->buf->len);
         }
 
-        if (!need_query) {
-            remote_t *remote = ConnectToRemote(EV_A_ & info, server);
+        remote_t *remote = ConnectToRemote(EV_A_ & info, server);
+        if (remote == NULL) {
+            LOGE("connect error");
+            CloseAndFreeServer(EV_A_ server);
+            return;
+        } else {
+            server->remote = remote;
+            remote->server = server;
 
-            if (remote == NULL) {
-                LOGE("connect error");
-                CloseAndFreeServer(EV_A_ server);
-                return;
+            if (server->buf->len > 0) {
+                brealloc(remote->buf, server->buf->len, SOCKET_BUF_SIZE);
+                memcpy(remote->buf->data, server->buf->data + server->buf->idx,
+                    server->buf->len);
+                remote->buf->len = server->buf->len;
+                remote->buf->idx = 0;
+                server->buf->len = 0;
+                server->buf->idx = 0;
             }
-            else {
-                server->remote = remote;
-                remote->server = server;
 
-                // XXX: should handle buffer carefully
-                if (server->buf->len > 0) {
-                    brealloc(remote->buf, server->buf->len, SOCKET_BUF_SIZE);
-                    memcpy(remote->buf->data, server->buf->data + server->buf->idx,
-                        server->buf->len);
-                    remote->buf->len = server->buf->len;
-                    remote->buf->idx = 0;
-                    server->buf->len = 0;
-                    server->buf->idx = 0;
-                }
-
-                // waiting on remote connected event
-                ev_io_stop(EV_A_ & server_recv_ctx->io);
-                ev_io_start(EV_A_ & remote->send_ctx->io);
-            }
-        }
-        else {
             ev_io_stop(EV_A_ & server_recv_ctx->io);
-
-            query_t *query = (query_t*)ss_malloc(sizeof(query_t));
-            memset(query, 0, sizeof(query_t));
-            query->server = server;
-            server->query = query;
-            snprintf(query->hostname, MAX_HOSTNAME_LEN, "%s", host);
-
-            server->stage = STAGE_RESOLVE;
-            resolv_start(host, port, ResolvCallback, ResolvFreeCallback, query);
+            ev_io_start(EV_A_ & remote->send_ctx->io);
         }
-
-        return;
     }
-    // should not reach here
-    FATAL("server context error");
 }
-
 
 static void ServerSendCallback(EV_P_ ev_io *w, int revents) {
     server_ctx_t *server_send_ctx = (server_ctx_t *)w;
@@ -1049,7 +848,6 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
     }
 
     ssize_t r = recv(remote->fd, server->buf->data, SOCKET_BUF_SIZE, 0);
-
     if (r == 0) {
         // connection closed
         CloseAndFreeRemote(EV_A_ remote);
@@ -1060,8 +858,7 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
             // no data
             // continue to wait for recv
             return;
-        }
-        else {
+        } else {
             ERROR("remote recv");
             CloseAndFreeRemote(EV_A_ remote);
             CloseAndFreeServer(EV_A_ server);
@@ -1075,67 +872,10 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
     }
 
     server->buf->len = r;
-    if (server->client_ptr == nullptr) {
-        return;
-    }
-
-    auto now_point = std::chrono::steady_clock::now();
-    auto& user_account = server->client_ptr->account;
-    auto iter = server->svr_item->account_bindwidth_map.find(user_account);
-    if (iter == server->svr_item->account_bindwidth_map.end()) {
-        return;
-    } else {
-        iter->second->down_bandwidth += r;
-        if (iter->second->begin_time < now_point) {
-            // transaction now with bandwidth
-            uint32_t rand_band = std::rand() % iter->second->down_bandwidth;
-            std::string gid;
-            uint32_t rand_coin = 0;
-            if (rand_band > 0u && rand_band <= 50u * 1024u * 1024u) {
-                rand_coin = std::rand() % 2;
-            }
-
-            if (rand_band > 50u * 1024u * 1024u && rand_band <= 100u * 1024u * 1024u) {
-                rand_coin = std::rand() % 3;
-            }
-
-            if (rand_band > 100u * 1024u * 1024u && rand_band <= 500u * 1024u * 1024u) {
-                rand_coin = std::rand() % 5;
-            }
-
-            if (rand_band > 500u * 1024u * 1024u) {
-                rand_coin = std::rand() % 7;
-            }
-
-            if (rand_coin > 0) {
-                lego::vpn::VpnServer::Instance()->staking_queue().push(
-                        std::make_shared<StakingItem>(user_account, rand_coin));
-            }
-
-            iter->second->up_bandwidth = 0;
-            iter->second->down_bandwidth = 0;
-            iter->second->begin_time = now_point + std::chrono::microseconds(kTransactionTimeout);
-        }
-    }
-    crypto_t* tmp_crypto = server->client_ptr->crypto;
-    if (tmp_crypto == NULL) {
-        return;
-    }
-
-//     int err = crypto->encrypt(server->buf, server->e_ctx, SOCKET_BUF_SIZE);
-    int err = tmp_crypto->encrypt(server->buf, server->e_ctx, SOCKET_BUF_SIZE);
-    if (err) {
-        LOGE("invalid password or cipher");
-        CloseAndFreeRemote(EV_A_ remote);
-        CloseAndFreeServer(EV_A_ server);
-        return;
-    }
-
 #ifdef USE_NFCONNTRACK_TOS
     SetTosFromConnmark(remote, server);
 #endif
     int s = send(server->fd, server->buf->data, server->buf->len, 0);
-
     if (s == -1) {
         if (errno == EAGAIN || errno == EWOULDBLOCK) {
             // no data, wait for send
@@ -1348,8 +1088,6 @@ static server_t * NewServer(int fd, listen_ctx_t *listener) {
     server->svr_item = listener->svr_item;
     server->e_ctx = (cipher_ctx_t*)ss_malloc(sizeof(cipher_ctx_t));
     server->d_ctx = (cipher_ctx_t*)ss_malloc(sizeof(cipher_ctx_t));
-//     crypto->ctx_init(crypto->cipher, server->e_ctx, 1);
-//     crypto->ctx_init(crypto->cipher, server->d_ctx, 0);
 
     int request_timeout = std::min(MAX_REQUEST_TIMEOUT, listener->timeout)
         + rand() % MAX_REQUEST_TIMEOUT;
@@ -1391,14 +1129,12 @@ static void FreeServer(server_t *server) {
         if (tmp_crypto != NULL) {
             tmp_crypto->ctx_release(server->e_ctx);
         }
-//         crypto->ctx_release(server->e_ctx);
         ss_free(server->e_ctx);
     }
     if (server->d_ctx != NULL) {
         if (tmp_crypto != NULL) {
             tmp_crypto->ctx_release(server->d_ctx);
         }
-//         crypto->ctx_release(server->d_ctx);
         ss_free(server->d_ctx);
     }
     if (server->buf != NULL) {
@@ -1440,7 +1176,7 @@ static void SignalCallback(EV_P_ ev_signal *w, int revents) {
 #endif
         case SIGINT:
         case SIGTERM:
-            auto def_ctx = lego::vpn::VpnServer::Instance()->default_ctx();
+            auto def_ctx = lego::vpn::VpnRoute::Instance()->default_ctx();
             if (def_ctx) {
                 ev_signal_stop(def_ctx->loop, &sigint_watcher);
                 ev_signal_stop(def_ctx->loop, &sigterm_watcher);
@@ -1517,20 +1253,7 @@ static void InitSignal(std::shared_ptr<listen_ctx_t> default_ctx) {
     ev_signal_start(default_ctx->loop, &sigchld_watcher);
 }
 
-// static int InitCrypto(
-//         const std::string& password,
-//         const std::string& key,
-//         const std::string& method) {
-//     crypto = crypto_init("8246c339fa67fb295de905c0956befbffc2bf24e0c9b8aee7fbfdc66506512eb", NULL, "aes-128-cfb");
-//     if (crypto == NULL) {
-//         LOGI("failed to initialize ciphers");
-//         return -1;
-//     }
-//     return 0;
-// }
-
-struct ev_loop *loop = EV_DEFAULT;
-
+struct ev_loop *loop = ev_loop_new(EVBACKEND_EPOLL | EVFLAG_NOENV);
 static int StartTcpServer(
         const std::string& host,
         uint16_t port,
@@ -1578,7 +1301,6 @@ static void AsyncCallback(struct ev_loop *loop, ev_async*, int) {
 
 static void StopVpn(listen_ctx_t* listen_ctx) {
     ev_io_stop(loop, &listen_ctx->io);
-    resolv_shutdown(loop);
     close(listen_ctx->fd);
     FreeConnections(loop, &listen_ctx->svr_item->connections);
 #ifdef __MINGW32__
@@ -1594,30 +1316,31 @@ namespace lego {
 
 namespace vpn {
 
-VpnServer::VpnServer() {
+VpnRoute::VpnRoute() {
     network::Route::Instance()->RegisterMessage(
             common::kBlockMessage,
-            std::bind(&VpnServer::HandleMessage, this, std::placeholders::_1));
+            std::bind(&VpnRoute::HandleMessage, this, std::placeholders::_1));
 }
 
-VpnServer::~VpnServer() {}
+VpnRoute::~VpnRoute() {}
 
-VpnServer* VpnServer::Instance() {
-    static VpnServer ins;
+VpnRoute* VpnRoute::Instance() {
+    static VpnRoute ins;
     return &ins;
 }
 
-void VpnServer::Stop() {
+void VpnRoute::Stop() {
     StopVpn(default_ctx_.get());
-    while (!listen_ctx_queue.empty()) {
-        auto listen_ctx_ptr = listen_ctx_queue.front();
-        listen_ctx_queue.pop_front();
+    while (!listen_ctx_queue_.empty()) {
+        auto listen_ctx_ptr = listen_ctx_queue_.front();
+        listen_ctx_queue_.pop_front();
         StopVpn(listen_ctx_ptr.get());
     }
+    resolv_shutdown(loop);
     free_udprelay();
 }
 
-int VpnServer::Init(
+int VpnRoute::Init(
         const std::string& ip,
         uint16_t port,
         const std::string& passwd,
@@ -1632,195 +1355,19 @@ int VpnServer::Init(
     cork_dllist_init(&default_ctx_->svr_item->connections);
     default_ctx_->thread_ptr = std::make_shared<std::thread>(&StartVpn, default_ctx_.get());
     InitSignal(default_ctx_);
-
-    staking_tick_.CutOff(
-            kStakingCheckingPeriod,
-            std::bind(&VpnServer::CheckTransactions, VpnServer::Instance()));
-    bandwidth_tick_.CutOff(
-            kStakingCheckingPeriod,
-            std::bind(&VpnServer::CheckAccountValid, VpnServer::Instance()));
-    VpnServer::RotationServer();
+    VpnRoute::RotationServer();
     return kVpnsvrSuccess;
 }
 
-void VpnServer::HandleMessage(transport::protobuf::Header& header) {
-    if (header.type() != common::kBlockMessage) {
-        return;
-    }
-
-    block::protobuf::BlockMessage block_msg;
-    if (!block_msg.ParseFromString(header.data())) {
-        return;
-    }
-
-    if (block_msg.has_acc_attr_res()) {
-        dht::BaseDhtPtr dht_ptr = nullptr;
-        uint32_t netid = dht::DhtKeyManager::DhtKeyGetNetId(header.des_dht_key());
-        if (netid == network::kUniversalNetworkId || netid == network::kNodeNetworkId) {
-            dht_ptr = network::UniversalManager::Instance()->GetUniversal(netid);
-        } else {
-            if (header.universal() == 0) {
-                dht_ptr = network::UniversalManager::Instance()->GetUniversal(netid);
-            } else {
-                dht_ptr = network::DhtManager::Instance()->GetDht(netid);
-            }
-        }
-
-        if (dht_ptr == nullptr) {
-            network::Route::Instance()->Send(header);
-            return;
-        }
-
-        if (header.des_dht_key() == dht_ptr->local_node()->dht_key) {
-            HandleVpnLoginResponse(header, block_msg);
-            return;
-        }
-        dht_ptr->SendToClosestNode(header);
-    }
-}
-
-int VpnServer::ParserReceivePacket(const char* buf) {
-    return 0;
-}
-
-void VpnServer::SendGetAccountAttrLastBlock(const std::string& account, uint64_t height) {
-    uint64_t rand_num = 0;
-    auto uni_dht = lego::network::DhtManager::Instance()->GetDht(
-            lego::network::kVpnNetworkId);
-    if (uni_dht == nullptr) {
-        VPNSVR_ERROR("not found vpn server dht.");
-        return;
-    }
-
-    transport::protobuf::Header msg;
-    block::BlockProto::AccountAttrRequest(
-            uni_dht->local_node(),
-            account,
-            common::kVpnLoginAttrKey,
-            height,
-            msg);
-    network::Route::Instance()->Send(msg);
-}
-
-void VpnServer::CheckTransactions() {
-    StakingItemPtr staking_item = nullptr;
-    while (staking_queue_.pop(&staking_item)) {
-        if (staking_item != nullptr) {
-            std::string gid;
-            lego::client::TransactionClient::Instance()->Transaction(
-                    staking_item->to,
-                    staking_item->amount,
-                    gid);
-            // check and retry transaction success
-            // gid_map_.insert(std::make_pair(gid, staking_item));
-        }
-    }
-    staking_tick_.CutOff(
-            kStakingCheckingPeriod,
-            std::bind(&VpnServer::CheckTransactions, VpnServer::Instance()));
-}
-
-void VpnServer::HandleVpnLoginResponse(
-        transport::protobuf::Header& header,
-        block::protobuf::BlockMessage& block_msg) {
-    auto& attr_res = block_msg.acc_attr_res();
-    if (attr_res.attr_key() != common::kVpnLoginAttrKey) {
-        return;
-    }
-
-    std::lock_guard<std::mutex> guard(account_map_mutex_);
-    auto iter = account_map_.find(attr_res.account());
-    if (iter == account_map_.end()) {
-        return;
-    }
-
-    bft::protobuf::Block block;
-    if (!block.ParseFromString(attr_res.block())) {
-        return;
-    }
-
-    // TODO(): check block multi sign
-
-    std::string login_svr_id;
-    auto& tx_list = block.tx_block().tx_list();
-    for (int32_t i = tx_list.size() - 1; i >= 0; --i) {
-        if (tx_list[i].attr_size() > 0) {
-            if (tx_list[i].from() != attr_res.account()) {
-                continue;
-            }
-
-            for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
-                if (tx_list[i].attr(attr_idx).key() == common::kVpnLoginAttrKey) {
-                    login_svr_id = tx_list[i].attr(attr_idx).value();
-                    break;
-                }
-            }
-        }
-
-        if (!login_svr_id.empty()) {
-            break;
-        }
-    }
-
-    if (login_svr_id != common::GlobalInfo::Instance()->id()) {
-        ++iter->second->invalid_times;
-        if (iter->second->invalid_times > 5) {
-            iter->second->login_valid = false;
-            account_map_.erase(iter);
-        }
-        return;
-    }
-    iter->second->invalid_times = 0;
-    iter->second->vpn_login_height = block.height();
-}
-
-void VpnServer::CheckAccountValid() {
-    std::lock_guard<std::mutex> guard(account_map_mutex_);
-    static const uint32_t kWaitingLogin = 10 * 1000 * 1000;
-    BandwidthInfoPtr account_info = nullptr;
-    while (bandwidth_queue_.pop(&account_info)) {
-        if (account_info != nullptr) {
-            auto iter = account_map_.find(account_info->account_id);
-            if (iter != account_map_.end()) {
-                continue;
-            }
-            account_info->join_time = std::chrono::steady_clock::now() +
-                    std::chrono::microseconds(kWaitingLogin);
-            account_map_[account_info->account_id] = account_info;
-        }
-    }
-
-    auto now_point = std::chrono::steady_clock::now();
-    for (auto iter = account_map_.begin(); iter != account_map_.end();) {
-        if ((iter->second->begin_time +
-                std::chrono::microseconds(10 * 1000 * 1000)) < now_point) {
-            account_map_.erase(iter++);
-            continue;
-        }
-
-        if (iter->second->join_time < now_point) {
-            SendGetAccountAttrLastBlock(
-                    iter->second->account_id,
-                    iter->second->vpn_login_height);
-            iter->second->join_time = (std::chrono::steady_clock::now() +
-                std::chrono::microseconds(kWaitingLogin));
-        }
-        ++iter;
-    }
-    bandwidth_tick_.CutOff(
-            kStakingCheckingPeriod,
-            std::bind(&VpnServer::CheckAccountValid, VpnServer::Instance()));
-}
-
-void VpnServer::RotationServer() {
-    if (listen_ctx_queue.size() >= common::kMaxRotationCount) {
-        auto listen_item = listen_ctx_queue.front();
-        listen_ctx_queue.pop_front();
+void VpnRoute::RotationServer() {
+    if (listen_ctx_queue_.size() >= common::kMaxRotationCount) {
+        auto listen_item = listen_ctx_queue_.front();
+        listen_ctx_queue_.pop_front();
         StopVpn(listen_item.get());
     }
 
     std::shared_ptr<listen_ctx_t> listen_ctx_ptr = std::make_shared<listen_ctx_t>();
-    listen_ctx_queue.push_back(listen_ctx_ptr);
+    listen_ctx_queue_.push_back(listen_ctx_ptr);
     if (StartTcpServer(
             common::GlobalInfo::Instance()->config_local_ip(),
             0,
@@ -1831,9 +1378,6 @@ void VpnServer::RotationServer() {
             listen_ctx_ptr->vpn_port = ntohs(sin.sin_port);
             std::cout << "start new vpn server port: " << listen_ctx_ptr->vpn_port << std::endl;
             cork_dllist_init(&listen_ctx_ptr->svr_item->connections);
-//             listen_ctx_ptr->thread_ptr = std::make_shared<std::thread>(
-//                     &StartVpn,
-//                     listen_ctx_ptr.get());
             last_listen_ptr_ = listen_ctx_ptr;
         } else {
             StopVpn(listen_ctx_ptr.get());
@@ -1842,7 +1386,7 @@ void VpnServer::RotationServer() {
 
     new_vpn_server_tick_.CutOff(
             common::kRotationPeriod,
-            std::bind(&VpnServer::RotationServer, VpnServer::Instance()));
+            std::bind(&VpnRoute::RotationServer, VpnRoute::Instance()));
 }
 
 }  // namespace vpn
