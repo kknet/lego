@@ -164,12 +164,7 @@ int ShadowsocksProxy::StartShadowsocks() {
         return kProxyError;
     }
 
-    if (VpnServer::Instance()->Init(
-            common::GlobalInfo::Instance()->config_local_ip(),
-            vpn_server_port_,
-            "password",
-            "",
-            "aes-128-cfb") != kVpnsvrSuccess) {
+    if (VpnServer::Instance()->Init() != kVpnsvrSuccess) {
         return kProxyError;
     }
 
