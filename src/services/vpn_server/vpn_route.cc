@@ -97,6 +97,7 @@ extern "C" {
 #include "block/proto/block.pb.h"
 #include "block/proto/block_proto.h"
 #include "bft/basic_bft/transaction/proto/tx.pb.h"
+#include "services/vpn_server/ev_loop_manager.h"
 
 using namespace lego;
 
