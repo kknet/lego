@@ -16,12 +16,8 @@ public:
     }
 
 private:
-    EvLoopManager() {
-        InitLoop();
-    }
-
-    ~EvLoopManager() {}
-
+    EvLoopManager();
+    ~EvLoopManager();
     void InitLoop();
 
     struct ev_loop* loop_{ nullptr };
