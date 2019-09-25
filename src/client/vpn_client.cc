@@ -953,6 +953,7 @@ void VpnClient::GetAccountBlockWithHeight() {
 }
 
 void VpnClient::DumpNodeToConfig() {
+    return;
     DumpVpnNodes();
     DumpRouteNodes();
     config.DumpConfig(config_path_);
@@ -1005,6 +1006,8 @@ void VpnClient::DumpRouteNodes() {
 }
 
 void VpnClient::ReadRouteNodesFromConf() {
+    return;
+
     std::string country_list;
     config.Get("route", "country", country_list);
     if (country_list.empty()) {
@@ -1069,6 +1072,7 @@ void VpnClient::ReadRouteNodesFromConf() {
 }
 
 void VpnClient::ReadVpnNodesFromConf() {
+    return;
     std::string country_list;
     config.Get("vpn", "country", country_list);
     if (country_list.empty()) {
