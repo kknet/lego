@@ -643,7 +643,7 @@ void VpnClient::GetNetworkNodes(
                     vpn_svr_port,
                     vpn_route_port,
                     common::Encode::HexEncode(sec_key),
-                    tmp_node->dht_key,
+                    common::Encode::HexEncode(tmp_node->dht_key),
                     common::Encode::HexEncode(tmp_node->pubkey_str),
                     common::Encode::HexEncode(network::GetAccountAddressByPublicKey(tmp_node->pubkey_str)),
                     true);
