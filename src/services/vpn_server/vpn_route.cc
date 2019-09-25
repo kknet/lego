@@ -1361,14 +1361,14 @@ void VpnRoute::StartMoreServer() {
             std::cout << "start new route server port: " << listen_ctx_ptr->vpn_port << std::endl;
             cork_dllist_init(&listen_ctx_ptr->svr_item->connections);
             last_listen_ptr_ = listen_ctx_ptr;
-            listen_ctx_queue.push_back(listen_ctx_ptr);
+            listen_ctx_queue_.push_back(listen_ctx_ptr);
             started_port_set_.insert(valid_port[i]);
         }
     }
 
-    while (listen_ctx_queue.size() >= common::kMaxRotationCount) {
-        auto listen_item = listen_ctx_queue.front();
-        listen_ctx_queue.pop_front();
+    while (listen_ctx_queue_.size() >= common::kMaxRotationCount) {
+        auto listen_item = listen_ctx_queue_.front();
+        listen_ctx_queue_.pop_front();
         StopVpn(listen_item.get());
     }
 }
