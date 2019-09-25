@@ -129,17 +129,18 @@ int ShadowsocksProxy::InitTcpRelay() {
         return kProxySuccess;
     }
 
-    int res = vpn::VpnRoute::Instance()->Init();
-    if (res != vpnroute::kVpnRouteSuccess) {
-        return kProxyError;
-    }
-
     vpn_route_ = std::make_shared<VpnProxyNode>(network::kVpnRouteNetworkId);
     if (vpn_route_->Init() != network::kNetworkSuccess) {
         vpn_route_ = nullptr;
         PROXY_ERROR("node join network [%u] failed!", network::kVpnRouteNetworkId);
         return kProxyError;
     }
+
+    int res = vpn::VpnRoute::Instance()->Init();
+    if (res != vpnroute::kVpnRouteSuccess) {
+        return kProxyError;
+    }
+
     return kProxySuccess;
 }
 
@@ -156,6 +157,13 @@ int ShadowsocksProxy::StartShadowsocks() {
         return kProxySuccess;
     }
 
+    vpn_proxy_ = std::make_shared<VpnProxyNode>(network::kVpnNetworkId);
+    if (vpn_proxy_->Init() != network::kNetworkSuccess) {
+        vpn_proxy_ = nullptr;
+        PROXY_ERROR("node join network [%u] failed!", network::kVpnNetworkId);
+        return kProxyError;
+    }
+
     if (VpnServer::Instance()->Init(
             common::GlobalInfo::Instance()->config_local_ip(),
             vpn_server_port_,
@@ -165,12 +173,6 @@ int ShadowsocksProxy::StartShadowsocks() {
         return kProxyError;
     }
 
-    vpn_proxy_ = std::make_shared<VpnProxyNode>(network::kVpnNetworkId);
-    if (vpn_proxy_->Init() != network::kNetworkSuccess) {
-        vpn_proxy_ = nullptr;
-        PROXY_ERROR("node join network [%u] failed!", network::kVpnNetworkId);
-        return kProxyError;
-    }
     return kProxySuccess;
 }
 
