@@ -125,8 +125,8 @@ static void ResolvFreeCallback(void *data);
 static int acl = 0;
 static int mode = TCP_ONLY;
 static int ipv6first = 0;
-static int fast_open = 0;
-static int no_delay = 0;
+static int fast_open = 1;
+static int no_delay = 1;
 static int ret_val = 0;
 
 #ifdef HAVE_SETRLIMIT
@@ -681,7 +681,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
 
         port = ntohs(load16_be(server->buf->data + offset));
         offset += 2;
-
         if (static_cast<int>(server->buf->len) < offset) {
             ReportAddr(server->fd, "invalid request length");
             StopServer(EV_A_ server);
