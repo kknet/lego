@@ -40,14 +40,7 @@ public:
     }
 
     std::shared_ptr<listen_ctx_t> last_listen_ptr() {
-        if (last_listen_ptr_ == nullptr) {
-            return default_ctx_;
-        }
         return last_listen_ptr_;
-    }
-
-    std::shared_ptr<listen_ctx_t> default_ctx() {
-        return default_ctx_;
     }
 
 private:
@@ -58,6 +51,7 @@ private:
     void SendGetAccountAttrLastBlock(const std::string& account, uint64_t height);
     void HandleMessage(transport::protobuf::Header& header);
     void RotationServer();
+    void StartMoreServer();
 
     static const uint32_t kStakingCheckingPeriod = 10 * 1000 * 1000;
     static const uint32_t kAccountCheckPeriod = 10 * 1000 * 1000;
@@ -71,8 +65,9 @@ private:
     std::mutex account_map_mutex_;
     std::deque<std::shared_ptr<listen_ctx_t>> listen_ctx_queue;
     common::Tick new_vpn_server_tick_;
-    std::shared_ptr<listen_ctx_t> default_ctx_{ nullptr };
     std::shared_ptr<listen_ctx_t> last_listen_ptr_{ nullptr };
+    std::shared_ptr<std::thread> loop_thread_{ nullptr };
+    std::set<uint16_t> started_port_set_;
 
     DISALLOW_COPY_AND_ASSIGN(VpnServer);
 };

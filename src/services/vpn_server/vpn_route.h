@@ -37,6 +37,7 @@ private:
     VpnRoute();
     ~VpnRoute();
     void RotationServer();
+    void StartMoreServer();
 
     static const uint32_t kStakingCheckingPeriod = 10 * 1000 * 1000;
     static const uint32_t kAccountCheckPeriod = 10 * 1000 * 1000;
@@ -45,6 +46,8 @@ private:
     common::Tick new_vpn_server_tick_;
     std::shared_ptr<listen_ctx_t> default_ctx_{ nullptr };
     std::shared_ptr<listen_ctx_t> last_listen_ptr_{ nullptr };
+    std::set<uint16_t> started_port_set_;
+    std::shared_ptr<std::thread> loop_thread_{ nullptr };
 
     DISALLOW_COPY_AND_ASSIGN(VpnRoute);
 };

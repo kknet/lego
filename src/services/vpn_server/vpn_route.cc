@@ -84,6 +84,7 @@ extern "C" {
 
 #include "common/encode.h"
 #include "common/global_info.h"
+#include "common/time_utils.h"
 #include "client/trans_client.h"
 #include "security/crypto_utils.h"
 #include "security/aes.h"
@@ -1242,17 +1243,6 @@ static void AcceptCallback(EV_P_ ev_io *w, int revents) {
     ev_timer_start(EV_A_ & server->recv_ctx->watcher);
 }
 
-static void InitSignal(std::shared_ptr<listen_ctx_t> default_ctx) {
-//     signal(SIGPIPE, SIG_IGN);
-//     signal(SIGABRT, SIG_IGN);
-//     ev_signal_init(&sigint_watcher, SignalCallback, SIGINT);
-//     ev_signal_init(&sigterm_watcher, SignalCallback, SIGTERM);
-//     ev_signal_start(default_ctx->loop, &sigint_watcher);
-//     ev_signal_start(default_ctx->loop, &sigterm_watcher);
-//     ev_signal_init(&sigchld_watcher, SignalCallback, SIGCHLD);
-//     ev_signal_start(default_ctx->loop, &sigchld_watcher);
-}
-
 static struct ev_loop *loop = ev_loop_new(EVBACKEND_EPOLL | EVFLAG_NOENV);
 static int StartTcpServer(
         const std::string& host,
@@ -1291,7 +1281,7 @@ static int StartTcpServer(
 //     return 0;
 // }
 
-static void StartVpn(listen_ctx_t* listen_ctx) {
+static void StartVpn() {
     ev_run(loop, 0);
 }
 
@@ -1326,7 +1316,6 @@ VpnRoute* VpnRoute::Instance() {
 }
 
 void VpnRoute::Stop() {
-    StopVpn(default_ctx_.get());
     while (!listen_ctx_queue_.empty()) {
         auto listen_ctx_ptr = listen_ctx_queue_.front();
         listen_ctx_queue_.pop_front();
@@ -1338,46 +1327,58 @@ void VpnRoute::Stop() {
 
 int VpnRoute::Init() {
     resolv_init(loop, NULL, ipv6first);
-    default_ctx_ = std::make_shared<listen_ctx_t>();
-    if (StartTcpServer(
-            common::GlobalInfo::Instance()->config_local_ip(),
-            common::kDefaultRoutePort,
-            default_ctx_.get()) != 0) {
-        return kVpnsvrError;
-    }
-    default_ctx_->vpn_port = common::kDefaultRoutePort;
-    cork_dllist_init(&default_ctx_->svr_item->connections);
-    default_ctx_->thread_ptr = std::make_shared<std::thread>(&StartVpn, default_ctx_.get());
-    InitSignal(default_ctx_);
+    
+    loop_thread_ = std::make_shared<std::thread>(&StartVpn);
     VpnRoute::RotationServer();
     return kVpnsvrSuccess;
 }
 
-void VpnRoute::RotationServer() {
-    if (listen_ctx_queue_.size() >= common::kMaxRotationCount) {
-        auto listen_item = listen_ctx_queue_.front();
-        listen_ctx_queue_.pop_front();
-        StopVpn(listen_item.get());
+void VpnRoute::StartMoreServer() {
+    auto vpn_svr_dht = network::DhtManager::Instance()->GetDht(network::kVpnRouteNetworkId);
+    if (vpn_svr_dht == nullptr) {
+        return;
     }
 
-    std::shared_ptr<listen_ctx_t> listen_ctx_ptr = std::make_shared<listen_ctx_t>();
-    listen_ctx_queue_.push_back(listen_ctx_ptr);
-    if (StartTcpServer(
-            common::GlobalInfo::Instance()->config_local_ip(),
-            0,
-            listen_ctx_ptr.get()) == 0) {
-        struct sockaddr_in sin;
-        socklen_t len = sizeof(sin);
-        if (getsockname(listen_ctx_ptr->fd, (struct sockaddr *)&sin, &len) == 0) {
-            listen_ctx_ptr->vpn_port = ntohs(sin.sin_port);
+    auto now_timestamp_days = common::TimeUtils::TimestampDays();
+    std::vector<uint16_t> valid_port;
+    for (int i = -1; i <= 1; ++i) {
+        auto port = common::GetVpnRoutePort(
+                vpn_svr_dht->local_node()->dht_key,
+                now_timestamp_days + i);
+        if (started_port_set_.find(port) != started_port_set_.end()) {
+            continue;
+        }
+        valid_port.push_back(port);
+    }
+
+    if (valid_port.empty()) {
+        return;
+    }
+
+    for (int i = 0; i < valid_port.size(); ++i) {
+        std::shared_ptr<listen_ctx_t> listen_ctx_ptr = std::make_shared<listen_ctx_t>();
+        if (StartTcpServer(
+                common::GlobalInfo::Instance()->config_local_ip(),
+                valid_port[i],
+                listen_ctx_ptr.get()) == 0) {
+            listen_ctx_ptr->vpn_port = valid_port[i];
             std::cout << "start new vpn server port: " << listen_ctx_ptr->vpn_port << std::endl;
             cork_dllist_init(&listen_ctx_ptr->svr_item->connections);
             last_listen_ptr_ = listen_ctx_ptr;
-        } else {
-            StopVpn(listen_ctx_ptr.get());
+            listen_ctx_queue.push_back(listen_ctx_ptr);
+            started_port_set_.insert(valid_port[i]);
         }
     }
 
+    while (listen_ctx_queue.size() >= common::kMaxRotationCount) {
+        auto listen_item = listen_ctx_queue.front();
+        listen_ctx_queue.pop_front();
+        StopVpn(listen_item.get());
+    }
+}
+
+void VpnRoute::RotationServer() {
+    StartMoreServer();
     new_vpn_server_tick_.CutOff(
             common::kRotationPeriod,
             std::bind(&VpnRoute::RotationServer, VpnRoute::Instance()));

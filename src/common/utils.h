@@ -86,8 +86,12 @@ static const std::string kVpnLoginAttrKey = "vpn_login";
 extern volatile bool global_stop;
 static const uint16_t kDefaultVpnPort = 9033;
 static const uint16_t kDefaultRoutePort = 9034;
-static const int64_t kRotationPeriod = 24ll * 3600ll * 1000ll * 1000ll;
+static const int64_t kRotationPeriod = 60ll * 1000ll * 1000ll;
 static const uint32_t kMaxRotationCount = 4u;
+static const uint16_t kVpnServerPortRangeMin = 10000u;
+static const uint16_t kVpnServerPortRangeMax = 35000u;
+static const uint16_t kVpnRoutePortRangeMin = 35000u;
+static const uint16_t kVpnRoutePortRangeMax = 65000u;
 
 uint32_t GetPoolIndex(const std::string& acc_addr);
 std::string CreateGID(const std::string& pubkey);
@@ -140,6 +144,9 @@ void itimeofday(long *sec, long *usec);
 int64_t iclock64(void);
 uint32_t iclock();
 void SignalRegister();
+
+uint16_t GetVpnServerPort(const std::string& dht_key, uint32_t timestamp_days);
+uint16_t GetVpnRoutePort(const std::string& dht_key, uint32_t timestamp_days);
 
 }  // namespace common
 

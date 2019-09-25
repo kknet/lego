@@ -22,6 +22,7 @@
 #include "common/random.h"
 #include "common/country_code.h"
 #include "common/global_info.h"
+#include "common/time_utils.h"
 
 namespace lego {
 
@@ -143,6 +144,22 @@ void SignalRegister() {
     signal(SIGABRT, SIG_IGN);
     signal(SIGINT, SignalCallback);
     signal(SIGTERM, SignalCallback);
+}
+
+uint16_t GetVpnServerPort(const std::string& dht_key, uint32_t timestamp_days) {
+    std::string tmp_str = dht_key + std::to_string(timestamp_days);
+    uint32_t hash32 = common::Hash::Hash32(tmp_str);
+    uint32_t vpn_server_range = kVpnServerPortRangeMax - kVpnServerPortRangeMin;
+    uint16_t tmp_port = (hash32 % vpn_server_range) + kVpnServerPortRangeMin;
+    return tmp_port;
+}
+
+uint16_t GetVpnRoutePort(const std::string& dht_key, uint32_t timestamp_days) {
+    std::string tmp_str = dht_key + std::to_string(timestamp_days);
+    uint32_t hash32 = common::Hash::Hash32(tmp_str);
+    uint32_t vpn_route_range = kVpnRoutePortRangeMax - kVpnRoutePortRangeMin;
+    uint16_t tmp_port = (hash32 % vpn_route_range) + kVpnRoutePortRangeMin;
+    return tmp_port;
 }
 
 }  // namespace common
