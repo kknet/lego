@@ -595,8 +595,31 @@ void VpnClient::GetVpnNodes() {
 void VpnClient::GetNetworkNodes(
         const std::vector<std::string>& country_vec,
         uint32_t network_id) {
+    auto now_tick = std::chrono::steady_clock::now();
     for (uint32_t i = 0; i < country_vec.size(); ++i) {
         auto country = country_vec[i];
+        if (network_id == network::kVpnNetworkId) {
+            auto iter = vpn_nodes_map_.find(country);
+            if (iter != vpn_nodes_map_.end() && iter->second.size() > 3) {
+                if (iter->second.front()->timeout >= now_tick) {
+                    continue;
+                }
+
+                iter->second.pop_front();
+            }
+        }
+
+        if (network_id == network::kVpnRouteNetworkId) {
+            auto iter = route_nodes_map_.find(country);
+            if (iter != route_nodes_map_.end() && iter->second.size() > 3) {
+                if (iter->second.front()->timeout >= now_tick) {
+                    continue;
+                }
+
+                iter->second.pop_front();
+            }
+        }
+
         auto uni_dht = std::dynamic_pointer_cast<network::Uniersal>(
             network::UniversalManager::Instance()->GetUniversal(
                 network::kUniversalNetworkId));
@@ -609,10 +632,8 @@ void VpnClient::GetNetworkNodes(
                 common::global_country_map[country],
                 4);
         if (dht_nodes.empty()) {
-            CLIENT_ERROR("get nodes[%s] size: %d error.", country.c_str(), dht_nodes.size());
             continue;
         }
-        CLIENT_ERROR("get nodes[%s] size: %d", country.c_str(), dht_nodes.size());
 
         for (auto iter = dht_nodes.begin(); iter != dht_nodes.end(); ++iter) {
             auto& tmp_node = *iter;

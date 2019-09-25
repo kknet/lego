@@ -57,7 +57,9 @@ struct VpnServerNode {
               dht_key(dkey),
               pubkey(pkey),
               acccount_id(id),
-              new_get(new_node) {}
+              new_get(new_node) {
+        timeout = std::chrono::steady_clock::now() + std::chrono::seconds(3600);
+    }
     std::string ip;
     uint16_t svr_port;
     uint16_t route_port;
@@ -66,6 +68,7 @@ struct VpnServerNode {
     std::string pubkey;
     std::string acccount_id;
     bool new_get{ false };
+    std::chrono::steady_clock::time_point timeout;
 };
 typedef std::shared_ptr<VpnServerNode> VpnServerNodePtr;
 
