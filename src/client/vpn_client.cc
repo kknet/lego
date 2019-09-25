@@ -598,27 +598,27 @@ void VpnClient::GetNetworkNodes(
     auto now_tick = std::chrono::steady_clock::now();
     for (uint32_t i = 0; i < country_vec.size(); ++i) {
         auto country = country_vec[i];
-        if (network_id == network::kVpnNetworkId) {
-            auto iter = vpn_nodes_map_.find(country);
-            if (iter != vpn_nodes_map_.end() && iter->second.size() > 3) {
-                if (iter->second.front()->timeout >= now_tick) {
-                    continue;
-                }
-
-                iter->second.pop_front();
-            }
-        }
-
-        if (network_id == network::kVpnRouteNetworkId) {
-            auto iter = route_nodes_map_.find(country);
-            if (iter != route_nodes_map_.end() && iter->second.size() > 3) {
-                if (iter->second.front()->timeout >= now_tick) {
-                    continue;
-                }
-
-                iter->second.pop_front();
-            }
-        }
+//         if (network_id == network::kVpnNetworkId) {
+//             auto iter = vpn_nodes_map_.find(country);
+//             if (iter != vpn_nodes_map_.end() && iter->second.size() > 3) {
+//                 if (iter->second.front()->timeout >= now_tick) {
+//                     continue;
+//                 }
+// 
+//                 iter->second.pop_front();
+//             }
+//         }
+// 
+//         if (network_id == network::kVpnRouteNetworkId) {
+//             auto iter = route_nodes_map_.find(country);
+//             if (iter != route_nodes_map_.end() && iter->second.size() > 3) {
+//                 if (iter->second.front()->timeout >= now_tick) {
+//                     continue;
+//                 }
+// 
+//                 iter->second.pop_front();
+//             }
+//         }
 
         auto uni_dht = std::dynamic_pointer_cast<network::Uniersal>(
             network::UniversalManager::Instance()->GetUniversal(
