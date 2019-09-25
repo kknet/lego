@@ -1524,12 +1524,7 @@ void VpnServer::Stop() {
     }
 }
 
-int VpnServer::Init(
-        const std::string& ip,
-        uint16_t port,
-        const std::string& passwd,
-        const std::string& key,
-        const std::string& method) {
+int VpnServer::Init() {
     RotationServer();
     if (listen_ctx_queue_.empty()) {
         return kVpnsvrError;

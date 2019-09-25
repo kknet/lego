@@ -19,7 +19,7 @@ namespace vpn {
 class VpnServer {
 public:
     static VpnServer* Instance();
-    int Init(struct ev_loop *loop);
+    int Init();
     int ParserReceivePacket(const char* buf);
     void HandleVpnLoginResponse(
             transport::protobuf::Header& header,
