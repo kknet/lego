@@ -1323,9 +1323,13 @@ void VpnRoute::Stop() {
 
 int VpnRoute::Init() {
     resolv_init(loop, NULL, ipv6first);
-    
+    RotationServer();
+    if (listen_ctx_queue_.empty()) {
+        std::cout << "start vpn route server failed!" << std::endl;
+        return kVpnsvrError;
+    }
+
     loop_thread_ = std::make_shared<std::thread>(&StartVpn);
-    VpnRoute::RotationServer();
     return kVpnsvrSuccess;
 }
 
@@ -1345,6 +1349,7 @@ void VpnRoute::StartMoreServer() {
             continue;
         }
         valid_port.push_back(port);
+        std::cout << "will start route port: " << port << std::endl;
     }
 
     if (valid_port.empty()) {

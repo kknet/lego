@@ -1825,6 +1825,7 @@ void VpnServer::StartMoreServer() {
             continue;
         }
         valid_port.push_back(port);
+        std::cout << "will start server port: " << port << std::endl;
     }
 
     if (valid_port.empty()) {
