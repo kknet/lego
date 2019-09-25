@@ -12,6 +12,7 @@
 #include "common/split.h"
 #include "common/tick.h"
 #include "common/string_utils.h"
+#include "common/time_utils.h"
 #include "security/private_key.h"
 #include "security/public_key.h"
 #include "security/schnorr.h"
@@ -610,17 +611,78 @@ void VpnClient::GetNetworkNodes(
             continue;
         }
         CLIENT_ERROR("get nodes[%s] size: %d", country.c_str(), dht_nodes.size());
-        uint32_t msg_id = common::GlobalInfo::Instance()->MessageId();
-        for (uint32_t i = 0; i < dht_nodes.size(); ++i) {
-            transport::protobuf::Header msg;
-            auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
-                    network::kUniversalNetworkId);
-            ClientProto::CreateGetVpnInfoRequest(
-                    root_dht_->local_node(),
-                    dht_nodes[i],
-                    msg_id,
-                    msg);
-            uni_dht->SendToClosestNode(msg);
+
+        for (auto iter = dht_nodes.begin(); iter != dht_nodes.end(); ++iter) {
+            auto& tmp_node = *iter;
+            uint16_t vpn_svr_port = 0;
+            uint16_t vpn_route_port = 0;
+            if (network_id == network::kVpnNetworkId) {
+                vpn_svr_port = common::GetVpnServerPort(
+                        tmp_node->dht_key,
+                        common::TimeUtils::TimestampDays());
+            } else if (network_id == network::kVpnRouteNetworkId) {
+                vpn_route_port = common::GetVpnRoutePort(
+                        tmp_node->dht_key,
+                        common::TimeUtils::TimestampDays());
+            }
+
+            // ecdh encrypt vpn password
+            std::string sec_key;
+            auto res = security::EcdhCreateKey::Instance()->CreateKey(
+                    *(tmp_node->pubkey_ptr),
+                    sec_key);
+            if (res != security::kSecuritySuccess) {
+                CLIENT_ERROR("create sec key failed!");
+                continue;;
+            }
+
+            auto node_ptr = std::make_shared<VpnServerNode>(
+                    tmp_node->public_ip,
+                    vpn_svr_port,
+                    vpn_route_port,
+                    common::Encode::HexEncode(sec_key),
+                    tmp_node->dht_key,
+                    common::Encode::HexEncode(tmp_node->pubkey_str),
+                    common::Encode::HexEncode(network::GetAccountAddressByPublicKey(tmp_node->pubkey_str)),
+                    true);
+            if (vpn_svr_port > 0) {
+                CLIENT_ERROR("get vpn node: %s:%d", node_ptr->ip.c_str(), node_ptr->svr_port);
+                std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
+                auto iter = vpn_nodes_map_.find(country);
+                if (iter != vpn_nodes_map_.end()) {
+                    auto e_iter = std::find_if(
+                            iter->second.begin(),
+                            iter->second.end(),
+                            [node_ptr](const VpnServerNodePtr& ptr) {
+                                return node_ptr->ip == ptr->ip && node_ptr->svr_port == ptr->svr_port;
+                            });
+                    if (e_iter == iter->second.end()) {
+                        iter->second.push_back(node_ptr);
+                        if (iter->second.size() > 16) {
+                            iter->second.pop_front();
+                        }
+                    }
+                }
+            }
+
+            if (vpn_route_port > 0) {
+                std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
+                auto iter = route_nodes_map_.find(country);
+                if (iter != route_nodes_map_.end()) {
+                    auto e_iter = std::find_if(
+                        iter->second.begin(),
+                        iter->second.end(),
+                        [node_ptr](const VpnServerNodePtr& ptr) {
+                        return node_ptr->dht_key == ptr->dht_key;
+                    });
+                    if (e_iter == iter->second.end()) {
+                        iter->second.push_back(node_ptr);
+                        if (iter->second.size() > 16) {
+                            iter->second.pop_front();
+                        }
+                    }
+                }
+            }
         }
     }
 }
