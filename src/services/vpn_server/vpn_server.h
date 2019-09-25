@@ -19,12 +19,7 @@ namespace vpn {
 class VpnServer {
 public:
     static VpnServer* Instance();
-    int Init(
-            const std::string& ip,
-            uint16_t port,
-            const std::string& passwd,
-            const std::string& key,
-            const std::string& method);
+    int Init(struct ev_loop *loop);
     int ParserReceivePacket(const char* buf);
     void HandleVpnLoginResponse(
             transport::protobuf::Header& header,
@@ -66,7 +61,6 @@ private:
     std::deque<std::shared_ptr<listen_ctx_t>> listen_ctx_queue_;
     common::Tick new_vpn_server_tick_;
     std::shared_ptr<listen_ctx_t> last_listen_ptr_{ nullptr };
-    std::shared_ptr<std::thread> loop_thread_{ nullptr };
     std::set<uint16_t> started_port_set_;
 
     DISALLOW_COPY_AND_ASSIGN(VpnServer);

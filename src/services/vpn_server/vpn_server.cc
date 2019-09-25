@@ -1,5 +1,4 @@
 #include "services/vpn_server/vpn_server.h"
-#include "common/string_utils.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -82,6 +81,7 @@ extern "C" {
 }
 #endif
 
+#include "common/string_utils.h"
 #include "common/encode.h"
 #include "common/global_info.h"
 #include "common/time_utils.h"
@@ -97,6 +97,7 @@ extern "C" {
 #include "block/proto/block.pb.h"
 #include "block/proto/block_proto.h"
 #include "bft/basic_bft/transaction/proto/tx.pb.h"
+#include "services/vpn_server/ev_loop_manager.h"
 
 using namespace lego;
 
@@ -135,19 +136,6 @@ int use_syslog = 0;
 
 #ifndef __MINGW32__
 ev_timer stat_update_watcher;
-#endif
-
-static struct ev_signal sigint_watcher;
-static struct ev_signal sigterm_watcher;
-#ifndef __MINGW32__
-static struct ev_signal sigchld_watcher;
-#else
-static struct plugin_watcher_t {
-    ev_io io;
-    SOCKET fd;
-    uint16_t port;
-    int valid;
-} plugin_watcher;
 #endif
 
 static const uint32_t kMaxConnectAccount = 1024u;  // single server just 1024 user
@@ -1426,52 +1414,6 @@ static void CloseAndFreeServer(EV_P_ server_t *server) {
     }
 }
 
-struct ev_loop *loop = EV_DEFAULT;
-static void SignalCallback(EV_P_ ev_signal *w, int revents) {
-    std::cout << "signal catched and now exit." << std::endl;
-    if (revents & EV_SIGNAL) {
-        switch (w->signum) {
-#ifndef __MINGW32__
-        case SIGCHLD:
-            if (!is_plugin_running()) {
-                LOGE("plugin service exit unexpectedly");
-                ret_val = -1;
-            }
-            else
-                return;
-#endif
-        case SIGINT:
-        case SIGTERM:
-            ev_signal_stop(loop, &sigint_watcher);
-            ev_signal_stop(loop, &sigterm_watcher);
-#ifndef __MINGW32__
-            ev_signal_stop(loop, &sigchld_watcher);
-#else
-            ev_io_stop(loop, &plugin_watcher.io);
-#endif
-            ev_unloop(loop, EVUNLOOP_ALL);
-        }
-    }
-}
-
-#ifdef __MINGW32__
-static void plugin_watcher_cb(EV_P_ ev_io *w, int revents) {
-    char buf[1];
-    SOCKET fd = accept(plugin_watcher.fd, NULL, NULL);
-    if (fd == INVALID_SOCKET) {
-        return;
-    }
-    recv(fd, buf, 1, 0);
-    closesocket(fd);
-    LOGE("plugin service exit unexpectedly");
-    ret_val = -1;
-    ev_signal_stop(EV_DEFAULT, &sigint_watcher);
-    ev_signal_stop(EV_DEFAULT, &sigterm_watcher);
-    ev_io_stop(EV_DEFAULT, &plugin_watcher.io);
-    ev_unloop(EV_A_ EVUNLOOP_ALL);
-}
-#endif
-
 static void AcceptCallback(EV_P_ ev_io *w, int revents) {
     listen_ctx_t *listener = (listen_ctx_t *)w;
     int serverfd = accept(listener->fd, NULL, NULL);
@@ -1504,30 +1446,6 @@ static void AcceptCallback(EV_P_ ev_io *w, int revents) {
     ev_timer_start(EV_A_ & server->recv_ctx->watcher);
 }
 
-static void InitSignal() {
-    signal(SIGPIPE, SIG_IGN);
-    signal(SIGABRT, SIG_IGN);
-    ev_signal_init(&sigint_watcher, SignalCallback, SIGINT);
-    ev_signal_init(&sigterm_watcher, SignalCallback, SIGTERM);
-    ev_signal_start(loop, &sigint_watcher);
-    ev_signal_start(loop, &sigterm_watcher);
-    ev_signal_init(&sigchld_watcher, SignalCallback, SIGCHLD);
-    ev_signal_start(loop, &sigchld_watcher);
-}
-
-// static int InitCrypto(
-//         const std::string& password,
-//         const std::string& key,
-//         const std::string& method) {
-//     crypto = crypto_init("8246c339fa67fb295de905c0956befbffc2bf24e0c9b8aee7fbfdc66506512eb", NULL, "aes-128-cfb");
-//     if (crypto == NULL) {
-//         LOGI("failed to initialize ciphers");
-//         return -1;
-//     }
-//     return 0;
-// }
-
-
 static int StartTcpServer(
         const std::string& host,
         uint16_t port,
@@ -1550,10 +1468,10 @@ static int StartTcpServer(
     listen_ctx->timeout = 60;
     listen_ctx->fd = listenfd;
     listen_ctx->iface = NULL;
-    listen_ctx->loop = loop;
+    listen_ctx->loop = vpn::EvLoopManager::Instance()->loop();
     listen_ctx->svr_item = std::make_shared<server_item_t>();
     ev_io_init(&listen_ctx->io, AcceptCallback, listenfd, EV_READ);
-    ev_io_start(loop, &listen_ctx->io);
+    ev_io_start(vpn::EvLoopManager::Instance()->loop(), &listen_ctx->io);
     return 0;
 }
 
@@ -1565,19 +1483,13 @@ static int StartTcpServer(
 //     return 0;
 // }
 
-static void StartVpn() {
-    ev_run(loop, 0);
-}
-
-static void AsyncCallback(struct ev_loop *loop, ev_async*, int) {
-    ev_break(loop, EVBREAK_ALL);
-}
-
 static void StopVpn(listen_ctx_t* listen_ctx) {
-    ev_io_stop(loop, &listen_ctx->io);
-    resolv_shutdown(loop);
+    ev_io_stop(vpn::EvLoopManager::Instance()->loop(), &listen_ctx->io);
+    resolv_shutdown(vpn::EvLoopManager::Instance()->loop());
     close(listen_ctx->fd);
-    FreeConnections(loop, &listen_ctx->svr_item->connections);
+    FreeConnections(
+            vpn::EvLoopManager::Instance()->loop(),
+            &listen_ctx->svr_item->connections);
 #ifdef __MINGW32__
         if (plugin_watcher.valid) {
             closesocket(plugin_watcher.fd);
@@ -1610,7 +1522,6 @@ void VpnServer::Stop() {
         listen_ctx_queue_.pop_front();
         StopVpn(listen_ctx_ptr.get());
     }
-    free_udprelay();
 }
 
 int VpnServer::Init(
@@ -1619,17 +1530,10 @@ int VpnServer::Init(
         const std::string& passwd,
         const std::string& key,
         const std::string& method) {
-    resolv_init(loop, NULL, ipv6first);
-    std::cout << "start vpn server." << std::endl;
     RotationServer();
     if (listen_ctx_queue_.empty()) {
-        std::cout << "start vpn server failed." << std::endl;
         return kVpnsvrError;
     }
-    std::cout << "start vpn server success." << std::endl;
-
-    loop_thread_ = std::make_shared<std::thread>(&StartVpn);
-    InitSignal();
 
     staking_tick_.CutOff(
             kStakingCheckingPeriod,
@@ -1825,7 +1729,6 @@ void VpnServer::StartMoreServer() {
             continue;
         }
         valid_port.push_back(port);
-        std::cout << "will start server port: " << port << std::endl;
     }
 
     if (valid_port.empty()) {
@@ -1839,7 +1742,6 @@ void VpnServer::StartMoreServer() {
                 valid_port[i],
                 listen_ctx_ptr.get()) == 0) {
             listen_ctx_ptr->vpn_port = valid_port[i];
-            std::cout << "start new vpn server port: " << listen_ctx_ptr->vpn_port << std::endl;
             cork_dllist_init(&listen_ctx_ptr->svr_item->connections);
             last_listen_ptr_ = listen_ctx_ptr;
             listen_ctx_queue_.push_back(listen_ctx_ptr);

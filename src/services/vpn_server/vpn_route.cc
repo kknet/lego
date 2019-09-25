@@ -1243,7 +1243,6 @@ static void AcceptCallback(EV_P_ ev_io *w, int revents) {
     ev_timer_start(EV_A_ & server->recv_ctx->watcher);
 }
 
-static struct ev_loop *loop = ev_loop_new(EVBACKEND_EPOLL | EVFLAG_NOENV);
 static int StartTcpServer(
         const std::string& host,
         uint16_t port,
@@ -1266,10 +1265,10 @@ static int StartTcpServer(
     listen_ctx->timeout = 60;
     listen_ctx->fd = listenfd;
     listen_ctx->iface = NULL;
-    listen_ctx->loop = loop;
+    listen_ctx->loop = vpn::EvLoopManager::Instance()->loop();
     listen_ctx->svr_item = std::make_shared<server_item_t>();
     ev_io_init(&listen_ctx->io, AcceptCallback, listenfd, EV_READ);
-    ev_io_start(loop, &listen_ctx->io);
+    ev_io_start(vpn::EvLoopManager::Instance()->loop(), &listen_ctx->io);
     return 0;
 }
 
@@ -1281,14 +1280,10 @@ static int StartTcpServer(
 //     return 0;
 // }
 
-static void StartVpn() {
-    ev_run(loop, 0);
-}
-
-static void StopVpn(listen_ctx_t* listen_ctx) {
-    ev_io_stop(loop, &listen_ctx->io);
+static void StopRoute(listen_ctx_t* listen_ctx) {
+    ev_io_stop(vpn::EvLoopManager::Instance()->loop(), &listen_ctx->io);
     close(listen_ctx->fd);
-    FreeConnections(loop, &listen_ctx->svr_item->connections);
+    FreeConnections(vpn::EvLoopManager::Instance()->loop(), &listen_ctx->svr_item->connections);
 #ifdef __MINGW32__
         if (plugin_watcher.valid) {
             closesocket(plugin_watcher.fd);
@@ -1315,21 +1310,17 @@ void VpnRoute::Stop() {
     while (!listen_ctx_queue_.empty()) {
         auto listen_ctx_ptr = listen_ctx_queue_.front();
         listen_ctx_queue_.pop_front();
-        StopVpn(listen_ctx_ptr.get());
+        StopRoute(listen_ctx_ptr.get());
     }
-    resolv_shutdown(loop);
-    free_udprelay();
 }
 
 int VpnRoute::Init() {
-    resolv_init(loop, NULL, ipv6first);
     RotationServer();
     if (listen_ctx_queue_.empty()) {
         std::cout << "start vpn route server failed!" << std::endl;
         return kVpnsvrError;
     }
 
-    loop_thread_ = std::make_shared<std::thread>(&StartVpn);
     return kVpnsvrSuccess;
 }
 
@@ -1349,7 +1340,6 @@ void VpnRoute::StartMoreServer() {
             continue;
         }
         valid_port.push_back(port);
-        std::cout << "will start route port: " << port << std::endl;
     }
 
     if (valid_port.empty()) {
@@ -1363,7 +1353,6 @@ void VpnRoute::StartMoreServer() {
                 valid_port[i],
                 listen_ctx_ptr.get()) == 0) {
             listen_ctx_ptr->vpn_port = valid_port[i];
-            std::cout << "start new route server port: " << listen_ctx_ptr->vpn_port << std::endl;
             cork_dllist_init(&listen_ctx_ptr->svr_item->connections);
             last_listen_ptr_ = listen_ctx_ptr;
             listen_ctx_queue_.push_back(listen_ctx_ptr);
@@ -1374,7 +1363,7 @@ void VpnRoute::StartMoreServer() {
     while (listen_ctx_queue_.size() >= common::kMaxRotationCount) {
         auto listen_item = listen_ctx_queue_.front();
         listen_ctx_queue_.pop_front();
-        StopVpn(listen_item.get());
+        StopRoute(listen_item.get());
     }
 }
 

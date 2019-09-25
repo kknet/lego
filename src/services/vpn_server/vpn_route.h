@@ -19,7 +19,7 @@ namespace vpn {
 class VpnRoute {
 public:
     static VpnRoute* Instance();
-    int Init();
+    int Init(struct ev_loop *loop);
     void Stop();
 
     std::shared_ptr<listen_ctx_t> last_listen_ptr() {
@@ -47,7 +47,6 @@ private:
     std::shared_ptr<listen_ctx_t> default_ctx_{ nullptr };
     std::shared_ptr<listen_ctx_t> last_listen_ptr_{ nullptr };
     std::set<uint16_t> started_port_set_;
-    std::shared_ptr<std::thread> loop_thread_{ nullptr };
 
     DISALLOW_COPY_AND_ASSIGN(VpnRoute);
 };
