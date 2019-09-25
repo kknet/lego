@@ -84,6 +84,7 @@ extern "C" {
 
 #include "common/encode.h"
 #include "common/global_info.h"
+#include "common/time_utils.h"
 #include "client/trans_client.h"
 #include "security/crypto_utils.h"
 #include "security/aes.h"
