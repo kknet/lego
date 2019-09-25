@@ -609,6 +609,7 @@ void VpnClient::GetNetworkNodes(
                 common::global_country_map[country],
                 4);
         if (dht_nodes.empty()) {
+            CLIENT_ERROR("get nodes[%s] size: %d error.", country.c_str(), dht_nodes.size());
             continue;
         }
         CLIENT_ERROR("get nodes[%s] size: %d", country.c_str(), dht_nodes.size());
