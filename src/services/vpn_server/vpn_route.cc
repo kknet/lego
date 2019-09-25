@@ -118,7 +118,6 @@ static void CloseAndFreeRemote(EV_P_ remote_t *remote);
 static void FreeServer(server_t *server);
 static void CloseAndFreeServer(EV_P_ server_t *server);
 static void ResolvCallback(struct sockaddr *addr, void *data);
-static void ResolvFreeCallback(void *data);
 
 // static crypto_t *crypto;
 
@@ -571,28 +570,6 @@ void SetTosFromConnmark(remote_t *remote, server_t *server) {
 
 #endif
 
-static bool RemoveNotAliveAccount(
-        const std::chrono::steady_clock::time_point& now_point,
-        std::unordered_map<std::string, BandwidthInfoPtr>& account_bindwidth_map) {
-    if (account_bindwidth_map.size() <= kMaxConnectAccount) {
-        return false;
-    }
-
-    for (auto iter = account_bindwidth_map.begin(); iter != account_bindwidth_map.end();) {
-        if (iter->second->begin_time < now_point) {
-            account_bindwidth_map.erase(iter++);
-        } else {
-            ++iter;
-        }
-    }
-
-    if (account_bindwidth_map.size() > kMaxConnectAccount) {
-        return true;
-    }
-    
-    return false;
-}
-
 static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     server_ctx_t *server_recv_ctx = (server_ctx_t *)w;
     server_t *server = server_recv_ctx->server;
@@ -649,7 +626,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         int offset = 0;
         int need_query = 0;
         char host[255] = { 0 };
-        uint16_t port = 0;
         struct addrinfo info;
         struct sockaddr_storage storage;
         memset(&info, 0, sizeof(struct addrinfo));
@@ -679,7 +655,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             return;
         }
 
-        port = ntohs(load16_be(server->buf->data + offset));
         offset += 2;
         if (static_cast<int>(server->buf->len) < offset) {
             ReportAddr(server->fd, "invalid request length");
@@ -773,68 +748,6 @@ static void ServerTimeoutCallback(EV_P_ ev_timer *watcher, int revents) {
 
     CloseAndFreeRemote(EV_A_ remote);
     CloseAndFreeServer(EV_A_ server);
-}
-
-static void ResolvFreeCallback(void *data) {
-    query_t *query = (query_t *)data;
-
-    if (query != NULL) {
-        if (query->server != NULL)
-            query->server->query = NULL;
-        ss_free(query);
-    }
-}
-
-static void ResolvCallback(struct sockaddr *addr, void *data) {
-    query_t *query = (query_t *)data;
-    server_t *server = query->server;
-
-    if (server == NULL)
-        return;
-
-    struct ev_loop *loop = server->listen_ctx->loop;
-
-    if (addr == NULL) {
-        LOGE("unable to resolve %s", query->hostname);
-        CloseAndFreeServer(EV_A_ server);
-    } else {
-        struct addrinfo info;
-        memset(&info, 0, sizeof(struct addrinfo));
-        info.ai_socktype = SOCK_STREAM;
-        info.ai_protocol = IPPROTO_TCP;
-        info.ai_addr = addr;
-
-        if (addr->sa_family == AF_INET) {
-            info.ai_family = AF_INET;
-            info.ai_addrlen = sizeof(struct sockaddr_in);
-        } else if (addr->sa_family == AF_INET6) {
-            info.ai_family = AF_INET6;
-            info.ai_addrlen = sizeof(struct sockaddr_in6);
-        }
-
-        remote_t *remote = ConnectToRemote(EV_A_ & info, server);
-
-        if (remote == NULL) {
-            CloseAndFreeServer(EV_A_ server);
-        } else {
-            server->remote = remote;
-            remote->server = server;
-
-            // XXX: should handle buffer carefully
-            if (server->buf->len > 0) {
-                brealloc(remote->buf, server->buf->len, SOCKET_BUF_SIZE);
-                memcpy(remote->buf->data, server->buf->data + server->buf->idx,
-                    server->buf->len);
-                remote->buf->len = server->buf->len;
-                remote->buf->idx = 0;
-                server->buf->len = 0;
-                server->buf->idx = 0;
-            }
-
-            // listen to remote connected event
-            ev_io_start(EV_A_ & remote->send_ctx->io);
-        }
-    }
 }
 
 static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
@@ -1162,37 +1075,6 @@ static void CloseAndFreeServer(EV_P_ server_t *server) {
     }
 }
 
-static void SignalCallback(EV_P_ ev_signal *w, int revents) {
-    std::cout << "signal catched and now exit." << std::endl;
-    if (revents & EV_SIGNAL) {
-        switch (w->signum) {
-#ifndef __MINGW32__
-        case SIGCHLD:
-            if (!is_plugin_running()) {
-                LOGE("plugin service exit unexpectedly");
-                ret_val = -1;
-            }
-            else
-                return;
-#endif
-        case SIGINT:
-        case SIGTERM:
-            auto def_ctx = lego::vpn::VpnRoute::Instance()->default_ctx();
-            if (def_ctx) {
-                ev_signal_stop(def_ctx->loop, &sigint_watcher);
-                ev_signal_stop(def_ctx->loop, &sigterm_watcher);
-#ifndef __MINGW32__
-                ev_signal_stop(def_ctx->loop, &sigchld_watcher);
-#else
-                ev_io_stop(def_ctx->loop, &plugin_watcher.io);
-#endif
-                ev_unloop(def_ctx->loop, EVUNLOOP_ALL);
-            }
-            std::cout << "signal catched and now exit." << std::endl;
-        }
-    }
-}
-
 #ifdef __MINGW32__
 static void plugin_watcher_cb(EV_P_ ev_io *w, int revents) {
     char buf[1];
@@ -1346,7 +1228,7 @@ void VpnRoute::StartMoreServer() {
         return;
     }
 
-    for (int i = 0; i < valid_port.size(); ++i) {
+    for (uint32_t i = 0; i < valid_port.size(); ++i) {
         std::shared_ptr<listen_ctx_t> listen_ctx_ptr = std::make_shared<listen_ctx_t>();
         if (StartTcpServer(
                 common::GlobalInfo::Instance()->config_local_ip(),

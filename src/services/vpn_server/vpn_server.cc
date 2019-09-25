@@ -101,7 +101,6 @@ extern "C" {
 
 using namespace lego;
 
-static void SignalCallback(EV_P_ ev_signal *w, int revents);
 static void AcceptCallback(EV_P_ ev_io *w, int revents);
 static void ServerSendCallback(EV_P_ ev_io *w, int revents);
 static void ServerRecvCallback(EV_P_ ev_io *w, int revents);
@@ -1730,7 +1729,7 @@ void VpnServer::StartMoreServer() {
         return;
     }
 
-    for (int i = 0; i < valid_port.size(); ++i) {
+    for (uint32_t i = 0; i < valid_port.size(); ++i) {
         std::shared_ptr<listen_ctx_t> listen_ctx_ptr = std::make_shared<listen_ctx_t>();
         if (StartTcpServer(
                 common::GlobalInfo::Instance()->config_local_ip(),
