@@ -106,10 +106,9 @@ static void SignalCallback(struct ev_loop* loop, ev_signal *w, int revents) {
         case SIGCHLD:
             if (!is_plugin_running()) {
                 LOGE("plugin service exit unexpectedly");
-                ret_val = -1;
-            }
-            else
+            } else {
                 return;
+            }
 #endif
         case SIGINT:
         case SIGTERM:
@@ -137,7 +136,7 @@ static void InitSignal(struct ev_loop* loop) {
 }
 
 static void StartVpn() {
-    ev_run(loop, 0);
+    ev_run(EvLoopManager::Instance()->loop(), 0);
 }
 
 EvLoopManager::EvLoopManager() {
@@ -145,7 +144,7 @@ EvLoopManager::EvLoopManager() {
 }
 
 EvLoopManager::~EvLoopManager() {
-    resolv_shutdown(loop);
+    resolv_shutdown(EvLoopManager::Instance()->loop());
 }
 
 EvLoopManager* EvLoopManager::Instance() {
@@ -153,10 +152,10 @@ EvLoopManager* EvLoopManager::Instance() {
     return &ins;
 }
 
-void InitLoop() {
+void EvLoopManager::InitLoop() {
     loop_ = EV_DEFAULT;
     resolv_init(loop_, NULL, 0);
-    InitSignal();
+    InitSignal(loop_);
     loop_thread_ = std::make_shared<std::thread>(&StartVpn);
 }
 
