@@ -1426,6 +1426,7 @@ static void CloseAndFreeServer(EV_P_ server_t *server) {
     }
 }
 
+struct ev_loop *loop = EV_DEFAULT;
 static void SignalCallback(EV_P_ ev_signal *w, int revents) {
     std::cout << "signal catched and now exit." << std::endl;
     if (revents & EV_SIGNAL) {
@@ -1441,18 +1442,14 @@ static void SignalCallback(EV_P_ ev_signal *w, int revents) {
 #endif
         case SIGINT:
         case SIGTERM:
-            auto def_ctx = lego::vpn::VpnServer::Instance()->default_ctx();
-            if (def_ctx) {
-                ev_signal_stop(def_ctx->loop, &sigint_watcher);
-                ev_signal_stop(def_ctx->loop, &sigterm_watcher);
+            ev_signal_stop(loop, &sigint_watcher);
+            ev_signal_stop(loop, &sigterm_watcher);
 #ifndef __MINGW32__
-                ev_signal_stop(def_ctx->loop, &sigchld_watcher);
+            ev_signal_stop(loop, &sigchld_watcher);
 #else
-                ev_io_stop(def_ctx->loop, &plugin_watcher.io);
+            ev_io_stop(loop, &plugin_watcher.io);
 #endif
-                ev_unloop(def_ctx->loop, EVUNLOOP_ALL);
-            }
-            std::cout << "signal catched and now exit." << std::endl;
+            ev_unloop(loop, EVUNLOOP_ALL);
         }
     }
 }
@@ -1507,7 +1504,7 @@ static void AcceptCallback(EV_P_ ev_io *w, int revents) {
     ev_timer_start(EV_A_ & server->recv_ctx->watcher);
 }
 
-static void InitSignal(ev_loop* loop) {
+static void InitSignal() {
     signal(SIGPIPE, SIG_IGN);
     signal(SIGABRT, SIG_IGN);
     ev_signal_init(&sigint_watcher, SignalCallback, SIGINT);
@@ -1530,7 +1527,6 @@ static void InitSignal(ev_loop* loop) {
 //     return 0;
 // }
 
-struct ev_loop *loop = EV_DEFAULT;
 
 static int StartTcpServer(
         const std::string& host,
@@ -1630,7 +1626,7 @@ int VpnServer::Init(
     }
 
     loop_thread_ = std::make_shared<std::thread>(&StartVpn);
-    InitSignal(loop);
+    InitSignal();
 
     staking_tick_.CutOff(
             kStakingCheckingPeriod,
