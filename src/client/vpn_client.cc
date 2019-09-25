@@ -541,6 +541,9 @@ std::string VpnClient::GetVpnServerNodes(
             std::vector<std::string> ct_vec = { country };
         } else {
             for (auto qiter = iter->second.begin(); qiter != iter->second.end(); ++qiter) {
+                (*qiter)->svr_port = common::GetVpnServerPort(
+                        common::Encode::HexDecode((*qiter)->dht_key),
+                        common::TimeUtils::TimestampDays());
                 nodes.push_back(*qiter);
             }
 
@@ -557,6 +560,9 @@ std::string VpnClient::GetVpnServerNodes(
             std::vector<std::string> ct_vec = { country };
         } else {
             for (auto qiter = iter->second.begin(); qiter != iter->second.end(); ++qiter) {
+                (*qiter)->svr_port = common::GetVpnRoutePort(
+                        common::Encode::HexDecode((*qiter)->dht_key),
+                        common::TimeUtils::TimestampDays());
                 nodes.push_back(*qiter);
             }
 
@@ -975,7 +981,6 @@ void VpnClient::GetAccountBlockWithHeight() {
 }
 
 void VpnClient::DumpNodeToConfig() {
-    return;
     DumpVpnNodes();
     DumpRouteNodes();
     config.DumpConfig(config_path_);
@@ -1028,8 +1033,6 @@ void VpnClient::DumpRouteNodes() {
 }
 
 void VpnClient::ReadRouteNodesFromConf() {
-    return;
-
     std::string country_list;
     config.Get("route", "country", country_list);
     if (country_list.empty()) {
@@ -1066,7 +1069,9 @@ void VpnClient::ReadRouteNodesFromConf() {
                 continue;
             }
 
-            uint16_t port = common::StringUtil::ToUint16(item_split[4]);
+            uint16_t port = common::GetVpnRoutePort(
+                    common::Encode::HexDecode(item_split[0]),
+                    common::TimeUtils::TimestampDays());
             auto node_item = std::make_shared<VpnServerNode>(
                     item_split[3],
                     0,
@@ -1130,13 +1135,14 @@ void VpnClient::ReadVpnNodesFromConf() {
 
             std::string seckey;
             security::PublicKey pubkey(common::Encode::HexDecode(item_split[2]));
-
             int res = security::EcdhCreateKey::Instance()->CreateKey(pubkey, seckey);
             if (res != security::kSecuritySuccess) {
                 continue;
             }
 
-            uint16_t port = common::StringUtil::ToUint16(item_split[4]);
+            uint16_t port = common::GetVpnServerPort(
+                    common::Encode::HexDecode(item_split[0]),
+                    common::TimeUtils::TimestampDays());
             auto node_item = std::make_shared<VpnServerNode>(
                     item_split[3],
                     port,
