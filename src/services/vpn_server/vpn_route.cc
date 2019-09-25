@@ -1285,10 +1285,6 @@ static void StartVpn() {
     ev_run(loop, 0);
 }
 
-static void AsyncCallback(struct ev_loop *loop, ev_async*, int) {
-    ev_break(loop, EVBREAK_ALL);
-}
-
 static void StopVpn(listen_ctx_t* listen_ctx) {
     ev_io_stop(loop, &listen_ctx->io);
     close(listen_ctx->fd);
@@ -1362,7 +1358,7 @@ void VpnRoute::StartMoreServer() {
                 valid_port[i],
                 listen_ctx_ptr.get()) == 0) {
             listen_ctx_ptr->vpn_port = valid_port[i];
-            std::cout << "start new vpn server port: " << listen_ctx_ptr->vpn_port << std::endl;
+            std::cout << "start new route server port: " << listen_ctx_ptr->vpn_port << std::endl;
             cork_dllist_init(&listen_ctx_ptr->svr_item->connections);
             last_listen_ptr_ = listen_ctx_ptr;
             listen_ctx_queue.push_back(listen_ctx_ptr);
