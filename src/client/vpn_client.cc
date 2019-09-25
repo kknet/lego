@@ -1065,25 +1065,29 @@ void VpnClient::ReadRouteNodesFromConf() {
                 continue;
             }
 
-            iter->second.push_back(node_item);
-            if (iter->second.size() > 16) {
-                iter->second.pop_front();
+            auto e_iter = std::find_if(
+                    iter->second.begin(),
+                    iter->second.end(),
+                    [node_item](const VpnServerNodePtr& ptr) {
+                return node_item->dht_key == ptr->dht_key;
+            });
+
+            if (e_iter == iter->second.end()) {
+                iter->second.push_back(node_item);
+                if (iter->second.size() > 16) {
+                    iter->second.pop_front();
+                }
             }
         }
     }
 }
 
 void VpnClient::ReadVpnNodesFromConf() {
-    return;
     std::string country_list;
     config.Get("vpn", "country", country_list);
     if (country_list.empty()) {
         return;
     }
-
-    auto tp = std::chrono::time_point_cast<std::chrono::milliseconds>(
-            std::chrono::system_clock::now() - std::chrono::milliseconds(3 * 24 * 60 * 1000));
-    auto now_tick = std::chrono::duration_cast<std::chrono::milliseconds>(tp.time_since_epoch()).count();
 
     common::Split country_split(country_list.c_str(), ',', country_list.size());
     for (uint32_t i = 0; i < country_split.Count(); ++i) {
@@ -1137,7 +1141,7 @@ void VpnClient::ReadVpnNodesFromConf() {
                     iter->second.begin(),
                     iter->second.end(),
                     [node_item](const VpnServerNodePtr& ptr) {
-                return node_item->ip == ptr->ip && node_item->svr_port == ptr->svr_port;
+                return node_item->dht_key == ptr->dht_key;
             });
             if (e_iter == iter->second.end()) {
                 iter->second.push_back(node_item);
