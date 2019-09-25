@@ -63,7 +63,7 @@ private:
     std::unordered_map<std::string, StakingItemPtr> gid_map_;
     std::unordered_map<std::string, BandwidthInfoPtr> account_map_;
     std::mutex account_map_mutex_;
-    std::deque<std::shared_ptr<listen_ctx_t>> listen_ctx_queue;
+    std::deque<std::shared_ptr<listen_ctx_t>> listen_ctx_queue_;
     common::Tick new_vpn_server_tick_;
     std::shared_ptr<listen_ctx_t> last_listen_ptr_{ nullptr };
     std::shared_ptr<std::thread> loop_thread_{ nullptr };
