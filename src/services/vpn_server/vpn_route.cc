@@ -101,7 +101,6 @@ extern "C" {
 
 using namespace lego;
 
-static void SignalCallback(EV_P_ ev_signal *w, int revents);
 static void AcceptCallback(EV_P_ ev_io *w, int revents);
 static void ServerSendCallback(EV_P_ ev_io *w, int revents);
 static void ServerRecvCallback(EV_P_ ev_io *w, int revents);
@@ -117,7 +116,6 @@ static void FreeRemote(remote_t *remote);
 static void CloseAndFreeRemote(EV_P_ remote_t *remote);
 static void FreeServer(server_t *server);
 static void CloseAndFreeServer(EV_P_ server_t *server);
-static void ResolvCallback(struct sockaddr *addr, void *data);
 
 // static crypto_t *crypto;
 
