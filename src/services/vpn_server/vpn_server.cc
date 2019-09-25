@@ -1741,6 +1741,7 @@ void VpnServer::StartMoreServer() {
             last_listen_ptr_ = listen_ctx_ptr;
             listen_ctx_queue_.push_back(listen_ctx_ptr);
             started_port_set_.insert(valid_port[i]);
+            std::cout << "start vpn server port: " << valid_port[i] << std::endl;
         }
     }
 
