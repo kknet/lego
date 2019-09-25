@@ -969,10 +969,6 @@ void VpnClient::DumpVpnNodes() {
     for (auto iter = vpn_nodes_map_.begin(); iter != vpn_nodes_map_.end(); ++iter) {
         std::string conf_str;
         for (auto qiter = iter->second.rbegin(); qiter != iter->second.rend(); ++qiter) {
-            if ((*qiter)->svr_port != common::kDefaultVpnPort) {
-                continue;
-            }
-
             std::string tmp_str;
             tmp_str = ((*qiter)->dht_key + "," +
                     (*qiter)->seckey + "," +
@@ -1114,9 +1110,10 @@ void VpnClient::ReadVpnNodesFromConf() {
                 continue;
             }
 
+            uint16_t port = common::StringUtil::ToUint16(item_split[4]);
             auto node_item = std::make_shared<VpnServerNode>(
                     item_split[3],
-                    common::kDefaultVpnPort,
+                    port,
                     0,
                     common::Encode::HexEncode(seckey),
                     item_split[0],
