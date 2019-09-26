@@ -857,13 +857,11 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
 
         if (!need_query) {
             remote_t *remote = ConnectToRemote(EV_A_ & info, server);
-
             if (remote == NULL) {
                 LOGE("connect error");
                 CloseAndFreeServer(EV_A_ server);
                 return;
-            }
-            else {
+            } else {
                 server->remote = remote;
                 remote->server = server;
 
@@ -882,24 +880,17 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
                 ev_io_stop(EV_A_ & server_recv_ctx->io);
                 ev_io_start(EV_A_ & remote->send_ctx->io);
             }
-        }
-        else {
+        } else {
             ev_io_stop(EV_A_ & server_recv_ctx->io);
-
             query_t *query = (query_t*)ss_malloc(sizeof(query_t));
             memset(query, 0, sizeof(query_t));
             query->server = server;
             server->query = query;
             snprintf(query->hostname, MAX_HOSTNAME_LEN, "%s", host);
-
             server->stage = STAGE_RESOLVE;
             resolv_start(host, port, ResolvCallback, ResolvFreeCallback, query);
         }
-
-        return;
     }
-    // should not reach here
-    FATAL("server context error");
 }
 
 
@@ -981,47 +972,44 @@ static void ResolvCallback(struct sockaddr *addr, void *data) {
         return;
 
     struct ev_loop *loop = server->listen_ctx->loop;
-
     if (addr == NULL) {
         LOGE("unable to resolve %s", query->hostname);
         CloseAndFreeServer(EV_A_ server);
+        return;
+    }
+
+    struct addrinfo info;
+    memset(&info, 0, sizeof(struct addrinfo));
+    info.ai_socktype = SOCK_STREAM;
+    info.ai_protocol = IPPROTO_TCP;
+    info.ai_addr = addr;
+
+    if (addr->sa_family == AF_INET) {
+        info.ai_family = AF_INET;
+        info.ai_addrlen = sizeof(struct sockaddr_in);
+    } else if (addr->sa_family == AF_INET6) {
+        info.ai_family = AF_INET6;
+        info.ai_addrlen = sizeof(struct sockaddr_in6);
+    }
+
+    remote_t *remote = ConnectToRemote(EV_A_ & info, server);
+    if (remote == NULL) {
+        CloseAndFreeServer(EV_A_ server);
     } else {
-        struct addrinfo info;
-        memset(&info, 0, sizeof(struct addrinfo));
-        info.ai_socktype = SOCK_STREAM;
-        info.ai_protocol = IPPROTO_TCP;
-        info.ai_addr = addr;
+        server->remote = remote;
+        remote->server = server;
 
-        if (addr->sa_family == AF_INET) {
-            info.ai_family = AF_INET;
-            info.ai_addrlen = sizeof(struct sockaddr_in);
-        } else if (addr->sa_family == AF_INET6) {
-            info.ai_family = AF_INET6;
-            info.ai_addrlen = sizeof(struct sockaddr_in6);
+        if (server->buf->len > 0) {
+            brealloc(remote->buf, server->buf->len, SOCKET_BUF_SIZE);
+            memcpy(remote->buf->data, server->buf->data + server->buf->idx,
+                server->buf->len);
+            remote->buf->len = server->buf->len;
+            remote->buf->idx = 0;
+            server->buf->len = 0;
+            server->buf->idx = 0;
         }
 
-        remote_t *remote = ConnectToRemote(EV_A_ & info, server);
-
-        if (remote == NULL) {
-            CloseAndFreeServer(EV_A_ server);
-        } else {
-            server->remote = remote;
-            remote->server = server;
-
-            // XXX: should handle buffer carefully
-            if (server->buf->len > 0) {
-                brealloc(remote->buf, server->buf->len, SOCKET_BUF_SIZE);
-                memcpy(remote->buf->data, server->buf->data + server->buf->idx,
-                    server->buf->len);
-                remote->buf->len = server->buf->len;
-                remote->buf->idx = 0;
-                server->buf->len = 0;
-                server->buf->idx = 0;
-            }
-
-            // listen to remote connected event
-            ev_io_start(EV_A_ & remote->send_ctx->io);
-        }
+        ev_io_start(EV_A_ & remote->send_ctx->io);
     }
 }
 
@@ -1484,7 +1472,6 @@ static int StartTcpServer(
 
 static void StopVpn(listen_ctx_t* listen_ctx) {
     ev_io_stop(vpn::EvLoopManager::Instance()->loop(), &listen_ctx->io);
-    resolv_shutdown(vpn::EvLoopManager::Instance()->loop());
     close(listen_ctx->fd);
     FreeConnections(
             vpn::EvLoopManager::Instance()->loop(),
@@ -1744,10 +1731,11 @@ void VpnServer::StartMoreServer() {
         }
     }
 
-    while (listen_ctx_queue_.size() >= common::kMaxRotationCount) {
+    if (listen_ctx_queue_.size() >= common::kMaxRotationCount) {
         auto listen_item = listen_ctx_queue_.front();
         listen_ctx_queue_.pop_front();
         StopVpn(listen_item.get());
+        std::cout << "stop server: " << listen_item->vpn_port << std::endl;
     }
 }
 
