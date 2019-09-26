@@ -15,7 +15,6 @@
 
 #if OPENSSL_VERSION_NUMBER < 0x1010007fL  // only needed before OpenSSL 1.1.0g
 
-#ifndef ARMEABI_V7A
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -30,7 +29,6 @@ int BN_generate_dsa_nonce(
 
 #ifdef __cplusplus
 }
-#endif
 #endif
 
 #endif
