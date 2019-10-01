@@ -319,6 +319,7 @@ std::string VpnClient::Init(
     if (ConfigExists(conf_path)) {
         if (!config.Init(conf_path)) {
             CLIENT_ERROR("init config failed!");
+            config.Set("lego", "prikey", std::string(""));
         }
 
         std::string priky("");
