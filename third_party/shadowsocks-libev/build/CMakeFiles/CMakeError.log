@@ -1,0 +1,279 @@
+Determining if the function socket exists in the socket failed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_f2884/fast && /usr/bin/gmake -f CMakeFiles/cmTC_f2884.dir/build.make CMakeFiles/cmTC_f2884.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f2884.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=gnu99 -DCHECK_FUNCTION_EXISTS=socket -fPIE   -o CMakeFiles/cmTC_f2884.dir/CheckFunctionExists.c.o   -c /usr/local/share/cmake-3.15/Modules/CheckFunctionExists.c
+Linking C executable cmTC_f2884
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f2884.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99 -DCHECK_FUNCTION_EXISTS=socket    -rdynamic CMakeFiles/cmTC_f2884.dir/CheckFunctionExists.c.o  -o cmTC_f2884 -lsocket 
+/usr/bin/ld: cannot find -lsocket
+collect2: error: ld returned 1 exit status
+gmake[1]: *** [cmTC_f2884] Error 1
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+gmake: *** [cmTC_f2884/fast] Error 2
+
+
+
+Determining if files linux/if.h exist failed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_33688/fast && /usr/bin/gmake -f CMakeFiles/cmTC_33688.dir/build.make CMakeFiles/cmTC_33688.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_33688.dir/HAVE_LINUX_IF_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_33688.dir/HAVE_LINUX_IF_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_LINUX_IF_H.c
+In file included from /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_LINUX_IF_H.c:2:0:
+/usr/include/linux/if.h:211:19: error: field ‘ifru_addr’ has incomplete type
+   struct sockaddr ifru_addr;
+                   ^
+/usr/include/linux/if.h:212:19: error: field ‘ifru_dstaddr’ has incomplete type
+   struct sockaddr ifru_dstaddr;
+                   ^
+/usr/include/linux/if.h:213:19: error: field ‘ifru_broadaddr’ has incomplete type
+   struct sockaddr ifru_broadaddr;
+                   ^
+/usr/include/linux/if.h:214:19: error: field ‘ifru_netmask’ has incomplete type
+   struct sockaddr ifru_netmask;
+                   ^
+/usr/include/linux/if.h:215:20: error: field ‘ifru_hwaddr’ has incomplete type
+   struct  sockaddr ifru_hwaddr;
+                    ^
+gmake[1]: *** [CMakeFiles/cmTC_33688.dir/HAVE_LINUX_IF_H.c.o] Error 1
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+gmake: *** [cmTC_33688/fast] Error 2
+
+
+Source:
+/* */
+#include <linux/if.h>
+
+
+int main(void){return 0;}
+
+Determining if files linux/netfilter_ipv4.h exist failed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_87750/fast && /usr/bin/gmake -f CMakeFiles/cmTC_87750.dir/build.make CMakeFiles/cmTC_87750.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_87750.dir/HAVE_LINUX_NETFILTER_IPV4_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_87750.dir/HAVE_LINUX_NETFILTER_IPV4_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_LINUX_NETFILTER_IPV4_H.c
+In file included from /usr/include/linux/netfilter.h:6:0,
+                 from /usr/include/linux/netfilter_ipv4.h:8,
+                 from /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_LINUX_NETFILTER_IPV4_H.c:2:
+/usr/include/linux/sysctl.h:40:2: error: unknown type name ‘size_t’
+  size_t *oldlenp;
+  ^
+/usr/include/linux/sysctl.h:42:2: error: unknown type name ‘size_t’
+  size_t newlen;
+  ^
+In file included from /usr/include/linux/netfilter_ipv4.h:8:0,
+                 from /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_LINUX_NETFILTER_IPV4_H.c:2:
+/usr/include/linux/netfilter.h:67:17: error: field ‘in’ has incomplete type
+  struct in_addr in;
+                 ^
+/usr/include/linux/netfilter.h:68:18: error: field ‘in6’ has incomplete type
+  struct in6_addr in6;
+                  ^
+gmake[1]: *** [CMakeFiles/cmTC_87750.dir/HAVE_LINUX_NETFILTER_IPV4_H.c.o] Error 1
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+gmake: *** [cmTC_87750/fast] Error 2
+
+
+Source:
+/* */
+#include <linux/netfilter_ipv4.h>
+
+
+int main(void){return 0;}
+
+Determining if files linux/netfilter_ipv6/ip6_tables.h exist failed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_39f42/fast && /usr/bin/gmake -f CMakeFiles/cmTC_39f42.dir/build.make CMakeFiles/cmTC_39f42.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_39f42.dir/HAVE_LINUX_NETFILTER_IPV6_IP6_TABLES_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_39f42.dir/HAVE_LINUX_NETFILTER_IPV6_IP6_TABLES_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_LINUX_NETFILTER_IPV6_IP6_TABLES_H.c
+In file included from /usr/include/linux/netfilter.h:6:0,
+                 from /usr/include/linux/netfilter_ipv6.h:11,
+                 from /usr/include/linux/netfilter_ipv6/ip6_tables.h:20,
+                 from /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_LINUX_NETFILTER_IPV6_IP6_TABLES_H.c:2:
+/usr/include/linux/sysctl.h:40:2: error: unknown type name ‘size_t’
+  size_t *oldlenp;
+  ^
+/usr/include/linux/sysctl.h:42:2: error: unknown type name ‘size_t’
+  size_t newlen;
+  ^
+In file included from /usr/include/linux/netfilter_ipv6.h:11:0,
+                 from /usr/include/linux/netfilter_ipv6/ip6_tables.h:20,
+                 from /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_LINUX_NETFILTER_IPV6_IP6_TABLES_H.c:2:
+/usr/include/linux/netfilter.h:67:17: error: field ‘in’ has incomplete type
+  struct in_addr in;
+                 ^
+/usr/include/linux/netfilter.h:68:18: error: field ‘in6’ has incomplete type
+  struct in6_addr in6;
+                  ^
+In file included from /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_LINUX_NETFILTER_IPV6_IP6_TABLES_H.c:2:0:
+/usr/include/linux/netfilter_ipv6/ip6_tables.h:62:18: error: field ‘src’ has incomplete type
+  struct in6_addr src, dst;  
+                  ^
+/usr/include/linux/netfilter_ipv6/ip6_tables.h:62:23: error: field ‘dst’ has incomplete type
+  struct in6_addr src, dst;  
+                       ^
+/usr/include/linux/netfilter_ipv6/ip6_tables.h:64:18: error: field ‘smsk’ has incomplete type
+  struct in6_addr smsk, dmsk;
+                  ^
+/usr/include/linux/netfilter_ipv6/ip6_tables.h:64:24: error: field ‘dmsk’ has incomplete type
+  struct in6_addr smsk, dmsk;
+                        ^
+/usr/include/linux/netfilter_ipv6/ip6_tables.h:65:15: error: ‘IFNAMSIZ’ undeclared here (not in a function)
+  char iniface[IFNAMSIZ], outiface[IFNAMSIZ];
+               ^
+gmake[1]: *** [CMakeFiles/cmTC_39f42.dir/HAVE_LINUX_NETFILTER_IPV6_IP6_TABLES_H.c.o] Error 1
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+gmake: *** [cmTC_39f42/fast] Error 2
+
+
+Source:
+/* */
+#include <linux/netfilter_ipv6/ip6_tables.h>
+
+
+int main(void){return 0;}
+
+Determining if files pcre/pcre.h exist failed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_277a6/fast && /usr/bin/gmake -f CMakeFiles/cmTC_277a6.dir/build.make CMakeFiles/cmTC_277a6.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_277a6.dir/HAVE_PCRE_PCRE_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_277a6.dir/HAVE_PCRE_PCRE_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_PCRE_PCRE_H.c
+/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_PCRE_PCRE_H.c:2:23: fatal error: pcre/pcre.h: No such file or directory
+ #include <pcre/pcre.h>
+                       ^
+compilation terminated.
+gmake[1]: *** [CMakeFiles/cmTC_277a6.dir/HAVE_PCRE_PCRE_H.c.o] Error 1
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+gmake: *** [cmTC_277a6/fast] Error 2
+
+
+Source:
+/* */
+#include <pcre/pcre.h>
+
+
+int main(void){return 0;}
+
+Determining if the PTHREAD_PRIO_INHERIT exist failed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_c54dd/fast && /usr/bin/gmake -f CMakeFiles/cmTC_c54dd.dir/build.make CMakeFiles/cmTC_c54dd.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c54dd.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_c54dd.dir/CheckSymbolExists.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c: In function ‘main’:
+/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:18: error: lvalue required as unary ‘&’ operand
+   return ((int*)(&PTHREAD_PRIO_INHERIT))[argc];
+                  ^
+gmake[1]: *** [CMakeFiles/cmTC_c54dd.dir/CheckSymbolExists.c.o] Error 1
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+gmake: *** [cmTC_c54dd/fast] Error 2
+
+
+File /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef PTHREAD_PRIO_INHERIT
+  return ((int*)(&PTHREAD_PRIO_INHERIT))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if files vfork.h exist failed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_ba17c/fast && /usr/bin/gmake -f CMakeFiles/cmTC_ba17c.dir/build.make CMakeFiles/cmTC_ba17c.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ba17c.dir/HAVE_VFORK_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_ba17c.dir/HAVE_VFORK_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_VFORK_H.c
+/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_VFORK_H.c:2:19: fatal error: vfork.h: No such file or directory
+ #include <vfork.h>
+                   ^
+compilation terminated.
+gmake[1]: *** [CMakeFiles/cmTC_ba17c.dir/HAVE_VFORK_H.c.o] Error 1
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+gmake: *** [cmTC_ba17c/fast] Error 2
+
+
+Source:
+/* */
+#include <vfork.h>
+
+
+int main(void){return 0;}
+
+Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_c4872/fast && /usr/bin/gmake -f CMakeFiles/cmTC_c4872.dir/build.make CMakeFiles/cmTC_c4872.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c4872.dir/src.c.o
+/usr/bin/cc   -std=gnu99 -DCMAKE_HAVE_LIBC_PTHREAD -fPIE   -o CMakeFiles/cmTC_c4872.dir/src.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_c4872
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c4872.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99 -DCMAKE_HAVE_LIBC_PTHREAD    -rdynamic CMakeFiles/cmTC_c4872.dir/src.c.o  -o cmTC_c4872 
+CMakeFiles/cmTC_c4872.dir/src.c.o: In function `main':
+src.c:(.text+0x2f): undefined reference to `pthread_create'
+src.c:(.text+0x3b): undefined reference to `pthread_detach'
+src.c:(.text+0x4c): undefined reference to `pthread_join'
+src.c:(.text+0x60): undefined reference to `pthread_atfork'
+collect2: error: ld returned 1 exit status
+gmake[1]: *** [cmTC_c4872] Error 1
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+gmake: *** [cmTC_c4872/fast] Error 2
+
+
+Source file was:
+#include <pthread.h>
+
+void* test_func(void* data)
+{
+  return data;
+}
+
+int main(void)
+{
+  pthread_t thread;
+  pthread_create(&thread, NULL, test_func, NULL);
+  pthread_detach(thread);
+  pthread_join(thread, NULL);
+  pthread_atfork(NULL, NULL, NULL);
+  pthread_exit(NULL);
+
+  return 0;
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_94f79/fast && /usr/bin/gmake -f CMakeFiles/cmTC_94f79.dir/build.make CMakeFiles/cmTC_94f79.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_94f79.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=gnu99 -DCHECK_FUNCTION_EXISTS=pthread_create -fPIE   -o CMakeFiles/cmTC_94f79.dir/CheckFunctionExists.c.o   -c /usr/local/share/cmake-3.15/Modules/CheckFunctionExists.c
+Linking C executable cmTC_94f79
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_94f79.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99 -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_94f79.dir/CheckFunctionExists.c.o  -o cmTC_94f79 -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+gmake[1]: *** [cmTC_94f79] Error 1
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+gmake: *** [cmTC_94f79/fast] Error 2
+
+
+

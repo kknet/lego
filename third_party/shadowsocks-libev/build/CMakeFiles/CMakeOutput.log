@@ -1,0 +1,1145 @@
+The system is: Linux - 3.10.0-693.el7.x86_64 - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /usr/bin/cc 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is GNU, found in "/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/3.15.2/CompilerIdC/a.out"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /usr/bin/c++ 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+
+The CXX compiler identification is GNU, found in "/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/3.15.2/CompilerIdCXX/a.out"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_2720c/fast && /usr/bin/gmake -f CMakeFiles/cmTC_2720c.dir/build.make CMakeFiles/cmTC_2720c.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2720c.dir/testCCompiler.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_2720c.dir/testCCompiler.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_2720c
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2720c.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_2720c.dir/testCCompiler.c.o  -o cmTC_2720c 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_c226b/fast && /usr/bin/gmake -f CMakeFiles/cmTC_c226b.dir/build.make CMakeFiles/cmTC_c226b.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c226b.dir/CMakeCCompilerABI.c.o
+/usr/bin/cc   -v -o CMakeFiles/cmTC_c226b.dir/CMakeCCompilerABI.c.o   -c /usr/local/share/cmake-3.15/Modules/CMakeCCompilerABI.c
+Using built-in specs.
+COLLECT_GCC=/usr/bin/cc
+Target: x86_64-redhat-linux
+Configured with: ../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-bootstrap --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-linker-hash-style=gnu --enable-languages=c,c++,objc,obj-c++,java,fortran,ada,go,lto --enable-plugin --enable-initfini-array --disable-libgcj --with-isl=/builddir/build/BUILD/gcc-4.8.5-20150702/obj-x86_64-redhat-linux/isl-install --with-cloog=/builddir/build/BUILD/gcc-4.8.5-20150702/obj-x86_64-redhat-linux/cloog-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux
+Thread model: posix
+gcc version 4.8.5 20150623 (Red Hat 4.8.5-36) (GCC) 
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_c226b.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64'
+ /usr/libexec/gcc/x86_64-redhat-linux/4.8.5/cc1 -quiet -v /usr/local/share/cmake-3.15/Modules/CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles/cmTC_c226b.dir/CMakeCCompilerABI.c.o -version -o /tmp/ccAEfREr.s
+GNU C (GCC) version 4.8.5 20150623 (Red Hat 4.8.5-36) (x86_64-redhat-linux)
+	compiled by GNU C version 4.8.5 20150623 (Red Hat 4.8.5-36), GMP version 6.0.0, MPFR version 3.1.1, MPC version 1.0.1
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include-fixed"
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../x86_64-redhat-linux/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/lib/gcc/x86_64-redhat-linux/4.8.5/include
+ /usr/local/include
+ /usr/include
+End of search list.
+GNU C (GCC) version 4.8.5 20150623 (Red Hat 4.8.5-36) (x86_64-redhat-linux)
+	compiled by GNU C version 4.8.5 20150623 (Red Hat 4.8.5-36), GMP version 6.0.0, MPFR version 3.1.1, MPC version 1.0.1
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: c0b461ba69dba093bfc939a7fa8b7724
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_c226b.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64'
+ as -v --64 -o CMakeFiles/cmTC_c226b.dir/CMakeCCompilerABI.c.o /tmp/ccAEfREr.s
+GNU assembler version 2.25.1 (x86_64-redhat-linux) using BFD version version 2.25.1-31.base.el7 
+COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/:/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/:/usr/lib/gcc/x86_64-redhat-linux/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/4.8.5/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_c226b.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64'
+Linking C executable cmTC_c226b
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c226b.dir/link.txt --verbose=1
+/usr/bin/cc     -v -rdynamic CMakeFiles/cmTC_c226b.dir/CMakeCCompilerABI.c.o  -o cmTC_c226b 
+Using built-in specs.
+COLLECT_GCC=/usr/bin/cc
+COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/lto-wrapper
+Target: x86_64-redhat-linux
+Configured with: ../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-bootstrap --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-linker-hash-style=gnu --enable-languages=c,c++,objc,obj-c++,java,fortran,ada,go,lto --enable-plugin --enable-initfini-array --disable-libgcj --with-isl=/builddir/build/BUILD/gcc-4.8.5-20150702/obj-x86_64-redhat-linux/isl-install --with-cloog=/builddir/build/BUILD/gcc-4.8.5-20150702/obj-x86_64-redhat-linux/cloog-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux
+Thread model: posix
+gcc version 4.8.5 20150623 (Red Hat 4.8.5-36) (GCC) 
+COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/:/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/:/usr/lib/gcc/x86_64-redhat-linux/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/4.8.5/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_c226b' '-mtune=generic' '-march=x86-64'
+ /usr/libexec/gcc/x86_64-redhat-linux/4.8.5/collect2 --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_c226b /usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/crti.o /usr/lib/gcc/x86_64-redhat-linux/4.8.5/crtbegin.o -L/usr/lib/gcc/x86_64-redhat-linux/4.8.5 -L/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../.. CMakeFiles/cmTC_c226b.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/lib/gcc/x86_64-redhat-linux/4.8.5/crtend.o /usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/crtn.o
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Parsed C implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include]
+    add: [/usr/local/include]
+    add: [/usr/include]
+  end of search list found
+  collapse include dir [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include] ==> [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include]
+  collapse include dir [/usr/local/include] ==> [/usr/local/include]
+  collapse include dir [/usr/include] ==> [/usr/include]
+  implicit include dirs: [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include;/usr/local/include;/usr/include]
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/usr/bin/gmake cmTC_c226b/fast && /usr/bin/gmake -f CMakeFiles/cmTC_c226b.dir/build.make CMakeFiles/cmTC_c226b.dir/build]
+  ignore line: [gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp']
+  ignore line: [Building C object CMakeFiles/cmTC_c226b.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/bin/cc   -v -o CMakeFiles/cmTC_c226b.dir/CMakeCCompilerABI.c.o   -c /usr/local/share/cmake-3.15/Modules/CMakeCCompilerABI.c]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/usr/bin/cc]
+  ignore line: [Target: x86_64-redhat-linux]
+  ignore line: [Configured with: ../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-bootstrap --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-linker-hash-style=gnu --enable-languages=c,c++,objc,obj-c++,java,fortran,ada,go,lto --enable-plugin --enable-initfini-array --disable-libgcj --with-isl=/builddir/build/BUILD/gcc-4.8.5-20150702/obj-x86_64-redhat-linux/isl-install --with-cloog=/builddir/build/BUILD/gcc-4.8.5-20150702/obj-x86_64-redhat-linux/cloog-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 4.8.5 20150623 (Red Hat 4.8.5-36) (GCC) ]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_c226b.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64']
+  ignore line: [ /usr/libexec/gcc/x86_64-redhat-linux/4.8.5/cc1 -quiet -v /usr/local/share/cmake-3.15/Modules/CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles/cmTC_c226b.dir/CMakeCCompilerABI.c.o -version -o /tmp/ccAEfREr.s]
+  ignore line: [GNU C (GCC) version 4.8.5 20150623 (Red Hat 4.8.5-36) (x86_64-redhat-linux)]
+  ignore line: [	compiled by GNU C version 4.8.5 20150623 (Red Hat 4.8.5-36), GMP version 6.0.0, MPFR version 3.1.1, MPC version 1.0.1]
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include-fixed"]
+  ignore line: [ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../x86_64-redhat-linux/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /usr/lib/gcc/x86_64-redhat-linux/4.8.5/include]
+  ignore line: [ /usr/local/include]
+  ignore line: [ /usr/include]
+  ignore line: [End of search list.]
+  ignore line: [GNU C (GCC) version 4.8.5 20150623 (Red Hat 4.8.5-36) (x86_64-redhat-linux)]
+  ignore line: [	compiled by GNU C version 4.8.5 20150623 (Red Hat 4.8.5-36), GMP version 6.0.0, MPFR version 3.1.1, MPC version 1.0.1]
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [Compiler executable checksum: c0b461ba69dba093bfc939a7fa8b7724]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_c226b.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64']
+  ignore line: [ as -v --64 -o CMakeFiles/cmTC_c226b.dir/CMakeCCompilerABI.c.o /tmp/ccAEfREr.s]
+  ignore line: [GNU assembler version 2.25.1 (x86_64-redhat-linux) using BFD version version 2.25.1-31.base.el7 ]
+  ignore line: [COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/:/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/:/usr/lib/gcc/x86_64-redhat-linux/]
+  ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/4.8.5/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../:/lib/:/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_c226b.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64']
+  ignore line: [Linking C executable cmTC_c226b]
+  ignore line: [/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c226b.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/cc     -v -rdynamic CMakeFiles/cmTC_c226b.dir/CMakeCCompilerABI.c.o  -o cmTC_c226b ]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/usr/bin/cc]
+  ignore line: [COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/lto-wrapper]
+  ignore line: [Target: x86_64-redhat-linux]
+  ignore line: [Configured with: ../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-bootstrap --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-linker-hash-style=gnu --enable-languages=c,c++,objc,obj-c++,java,fortran,ada,go,lto --enable-plugin --enable-initfini-array --disable-libgcj --with-isl=/builddir/build/BUILD/gcc-4.8.5-20150702/obj-x86_64-redhat-linux/isl-install --with-cloog=/builddir/build/BUILD/gcc-4.8.5-20150702/obj-x86_64-redhat-linux/cloog-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 4.8.5 20150623 (Red Hat 4.8.5-36) (GCC) ]
+  ignore line: [COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/:/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/:/usr/lib/gcc/x86_64-redhat-linux/]
+  ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/4.8.5/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../:/lib/:/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_c226b' '-mtune=generic' '-march=x86-64']
+  link line: [ /usr/libexec/gcc/x86_64-redhat-linux/4.8.5/collect2 --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_c226b /usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/crti.o /usr/lib/gcc/x86_64-redhat-linux/4.8.5/crtbegin.o -L/usr/lib/gcc/x86_64-redhat-linux/4.8.5 -L/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../.. CMakeFiles/cmTC_c226b.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/lib/gcc/x86_64-redhat-linux/4.8.5/crtend.o /usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/crtn.o]
+    arg [/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/collect2] ==> ignore
+    arg [--build-id] ==> ignore
+    arg [--no-add-needed] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [--hash-style=gnu] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_x86_64] ==> ignore
+    arg [-export-dynamic] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_c226b] ==> ignore
+    arg [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/crt1.o] ==> ignore
+    arg [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/crti.o] ==> ignore
+    arg [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/crtbegin.o] ==> ignore
+    arg [-L/usr/lib/gcc/x86_64-redhat-linux/4.8.5] ==> dir [/usr/lib/gcc/x86_64-redhat-linux/4.8.5]
+    arg [-L/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64] ==> dir [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64]
+    arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+    arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
+    arg [-L/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../..] ==> dir [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../..]
+    arg [CMakeFiles/cmTC_c226b.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [-lgcc] ==> lib [gcc]
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--no-as-needed] ==> ignore
+    arg [-lc] ==> lib [c]
+    arg [-lgcc] ==> lib [gcc]
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--no-as-needed] ==> ignore
+    arg [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/crtend.o] ==> ignore
+    arg [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/crtn.o] ==> ignore
+  collapse library dir [/usr/lib/gcc/x86_64-redhat-linux/4.8.5] ==> [/usr/lib/gcc/x86_64-redhat-linux/4.8.5]
+  collapse library dir [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64] ==> [/usr/lib64]
+  collapse library dir [/lib/../lib64] ==> [/lib64]
+  collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
+  collapse library dir [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../..] ==> [/usr/lib]
+  implicit libs: [gcc;gcc_s;c;gcc;gcc_s]
+  implicit dirs: [/usr/lib/gcc/x86_64-redhat-linux/4.8.5;/usr/lib64;/lib64;/usr/lib]
+  implicit fwks: []
+
+
+Determining if the CXX compiler works passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_340e5/fast && /usr/bin/gmake -f CMakeFiles/cmTC_340e5.dir/build.make CMakeFiles/cmTC_340e5.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_340e5.dir/testCXXCompiler.cxx.o
+/usr/bin/c++     -o CMakeFiles/cmTC_340e5.dir/testCXXCompiler.cxx.o -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTC_340e5
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_340e5.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_340e5.dir/testCXXCompiler.cxx.o  -o cmTC_340e5 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_aac86/fast && /usr/bin/gmake -f CMakeFiles/cmTC_aac86.dir/build.make CMakeFiles/cmTC_aac86.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_aac86.dir/CMakeCXXCompilerABI.cpp.o
+/usr/bin/c++    -v -o CMakeFiles/cmTC_aac86.dir/CMakeCXXCompilerABI.cpp.o -c /usr/local/share/cmake-3.15/Modules/CMakeCXXCompilerABI.cpp
+Using built-in specs.
+COLLECT_GCC=/usr/bin/c++
+Target: x86_64-redhat-linux
+Configured with: ../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-bootstrap --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-linker-hash-style=gnu --enable-languages=c,c++,objc,obj-c++,java,fortran,ada,go,lto --enable-plugin --enable-initfini-array --disable-libgcj --with-isl=/builddir/build/BUILD/gcc-4.8.5-20150702/obj-x86_64-redhat-linux/isl-install --with-cloog=/builddir/build/BUILD/gcc-4.8.5-20150702/obj-x86_64-redhat-linux/cloog-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux
+Thread model: posix
+gcc version 4.8.5 20150623 (Red Hat 4.8.5-36) (GCC) 
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_aac86.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ /usr/libexec/gcc/x86_64-redhat-linux/4.8.5/cc1plus -quiet -v -D_GNU_SOURCE /usr/local/share/cmake-3.15/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpbase CMakeCXXCompilerABI.cpp -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles/cmTC_aac86.dir/CMakeCXXCompilerABI.cpp.o -version -o /tmp/ccetNMrE.s
+GNU C++ (GCC) version 4.8.5 20150623 (Red Hat 4.8.5-36) (x86_64-redhat-linux)
+	compiled by GNU C version 4.8.5 20150623 (Red Hat 4.8.5-36), GMP version 6.0.0, MPFR version 3.1.1, MPC version 1.0.1
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include-fixed"
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../x86_64-redhat-linux/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5
+ /usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/x86_64-redhat-linux
+ /usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/backward
+ /usr/lib/gcc/x86_64-redhat-linux/4.8.5/include
+ /usr/local/include
+ /usr/include
+End of search list.
+GNU C++ (GCC) version 4.8.5 20150623 (Red Hat 4.8.5-36) (x86_64-redhat-linux)
+	compiled by GNU C version 4.8.5 20150623 (Red Hat 4.8.5-36), GMP version 6.0.0, MPFR version 3.1.1, MPC version 1.0.1
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: 716696aeb8e1265fe923bf392b1dfb5e
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_aac86.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ as -v --64 -o CMakeFiles/cmTC_aac86.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccetNMrE.s
+GNU assembler version 2.25.1 (x86_64-redhat-linux) using BFD version version 2.25.1-31.base.el7 
+COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/:/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/:/usr/lib/gcc/x86_64-redhat-linux/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/4.8.5/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_aac86.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+Linking CXX executable cmTC_aac86
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_aac86.dir/link.txt --verbose=1
+/usr/bin/c++      -v -rdynamic CMakeFiles/cmTC_aac86.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_aac86 
+Using built-in specs.
+COLLECT_GCC=/usr/bin/c++
+COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/lto-wrapper
+Target: x86_64-redhat-linux
+Configured with: ../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-bootstrap --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-linker-hash-style=gnu --enable-languages=c,c++,objc,obj-c++,java,fortran,ada,go,lto --enable-plugin --enable-initfini-array --disable-libgcj --with-isl=/builddir/build/BUILD/gcc-4.8.5-20150702/obj-x86_64-redhat-linux/isl-install --with-cloog=/builddir/build/BUILD/gcc-4.8.5-20150702/obj-x86_64-redhat-linux/cloog-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux
+Thread model: posix
+gcc version 4.8.5 20150623 (Red Hat 4.8.5-36) (GCC) 
+COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/:/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/:/usr/lib/gcc/x86_64-redhat-linux/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/4.8.5/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_aac86' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ /usr/libexec/gcc/x86_64-redhat-linux/4.8.5/collect2 --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_aac86 /usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/crti.o /usr/lib/gcc/x86_64-redhat-linux/4.8.5/crtbegin.o -L/usr/lib/gcc/x86_64-redhat-linux/4.8.5 -L/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../.. CMakeFiles/cmTC_aac86.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-redhat-linux/4.8.5/crtend.o /usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/crtn.o
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Parsed CXX implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5]
+    add: [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/x86_64-redhat-linux]
+    add: [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/backward]
+    add: [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include]
+    add: [/usr/local/include]
+    add: [/usr/include]
+  end of search list found
+  collapse include dir [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5] ==> [/usr/include/c++/4.8.5]
+  collapse include dir [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/x86_64-redhat-linux] ==> [/usr/include/c++/4.8.5/x86_64-redhat-linux]
+  collapse include dir [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/backward] ==> [/usr/include/c++/4.8.5/backward]
+  collapse include dir [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include] ==> [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include]
+  collapse include dir [/usr/local/include] ==> [/usr/local/include]
+  collapse include dir [/usr/include] ==> [/usr/include]
+  implicit include dirs: [/usr/include/c++/4.8.5;/usr/include/c++/4.8.5/x86_64-redhat-linux;/usr/include/c++/4.8.5/backward;/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include;/usr/local/include;/usr/include]
+
+
+Parsed CXX implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/usr/bin/gmake cmTC_aac86/fast && /usr/bin/gmake -f CMakeFiles/cmTC_aac86.dir/build.make CMakeFiles/cmTC_aac86.dir/build]
+  ignore line: [gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp']
+  ignore line: [Building CXX object CMakeFiles/cmTC_aac86.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/usr/bin/c++    -v -o CMakeFiles/cmTC_aac86.dir/CMakeCXXCompilerABI.cpp.o -c /usr/local/share/cmake-3.15/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/usr/bin/c++]
+  ignore line: [Target: x86_64-redhat-linux]
+  ignore line: [Configured with: ../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-bootstrap --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-linker-hash-style=gnu --enable-languages=c,c++,objc,obj-c++,java,fortran,ada,go,lto --enable-plugin --enable-initfini-array --disable-libgcj --with-isl=/builddir/build/BUILD/gcc-4.8.5-20150702/obj-x86_64-redhat-linux/isl-install --with-cloog=/builddir/build/BUILD/gcc-4.8.5-20150702/obj-x86_64-redhat-linux/cloog-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 4.8.5 20150623 (Red Hat 4.8.5-36) (GCC) ]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_aac86.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
+  ignore line: [ /usr/libexec/gcc/x86_64-redhat-linux/4.8.5/cc1plus -quiet -v -D_GNU_SOURCE /usr/local/share/cmake-3.15/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpbase CMakeCXXCompilerABI.cpp -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles/cmTC_aac86.dir/CMakeCXXCompilerABI.cpp.o -version -o /tmp/ccetNMrE.s]
+  ignore line: [GNU C++ (GCC) version 4.8.5 20150623 (Red Hat 4.8.5-36) (x86_64-redhat-linux)]
+  ignore line: [	compiled by GNU C version 4.8.5 20150623 (Red Hat 4.8.5-36), GMP version 6.0.0, MPFR version 3.1.1, MPC version 1.0.1]
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include-fixed"]
+  ignore line: [ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../x86_64-redhat-linux/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5]
+  ignore line: [ /usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/x86_64-redhat-linux]
+  ignore line: [ /usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/backward]
+  ignore line: [ /usr/lib/gcc/x86_64-redhat-linux/4.8.5/include]
+  ignore line: [ /usr/local/include]
+  ignore line: [ /usr/include]
+  ignore line: [End of search list.]
+  ignore line: [GNU C++ (GCC) version 4.8.5 20150623 (Red Hat 4.8.5-36) (x86_64-redhat-linux)]
+  ignore line: [	compiled by GNU C version 4.8.5 20150623 (Red Hat 4.8.5-36), GMP version 6.0.0, MPFR version 3.1.1, MPC version 1.0.1]
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [Compiler executable checksum: 716696aeb8e1265fe923bf392b1dfb5e]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_aac86.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
+  ignore line: [ as -v --64 -o CMakeFiles/cmTC_aac86.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccetNMrE.s]
+  ignore line: [GNU assembler version 2.25.1 (x86_64-redhat-linux) using BFD version version 2.25.1-31.base.el7 ]
+  ignore line: [COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/:/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/:/usr/lib/gcc/x86_64-redhat-linux/]
+  ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/4.8.5/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../:/lib/:/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_aac86.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
+  ignore line: [Linking CXX executable cmTC_aac86]
+  ignore line: [/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_aac86.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/c++      -v -rdynamic CMakeFiles/cmTC_aac86.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_aac86 ]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/usr/bin/c++]
+  ignore line: [COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/lto-wrapper]
+  ignore line: [Target: x86_64-redhat-linux]
+  ignore line: [Configured with: ../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-bootstrap --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-linker-hash-style=gnu --enable-languages=c,c++,objc,obj-c++,java,fortran,ada,go,lto --enable-plugin --enable-initfini-array --disable-libgcj --with-isl=/builddir/build/BUILD/gcc-4.8.5-20150702/obj-x86_64-redhat-linux/isl-install --with-cloog=/builddir/build/BUILD/gcc-4.8.5-20150702/obj-x86_64-redhat-linux/cloog-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 4.8.5 20150623 (Red Hat 4.8.5-36) (GCC) ]
+  ignore line: [COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/:/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/:/usr/lib/gcc/x86_64-redhat-linux/]
+  ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/4.8.5/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../:/lib/:/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_aac86' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
+  link line: [ /usr/libexec/gcc/x86_64-redhat-linux/4.8.5/collect2 --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_aac86 /usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/crti.o /usr/lib/gcc/x86_64-redhat-linux/4.8.5/crtbegin.o -L/usr/lib/gcc/x86_64-redhat-linux/4.8.5 -L/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../.. CMakeFiles/cmTC_aac86.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-redhat-linux/4.8.5/crtend.o /usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/crtn.o]
+    arg [/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/collect2] ==> ignore
+    arg [--build-id] ==> ignore
+    arg [--no-add-needed] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [--hash-style=gnu] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_x86_64] ==> ignore
+    arg [-export-dynamic] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_aac86] ==> ignore
+    arg [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/crt1.o] ==> ignore
+    arg [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/crti.o] ==> ignore
+    arg [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/crtbegin.o] ==> ignore
+    arg [-L/usr/lib/gcc/x86_64-redhat-linux/4.8.5] ==> dir [/usr/lib/gcc/x86_64-redhat-linux/4.8.5]
+    arg [-L/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64] ==> dir [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64]
+    arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+    arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
+    arg [-L/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../..] ==> dir [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../..]
+    arg [CMakeFiles/cmTC_aac86.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [-lstdc++] ==> lib [stdc++]
+    arg [-lm] ==> lib [m]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lgcc] ==> lib [gcc]
+    arg [-lc] ==> lib [c]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lgcc] ==> lib [gcc]
+    arg [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/crtend.o] ==> ignore
+    arg [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/crtn.o] ==> ignore
+  collapse library dir [/usr/lib/gcc/x86_64-redhat-linux/4.8.5] ==> [/usr/lib/gcc/x86_64-redhat-linux/4.8.5]
+  collapse library dir [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64] ==> [/usr/lib64]
+  collapse library dir [/lib/../lib64] ==> [/lib64]
+  collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
+  collapse library dir [/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../..] ==> [/usr/lib]
+  implicit libs: [stdc++;m;gcc_s;gcc;c;gcc_s;gcc]
+  implicit dirs: [/usr/lib/gcc/x86_64-redhat-linux/4.8.5;/usr/lib64;/lib64;/usr/lib]
+  implicit fwks: []
+
+
+
+
+Detecting CXX [-std=c++1y] compiler features compiled with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_07758/fast && /usr/bin/gmake -f CMakeFiles/cmTC_07758.dir/build.make CMakeFiles/cmTC_07758.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_07758.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++1y -o CMakeFiles/cmTC_07758.dir/feature_tests.cxx.o -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_07758
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_07758.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_07758.dir/feature_tests.cxx.o  -o cmTC_07758 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+    Feature record: CXX_FEATURE:1cxx_template_template_parameters
+    Feature record: CXX_FEATURE:1cxx_alias_templates
+    Feature record: CXX_FEATURE:1cxx_alignas
+    Feature record: CXX_FEATURE:1cxx_alignof
+    Feature record: CXX_FEATURE:1cxx_attributes
+    Feature record: CXX_FEATURE:1cxx_auto_type
+    Feature record: CXX_FEATURE:1cxx_constexpr
+    Feature record: CXX_FEATURE:1cxx_decltype
+    Feature record: CXX_FEATURE:1cxx_decltype_incomplete_return_types
+    Feature record: CXX_FEATURE:1cxx_default_function_template_args
+    Feature record: CXX_FEATURE:1cxx_defaulted_functions
+    Feature record: CXX_FEATURE:1cxx_defaulted_move_initializers
+    Feature record: CXX_FEATURE:1cxx_delegating_constructors
+    Feature record: CXX_FEATURE:1cxx_deleted_functions
+    Feature record: CXX_FEATURE:1cxx_enum_forward_declarations
+    Feature record: CXX_FEATURE:1cxx_explicit_conversions
+    Feature record: CXX_FEATURE:1cxx_extended_friend_declarations
+    Feature record: CXX_FEATURE:1cxx_extern_templates
+    Feature record: CXX_FEATURE:1cxx_final
+    Feature record: CXX_FEATURE:1cxx_func_identifier
+    Feature record: CXX_FEATURE:1cxx_generalized_initializers
+    Feature record: CXX_FEATURE:1cxx_inheriting_constructors
+    Feature record: CXX_FEATURE:1cxx_inline_namespaces
+    Feature record: CXX_FEATURE:1cxx_lambdas
+    Feature record: CXX_FEATURE:1cxx_local_type_template_args
+    Feature record: CXX_FEATURE:1cxx_long_long_type
+    Feature record: CXX_FEATURE:1cxx_noexcept
+    Feature record: CXX_FEATURE:1cxx_nonstatic_member_init
+    Feature record: CXX_FEATURE:1cxx_nullptr
+    Feature record: CXX_FEATURE:1cxx_override
+    Feature record: CXX_FEATURE:1cxx_range_for
+    Feature record: CXX_FEATURE:1cxx_raw_string_literals
+    Feature record: CXX_FEATURE:1cxx_reference_qualified_functions
+    Feature record: CXX_FEATURE:1cxx_right_angle_brackets
+    Feature record: CXX_FEATURE:1cxx_rvalue_references
+    Feature record: CXX_FEATURE:1cxx_sizeof_member
+    Feature record: CXX_FEATURE:1cxx_static_assert
+    Feature record: CXX_FEATURE:1cxx_strong_enums
+    Feature record: CXX_FEATURE:1cxx_thread_local
+    Feature record: CXX_FEATURE:1cxx_trailing_return_types
+    Feature record: CXX_FEATURE:1cxx_unicode_literals
+    Feature record: CXX_FEATURE:1cxx_uniform_initialization
+    Feature record: CXX_FEATURE:1cxx_unrestricted_unions
+    Feature record: CXX_FEATURE:1cxx_user_literals
+    Feature record: CXX_FEATURE:1cxx_variadic_macros
+    Feature record: CXX_FEATURE:1cxx_variadic_templates
+    Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers
+    Feature record: CXX_FEATURE:0cxx_attribute_deprecated
+    Feature record: CXX_FEATURE:0cxx_binary_literals
+    Feature record: CXX_FEATURE:0cxx_contextual_conversions
+    Feature record: CXX_FEATURE:0cxx_decltype_auto
+    Feature record: CXX_FEATURE:0cxx_digit_separators
+    Feature record: CXX_FEATURE:0cxx_generic_lambdas
+    Feature record: CXX_FEATURE:0cxx_lambda_init_captures
+    Feature record: CXX_FEATURE:0cxx_relaxed_constexpr
+    Feature record: CXX_FEATURE:0cxx_return_type_deduction
+    Feature record: CXX_FEATURE:0cxx_variable_templates
+Determining if files dlfcn.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_fad46/fast && /usr/bin/gmake -f CMakeFiles/cmTC_fad46.dir/build.make CMakeFiles/cmTC_fad46.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_fad46.dir/HAVE_DLFCN_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_fad46.dir/HAVE_DLFCN_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_DLFCN_H.c
+Linking C executable cmTC_fad46
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fad46.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_fad46.dir/HAVE_DLFCN_H.c.o  -o cmTC_fad46 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files ev.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_8d5b7/fast && /usr/bin/gmake -f CMakeFiles/cmTC_8d5b7.dir/build.make CMakeFiles/cmTC_8d5b7.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_8d5b7.dir/HAVE_EV_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_8d5b7.dir/HAVE_EV_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_EV_H.c
+Linking C executable cmTC_8d5b7
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8d5b7.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_8d5b7.dir/HAVE_EV_H.c.o  -o cmTC_8d5b7 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files fcntl.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_ff37a/fast && /usr/bin/gmake -f CMakeFiles/cmTC_ff37a.dir/build.make CMakeFiles/cmTC_ff37a.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ff37a.dir/HAVE_FCNTL_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_ff37a.dir/HAVE_FCNTL_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_FCNTL_H.c
+Linking C executable cmTC_ff37a
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ff37a.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_ff37a.dir/HAVE_FCNTL_H.c.o  -o cmTC_ff37a 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the function fork exists passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_aa82d/fast && /usr/bin/gmake -f CMakeFiles/cmTC_aa82d.dir/build.make CMakeFiles/cmTC_aa82d.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_aa82d.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=gnu99 -DCHECK_FUNCTION_EXISTS=fork -fPIE   -o CMakeFiles/cmTC_aa82d.dir/CheckFunctionExists.c.o   -c /usr/local/share/cmake-3.15/Modules/CheckFunctionExists.c
+<command-line>:0:23: warning: conflicting types for built-in function ‘fork’ [enabled by default]
+/usr/local/share/cmake-3.15/Modules/CheckFunctionExists.c:7:3: note: in expansion of macro ‘CHECK_FUNCTION_EXISTS’
+   CHECK_FUNCTION_EXISTS(void);
+   ^
+Linking C executable cmTC_aa82d
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_aa82d.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99 -DCHECK_FUNCTION_EXISTS=fork    -rdynamic CMakeFiles/cmTC_aa82d.dir/CheckFunctionExists.c.o  -o cmTC_aa82d 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the function getpwnam_r exists passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_cd153/fast && /usr/bin/gmake -f CMakeFiles/cmTC_cd153.dir/build.make CMakeFiles/cmTC_cd153.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_cd153.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=gnu99 -DCHECK_FUNCTION_EXISTS=getpwnam_r -fPIE   -o CMakeFiles/cmTC_cd153.dir/CheckFunctionExists.c.o   -c /usr/local/share/cmake-3.15/Modules/CheckFunctionExists.c
+Linking C executable cmTC_cd153
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cd153.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99 -DCHECK_FUNCTION_EXISTS=getpwnam_r    -rdynamic CMakeFiles/cmTC_cd153.dir/CheckFunctionExists.c.o  -o cmTC_cd153 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the function inet_ntop exists passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_fbd55/fast && /usr/bin/gmake -f CMakeFiles/cmTC_fbd55.dir/build.make CMakeFiles/cmTC_fbd55.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_fbd55.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=gnu99 -DCHECK_FUNCTION_EXISTS=inet_ntop -fPIE   -o CMakeFiles/cmTC_fbd55.dir/CheckFunctionExists.c.o   -c /usr/local/share/cmake-3.15/Modules/CheckFunctionExists.c
+Linking C executable cmTC_fbd55
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fbd55.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99 -DCHECK_FUNCTION_EXISTS=inet_ntop    -rdynamic CMakeFiles/cmTC_fbd55.dir/CheckFunctionExists.c.o  -o cmTC_fbd55 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files inttypes.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_cd605/fast && /usr/bin/gmake -f CMakeFiles/cmTC_cd605.dir/build.make CMakeFiles/cmTC_cd605.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_cd605.dir/HAVE_INTTYPES_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_cd605.dir/HAVE_INTTYPES_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_INTTYPES_H.c
+Linking C executable cmTC_cd605
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cd605.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_cd605.dir/HAVE_INTTYPES_H.c.o  -o cmTC_cd605 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files langinfo.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_1de27/fast && /usr/bin/gmake -f CMakeFiles/cmTC_1de27.dir/build.make CMakeFiles/cmTC_1de27.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_1de27.dir/HAVE_LANGINFO_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_1de27.dir/HAVE_LANGINFO_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_LANGINFO_H.c
+Linking C executable cmTC_1de27
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1de27.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_1de27.dir/HAVE_LANGINFO_H.c.o  -o cmTC_1de27 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files limits.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_37bf7/fast && /usr/bin/gmake -f CMakeFiles/cmTC_37bf7.dir/build.make CMakeFiles/cmTC_37bf7.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_37bf7.dir/HAVE_LIMITS_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_37bf7.dir/HAVE_LIMITS_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_LIMITS_H.c
+Linking C executable cmTC_37bf7
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_37bf7.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_37bf7.dir/HAVE_LIMITS_H.c.o  -o cmTC_37bf7 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files locale.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_5f9ab/fast && /usr/bin/gmake -f CMakeFiles/cmTC_5f9ab.dir/build.make CMakeFiles/cmTC_5f9ab.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_5f9ab.dir/HAVE_LOCALE_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_5f9ab.dir/HAVE_LOCALE_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_LOCALE_H.c
+Linking C executable cmTC_5f9ab
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5f9ab.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_5f9ab.dir/HAVE_LOCALE_H.c.o  -o cmTC_5f9ab 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the function malloc exists passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_60ed1/fast && /usr/bin/gmake -f CMakeFiles/cmTC_60ed1.dir/build.make CMakeFiles/cmTC_60ed1.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_60ed1.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=gnu99 -DCHECK_FUNCTION_EXISTS=malloc -fPIE   -o CMakeFiles/cmTC_60ed1.dir/CheckFunctionExists.c.o   -c /usr/local/share/cmake-3.15/Modules/CheckFunctionExists.c
+<command-line>:0:23: warning: conflicting types for built-in function ‘malloc’ [enabled by default]
+/usr/local/share/cmake-3.15/Modules/CheckFunctionExists.c:7:3: note: in expansion of macro ‘CHECK_FUNCTION_EXISTS’
+   CHECK_FUNCTION_EXISTS(void);
+   ^
+Linking C executable cmTC_60ed1
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_60ed1.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99 -DCHECK_FUNCTION_EXISTS=malloc    -rdynamic CMakeFiles/cmTC_60ed1.dir/CheckFunctionExists.c.o  -o cmTC_60ed1 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files memory.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_2525a/fast && /usr/bin/gmake -f CMakeFiles/cmTC_2525a.dir/build.make CMakeFiles/cmTC_2525a.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2525a.dir/HAVE_MEMORY_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_2525a.dir/HAVE_MEMORY_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_MEMORY_H.c
+Linking C executable cmTC_2525a
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2525a.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_2525a.dir/HAVE_MEMORY_H.c.o  -o cmTC_2525a 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the function memset exists passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_c430b/fast && /usr/bin/gmake -f CMakeFiles/cmTC_c430b.dir/build.make CMakeFiles/cmTC_c430b.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c430b.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=gnu99 -DCHECK_FUNCTION_EXISTS=memset -fPIE   -o CMakeFiles/cmTC_c430b.dir/CheckFunctionExists.c.o   -c /usr/local/share/cmake-3.15/Modules/CheckFunctionExists.c
+<command-line>:0:23: warning: conflicting types for built-in function ‘memset’ [enabled by default]
+/usr/local/share/cmake-3.15/Modules/CheckFunctionExists.c:7:3: note: in expansion of macro ‘CHECK_FUNCTION_EXISTS’
+   CHECK_FUNCTION_EXISTS(void);
+   ^
+Linking C executable cmTC_c430b
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c430b.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99 -DCHECK_FUNCTION_EXISTS=memset    -rdynamic CMakeFiles/cmTC_c430b.dir/CheckFunctionExists.c.o  -o cmTC_c430b 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files netdb.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_ea189/fast && /usr/bin/gmake -f CMakeFiles/cmTC_ea189.dir/build.make CMakeFiles/cmTC_ea189.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ea189.dir/HAVE_NETDB_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_ea189.dir/HAVE_NETDB_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_NETDB_H.c
+Linking C executable cmTC_ea189
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ea189.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_ea189.dir/HAVE_NETDB_H.c.o  -o cmTC_ea189 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files netinet/in.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_b5612/fast && /usr/bin/gmake -f CMakeFiles/cmTC_b5612.dir/build.make CMakeFiles/cmTC_b5612.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_b5612.dir/HAVE_NETINET_IN_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_b5612.dir/HAVE_NETINET_IN_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_NETINET_IN_H.c
+Linking C executable cmTC_b5612
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b5612.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_b5612.dir/HAVE_NETINET_IN_H.c.o  -o cmTC_b5612 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files netinet/tcp.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_3f00a/fast && /usr/bin/gmake -f CMakeFiles/cmTC_3f00a.dir/build.make CMakeFiles/cmTC_3f00a.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_3f00a.dir/HAVE_NETINET_TCP_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_3f00a.dir/HAVE_NETINET_TCP_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_NETINET_TCP_H.c
+Linking C executable cmTC_3f00a
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3f00a.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_3f00a.dir/HAVE_NETINET_TCP_H.c.o  -o cmTC_3f00a 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files linux/tcp.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_039e4/fast && /usr/bin/gmake -f CMakeFiles/cmTC_039e4.dir/build.make CMakeFiles/cmTC_039e4.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_039e4.dir/HAVE_LINUX_TCP_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_039e4.dir/HAVE_LINUX_TCP_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_LINUX_TCP_H.c
+Linking C executable cmTC_039e4
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_039e4.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_039e4.dir/HAVE_LINUX_TCP_H.c.o  -o cmTC_039e4 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files net/if.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_f10dc/fast && /usr/bin/gmake -f CMakeFiles/cmTC_f10dc.dir/build.make CMakeFiles/cmTC_f10dc.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f10dc.dir/HAVE_NET_IF_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_f10dc.dir/HAVE_NET_IF_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_NET_IF_H.c
+Linking C executable cmTC_f10dc
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f10dc.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_f10dc.dir/HAVE_NET_IF_H.c.o  -o cmTC_f10dc 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files pcre.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_8cac0/fast && /usr/bin/gmake -f CMakeFiles/cmTC_8cac0.dir/build.make CMakeFiles/cmTC_8cac0.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_8cac0.dir/HAVE_PCRE_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_8cac0.dir/HAVE_PCRE_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_PCRE_H.c
+Linking C executable cmTC_8cac0
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8cac0.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_8cac0.dir/HAVE_PCRE_H.c.o  -o cmTC_8cac0 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the function select exists passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_2fa8d/fast && /usr/bin/gmake -f CMakeFiles/cmTC_2fa8d.dir/build.make CMakeFiles/cmTC_2fa8d.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2fa8d.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=gnu99 -DCHECK_FUNCTION_EXISTS=select -fPIE   -o CMakeFiles/cmTC_2fa8d.dir/CheckFunctionExists.c.o   -c /usr/local/share/cmake-3.15/Modules/CheckFunctionExists.c
+Linking C executable cmTC_2fa8d
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2fa8d.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99 -DCHECK_FUNCTION_EXISTS=select    -rdynamic CMakeFiles/cmTC_2fa8d.dir/CheckFunctionExists.c.o  -o cmTC_2fa8d 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the function setresuid exists passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_d6b34/fast && /usr/bin/gmake -f CMakeFiles/cmTC_d6b34.dir/build.make CMakeFiles/cmTC_d6b34.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_d6b34.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=gnu99 -DCHECK_FUNCTION_EXISTS=setresuid -fPIE   -o CMakeFiles/cmTC_d6b34.dir/CheckFunctionExists.c.o   -c /usr/local/share/cmake-3.15/Modules/CheckFunctionExists.c
+Linking C executable cmTC_d6b34
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d6b34.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99 -DCHECK_FUNCTION_EXISTS=setresuid    -rdynamic CMakeFiles/cmTC_d6b34.dir/CheckFunctionExists.c.o  -o cmTC_d6b34 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the function setreuid exists passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_da40e/fast && /usr/bin/gmake -f CMakeFiles/cmTC_da40e.dir/build.make CMakeFiles/cmTC_da40e.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_da40e.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=gnu99 -DCHECK_FUNCTION_EXISTS=setreuid -fPIE   -o CMakeFiles/cmTC_da40e.dir/CheckFunctionExists.c.o   -c /usr/local/share/cmake-3.15/Modules/CheckFunctionExists.c
+Linking C executable cmTC_da40e
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_da40e.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99 -DCHECK_FUNCTION_EXISTS=setreuid    -rdynamic CMakeFiles/cmTC_da40e.dir/CheckFunctionExists.c.o  -o cmTC_da40e 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the function setrlimit exists passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_85a55/fast && /usr/bin/gmake -f CMakeFiles/cmTC_85a55.dir/build.make CMakeFiles/cmTC_85a55.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_85a55.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=gnu99 -DCHECK_FUNCTION_EXISTS=setrlimit -fPIE   -o CMakeFiles/cmTC_85a55.dir/CheckFunctionExists.c.o   -c /usr/local/share/cmake-3.15/Modules/CheckFunctionExists.c
+Linking C executable cmTC_85a55
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_85a55.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99 -DCHECK_FUNCTION_EXISTS=setrlimit    -rdynamic CMakeFiles/cmTC_85a55.dir/CheckFunctionExists.c.o  -o cmTC_85a55 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the function socket exists passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_c4f28/fast && /usr/bin/gmake -f CMakeFiles/cmTC_c4f28.dir/build.make CMakeFiles/cmTC_c4f28.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c4f28.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=gnu99 -DCHECK_FUNCTION_EXISTS=socket -fPIE   -o CMakeFiles/cmTC_c4f28.dir/CheckFunctionExists.c.o   -c /usr/local/share/cmake-3.15/Modules/CheckFunctionExists.c
+Linking C executable cmTC_c4f28
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c4f28.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99 -DCHECK_FUNCTION_EXISTS=socket    -rdynamic CMakeFiles/cmTC_c4f28.dir/CheckFunctionExists.c.o  -o cmTC_c4f28 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files stdint.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_1a0f1/fast && /usr/bin/gmake -f CMakeFiles/cmTC_1a0f1.dir/build.make CMakeFiles/cmTC_1a0f1.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_1a0f1.dir/HAVE_STDINT_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_1a0f1.dir/HAVE_STDINT_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_STDINT_H.c
+Linking C executable cmTC_1a0f1
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1a0f1.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_1a0f1.dir/HAVE_STDINT_H.c.o  -o cmTC_1a0f1 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files stdlib.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_1828d/fast && /usr/bin/gmake -f CMakeFiles/cmTC_1828d.dir/build.make CMakeFiles/cmTC_1828d.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_1828d.dir/HAVE_STDLIB_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_1828d.dir/HAVE_STDLIB_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_STDLIB_H.c
+Linking C executable cmTC_1828d
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1828d.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_1828d.dir/HAVE_STDLIB_H.c.o  -o cmTC_1828d 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the function strerror exists passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_bc20d/fast && /usr/bin/gmake -f CMakeFiles/cmTC_bc20d.dir/build.make CMakeFiles/cmTC_bc20d.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_bc20d.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=gnu99 -DCHECK_FUNCTION_EXISTS=strerror -fPIE   -o CMakeFiles/cmTC_bc20d.dir/CheckFunctionExists.c.o   -c /usr/local/share/cmake-3.15/Modules/CheckFunctionExists.c
+Linking C executable cmTC_bc20d
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bc20d.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99 -DCHECK_FUNCTION_EXISTS=strerror    -rdynamic CMakeFiles/cmTC_bc20d.dir/CheckFunctionExists.c.o  -o cmTC_bc20d 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files strings.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_8d097/fast && /usr/bin/gmake -f CMakeFiles/cmTC_8d097.dir/build.make CMakeFiles/cmTC_8d097.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_8d097.dir/HAVE_STRINGS_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_8d097.dir/HAVE_STRINGS_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_STRINGS_H.c
+Linking C executable cmTC_8d097
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8d097.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_8d097.dir/HAVE_STRINGS_H.c.o  -o cmTC_8d097 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files string.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_9c19c/fast && /usr/bin/gmake -f CMakeFiles/cmTC_9c19c.dir/build.make CMakeFiles/cmTC_9c19c.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_9c19c.dir/HAVE_STRING_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_9c19c.dir/HAVE_STRING_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_STRING_H.c
+Linking C executable cmTC_9c19c
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9c19c.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_9c19c.dir/HAVE_STRING_H.c.o  -o cmTC_9c19c 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files sys/ioctl.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_b7624/fast && /usr/bin/gmake -f CMakeFiles/cmTC_b7624.dir/build.make CMakeFiles/cmTC_b7624.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_b7624.dir/HAVE_SYS_IOCTL_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_b7624.dir/HAVE_SYS_IOCTL_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_SYS_IOCTL_H.c
+Linking C executable cmTC_b7624
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b7624.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_b7624.dir/HAVE_SYS_IOCTL_H.c.o  -o cmTC_b7624 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files sys/select.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_120fc/fast && /usr/bin/gmake -f CMakeFiles/cmTC_120fc.dir/build.make CMakeFiles/cmTC_120fc.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_120fc.dir/HAVE_SYS_SELECT_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_120fc.dir/HAVE_SYS_SELECT_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_SYS_SELECT_H.c
+Linking C executable cmTC_120fc
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_120fc.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_120fc.dir/HAVE_SYS_SELECT_H.c.o  -o cmTC_120fc 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files sys/socket.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_6f8a1/fast && /usr/bin/gmake -f CMakeFiles/cmTC_6f8a1.dir/build.make CMakeFiles/cmTC_6f8a1.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_6f8a1.dir/HAVE_SYS_SOCKET_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_6f8a1.dir/HAVE_SYS_SOCKET_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_SYS_SOCKET_H.c
+Linking C executable cmTC_6f8a1
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6f8a1.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_6f8a1.dir/HAVE_SYS_SOCKET_H.c.o  -o cmTC_6f8a1 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files sys/stat.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_0d8b8/fast && /usr/bin/gmake -f CMakeFiles/cmTC_0d8b8.dir/build.make CMakeFiles/cmTC_0d8b8.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_0d8b8.dir/HAVE_SYS_STAT_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_0d8b8.dir/HAVE_SYS_STAT_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_SYS_STAT_H.c
+Linking C executable cmTC_0d8b8
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0d8b8.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_0d8b8.dir/HAVE_SYS_STAT_H.c.o  -o cmTC_0d8b8 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files sys/types.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_1a8a9/fast && /usr/bin/gmake -f CMakeFiles/cmTC_1a8a9.dir/build.make CMakeFiles/cmTC_1a8a9.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_1a8a9.dir/HAVE_SYS_TYPES_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_1a8a9.dir/HAVE_SYS_TYPES_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_SYS_TYPES_H.c
+Linking C executable cmTC_1a8a9
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1a8a9.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_1a8a9.dir/HAVE_SYS_TYPES_H.c.o  -o cmTC_1a8a9 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files sys/wait.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_4f1b9/fast && /usr/bin/gmake -f CMakeFiles/cmTC_4f1b9.dir/build.make CMakeFiles/cmTC_4f1b9.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_4f1b9.dir/HAVE_SYS_WAIT_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_4f1b9.dir/HAVE_SYS_WAIT_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_SYS_WAIT_H.c
+Linking C executable cmTC_4f1b9
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4f1b9.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_4f1b9.dir/HAVE_SYS_WAIT_H.c.o  -o cmTC_4f1b9 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files ares.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_141ac/fast && /usr/bin/gmake -f CMakeFiles/cmTC_141ac.dir/build.make CMakeFiles/cmTC_141ac.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_141ac.dir/HAVE_ARES_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_141ac.dir/HAVE_ARES_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_ARES_H.c
+Linking C executable cmTC_141ac
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_141ac.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_141ac.dir/HAVE_ARES_H.c.o  -o cmTC_141ac 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files unistd.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_32e42/fast && /usr/bin/gmake -f CMakeFiles/cmTC_32e42.dir/build.make CMakeFiles/cmTC_32e42.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_32e42.dir/HAVE_UNISTD_H.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_32e42.dir/HAVE_UNISTD_H.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/HAVE_UNISTD_H.c
+Linking C executable cmTC_32e42
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_32e42.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_32e42.dir/HAVE_UNISTD_H.c.o  -o cmTC_32e42 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the function vfork exists passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_09eef/fast && /usr/bin/gmake -f CMakeFiles/cmTC_09eef.dir/build.make CMakeFiles/cmTC_09eef.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_09eef.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=gnu99 -DCHECK_FUNCTION_EXISTS=vfork -fPIE   -o CMakeFiles/cmTC_09eef.dir/CheckFunctionExists.c.o   -c /usr/local/share/cmake-3.15/Modules/CheckFunctionExists.c
+Linking C executable cmTC_09eef
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_09eef.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99 -DCHECK_FUNCTION_EXISTS=vfork    -rdynamic CMakeFiles/cmTC_09eef.dir/CheckFunctionExists.c.o  -o cmTC_09eef 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if files sys/time.h;time.h exist passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_5e3bb/fast && /usr/bin/gmake -f CMakeFiles/cmTC_5e3bb.dir/build.make CMakeFiles/cmTC_5e3bb.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_5e3bb.dir/TIME_WITH_SYS_TIME.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_5e3bb.dir/TIME_WITH_SYS_TIME.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckIncludeFiles/TIME_WITH_SYS_TIME.c
+Linking C executable cmTC_5e3bb
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5e3bb.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_5e3bb.dir/TIME_WITH_SYS_TIME.c.o  -o cmTC_5e3bb 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Performing C SOURCE FILE Test HAVE_GCC_THREAD_LOCAL_STORAGE succeeded with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_f4144/fast && /usr/bin/gmake -f CMakeFiles/cmTC_f4144.dir/build.make CMakeFiles/cmTC_f4144.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f4144.dir/src.c.o
+/usr/bin/cc   -std=gnu99 -DHAVE_GCC_THREAD_LOCAL_STORAGE -fPIE   -o CMakeFiles/cmTC_f4144.dir/src.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_f4144
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f4144.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99 -DHAVE_GCC_THREAD_LOCAL_STORAGE    -rdynamic CMakeFiles/cmTC_f4144.dir/src.c.o  -o cmTC_f4144 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+
+        __thread int tls;
+        int main(void) { return 0; }
+Determining if the include file stddef.h exists passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_520d5/fast && /usr/bin/gmake -f CMakeFiles/cmTC_520d5.dir/build.make CMakeFiles/cmTC_520d5.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_520d5.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_520d5.dir/CheckIncludeFile.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTC_520d5
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_520d5.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_520d5.dir/CheckIncludeFile.c.o  -o cmTC_520d5 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining size of pid_t passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_f9d2a/fast && /usr/bin/gmake -f CMakeFiles/cmTC_f9d2a.dir/build.make CMakeFiles/cmTC_f9d2a.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f9d2a.dir/PID_T.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_f9d2a.dir/PID_T.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckTypeSize/PID_T.c
+Linking C executable cmTC_f9d2a
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f9d2a.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_f9d2a.dir/PID_T.c.o  -o cmTC_f9d2a 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining size of size_t passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_ce4f0/fast && /usr/bin/gmake -f CMakeFiles/cmTC_ce4f0.dir/build.make CMakeFiles/cmTC_ce4f0.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ce4f0.dir/SIZE_T.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_ce4f0.dir/SIZE_T.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckTypeSize/SIZE_T.c
+Linking C executable cmTC_ce4f0
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ce4f0.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_ce4f0.dir/SIZE_T.c.o  -o cmTC_ce4f0 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining size of ssize_t passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_bb8b0/fast && /usr/bin/gmake -f CMakeFiles/cmTC_bb8b0.dir/build.make CMakeFiles/cmTC_bb8b0.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_bb8b0.dir/SSIZE_T.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_bb8b0.dir/SSIZE_T.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckTypeSize/SSIZE_T.c
+Linking C executable cmTC_bb8b0
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bb8b0.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_bb8b0.dir/SSIZE_T.c.o  -o cmTC_bb8b0 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining size of uint16_t passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_5765a/fast && /usr/bin/gmake -f CMakeFiles/cmTC_5765a.dir/build.make CMakeFiles/cmTC_5765a.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_5765a.dir/UINT16_T.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_5765a.dir/UINT16_T.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckTypeSize/UINT16_T.c
+Linking C executable cmTC_5765a
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5765a.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_5765a.dir/UINT16_T.c.o  -o cmTC_5765a 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining size of uint8_t passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_4c4f0/fast && /usr/bin/gmake -f CMakeFiles/cmTC_4c4f0.dir/build.make CMakeFiles/cmTC_4c4f0.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_4c4f0.dir/UINT8_T.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_4c4f0.dir/UINT8_T.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CheckTypeSize/UINT8_T.c
+Linking C executable cmTC_4c4f0
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4c4f0.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_4c4f0.dir/UINT8_T.c.o  -o cmTC_4c4f0 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the include file pthread.h exists passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_e0977/fast && /usr/bin/gmake -f CMakeFiles/cmTC_e0977.dir/build.make CMakeFiles/cmTC_e0977.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e0977.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=gnu99  -fPIE   -o CMakeFiles/cmTC_e0977.dir/CheckIncludeFile.c.o   -c /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTC_e0977
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e0977.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99     -rdynamic CMakeFiles/cmTC_e0977.dir/CheckIncludeFile.c.o  -o cmTC_e0977 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the function pthread_create exists in the pthread passed with the following output:
+Change Dir: /root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_a40c9/fast && /usr/bin/gmake -f CMakeFiles/cmTC_a40c9.dir/build.make CMakeFiles/cmTC_a40c9.dir/build
+gmake[1]: Entering directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_a40c9.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=gnu99 -DCHECK_FUNCTION_EXISTS=pthread_create -fPIE   -o CMakeFiles/cmTC_a40c9.dir/CheckFunctionExists.c.o   -c /usr/local/share/cmake-3.15/Modules/CheckFunctionExists.c
+Linking C executable cmTC_a40c9
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a40c9.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu99 -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_a40c9.dir/CheckFunctionExists.c.o  -o cmTC_a40c9 -lpthread 
+gmake[1]: Leaving directory `/root/work/lego/third_party/shadowsocks-libev/build/CMakeFiles/CMakeTmp'
+
+
+

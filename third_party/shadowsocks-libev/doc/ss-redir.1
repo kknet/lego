@@ -1,0 +1,227 @@
+'\" t
+.\"     Title: ss-redir
+.\"    Author: [FIXME: author] [see http://docbook.sf.net/el/author]
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 08/31/2019
+.\"    Manual: Shadowsocks-libev Manual
+.\"    Source: Shadowsocks-libev 3.3.1
+.\"  Language: English
+.\"
+.TH "SS\-REDIR" "1" "08/31/2019" "Shadowsocks\-libev 3\&.3\&.1" "Shadowsocks\-libev Manual"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+ss-redir \- shadowsocks client as transparent proxy, libev port
+.SH "SYNOPSIS"
+.sp
+\fBss\-redir\fR [\-uUv6] [\-h|\-\-help] [\-s \fI<server_host>\fR] [\-p \fI<server_port>\fR] [\-l \fI<local_port>\fR] [\-k \fI<password>\fR] [\-m \fI<encrypt_method>\fR] [\-f \fI<pid_file>\fR] [\-t \fI<timeout>\fR] [\-c \fI<config_file>\fR] [\-b \fI<local_address>\fR] [\-a \fI<user_name>\fR] [\-n \fI<nofile>\fR] [\-\-mtu \fI<MTU>\fR] [\-\-no\-delay] [\-\-plugin \fI<plugin_name>\fR] [\-\-plugin\-opts \fI<plugin_options>\fR] [\-\-password \fI<password>\fR] [\-\-key \fI<key_in_base64>\fR]
+.SH "DESCRIPTION"
+.sp
+\fBShadowsocks\-libev\fR is a lightweight and secure socks5 proxy\&. It is a port of the original shadowsocks created by clowwindy\&. \fBShadowsocks\-libev\fR is written in pure C and takes advantage of libev to achieve both high performance and low resource consumption\&.
+.sp
+\fBShadowsocks\-libev\fR consists of five components\&. \fBss\-redir\fR(1) works as a transparent proxy on local machines to proxy TCP traffic and requires netfilter\(cqs NAT module\&. For more information, check out \fBshadowsocks\-libev\fR(8) and the following \fIEXAMPLE\fR section\&.
+.SH "OPTIONS"
+.PP
+\-s \fI<server_host>\fR
+.RS 4
+Set the server\(cqs hostname or IP\&.
+.RE
+.PP
+\-p \fI<server_port>\fR
+.RS 4
+Set the server\(cqs port number\&.
+.RE
+.PP
+\-l \fI<local_port>\fR
+.RS 4
+Set the local port number\&.
+.RE
+.PP
+\-k \fI<password>\fR, \-\-password \fI<password>\fR
+.RS 4
+Set the password\&. The server and the client should use the same password\&.
+.RE
+.PP
+\-\-key \fI<key_in_base64>\fR
+.RS 4
+Set the key directly\&. The key should be encoded with URL\-safe Base64\&.
+.RE
+.PP
+\-m \fI<encrypt_method>\fR
+.RS 4
+Set the cipher\&.
+.sp
+\fBShadowsocks\-libev\fR
+accepts 18 different ciphers:
+.sp
+aes\-128\-gcm, aes\-192\-gcm, aes\-256\-gcm, rc4\-md5, aes\-128\-cfb, aes\-192\-cfb, aes\-256\-cfb, aes\-128\-ctr, aes\-192\-ctr, aes\-256\-ctr, bf\-cfb, camellia\-128\-cfb, camellia\-192\-cfb, camellia\-256\-cfb, chacha20\-ietf\-poly1305, salsa20, chacha20 and chacha20\-ietf\&.
+.sp
+The default cipher is
+\fIchacha20\-ietf\-poly1305\fR\&.
+.sp
+If built with PolarSSL or custom OpenSSL libraries, some of these ciphers may not work\&.
+.RE
+.PP
+\-a \fI<user_name>\fR
+.RS 4
+Run as a specific user\&.
+.RE
+.PP
+\-f \fI<pid_file>\fR
+.RS 4
+Start shadowsocks as a daemon with specific pid file\&.
+.RE
+.PP
+\-t \fI<timeout>\fR
+.RS 4
+Set the socket timeout in seconds\&. The default value is 60\&.
+.RE
+.PP
+\-c \fI<config_file>\fR
+.RS 4
+Use a configuration file\&.
+.sp
+Refer to
+\fBshadowsocks\-libev\fR(8)
+\fICONFIG FILE\fR
+section for more details\&.
+.RE
+.PP
+\-n \fI<number>\fR
+.RS 4
+Specify max number of open files\&.
+.sp
+Only available on Linux\&.
+.RE
+.PP
+\-b \fI<local_address>\fR
+.RS 4
+Specify the local address to use while this client is making outbound connections to the server\&.
+.RE
+.PP
+\-u
+.RS 4
+Enable UDP relay\&.
+.sp
+TPROXY is required in redir mode\&. You may need root permission\&.
+.RE
+.PP
+\-U
+.RS 4
+Enable UDP relay and disable TCP relay\&.
+.RE
+.PP
+\-6
+.RS 4
+Resovle hostname to IPv6 address first\&.
+.RE
+.PP
+\-\-mtu \fI<MTU>\fR
+.RS 4
+Specify the MTU of your network interface\&.
+.RE
+.PP
+\-\-mptcp
+.RS 4
+Enable Multipath TCP\&.
+.sp
+Only available with MPTCP enabled Linux kernel\&.
+.RE
+.PP
+\-\-reuse\-port
+.RS 4
+Enable port reuse\&.
+.sp
+Only available with Linux kernel > 3\&.9\&.0\&.
+.RE
+.PP
+\-\-no\-delay
+.RS 4
+Enable TCP_NODELAY\&.
+.RE
+.PP
+\-\-plugin \fI<plugin_name>\fR
+.RS 4
+Enable SIP003 plugin\&. (Experimental)
+.RE
+.PP
+\-\-plugin\-opts \fI<plugin_options>\fR
+.RS 4
+Set SIP003 plugin options\&. (Experimental)
+.RE
+.PP
+\-v
+.RS 4
+Enable verbose mode\&.
+.RE
+.PP
+\-h|\-\-help
+.RS 4
+Print help message\&.
+.RE
+.SH "EXAMPLE"
+.sp
+ss\-redir requires netfilter\(cqs NAT function\&. Here is an example:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# Create new chain
+iptables \-t nat \-N SHADOWSOCKS
+iptables \-t mangle \-N SHADOWSOCKS
+
+# Ignore your shadowsocks server\*(Aqs addresses
+# It\*(Aqs very IMPORTANT, just be careful\&.
+iptables \-t nat \-A SHADOWSOCKS \-d 123\&.123\&.123\&.123 \-j RETURN
+
+# Ignore LANs and any other addresses you\*(Aqd like to bypass the proxy
+# See Wikipedia and RFC5735 for full list of reserved networks\&.
+# See ashi009/bestroutetb for a highly optimized CHN route list\&.
+iptables \-t nat \-A SHADOWSOCKS \-d 0\&.0\&.0\&.0/8 \-j RETURN
+iptables \-t nat \-A SHADOWSOCKS \-d 10\&.0\&.0\&.0/8 \-j RETURN
+iptables \-t nat \-A SHADOWSOCKS \-d 127\&.0\&.0\&.0/8 \-j RETURN
+iptables \-t nat \-A SHADOWSOCKS \-d 169\&.254\&.0\&.0/16 \-j RETURN
+iptables \-t nat \-A SHADOWSOCKS \-d 172\&.16\&.0\&.0/12 \-j RETURN
+iptables \-t nat \-A SHADOWSOCKS \-d 192\&.168\&.0\&.0/16 \-j RETURN
+iptables \-t nat \-A SHADOWSOCKS \-d 224\&.0\&.0\&.0/4 \-j RETURN
+iptables \-t nat \-A SHADOWSOCKS \-d 240\&.0\&.0\&.0/4 \-j RETURN
+
+# Anything else should be redirected to shadowsocks\*(Aqs local port
+iptables \-t nat \-A SHADOWSOCKS \-p tcp \-j REDIRECT \-\-to\-ports 12345
+
+# Add any UDP rules
+ip route add local default dev lo table 100
+ip rule add fwmark 1 lookup 100
+iptables \-t mangle \-A SHADOWSOCKS \-p udp \-\-dport 53 \-j TPROXY \-\-on\-port 12345 \-\-tproxy\-mark 0x01/0x01
+
+# Apply the rules
+iptables \-t nat \-A PREROUTING \-p tcp \-j SHADOWSOCKS
+iptables \-t mangle \-A PREROUTING \-j SHADOWSOCKS
+
+# Start the shadowsocks\-redir
+ss\-redir \-u \-c /etc/config/shadowsocks\&.json \-f /var/run/shadowsocks\&.pid
+.fi
+.if n \{\
+.RE
+.\}
+.SH "SEE ALSO"
+.sp
+\fBss\-local\fR(1), \fBss\-server\fR(1), \fBss\-tunnel\fR(1), \fBss\-manager\fR(1), \fBshadowsocks\-libev\fR(8), \fBiptables\fR(8), /etc/shadowsocks\-libev/config\&.json

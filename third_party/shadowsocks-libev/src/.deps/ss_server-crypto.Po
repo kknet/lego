@@ -1,0 +1,503 @@
+ss_server-crypto.o: crypto.c /usr/include/stdc-predef.h ../config.h \
+ /usr/include/fcntl.h /usr/include/features.h /usr/include/sys/cdefs.h \
+ /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h \
+ /usr/include/gnu/stubs-64.h /usr/include/bits/types.h \
+ /usr/include/bits/typesizes.h /usr/include/bits/fcntl.h \
+ /usr/include/bits/fcntl-linux.h /usr/include/bits/uio.h \
+ /usr/include/sys/types.h /usr/include/time.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/stddef.h \
+ /usr/include/endian.h /usr/include/bits/endian.h \
+ /usr/include/bits/byteswap.h /usr/include/bits/byteswap-16.h \
+ /usr/include/sys/select.h /usr/include/bits/select.h \
+ /usr/include/bits/sigset.h /usr/include/bits/time.h \
+ /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h \
+ /usr/include/linux/falloc.h /usr/include/bits/stat.h \
+ /usr/include/unistd.h /usr/include/bits/posix_opt.h \
+ /usr/include/bits/environments.h /usr/include/bits/confname.h \
+ /usr/include/getopt.h /usr/include/sys/ioctl.h \
+ /usr/include/bits/ioctls.h /usr/include/asm/ioctls.h \
+ /usr/include/asm-generic/ioctls.h /usr/include/linux/ioctl.h \
+ /usr/include/asm/ioctl.h /usr/include/asm-generic/ioctl.h \
+ /usr/include/bits/ioctl-types.h /usr/include/sys/ttydefaults.h \
+ /usr/include/linux/random.h /usr/include/linux/types.h \
+ /usr/include/asm/types.h /usr/include/asm-generic/types.h \
+ /usr/include/asm-generic/int-ll64.h /usr/include/asm/bitsperlong.h \
+ /usr/include/asm-generic/bitsperlong.h /usr/include/linux/posix_types.h \
+ /usr/include/linux/stddef.h /usr/include/asm/posix_types.h \
+ /usr/include/asm/posix_types_64.h /usr/include/asm-generic/posix_types.h \
+ /usr/include/linux/irqnr.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/stdint.h \
+ /usr/include/stdint.h /usr/include/bits/wchar.h /usr/include/sodium.h \
+ /usr/include/sodium/version.h /usr/include/sodium/export.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/limits.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/syslimits.h \
+ /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+ /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+ /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h \
+ /usr/include/bits/stdio_lim.h /usr/include/sodium/core.h \
+ /usr/include/sodium/crypto_aead_aes256gcm.h \
+ /usr/include/sodium/crypto_aead_chacha20poly1305.h \
+ /usr/include/sodium/crypto_aead_xchacha20poly1305.h \
+ /usr/include/sodium/crypto_auth.h \
+ /usr/include/sodium/crypto_auth_hmacsha512256.h \
+ /usr/include/sodium/crypto_auth_hmacsha512.h \
+ /usr/include/sodium/crypto_hash_sha512.h /usr/include/stdlib.h \
+ /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
+ /usr/include/xlocale.h /usr/include/alloca.h \
+ /usr/include/bits/stdlib-float.h \
+ /usr/include/sodium/crypto_auth_hmacsha256.h \
+ /usr/include/sodium/crypto_hash_sha256.h \
+ /usr/include/sodium/crypto_auth_hmacsha512.h \
+ /usr/include/sodium/crypto_auth_hmacsha512256.h \
+ /usr/include/sodium/crypto_box.h \
+ /usr/include/sodium/crypto_box_curve25519xsalsa20poly1305.h \
+ /usr/include/sodium/crypto_stream_xsalsa20.h \
+ /usr/include/sodium/crypto_box_curve25519xsalsa20poly1305.h \
+ /usr/include/sodium/crypto_core_hsalsa20.h \
+ /usr/include/sodium/crypto_core_hchacha20.h \
+ /usr/include/sodium/crypto_core_salsa20.h \
+ /usr/include/sodium/crypto_core_salsa2012.h \
+ /usr/include/sodium/crypto_core_salsa208.h \
+ /usr/include/sodium/crypto_generichash.h \
+ /usr/include/sodium/crypto_generichash_blake2b.h \
+ /usr/include/sodium/crypto_generichash_blake2b.h \
+ /usr/include/sodium/crypto_hash.h \
+ /usr/include/sodium/crypto_hash_sha256.h \
+ /usr/include/sodium/crypto_hash_sha512.h \
+ /usr/include/sodium/crypto_kdf.h \
+ /usr/include/sodium/crypto_kdf_blake2b.h \
+ /usr/include/sodium/crypto_kdf_blake2b.h /usr/include/sodium/crypto_kx.h \
+ /usr/include/sodium/crypto_onetimeauth.h \
+ /usr/include/sodium/crypto_onetimeauth_poly1305.h /usr/include/stdio.h \
+ /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/stdarg.h \
+ /usr/include/bits/sys_errlist.h /usr/include/bits/stdio.h \
+ /usr/include/sodium/crypto_onetimeauth_poly1305.h \
+ /usr/include/sodium/crypto_pwhash.h \
+ /usr/include/sodium/crypto_pwhash_argon2i.h \
+ /usr/include/sodium/crypto_pwhash_argon2id.h \
+ /usr/include/sodium/crypto_pwhash_argon2i.h \
+ /usr/include/sodium/crypto_scalarmult.h \
+ /usr/include/sodium/crypto_scalarmult_curve25519.h \
+ /usr/include/sodium/crypto_scalarmult_curve25519.h \
+ /usr/include/sodium/crypto_secretbox.h \
+ /usr/include/sodium/crypto_secretbox_xsalsa20poly1305.h \
+ /usr/include/sodium/crypto_secretbox_xsalsa20poly1305.h \
+ /usr/include/sodium/crypto_secretstream_xchacha20poly1305.h \
+ /usr/include/sodium/crypto_aead_xchacha20poly1305.h \
+ /usr/include/sodium/crypto_stream_chacha20.h \
+ /usr/include/sodium/crypto_shorthash.h \
+ /usr/include/sodium/crypto_shorthash_siphash24.h \
+ /usr/include/sodium/crypto_shorthash_siphash24.h \
+ /usr/include/sodium/crypto_sign.h \
+ /usr/include/sodium/crypto_sign_ed25519.h \
+ /usr/include/sodium/crypto_sign_ed25519.h \
+ /usr/include/sodium/crypto_stream.h \
+ /usr/include/sodium/crypto_stream_chacha20.h \
+ /usr/include/sodium/crypto_stream_salsa20.h \
+ /usr/include/sodium/crypto_stream_xsalsa20.h \
+ /usr/include/sodium/crypto_verify_16.h \
+ /usr/include/sodium/crypto_verify_32.h \
+ /usr/include/sodium/crypto_verify_64.h /usr/include/sodium/randombytes.h \
+ /usr/include/sodium/randombytes_internal_random.h \
+ /usr/include/sodium/randombytes.h \
+ /usr/include/sodium/randombytes_sysrandom.h \
+ /usr/include/sodium/runtime.h /usr/include/sodium/utils.h \
+ /usr/include/sodium/crypto_box_curve25519xchacha20poly1305.h \
+ /usr/include/sodium/crypto_stream_xchacha20.h \
+ /usr/include/sodium/crypto_core_ed25519.h \
+ /usr/include/sodium/crypto_core_ristretto255.h \
+ /usr/include/sodium/crypto_scalarmult_ed25519.h \
+ /usr/include/sodium/crypto_scalarmult_ristretto255.h \
+ /usr/include/sodium/crypto_secretbox_xchacha20poly1305.h \
+ /usr/include/sodium/crypto_pwhash_scryptsalsa208sha256.h \
+ /usr/include/sodium/crypto_stream_salsa2012.h \
+ /usr/include/sodium/crypto_stream_salsa208.h \
+ /usr/include/sodium/crypto_stream_xchacha20.h \
+ /usr/include/mbedtls/version.h /usr/include/mbedtls/config.h \
+ /usr/include/mbedtls/check_config.h /usr/include/mbedtls/md5.h base64.h \
+ crypto.h /usr/include/sys/socket.h /usr/include/sys/uio.h \
+ /usr/include/bits/socket.h /usr/include/bits/socket_type.h \
+ /usr/include/bits/sockaddr.h /usr/include/asm/socket.h \
+ /usr/include/asm-generic/socket.h /usr/include/asm/sockios.h \
+ /usr/include/asm-generic/sockios.h /usr/include/string.h \
+ /usr/include/bits/string.h /usr/include/bits/string2.h \
+ /usr/include/mbedtls/cipher.h /usr/include/mbedtls/md.h stream.h aead.h \
+ utils.h /usr/include/bits/timex.h /usr/include/syslog.h \
+ /usr/include/sys/syslog.h /usr/include/bits/syslog-path.h ppbloom.h
+
+/usr/include/stdc-predef.h:
+
+../config.h:
+
+/usr/include/fcntl.h:
+
+/usr/include/features.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/bits/wordsize.h:
+
+/usr/include/gnu/stubs.h:
+
+/usr/include/gnu/stubs-64.h:
+
+/usr/include/bits/types.h:
+
+/usr/include/bits/typesizes.h:
+
+/usr/include/bits/fcntl.h:
+
+/usr/include/bits/fcntl-linux.h:
+
+/usr/include/bits/uio.h:
+
+/usr/include/sys/types.h:
+
+/usr/include/time.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/stddef.h:
+
+/usr/include/endian.h:
+
+/usr/include/bits/endian.h:
+
+/usr/include/bits/byteswap.h:
+
+/usr/include/bits/byteswap-16.h:
+
+/usr/include/sys/select.h:
+
+/usr/include/bits/select.h:
+
+/usr/include/bits/sigset.h:
+
+/usr/include/bits/time.h:
+
+/usr/include/sys/sysmacros.h:
+
+/usr/include/bits/pthreadtypes.h:
+
+/usr/include/linux/falloc.h:
+
+/usr/include/bits/stat.h:
+
+/usr/include/unistd.h:
+
+/usr/include/bits/posix_opt.h:
+
+/usr/include/bits/environments.h:
+
+/usr/include/bits/confname.h:
+
+/usr/include/getopt.h:
+
+/usr/include/sys/ioctl.h:
+
+/usr/include/bits/ioctls.h:
+
+/usr/include/asm/ioctls.h:
+
+/usr/include/asm-generic/ioctls.h:
+
+/usr/include/linux/ioctl.h:
+
+/usr/include/asm/ioctl.h:
+
+/usr/include/asm-generic/ioctl.h:
+
+/usr/include/bits/ioctl-types.h:
+
+/usr/include/sys/ttydefaults.h:
+
+/usr/include/linux/random.h:
+
+/usr/include/linux/types.h:
+
+/usr/include/asm/types.h:
+
+/usr/include/asm-generic/types.h:
+
+/usr/include/asm-generic/int-ll64.h:
+
+/usr/include/asm/bitsperlong.h:
+
+/usr/include/asm-generic/bitsperlong.h:
+
+/usr/include/linux/posix_types.h:
+
+/usr/include/linux/stddef.h:
+
+/usr/include/asm/posix_types.h:
+
+/usr/include/asm/posix_types_64.h:
+
+/usr/include/asm-generic/posix_types.h:
+
+/usr/include/linux/irqnr.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/stdint.h:
+
+/usr/include/stdint.h:
+
+/usr/include/bits/wchar.h:
+
+/usr/include/sodium.h:
+
+/usr/include/sodium/version.h:
+
+/usr/include/sodium/export.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/limits.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/syslimits.h:
+
+/usr/include/limits.h:
+
+/usr/include/bits/posix1_lim.h:
+
+/usr/include/bits/local_lim.h:
+
+/usr/include/linux/limits.h:
+
+/usr/include/bits/posix2_lim.h:
+
+/usr/include/bits/xopen_lim.h:
+
+/usr/include/bits/stdio_lim.h:
+
+/usr/include/sodium/core.h:
+
+/usr/include/sodium/crypto_aead_aes256gcm.h:
+
+/usr/include/sodium/crypto_aead_chacha20poly1305.h:
+
+/usr/include/sodium/crypto_aead_xchacha20poly1305.h:
+
+/usr/include/sodium/crypto_auth.h:
+
+/usr/include/sodium/crypto_auth_hmacsha512256.h:
+
+/usr/include/sodium/crypto_auth_hmacsha512.h:
+
+/usr/include/sodium/crypto_hash_sha512.h:
+
+/usr/include/stdlib.h:
+
+/usr/include/bits/waitflags.h:
+
+/usr/include/bits/waitstatus.h:
+
+/usr/include/xlocale.h:
+
+/usr/include/alloca.h:
+
+/usr/include/bits/stdlib-float.h:
+
+/usr/include/sodium/crypto_auth_hmacsha256.h:
+
+/usr/include/sodium/crypto_hash_sha256.h:
+
+/usr/include/sodium/crypto_auth_hmacsha512.h:
+
+/usr/include/sodium/crypto_auth_hmacsha512256.h:
+
+/usr/include/sodium/crypto_box.h:
+
+/usr/include/sodium/crypto_box_curve25519xsalsa20poly1305.h:
+
+/usr/include/sodium/crypto_stream_xsalsa20.h:
+
+/usr/include/sodium/crypto_box_curve25519xsalsa20poly1305.h:
+
+/usr/include/sodium/crypto_core_hsalsa20.h:
+
+/usr/include/sodium/crypto_core_hchacha20.h:
+
+/usr/include/sodium/crypto_core_salsa20.h:
+
+/usr/include/sodium/crypto_core_salsa2012.h:
+
+/usr/include/sodium/crypto_core_salsa208.h:
+
+/usr/include/sodium/crypto_generichash.h:
+
+/usr/include/sodium/crypto_generichash_blake2b.h:
+
+/usr/include/sodium/crypto_generichash_blake2b.h:
+
+/usr/include/sodium/crypto_hash.h:
+
+/usr/include/sodium/crypto_hash_sha256.h:
+
+/usr/include/sodium/crypto_hash_sha512.h:
+
+/usr/include/sodium/crypto_kdf.h:
+
+/usr/include/sodium/crypto_kdf_blake2b.h:
+
+/usr/include/sodium/crypto_kdf_blake2b.h:
+
+/usr/include/sodium/crypto_kx.h:
+
+/usr/include/sodium/crypto_onetimeauth.h:
+
+/usr/include/sodium/crypto_onetimeauth_poly1305.h:
+
+/usr/include/stdio.h:
+
+/usr/include/libio.h:
+
+/usr/include/_G_config.h:
+
+/usr/include/wchar.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/stdarg.h:
+
+/usr/include/bits/sys_errlist.h:
+
+/usr/include/bits/stdio.h:
+
+/usr/include/sodium/crypto_onetimeauth_poly1305.h:
+
+/usr/include/sodium/crypto_pwhash.h:
+
+/usr/include/sodium/crypto_pwhash_argon2i.h:
+
+/usr/include/sodium/crypto_pwhash_argon2id.h:
+
+/usr/include/sodium/crypto_pwhash_argon2i.h:
+
+/usr/include/sodium/crypto_scalarmult.h:
+
+/usr/include/sodium/crypto_scalarmult_curve25519.h:
+
+/usr/include/sodium/crypto_scalarmult_curve25519.h:
+
+/usr/include/sodium/crypto_secretbox.h:
+
+/usr/include/sodium/crypto_secretbox_xsalsa20poly1305.h:
+
+/usr/include/sodium/crypto_secretbox_xsalsa20poly1305.h:
+
+/usr/include/sodium/crypto_secretstream_xchacha20poly1305.h:
+
+/usr/include/sodium/crypto_aead_xchacha20poly1305.h:
+
+/usr/include/sodium/crypto_stream_chacha20.h:
+
+/usr/include/sodium/crypto_shorthash.h:
+
+/usr/include/sodium/crypto_shorthash_siphash24.h:
+
+/usr/include/sodium/crypto_shorthash_siphash24.h:
+
+/usr/include/sodium/crypto_sign.h:
+
+/usr/include/sodium/crypto_sign_ed25519.h:
+
+/usr/include/sodium/crypto_sign_ed25519.h:
+
+/usr/include/sodium/crypto_stream.h:
+
+/usr/include/sodium/crypto_stream_chacha20.h:
+
+/usr/include/sodium/crypto_stream_salsa20.h:
+
+/usr/include/sodium/crypto_stream_xsalsa20.h:
+
+/usr/include/sodium/crypto_verify_16.h:
+
+/usr/include/sodium/crypto_verify_32.h:
+
+/usr/include/sodium/crypto_verify_64.h:
+
+/usr/include/sodium/randombytes.h:
+
+/usr/include/sodium/randombytes_internal_random.h:
+
+/usr/include/sodium/randombytes.h:
+
+/usr/include/sodium/randombytes_sysrandom.h:
+
+/usr/include/sodium/runtime.h:
+
+/usr/include/sodium/utils.h:
+
+/usr/include/sodium/crypto_box_curve25519xchacha20poly1305.h:
+
+/usr/include/sodium/crypto_stream_xchacha20.h:
+
+/usr/include/sodium/crypto_core_ed25519.h:
+
+/usr/include/sodium/crypto_core_ristretto255.h:
+
+/usr/include/sodium/crypto_scalarmult_ed25519.h:
+
+/usr/include/sodium/crypto_scalarmult_ristretto255.h:
+
+/usr/include/sodium/crypto_secretbox_xchacha20poly1305.h:
+
+/usr/include/sodium/crypto_pwhash_scryptsalsa208sha256.h:
+
+/usr/include/sodium/crypto_stream_salsa2012.h:
+
+/usr/include/sodium/crypto_stream_salsa208.h:
+
+/usr/include/sodium/crypto_stream_xchacha20.h:
+
+/usr/include/mbedtls/version.h:
+
+/usr/include/mbedtls/config.h:
+
+/usr/include/mbedtls/check_config.h:
+
+/usr/include/mbedtls/md5.h:
+
+base64.h:
+
+crypto.h:
+
+/usr/include/sys/socket.h:
+
+/usr/include/sys/uio.h:
+
+/usr/include/bits/socket.h:
+
+/usr/include/bits/socket_type.h:
+
+/usr/include/bits/sockaddr.h:
+
+/usr/include/asm/socket.h:
+
+/usr/include/asm-generic/socket.h:
+
+/usr/include/asm/sockios.h:
+
+/usr/include/asm-generic/sockios.h:
+
+/usr/include/string.h:
+
+/usr/include/bits/string.h:
+
+/usr/include/bits/string2.h:
+
+/usr/include/mbedtls/cipher.h:
+
+/usr/include/mbedtls/md.h:
+
+stream.h:
+
+aead.h:
+
+utils.h:
+
+/usr/include/bits/timex.h:
+
+/usr/include/syslog.h:
+
+/usr/include/sys/syslog.h:
+
+/usr/include/bits/syslog-path.h:
+
+ppbloom.h:
