@@ -1,0 +1,14 @@
+D:/lego/lego/third_party/protobuf-3.6.1/cmake/cbuild/CMakeFiles/libprotobuf-lite.dir
+D:/lego/lego/third_party/protobuf-3.6.1/cmake/cbuild/CMakeFiles/protoc.dir
+D:/lego/lego/third_party/protobuf-3.6.1/cmake/cbuild/CMakeFiles/libprotoc.dir
+D:/lego/lego/third_party/protobuf-3.6.1/cmake/cbuild/CMakeFiles/libprotobuf.dir
+D:/lego/lego/third_party/protobuf-3.6.1/cmake/cbuild/CMakeFiles/gmock_main.dir
+D:/lego/lego/third_party/protobuf-3.6.1/cmake/cbuild/CMakeFiles/gmock.dir
+D:/lego/lego/third_party/protobuf-3.6.1/cmake/cbuild/CMakeFiles/tests.dir
+D:/lego/lego/third_party/protobuf-3.6.1/cmake/cbuild/CMakeFiles/test_plugin.dir
+D:/lego/lego/third_party/protobuf-3.6.1/cmake/cbuild/CMakeFiles/lite-test.dir
+D:/lego/lego/third_party/protobuf-3.6.1/cmake/cbuild/CMakeFiles/lite-arena-test.dir
+D:/lego/lego/third_party/protobuf-3.6.1/cmake/cbuild/CMakeFiles/check.dir
+D:/lego/lego/third_party/protobuf-3.6.1/cmake/cbuild/CMakeFiles/INSTALL.dir
+D:/lego/lego/third_party/protobuf-3.6.1/cmake/cbuild/CMakeFiles/ALL_BUILD.dir
+D:/lego/lego/third_party/protobuf-3.6.1/cmake/cbuild/CMakeFiles/ZERO_CHECK.dir

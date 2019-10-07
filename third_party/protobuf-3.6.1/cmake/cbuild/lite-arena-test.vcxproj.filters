@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\lite_arena_unittest.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\arena_test_util.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\map_lite_test_util.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\test_util_lite.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\map_lite_unittest.pb.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\unittest_import_lite.pb.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\unittest_import_public_lite.pb.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\unittest_lite.pb.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\unittest_no_arena_lite.pb.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\lego\lego\third_party\protobuf-3.6.1\cmake\cbuild\CMakeFiles\1bebfb7fd8d2dd591d954ebbfa521f67\map_lite_unittest.pb.cc.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\lego\lego\third_party\protobuf-3.6.1\cmake\cbuild\CMakeFiles\1bebfb7fd8d2dd591d954ebbfa521f67\unittest_import_lite.pb.cc.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\lego\lego\third_party\protobuf-3.6.1\cmake\cbuild\CMakeFiles\1bebfb7fd8d2dd591d954ebbfa521f67\unittest_import_public_lite.pb.cc.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\lego\lego\third_party\protobuf-3.6.1\cmake\cbuild\CMakeFiles\1bebfb7fd8d2dd591d954ebbfa521f67\unittest_lite.pb.cc.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\lego\lego\third_party\protobuf-3.6.1\cmake\cbuild\CMakeFiles\1bebfb7fd8d2dd591d954ebbfa521f67\unittest_no_arena_lite.pb.cc.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\lego\lego\third_party\protobuf-3.6.1\cmake\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{46E70323-66FE-3A46-AC64-A0AB4ED0DA7C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{5FE2CBE3-9BD5-3E4E-8A16-5D7D8A9BDF76}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

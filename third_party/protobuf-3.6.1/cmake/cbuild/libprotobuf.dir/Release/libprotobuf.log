@@ -1,0 +1,249 @@
+﻿  Building Custom Rule D:/lego/lego/third_party/protobuf-3.6.1/cmake/CMakeLists.txt
+  arena.cc
+  arenastring.cc
+  extension_set.cc
+  generated_message_table_driven_lite.cc
+  generated_message_util.cc
+  implicit_weak_message.cc
+  coded_stream.cc
+  zero_copy_stream.cc
+  zero_copy_stream_impl_lite.cc
+  message_lite.cc
+  repeated_field.cc
+  bytestream.cc
+  common.cc
+  int128.cc
+  io_win32.cc
+  status.cc
+  statusor.cc
+  stringpiece.cc
+  stringprintf.cc
+  structurally_valid.cc
+  strutil.cc
+  time.cc
+  wire_format_lite.cc
+  any.cc
+  any.pb.cc
+  api.pb.cc
+  importer.cc
+  parser.cc
+  descriptor.cc
+  descriptor.pb.cc
+  descriptor_database.cc
+  duration.pb.cc
+  dynamic_message.cc
+  empty.pb.cc
+  extension_set_heavy.cc
+  field_mask.pb.cc
+  generated_message_reflection.cc
+  generated_message_table_driven.cc
+  gzip_stream.cc
+  printer.cc
+  strtod.cc
+  tokenizer.cc
+  zero_copy_stream_impl.cc
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapBegin(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(185): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapBegin”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapEnd(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(186): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapEnd”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “bool google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::EqualIterator(const google::protobuf::MapIterator &,const google::protobuf::MapIterator &) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(187): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::EqualIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “google::protobuf::Map<Key,T>::const_iterator &google::protobuf::internal::TypeDefinedMapFieldBase<Key,T>::InternalGetIterator(const google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+          with
+          [
+              Key=google::protobuf::MapKey,
+              T=google::protobuf::MapValueRef
+          ] (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(193): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InternalGetIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InitializeIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(197): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InitializeIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::DeleteIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(198): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::DeleteIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::CopyIterator(google::protobuf::MapIterator *,const google::protobuf::MapIterator &) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(199): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::CopyIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::IncreaseIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(201): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::IncreaseIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc(2423): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapBegin(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(185): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapBegin”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc(2423): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapEnd(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(186): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapEnd”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc(2423): warning C4661: “bool google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::EqualIterator(const google::protobuf::MapIterator &,const google::protobuf::MapIterator &) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(187): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::EqualIterator”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc(2423): warning C4661: “google::protobuf::Map<Key,T>::const_iterator &google::protobuf::internal::TypeDefinedMapFieldBase<Key,T>::InternalGetIterator(const google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+          with
+          [
+              Key=google::protobuf::MapKey,
+              T=google::protobuf::MapValueRef
+          ]
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(193): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InternalGetIterator”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc(2423): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InitializeIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(197): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InitializeIterator”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc(2423): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::DeleteIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(198): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::DeleteIterator”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc(2423): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::CopyIterator(google::protobuf::MapIterator *,const google::protobuf::MapIterator &) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(199): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::CopyIterator”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\generated_message_reflection.cc(2423): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::IncreaseIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(201): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::IncreaseIterator”的声明
+  map_field.cc
+  message.cc
+  reflection_ops.cc
+  service.cc
+  source_context.pb.cc
+  struct.pb.cc
+  mathlimits.cc
+  substitute.cc
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapBegin(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(185): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapBegin”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapEnd(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(186): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapEnd”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “bool google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::EqualIterator(const google::protobuf::MapIterator &,const google::protobuf::MapIterator &) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(187): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::EqualIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “google::protobuf::Map<Key,T>::const_iterator &google::protobuf::internal::TypeDefinedMapFieldBase<Key,T>::InternalGetIterator(const google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+          with
+          [
+              Key=google::protobuf::MapKey,
+              T=google::protobuf::MapValueRef
+          ] (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(193): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InternalGetIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InitializeIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(197): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InitializeIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::DeleteIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(198): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::DeleteIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::CopyIterator(google::protobuf::MapIterator *,const google::protobuf::MapIterator &) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(199): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::CopyIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::IncreaseIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(201): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::IncreaseIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapBegin(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(185): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapBegin”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapEnd(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(186): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapEnd”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “bool google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::EqualIterator(const google::protobuf::MapIterator &,const google::protobuf::MapIterator &) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(187): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::EqualIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “google::protobuf::Map<Key,T>::const_iterator &google::protobuf::internal::TypeDefinedMapFieldBase<Key,T>::InternalGetIterator(const google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+          with
+          [
+              Key=google::protobuf::MapKey,
+              T=google::protobuf::MapValueRef
+          ] (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(193): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InternalGetIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InitializeIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(197): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InitializeIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::DeleteIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(198): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::DeleteIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::CopyIterator(google::protobuf::MapIterator *,const google::protobuf::MapIterator &) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(199): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::CopyIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::IncreaseIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(201): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::IncreaseIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc(305): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapBegin(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(185): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapBegin”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc(305): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapEnd(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(186): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapEnd”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc(305): warning C4661: “bool google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::EqualIterator(const google::protobuf::MapIterator &,const google::protobuf::MapIterator &) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(187): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::EqualIterator”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc(305): warning C4661: “google::protobuf::Map<Key,T>::const_iterator &google::protobuf::internal::TypeDefinedMapFieldBase<Key,T>::InternalGetIterator(const google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+          with
+          [
+              Key=google::protobuf::MapKey,
+              T=google::protobuf::MapValueRef
+          ]
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(193): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InternalGetIterator”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc(305): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InitializeIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(197): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InitializeIterator”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc(305): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::DeleteIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(198): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::DeleteIterator”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc(305): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::CopyIterator(google::protobuf::MapIterator *,const google::protobuf::MapIterator &) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(199): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::CopyIterator”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\reflection_ops.cc(305): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::IncreaseIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(201): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::IncreaseIterator”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc(477): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapBegin(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(185): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapBegin”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc(477): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapEnd(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(186): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapEnd”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc(477): warning C4661: “bool google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::EqualIterator(const google::protobuf::MapIterator &,const google::protobuf::MapIterator &) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(187): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::EqualIterator”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc(477): warning C4661: “google::protobuf::Map<Key,T>::const_iterator &google::protobuf::internal::TypeDefinedMapFieldBase<Key,T>::InternalGetIterator(const google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+          with
+          [
+              Key=google::protobuf::MapKey,
+              T=google::protobuf::MapValueRef
+          ]
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(193): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InternalGetIterator”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc(477): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InitializeIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(197): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InitializeIterator”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc(477): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::DeleteIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(198): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::DeleteIterator”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc(477): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::CopyIterator(google::protobuf::MapIterator *,const google::protobuf::MapIterator &) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(199): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::CopyIterator”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\message.cc(477): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::IncreaseIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(201): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::IncreaseIterator”的声明
+  text_format.cc
+  timestamp.pb.cc
+  type.pb.cc
+  unknown_field_set.cc
+  delimited_message_util.cc
+  field_comparator.cc
+  field_mask_util.cc
+  datapiece.cc
+  default_value_objectwriter.cc
+  error_listener.cc
+  field_mask_utility.cc
+  json_escaping.cc
+  json_objectwriter.cc
+  json_stream_parser.cc
+  object_writer.cc
+  proto_writer.cc
+  protostream_objectsource.cc
+  protostream_objectwriter.cc
+  type_info.cc
+  type_info_test_helper.cc
+  utility.cc
+  json_util.cc
+  message_differencer.cc
+  time_util.cc
+  type_resolver_util.cc
+  wire_format.cc
+  wrappers.pb.cc
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapBegin(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(185): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapBegin”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapEnd(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(186): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapEnd”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “bool google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::EqualIterator(const google::protobuf::MapIterator &,const google::protobuf::MapIterator &) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(187): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::EqualIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “google::protobuf::Map<Key,T>::const_iterator &google::protobuf::internal::TypeDefinedMapFieldBase<Key,T>::InternalGetIterator(const google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+          with
+          [
+              Key=google::protobuf::MapKey,
+              T=google::protobuf::MapValueRef
+          ] (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(193): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InternalGetIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InitializeIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(197): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InitializeIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::DeleteIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(198): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::DeleteIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::CopyIterator(google::protobuf::MapIterator *,const google::protobuf::MapIterator &) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(199): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::CopyIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(205): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::IncreaseIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc)
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(201): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::IncreaseIterator”的声明 (编译源文件 D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc)
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc(1448): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapBegin(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(185): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapBegin”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc(1448): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapEnd(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(186): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::MapEnd”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc(1448): warning C4661: “bool google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::EqualIterator(const google::protobuf::MapIterator &,const google::protobuf::MapIterator &) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(187): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::EqualIterator”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc(1448): warning C4661: “google::protobuf::Map<Key,T>::const_iterator &google::protobuf::internal::TypeDefinedMapFieldBase<Key,T>::InternalGetIterator(const google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+          with
+          [
+              Key=google::protobuf::MapKey,
+              T=google::protobuf::MapValueRef
+          ]
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(193): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InternalGetIterator”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc(1448): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InitializeIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(197): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::InitializeIterator”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc(1448): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::DeleteIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(198): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::DeleteIterator”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc(1448): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::CopyIterator(google::protobuf::MapIterator *,const google::protobuf::MapIterator &) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(199): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::CopyIterator”的声明
+D:\lego\lego\third_party\protobuf-3.6.1\src\google\protobuf\wire_format.cc(1448): warning C4661: “void google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::IncreaseIterator(google::protobuf::MapIterator *) const”: 没有为显式模板实例化请求提供适当的定义
+  D:\lego\lego\third_party\protobuf-3.6.1\src\google/protobuf/map_field.h(201): note: 参见“google::protobuf::internal::TypeDefinedMapFieldBase<google::protobuf::MapKey,google::protobuf::MapValueRef>::IncreaseIterator”的声明
+    正在创建库 D:/lego/lego/third_party/protobuf-3.6.1/cmake/cbuild/Release/libprotobuf.lib 和对象 D:/lego/lego/third_party/protobuf-3.6.1/cmake/cbuild/Release/libprotobuf.exp
+  libprotobuf.vcxproj -> D:\lego\lego\third_party\protobuf-3.6.1\cmake\cbuild\Release\libprotobuf.dll
