@@ -43,6 +43,9 @@
 #define strcasecmp _stricmp
 #endif // strcasecmp
 
+#undef min
+#undef max
+
 typedef SOCKET socket_t;
 #else
 #include <arpa/inet.h>
@@ -1259,7 +1262,11 @@ inline bool read_content_with_length(Stream &strm, size_t len,
 
   size_t r = 0;
   while (r < len) {
-    auto n = strm.read(buf, std::min((len - r), CPPHTTPLIB_RECV_BUFSIZ));
+      uint32_t min_len = len - r;
+      if (min_len > CPPHTTPLIB_RECV_BUFSIZ) {
+          min_len = CPPHTTPLIB_RECV_BUFSIZ;
+      }
+    auto n = strm.read(buf, min_len);
     if (n <= 0) { return false; }
 
     if (!out(buf, n)) { return false; }
@@ -1278,7 +1285,12 @@ inline void skip_content_with_length(Stream &strm, size_t len) {
   char buf[CPPHTTPLIB_RECV_BUFSIZ];
   size_t r = 0;
   while (r < len) {
-    auto n = strm.read(buf, std::min((len - r), CPPHTTPLIB_RECV_BUFSIZ));
+      uint32_t min_len = len - r;
+      if (min_len > CPPHTTPLIB_RECV_BUFSIZ) {
+          min_len = CPPHTTPLIB_RECV_BUFSIZ;
+      }
+
+    auto n = strm.read(buf, min_len);
     if (n <= 0) { return; }
     r += n;
   }
