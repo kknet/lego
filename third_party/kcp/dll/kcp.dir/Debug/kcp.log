@@ -1,0 +1,3 @@
+﻿  Building Custom Rule D:/lego/lego/third_party/kcp/CMakeLists.txt
+  ikcp.c
+  kcp.vcxproj -> D:\lego\lego\third_party\kcp\dll\Debug\kcp.dll

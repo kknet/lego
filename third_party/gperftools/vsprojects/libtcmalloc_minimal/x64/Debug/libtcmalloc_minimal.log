@@ -1,0 +1,72 @@
+﻿  dynamic_annotations.c
+  logging.cc
+  low_level_alloc.cc
+  spinlock.cc
+  spinlock_internal.cc
+  sysinfo.cc
+  central_freelist.cc
+d:\lego\lego\third_party\gperftools\src\stack_trace_table.h(80): warning C4251: “tcmalloc::StackTraceTable::allocator_”: class“tcmalloc::STLPageHeapAllocator<tcmalloc::StackTraceTable::Entry,void>”需要有 dll 接口由 class“tcmalloc::StackTraceTable”的客户端使用
+  d:\lego\lego\third_party\gperftools\src\stack_trace_table.h(80): note: 参见“tcmalloc::STLPageHeapAllocator<tcmalloc::StackTraceTable::Entry,void>”的声明
+  common.cc
+  fake_stacktrace_scope.cc
+  heap-profile-table.cc
+  internal_logging.cc
+  malloc_extension.cc
+  malloc_hook.cc
+  memory_region_map.cc
+  page_heap.cc
+d:\lego\lego\third_party\gperftools\src\stack_trace_table.h(80): warning C4251: “tcmalloc::StackTraceTable::allocator_”: class“tcmalloc::STLPageHeapAllocator<tcmalloc::StackTraceTable::Entry,void>”需要有 dll 接口由 class“tcmalloc::StackTraceTable”的客户端使用
+  d:\lego\lego\third_party\gperftools\src\stack_trace_table.h(80): note: 参见“tcmalloc::STLPageHeapAllocator<tcmalloc::StackTraceTable::Entry,void>”的声明
+  raw_printer.cc
+  sampler.cc
+d:\lego\lego\third_party\gperftools\src\stack_trace_table.h(80): warning C4251: “tcmalloc::StackTraceTable::allocator_”: class“tcmalloc::STLPageHeapAllocator<tcmalloc::StackTraceTable::Entry,void>”需要有 dll 接口由 class“tcmalloc::StackTraceTable”的客户端使用
+  d:\lego\lego\third_party\gperftools\src\stack_trace_table.h(80): note: 参见“tcmalloc::STLPageHeapAllocator<tcmalloc::StackTraceTable::Entry,void>”的声明
+d:\lego\lego\third_party\gperftools\src\sampler.cc(117): warning C4305: “参数”: 从“ssize_t”到“const _Ty”截断
+          with
+          [
+              _Ty=double
+          ]
+  span.cc
+d:\lego\lego\third_party\gperftools\src\stack_trace_table.h(80): warning C4251: “tcmalloc::StackTraceTable::allocator_”: class“tcmalloc::STLPageHeapAllocator<tcmalloc::StackTraceTable::Entry,void>”需要有 dll 接口由 class“tcmalloc::StackTraceTable”的客户端使用
+  d:\lego\lego\third_party\gperftools\src\stack_trace_table.h(80): note: 参见“tcmalloc::STLPageHeapAllocator<tcmalloc::StackTraceTable::Entry,void>”的声明
+  stacktrace.cc
+  stack_trace_table.cc
+d:\lego\lego\third_party\gperftools\src\stack_trace_table.h(80): warning C4251: “tcmalloc::StackTraceTable::allocator_”: class“tcmalloc::STLPageHeapAllocator<tcmalloc::StackTraceTable::Entry,void>”需要有 dll 接口由 class“tcmalloc::StackTraceTable”的客户端使用
+  d:\lego\lego\third_party\gperftools\src\stack_trace_table.h(80): note: 参见“tcmalloc::STLPageHeapAllocator<tcmalloc::StackTraceTable::Entry,void>”的声明
+  static_vars.cc
+d:\lego\lego\third_party\gperftools\src\stack_trace_table.h(80): warning C4251: “tcmalloc::StackTraceTable::allocator_”: class“tcmalloc::STLPageHeapAllocator<tcmalloc::StackTraceTable::Entry,void>”需要有 dll 接口由 class“tcmalloc::StackTraceTable”的客户端使用
+  d:\lego\lego\third_party\gperftools\src\stack_trace_table.h(80): note: 参见“tcmalloc::STLPageHeapAllocator<tcmalloc::StackTraceTable::Entry,void>”的声明
+  正在生成代码...
+  正在编译...
+  symbolize.cc
+  thread_cache.cc
+d:\lego\lego\third_party\gperftools\src\stack_trace_table.h(80): warning C4251: “tcmalloc::StackTraceTable::allocator_”: class“tcmalloc::STLPageHeapAllocator<tcmalloc::StackTraceTable::Entry,void>”需要有 dll 接口由 class“tcmalloc::StackTraceTable”的客户端使用
+  d:\lego\lego\third_party\gperftools\src\stack_trace_table.h(80): note: 参见“tcmalloc::STLPageHeapAllocator<tcmalloc::StackTraceTable::Entry,void>”的声明
+  ia32_modrm_map.cc
+  ia32_opcode_map.cc
+d:\lego\lego\third_party\gperftools\src\windows\ia32_opcode_map.cc(343): warning C4838: 从“int”转换到“unsigned int”需要收缩转换
+d:\lego\lego\third_party\gperftools\src\windows\ia32_opcode_map.cc(947): warning C4838: 从“int”转换到“unsigned int”需要收缩转换
+  mini_disassembler.cc
+  patch_functions.cc
+d:\lego\lego\third_party\gperftools\src\stack_trace_table.h(80): warning C4251: “tcmalloc::StackTraceTable::allocator_”: class“tcmalloc::STLPageHeapAllocator<tcmalloc::StackTraceTable::Entry,void>”需要有 dll 接口由 class“tcmalloc::StackTraceTable”的客户端使用
+  d:\lego\lego\third_party\gperftools\src\stack_trace_table.h(80): note: 参见“tcmalloc::STLPageHeapAllocator<tcmalloc::StackTraceTable::Entry,void>”的声明
+d:\lego\lego\third_party\gperftools\src\tcmalloc.cc(1356): warning C4141: “inline”: 使用了多次
+d:\lego\lego\third_party\gperftools\src\tcmalloc.cc(1386): warning C4141: “inline”: 使用了多次
+d:\lego\lego\third_party\gperftools\src\tcmalloc.cc(1395): warning C4141: “inline”: 使用了多次
+d:\lego\lego\third_party\gperftools\src\tcmalloc.cc(1431): warning C4141: “inline”: 使用了多次
+d:\lego\lego\third_party\gperftools\src\tcmalloc.cc(1500): warning C4141: “inline”: 使用了多次
+d:\lego\lego\third_party\gperftools\src\tcmalloc.cc(1535): warning C4141: “inline”: 使用了多次
+d:\lego\lego\third_party\gperftools\src\tcmalloc.cc(1582): warning C4141: “inline”: 使用了多次
+d:\lego\lego\third_party\gperftools\src\tcmalloc.cc(1587): warning C4141: “inline”: 使用了多次
+d:\lego\lego\third_party\gperftools\src\tcmalloc.cc(1768): warning C4141: “inline”: 使用了多次
+d:\lego\lego\third_party\gperftools\src\tcmalloc.cc(1791): warning C4141: “inline”: 使用了多次
+d:\lego\lego\third_party\gperftools\src\tcmalloc.cc(1844): warning C4141: “inline”: 使用了多次
+d:\lego\lego\third_party\gperftools\src\tcmalloc.cc(1871): warning C4141: “inline”: 使用了多次
+d:\lego\lego\third_party\gperftools\src\tcmalloc.cc(1895): warning C4141: “inline”: 使用了多次
+  port.cc
+  preamble_patcher.cc
+  preamble_patcher_with_stub.cc
+  system-alloc.cc
+  正在生成代码...
+    正在创建库 D:\lego\lego\third_party\gperftools\x64\Debug\libtcmalloc_minimal.lib 和对象 D:\lego\lego\third_party\gperftools\x64\Debug\libtcmalloc_minimal.exp
+  libtcmalloc_minimal.vcxproj -> D:\lego\lego\third_party\gperftools\x64\Debug\libtcmalloc_minimal.dll

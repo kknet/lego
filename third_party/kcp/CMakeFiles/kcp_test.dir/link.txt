@@ -1,1 +1,0 @@
-/usr/bin/c++    -rdynamic CMakeFiles/kcp_test.dir/test.cpp.o  -o kcp_test 

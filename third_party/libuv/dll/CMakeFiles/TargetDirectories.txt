@@ -1,0 +1,11 @@
+D:/lego/lego/third_party/libuv/dll/CMakeFiles/Nightly.dir
+D:/lego/lego/third_party/libuv/dll/CMakeFiles/uv_run_tests_a.dir
+D:/lego/lego/third_party/libuv/dll/CMakeFiles/uv_run_tests.dir
+D:/lego/lego/third_party/libuv/dll/CMakeFiles/Continuous.dir
+D:/lego/lego/third_party/libuv/dll/CMakeFiles/uv_a.dir
+D:/lego/lego/third_party/libuv/dll/CMakeFiles/uv.dir
+D:/lego/lego/third_party/libuv/dll/CMakeFiles/NightlyMemoryCheck.dir
+D:/lego/lego/third_party/libuv/dll/CMakeFiles/Experimental.dir
+D:/lego/lego/third_party/libuv/dll/CMakeFiles/RUN_TESTS.dir
+D:/lego/lego/third_party/libuv/dll/CMakeFiles/ALL_BUILD.dir
+D:/lego/lego/third_party/libuv/dll/CMakeFiles/ZERO_CHECK.dir

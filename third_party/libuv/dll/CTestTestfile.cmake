@@ -1,0 +1,36 @@
+# CMake generated Testfile for 
+# Source directory: D:/lego/lego/third_party/libuv
+# Build directory: D:/lego/lego/third_party/libuv/dll
+# 
+# This file includes the relevant testing commands required for 
+# testing this directory and lists subdirectories to be tested as well.
+if("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Dd][Ee][Bb][Uu][Gg])$")
+  add_test(uv_test "D:/lego/lego/third_party/libuv/dll/Debug/uv_run_tests.exe")
+  set_tests_properties(uv_test PROPERTIES  WORKING_DIRECTORY "D:/lego/lego/third_party/libuv" _BACKTRACE_TRIPLES "D:/lego/lego/third_party/libuv/CMakeLists.txt;382;add_test;D:/lego/lego/third_party/libuv/CMakeLists.txt;0;")
+elseif("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Rr][Ee][Ll][Ee][Aa][Ss][Ee])$")
+  add_test(uv_test "D:/lego/lego/third_party/libuv/dll/Release/uv_run_tests.exe")
+  set_tests_properties(uv_test PROPERTIES  WORKING_DIRECTORY "D:/lego/lego/third_party/libuv" _BACKTRACE_TRIPLES "D:/lego/lego/third_party/libuv/CMakeLists.txt;382;add_test;D:/lego/lego/third_party/libuv/CMakeLists.txt;0;")
+elseif("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Mm][Ii][Nn][Ss][Ii][Zz][Ee][Rr][Ee][Ll])$")
+  add_test(uv_test "D:/lego/lego/third_party/libuv/dll/MinSizeRel/uv_run_tests.exe")
+  set_tests_properties(uv_test PROPERTIES  WORKING_DIRECTORY "D:/lego/lego/third_party/libuv" _BACKTRACE_TRIPLES "D:/lego/lego/third_party/libuv/CMakeLists.txt;382;add_test;D:/lego/lego/third_party/libuv/CMakeLists.txt;0;")
+elseif("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Rr][Ee][Ll][Ww][Ii][Tt][Hh][Dd][Ee][Bb][Ii][Nn][Ff][Oo])$")
+  add_test(uv_test "D:/lego/lego/third_party/libuv/dll/RelWithDebInfo/uv_run_tests.exe")
+  set_tests_properties(uv_test PROPERTIES  WORKING_DIRECTORY "D:/lego/lego/third_party/libuv" _BACKTRACE_TRIPLES "D:/lego/lego/third_party/libuv/CMakeLists.txt;382;add_test;D:/lego/lego/third_party/libuv/CMakeLists.txt;0;")
+else()
+  add_test(uv_test NOT_AVAILABLE)
+endif()
+if("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Dd][Ee][Bb][Uu][Gg])$")
+  add_test(uv_test_a "D:/lego/lego/third_party/libuv/dll/Debug/uv_run_tests_a.exe")
+  set_tests_properties(uv_test_a PROPERTIES  WORKING_DIRECTORY "D:/lego/lego/third_party/libuv" _BACKTRACE_TRIPLES "D:/lego/lego/third_party/libuv/CMakeLists.txt;389;add_test;D:/lego/lego/third_party/libuv/CMakeLists.txt;0;")
+elseif("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Rr][Ee][Ll][Ee][Aa][Ss][Ee])$")
+  add_test(uv_test_a "D:/lego/lego/third_party/libuv/dll/Release/uv_run_tests_a.exe")
+  set_tests_properties(uv_test_a PROPERTIES  WORKING_DIRECTORY "D:/lego/lego/third_party/libuv" _BACKTRACE_TRIPLES "D:/lego/lego/third_party/libuv/CMakeLists.txt;389;add_test;D:/lego/lego/third_party/libuv/CMakeLists.txt;0;")
+elseif("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Mm][Ii][Nn][Ss][Ii][Zz][Ee][Rr][Ee][Ll])$")
+  add_test(uv_test_a "D:/lego/lego/third_party/libuv/dll/MinSizeRel/uv_run_tests_a.exe")
+  set_tests_properties(uv_test_a PROPERTIES  WORKING_DIRECTORY "D:/lego/lego/third_party/libuv" _BACKTRACE_TRIPLES "D:/lego/lego/third_party/libuv/CMakeLists.txt;389;add_test;D:/lego/lego/third_party/libuv/CMakeLists.txt;0;")
+elseif("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Rr][Ee][Ll][Ww][Ii][Tt][Hh][Dd][Ee][Bb][Ii][Nn][Ff][Oo])$")
+  add_test(uv_test_a "D:/lego/lego/third_party/libuv/dll/RelWithDebInfo/uv_run_tests_a.exe")
+  set_tests_properties(uv_test_a PROPERTIES  WORKING_DIRECTORY "D:/lego/lego/third_party/libuv" _BACKTRACE_TRIPLES "D:/lego/lego/third_party/libuv/CMakeLists.txt;389;add_test;D:/lego/lego/third_party/libuv/CMakeLists.txt;0;")
+else()
+  add_test(uv_test_a NOT_AVAILABLE)
+endif()
