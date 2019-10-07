@@ -1,0 +1,45 @@
+syntax = "proto2";
+
+package lego.block.protobuf;
+
+message GetTxBlockRequest {
+	optional bytes tx_gid = 1;
+	optional bytes block_hash = 2;
+	optional bool from = 3;
+    optional uint64 height = 4;
+	optional bytes account_address = 5;
+}
+
+message GetTxBlockResponse {
+	optional bytes block = 1;
+}
+
+message AccountHeightRequest {
+	optional bytes account_addr = 1;
+}
+
+message AccountHeightResponse {
+	repeated uint64 heights = 1;
+}
+
+message AccountAttrRequest {
+    optional bytes account = 1;
+    optional bytes attr_key = 2;
+    optional uint64 height = 3;
+}
+
+message AccountAttrResponse {
+    optional bytes account = 1;
+    optional bytes attr_key = 2;
+    optional uint64 height = 3;
+    optional bytes block = 4
+}
+
+message BlockMessage {
+	optional GetTxBlockRequest block_req = 1;
+	optional GetTxBlockResponse block_res = 2;
+    optional AccountHeightRequest height_req = 3;
+	optional AccountHeightResponse height_res = 4;
+    optional AccountAttrRequest acc_attr_req = 5;
+	optional AccountAttrResponse acc_attr_res = 6;
+}

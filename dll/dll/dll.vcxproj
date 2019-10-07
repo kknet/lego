@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{772CF9EE-4EB1-43D1-88EE-2C227190F0D6}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>dll</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <ReferencePath>D:\lego\lego\dll\dll;$(ReferencePath)</ReferencePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;DLL_EXPORTS;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\lego\lego\dll\dll;D:\lego\lego\third_party\depends\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>D:\lego\lego\third_party\depends\libs\dll;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>log4cpp.lib;libcryptoMDd.lib;libsslMDd.lib;libprotobufd.lib;ws2_32.lib;uv.lib;leveldb.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>Source.def</ModuleDefinitionFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;DLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ModuleDefinitionFile>Source.def</ModuleDefinitionFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;DLL_EXPORTS;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\lego\lego\third_party\depends\include;D:\lego\lego\dll\dll;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ModuleDefinitionFile>Source.def</ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>D:\lego\lego\third_party\depends\libs\dll_re;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>leveldb.lib;libcryptoMD.lib;libprotobuf.lib;libsslMD.lib;log4cpp.lib;uv.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;DLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ModuleDefinitionFile>Source.def</ModuleDefinitionFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="bft\basic_bft\transaction\proto\tx.pb.h" />
+    <ClInclude Include="bft\basic_bft\transaction\proto\tx_proto.h" />
+    <ClInclude Include="bft\basic_bft\transaction\tx_bft.h" />
+    <ClInclude Include="bft\basic_bft\transaction\tx_pool.h" />
+    <ClInclude Include="bft\basic_bft\transaction\tx_pool_manager.h" />
+    <ClInclude Include="bft\bft_interface.h" />
+    <ClInclude Include="bft\bft_manager.h" />
+    <ClInclude Include="bft\bft_utils.h" />
+    <ClInclude Include="bft\dispatch_pool.h" />
+    <ClInclude Include="bft\member_manager.h" />
+    <ClInclude Include="bft\proto\bft.pb.h" />
+    <ClInclude Include="bft\proto\bft_proto.h" />
+    <ClInclude Include="block\account_manager.h" />
+    <ClInclude Include="block\block_manager.h" />
+    <ClInclude Include="block\block_utils.h" />
+    <ClInclude Include="block\genesis_block.h" />
+    <ClInclude Include="block\proto\block.pb.h" />
+    <ClInclude Include="block\proto\block_proto.h" />
+    <ClInclude Include="broadcast\broadcast.h" />
+    <ClInclude Include="broadcast\broadcast_utils.h" />
+    <ClInclude Include="broadcast\filter_broadcast.h" />
+    <ClInclude Include="client\client_dht.h" />
+    <ClInclude Include="client\client_universal_dht.h" />
+    <ClInclude Include="client\client_utils.h" />
+    <ClInclude Include="client\proto\client.pb.h" />
+    <ClInclude Include="client\proto\client_proto.h" />
+    <ClInclude Include="client\trans_client.h" />
+    <ClInclude Include="client\vpn_client.h" />
+    <ClInclude Include="common\bitmap.h" />
+    <ClInclude Include="common\bloom_filter.h" />
+    <ClInclude Include="common\config.h" />
+    <ClInclude Include="common\country_code.h" />
+    <ClInclude Include="common\encode.h" />
+    <ClInclude Include="common\global_info.h" />
+    <ClInclude Include="common\hash.h" />
+    <ClInclude Include="common\log.h" />
+    <ClInclude Include="common\parse_args.h" />
+    <ClInclude Include="common\random.h" />
+    <ClInclude Include="common\split.h" />
+    <ClInclude Include="common\state_lock.h" />
+    <ClInclude Include="common\string_utils.h" />
+    <ClInclude Include="common\thread_safe_queue.h" />
+    <ClInclude Include="common\tick.h" />
+    <ClInclude Include="common\tick\thread_pool.h" />
+    <ClInclude Include="common\time_utils.h" />
+    <ClInclude Include="common\utils.h" />
+    <ClInclude Include="db\db.h" />
+    <ClInclude Include="db\db_utils.h" />
+    <ClInclude Include="db\dict.h" />
+    <ClInclude Include="dht\base_dht.h" />
+    <ClInclude Include="dht\dht_function.h" />
+    <ClInclude Include="dht\dht_key.h" />
+    <ClInclude Include="dht\dht_utils.h" />
+    <ClInclude Include="dht\node.h" />
+    <ClInclude Include="dht\proto\dht.pb.h" />
+    <ClInclude Include="dht\proto\dht_proto.h" />
+    <ClInclude Include="dll_interface.h" />
+    <ClInclude Include="election\elect_dht.h" />
+    <ClInclude Include="election\elect_manager.h" />
+    <ClInclude Include="election\elect_node.h" />
+    <ClInclude Include="election\elect_utils.h" />
+    <ClInclude Include="election\proto\elect.pb.h" />
+    <ClInclude Include="election\proto\elect_proto.h" />
+    <ClInclude Include="init\command.h" />
+    <ClInclude Include="init\init_utils.h" />
+    <ClInclude Include="init\network_init.h" />
+    <ClInclude Include="ip\cidr.h" />
+    <ClInclude Include="ip\ip_utils.h" />
+    <ClInclude Include="ip\ip_with_country.h" />
+    <ClInclude Include="nat_traverse\detection.h" />
+    <ClInclude Include="nat_traverse\nat_utils.h" />
+    <ClInclude Include="nat_traverse\proto\nat.pb.h" />
+    <ClInclude Include="nat_traverse\proto\nat_proto.h" />
+    <ClInclude Include="network\bootstrap.h" />
+    <ClInclude Include="network\dht_manager.h" />
+    <ClInclude Include="network\network_utils.h" />
+    <ClInclude Include="network\proto\network.pb.h" />
+    <ClInclude Include="network\proto\network_proto.h" />
+    <ClInclude Include="network\route.h" />
+    <ClInclude Include="network\shard_network.h" />
+    <ClInclude Include="network\universal.h" />
+    <ClInclude Include="network\universal_manager.h" />
+    <ClInclude Include="root_congress\congress_dht.h" />
+    <ClInclude Include="root_congress\congress_init.h" />
+    <ClInclude Include="root_congress\congress_utils.h" />
+    <ClInclude Include="root_congress\consensus_shard_manager.h" />
+    <ClInclude Include="security\aes.h" />
+    <ClInclude Include="security\challenge.h" />
+    <ClInclude Include="security\commit_point.h" />
+    <ClInclude Include="security\commit_point_hash.h" />
+    <ClInclude Include="security\commit_secret.h" />
+    <ClInclude Include="security\crypto_utils.h" />
+    <ClInclude Include="security\curve.h" />
+    <ClInclude Include="security\ecdh_create_key.h" />
+    <ClInclude Include="security\multi_sign.h" />
+    <ClInclude Include="security\private_key.h" />
+    <ClInclude Include="security\public_key.h" />
+    <ClInclude Include="security\response.h" />
+    <ClInclude Include="security\schnorr.h" />
+    <ClInclude Include="security\security_string_trans.h" />
+    <ClInclude Include="security\sha256.h" />
+    <ClInclude Include="security\signature.h" />
+    <ClInclude Include="statistics\statistics.h" />
+    <ClInclude Include="statistics\statis_utils.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="transport\client_relay.h" />
+    <ClInclude Include="transport\endpoint.h" />
+    <ClInclude Include="transport\http\http_transport.h" />
+    <ClInclude Include="transport\ikcp.h" />
+    <ClInclude Include="transport\message_filter.h" />
+    <ClInclude Include="transport\multi_thread.h" />
+    <ClInclude Include="transport\processor.h" />
+    <ClInclude Include="transport\proto\transport.pb.h" />
+    <ClInclude Include="transport\rudp\rudp.h" />
+    <ClInclude Include="transport\rudp\session_manager.h" />
+    <ClInclude Include="transport\synchro_wait.h" />
+    <ClInclude Include="transport\transport.h" />
+    <ClInclude Include="transport\transport_utils.h" />
+    <ClInclude Include="transport\udp\udp_transport.h" />
+    <ClInclude Include="uuid\all-io.h" />
+    <ClInclude Include="uuid\md5.h" />
+    <ClInclude Include="uuid\nls.h" />
+    <ClInclude Include="uuid\sha1.h" />
+    <ClInclude Include="uuid\strutils.h" />
+    <ClInclude Include="uuid\xxh3.h" />
+    <ClInclude Include="uuid\xxhash.h" />
+    <ClInclude Include="vss\vss_manager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="bft\basic_bft\transaction\proto\tx.pb.cc" />
+    <ClCompile Include="bft\basic_bft\transaction\proto\tx_proto.cc" />
+    <ClCompile Include="bft\basic_bft\transaction\tx_bft.cc" />
+    <ClCompile Include="bft\basic_bft\transaction\tx_pool.cc" />
+    <ClCompile Include="bft\basic_bft\transaction\tx_pool_manager.cc" />
+    <ClCompile Include="bft\bft_interface.cc" />
+    <ClCompile Include="bft\bft_manager.cc" />
+    <ClCompile Include="bft\dispatch_pool.cc" />
+    <ClCompile Include="bft\member_manager.cc" />
+    <ClCompile Include="bft\proto\bft.pb.cc" />
+    <ClCompile Include="bft\proto\bft_proto.cc" />
+    <ClCompile Include="block\account_manager.cc" />
+    <ClCompile Include="block\block_manager.cc" />
+    <ClCompile Include="block\genesis_block.cc" />
+    <ClCompile Include="block\proto\block.pb.cc" />
+    <ClCompile Include="broadcast\broadcast.cc" />
+    <ClCompile Include="broadcast\filter_broadcast.cc" />
+    <ClCompile Include="client\client_universal_dht.cc" />
+    <ClCompile Include="client\proto\client.pb.cc" />
+    <ClCompile Include="client\trans_client.cc" />
+    <ClCompile Include="client\vpn_client.cc" />
+    <ClCompile Include="common\bitmap.cc" />
+    <ClCompile Include="common\bloom_filter.cc" />
+    <ClCompile Include="common\config.cc" />
+    <ClCompile Include="common\encode.cc" />
+    <ClCompile Include="common\global_info.cc" />
+    <ClCompile Include="common\hash.cc" />
+    <ClCompile Include="common\parse_args.cc" />
+    <ClCompile Include="common\random.cc" />
+    <ClCompile Include="common\state_lock.cc" />
+    <ClCompile Include="common\string_utils.cc" />
+    <ClCompile Include="common\tick\thread_pool.cc" />
+    <ClCompile Include="common\tick\tick.cc" />
+    <ClCompile Include="common\utils.cc" />
+    <ClCompile Include="db\db.cc" />
+    <ClCompile Include="db\dict.cc" />
+    <ClCompile Include="dht\base_dht.cc" />
+    <ClCompile Include="dht\dht_function.cc" />
+    <ClCompile Include="dht\dht_key.cc" />
+    <ClCompile Include="dht\proto\dht.pb.cc" />
+    <ClCompile Include="dht\proto\dht_proto.cc" />
+    <ClCompile Include="dll.cpp" />
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="dll_interface.cc" />
+    <ClCompile Include="election\elect_dht.cc" />
+    <ClCompile Include="election\elect_manager.cc" />
+    <ClCompile Include="election\elect_node.cc" />
+    <ClCompile Include="election\proto\elect.pb.cc" />
+    <ClCompile Include="election\proto\elect_proto.cc" />
+    <ClCompile Include="init\command.cc" />
+    <ClCompile Include="init\network_init.cc" />
+    <ClCompile Include="ip\cidr.cc" />
+    <ClCompile Include="ip\ip_with_country.cc" />
+    <ClCompile Include="nat_traverse\detection.cc" />
+    <ClCompile Include="nat_traverse\proto\nat.pb.cc" />
+    <ClCompile Include="network\bootstrap.cc" />
+    <ClCompile Include="network\dht_manager.cc" />
+    <ClCompile Include="network\proto\network.pb.cc" />
+    <ClCompile Include="network\proto\network_proto.cc" />
+    <ClCompile Include="network\route.cc" />
+    <ClCompile Include="network\universal.cc" />
+    <ClCompile Include="network\universal_manager.cc" />
+    <ClCompile Include="root_congress\congress_dht.cc" />
+    <ClCompile Include="root_congress\congress_init.cc" />
+    <ClCompile Include="root_congress\consensus_shard_manager.cc" />
+    <ClCompile Include="security\aes.cc" />
+    <ClCompile Include="security\challenge.cc" />
+    <ClCompile Include="security\commit_point.cc" />
+    <ClCompile Include="security\commit_point_hash.cc" />
+    <ClCompile Include="security\commit_secret.cc" />
+    <ClCompile Include="security\crypto_utils.cc" />
+    <ClCompile Include="security\ecdh_create_key.cc" />
+    <ClCompile Include="security\multi_sign.cc" />
+    <ClCompile Include="security\private_key.cc" />
+    <ClCompile Include="security\public_key.cc" />
+    <ClCompile Include="security\response.cc" />
+    <ClCompile Include="security\schnorr.cc" />
+    <ClCompile Include="security\security_string_trans.cc" />
+    <ClCompile Include="security\signature.cc" />
+    <ClCompile Include="statistics\statistics.cc" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="transport\client_relay.cc" />
+    <ClCompile Include="transport\endpoint.cc" />
+    <ClCompile Include="transport\http\http_transport.cc" />
+    <ClCompile Include="transport\ikcp.cc" />
+    <ClCompile Include="transport\message_filter.cc" />
+    <ClCompile Include="transport\multi_thread.cc" />
+    <ClCompile Include="transport\processor.cc" />
+    <ClCompile Include="transport\proto\transport.pb.cc" />
+    <ClCompile Include="transport\rudp\rudp.cc" />
+    <ClCompile Include="transport\rudp\session_manager.cc" />
+    <ClCompile Include="transport\synchro_wait.cc" />
+    <ClCompile Include="transport\udp\udp_transport.cc" />
+    <ClCompile Include="uuid\md5.cc" />
+    <ClCompile Include="uuid\sha1.cc" />
+    <ClCompile Include="uuid\xxhash.cc" />
+    <ClCompile Include="uuid\xxhsum.cc" />
+    <ClCompile Include="vss\vss_manager.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source.def" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

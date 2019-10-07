@@ -1,0 +1,134 @@
+syntax = "proto2";
+
+package lego.client.protobuf;
+
+message AccountAttributes {
+    optional bytes key = 1;
+	optional bytes value = 2;
+}
+
+message NewTx {
+	optional bytes gid = 1;
+	optional bytes from_acc_addr = 2;
+	optional bytes from_pubkey = 3;
+	optional bytes from_sign = 4;
+	optional bytes to_acc_addr = 5;
+	optional uint64 lego_count = 6;
+	optional uint32 type = 7;
+    repeated AccountAttributes attr = 8;
+}
+
+message TxBft {
+	optional NewTx new_tx = 1;
+}
+
+message BftMessage {
+	optional bytes gid = 1;
+	optional uint64 rand = 2;
+	optional int32 status = 3;
+	optional bool leader = 4;
+	optional uint32 net_id = 5;
+	optional bytes node_id = 6;
+	optional bytes pubkey = 7;
+	optional bytes sign_challenge = 8;
+	optional bytes sign_response = 9;
+	optional bytes secret = 10;
+	optional bytes challenge = 11;
+	optional bytes response = 12;
+	optional bytes agg_sign_challenge = 13;
+	optional bytes agg_sign_response = 14;
+	repeated uint64 bitmap = 15;
+	optional bool agree = 16;
+	optional bytes bft_address = 17;
+	optional uint32 pool_index = 18;
+	optional bytes data = 19;
+}
+
+message GetVpnInfoRequest {
+    optional bytes pubkey = 1;
+    optional bytes sign_challenge = 2;
+    optional bytes sign_response = 3;
+    optional bool heartbeat = 4;
+    optional bytes method = 5;
+}
+
+message GetVpnInfoResponse {
+	optional bytes ip = 1;
+	optional uint32 svr_port = 2;
+	optional uint32 route_port = 3;
+    optional bytes country = 4;
+    optional int32 secnum = 5;
+    optional bytes pubkey = 6;
+}
+
+message ServiceMessage {
+	optional GetVpnInfoRequest vpn_req = 1;
+	optional GetVpnInfoResponse vpn_res = 2;
+}
+
+message GetTxBlockRequest {
+	optional bytes tx_gid = 1;
+	optional bytes block_hash = 2;
+	optional bool from = 3;
+    optional uint64 height = 4;
+	optional bytes account_address = 5;
+}
+
+message GetTxBlockResponse {
+	optional bytes block = 1;
+}
+
+message AccountHeightRequest {
+	optional bytes account_addr = 1;
+}
+
+message AccountHeightResponse {
+	repeated uint64 heights = 1;
+}
+
+message BlockMessage {
+	optional GetTxBlockRequest block_req = 1;
+	optional GetTxBlockResponse block_res = 2;
+	optional AccountHeightRequest height_req = 3;
+	optional AccountHeightResponse height_res = 4;
+}
+
+message TxInfo {
+	optional uint32 version = 1;
+	optional bytes gid = 2;
+	optional bytes from = 3;
+	optional bytes from_pubkey = 4;
+	optional bytes from_sign = 5;
+	optional bytes to = 6;
+	optional uint64 amount = 7;
+	optional uint64 gas_limit = 8;
+    optional uint64 gas_used = 9;
+    optional uint64 gas_price = 10;
+	optional uint64 balance = 11;
+	optional bool to_add = 12;
+    optional uint32 netwok_id = 13;
+    optional uint32 type = 14;
+    repeated AccountAttributes attr = 15;
+}
+
+message TxBlock {
+    optional bytes prehash = 1;
+    optional uint32 version = 2;
+    optional uint32 elect_ver = 3;
+	optional bytes rc_hash = 4;
+	repeated uint64 bitmap = 5;
+	optional bytes agg_pubkey = 6;
+	optional bytes agg_sign = 7;
+    optional uint64 tx_id = 8;
+    optional bytes tx_hash = 9;
+    optional bytes tx_root_hash = 10;
+    repeated TxInfo tx_list = 11;
+	optional uint32 network_id = 12;
+}
+
+message Block {
+    optional bytes hash = 1;
+	optional uint64 height = 2;
+	optional TxBlock tx_block = 3;
+	optional uint64 timestamp = 4;
+}

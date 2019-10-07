@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package lego.bft.protobuf;
+
+message BftMessage {
+	optional bytes gid = 1;
+	optional uint64 rand = 2;
+	optional int32 status = 3;
+	optional bool leader = 4;
+	optional uint32 net_id = 5;
+	optional bytes node_id = 6;
+	optional bytes pubkey = 7;
+	optional bytes sign_challenge = 8;
+	optional bytes sign_response = 9;
+	optional bytes secret = 10;
+	optional bytes challenge = 11;
+	optional bytes response = 12;
+	optional bytes agg_sign_challenge = 13;
+	optional bytes agg_sign_response = 14;
+	repeated uint64 bitmap = 15;
+	optional bool agree = 16;
+	optional bytes bft_address = 17;
+	optional uint32 pool_index = 18;
+	optional bytes data = 19;
+}
