@@ -42,9 +42,9 @@ struct AccountInfo {
     std::unordered_map<std::string, uint64_t> attrs_with_height;
     std::mutex attrs_with_height_mutex;
 
-    void AddHeight(uint64_t height) {
+    void AddHeight(uint64_t tmp_height) {
         std::lock_guard<std::mutex> guard(height_pri_queue_mutex);
-        height_pri_queue.push(height);
+        height_pri_queue.push(tmp_height);
         if (height_pri_queue.size() > kAccountHeightMaxSize) {
             height_pri_queue.pop();
         }

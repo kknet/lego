@@ -76,7 +76,8 @@ void Challenge::Set(
     }
 
     Sha256 sha2;
-    sha2.Update({ kThirdHashFunctionByte });
+    std::string tmp_func_byte((char)kThirdHashFunctionByte, 1);
+    sha2.Update(tmp_func_byte);
     inited_ = false;
     bytes buf(kPublicCompresssedSizeBytes);
     const Curve& curve = Schnorr::Instance()->curve();

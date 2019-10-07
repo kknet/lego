@@ -52,7 +52,8 @@ void CommitPointHash::Set(const CommitPoint& point) {
     inited_ = false;
     bytes buf(kPublicCompresssedSizeBytes);
     Sha256 sha2;
-    sha2.Update({ kSecondHashFunctionByte });
+    std::string tmp_func_byte((char)kSecondHashFunctionByte, 1);
+    sha2.Update(tmp_func_byte);
     const Curve& curve = Schnorr::Instance()->curve();
     if (EC_POINT_point2oct(
             curve.group_.get(),

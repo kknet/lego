@@ -6,6 +6,8 @@
 
 #include "common/config.h"
 #include "common/utils.h"
+#include "network/universal_manager.h"
+#include "network/universal.h"
 
 namespace lego {
 

@@ -172,7 +172,6 @@ void HttpTransport::HandleAccountBalance(const httplib::Request &req, httplib::R
 void HttpTransport::HandleGetTransaction(const httplib::Request &req, httplib::Response &res) {
     try {
         nlohmann::json json_obj = nlohmann::json::parse(req.body);
-        std::string tx_gid;
         std::string block_hash;
         if (json_obj.find("tx_gid") != json_obj.end()) {
             auto tx_gid = common::Encode::HexDecode(json_obj["tx_gid"].get<std::string>());

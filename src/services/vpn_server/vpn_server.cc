@@ -649,7 +649,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
                 return;
             }
             lego::vpn::VpnServer::Instance()->bandwidth_queue().push(acc_item);
-            std::cout << "new client coming." << common::Encode::HexEncode(user_account) << std::endl;
         } else {
             if (!iter->second->login_valid) {
                 return;

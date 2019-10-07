@@ -635,7 +635,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             memcpy(&addr->sin_addr, server->buf->data + offset, in_addr_len);
             inet_ntop(AF_INET, (const void *)(server->buf->data + offset), host, INET_ADDRSTRLEN);
             offset += in_addr_len;
-            std::cout << "new relay coming: " << host << std::endl;
         } else {
             ReportAddr(server->fd, "invalid length for ipv4 address");
             StopServer(EV_A_ server);

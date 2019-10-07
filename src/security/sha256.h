@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <cassert>
 
 #include <openssl/sha.h>
 #include "common/utils.h"

@@ -1,7 +1,10 @@
 #pragma once
 
 #include <time.h>
+
+#ifndef _WIN32
 #include <sys/time.h>
+#endif
 
 #include <cstdint>
 #include <chrono>
@@ -51,6 +54,7 @@ public:
                 time.time_since_epoch()).count();
     }
 
+    /*
     // "%Y-%m-%d %H:%M:%S"
     static std::string DatetimeStr(const std::chrono::system_clock::time_point &time) {
         char tmp_time[25] = { 0 };
@@ -78,6 +82,7 @@ public:
 
         return std::string(tmp_time);
     }
+    */
 
 private:
     TimeUtils();

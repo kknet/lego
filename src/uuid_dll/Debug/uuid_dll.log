@@ -1,0 +1,11 @@
+﻿  md5.c
+d:\lego\lego\src\uuid_dll\md5.c(17): fatal error C1853: “Debug\uuid_dll.pch”预编译头文件来自编译器的早期版本，或者预编译头为 C++ 而在 C 中使用它(或相反)
+  sha1.c
+d:\lego\lego\src\uuid_dll\sha1.c(26): warning C4005: “blk0”: 宏重定义
+  d:\lego\lego\src\uuid_dll\sha1.c(23): note: 参见“blk0”的前一个定义
+d:\lego\lego\src\uuid_dll\sha1.c(259): fatal error C1010: 在查找预编译头时遇到意外的文件结尾。是否忘记了向源中添加“#include "stdafx.h"”?
+  xxhash.c
+d:\lego\lego\src\uuid_dll\xxhash.c(52): fatal error C1853: “Debug\uuid_dll.pch”预编译头文件来自编译器的早期版本，或者预编译头为 C++ 而在 C 中使用它(或相反)
+  xxhsum.c
+d:\lego\lego\src\uuid_dll\xxhsum.c(31): fatal error C1853: “Debug\uuid_dll.pch”预编译头文件来自编译器的早期版本，或者预编译头为 C++ 而在 C 中使用它(或相反)
+  正在生成代码...

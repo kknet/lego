@@ -17,7 +17,6 @@
 #include <windows.h>
 #endif
 
-#include "uuid/uuid.h"
 #include "common/hash.h"
 #include "common/random.h"
 #include "common/country_code.h"
@@ -140,10 +139,12 @@ static void SignalCallback(int sig_int) {
 }
 
 void SignalRegister() {
+#ifndef _WIN32
     signal(SIGPIPE, SIG_IGN);
     signal(SIGABRT, SIG_IGN);
     signal(SIGINT, SignalCallback);
     signal(SIGTERM, SignalCallback);
+#endif
 }
 
 uint16_t GetVpnServerPort(const std::string& dht_key, uint32_t timestamp_days) {

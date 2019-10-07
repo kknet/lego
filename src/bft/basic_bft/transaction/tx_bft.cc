@@ -113,10 +113,10 @@ int TxBft::BackupCheckPrepare(std::string& bft_str) {
     std::unordered_map<std::string, int64_t> acc_balance_map;
     for (int32_t i = 0; i < block.tx_block().tx_list_size(); ++i) {
         const auto& tx_info = block.tx_block().tx_list(i);
-        int res = CheckTxInfo(block, tx_info);
-        if (res != kBftSuccess) {
-            BFT_ERROR("check transaction failed![%d]", res);
-            return res;
+        int tmp_res = CheckTxInfo(block, tx_info);
+        if (tmp_res != kBftSuccess) {
+            BFT_ERROR("check transaction failed![%d]", tmp_res);
+            return tmp_res;
         }
 
         if (tx_info.has_to() && !tx_info.to().empty()) {

@@ -108,10 +108,6 @@ void MultiThreadHandler::HandleMessage(protobuf::Header& msg) {
             priority = message_ptr->priority();
         }
         priority_queue_map_[priority].push(message_ptr);
-#ifdef LEGO_TRACE_MESSAGE
-        transport::protobuf::Header& msg = *(message_ptr);
-        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("local transport push to queue", msg);
-#endif
     }
 }
 

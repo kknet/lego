@@ -8,7 +8,6 @@
 #include "ip/ip_with_country.h"
 #include "security/schnorr.h"
 #include "dht/dht_key.h"
-#include "network/universal.h"
 #include "network/network_utils.h"
 #include "network/bootstrap.h"
 
@@ -87,7 +86,7 @@ int UniversalManager::CreateNetwork(
             common::GlobalInfo::Instance()->id().size(),
             common::Encode::HexEncode(dht_key.StrKey()).c_str());
     local_node->first_node = common::GlobalInfo::Instance()->config_first_node();
-    dht::BaseDhtPtr dht_ptr = std::make_shared<network::Uniersal>(transport, local_node);
+    dht::BaseDhtPtr dht_ptr = std::make_shared<network::Universal>(transport, local_node);
     dht_ptr->Init();
     RegisterUniversal(network_id, dht_ptr);
     if (local_node->first_node) {

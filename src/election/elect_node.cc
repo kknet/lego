@@ -60,7 +60,7 @@ int ElectNode::JoinUniversal() {
     local_node->dht_key = dht_key.StrKey();
     local_node->dht_key_hash = common::Hash::Hash64(dht_key.StrKey());
     transport::TransportPtr tansport_ptr = unversal_dht->transport();
-    universal_role_ = std::make_shared<network::Uniersal>(
+    universal_role_ = std::make_shared<network::Universal>(
             tansport_ptr,
             local_node);
     if (universal_role_->Init() != network::kNetworkSuccess) {

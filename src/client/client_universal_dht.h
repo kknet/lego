@@ -1,6 +1,7 @@
 #pragma once
 
 #include "dht/base_dht.h"
+#include "transport/transport.h"
 
 namespace lego {
 

@@ -210,7 +210,7 @@ private:
     int LeaderCreatePreCommitAggChallenge();
     int LeaderCreateCommitAggSign();
 
-    uint32_t pool_index_{ -1 };
+    uint32_t pool_index_{ std::numeric_limits<uint32_t>::max() };
     std::string gid_;
     uint32_t network_id_{ 0 };
     uint32_t leader_index_{ 0 };

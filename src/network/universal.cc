@@ -16,15 +16,15 @@ namespace lego {
 
 namespace network {
 
-Uniersal::Uniersal(transport::TransportPtr& transport_ptr, dht::NodePtr& local_node)
+Universal::Universal(transport::TransportPtr& transport_ptr, dht::NodePtr& local_node)
         : BaseDht(transport_ptr, local_node) {
 }
 
-Uniersal::~Uniersal() {
+Universal::~Universal() {
     Destroy();
 }
 
-int Uniersal::Init() {
+int Universal::Init() {
     if (BaseDht::Init() != dht::kDhtSuccess) {
         NETWORK_ERROR("init base dht failed!");
         return kNetworkError;
@@ -39,7 +39,7 @@ int Uniersal::Init() {
     } else {
         dht::BaseDhtPtr dht = UniversalManager::Instance()->GetUniversal(kUniversalNetworkId);
         if (dht) {
-            auto universal_dht = std::dynamic_pointer_cast<Uniersal>(dht);
+            auto universal_dht = std::dynamic_pointer_cast<Universal>(dht);
             if (universal_dht) {
                 universal_dht->AddNetworkId(net_id);
             }
@@ -48,7 +48,7 @@ int Uniersal::Init() {
     return kNetworkSuccess;
 }
 
-bool Uniersal::CheckDestination(const std::string& des_dht_key, bool closest) {
+bool Universal::CheckDestination(const std::string& des_dht_key, bool closest) {
     if (dht::BaseDht::CheckDestination(des_dht_key, closest)) {
         return true;
     }
@@ -65,12 +65,12 @@ bool Uniersal::CheckDestination(const std::string& des_dht_key, bool closest) {
     return true;
 }
 
-void Uniersal::SetFrequently(transport::protobuf::Header& msg) {
+void Universal::SetFrequently(transport::protobuf::Header& msg) {
     dht::BaseDht::SetFrequently(msg);
     msg.set_universal(true);
 }
 
-std::vector<dht::NodePtr> Uniersal::LocalGetNetworkNodes(
+std::vector<dht::NodePtr> Universal::LocalGetNetworkNodes(
         uint32_t network_id,
         uint32_t count) {
     return LocalGetNetworkNodes(
@@ -79,7 +79,7 @@ std::vector<dht::NodePtr> Uniersal::LocalGetNetworkNodes(
             count);
 }
 
-std::vector<dht::NodePtr> Uniersal::RemoteGetNetworkNodes(
+std::vector<dht::NodePtr> Universal::RemoteGetNetworkNodes(
         uint32_t network_id,
         uint32_t count) {
     return RemoteGetNetworkNodes(
@@ -88,9 +88,9 @@ std::vector<dht::NodePtr> Uniersal::RemoteGetNetworkNodes(
             count);
 }
 
-std::vector<dht::NodePtr> Uniersal::LocalGetNetworkNodes(
+std::vector<dht::NodePtr> Universal::LocalGetNetworkNodes(
         uint32_t network_id,
-        uint32_t country,
+        uint8_t country,
         uint32_t count) {
     dht::Dht tmp_dht = *(readonly_dht());  // change must copy
     dht::DhtKeyManager dht_key(
@@ -121,9 +121,9 @@ std::vector<dht::NodePtr> Uniersal::LocalGetNetworkNodes(
     return tmp_nodes;
 }
 
-std::vector<dht::NodePtr> Uniersal::RemoteGetNetworkNodes(
+std::vector<dht::NodePtr> Universal::RemoteGetNetworkNodes(
         uint32_t network_id,
-        uint32_t country,
+        uint8_t country,
         uint32_t count) {
     // may be can try 3 times for random destination dht key
     transport::protobuf::Header msg;
@@ -173,7 +173,7 @@ std::vector<dht::NodePtr> Uniersal::RemoteGetNetworkNodes(
     return nodes;
 }
 
-void Uniersal::HandleMessage(transport::protobuf::Header& msg) {
+void Universal::HandleMessage(transport::protobuf::Header& msg) {
     if (msg.type() == common::kDhtMessage || msg.type() == common::kNatMessage) {
         LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("universal dht:", msg);
         return dht::BaseDht::HandleMessage(msg);
@@ -198,7 +198,7 @@ void Uniersal::HandleMessage(transport::protobuf::Header& msg) {
     }
 }
 
-void Uniersal::ProcessGetNetworkNodesRequest(
+void Universal::ProcessGetNetworkNodesRequest(
         transport::protobuf::Header& header,
         protobuf::NetworkMessage& network_msg) {
     std::vector<dht::NodePtr> nodes = LocalGetNetworkNodes(
@@ -231,7 +231,7 @@ void Uniersal::ProcessGetNetworkNodesRequest(
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end 2", header);
 }
 
-void Uniersal::ProcessGetNetworkNodesResponse(
+void Universal::ProcessGetNetworkNodesResponse(
         transport::protobuf::Header& header,
         protobuf::NetworkMessage& network_msg) {
     if (header.des_dht_key() != local_node_->dht_key) {
@@ -242,22 +242,22 @@ void Uniersal::ProcessGetNetworkNodesResponse(
     transport::SynchroWait::Instance()->Callback(header.id(), header);
 }
 
-void Uniersal::AddNetworkId(uint32_t network_id) {
+void Universal::AddNetworkId(uint32_t network_id) {
     assert(network_id < kNetworkMaxDhtCount);
     universal_ids_[network_id] = true;
 }
 
-void Uniersal::RemoveNetworkId(uint32_t network_id) {
+void Universal::RemoveNetworkId(uint32_t network_id) {
     assert(network_id < kNetworkMaxDhtCount);
     universal_ids_[network_id] = false;
 }
 
-bool Uniersal::HasNetworkId(uint32_t network_id) {
+bool Universal::HasNetworkId(uint32_t network_id) {
     assert(network_id < kNetworkMaxDhtCount);
     return universal_ids_[network_id];
 }
 
-int Uniersal::Destroy() {
+int Universal::Destroy() {
     if (universal_ids_ != nullptr) {
         delete []universal_ids_;
     }
@@ -266,7 +266,7 @@ int Uniersal::Destroy() {
     if (dht == nullptr) {
         return kNetworkSuccess;
     }
-    auto universal_dht = std::dynamic_pointer_cast<Uniersal>(dht);
+    auto universal_dht = std::dynamic_pointer_cast<Universal>(dht);
     if (universal_dht == nullptr) {
         return kNetworkSuccess;
     }

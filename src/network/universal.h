@@ -1,19 +1,21 @@
 #pragma once
 
 #include <unordered_set>
+#include <vector>
 
 #include "transport/transport.h"
 #include "dht/base_dht.h"
+#include "dht/node.h"
 #include "network/proto/network.pb.h"
 
 namespace lego {
 
 namespace network {
 
-class Uniersal : public dht::BaseDht {
+class Universal : public dht::BaseDht {
 public:
-    Uniersal(transport::TransportPtr& transport_ptr, dht::NodePtr& local_node);
-    virtual ~Uniersal();
+    Universal(transport::TransportPtr& transport_ptr, dht::NodePtr& local_node);
+    virtual ~Universal();
     virtual int Init();
     virtual int Destroy();
     virtual bool CheckDestination(const std::string& des_dht_key, bool closest);
@@ -28,11 +30,11 @@ public:
     std::vector<dht::NodePtr> RemoteGetNetworkNodes(uint32_t network_id, uint32_t count);
     std::vector<dht::NodePtr> LocalGetNetworkNodes(
             uint32_t network_id,
-            uint32_t country,
+            uint8_t country,
             uint32_t count);
     std::vector<dht::NodePtr> RemoteGetNetworkNodes(
             uint32_t network_id,
-            uint32_t country,
+            uint8_t country,
             uint32_t count);
 
 private:
@@ -46,7 +48,7 @@ private:
 
     bool* universal_ids_{ nullptr };
 
-    DISALLOW_COPY_AND_ASSIGN(Uniersal);
+    DISALLOW_COPY_AND_ASSIGN(Universal);
 };
 
 }  // namespace network

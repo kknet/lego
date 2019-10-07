@@ -469,11 +469,11 @@ int NetworkInit::SetPriAndPubKey(const std::string&) {
     std::string private_key = common::Encode::HexDecode(prikey);
     std::shared_ptr<security::PrivateKey> prikey_ptr{ nullptr };
     if (!prikey.empty()) {
-        security::PrivateKey private_key(prikey);
-        prikey_ptr = std::make_shared<security::PrivateKey>(private_key);
+        security::PrivateKey tmp_prikey(prikey);
+        prikey_ptr = std::make_shared<security::PrivateKey>(tmp_prikey);
     } else {
-        security::PrivateKey private_key;
-        prikey_ptr = std::make_shared<security::PrivateKey>(private_key);
+        security::PrivateKey tmp_prikey;
+        prikey_ptr = std::make_shared<security::PrivateKey>(tmp_prikey);
     }
     security::PublicKey pubkey(*(prikey_ptr.get()));
     auto pubkey_ptr = std::make_shared<security::PublicKey>(pubkey);

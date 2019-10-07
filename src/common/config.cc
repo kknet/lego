@@ -292,8 +292,8 @@ bool Config::DumpConfig(const std::string& conf) {
 
         for (auto key_iter = iter->second.begin(); key_iter != iter->second.end(); ++key_iter) {
             std::string kv = key_iter->first + "=" + key_iter->second + "\n";
-            size_t ws = fwrite(kv.c_str(), 1, kv.size(), fd);
-            if (ws != kv.size()) {
+            size_t tm_ws = fwrite(kv.c_str(), 1, kv.size(), fd);
+            if (tm_ws != kv.size()) {
                 ERROR("write file failed!");
                 res = false;
                 break;
@@ -342,8 +342,8 @@ bool Config::InitWithContent(const std::string& content) {
             continue;
         }
 
-        for (uint32_t i = 0; i < line.size(); ++i) {
-            if (line[i] != ' ' && line[i] != ' ' && line[i] != '\n') {
+        for (uint32_t j = 0; j < line.size(); ++j) {
+            if (line[j] != ' ' && line[j] != ' ' && line[j] != '\n') {
                 ERROR("line illegal[%s]", line.c_str());
                 res = false;
                 break;
@@ -377,6 +377,7 @@ bool Config::Init(const std::string& conf) {
         std::string line(read_buf);
         if (line.size() >= kConfigMaxLen) {
             ERROR("line size exceeded %d", kConfigMaxLen);
+            printf("open config file[%s] failed!\n", conf.c_str());
             res = false;
             break;
         }

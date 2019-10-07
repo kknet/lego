@@ -6,8 +6,6 @@
 #include "common/encode.h"
 #include "dht/dht_key.h"
 #include "network/network_utils.h"
-#include "network/universal_manager.h"
-#include "network/universal.h"
 
 namespace lego {
 
@@ -71,7 +69,7 @@ std::vector<dht::NodePtr> Bootstrap::GetNetworkBootstrap(
         uint32_t network_id,
         uint32_t count) {
     auto tmp_dht = UniversalManager::Instance()->GetUniversal(kUniversalNetworkId);
-    std::shared_ptr<Uniersal> universal_dht = std::dynamic_pointer_cast<Uniersal>(tmp_dht);
+    std::shared_ptr<Universal> universal_dht = std::dynamic_pointer_cast<Universal>(tmp_dht);
     assert(universal_dht);
     auto nodes = universal_dht->LocalGetNetworkNodes(
             network_id,

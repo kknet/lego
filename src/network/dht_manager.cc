@@ -93,7 +93,7 @@ void DhtManager::NetworkDetection() {
     }
 
     auto dht = UniversalManager::Instance()->GetUniversal(kUniversalNetworkId);
-    auto universal_dht = std::dynamic_pointer_cast<Uniersal>(dht);
+    auto universal_dht = std::dynamic_pointer_cast<Universal>(dht);
     if (!universal_dht) {
         tick_.CutOff(kNetworkDetectPeriod, std::bind(&DhtManager::NetworkDetection, this));
         return;

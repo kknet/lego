@@ -131,8 +131,8 @@ int BaseDht::Drop(NodePtr& node) {
                 [dht_key_hash](const NodePtr& rhs) -> bool {
             return dht_key_hash == rhs->dht_key_hash;
         });
-        assert((*iter)->id == node->id);
         if (iter != dht_.end()) {
+            assert((*iter)->id == node->id);
             dht_.erase(iter);
         }
         readonly_dht_ = std::make_shared<Dht>(dht_);
@@ -148,9 +148,9 @@ int BaseDht::Drop(NodePtr& node) {
     {
         auto iter = node_map_.find(node->dht_key_hash);
         if (iter != node_map_.end()) {
+            assert(iter->second->id == node->id);
             node_map_.erase(iter);
         }
-        assert(iter->second->id == node->id);
         readony_node_map_ = std::make_shared<std::unordered_map<uint64_t, NodePtr>>(node_map_);
     }
     return kDhtSuccess;

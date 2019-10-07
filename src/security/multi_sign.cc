@@ -209,7 +209,8 @@ bool MultiSign::MultiSigVerify(
     assert(!message.empty());
     try {
         Sha256 sha2;
-        sha2.Update({ kThirdHashFunctionByte });
+        std::string tmp_func_byte((char)kThirdHashFunctionByte, 1);
+        sha2.Update(tmp_func_byte);
         bytes buf(kPublicCompresssedSizeBytes);
         bool err = false;
         bool err2 = false;

@@ -79,7 +79,7 @@ void KeyValueSync::CheckSyncItem() {
                     std::chrono::milliseconds(kSyncValueRetryPeriod);
             ++(item->sync_times);
             {
-                std::lock_guard<std::mutex> guard(synced_map_mutex_);
+                std::lock_guard<std::mutex> tmp_guard(synced_map_mutex_);
                 synced_map_.insert(std::make_pair(item->key, item));
                 if (synced_map_.size() > kSyncMaxKeyCount) {
                     stop = true;
@@ -235,7 +235,7 @@ void KeyValueSync::CheckSyncTimeout() {
             }
 
             {
-                std::lock_guard<std::mutex> guard(prio_sync_queue_[iter->second->priority].mutex);
+                std::lock_guard<std::mutex> tmp_guard(prio_sync_queue_[iter->second->priority].mutex);
                 prio_sync_queue_[iter->second->priority].sync_queue.push(iter->second);
             }
         }

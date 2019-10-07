@@ -1,3 +1,4 @@
+#include "client/client_universal_dht.h"
 #include "client/vpn_client.h"
 
 #include <cassert>
@@ -46,6 +47,7 @@ static common::Tick check_tx_tick_;
 static common::Tick vpn_nodes_tick_;
 static common::Tick dump_config_tick_;
 static common::Tick dump_bootstrap_tick_;
+static std::shared_ptr<ClientUniversalDht> root_dht_{ nullptr };
 
 VpnClient::VpnClient() {
     network::Route::Instance()->RegisterMessage(
@@ -54,14 +56,6 @@ VpnClient::VpnClient() {
     network::Route::Instance()->RegisterMessage(
             common::kBlockMessage,
             std::bind(&VpnClient::HandleMessage, this, std::placeholders::_1));
-    check_tx_tick_.CutOff(1000 * 1000, std::bind(&VpnClient::CheckTxExists, this));
-    vpn_nodes_tick_.CutOff(1000 * 1000, std::bind(&VpnClient::GetVpnNodes, this));
-    dump_config_tick_.CutOff(
-            60ull * 1000ull * 1000ull,
-            std::bind(&VpnClient::DumpNodeToConfig, this));
-    dump_bootstrap_tick_.CutOff(
-            60ull * 1000ull * 1000ull,
-            std::bind(&VpnClient::DumpBootstrapNodes, this));
 }
 
 VpnClient::~VpnClient() {}
@@ -384,6 +378,15 @@ std::string VpnClient::Init(
         return "ERROR";
     }
     
+    check_tx_tick_.CutOff(1000 * 1000, std::bind(&VpnClient::CheckTxExists, this));
+    vpn_nodes_tick_.CutOff(1000 * 1000, std::bind(&VpnClient::GetVpnNodes, this));
+    dump_config_tick_.CutOff(
+            60ull * 1000ull * 1000ull,
+            std::bind(&VpnClient::DumpNodeToConfig, this));
+    dump_bootstrap_tick_.CutOff(
+            60ull * 1000ull * 1000ull,
+            std::bind(&VpnClient::DumpBootstrapNodes, this));
+
     return (common::global_code_to_country_map[common::GlobalInfo::Instance()->country()] +
             "," +
             common::Encode::HexEncode(common::GlobalInfo::Instance()->id()) +
@@ -603,7 +606,7 @@ void VpnClient::GetNetworkNodes(
     auto now_tick = std::chrono::steady_clock::now();
     for (uint32_t i = 0; i < country_vec.size(); ++i) {
         auto country = country_vec[i];
-        auto uni_dht = std::dynamic_pointer_cast<network::Uniersal>(
+        auto uni_dht = std::dynamic_pointer_cast<network::Universal>(
             network::UniversalManager::Instance()->GetUniversal(
                 network::kUniversalNetworkId));
         if (!uni_dht) {
@@ -611,9 +614,9 @@ void VpnClient::GetNetworkNodes(
         }
 
         auto dht_nodes = uni_dht->LocalGetNetworkNodes(
-                network_id,
-                common::global_country_map[country],
-                4);
+                (uint32_t)network_id,
+                (uint8_t)common::global_country_map[country],
+                (uint32_t)4);
         if (dht_nodes.empty()) {
             continue;
         }
@@ -655,18 +658,18 @@ void VpnClient::GetNetworkNodes(
             if (node_netid == network::kVpnNetworkId) {
                 CLIENT_ERROR("get vpn node: %s:%d", node_ptr->ip.c_str(), node_ptr->svr_port);
                 std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
-                auto iter = vpn_nodes_map_.find(country);
-                if (iter != vpn_nodes_map_.end()) {
+                auto sub_iter = vpn_nodes_map_.find(country);
+                if (sub_iter != vpn_nodes_map_.end()) {
                     auto e_iter = std::find_if(
-                            iter->second.begin(),
-                            iter->second.end(),
+                        sub_iter->second.begin(),
+                        sub_iter->second.end(),
                             [node_ptr](const VpnServerNodePtr& ptr) {
                                 return node_ptr->ip == ptr->ip && node_ptr->svr_port == ptr->svr_port;
                             });
-                    if (e_iter == iter->second.end()) {
-                        iter->second.push_back(node_ptr);
-                        if (iter->second.size() > 16) {
-                            iter->second.pop_front();
+                    if (e_iter == sub_iter->second.end()) {
+                        sub_iter->second.push_back(node_ptr);
+                        if (sub_iter->second.size() > 16) {
+                            sub_iter->second.pop_front();
                         }
                     }
                 }
@@ -674,18 +677,18 @@ void VpnClient::GetNetworkNodes(
 
             if (node_netid == network::kVpnRouteNetworkId) {
                 std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
-                auto iter = route_nodes_map_.find(country);
-                if (iter != route_nodes_map_.end()) {
+                auto sub_iter = route_nodes_map_.find(country);
+                if (sub_iter != route_nodes_map_.end()) {
                     auto e_iter = std::find_if(
-                        iter->second.begin(),
-                        iter->second.end(),
+                        sub_iter->second.begin(),
+                        sub_iter->second.end(),
                         [node_ptr](const VpnServerNodePtr& ptr) {
                         return node_ptr->dht_key == ptr->dht_key;
                     });
-                    if (e_iter == iter->second.end()) {
-                        iter->second.push_back(node_ptr);
-                        if (iter->second.size() > 16) {
-                            iter->second.pop_front();
+                    if (e_iter == sub_iter->second.end()) {
+                        sub_iter->second.push_back(node_ptr);
+                        if (sub_iter->second.size() > 16) {
+                            sub_iter->second.pop_front();
                         }
                     }
                 }
@@ -942,8 +945,8 @@ void VpnClient::GetAccountBlockWithHeight() {
     for (auto iter = height_set.rbegin(); iter != height_set.rend(); ++iter) {
         auto height = *iter;
         {
-            auto iter = hight_block_map_.find(height);
-            if (iter != hight_block_map_.end()) {
+            auto tmp_iter = hight_block_map_.find(height);
+            if (tmp_iter != hight_block_map_.end()) {
                 continue;
             }
         }
