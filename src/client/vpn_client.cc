@@ -48,6 +48,8 @@ static common::Tick vpn_nodes_tick_;
 static common::Tick dump_config_tick_;
 static common::Tick dump_bootstrap_tick_;
 static std::shared_ptr<ClientUniversalDht> root_dht_{ nullptr };
+static const std::string kCheckVersionAccount = common::Encode::HexDecode(
+		"e8a1ceb6b807a98a20e3aa10aa2199e47cbbed08c2540bd48aa3e1e72ba6bd99");
 
 VpnClient::VpnClient() {
     network::Route::Instance()->RegisterMessage(
@@ -56,6 +58,8 @@ VpnClient::VpnClient() {
     network::Route::Instance()->RegisterMessage(
             common::kBlockMessage,
             std::bind(&VpnClient::HandleMessage, this, std::placeholders::_1));
+	vpn_last_version_ = "1.0.1";
+	vpn_download_url_ = "ios^https://www.pgyer.com/1U2f,android^https://www.pgyer.com/62Dg,windows^,mac^";
 }
 
 VpnClient::~VpnClient() {}
@@ -63,6 +67,10 @@ VpnClient::~VpnClient() {}
 VpnClient* VpnClient::Instance() {
     static VpnClient ins;
     return &ins;
+}
+
+std::string VpnClient::CheckVersion() {
+	return vpn_last_version_ + "`" + vpn_download_url_;
 }
 
 void VpnClient::HandleMessage(transport::protobuf::Header& header) {
@@ -96,28 +104,78 @@ void VpnClient::HandleBlockResponse(const protobuf::GetTxBlockResponse& block_re
     if (!block.ParseFromString(block_res.block())) {
         return;
     }
-    std::lock_guard<std::mutex> guard(hight_block_map_mutex_);
-    hight_block_map_[block.height()] = block_res.block();
-    if (hight_block_map_.size() >= kHeightMaxSize) {
-        hight_block_map_.erase(hight_block_map_.begin());
-    }
 
+	bool has_local_trans = false;
+    std::lock_guard<std::mutex> guard(hight_block_map_mutex_);
     auto block_ptr = std::make_shared<protobuf::Block>(block);
     std::lock_guard<std::mutex> tmp_map_guard(tx_map_mutex_);
     auto& tx_list = block_ptr->tx_block().tx_list();
     for (int32_t i = 0; i < tx_list.size(); ++i) {
         tx_map_[tx_list[i].gid()] = block_ptr;
+		if (tx_list[i].from() == common::GlobalInfo::Instance()->id() ||
+				tx_list[i].to() == common::GlobalInfo::Instance()->id()) {
+			has_local_trans = true;
+		}
+
+		if (tx_list[i].from() == kCheckVersionAccount ||
+				tx_list[i].to() == kCheckVersionAccount) {
+			if (block_ptr->height() >= vpn_version_last_height_) {
+				for (int attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
+					if (tx_list[i].attr(attr_idx).key() == "tenon_vpn_version") {
+						vpn_last_version_ = tx_list[i].attr(attr_idx).value();
+					}
+
+					if (tx_list[i].attr(attr_idx).key() == "tenon_vpn_url") {
+						vpn_download_url_ = tx_list[i].attr(attr_idx).value();
+					}
+				}
+			}
+		}
     }
-    got_block_ = true;
+
+	if (has_local_trans) {
+		hight_block_map_[block.height()] = block_res.block();
+		if (hight_block_map_.size() >= kHeightMaxSize) {
+			hight_block_map_.erase(hight_block_map_.begin());
+		}
+	}
 }
 
 void VpnClient::HandleHeightResponse(
         const protobuf::AccountHeightResponse& height_res) {
+	if (height_res.account_addr() == kCheckVersionAccount) {
+		bool get_version_block = false;
+		for (int32_t i = 0; i < height_res.heights_size(); ++i) {
+			if (height_res.heights(i) > vpn_version_last_height_) {
+				vpn_version_last_height_ = height_res.heights(i);
+				get_version_block = true;
+			}
+		}
+
+		if (get_version_block) {
+			transport::protobuf::Header msg;
+			auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+				network::kUniversalNetworkId);
+			if (uni_dht == nullptr) {
+				return;
+			}
+			uni_dht->SetFrequently(msg);
+			ClientProto::GetBlockWithHeight(
+					uni_dht->local_node(),
+					kCheckVersionAccount,
+					vpn_version_last_height_,
+					msg);
+			uni_dht->SendToClosestNode(msg);
+		}
+
+		return;
+	}
+
     std::lock_guard<std::mutex> guard(height_set_mutex_);
     for (int32_t i = 0; i < height_res.heights_size(); ++i) {
-        height_set_.insert(height_res.heights(i));
-        if (height_set_.size() > kHeightMaxSize) {
-            height_set_.erase(height_set_.begin());
+        local_account_height_set_.insert(height_res.heights(i));
+        if (local_account_height_set_.size() > kHeightMaxSize) {
+            local_account_height_set_.erase(local_account_height_set_.begin());
         }
     }
 }
@@ -924,7 +982,22 @@ void VpnClient::GetAccountHeight() {
     }
     transport::protobuf::Header msg;
     uni_dht->SetFrequently(msg);
-    ClientProto::GetAccountHeight(uni_dht->local_node(), msg);
+    std::string account_address = network::GetAccountAddressByPublicKey(
+        security::Schnorr::Instance()->str_pubkey());
+
+    ClientProto::GetAccountHeight(uni_dht->local_node(), msg, account_address);
+    uni_dht->SendToClosestNode(msg);
+}
+
+void VpnClient::GetVpnVersion() {
+    auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+            network::kUniversalNetworkId);
+    if (uni_dht == nullptr) {
+        return;
+    }
+    transport::protobuf::Header msg;
+    uni_dht->SetFrequently(msg);
+    ClientProto::GetAccountHeight(uni_dht->local_node(), msg, kCheckVersionAccount);
     uni_dht->SendToClosestNode(msg);
 }
 
@@ -938,10 +1011,12 @@ void VpnClient::GetAccountBlockWithHeight() {
     std::set<uint64_t> height_set;
     {
         std::lock_guard<std::mutex> guard(height_set_mutex_);
-        height_set = height_set_;
+        height_set = local_account_height_set_;
     }
 
     uint32_t sended_req = 0;
+	std::string account_address = network::GetAccountAddressByPublicKey(
+		security::Schnorr::Instance()->str_pubkey());
     for (auto iter = height_set.rbegin(); iter != height_set.rend(); ++iter) {
         auto height = *iter;
         {
@@ -952,7 +1027,7 @@ void VpnClient::GetAccountBlockWithHeight() {
         }
         transport::protobuf::Header msg;
         uni_dht->SetFrequently(msg);
-        ClientProto::GetBlockWithHeight(uni_dht->local_node(), height, msg);
+        ClientProto::GetBlockWithHeight(uni_dht->local_node(), account_address, height, msg);
         uni_dht->SendToClosestNode(msg);
         ++sended_req;
         if (sended_req > 30) {

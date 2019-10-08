@@ -164,6 +164,8 @@ void BlockManager::HandleGetHeightRequest(
     }
     protobuf::BlockMessage block_msg_res;
     auto height_res = block_msg_res.mutable_height_res();
+	height_res->set_account_addr(block_msg.height_req().account_addr());
+	height_res->set_type(block_msg.height_req().type());
     auto priqueue = acc_ptr->get_height_pri_queue();
     while (!priqueue.empty()) {
         height_res->add_heights(priqueue.top());

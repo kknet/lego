@@ -60,21 +60,13 @@ void ElectProto::CreateElectBlock(
     in->set_net_id(4);
     in->set_country(common::global_country_map["US"]);
 
-    bool valid = false;
     for (auto iter = readonly_dht->begin(); iter != readonly_dht->end(); ++iter) {
         auto in = ec_block->add_in();
         in->set_id((*iter)->id);
-        if ((*iter)->id == local_node->id) {
-            valid = true;
-        }
         in->set_pubkey((*iter)->pubkey_str);
         in->set_sign("sign");
         in->set_net_id(4);
         in->set_country(common::global_country_map["US"]);
-    }
-
-    if (!valid) {
-        return;
     }
 
     ec_block->set_acc_pubkey("acc_pubkey");

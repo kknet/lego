@@ -219,10 +219,11 @@ public:
 
     static void GetAccountHeight(
             const dht::NodePtr& local_node,
-            transport::protobuf::Header& msg) {
+            transport::protobuf::Header& msg,
+			const std::string& account_address) {
         msg.set_src_dht_key(local_node->dht_key);
-        std::string account_address = network::GetAccountAddressByPublicKey(
-            security::Schnorr::Instance()->str_pubkey());
+//         std::string account_address = network::GetAccountAddressByPublicKey(
+//             security::Schnorr::Instance()->str_pubkey());
         uint32_t des_net_id = network::GetConsensusShardNetworkId(account_address);
         dht::DhtKeyManager dht_key(
                 des_net_id,
@@ -248,11 +249,10 @@ public:
 
     static void GetBlockWithHeight(
             const dht::NodePtr& local_node,
-            uint64_t height,
+			const std::string& account_address,
+			uint64_t height,
             transport::protobuf::Header& msg) {
-        msg.set_src_dht_key(local_node->dht_key);
-        std::string account_address = network::GetAccountAddressByPublicKey(
-            security::Schnorr::Instance()->str_pubkey());
+		msg.set_src_dht_key(local_node->dht_key);
         uint32_t des_net_id = network::GetConsensusShardNetworkId(account_address);
         dht::DhtKeyManager dht_key(
             des_net_id,

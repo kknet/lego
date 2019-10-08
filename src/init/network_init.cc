@@ -437,6 +437,7 @@ void NetworkInit::TestStartBft() {
 
 void NetworkInit::CreateNewElectBlock() {
     // for test
+	std::cout << "create ec block: " << common::GlobalInfo::Instance()->config_local_ip() << std::endl;
     if (common::GlobalInfo::Instance()->config_local_ip() != "192.168.0.218") {
         return;
     }
@@ -445,7 +446,8 @@ void NetworkInit::CreateNewElectBlock() {
     auto dht = network::DhtManager::Instance()->GetDht(network::GetConsensusShardNetworkId(""));
     if (!dht) {
         assert(false);
-        return;
+		std::cout << "create ec block failed:  " << common::GlobalInfo::Instance()->config_local_ip() << std::endl;
+		return;
     }
     elect::ElectProto::CreateElectBlock(dht->local_node(), msg);
     if (!msg.has_data()) {
@@ -460,6 +462,7 @@ void NetworkInit::CreateNewElectBlock() {
     test_new_elect_tick_.CutOff(
             kTestNewElectPeriod,
             std::bind(&NetworkInit::CreateNewElectBlock, this));
+	std::cout << "create ec block success:  " << common::GlobalInfo::Instance()->config_local_ip() << std::endl;
 }
 
 int NetworkInit::SetPriAndPubKey(const std::string&) {
