@@ -50,6 +50,8 @@ static common::Tick dump_bootstrap_tick_;
 static std::shared_ptr<ClientUniversalDht> root_dht_{ nullptr };
 static const std::string kCheckVersionAccount = common::Encode::HexDecode(
 		"e8a1ceb6b807a98a20e3aa10aa2199e47cbbed08c2540bd48aa3e1e72ba6bd99");
+static const std::string kClientVersion = "1.0.1";
+static const std::string kClientDownloadUrl = "ios___https://www.pgyer.com/1U2f,android___https://www.pgyer.com/62Dg,windows___,mac___";
 
 VpnClient::VpnClient() {
     network::Route::Instance()->RegisterMessage(
@@ -58,8 +60,8 @@ VpnClient::VpnClient() {
     network::Route::Instance()->RegisterMessage(
             common::kBlockMessage,
             std::bind(&VpnClient::HandleMessage, this, std::placeholders::_1));
-	vpn_last_version_ = "1.0.1";
-	vpn_download_url_ = "ios^https://www.pgyer.com/1U2f,android^https://www.pgyer.com/62Dg,windows^,mac^";
+	vpn_last_version_ = kClientVersion;
+	vpn_download_url_ = kClientDownloadUrl;
 }
 
 VpnClient::~VpnClient() {}
@@ -70,7 +72,11 @@ VpnClient* VpnClient::Instance() {
 }
 
 std::string VpnClient::CheckVersion() {
-	return vpn_last_version_ + "`" + vpn_download_url_;
+	if (vpn_last_version_ == kClientVersion) {
+		return "";
+	}
+
+	return vpn_last_version_ + "---" + vpn_download_url_;
 }
 
 void VpnClient::HandleMessage(transport::protobuf::Header& header) {
