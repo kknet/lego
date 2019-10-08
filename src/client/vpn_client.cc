@@ -912,6 +912,7 @@ void VpnClient::CheckTxExists() {
 
     GetAccountHeight();
     GetAccountBlockWithHeight();
+	GetVpnVersion();
     check_tx_tick_.CutOff(kCheckTxPeriod, std::bind(&VpnClient::CheckTxExists, this));
 }
 
