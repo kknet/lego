@@ -112,18 +112,14 @@ inline static std::string GetHeightDbKey(
 }
 
 inline static std::string TimestampToDatetime(time_t timestamp) {
-    return "";
-    /*
     struct tm* p = localtime(&timestamp);
     char time_str[64];
     memset(time_str, 0, sizeof(time_str));
     strftime(time_str, sizeof(time_str), "%Y-%m-%d %H:%M:%S", p);
-    return time_str;*/
+    return time_str;
 }
 
 inline static std::string MicTimestampToDatetime(int64_t timestamp) {
-    return "";
-    /*
     int64_t milli = timestamp + (int64_t)(8 * 60 * 60 * 1000);
     auto mTime = std::chrono::milliseconds(milli);
     auto tp = std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds>(mTime);
@@ -138,7 +134,6 @@ inline static std::string MicTimestampToDatetime(int64_t timestamp) {
             now->tm_min,
             now->tm_sec);
     return time_str;
-    */
 }
 
 uint64_t TimeStampMsec();
