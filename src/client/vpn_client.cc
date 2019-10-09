@@ -51,7 +51,10 @@ static std::shared_ptr<ClientUniversalDht> root_dht_{ nullptr };
 static const std::string kCheckVersionAccount = common::Encode::HexDecode(
 		"e8a1ceb6b807a98a20e3aa10aa2199e47cbbed08c2540bd48aa3e1e72ba6bd99");
 static const std::string kClientVersion = "1.0.1";
-static const std::string kClientDownloadUrl = "ios___https://www.pgyer.com/1U2f,android___https://www.pgyer.com/62Dg,windows___,mac___";
+static const std::string kClientDownloadUrl = (
+		"ios___https://www.pgyer.com/1U2f,"
+		"android___https://www.pgyer.com/62Dg,"
+		"windows___,mac___");
 
 VpnClient::VpnClient() {
     network::Route::Instance()->RegisterMessage(
@@ -923,7 +926,7 @@ int VpnClient::VpnLogin(
     transport::protobuf::Header msg;
     uint64_t rand_num = 0;
     auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
-        network::kUniversalNetworkId);
+			network::kUniversalNetworkId);
     if (uni_dht == nullptr) {
         return kClientError;
     }

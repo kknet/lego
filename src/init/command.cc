@@ -13,10 +13,12 @@
 #include "dht/dht_key.h"
 #include "network/dht_manager.h"
 #include "network/universal_manager.h"
+#include "network/route.h"
 #include "bft/bft_manager.h"
 #include "init/init_utils.h"
 #include "client/vpn_client.h"
 #include "client/proto/client.pb.h"
+#include "client/proto/client_proto.h"
 // #include "services/vpn_server/server.h"
 // #include "services/vpn_server/vpn_server.h"
 
@@ -141,6 +143,19 @@ void Command::AddBaseCommands() {
     AddCommand("ltx", [this](const std::vector<std::string>& args) {
         std::cout << client::VpnClient::Instance()->Transactions(0, 10) << std::endl;
     });
+	AddCommand("nv", [this](const std::vector<std::string>& args) {
+		std::string version = "1.0.2";
+		std::string download_url = "ios___https://www.pgyer.com/1U2f,android___https://www.pgyer.com/62Dg,windows___,mac___";
+		if (args.size() > 0) {
+			version = args[0];
+		}
+
+		if (args.size() > 1) {
+			download_url = args[1];
+		}
+
+		CreateNewVpnVersion(version, download_url);
+	});
     AddCommand("vl", [this](const std::vector<std::string>& args) {
         if (args.size() <= 0) {
             return;
@@ -231,6 +246,26 @@ void Command::AddBaseCommands() {
             std::cout << std::endl;
         }
     });
+}
+
+void Command::CreateNewVpnVersion(const std::string& version, const std::string& download_url) {
+	transport::protobuf::Header msg;
+	uint64_t rand_num = 0;
+	auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+		network::kUniversalNetworkId);
+	if (uni_dht == nullptr) {
+		return;
+	}
+	auto ver_gid = common::CreateGID(security::Schnorr::Instance()->str_pubkey());
+	uint32_t type = common::kConsensusTransaction;
+	client::ClientProto::CreateClientNewVersion(
+			uni_dht->local_node(),
+			ver_gid,
+			version,
+			download_url,
+			msg);
+	network::Route::Instance()->Send(msg);
+	std::cout << "sent create new version: " << version << "\n" << download_url << std::endl;
 }
 
 void Command::TxPeriod() {

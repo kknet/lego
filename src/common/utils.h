@@ -76,7 +76,8 @@ enum ConsensusType {
     kConsensusTransaction = 0,
     kConsensusCreateAcount = 1,
     kConsensusMining = 2,
-    kConsensusLogin = 3,
+	kConsensusLogin = 3,
+	kConsensusKeyValue = 4,
 };
 
 enum GetHeightBlockType {
