@@ -786,10 +786,6 @@ void BaseDht::Heartbeat() {
         }
 
         if (node->heartbeat_send_times >= kHeartbeatMaxSendTimes) {
-            DHT_ERROR("node[%s][%d] heartbeat failed after [%u] times, drop it!",
-                    node->public_ip.c_str(),
-                    node->public_port,
-                    (uint32_t)node->heartbeat_send_times);
             Drop(node);
             continue;
         }
