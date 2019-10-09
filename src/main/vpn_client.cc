@@ -28,8 +28,6 @@ int main(int argc, char** argv) {
     bool run_tx = false;
     conf.Get("lego", "run_tx", run_tx);
     lego::common::SignalRegister();
-    lego::client::VpnClient::Instance();
-    return 0;
     auto int_res = lego::client::VpnClient::Instance()->Init(
         local_ip,
         local_port,
@@ -41,7 +39,6 @@ int main(int argc, char** argv) {
         std::cout << "init client failed: " << int_res << std::endl;
         return 1;
     }
-    return 0;
     lego::init::Command cmd;
     if (!cmd.Init(false, show_cmd, run_tx)) {
         std::cout << "init cmd failed!" << std::endl;
