@@ -43,18 +43,14 @@ namespace client {
 
 static const uint32_t kDefaultBufferSize = 1024u * 1024u;
 static common::Config config;
-static common::Tick check_tx_tick_;
-static common::Tick vpn_nodes_tick_;
-static common::Tick dump_config_tick_;
-static common::Tick dump_bootstrap_tick_;
 static std::shared_ptr<ClientUniversalDht> root_dht_{ nullptr };
 static const std::string kCheckVersionAccount = common::Encode::HexDecode(
 		"e8a1ceb6b807a98a20e3aa10aa2199e47cbbed08c2540bd48aa3e1e72ba6bd99");
-static const std::string kClientVersion = "1.0.1";
 static const std::string kClientDownloadUrl = (
-		"ios___https://www.pgyer.com/1U2f,"
-		"android___https://www.pgyer.com/62Dg,"
-		"windows___,mac___");
+		"ios;1.0.3;https://www.pgyer.com/1U2f,"
+		"android;1.0.3;https://www.pgyer.com/62Dg,"
+		"windows;1.0.3;,"
+		"mac;1.0.3;");
 
 VpnClient::VpnClient() {
     network::Route::Instance()->RegisterMessage(
@@ -63,8 +59,12 @@ VpnClient::VpnClient() {
     network::Route::Instance()->RegisterMessage(
             common::kBlockMessage,
             std::bind(&VpnClient::HandleMessage, this, std::placeholders::_1));
-	vpn_last_version_ = kClientVersion;
 	vpn_download_url_ = kClientDownloadUrl;
+	check_tx_tick_ = std::make_shared<common::Tick>();
+	vpn_nodes_tick_ = std::make_shared<common::Tick>();
+	dump_config_tick_ = std::make_shared<common::Tick>();
+	dump_bootstrap_tick_ = std::make_shared<common::Tick>();
+
 }
 
 VpnClient::~VpnClient() {}
@@ -75,11 +75,7 @@ VpnClient* VpnClient::Instance() {
 }
 
 std::string VpnClient::CheckVersion() {
-	if (vpn_last_version_ == kClientVersion) {
-		return "";
-	}
-
-	return vpn_last_version_ + "---" + vpn_download_url_;
+	return vpn_download_url_;
 }
 
 void VpnClient::HandleMessage(transport::protobuf::Header& header) {
@@ -130,10 +126,6 @@ void VpnClient::HandleBlockResponse(const protobuf::GetTxBlockResponse& block_re
 				tx_list[i].to() == kCheckVersionAccount) {
 			if (block_ptr->height() >= vpn_version_last_height_) {
 				for (int attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
-					if (tx_list[i].attr(attr_idx).key() == "tenon_vpn_version") {
-						vpn_last_version_ = tx_list[i].attr(attr_idx).value();
-					}
-
 					if (tx_list[i].attr(attr_idx).key() == "tenon_vpn_url") {
 						vpn_download_url_ = tx_list[i].attr(attr_idx).value();
 					}
@@ -445,12 +437,12 @@ std::string VpnClient::Init(
         return "ERROR";
     }
     
-    check_tx_tick_.CutOff(1000 * 1000, std::bind(&VpnClient::CheckTxExists, this));
-    vpn_nodes_tick_.CutOff(1000 * 1000, std::bind(&VpnClient::GetVpnNodes, this));
-    dump_config_tick_.CutOff(
+    check_tx_tick_->CutOff(1000 * 1000, std::bind(&VpnClient::CheckTxExists, this));
+    vpn_nodes_tick_->CutOff(1000 * 1000, std::bind(&VpnClient::GetVpnNodes, this));
+    dump_config_tick_->CutOff(
             60ull * 1000ull * 1000ull,
             std::bind(&VpnClient::DumpNodeToConfig, this));
-    dump_bootstrap_tick_.CutOff(
+    dump_bootstrap_tick_->CutOff(
             60ull * 1000ull * 1000ull,
             std::bind(&VpnClient::DumpBootstrapNodes, this));
 
@@ -664,7 +656,7 @@ void VpnClient::GetVpnNodes() {
     }
 
     GetNetworkNodes(country_vec, network::kVpnRouteNetworkId);
-    vpn_nodes_tick_.CutOff(kGetVpnNodesPeriod, std::bind(&VpnClient::GetVpnNodes, this));
+    vpn_nodes_tick_->CutOff(kGetVpnNodesPeriod, std::bind(&VpnClient::GetVpnNodes, this));
 }
 
 void VpnClient::GetNetworkNodes(
@@ -916,7 +908,7 @@ void VpnClient::CheckTxExists() {
     GetAccountHeight();
     GetAccountBlockWithHeight();
 	GetVpnVersion();
-    check_tx_tick_.CutOff(kCheckTxPeriod, std::bind(&VpnClient::CheckTxExists, this));
+    check_tx_tick_->CutOff(kCheckTxPeriod, std::bind(&VpnClient::CheckTxExists, this));
 }
 
 int VpnClient::VpnLogin(
@@ -1050,7 +1042,7 @@ void VpnClient::DumpNodeToConfig() {
     DumpVpnNodes();
     DumpRouteNodes();
     config.DumpConfig(config_path_);
-    dump_config_tick_.CutOff(
+    dump_config_tick_->CutOff(
             60ull * 1000ull * 1000ull,
             std::bind(&VpnClient::DumpNodeToConfig, this));
 }
@@ -1278,7 +1270,7 @@ void VpnClient::DumpBootstrapNodes() {
         config.DumpConfig(config_path_);
     }
 
-    dump_bootstrap_tick_.CutOff(
+    dump_bootstrap_tick_->CutOff(
             60ull * 1000ull * 1000ull,
             std::bind(&VpnClient::DumpBootstrapNodes, this));
 }

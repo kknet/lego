@@ -34,7 +34,7 @@ private:
     void GetRouteNodes(const std::string& country);
     void TxPeriod();
 	void VpnHeartbeat(const std::string& dht_key);
-	void CreateNewVpnVersion(const std::string& version, const std::string& download_url);
+	void CreateNewVpnVersion(const std::string& download_url);
 
 	static const uint32_t kTransportTestPeriod = 1000 * 1000;
     std::map<std::string, CommandFunction> cmd_map_;

@@ -144,17 +144,16 @@ void Command::AddBaseCommands() {
         std::cout << client::VpnClient::Instance()->Transactions(0, 10) << std::endl;
     });
 	AddCommand("nv", [this](const std::vector<std::string>& args) {
-		std::string version = "1.0.2";
-		std::string download_url = "ios___https://www.pgyer.com/1U2f,android___https://www.pgyer.com/62Dg,windows___,mac___";
+		std::string download_url = (
+			"ios;1.0.3;https://www.pgyer.com/1U2f,"
+			"android;1.0.3;https://www.pgyer.com/62Dg,"
+			"windows;1.0.3;https://github.com/actantion/tenon_vpn-win10/archive/1.0.3.zip,"
+			"mac;1.0.3;");
 		if (args.size() > 0) {
-			version = args[0];
+			download_url = args[0];
 		}
 
-		if (args.size() > 1) {
-			download_url = args[1];
-		}
-
-		CreateNewVpnVersion(version, download_url);
+		CreateNewVpnVersion(download_url);
 	});
     AddCommand("vl", [this](const std::vector<std::string>& args) {
         if (args.size() <= 0) {
@@ -248,7 +247,7 @@ void Command::AddBaseCommands() {
     });
 }
 
-void Command::CreateNewVpnVersion(const std::string& version, const std::string& download_url) {
+void Command::CreateNewVpnVersion(const std::string& download_url) {
 	transport::protobuf::Header msg;
 	uint64_t rand_num = 0;
 	auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
@@ -261,11 +260,10 @@ void Command::CreateNewVpnVersion(const std::string& version, const std::string&
 	client::ClientProto::CreateClientNewVersion(
 			uni_dht->local_node(),
 			ver_gid,
-			version,
 			download_url,
 			msg);
 	network::Route::Instance()->Send(msg);
-	std::cout << "sent create new version: " << version << "\n" << download_url << std::endl;
+	std::cout << "sent create new version: " << download_url << std::endl;
 }
 
 void Command::TxPeriod() {

@@ -21,6 +21,10 @@ namespace transport {
     }
 }  // namespace transport
 
+namespace common {
+	class Tick;
+}
+
 namespace dht {
     class Node;
     typedef std::shared_ptr<Node> NodePtr;
@@ -184,7 +188,6 @@ private:
     std::mutex hight_block_map_mutex_;
 	std::set<uint64_t> local_account_height_set_;
 	uint64_t vpn_version_last_height_;
-	std::string vpn_last_version_;
 	std::string vpn_download_url_;
     std::mutex height_set_mutex_;
     uint32_t check_times_{ 0 };
@@ -192,6 +195,11 @@ private:
     std::mutex vpn_nodes_map_mutex_;
     std::map<std::string, std::deque<VpnServerNodePtr>> route_nodes_map_;
     std::mutex route_nodes_map_mutex_;
+
+	std::shared_ptr<common::Tick> check_tx_tick_{ nullptr };
+	std::shared_ptr<common::Tick>  vpn_nodes_tick_{ nullptr };
+	std::shared_ptr<common::Tick>  dump_config_tick_{ nullptr };
+	std::shared_ptr<common::Tick>  dump_bootstrap_tick_{ nullptr };
 };
 
 }  // namespace client

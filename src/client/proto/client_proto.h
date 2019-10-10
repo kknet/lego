@@ -183,7 +183,6 @@ public:
 	static void CreateClientNewVersion(
             const dht::NodePtr& local_node,
             const std::string& gid,
-			const std::string& version,
 			const std::string& downurl,
             transport::protobuf::Header& msg) {
         msg.set_src_dht_key(local_node->dht_key);
@@ -214,9 +213,6 @@ public:
         new_tx->set_from_acc_addr(account_address);
         new_tx->set_from_pubkey(security::Schnorr::Instance()->str_pubkey());
         new_tx->set_type(common::kConsensusKeyValue);
-        auto ver_attr = new_tx->add_attr();
-		ver_attr->set_key("tenon_vpn_version");
-		ver_attr->set_value(version);
 		auto down_attr = new_tx->add_attr();
 		down_attr->set_key("tenon_vpn_url");
 		down_attr->set_value(downurl);
