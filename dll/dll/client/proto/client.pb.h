@@ -2037,13 +2037,49 @@ class AccountHeightResponse : public ::google::protobuf::Message /* @@protoc_ins
   ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
       mutable_heights();
 
+  // optional bytes account_addr = 2;
+  bool has_account_addr() const;
+  void clear_account_addr();
+  static const int kAccountAddrFieldNumber = 2;
+  const ::std::string& account_addr() const;
+  void set_account_addr(const ::std::string& value);
+  #if LANG_CXX11
+  void set_account_addr(::std::string&& value);
+  #endif
+  void set_account_addr(const char* value);
+  void set_account_addr(const void* value, size_t size);
+  ::std::string* mutable_account_addr();
+  ::std::string* release_account_addr();
+  void set_allocated_account_addr(::std::string* account_addr);
+
+  // optional bytes type = 3;
+  bool has_type() const;
+  void clear_type();
+  static const int kTypeFieldNumber = 3;
+  const ::std::string& type() const;
+  void set_type(const ::std::string& value);
+  #if LANG_CXX11
+  void set_type(::std::string&& value);
+  #endif
+  void set_type(const char* value);
+  void set_type(const void* value, size_t size);
+  ::std::string* mutable_type();
+  ::std::string* release_type();
+  void set_allocated_type(::std::string* type);
+
   // @@protoc_insertion_point(class_scope:lego.client.protobuf.AccountHeightResponse)
  private:
+  void set_has_account_addr();
+  void clear_has_account_addr();
+  void set_has_type();
+  void clear_has_type();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   ::google::protobuf::RepeatedField< ::google::protobuf::uint64 > heights_;
+  ::google::protobuf::internal::ArenaStringPtr account_addr_;
+  ::google::protobuf::internal::ArenaStringPtr type_;
   friend struct ::protobuf_client_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
@@ -5637,6 +5673,138 @@ inline ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
 AccountHeightResponse::mutable_heights() {
   // @@protoc_insertion_point(field_mutable_list:lego.client.protobuf.AccountHeightResponse.heights)
   return &heights_;
+}
+
+// optional bytes account_addr = 2;
+inline bool AccountHeightResponse::has_account_addr() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void AccountHeightResponse::set_has_account_addr() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void AccountHeightResponse::clear_has_account_addr() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void AccountHeightResponse::clear_account_addr() {
+  account_addr_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_account_addr();
+}
+inline const ::std::string& AccountHeightResponse::account_addr() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.AccountHeightResponse.account_addr)
+  return account_addr_.GetNoArena();
+}
+inline void AccountHeightResponse::set_account_addr(const ::std::string& value) {
+  set_has_account_addr();
+  account_addr_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.AccountHeightResponse.account_addr)
+}
+#if LANG_CXX11
+inline void AccountHeightResponse::set_account_addr(::std::string&& value) {
+  set_has_account_addr();
+  account_addr_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.AccountHeightResponse.account_addr)
+}
+#endif
+inline void AccountHeightResponse::set_account_addr(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_account_addr();
+  account_addr_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.AccountHeightResponse.account_addr)
+}
+inline void AccountHeightResponse::set_account_addr(const void* value, size_t size) {
+  set_has_account_addr();
+  account_addr_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.AccountHeightResponse.account_addr)
+}
+inline ::std::string* AccountHeightResponse::mutable_account_addr() {
+  set_has_account_addr();
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.AccountHeightResponse.account_addr)
+  return account_addr_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* AccountHeightResponse::release_account_addr() {
+  // @@protoc_insertion_point(field_release:lego.client.protobuf.AccountHeightResponse.account_addr)
+  if (!has_account_addr()) {
+    return NULL;
+  }
+  clear_has_account_addr();
+  return account_addr_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void AccountHeightResponse::set_allocated_account_addr(::std::string* account_addr) {
+  if (account_addr != NULL) {
+    set_has_account_addr();
+  } else {
+    clear_has_account_addr();
+  }
+  account_addr_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), account_addr);
+  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.AccountHeightResponse.account_addr)
+}
+
+// optional bytes type = 3;
+inline bool AccountHeightResponse::has_type() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void AccountHeightResponse::set_has_type() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void AccountHeightResponse::clear_has_type() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void AccountHeightResponse::clear_type() {
+  type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_type();
+}
+inline const ::std::string& AccountHeightResponse::type() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.AccountHeightResponse.type)
+  return type_.GetNoArena();
+}
+inline void AccountHeightResponse::set_type(const ::std::string& value) {
+  set_has_type();
+  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.AccountHeightResponse.type)
+}
+#if LANG_CXX11
+inline void AccountHeightResponse::set_type(::std::string&& value) {
+  set_has_type();
+  type_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.AccountHeightResponse.type)
+}
+#endif
+inline void AccountHeightResponse::set_type(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_type();
+  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.AccountHeightResponse.type)
+}
+inline void AccountHeightResponse::set_type(const void* value, size_t size) {
+  set_has_type();
+  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.AccountHeightResponse.type)
+}
+inline ::std::string* AccountHeightResponse::mutable_type() {
+  set_has_type();
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.AccountHeightResponse.type)
+  return type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* AccountHeightResponse::release_type() {
+  // @@protoc_insertion_point(field_release:lego.client.protobuf.AccountHeightResponse.type)
+  if (!has_type()) {
+    return NULL;
+  }
+  clear_has_type();
+  return type_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void AccountHeightResponse::set_allocated_type(::std::string* type) {
+  if (type != NULL) {
+    set_has_type();
+  } else {
+    clear_has_type();
+  }
+  type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), type);
+  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.AccountHeightResponse.type)
 }
 
 // -------------------------------------------------------------------
