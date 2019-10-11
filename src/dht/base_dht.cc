@@ -681,7 +681,6 @@ bool BaseDht::NodeJoined(NodePtr& node) {
 
 int BaseDht::CheckJoin(NodePtr& node) {
     if (node->client_mode) {
-        DHT_ERROR("node is client mode error!");
         return kDhtError;
     }
 

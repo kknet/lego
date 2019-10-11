@@ -1035,8 +1035,7 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
             // no data
             // continue to wait for recv
             return;
-        }
-        else {
+        } else {
             ERROR("remote recv");
             CloseAndFreeRemote(EV_A_ remote);
             CloseAndFreeServer(EV_A_ server);
