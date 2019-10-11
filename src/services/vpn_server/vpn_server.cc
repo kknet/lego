@@ -1058,7 +1058,8 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
     auto& user_account = server->client_ptr->account;
     auto iter = server->svr_item->account_bindwidth_map.find(user_account);
     if (iter == server->svr_item->account_bindwidth_map.end()) {
-        return;
+		std::cout << "account not found." << std::endl;
+//         return;
     } else {
         iter->second->down_bandwidth += r;
         if (iter->second->begin_time < now_point) {
