@@ -1427,8 +1427,6 @@ static void AcceptCallback(EV_P_ ev_io *w, int revents) {
 #endif
     SetNonblocking(serverfd);
 
-	std::cout << "new client connection coming." << std::endl;
-
     server_t *server = NewServer(serverfd, listener);
     ev_io_start(EV_A_ & server->recv_ctx->io);
     ev_timer_start(EV_A_ & server->recv_ctx->watcher);
