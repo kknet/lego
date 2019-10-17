@@ -425,9 +425,9 @@ void NetworkInit::CreateNewTx() {
 }
 
 void NetworkInit::TestStartBft() {
-    if (!common::GlobalInfo::Instance()->config_first_node()) {
-        return;
-    }
+	if (common::GlobalInfo::Instance()->config_local_ip() != "192.168.0.218") {
+		return;
+	}
 
     if (ec_block_ok_) {
         bft::BftManager::Instance()->StartBft(bft::kTransactionPbftAddress, "", 4, 0);
