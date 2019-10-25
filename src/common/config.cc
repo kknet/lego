@@ -365,6 +365,28 @@ bool Config::Init(const std::string& conf) {
         return false;
     }
 
+
+    fseek(fd, 0, SEEK_END);
+    auto file_size = ftell(fd);
+    if (file_size > 1024 * 1024) {
+        ERROR("read config file[%s] failed!", conf.c_str());
+        return false;
+    }
+
+    rewind(fd);
+
+    char* buffer = new char[file_size];
+    auto result = fread(buffer, 1, file_size, fd);
+    if (result != file_size) {
+        delete[]buffer;
+        fclose(fd);
+        ERROR("read config file[%s] failed!", conf.c_str());
+        return false;
+    }
+    delete[]buffer;
+    fclose(fd);
+    return InitWithContent(std::string(buffer, file_size));
+
     std::string filed;
     char* read_buf = new char[kConfigMaxLen];
     bool res = true;
