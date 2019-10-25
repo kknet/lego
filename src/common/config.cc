@@ -314,6 +314,7 @@ bool Config::InitWithContent(const std::string& content) {
     std::string filed;
     for (uint32_t i = 0; i < spliter.Count(); ++i) {
         std::string line(spliter[i]);
+        printf("handle line [%s]\n", line.c_str());
         if (line.size() >= kConfigMaxLen) {
             ERROR("line size exceeded %d", kConfigMaxLen);
             printf("line size exceeded %d\n", kConfigMaxLen);
@@ -380,7 +381,7 @@ bool Config::Init(const std::string& conf) {
         return false;
     }
 
-    rewind(fd);
+    fseek(fd, 0, SEEK_SET);
 
     char* buffer = new char[file_size];
     auto result = fread(buffer, 1, file_size, fd);
@@ -392,10 +393,11 @@ bool Config::Init(const std::string& conf) {
                 conf.c_str(), result, file_size);
         return false;
     }
+
+    std::string content(buffer, file_size);
     delete[]buffer;
     fclose(fd);
-    bool res = InitWithContent(std::string(buffer, file_size));
-    std::cout << "read config content success. and parse: " << res << std::endl;
+    bool res = InitWithContent(content);
     return res;
 
     std::string filed;
