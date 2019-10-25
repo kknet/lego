@@ -316,6 +316,7 @@ bool Config::InitWithContent(const std::string& content) {
         std::string line(spliter[i]);
         if (line.size() >= kConfigMaxLen) {
             ERROR("line size exceeded %d", kConfigMaxLen);
+            printf("line size exceeded %d\n", kConfigMaxLen);
             res = false;
             break;
         }
@@ -327,6 +328,7 @@ bool Config::InitWithContent(const std::string& content) {
         if (line.find(']') != std::string::npos) {
             if (!HandleFiled(line, filed)) {
                 ERROR("handle field failed[%s][%d]", line.c_str(), line.find(']'));
+                printf("handle field failed[%s][%d]\n", line.c_str(), line.find(']'));
                 res = false;
                 break;
             }
@@ -336,6 +338,7 @@ bool Config::InitWithContent(const std::string& content) {
         if (line.find('=') != std::string::npos) {
             if (!HandleKeyValue(filed, line)) {
                 ERROR("handle key value failed[%s]", line.c_str());
+                printf("handle key value failed[%s]\n", line.c_str());
                 res = false;
                 break;
             }
@@ -345,6 +348,7 @@ bool Config::InitWithContent(const std::string& content) {
         for (uint32_t j = 0; j < line.size(); ++j) {
             if (line[j] != ' ' && line[j] != ' ' && line[j] != '\n') {
                 ERROR("line illegal[%s]", line.c_str());
+                printf("line illegal[%s]\n", line.c_str());
                 res = false;
                 break;
             }
