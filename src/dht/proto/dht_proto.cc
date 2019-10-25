@@ -1,6 +1,7 @@
 #include "dht/proto/dht_proto.h"
 
 #include "security/schnorr.h"
+#include "ip/ip_with_country.h"
 #include "dht/dht_key.h"
 
 namespace lego {
@@ -72,6 +73,14 @@ void DhtProto::CreateBootstrapResponse(
     bootstrap_res->set_local_port(local_node->local_port);
     bootstrap_res->set_public_ip(header.from_ip());
     bootstrap_res->set_public_port(header.from_port());
+
+	auto node_country = ip::IpWithCountry::Instance()->GetCountryUintCode(header.from_ip());
+	if (node_country != ip::kInvalidCountryCode) {
+		bootstrap_res->set_country_code(node_country);
+	} else {
+		bootstrap_res->set_country_code(ip::kInvalidCountryCode);
+	}
+
     msg.set_data(res_dht_msg.SerializeAsString());
 #ifdef LEGO_TRACE_MESSAGE
     msg.set_debug(std::string("bootstrap res:") + 

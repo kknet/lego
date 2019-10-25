@@ -428,7 +428,12 @@ void BaseDht::ProcessBootstrapResponse(
     auto local_dht_key = DhtKeyManager(local_node_->dht_key);
     if (node_country != ip::kInvalidCountryCode) {
         local_dht_key.SetCountryId(node_country);
-    }
+    } else {
+		auto server_country_code = dht_msg.bootstrap_res().country_code();
+		if (server_country_code != ip::kInvalidCountryCode) {
+			local_dht_key.SetCountryId(node_country);
+		}
+	}
 
     local_node_->dht_key = local_dht_key.StrKey();
     local_node_->dht_key_hash = common::Hash::Hash64(local_node_->dht_key);

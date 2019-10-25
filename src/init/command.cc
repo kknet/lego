@@ -19,6 +19,7 @@
 #include "client/vpn_client.h"
 #include "client/proto/client.pb.h"
 #include "client/proto/client_proto.h"
+#include "ip/ip_with_country.h"
 // #include "services/vpn_server/server.h"
 // #include "services/vpn_server/vpn_server.h"
 
@@ -140,6 +141,23 @@ void Command::AddBaseCommands() {
             VpnHeartbeat(args[0]);
         }
     });
+	AddCommand("ip", [this](const std::vector<std::string>& args) {
+		if (args.size() > 0) {
+			static bool inited = false;
+			if (!inited) {
+				if (ip::IpWithCountry::Instance()->Init(
+						"./conf/geolite.conf",
+						"./conf/geo_country.conf") != ip::kIpSuccess) {
+					std::cout << "init ip failed!" << std::endl;
+					return;
+				}
+				inited = true;
+				std::cout << ip::IpWithCountry::Instance()->GetCountryCode(args[0]) << std::endl;
+			} else {
+				std::cout << ip::IpWithCountry::Instance()->GetCountryCode(args[0]) << std::endl;
+			}
+		}
+	});
     AddCommand("ltx", [this](const std::vector<std::string>& args) {
         std::cout << client::VpnClient::Instance()->Transactions(0, 10) << std::endl;
     });
