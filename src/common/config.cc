@@ -466,6 +466,7 @@ bool Config::HandleKeyValue(const std::string& filed, const std::string& key_val
         if (key_value[i] == '=' || key_value[i] == '+' || key_value[i] == '-' ||
                 key_value[i] == '*' || key_value[i] == '/') {
             ERROR("invalid char[%c]", key_value[i]);
+            printf("invalid char[%c]\n", key_value[i]);
             return false;
         }
 
@@ -477,6 +478,7 @@ bool Config::HandleKeyValue(const std::string& filed, const std::string& key_val
             for (size_t j = i; j < eq_pos; ++j) {
                 if (key_value[j] != ' ' && key_value[j] != '\t' && key_value[j] != '\n') {
                     ERROR("invalid char[ ][\\t][\\n]");
+                    printf("invalid char[ ][\\t][\\n]\n");
                     return false;
                 }
             }
@@ -491,6 +493,7 @@ bool Config::HandleKeyValue(const std::string& filed, const std::string& key_val
     }
     if (key_start_pos == -1 || static_cast<int>(eq_pos) <= key_start_pos) {
         ERROR("invalid key_start_pos[%d]", key_start_pos);
+        printf("invalid key_start_pos[%d]\n", key_start_pos);
         return false;
     }
     if (key.empty()) {
@@ -498,6 +501,7 @@ bool Config::HandleKeyValue(const std::string& filed, const std::string& key_val
     }
     if (key.empty()) {
         ERROR("invalid key_start_pos[%d]", key_start_pos);
+        printf("invalid key_start_pos[%d]\n", key_start_pos);
         return false;
     }
 
@@ -513,6 +517,7 @@ bool Config::HandleKeyValue(const std::string& filed, const std::string& key_val
 
         if (key_value[i] == '=') {
             ERROR("invalid char[%c]", key_value[i]);
+            printf("invalid char[%c]\n", key_value[i]);
             return false;
         }
 
@@ -532,6 +537,7 @@ bool Config::HandleKeyValue(const std::string& filed, const std::string& key_val
 
                 if (key_value[j] != ' ' && key_value[j] != '\t' && key_value[j] != '\n') {
                     ERROR("invalid char[ ][\\t][\\n]");
+                    printf("invalid char[ ][\\t][\\n]\n");
                     return false;
                 }
             }
@@ -546,6 +552,7 @@ bool Config::HandleKeyValue(const std::string& filed, const std::string& key_val
     }
     if (value_start_pos == -1 || static_cast<int>(key_value.size()) <= value_start_pos) {
         ERROR("invalid value_start_pos[%d]", value_start_pos);
+        printf("invalid value_start_pos[%d]\n", value_start_pos);
         return false;
     }
     if (value.empty()) {
