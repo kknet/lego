@@ -9,7 +9,7 @@
 #include "common/encode.h"
 #include "security/aes.h"
 
-#define ENCODE_CONFIG_CONTENT
+//#define ENCODE_CONFIG_CONTENT
 
 namespace lego {
 
