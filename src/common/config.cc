@@ -281,31 +281,30 @@ bool Config::DumpConfig(const std::string& conf) {
     }
 
     bool res = true;
+    std::string content("");
     for (auto iter = config_map_.begin(); iter != config_map_.end(); ++iter) {
         std::string filed = std::string("[") + iter->first + "]\n";
-        size_t ws = fwrite(filed.c_str(), 1, filed.size(), fd);
-        if (ws != filed.size()) {
-            ERROR("write file failed!");
-            res = false;
-            break;
-        }
+        content += filed;
 
         for (auto key_iter = iter->second.begin(); key_iter != iter->second.end(); ++key_iter) {
             std::string kv = key_iter->first + "=" + key_iter->second + "\n";
-            size_t tm_ws = fwrite(kv.c_str(), 1, kv.size(), fd);
-            if (tm_ws != kv.size()) {
-                ERROR("write file failed!");
-                res = false;
-                break;
-            }
+            content += kv;
         }
 
         if (!res) {
             break;
         }
     }
+
+    size_t tm_ws = fwrite(content.c_str(), 1, content.size(), fd);
+    if (tm_ws != content.size()) {
+        ERROR("write file failed!");
+        fclose(fd);
+        return false;
+    }
+
     fclose(fd);
-    return res;
+    return true;
 }
 
 bool Config::InitWithContent(const std::string& content) {
