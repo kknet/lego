@@ -11,6 +11,21 @@
 #include "client/client_utils.h"
 
 int main(int argc, char** argv) {
+#define ENCODE_CONFIG_CONTENT
+#ifdef ENCODE_CONFIG_CONTENT
+    lego::common::SignalRegister();
+    auto int_res = lego::client::VpnClient::Instance()->Init(
+            "0.0.0.0",
+            7991,
+            "id:134.209.184.49:7896",
+            "./conf/lego.conf",
+            "./log/lego.log",
+            "./conf/log4cpp.properties");
+    if (int_res == "ERROR") {
+        std::cout << "init client failed: " << int_res << std::endl;
+        return 1;
+    }
+#else
     lego::common::Config conf;
     std::cout << "init config now." << std::endl;
     if (!conf.Init("./conf/lego.conf")) {
@@ -29,18 +44,19 @@ int main(int argc, char** argv) {
     conf.Get("lego", "run_tx", run_tx);
     lego::common::SignalRegister();
     auto int_res = lego::client::VpnClient::Instance()->Init(
-        local_ip,
-        local_port,
-        bootstrap,
-        "./conf/lego.conf",
-        "./log/lego.log",
-        "./conf/log4cpp.properties");
+            local_ip,
+            local_port,
+            bootstrap,
+            "./conf/lego.conf",
+            "./log/lego.log",
+            "./conf/log4cpp.properties");
     if (int_res == "ERROR") {
         std::cout << "init client failed: " << int_res << std::endl;
         return 1;
     }
+#endif
     lego::init::Command cmd;
-    if (!cmd.Init(false, show_cmd, run_tx)) {
+    if (!cmd.Init(false, true, false)) {
         std::cout << "init cmd failed!" << std::endl;
         return 1;
     }
