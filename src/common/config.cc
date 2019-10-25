@@ -280,12 +280,6 @@ bool Config::Set(const std::string& field, const std::string& key, double value)
 
 #ifdef ENCODE_CONFIG_CONTENT
 bool Config::DumpConfig(const std::string& conf) {
-    FILE* fd = fopen(conf.c_str(), "w");
-    if (fd == NULL) {
-        ERROR("open config file[%s] failed!", conf.c_str());
-        return false;
-    }
-
     bool res = true;
     std::string content("");
     for (auto iter = config_map_.begin(); iter != config_map_.end(); ++iter) {
@@ -294,7 +288,6 @@ bool Config::DumpConfig(const std::string& conf) {
 
         for (auto key_iter = iter->second.begin(); key_iter != iter->second.end(); ++key_iter) {
             std::string kv = key_iter->first + "=" + key_iter->second + "\n";
-            printf("dump kv [%s]", kv.c_str());
             content += kv;
         }
 
@@ -309,15 +302,27 @@ bool Config::DumpConfig(const std::string& conf) {
     }
 
     char* out = new char[content.size()];
-    int res = security::Aes::Encrypt(
+    int enc_res = security::Aes::Encrypt(
             (char*)content.c_str(),
             content.size(),
             (char*)kConfigEncKey.c_str(),
             kConfigEncKey.size(),
             out);
+    if (enc_res != security::kSecuritySuccess) {
+        printf("encrypt config content error.");
+        delete []out;
+        return false;
+    }
     std::string tmp_content(out, content.size());
     delete []out;
     std::string dec_code_con = common::Encode::HexEncode(tmp_content);
+
+    FILE* fd = fopen(conf.c_str(), "w");
+    if (fd == NULL) {
+        ERROR("open config file[%s] failed!", conf.c_str());
+        return false;
+    }
+
     size_t tm_ws = fwrite(dec_code_con.c_str(), 1, dec_code_con.size(), fd);
     if (tm_ws != dec_code_con.size()) {
         ERROR("write file failed!");
@@ -393,7 +398,6 @@ bool Config::InitWithContent(const std::string& content) {
         }
 
         if (line.find('=') != std::string::npos) {
-            printf("handle line[%s]\n", line.c_str());
             if (!HandleKeyValue(filed, line)) {
                 ERROR("handle key value failed[%s]", line.c_str());
                 printf("handle key value failed[%s]\n", line.c_str());
@@ -453,7 +457,7 @@ bool Config::Init(const std::string& conf) {
     std::string content(buffer, file_size);
     std::string dec_code_con = common::Encode::HexDecode(content);
     char* out = new char[dec_code_con.size()];
-    int res = security::Aes::Decrypt(
+    int dec_res = security::Aes::Decrypt(
             (char*)dec_code_con.c_str(),
             dec_code_con.size(),
             (char*)kConfigEncKey.c_str(),
@@ -463,7 +467,10 @@ bool Config::Init(const std::string& conf) {
     delete[]out;
     delete[]buffer;
     fclose(fd);
-    return InitWithContent(content);
+    if (dec_res != security::kSecuritySuccess) {
+        return false;
+    }
+    return InitWithContent(tmp_content);
 #endif
 
     bool res = false;
@@ -707,7 +714,6 @@ bool Config::AddKey(const std::string& field, const std::string& key, const std:
         return false;
     }
     auto ins_iter = iter->second.insert(std::make_pair(key, value));
-    printf("add key[%s] value[%s]\n", key.c_str(), value.c_str());
     return ins_iter.second;
 }
 
