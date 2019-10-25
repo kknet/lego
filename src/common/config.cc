@@ -362,6 +362,7 @@ bool Config::Init(const std::string& conf) {
     FILE* fd = fopen(conf.c_str(), "r");
     if (fd == NULL) {
         ERROR("open config file[%s] failed!", conf.c_str());
+        printf("open config file[%s] failed!\n", conf.c_str());
         return false;
     }
 
@@ -370,6 +371,8 @@ bool Config::Init(const std::string& conf) {
     auto file_size = ftell(fd);
     if (file_size > 1024 * 1024) {
         ERROR("read config file[%s] failed!", conf.c_str());
+        printf("read config file[%s] failed! size error.[%ld]\n",
+                conf.c_str(), file_size);
         return false;
     }
 
@@ -381,10 +384,13 @@ bool Config::Init(const std::string& conf) {
         delete[]buffer;
         fclose(fd);
         ERROR("read config file[%s] failed!", conf.c_str());
+        printf("read config file[%s] failed! size error.[%ld][%ld]\n",
+                conf.c_str(), result, file_size);
         return false;
     }
     delete[]buffer;
     fclose(fd);
+    std::cout << "read config content success." << std::endl;
     return InitWithContent(std::string(buffer, file_size));
 
     std::string filed;
