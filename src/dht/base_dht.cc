@@ -429,11 +429,13 @@ void BaseDht::ProcessBootstrapResponse(
     if (node_country != ip::kInvalidCountryCode) {
         local_dht_key.SetCountryId(node_country);
     } else {
-		auto server_country_code = dht_msg.bootstrap_res().country_code();
-		if (server_country_code != ip::kInvalidCountryCode) {
-			local_dht_key.SetCountryId(node_country);
-		}
-	}
+        auto server_country_code = dht_msg.bootstrap_res().country_code();
+        if (server_country_code != ip::kInvalidCountryCode) {
+            std::cout << "joined success and get counry from server: "
+                << server_country_code << ":" << common::global_code_to_country_map[node_country] << std::endl;
+            local_dht_key.SetCountryId(node_country);
+        }
+    }
 
     local_node_->dht_key = local_dht_key.StrKey();
     local_node_->dht_key_hash = common::Hash::Hash64(local_node_->dht_key);

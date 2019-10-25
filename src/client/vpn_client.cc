@@ -394,6 +394,7 @@ std::string VpnClient::Init(
     std::string boot_net;
     config.Get("lego", "bootstrap_net", boot_net);
     boot_net += "," + bootstrap;
+    std::cout << "bootstrap from : " << boot_net << std::endl;
     if (common::GlobalInfo::Instance()->Init(config) != common::kCommonSuccess) {
         CLIENT_ERROR("init global info failed!");
         return "ERROR";
