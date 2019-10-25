@@ -254,12 +254,14 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::dht::protobuf::BootstrapResponse, local_port_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::dht::protobuf::BootstrapResponse, public_ip_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::dht::protobuf::BootstrapResponse, public_port_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::dht::protobuf::BootstrapResponse, country_code_),
   0,
   3,
   1,
   4,
   2,
   5,
+  6,
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::dht::protobuf::RefreshNeighborsRequest, _has_bits_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::dht::protobuf::RefreshNeighborsRequest, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -354,14 +356,14 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   { 0, 9, sizeof(::lego::dht::protobuf::BootstrapRequest)},
-  { 13, 24, sizeof(::lego::dht::protobuf::BootstrapResponse)},
-  { 30, 38, sizeof(::lego::dht::protobuf::RefreshNeighborsRequest)},
-  { 41, 53, sizeof(::lego::dht::protobuf::NodeInfo)},
-  { 60, 66, sizeof(::lego::dht::protobuf::RefreshNeighborsResponse)},
-  { 67, 73, sizeof(::lego::dht::protobuf::HeartbeatRequest)},
-  { 74, 80, sizeof(::lego::dht::protobuf::HeartbeatResponse)},
-  { 81, 94, sizeof(::lego::dht::protobuf::ConnectReqeust)},
-  { 102, 114, sizeof(::lego::dht::protobuf::DhtMessage)},
+  { 13, 25, sizeof(::lego::dht::protobuf::BootstrapResponse)},
+  { 32, 40, sizeof(::lego::dht::protobuf::RefreshNeighborsRequest)},
+  { 43, 55, sizeof(::lego::dht::protobuf::NodeInfo)},
+  { 62, 68, sizeof(::lego::dht::protobuf::RefreshNeighborsResponse)},
+  { 69, 75, sizeof(::lego::dht::protobuf::HeartbeatRequest)},
+  { 76, 82, sizeof(::lego::dht::protobuf::HeartbeatResponse)},
+  { 83, 96, sizeof(::lego::dht::protobuf::ConnectReqeust)},
+  { 104, 116, sizeof(::lego::dht::protobuf::DhtMessage)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -400,38 +402,39 @@ void AddDescriptorsImpl() {
       "\n\tdht.proto\022\021lego.dht.protobuf\"[\n\020Bootst"
       "rapRequest\022\020\n\010local_ip\030\001 \001(\t\022\022\n\nlocal_po"
       "rt\030\002 \001(\005\022\020\n\010nat_type\030\003 \001(\005\022\017\n\007node_id\030\004 "
-      "\001(\014\"\204\001\n\021BootstrapResponse\022\017\n\007node_id\030\001 \001"
+      "\001(\014\"\232\001\n\021BootstrapResponse\022\017\n\007node_id\030\001 \001"
       "(\014\022\020\n\010nat_type\030\002 \001(\005\022\020\n\010local_ip\030\003 \001(\t\022\022"
       "\n\nlocal_port\030\004 \001(\005\022\021\n\tpublic_ip\030\005 \001(\t\022\023\n"
-      "\013public_port\030\006 \001(\005\"R\n\027RefreshNeighborsRe"
-      "quest\022\r\n\005count\030\001 \001(\r\022\023\n\013des_dht_key\030\002 \001("
-      "\014\022\023\n\013bloomfilter\030\003 \003(\004\"\207\001\n\010NodeInfo\022\021\n\tp"
-      "ublic_ip\030\001 \001(\014\022\023\n\013public_port\030\002 \001(\005\022\020\n\010l"
-      "ocal_ip\030\003 \001(\014\022\022\n\nlocal_port\030\004 \001(\005\022\n\n\002id\030"
-      "\005 \001(\014\022\020\n\010nat_type\030\006 \001(\005\022\017\n\007dht_key\030\007 \001(\014"
-      "\"F\n\030RefreshNeighborsResponse\022*\n\005nodes\030\001 "
-      "\003(\0132\033.lego.dht.protobuf.NodeInfo\"(\n\020Hear"
-      "tbeatRequest\022\024\n\014dht_key_hash\030\001 \001(\004\")\n\021He"
-      "artbeatResponse\022\024\n\014dht_key_hash\030\001 \001(\004\"\235\001"
-      "\n\016ConnectReqeust\022\020\n\010local_ip\030\001 \001(\014\022\022\n\nlo"
-      "cal_port\030\002 \001(\005\022\021\n\tpublic_ip\030\003 \001(\014\022\023\n\013pub"
-      "lic_port\030\004 \001(\005\022\020\n\010nat_type\030\005 \001(\005\022\n\n\002id\030\006"
-      " \001(\014\022\017\n\007dht_key\030\007 \001(\014\022\016\n\006direct\030\010 \001(\010\"\315\003"
-      "\n\nDhtMessage\022:\n\rbootstrap_req\030\001 \001(\0132#.le"
-      "go.dht.protobuf.BootstrapRequest\022;\n\rboot"
-      "strap_res\030\002 \001(\0132$.lego.dht.protobuf.Boot"
-      "strapResponse\022I\n\025refresh_neighbors_req\030\003"
-      " \001(\0132*.lego.dht.protobuf.RefreshNeighbor"
-      "sRequest\022J\n\025refresh_neighbors_res\030\004 \001(\0132"
-      "+.lego.dht.protobuf.RefreshNeighborsResp"
-      "onse\0226\n\013connect_req\030\005 \001(\0132!.lego.dht.pro"
-      "tobuf.ConnectReqeust\022:\n\rheartbeat_req\030\006 "
-      "\001(\0132#.lego.dht.protobuf.HeartbeatRequest"
-      "\022;\n\rheartbeat_res\030\007 \001(\0132$.lego.dht.proto"
-      "buf.HeartbeatResponse"
+      "\013public_port\030\006 \001(\005\022\024\n\014country_code\030\007 \001(\005"
+      "\"R\n\027RefreshNeighborsRequest\022\r\n\005count\030\001 \001"
+      "(\r\022\023\n\013des_dht_key\030\002 \001(\014\022\023\n\013bloomfilter\030\003"
+      " \003(\004\"\207\001\n\010NodeInfo\022\021\n\tpublic_ip\030\001 \001(\014\022\023\n\013"
+      "public_port\030\002 \001(\005\022\020\n\010local_ip\030\003 \001(\014\022\022\n\nl"
+      "ocal_port\030\004 \001(\005\022\n\n\002id\030\005 \001(\014\022\020\n\010nat_type\030"
+      "\006 \001(\005\022\017\n\007dht_key\030\007 \001(\014\"F\n\030RefreshNeighbo"
+      "rsResponse\022*\n\005nodes\030\001 \003(\0132\033.lego.dht.pro"
+      "tobuf.NodeInfo\"(\n\020HeartbeatRequest\022\024\n\014dh"
+      "t_key_hash\030\001 \001(\004\")\n\021HeartbeatResponse\022\024\n"
+      "\014dht_key_hash\030\001 \001(\004\"\235\001\n\016ConnectReqeust\022\020"
+      "\n\010local_ip\030\001 \001(\014\022\022\n\nlocal_port\030\002 \001(\005\022\021\n\t"
+      "public_ip\030\003 \001(\014\022\023\n\013public_port\030\004 \001(\005\022\020\n\010"
+      "nat_type\030\005 \001(\005\022\n\n\002id\030\006 \001(\014\022\017\n\007dht_key\030\007 "
+      "\001(\014\022\016\n\006direct\030\010 \001(\010\"\315\003\n\nDhtMessage\022:\n\rbo"
+      "otstrap_req\030\001 \001(\0132#.lego.dht.protobuf.Bo"
+      "otstrapRequest\022;\n\rbootstrap_res\030\002 \001(\0132$."
+      "lego.dht.protobuf.BootstrapResponse\022I\n\025r"
+      "efresh_neighbors_req\030\003 \001(\0132*.lego.dht.pr"
+      "otobuf.RefreshNeighborsRequest\022J\n\025refres"
+      "h_neighbors_res\030\004 \001(\0132+.lego.dht.protobu"
+      "f.RefreshNeighborsResponse\0226\n\013connect_re"
+      "q\030\005 \001(\0132!.lego.dht.protobuf.ConnectReqeu"
+      "st\022:\n\rheartbeat_req\030\006 \001(\0132#.lego.dht.pro"
+      "tobuf.HeartbeatRequest\022;\n\rheartbeat_res\030"
+      "\007 \001(\0132$.lego.dht.protobuf.HeartbeatRespo"
+      "nse"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 1261);
+      descriptor, 1283);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "dht.proto", &protobuf_RegisterTypes);
 }
@@ -851,6 +854,7 @@ const int BootstrapResponse::kLocalIpFieldNumber;
 const int BootstrapResponse::kLocalPortFieldNumber;
 const int BootstrapResponse::kPublicIpFieldNumber;
 const int BootstrapResponse::kPublicPortFieldNumber;
+const int BootstrapResponse::kCountryCodeFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 BootstrapResponse::BootstrapResponse()
@@ -878,8 +882,8 @@ BootstrapResponse::BootstrapResponse(const BootstrapResponse& from)
     public_ip_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.public_ip_);
   }
   ::memcpy(&nat_type_, &from.nat_type_,
-    static_cast<size_t>(reinterpret_cast<char*>(&public_port_) -
-    reinterpret_cast<char*>(&nat_type_)) + sizeof(public_port_));
+    static_cast<size_t>(reinterpret_cast<char*>(&country_code_) -
+    reinterpret_cast<char*>(&nat_type_)) + sizeof(country_code_));
   // @@protoc_insertion_point(copy_constructor:lego.dht.protobuf.BootstrapResponse)
 }
 
@@ -888,8 +892,8 @@ void BootstrapResponse::SharedCtor() {
   local_ip_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   public_ip_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&nat_type_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&public_port_) -
-      reinterpret_cast<char*>(&nat_type_)) + sizeof(public_port_));
+      reinterpret_cast<char*>(&country_code_) -
+      reinterpret_cast<char*>(&nat_type_)) + sizeof(country_code_));
 }
 
 BootstrapResponse::~BootstrapResponse() {
@@ -935,10 +939,10 @@ void BootstrapResponse::Clear() {
       public_ip_.ClearNonDefaultToEmptyNoArena();
     }
   }
-  if (cached_has_bits & 56u) {
+  if (cached_has_bits & 120u) {
     ::memset(&nat_type_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&public_port_) -
-        reinterpret_cast<char*>(&nat_type_)) + sizeof(public_port_));
+        reinterpret_cast<char*>(&country_code_) -
+        reinterpret_cast<char*>(&nat_type_)) + sizeof(country_code_));
   }
   _has_bits_.Clear();
   _internal_metadata_.Clear();
@@ -1040,6 +1044,20 @@ bool BootstrapResponse::MergePartialFromCodedStream(
         break;
       }
 
+      // optional int32 country_code = 7;
+      case 7: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(56u /* 56 & 0xFF */)) {
+          set_has_country_code();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &country_code_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -1108,6 +1126,11 @@ void BootstrapResponse::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(6, this->public_port(), output);
   }
 
+  // optional int32 country_code = 7;
+  if (cached_has_bits & 0x00000040u) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(7, this->country_code(), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -1167,6 +1190,11 @@ void BootstrapResponse::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(6, this->public_port(), target);
   }
 
+  // optional int32 country_code = 7;
+  if (cached_has_bits & 0x00000040u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(7, this->country_code(), target);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
@@ -1184,7 +1212,7 @@ size_t BootstrapResponse::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         _internal_metadata_.unknown_fields());
   }
-  if (_has_bits_[0 / 32] & 63u) {
+  if (_has_bits_[0 / 32] & 127u) {
     // optional bytes node_id = 1;
     if (has_node_id()) {
       total_size += 1 +
@@ -1227,6 +1255,13 @@ size_t BootstrapResponse::ByteSizeLong() const {
           this->public_port());
     }
 
+    // optional int32 country_code = 7;
+    if (has_country_code()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->country_code());
+    }
+
   }
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   SetCachedSize(cached_size);
@@ -1256,7 +1291,7 @@ void BootstrapResponse::MergeFrom(const BootstrapResponse& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 63u) {
+  if (cached_has_bits & 127u) {
     if (cached_has_bits & 0x00000001u) {
       set_has_node_id();
       node_id_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.node_id_);
@@ -1277,6 +1312,9 @@ void BootstrapResponse::MergeFrom(const BootstrapResponse& from) {
     }
     if (cached_has_bits & 0x00000020u) {
       public_port_ = from.public_port_;
+    }
+    if (cached_has_bits & 0x00000040u) {
+      country_code_ = from.country_code_;
     }
     _has_bits_[0] |= cached_has_bits;
   }
@@ -1315,6 +1353,7 @@ void BootstrapResponse::InternalSwap(BootstrapResponse* other) {
   swap(nat_type_, other->nat_type_);
   swap(local_port_, other->local_port_);
   swap(public_port_, other->public_port_);
+  swap(country_code_, other->country_code_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   _internal_metadata_.Swap(&other->_internal_metadata_);
 }
