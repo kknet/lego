@@ -433,8 +433,15 @@ void BaseDht::ProcessBootstrapResponse(
         } else {
             auto server_country_code = dht_msg.bootstrap_res().country_code();
             if (server_country_code != ip::kInvalidCountryCode) {
+                DhtKey::Construct* cons_key = (DhtKey::Construct*)(local_node_->dht_key.c_str());
+
                 std::cout << "joined success and get counry from server: "
-                    << server_country_code << ":" << common::global_code_to_country_map[node_country] << std::endl;
+                    << server_country_code << ":" << common::global_code_to_country_map[node_country]
+                    << "country: " << cons_key->country
+                    << ", r1: " << cons_key->reserve1
+                    << ", r2: " << cons_key->reserve2
+                    << ", r3: " << cons_key->reserve3
+                    << std::endl;
                 local_dht_key.SetCountryId(node_country);
             }
         }
@@ -444,6 +451,8 @@ void BaseDht::ProcessBootstrapResponse(
     }
 
     local_node_->dht_key = local_dht_key.StrKey();
+
+
     local_node_->dht_key_hash = common::Hash::Hash64(local_node_->dht_key);
     join_res_con_.notify_all();
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("4 end", header);
