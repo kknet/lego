@@ -314,7 +314,6 @@ bool Config::InitWithContent(const std::string& content) {
     std::string filed;
     for (uint32_t i = 0; i < spliter.Count(); ++i) {
         std::string line(spliter[i]);
-        printf("handle line [%s]\n", line.c_str());
         if (line.size() >= kConfigMaxLen) {
             ERROR("line size exceeded %d", kConfigMaxLen);
             printf("line size exceeded %d\n", kConfigMaxLen);
