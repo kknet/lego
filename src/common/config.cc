@@ -473,7 +473,7 @@ bool Config::Init(const std::string& conf) {
     return InitWithContent(tmp_content);
 #endif
 
-    bool res = false;
+    bool res = true;
     std::string filed;
     char* read_buf = new char[kConfigMaxLen];
     while (true) {

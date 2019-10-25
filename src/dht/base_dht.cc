@@ -438,6 +438,7 @@ void BaseDht::ProcessBootstrapResponse(
                 local_dht_key.SetCountryId(node_country);
             }
         }
+        common::GlobalInfo::Instance()->set_country(node_country);
     } else {
         local_dht_key.SetCountryId(common::GlobalInfo::Instance()->country());
     }
