@@ -630,6 +630,7 @@ bool Config::AddField(const std::string& field) {
 bool Config::AddKey(const std::string& field, const std::string& key, const std::string& value) {
     auto iter = config_map_.find(field);
     if (iter == config_map_.end()) {
+        printf("add key error, field not exists.[%s]\n", field.c_str());
         return false;
     }
     auto ins_iter = iter->second.insert(std::make_pair(key, value));
