@@ -433,6 +433,7 @@ void BaseDht::ProcessBootstrapResponse(
         } else {
             auto server_country_code = dht_msg.bootstrap_res().country_code();
             if (server_country_code != ip::kInvalidCountryCode) {
+                node_country = server_country_code;
                 local_dht_key.SetCountryId(server_country_code);
 
                 DhtKey::Construct* cons_key = (DhtKey::Construct*)(local_dht_key.StrKey().c_str());
