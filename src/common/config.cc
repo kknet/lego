@@ -394,12 +394,12 @@ bool Config::Init(const std::string& conf) {
     }
     delete[]buffer;
     fclose(fd);
-    std::cout << "read config content success." << std::endl;
-    return InitWithContent(std::string(buffer, file_size));
+    bool res = InitWithContent(std::string(buffer, file_size));
+    std::cout << "read config content success. and parse: " << res << std::endl;
+    return res;
 
     std::string filed;
     char* read_buf = new char[kConfigMaxLen];
-    bool res = true;
     while (true) {
         char* read_res = fgets(read_buf, kConfigMaxLen, fd);
         if (read_res == NULL) {
