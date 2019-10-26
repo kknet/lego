@@ -63,6 +63,7 @@ extern "C" {
 #include "security/ecdh_create_key.h"
 #include "security/public_key.h"
 #include "network/network_utils.h"
+#include "limit/tocken_bucket.h"
 
 static const uint32_t kPeerTimeout = 30 * 1000 * 1000;  // 30s
 static const int64_t kTransactionTimeout = 600ll * 1000ll * 1000ll;  // 10 min
@@ -116,6 +117,7 @@ struct BandwidthInfo {
     std::chrono::steady_clock::time_point join_time;
     uint64_t vpn_login_height{ 0 };
     uint32_t invalid_times{ 0 };
+    limit::TockenBucket tocken_bucket_{ 262144u };
 };
 typedef std::shared_ptr<BandwidthInfo> BandwidthInfoPtr;
 

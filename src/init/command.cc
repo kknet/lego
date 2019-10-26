@@ -211,12 +211,6 @@ void Command::AddBaseCommands() {
             amount = common::StringUtil::ToUint64(args[1]);
         }
         lego::client::VpnClient::Instance()->Transaction(to, amount, tx_gid);
-        while (lego::client::VpnClient::Instance()->GetTransactionInfo(tx_gid).empty()) {
-            std::this_thread::sleep_for(std::chrono::microseconds(100000ull));
-        }
-        std::cout << "tx gid:" << tx_gid << " success transaction from: "
-                << common::Encode::HexEncode(common::GlobalInfo::Instance()->id())
-                << " to: " << args[0] << " , amount: " << amount << std::endl;
     });
     AddCommand("bg", [this](const std::vector<std::string>& args) {
         if (args.size() <= 0) {

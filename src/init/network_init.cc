@@ -425,7 +425,7 @@ void NetworkInit::CreateNewTx() {
 }
 
 void NetworkInit::TestStartBft() {
-	if (common::GlobalInfo::Instance()->config_local_ip() != "192.168.0.218") {
+	if (common::GlobalInfo::Instance()->config_local_ip() != "172.18.216.70") {
 		return;
 	}
 
@@ -438,7 +438,7 @@ void NetworkInit::TestStartBft() {
 void NetworkInit::CreateNewElectBlock() {
     // for test
 	std::cout << "create ec block: " << common::GlobalInfo::Instance()->config_local_ip() << std::endl;
-    if (common::GlobalInfo::Instance()->config_local_ip() != "192.168.0.218") {
+    if (common::GlobalInfo::Instance()->config_local_ip() != "172.18.216.70") {
         return;
     }
 

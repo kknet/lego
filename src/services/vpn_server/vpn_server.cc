@@ -654,6 +654,10 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
                 return;
             }
 
+            if (!iter->second->tocken_bucket_.UpCheckLimit(r)) {
+                return;
+            }
+
             iter->second->up_bandwidth += r;
             if (iter->second->begin_time < now_point) {
                 iter->second->begin_time = now_point;
@@ -1058,8 +1062,12 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
     auto iter = server->svr_item->account_bindwidth_map.find(user_account);
     if (iter == server->svr_item->account_bindwidth_map.end()) {
 		std::cout << "account not found." << std::endl;
-//         return;
+        return;
     } else {
+        if (!iter->second->tocken_bucket_.DownCheckLimit(r)) {
+            return;
+        }
+
         iter->second->down_bandwidth += r;
         if (iter->second->begin_time < now_point) {
             // transaction now with bandwidth
