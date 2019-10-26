@@ -25,7 +25,7 @@ bool TockenBucket::UpCheckLimit(uint32_t stream) {
         pre_down_timestamp_ = std::chrono::system_clock::now();
     }
 
-    if (up_tockens_ < stream) {
+    if (up_tockens_ < static_cast<int>(stream)) {
         return false;
     }
 
@@ -43,7 +43,7 @@ bool TockenBucket::DownCheckLimit(uint32_t stream) {
         pre_down_timestamp_ = std::chrono::system_clock::now();
     }
 
-    if (down_tockens_ < stream) {
+    if (down_tockens_ < static_cast<int>(stream)) {
         download_valid_ = false;
         return false;
     }
