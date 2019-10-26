@@ -16,7 +16,7 @@ bool TockenBucket::UpCheckLimit(uint32_t stream) {
         pre_up_timestamp_ = std::chrono::system_clock::now();
     }
 
-    auto period_ms = common::TimeUtils::PeriodMs(pre_down_timestamp_);
+    period_ms = common::TimeUtils::PeriodMs(pre_down_timestamp_);
     if (period_ms >= kIncreaseTockenPeriod) {
         down_tockens_ += static_cast<uint32_t>(period_ms * tockens_add_per_ms_);
         if (down_tockens_ > max_tockens_) {
