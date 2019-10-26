@@ -17,9 +17,6 @@ protected:
     LimitInterface() {}
     virtual ~LimitInterface() {}
 
-private:
-
-    DISALLOW_COPY_AND_ASSIGN(LimitInterface);
 };
 
 }  // namespace limit
