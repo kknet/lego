@@ -13,6 +13,7 @@ bool TockenBucket::UpCheckLimit(uint32_t stream) {
         if (up_tockens_ > max_tockens_) {
             up_tockens_ = max_tockens_;
         }
+        pre_timestamp_ = std::chrono::steady_clock::now() + std::chrono::microseconds(0);
     }
 
     if (down_tockens_ <= 0) {
