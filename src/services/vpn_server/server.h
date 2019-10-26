@@ -60,6 +60,7 @@ extern "C" {
 #include "common/random.h"
 #include "common/tick.h"
 #include "common/encode.h"
+#include "common/global_info.h"
 #include "security/ecdh_create_key.h"
 #include "security/public_key.h"
 #include "network/network_utils.h"
@@ -117,7 +118,8 @@ struct BandwidthInfo {
     std::chrono::steady_clock::time_point join_time;
     uint64_t vpn_login_height{ 0 };
     uint32_t invalid_times{ 0 };
-    limit::TockenBucket tocken_bucket_{ 262144u };
+    limit::TockenBucket tocken_bucket_{
+            common::GlobalInfo::Instance()->config_default_stream_limit() };
 };
 typedef std::shared_ptr<BandwidthInfo> BandwidthInfoPtr;
 
