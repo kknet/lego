@@ -118,7 +118,7 @@ struct BandwidthInfo {
     std::chrono::steady_clock::time_point join_time;
     uint64_t vpn_login_height{ 0 };
     uint32_t invalid_times{ 0 };
-    limit::TockenBucket tocken_bucket_{
+    lego::limit::TockenBucket tocken_bucket_{
             common::GlobalInfo::Instance()->config_default_stream_limit() };
 };
 typedef std::shared_ptr<BandwidthInfo> BandwidthInfoPtr;
