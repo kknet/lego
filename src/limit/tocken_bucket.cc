@@ -7,6 +7,7 @@ namespace lego {
 namespace limit {
 
 bool TockenBucket::UpCheckLimit(uint32_t stream) {
+    return true;
     auto period_ms = common::TimeUtils::PeriodMs(pre_up_timestamp_);
     if (period_ms >= kIncreaseTockenPeriod) {
         up_tockens_ += static_cast<int32_t>(period_ms * tockens_add_per_ms_);
@@ -34,6 +35,8 @@ bool TockenBucket::UpCheckLimit(uint32_t stream) {
 }
 
 bool TockenBucket::DownCheckLimit(uint32_t stream) {
+    return true;
+
     auto period_ms = common::TimeUtils::PeriodMs(pre_down_timestamp_);
     if (period_ms >= kIncreaseTockenPeriod) {
         down_tockens_ += static_cast<uint32_t>(period_ms * tockens_add_per_ms_);

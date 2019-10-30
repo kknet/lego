@@ -456,7 +456,6 @@ std::string VpnClient::Init(
 
 void VpnClient::InitRouteAndVpnServer() {    
 	config.Set("route", "country", std::string("AU,BR,CA,CN,DE,FR,GB,HK,ID,IN,JP,KR,NL,NZ,PT,SG,US"));
-	config.Set("route", "country", std::string("AU,BR,CA,DE,FR,GB,HK,ID,IN,JP,KR,NL,NZ,PT,SG,US"));
     config.Set("route", "US", std::string("0410000038000000b003e4aa1f9e0c023363b95b7ddaea8eda9231aaefcb44d2,45f82bb181f5df52f862a4145f6738c80431d149a9f159de1986a9ff911754a0,0255bef707a29dac0f8ab974f953f50f5c1edcc18f0c3f341f9e290940110679dc,98.126.31.159,51765;"));
     config.Set("route", "SG", std::string("0410000086000000beea322a62cf3685dc9424210506ace6cb330629e8fec5d0,88bf7ebf6c378dd4162d824a6f769683b3cca077a580d9b009cf04653c9cf5d6,02db5169ceb32fa90899c9aa2e5eed0f06aa262fa2f6a6b3603d04742cd84835d2,47.88.223.66,56459;"));
     config.Set("route", "IN", std::string("04100000740000009f1354ef6fc9624a72671b32d1ddacdafd28deb4a0d4777b,a2837130b3e1a652c8e75cedb80bca3a62115bf702bea7360e118d6dfb8e922c,033e70c258240dd45f8c7f2a8a027764863f7a50558bf88ba182161d8753abebe8,149.129.147.55,63068;"));
