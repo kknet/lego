@@ -115,7 +115,6 @@ char* vpn_login(
 void use_cmd() {
     lego::init::Command cmd;
     if (!cmd.Init(false, true, false)) {
-        std::cout << "init cmd failed!" << std::endl;
         return;
     }
     cmd.Run();
@@ -124,4 +123,14 @@ void use_cmd() {
 void create_account() {
 	std::string gid;
 	lego::client::VpnClient::Instance()->Transaction("", 0, gid);
+}
+
+char* check_version() {
+	std::string res = lego::client::VpnClient::Instance()->CheckVersion();
+	if (res.size() >= sizeof(res_data) - 1) {
+		return (char*)("ERROR");
+	}
+	memcpy(res_data, res.c_str(), res.size());
+	res_data[res.size()] = '\0';
+	return (char*)res_data;
 }

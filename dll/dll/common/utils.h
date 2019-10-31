@@ -53,31 +53,37 @@ namespace lego {
 namespace common {
 
 enum MessageType {
-    kDhtMessage = 0,
-    kNatMessage = 1,
-    kNetworkMessage = 2,
-    kSyncMessage = 3,
-    kBftMessage = 4,
-    kElectMessage = 5,
-    kServiceMessage = 6,
-    kBlockMessage = 7,
-    kRelayMessage = 8,  // any not handle message will routing by root
+	kDhtMessage = 0,
+	kNatMessage = 1,
+	kNetworkMessage = 2,
+	kSyncMessage = 3,
+	kBftMessage = 4,
+	kElectMessage = 5,
+	kServiceMessage = 6,
+	kBlockMessage = 7,
+	kRelayMessage = 8,  // any not handle message will routing by root
 
-    kUdpDemoTestMessage,
-    // max message type
-    kLegoMaxMessageTypeCount,
+	kUdpDemoTestMessage,
+	// max message type
+	kLegoMaxMessageTypeCount,
 };
 
 enum CommonErrorCode {
-    kCommonSuccess = 0,
-    kCommonError = 1,
+	kCommonSuccess = 0,
+	kCommonError = 1,
 };
 
 enum ConsensusType {
-    kConsensusTransaction = 0,
-    kConsensusCreateAcount = 1,
-    kConsensusMining = 2,
-    kConsensusLogin = 3,
+	kConsensusTransaction = 0,
+	kConsensusCreateAcount = 1,
+	kConsensusMining = 2,
+	kConsensusLogin = 3,
+	kConsensusKeyValue = 4,
+};
+
+enum GetHeightBlockType {
+	kHeightBlockTransactions = 0,
+	kHeightBlockVersion = 1,
 };
 
 static const uint32_t kImmutablePoolSize = 64u;

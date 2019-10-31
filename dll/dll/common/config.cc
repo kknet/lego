@@ -1,4 +1,5 @@
 #include "stdafx.h"
+
 #include "common/config.h"
 
 #include <iostream>
@@ -7,12 +8,17 @@
 #include "common/log.h"
 #include "common/string_utils.h"
 #include "common/split.h"
+#include "common/encode.h"
+#include "security/aes.h"
+
+//#define ENCODE_CONFIG_CONTENT
 
 namespace lego {
 
 namespace common {
 
 static const uint32_t kConfigMaxLen = 1024 * 1024;
+static const std::string kConfigEncKey = "dfger45eD4fe$^&Idfger45eD4fe$^&I";
 
 Config::Config() {}
 Config::~Config() {}
@@ -274,6 +280,62 @@ bool Config::Set(const std::string& field, const std::string& key, double value)
     return Set(field, key, val);
 }
 
+#ifdef ENCODE_CONFIG_CONTENT
+bool Config::DumpConfig(const std::string& conf) {
+    bool res = true;
+    std::string content("");
+    for (auto iter = config_map_.begin(); iter != config_map_.end(); ++iter) {
+        std::string filed = std::string("[") + iter->first + "]\n";
+        content += filed;
+
+        for (auto key_iter = iter->second.begin(); key_iter != iter->second.end(); ++key_iter) {
+            std::string kv = key_iter->first + "=" + key_iter->second + "\n";
+            content += kv;
+        }
+
+        if (!res) {
+            break;
+        }
+    }
+    
+    auto left_size = content.size() % 32;
+    if (left_size != 0) {
+        content += std::string('#', 32 - left_size);
+    }
+
+    char* out = new char[content.size()];
+    int enc_res = security::Aes::Encrypt(
+            (char*)content.c_str(),
+            content.size(),
+            (char*)kConfigEncKey.c_str(),
+            kConfigEncKey.size(),
+            out);
+    if (enc_res != security::kSecuritySuccess) {
+        printf("encrypt config content error.");
+        delete []out;
+        return false;
+    }
+    std::string tmp_content(out, content.size());
+    delete []out;
+    std::string dec_code_con = common::Encode::HexEncode(tmp_content);
+
+    FILE* fd = fopen(conf.c_str(), "w");
+    if (fd == NULL) {
+        ERROR("open config file[%s] failed!", conf.c_str());
+        return false;
+    }
+
+    size_t tm_ws = fwrite(dec_code_con.c_str(), 1, dec_code_con.size(), fd);
+    if (tm_ws != dec_code_con.size()) {
+        ERROR("write file failed!");
+        fclose(fd);
+        return false;
+    }
+
+    fclose(fd);
+    return true;
+}
+#else
 bool Config::DumpConfig(const std::string& conf) {
     FILE* fd = fopen(conf.c_str(), "w");
     if (fd == NULL) {
@@ -308,15 +370,17 @@ bool Config::DumpConfig(const std::string& conf) {
     fclose(fd);
     return res;
 }
+#endif
 
 bool Config::InitWithContent(const std::string& content) {
     common::Split spliter(content.c_str(), '\n', content.size());
     bool res = true;
     std::string filed;
     for (uint32_t i = 0; i < spliter.Count(); ++i) {
-        std::string line(spliter[i]);
+        std::string line(spliter[i], spliter.SubLen(i));
         if (line.size() >= kConfigMaxLen) {
             ERROR("line size exceeded %d", kConfigMaxLen);
+            printf("line size exceeded %d\n", kConfigMaxLen);
             res = false;
             break;
         }
@@ -328,6 +392,7 @@ bool Config::InitWithContent(const std::string& content) {
         if (line.find(']') != std::string::npos) {
             if (!HandleFiled(line, filed)) {
                 ERROR("handle field failed[%s][%d]", line.c_str(), line.find(']'));
+                printf("handle field failed[%s][%d]\n", line.c_str(), line.find(']'));
                 res = false;
                 break;
             }
@@ -337,6 +402,7 @@ bool Config::InitWithContent(const std::string& content) {
         if (line.find('=') != std::string::npos) {
             if (!HandleKeyValue(filed, line)) {
                 ERROR("handle key value failed[%s]", line.c_str());
+                printf("handle key value failed[%s]\n", line.c_str());
                 res = false;
                 break;
             }
@@ -346,6 +412,7 @@ bool Config::InitWithContent(const std::string& content) {
         for (uint32_t j = 0; j < line.size(); ++j) {
             if (line[j] != ' ' && line[j] != ' ' && line[j] != '\n') {
                 ERROR("line illegal[%s]", line.c_str());
+                printf("line illegal[%s]\n", line.c_str());
                 res = false;
                 break;
             }
@@ -363,12 +430,54 @@ bool Config::Init(const std::string& conf) {
     FILE* fd = fopen(conf.c_str(), "r");
     if (fd == NULL) {
         ERROR("open config file[%s] failed!", conf.c_str());
+        printf("open config file[%s] failed!\n", conf.c_str());
+        return false;
+    }
+#ifdef ENCODE_CONFIG_CONTENT
+    fseek(fd, 0, SEEK_END);
+    auto file_size = ftell(fd);
+    if (file_size > 1024 * 1024) {
+        ERROR("read config file[%s] failed!", conf.c_str());
+        printf("read config file[%s] failed! size error.[%ld]\n",
+                conf.c_str(), file_size);
         return false;
     }
 
+    fseek(fd, 0, SEEK_SET);
+
+    char* buffer = new char[file_size];
+    auto result = fread(buffer, 1, file_size, fd);
+    if (result != file_size) {
+        delete[]buffer;
+        fclose(fd);
+        ERROR("read config file[%s] failed!", conf.c_str());
+        printf("read config file[%s] failed! size error.[%ld][%ld]\n",
+                conf.c_str(), result, file_size);
+        return false;
+    }
+
+    std::string content(buffer, file_size);
+    std::string dec_code_con = common::Encode::HexDecode(content);
+    char* out = new char[dec_code_con.size()];
+    int dec_res = security::Aes::Decrypt(
+            (char*)dec_code_con.c_str(),
+            dec_code_con.size(),
+            (char*)kConfigEncKey.c_str(),
+            kConfigEncKey.size(),
+            out);
+    std::string tmp_content(out, dec_code_con.size());
+    delete[]out;
+    delete[]buffer;
+    fclose(fd);
+    if (dec_res != security::kSecuritySuccess) {
+        return false;
+    }
+    return InitWithContent(tmp_content);
+#endif
+
+    bool res = true;
     std::string filed;
     char* read_buf = new char[kConfigMaxLen];
-    bool res = true;
     while (true) {
         char* read_res = fgets(read_buf, kConfigMaxLen, fd);
         if (read_res == NULL) {
@@ -435,6 +544,7 @@ bool Config::HandleKeyValue(const std::string& filed, const std::string& key_val
         if (key_value[i] == '=' || key_value[i] == '+' || key_value[i] == '-' ||
                 key_value[i] == '*' || key_value[i] == '/') {
             ERROR("invalid char[%c]", key_value[i]);
+            printf("invalid char[%c]\n", key_value[i]);
             return false;
         }
 
@@ -446,6 +556,7 @@ bool Config::HandleKeyValue(const std::string& filed, const std::string& key_val
             for (size_t j = i; j < eq_pos; ++j) {
                 if (key_value[j] != ' ' && key_value[j] != '\t' && key_value[j] != '\n') {
                     ERROR("invalid char[ ][\\t][\\n]");
+                    printf("invalid char[ ][\\t][\\n]\n");
                     return false;
                 }
             }
@@ -460,6 +571,7 @@ bool Config::HandleKeyValue(const std::string& filed, const std::string& key_val
     }
     if (key_start_pos == -1 || static_cast<int>(eq_pos) <= key_start_pos) {
         ERROR("invalid key_start_pos[%d]", key_start_pos);
+        printf("invalid key_start_pos[%d]\n", key_start_pos);
         return false;
     }
     if (key.empty()) {
@@ -467,6 +579,7 @@ bool Config::HandleKeyValue(const std::string& filed, const std::string& key_val
     }
     if (key.empty()) {
         ERROR("invalid key_start_pos[%d]", key_start_pos);
+        printf("invalid key_start_pos[%d]\n", key_start_pos);
         return false;
     }
 
@@ -482,6 +595,7 @@ bool Config::HandleKeyValue(const std::string& filed, const std::string& key_val
 
         if (key_value[i] == '=') {
             ERROR("invalid char[%c]", key_value[i]);
+            printf("invalid char[%c]\n", key_value[i]);
             return false;
         }
 
@@ -501,6 +615,7 @@ bool Config::HandleKeyValue(const std::string& filed, const std::string& key_val
 
                 if (key_value[j] != ' ' && key_value[j] != '\t' && key_value[j] != '\n') {
                     ERROR("invalid char[ ][\\t][\\n]");
+                    printf("invalid char[ ][\\t][\\n]\n");
                     return false;
                 }
             }
@@ -515,10 +630,15 @@ bool Config::HandleKeyValue(const std::string& filed, const std::string& key_val
     }
     if (value_start_pos == -1 || static_cast<int>(key_value.size()) <= value_start_pos) {
         ERROR("invalid value_start_pos[%d]", value_start_pos);
+        printf("invalid value_start_pos[%d]\n", value_start_pos);
         return false;
     }
     if (value.empty()) {
+#ifdef ENCODE_CONFIG_CONTENT
+        value = std::string(key_value.begin() + value_start_pos, key_value.end());
+#else
         value = std::string(key_value.begin() + value_start_pos, key_value.end() - 1);
+#endif
     }
     StringUtil::Trim(value);
     return AddKey(filed, key, value);
@@ -592,6 +712,7 @@ bool Config::AddField(const std::string& field) {
 bool Config::AddKey(const std::string& field, const std::string& key, const std::string& value) {
     auto iter = config_map_.find(field);
     if (iter == config_map_.end()) {
+        printf("add key error, field not exists.[%s]\n", field.c_str());
         return false;
     }
     auto ins_iter = iter->second.insert(std::make_pair(key, value));

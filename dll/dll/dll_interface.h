@@ -25,3 +25,4 @@ __declspec(dllexport) char* vpn_login(
         const char* route_vec);
 __declspec(dllexport) void use_cmd();
 __declspec(dllexport) void create_account();
+__declspec(dllexport) char* check_version();

@@ -21,16 +21,16 @@ namespace transport {
     }
 }  // namespace transport
 
+namespace common {
+	class Tick;
+}
+
 namespace dht {
     class Node;
     typedef std::shared_ptr<Node> NodePtr;
     class BaseDht;
     typedef std::shared_ptr<BaseDht> BaseDhtPtr;
 }  // namespace dht
-
-namespace common {
-	class Tick;
-}
 
 namespace client {
 
@@ -164,6 +164,8 @@ private:
     void GetNetworkNodes(const std::vector<std::string>& country_vec, uint32_t network_id);
     void InitRouteAndVpnServer();
 	void GetVpnVersion();
+    int SetDefaultRouting();
+    std::string GetDefaultRouting();
 
     static const uint32_t kDefaultUdpSendBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kDefaultUdpRecvBufferSize = 10u * 1024u * 1024u;
@@ -200,7 +202,6 @@ private:
 	std::shared_ptr<common::Tick>  vpn_nodes_tick_{ nullptr };
 	std::shared_ptr<common::Tick>  dump_config_tick_{ nullptr };
 	std::shared_ptr<common::Tick>  dump_bootstrap_tick_{ nullptr };
-
 };
 
 }  // namespace client

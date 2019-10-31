@@ -187,6 +187,7 @@ void Command::AddBaseCommands() {
                 << common::Encode::HexEncode(common::GlobalInfo::Instance()->id())
                 << " to: " << args[0] << " , amount: " << amount << std::endl;
     });
+
     AddCommand("bg", [this](const std::vector<std::string>& args) {
         if (args.size() <= 0) {
             return;

@@ -10,3 +10,4 @@ get_public_key;
 vpn_login;
 use_cmd;
 create_account;
+check_version;

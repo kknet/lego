@@ -16,6 +16,7 @@ message BootstrapResponse {
 	optional int32 local_port = 4;
 	optional string public_ip = 5;
 	optional int32 public_port = 6;
+	optional int32 country_code = 7;
 }
 
 message RefreshNeighborsRequest {

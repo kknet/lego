@@ -444,11 +444,33 @@ void BaseDht::ProcessBootstrapResponse(
 
     local_node_->public_ip = dht_msg.bootstrap_res().public_ip();
     local_node_->public_port = dht_msg.bootstrap_res().public_port();
-    auto node_country = ip::IpWithCountry::Instance()->GetCountryUintCode(
-            local_node_->public_ip);
+    auto net_id = dht::DhtKeyManager::DhtKeyGetNetId(local_node_->dht_key);
     auto local_dht_key = DhtKeyManager(local_node_->dht_key);
-    if (node_country != ip::kInvalidCountryCode) {
-        local_dht_key.SetCountryId(node_country);
+    if (net_id == network::kUniversalNetworkId) {
+        auto node_country = ip::IpWithCountry::Instance()->GetCountryUintCode(
+                local_node_->public_ip);
+        if (node_country != ip::kInvalidCountryCode) {
+            local_dht_key.SetCountryId(node_country);
+        } else {
+            auto server_country_code = dht_msg.bootstrap_res().country_code();
+            if (server_country_code != ip::kInvalidCountryCode) {
+                node_country = server_country_code;
+                local_dht_key.SetCountryId(server_country_code);
+
+                DhtKey::Construct* cons_key = (DhtKey::Construct*)(local_dht_key.StrKey().c_str());
+
+                std::cout << "joined success and get counry from server: "
+                    << server_country_code << ":" << common::global_code_to_country_map[node_country]
+                    << "country: " << (uint32_t)cons_key->country
+                    << ", r1: " << (uint32_t)cons_key->reserve1
+                    << ", r2: " << (uint32_t)cons_key->reserve2
+                    << ", r3: " << (uint32_t)cons_key->reserve3
+                    << std::endl;
+            }
+        }
+        common::GlobalInfo::Instance()->set_country(node_country);
+    } else {
+        local_dht_key.SetCountryId(common::GlobalInfo::Instance()->country());
     }
 
     local_node_->dht_key = local_dht_key.StrKey();
