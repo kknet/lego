@@ -164,6 +164,8 @@ private:
     void GetNetworkNodes(const std::vector<std::string>& country_vec, uint32_t network_id);
     void InitRouteAndVpnServer();
 	void GetVpnVersion();
+    int SetDefaultRouting();
+    std::string GetDefaultRouting();
 
     static const uint32_t kDefaultUdpSendBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kDefaultUdpRecvBufferSize = 10u * 1024u * 1024u;
