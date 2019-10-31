@@ -423,9 +423,9 @@ std::string VpnClient::Init(
     std::string def_conf;
     config.Get("route", "def_routing", def_conf);
     if (def_conf.empty()) {
-        def_conf = "PH:CN;PK:CN;VN:CN;BD:CN;ID:CN;MY:SG";
+        SetDefaultRouting();
+        config.Get("route", "def_routing", def_conf);
     }
-
 
     if (security::EcdhCreateKey::Instance()->Init() != security::kSecuritySuccess) {
         CLIENT_ERROR("init ecdh create secret key failed!");
@@ -1305,7 +1305,7 @@ std::string VpnClient::GetRouting(const std::string& start, const std::string& e
 }
 
 int VpnClient::SetDefaultRouting() {
-    std::string def_conf = "PH:CN;PK:CN;VN:CN;BD:CN;ID:CN;MY:SG";
+    std::string def_conf = "PH:CN;PK:CN;VN:CN;BD:CN;ID:CN;MY:SG;CN:CN";
     if (!config.Set("route", "def_routing", def_conf)) {
         CLIENT_ERROR("set default config for [%s] failed", def_conf.c_str());
         return kClientError;
