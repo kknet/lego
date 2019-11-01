@@ -61,7 +61,7 @@ int DispatchPool::AddTx(const bft::protobuf::BftMessage& bft_msg) {
             tx_bft.new_tx().to_acc_addr(),
             tx_bft.new_tx().lego_count(),
             tx_bft.new_tx().type(),
-            tx_bft.smart_contract_addr());
+            tx_bft.new_tx().smart_contract_addr());
     for (int32_t attr_idx = 0; attr_idx < tx_bft.new_tx().attr_size(); ++attr_idx) {
         tx_ptr->add_attr(
                 tx_bft.new_tx().attr(attr_idx).key(),
