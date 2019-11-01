@@ -83,6 +83,7 @@ message NewTx {
 	optional uint64 lego_count = 6;
 	optional uint32 type = 7;
     repeated AccountAttributes attr = 8;
+    optional bytes smart_contract_addr = 9;
 }
 
 message ToAccountTx {
