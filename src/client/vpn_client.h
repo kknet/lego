@@ -131,6 +131,7 @@ public:
             std::string& login_gid);
     int VpnLogout();
 	std::string CheckVersion();
+    std::string PayForVPN(const std::string& to, uint64_t amount);
 
 private:
     VpnClient();

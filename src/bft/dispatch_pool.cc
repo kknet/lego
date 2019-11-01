@@ -49,7 +49,7 @@ int DispatchPool::AddTx(const bft::protobuf::BftMessage& bft_msg) {
         BFT_ERROR("protobuf::TxBft ParseFromString failed!");
         return kBftError;
     }
-    // check sign for gid
+    // (TODO): check sign for gid
     assert(tx_bft.has_new_tx());
     auto tx_ptr = std::make_shared<TxItem>(
             tx_bft.new_tx().gid(),

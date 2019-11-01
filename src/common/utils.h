@@ -72,14 +72,6 @@ enum CommonErrorCode {
     kCommonError = 1,
 };
 
-enum ConsensusType {
-    kConsensusTransaction = 0,
-    kConsensusCreateAcount = 1,
-    kConsensusMining = 2,
-	kConsensusLogin = 3,
-	kConsensusKeyValue = 4,
-};
-
 enum GetHeightBlockType {
 	kHeightBlockTransactions = 0,
 	kHeightBlockVersion = 1,
@@ -88,7 +80,6 @@ enum GetHeightBlockType {
 static const uint32_t kImmutablePoolSize = 64u;
 static const uint32_t kInvalidPoolIndex = kImmutablePoolSize + 1;
 static const uint32_t kTestForNetworkId = 4u;
-static const std::string kVpnLoginAttrKey = "vpn_login";
 extern volatile bool global_stop;
 static const uint16_t kDefaultVpnPort = 9033;
 static const uint16_t kDefaultRoutePort = 9034;

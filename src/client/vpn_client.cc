@@ -876,6 +876,37 @@ int VpnClient::CreateClientUniversalNetwork() {
     return kClientSuccess;
 }
 
+std::string VpnClient::PayForVPN(const std::string& to, uint64_t amount) {
+    if (to.empty() || amount <= 0) {
+        return "ERROR";
+    }
+
+    transport::protobuf::Header msg;
+    uint64_t rand_num = 0;
+    auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+            network::kUniversalNetworkId);
+    if (uni_dht == nullptr) {
+        return "ERROR";
+    }
+    auto tx_gid = common::CreateGID(security::Schnorr::Instance()->str_pubkey());
+    std::string to_addr = common::Encode::HexDecode(to);
+    std::map<std::string, std::string> attrs = {
+        { common::kUserPayForVpn, "" }
+    };
+
+    uint32_t type = common::kConsensusPayForCommonVpn;
+    ClientProto::CreateTransactionWithAttr(
+            uni_dht->local_node(),
+            tx_gid,
+            to_addr,
+            amount,
+            type,
+            attrs,
+            msg);
+    network::Route::Instance()->Send(msg);
+    return tx_gid;
+}
+
 std::string VpnClient::Transaction(const std::string& to, uint64_t amount, std::string& tx_gid) {
     transport::protobuf::Header msg;
     uint64_t rand_num = 0;

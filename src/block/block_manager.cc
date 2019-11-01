@@ -103,7 +103,7 @@ void BlockManager::HandleAttrGetRequest(
     uint64_t height = 0;
     {
         std::lock_guard<std::mutex> gurad(account_ptr->attrs_with_height_mutex);
-        auto iter = account_ptr->attrs_with_height.find(common::kVpnLoginAttrKey);
+        auto iter = account_ptr->attrs_with_height.find(block_msg.acc_attr_req().attr_key());
         if (iter != account_ptr->attrs_with_height.end()) {
             height = iter->second;
         }
@@ -152,7 +152,6 @@ void BlockManager::HandleAttrGetRequest(
         network::Route::Instance()->Send(msg);
     }
 }
-
 
 void BlockManager::HandleGetHeightRequest(
         transport::protobuf::Header& header,

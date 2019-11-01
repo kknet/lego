@@ -127,6 +127,7 @@ static const uint32_t kBftLeaderPrepareWaitPeriod = 3u * 1000u * 1000u;
 static const uint32_t kInvalidMemberIndex = std::numeric_limits<uint32_t>::max();
 
 static const std::string kTransactionPbftAddress("Transaction");
+static const std::string kVpnSubscriptionDeduction("vpn_subscription_deduction");
 
 inline static std::string StatusToString(uint32_t status) {
     switch (status) {
