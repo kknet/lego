@@ -23,6 +23,7 @@ message TxInfo {
 	optional uint32 netwok_id = 13;
     optional uint32 type = 14;
     repeated AccountAttributes attr = 15;
+    optional bytes smart_contract_addr = 16;
 }
 
 message TxBlock {

@@ -12,6 +12,7 @@
 #include "common/utils.h"
 #include "common/hash.h"
 #include "common/global_info.h"
+#include "common/user_property_key_define.h"
 #include "bft/bft_utils.h"
 #include "bft/bft_interface.h"
 #include "network/network_utils.h"
@@ -28,14 +29,16 @@ struct TxItem {
             const std::string& in_from_sign,
             const std::string& in_to_acc_addr,
             uint64_t in_lego_count,
-            uint32_t type)
+            uint32_t type,
+            const std::string& smart_con_addr)
             : gid(in_gid),
               from_acc_addr(in_from_acc_addr),
               from_pubkey(in_from_pubkey),
               from_sign(in_from_sign),
               to_acc_addr(in_to_acc_addr),
               lego_count(in_lego_count),
-              bft_type(type) {
+              bft_type(type),
+              smart_contract_addr(smart_con_addr) {
         delta_time = (std::chrono::steady_clock::now() +
                 std::chrono::microseconds(kBftStartDeltaTime));
         time_valid += common::TimeStampUsec() + kBftStartDeltaTime;
@@ -62,6 +65,7 @@ struct TxItem {
 	uint32_t create_acc_network_id{ 0 };
     std::map<std::string, std::string> attr_map;
     uint32_t bft_type{ common::kConsensusTransaction };
+    std::string smart_contract_addr;
 };
 
 typedef std::shared_ptr<TxItem> TxItemPtr;

@@ -35,7 +35,8 @@ int DispatchPool::Dispatch(const protobuf::TxInfo& tx_info) {
         tx_info.from_sign(),
         tx_info.to(),
         tx_info.amount(),
-        tx_info.type());
+        tx_info.type(),
+        tx_info.smart_contract_addr());
     tx_ptr->add_to_acc_addr = tx_info.to_add();
     for (int32_t attr_idx = 0; attr_idx < tx_info.attr_size(); ++attr_idx) {
         tx_ptr->add_attr(tx_info.attr(attr_idx).key(), tx_info.attr(attr_idx).value());
@@ -49,6 +50,7 @@ int DispatchPool::AddTx(const bft::protobuf::BftMessage& bft_msg) {
         BFT_ERROR("protobuf::TxBft ParseFromString failed!");
         return kBftError;
     }
+
     // (TODO): check sign for gid
     assert(tx_bft.has_new_tx());
     auto tx_ptr = std::make_shared<TxItem>(
@@ -58,7 +60,8 @@ int DispatchPool::AddTx(const bft::protobuf::BftMessage& bft_msg) {
             tx_bft.new_tx().from_sign(),
             tx_bft.new_tx().to_acc_addr(),
             tx_bft.new_tx().lego_count(),
-            tx_bft.new_tx().type());
+            tx_bft.new_tx().type(),
+            tx_bft.smart_contract_addr());
     for (int32_t attr_idx = 0; attr_idx < tx_bft.new_tx().attr_size(); ++attr_idx) {
         tx_ptr->add_attr(
                 tx_bft.new_tx().attr(attr_idx).key(),
