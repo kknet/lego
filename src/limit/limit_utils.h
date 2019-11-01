@@ -1,5 +1,6 @@
 #pragma once
 
+#include "common/utils.h"
 #include "common/log.h"
 
 #define LIMIT_DEBUG(fmt, ...) DEBUG("[limit]" fmt, ## __VA_ARGS__)
