@@ -11,7 +11,8 @@ enum ConsensusType {
     kConsensusCreateAcount = 1,
     kConsensusMining = 2,
     kConsensusLogin = 3,
-    kConsensusPayForCommonVpn = 4,
+    kConsensusKeyValue = 4,
+    kConsensusPayForCommonVpn = 5,
 };
 
 static const std::string kVpnLoginAttrKey = "vpn_login";
