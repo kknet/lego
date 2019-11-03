@@ -904,7 +904,7 @@ std::string VpnClient::PayForVPN(const std::string& to, uint64_t amount) {
             attrs,
             msg);
     network::Route::Instance()->Send(msg);
-    return tx_gid;
+    return common::Encode::HexEncode(tx_gid);
 }
 
 std::string VpnClient::Transaction(const std::string& to, uint64_t amount, std::string& tx_gid) {

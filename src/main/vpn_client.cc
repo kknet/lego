@@ -11,7 +11,7 @@
 #include "client/client_utils.h"
 
 int main(int argc, char** argv) {
-#define ENCODE_CONFIG_CONTENT
+//#define ENCODE_CONFIG_CONTENT
 #ifdef ENCODE_CONFIG_CONTENT
     lego::common::SignalRegister();
     auto int_res = lego::client::VpnClient::Instance()->Init(
