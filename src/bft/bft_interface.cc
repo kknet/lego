@@ -24,14 +24,14 @@ bool BftInterface::CheckLeaderPrepare(const bft::protobuf::BftMessage& bft_msg) 
             bft_msg.net_id(),
             bft_msg.node_id(),
             vss::VssManager::Instance()->EpochRandom())) {
-        auto member_ptr = mem_manager_->GetNetworkMembers(bft_msg.net_id());
-        auto mem_ptr = (*member_ptr)[0];
-        BFT_ERROR("is not leader: %s, %s",
-            common::Encode::HexEncode(bft_msg.node_id()).c_str(),
-            common::Encode::HexEncode(mem_ptr->id).c_str());
-        for (auto iter = member_ptr->begin(); iter != member_ptr->end(); ++iter) {
-            BFT_ERROR("%s", common::Encode::HexEncode((*iter)->id).c_str());
-        }
+//         auto member_ptr = mem_manager_->GetNetworkMembers(bft_msg.net_id());
+//         auto mem_ptr = (*member_ptr)[0];
+//         BFT_ERROR("is not leader: %s, %s",
+//             common::Encode::HexEncode(bft_msg.node_id()).c_str(),
+//             common::Encode::HexEncode(mem_ptr->id).c_str());
+//         for (auto iter = member_ptr->begin(); iter != member_ptr->end(); ++iter) {
+//             BFT_ERROR("%s", common::Encode::HexEncode((*iter)->id).c_str());
+//         }
 
         BFT_ERROR("prepare message not leader.[%u][%s][%u]",
                 bft_msg.net_id(),

@@ -212,6 +212,19 @@ void Command::AddBaseCommands() {
         }
         lego::client::VpnClient::Instance()->Transaction(to, amount, tx_gid);
     });
+    AddCommand("pv", [this](const std::vector<std::string>& args) {
+        std::string to;
+        if (args.size() > 0) {
+            to = args[0];
+        }
+
+        uint64_t amount = 0;
+        if (args.size() > 1) {
+            amount = common::StringUtil::ToUint64(args[1]);
+        }
+        auto tx_gid = lego::client::VpnClient::Instance()->PayForVPN(to, amount);
+        std::cout << "pay for vpn: " << tx_gid << std::endl;
+    });
     AddCommand("bg", [this](const std::vector<std::string>& args) {
         if (args.size() <= 0) {
             return;

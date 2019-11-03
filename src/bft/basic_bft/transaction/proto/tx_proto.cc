@@ -156,8 +156,6 @@ void TxProto::CreateTxBlock(
         }
         tx.set_to_add(tx_vec[i]->add_to_acc_addr);
 
-
-
         if (!tx_vec[i]->attr_map.empty()) {
             for (auto iter = tx_vec[i]->attr_map.begin();
                     iter != tx_vec[i]->attr_map.end(); ++iter) {
