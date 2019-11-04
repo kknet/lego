@@ -8,7 +8,7 @@
 #include <memory>
 
 #ifndef LONG_MIN
-#define LONG_MIN (td::numeric_limits<long>::min)()  // NOLINT
+#define LONG_MIN (std::numeric_limits<long>::min)()  // NOLINT
 #endif
 
 namespace lego {
