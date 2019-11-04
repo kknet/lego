@@ -397,7 +397,7 @@ int BftManager::BackupPrepare(
     auto& data = *(header.mutable_data());
     if (bft_ptr->Prepare(false, data) != kBftSuccess) {
         BFT_ERROR("bft backup prepare failed!");
-        std::string rand_num_str = std::to_string(rand() % std::numeric_limits<int>::max());
+        std::string rand_num_str = std::to_string(rand() % (std::numeric_limits<int>::max)());
         BftProto::BackupCreatePrepare(
                 header,
                 bft_msg,
@@ -518,7 +518,7 @@ int BftManager::BackupPrecommit(
     auto& data = *(header.mutable_data());
     if (bft_ptr->PreCommit(false, data) != kBftSuccess) {
         BFT_ERROR("bft backup pre-commit failed!");
-        std::string rand_num_str = std::to_string(rand() % std::numeric_limits<int>::max());
+        std::string rand_num_str = std::to_string(rand() % (std::numeric_limits<int>::max)());
         BftProto::BackupCreatePreCommit(
                 header,
                 bft_msg,

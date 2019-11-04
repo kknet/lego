@@ -37,7 +37,7 @@ TEST_F(TestStringUtils, ToFloat) {
         ASSERT_TRUE(true);
     }
 
-    std::string min_str = std::to_string(std::numeric_limits<long>::min());
+    std::string min_str = std::to_string((td::numeric_limits<long>::min)());
     min_str += min_str;
     try {
         ASSERT_FALSE(StringUtil::ToFloat(min_str));
@@ -56,7 +56,7 @@ TEST_F(TestStringUtils, ToDouble) {
         ASSERT_TRUE(true);
     }
 
-    std::string min_str = std::to_string(std::numeric_limits<long>::min());
+    std::string min_str = std::to_string((td::numeric_limits<long>::min)());
     min_str += min_str;
     try {
         ASSERT_FALSE(StringUtil::ToDouble(min_str.c_str()));

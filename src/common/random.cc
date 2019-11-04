@@ -34,8 +34,8 @@ static std::mt19937 kRandomNumberGenerator(RangeSeed());
 template <typename IntType>
 IntType RandomInt() {
     static std::uniform_int_distribution<IntType> distribution(
-            std::numeric_limits<IntType>::min(),
-            std::numeric_limits<IntType>::max());
+            (std::numeric_limits<IntType>::min)(),
+            (std::numeric_limits<IntType>::max)());
     std::lock_guard<std::mutex> lock(kRandomGeneratorMutex);
     return distribution(kRandomNumberGenerator);
 }

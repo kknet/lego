@@ -8,7 +8,7 @@
 #include <memory>
 
 #ifndef LONG_MIN
-#define LONG_MIN std::numeric_limits<long>::min()  // NOLINT
+#define LONG_MIN (td::numeric_limits<long>::min)()  // NOLINT
 #endif
 
 namespace lego {
@@ -153,11 +153,11 @@ static long double LongDouble(const char* s) {  // NOLINT
 template<typename T>
 T SignedCheckCastValue(const std::string& str) {
     auto val = LongLong(str.c_str());
-    if (val < std::numeric_limits<T>::min()) {
+    if (val < (std::numeric_limits<T>::min)()) {
         throw ConvertException("value bound error[type min]");
     }
 
-    if (val > std::numeric_limits<T>::max()) {
+    if (val > (std::numeric_limits<T>::max)()) {
         throw ConvertException("value bound error[type max]");
     }
     return static_cast<T>(val);
@@ -166,11 +166,11 @@ T SignedCheckCastValue(const std::string& str) {
 template<typename T>
 T SignedCheckCastValue(const char* str) {
     auto val = LongLong(str);
-    if (val < std::numeric_limits<T>::min()) {
+    if (val < (std::numeric_limits<T>::min)()) {
         throw ConvertException("value bound error[type min]");
     }
 
-    if (val > std::numeric_limits<T>::max()) {
+    if (val > (std::numeric_limits<T>::max)()) {
         throw ConvertException("value bound error[type max]");
     }
     return static_cast<T>(val);
@@ -223,7 +223,7 @@ T UnsignedCheckCastValue(const std::string& str) {
         throw ConvertException("value bound error[0L]");
     }
 
-    if (val > std::numeric_limits<T>::max()) {
+    if (val > (std::numeric_limits<T>::max)()) {
         throw ConvertException("value bound error[uint16_t max]");
     }
     return static_cast<T>(val);
@@ -236,7 +236,7 @@ T UnsignedCheckCastValue(const char* str) {
         throw ConvertException("value bound error[0L]");
     }
 
-    if (val > std::numeric_limits<T>::max()) {
+    if (val > (std::numeric_limits<T>::max)()) {
         throw ConvertException("value bound error[uint16_t max]");
     }
     return static_cast<T>(val);

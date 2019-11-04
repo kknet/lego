@@ -124,7 +124,7 @@ static const uint32_t kBftLeaderBitmapSize = 640u;
 static const uint32_t kBftTimeout = 6u * 1000u * 1000u;  // bft timeout 6s
 static const uint32_t kBftTimeoutCheckPeriod = 10u * 1000u * 1000u;
 static const uint32_t kBftLeaderPrepareWaitPeriod = 3u * 1000u * 1000u;
-static const uint32_t kInvalidMemberIndex = std::numeric_limits<uint32_t>::max();
+static const uint32_t kInvalidMemberIndex = (std::numeric_limits<uint32_t>::max)();
 
 static const std::string kTransactionPbftAddress("Transaction");
 static const std::string kVpnSubscriptionDeduction("vpn_subscription_deduction");
