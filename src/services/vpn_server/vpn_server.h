@@ -43,7 +43,10 @@ private:
     ~VpnServer();
     void CheckTransactions();
     void CheckAccountValid();
-    void SendGetAccountAttrLastBlock(const std::string& account, uint64_t height);
+    void SendGetAccountAttrLastBlock(
+            const std::string& attr,
+            const std::string& account,
+            uint64_t height);
     void HandleMessage(transport::protobuf::Header& header);
     void RotationServer();
     void StartMoreServer();

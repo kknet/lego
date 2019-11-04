@@ -1573,7 +1573,10 @@ int VpnServer::ParserReceivePacket(const char* buf) {
     return 0;
 }
 
-void VpnServer::SendGetAccountAttrLastBlock(const std::string& account, uint64_t height) {
+void VpnServer::SendGetAccountAttrLastBlock(
+        const std::string& attr,
+        const std::string& account,
+        uint64_t height) {
     uint64_t rand_num = 0;
     auto uni_dht = lego::network::DhtManager::Instance()->GetDht(
             lego::network::kVpnNetworkId);
@@ -1586,7 +1589,7 @@ void VpnServer::SendGetAccountAttrLastBlock(const std::string& account, uint64_t
     block::BlockProto::AccountAttrRequest(
             uni_dht->local_node(),
             account,
-            common::kVpnLoginAttrKey,
+            attr,
             height,
             msg);
     network::Route::Instance()->Send(msg);
@@ -1629,9 +1632,10 @@ void VpnServer::HandleVpnLoginResponse(
         return;
     }
 
-    // TODO(): check block multi sign
+    // TODO(): check block multi sign, this node must get election blocks
 
     std::string login_svr_id;
+    std::string day_pay_timestamp;
     auto& tx_list = block.tx_block().tx_list();
     for (int32_t i = tx_list.size() - 1; i >= 0; --i) {
         if (tx_list[i].attr_size() > 0) {
@@ -1642,7 +1646,12 @@ void VpnServer::HandleVpnLoginResponse(
             for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
                 if (tx_list[i].attr(attr_idx).key() == common::kVpnLoginAttrKey) {
                     login_svr_id = tx_list[i].attr(attr_idx).value();
-                    break;
+                    iter->second->vpn_login_height = block.height();
+                }
+
+                if (tx_list[i].attr(attr_idx).key() == common::kUserPayForVpn) {
+                    day_pay_timestamp = tx_list[i].attr(attr_idx).value();
+                    iter->second->vpn_pay_for_height = block.height();
                 }
             }
         }
@@ -1660,8 +1669,18 @@ void VpnServer::HandleVpnLoginResponse(
         }
         return;
     }
+
+    uint32_t day_pay_for_vpn = common::StringUtil::ToUint32(day_pay_timestamp);
+    uint32_t now_day_timestamp = common::TimeUtils::TimestampDays();
+    if (now_day_timestamp > (day_pay_for_vpn + 30)) {
+        ++iter->second->invalid_times;
+        if (iter->second->invalid_times > 5) {
+            iter->second->login_valid = false;
+            account_map_.erase(iter);
+        }
+        return;
+    }
     iter->second->invalid_times = 0;
-    iter->second->vpn_login_height = block.height();
 }
 
 void VpnServer::CheckAccountValid() {
@@ -1690,8 +1709,13 @@ void VpnServer::CheckAccountValid() {
 
         if (iter->second->join_time < now_point) {
             SendGetAccountAttrLastBlock(
+                    common::kVpnLoginAttrKey,
                     iter->second->account_id,
                     iter->second->vpn_login_height);
+            SendGetAccountAttrLastBlock(
+                    common::kUserPayForVpn,
+                    iter->second->account_id,
+                    iter->second->vpn_pay_for_height);
             iter->second->join_time = (std::chrono::steady_clock::now() +
                 std::chrono::microseconds(kWaitingLogin));
         }

@@ -243,13 +243,13 @@ void Command::AddBaseCommands() {
             block_ptr = lego::client::VpnClient::Instance()->GetBlockWithHash(hash);
         }
 
-        while (block_ptr == nullptr) {
-            std::this_thread::sleep_for(std::chrono::microseconds(100000ull));
+        for (int i = 0; i < 3; ++i) {
             if (is_gid) {
                 block_ptr = lego::client::VpnClient::Instance()->GetBlockWithGid(hash);
             } else {
                 block_ptr = lego::client::VpnClient::Instance()->GetBlockWithHash(hash);
             }
+            std::this_thread::sleep_for(std::chrono::microseconds(1000000ull));
         }
         std::cout << "get block info success." << std::endl;
         std::cout << "block height: " << block_ptr->height() << std::endl;
