@@ -1,3 +1,7 @@
+#if defined(_WIN32) || defined(_WIN64)
+#include "stdafx.h"
+#endif
+
 #include "common/global_info.h"
 
 #include "uuid/uuid.h"
