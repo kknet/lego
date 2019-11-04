@@ -117,6 +117,7 @@ inline static std::string TimestampToDatetime(time_t timestamp) {
 }
 
 inline static std::string MicTimestampToDatetime(int64_t timestamp) {
+#ifndef _WIN32
     int64_t milli = timestamp + (int64_t)(8 * 60 * 60 * 1000);
     auto mTime = std::chrono::milliseconds(milli);
     auto tp = std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds>(mTime);
@@ -131,6 +132,9 @@ inline static std::string MicTimestampToDatetime(int64_t timestamp) {
             now->tm_min,
             now->tm_sec);
     return time_str;
+#else
+    return "";
+#endif
 }
 
 uint64_t TimeStampMsec();
