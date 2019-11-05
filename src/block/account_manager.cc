@@ -2,6 +2,7 @@
 
 #include "common/encode.h"
 #include "statistics/statistics.h"
+#include "contract/contract_manager.h"
 #include "db/db.h"
 
 namespace lego {
@@ -80,13 +81,22 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
             }
 
             // now just sender can modify attrs
+            std::map<std::string, std::string> attr_map;
             for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
                 // every attr just check last block
+                attr_map[tx_list[i].attr(i).key()] = tx_list[i].attr(i).value();
                 std::lock_guard<std::mutex> acc_guard(acc_ptr->attrs_with_height_mutex);
                 acc_ptr->attrs_with_height[tx_list[i].attr(i).key()] = block_item.height();
-                std::cout << "add account attr: " << tx_list[i].attr(i).key() << ", value: "
-                        << common::Encode::HexEncode(tx_list[i].attr(i).value())
-                        << ", height: " << block_item.height() << std::endl;
+            }
+
+            if (!tx_list[i].smart_contract_addr().empty()) {
+                contract::ContractManager::Instance()->InitWithAttr(
+                        tx_list[i].smart_contract_addr(),
+                        tx_list[i].from(),
+                        tx_list[i].to(),
+                        tx_list[i].amount(),
+                        tx_list[i].type(),
+                        attr_map);
             }
             AddAccount(acc_ptr);
 
@@ -122,7 +132,7 @@ void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
         acc_ptr->height_pri_queue = acc_map_[acc_ptr->account_id]->get_height_pri_queue();
         std::lock_guard<std::mutex> tmp_guard(acc_map_[acc_ptr->account_id]->attrs_with_height_mutex);
         for (auto sub_iter = acc_map_[acc_ptr->account_id]->attrs_with_height.begin();
-            sub_iter != acc_map_[acc_ptr->account_id]->attrs_with_height.end(); ++sub_iter) {
+                sub_iter != acc_map_[acc_ptr->account_id]->attrs_with_height.end(); ++sub_iter) {
             auto e_iter = acc_ptr->attrs_with_height.find(sub_iter->first);
             if (e_iter == acc_ptr->attrs_with_height.end()) {
                 acc_ptr->attrs_with_height[sub_iter->first] = sub_iter->second;
@@ -137,7 +147,7 @@ void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
         acc_map_[acc_ptr->account_id]->new_height = acc_ptr->new_height;
         std::lock_guard<std::mutex> tmp_guard(acc_map_[acc_ptr->account_id]->attrs_with_height_mutex);
         for (auto sub_iter = acc_ptr->attrs_with_height.begin();
-            sub_iter != acc_ptr->attrs_with_height.end(); ++sub_iter) {
+                sub_iter != acc_ptr->attrs_with_height.end(); ++sub_iter) {
             auto e_iter = acc_map_[acc_ptr->account_id]->attrs_with_height.find(sub_iter->first);
             if (e_iter == acc_map_[acc_ptr->account_id]->attrs_with_height.end()) {
                 acc_map_[acc_ptr->account_id]->attrs_with_height[sub_iter->first] = sub_iter->second;

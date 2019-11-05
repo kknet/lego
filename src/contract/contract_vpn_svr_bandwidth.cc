@@ -24,8 +24,7 @@ int VpnSvrBandwidth::InitWithAttr(
 
     {
         std::lock_guard<std::mutex> guard(bandwidth_map_mutex_);
-        bandwidth_map_.clear();
-        bandwidth_map_[attr_key] = common::StringUtil::ToUint32(iter->second);
+         bandwidth_map_[attr_key] = common::StringUtil::ToUint32(iter->second);
     }
     return kContractSuccess;
 }
