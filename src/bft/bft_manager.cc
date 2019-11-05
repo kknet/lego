@@ -345,13 +345,12 @@ int BftManager::LeaderPrepare(BftInterfacePtr& bft_ptr) {
             bft_ptr->rand_num())) {
         std::string prepare_data;
         int res = bft_ptr->Prepare(true, prepare_data);
-        transport::protobuf::Header msg;
-        LEGO_BFT_DEBUG_FOR_CONSENSUS_AND_MESSAGE(
-                std::string("LeaderPrepare ok:") + std::to_string(res),
-                bft_ptr,
-                msg);
-
         if (res != kBftSuccess) {
+            transport::protobuf::Header msg;
+            LEGO_BFT_DEBUG_FOR_CONSENSUS_AND_MESSAGE(
+                    std::string("LeaderPrepare ok:") + std::to_string(res),
+                    bft_ptr,
+                    msg);
             return res;
         }
 
@@ -373,6 +372,7 @@ int BftManager::LeaderPrepare(BftInterfacePtr& bft_ptr) {
         bft_ptr->LeaderPrecommitOk(member_idx, true, bft_ptr->secret());
         auto dht_ptr = network::DhtManager::Instance()->GetDht(bft_ptr->network_id());
         auto local_node = dht_ptr->local_node();
+        transport::protobuf::Header msg;
         BftProto::LeaderCreatePrepare(
                 local_node,
                 prepare_data,
