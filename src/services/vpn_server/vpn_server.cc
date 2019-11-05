@@ -1710,6 +1710,7 @@ void VpnServer::CheckAccountValid() {
             lego::client::TransactionClient::Instance()->Transaction(
                     account_info->account_id,
                     0,
+                    contract::kContractVpnBandwidthProveAddr,
                     attrs,
                     common::kConsensusVpnBandwidth,
                     gid);
