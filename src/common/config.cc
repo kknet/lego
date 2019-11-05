@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "common/config.h"
 
 #include <iostream>

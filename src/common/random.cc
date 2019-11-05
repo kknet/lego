@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <mutex>
 #include <random>
 #include <algorithm>

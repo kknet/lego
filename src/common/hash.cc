@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "common/hash.h"
 
 #include <string.h>

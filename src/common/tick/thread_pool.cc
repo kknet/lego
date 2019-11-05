@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "common/tick/thread_pool.h"
 
 #include "common/global_info.h"

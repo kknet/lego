@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "common/state_lock.h"
 
 namespace lego {

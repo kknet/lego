@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "common/string_utils.h"
 
 #include <errno.h>

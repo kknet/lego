@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "common/tick.h"
 
 #include <cassert>

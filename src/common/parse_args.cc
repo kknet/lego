@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "common/parse_args.h"
 
 #include <list>
