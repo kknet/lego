@@ -78,14 +78,6 @@ int ProxyDht::ResetUserUseTimer(const service::protobuf::GetVpnInfoRequest& vpn_
                 static_cast<uint32_t>(duration));
     }
 
-    if (iter->second->pre_duration.count() >= kStakingPeriod) {
-        std::string gid;
-        client::TransactionClient::Instance()->Transaction(
-                account_addr,
-                (std::rand() % 10 + 1),
-                gid);
-        iter->second->pre_duration = std::chrono::milliseconds(0);
-    }
     iter->second->prev_time = std::chrono::steady_clock::now();
     return kProxySuccess;
 }

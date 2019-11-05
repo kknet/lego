@@ -113,7 +113,6 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
     }
 
     std::string gid;
-    client::TransactionClient::Instance()->Transaction("", 0, gid);
     inited_ = true;
     cmd_.Run();
     transport_->Stop();
