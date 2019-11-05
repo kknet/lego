@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "transport/rudp/session_manager.h"
 
 #include "transport/multi_thread.h"

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "transport/client_relay.h"
 
 #include <functional>

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "transport/synchro_wait.h"
 
 namespace lego {

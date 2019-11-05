@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "broadcast/broadcast.h"
 
 #include "common/utils.h"

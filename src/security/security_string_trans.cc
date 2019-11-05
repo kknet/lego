@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "security/security_string_trans.h"
 
 #include "common/encode.h"

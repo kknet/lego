@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "transport/multi_thread.h"
 
 #include "common/utils.h"

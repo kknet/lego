@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "security/multi_sign.h"
 
 #include "security/schnorr.h"

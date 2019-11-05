@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "transport/udp/udp_transport.h"
 
 #ifdef _WIN32

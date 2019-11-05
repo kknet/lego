@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "security/public_key.h"
 
 #include "common/encode.h"

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "transport/http/http_transport.h"
 
 #include <queue>

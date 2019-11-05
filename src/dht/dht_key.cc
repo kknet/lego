@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "dht/dht_key.h"
 
 #include <cassert>

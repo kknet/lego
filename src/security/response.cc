@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "security/response.h"
 
 #include <cassert>

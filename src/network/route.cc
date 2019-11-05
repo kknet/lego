@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "network/route.h"
 
 #include "transport/processor.h"

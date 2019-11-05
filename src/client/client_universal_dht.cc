@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "client/client_universal_dht.h"
 
 #include "transport/synchro_wait.h"

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "dht/dht_function.h"
 
 #include "common/encode.h"

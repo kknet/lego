@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "network/dht_manager.h"
 
 #include <cassert>

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "security/commit_point.h"
 
 #include "security/schnorr.h"

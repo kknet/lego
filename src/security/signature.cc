@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "security/signature.h"
 
 #include <cassert>

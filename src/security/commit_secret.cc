@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "security/commit_secret.h"
 
 #include <cassert>

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "security/aes.h"
 
 #include <cassert>

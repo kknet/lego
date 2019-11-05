@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "network/proto/network_proto.h"
 
 #include "common/global_info.h"

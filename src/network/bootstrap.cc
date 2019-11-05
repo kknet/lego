@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "network/bootstrap.h"
 
 #include "common/split.h"

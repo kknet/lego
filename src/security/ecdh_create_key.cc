@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "security/ecdh_create_key.h"
 
 #include <openssl/ec.h>

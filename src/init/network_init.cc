@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "init/network_init.h"
 
 #include <functional>

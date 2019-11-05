@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "security/private_key.h"
 
 #include <cassert>

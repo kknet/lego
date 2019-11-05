@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "init/command.h"
 
 #include <iostream>

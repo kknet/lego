@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "security/crypto_utils.h"
 
 #include <mutex>

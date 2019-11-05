@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "broadcast/filter_broadcast.h"
 
 #include <algorithm>

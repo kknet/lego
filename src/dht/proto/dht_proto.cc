@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "dht/proto/dht_proto.h"
 
 #include "security/schnorr.h"

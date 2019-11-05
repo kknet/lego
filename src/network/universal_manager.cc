@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "network/universal_manager.h"
 
 #include <cassert>

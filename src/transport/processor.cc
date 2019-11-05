@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "transport/processor.h"
 
 namespace lego {

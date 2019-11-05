@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "client/trans_client.h"
 
 #include "common/encode.h"

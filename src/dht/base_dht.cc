@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "dht/base_dht.h"
 
 #include <bitset>

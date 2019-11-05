@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "security/schnorr.h"
 
 #include <memory.h>

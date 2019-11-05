@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "transport/rudp/rudp.h"
 #include "transport/udp/udp_transport.h"
 #include "transport/endpoint.h"

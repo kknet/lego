@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "security/commit_point_hash.h"
 
 #include <cassert>
