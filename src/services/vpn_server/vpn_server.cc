@@ -1597,12 +1597,15 @@ void VpnServer::SendGetAccountAttrLastBlock(
 
 void VpnServer::CheckTransactions() {
     StakingItemPtr staking_item = nullptr;
+    std::map<std::string, std::string> attrs;
     while (staking_queue_.pop(&staking_item)) {
         if (staking_item != nullptr) {
             std::string gid;
             lego::client::TransactionClient::Instance()->Transaction(
                     staking_item->to,
                     staking_item->amount,
+                    attrs,
+                    common::kConsensusMining,
                     gid);
             // check and retry transaction success
             // gid_map_.insert(std::make_pair(gid, staking_item));
@@ -1647,11 +1650,14 @@ void VpnServer::HandleVpnLoginResponse(
                 if (tx_list[i].attr(attr_idx).key() == common::kVpnLoginAttrKey) {
                     login_svr_id = tx_list[i].attr(attr_idx).value();
                     iter->second->vpn_login_height = block.height();
+                    std::cout << "receive get login block: " << block.height() << std::endl;
+
                 }
 
                 if (tx_list[i].attr(attr_idx).key() == common::kUserPayForVpn) {
                     day_pay_timestamp = tx_list[i].attr(attr_idx).value();
                     iter->second->vpn_pay_for_height = block.height();
+                    std::cout << "receive get pay for vpn block: " << block.height() << std::endl;
                 }
             }
         }
@@ -1696,6 +1702,16 @@ void VpnServer::CheckAccountValid() {
             account_info->join_time = std::chrono::steady_clock::now() +
                     std::chrono::microseconds(kWaitingLogin);
             account_map_[account_info->account_id] = account_info;
+            std::string gid;
+            std::map<std::string, std::string> attrs{
+                {common::kIncreaseVpnBandwidth, std::to_string(10 * 1024 * 1024)}
+            };
+            lego::client::TransactionClient::Instance()->Transaction(
+                    account_info->account_id,
+                    0,
+                    attrs,
+                    common::kConsensusVpnBandwidth,
+                    gid);
         }
     }
 
@@ -1707,6 +1723,22 @@ void VpnServer::CheckAccountValid() {
             continue;
         }
 
+        if ((iter->second->up_bandwidth + iter->second->down_bandwidth) >= (10 * 1024 * 1024)) {
+            std::string gid;
+            uint32_t band = iter->second->up_bandwidth + iter->second->down_bandwidth;
+            std::map<std::string, std::string> attrs{
+                {common::kIncreaseVpnBandwidth, std::to_string(band)}
+            };
+            lego::client::TransactionClient::Instance()->Transaction(
+                    iter->second->account_id,
+                    0,
+                    attrs,
+                    common::kConsensusVpnBandwidth,
+                    gid);
+            iter->second->up_bandwidth = 0;
+            iter->second->down_bandwidth = 0;
+        }
+
         if (iter->second->join_time < now_point) {
             SendGetAccountAttrLastBlock(
                     common::kVpnLoginAttrKey,
@@ -1716,6 +1748,7 @@ void VpnServer::CheckAccountValid() {
                     common::kUserPayForVpn,
                     iter->second->account_id,
                     iter->second->vpn_pay_for_height);
+            std::cout << "send get login block and pay for vpn block." << std::endl;
             iter->second->join_time = (std::chrono::steady_clock::now() +
                 std::chrono::microseconds(kWaitingLogin));
         }

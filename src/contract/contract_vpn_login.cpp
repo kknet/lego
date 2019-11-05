@@ -7,7 +7,21 @@ namespace lego {
 
 namespace contract {
 
-int VpnLogin::Execute(std::map<std::string, std::string>& attr_map) {
+int VpnLogin::InitWithAttr(
+        const std::string& from,
+        const std::string& to,
+        uint64_t amount,
+        uint32_t type,
+        const std::map<std::string, std::string>& attr_map) {
+    return kContractSuccess;
+}
+
+int VpnLogin::Execute(
+        const std::string& from,
+        const std::string& to,
+        uint64_t amount,
+        uint32_t type,
+        std::map<std::string, std::string>& attr_map) {
     return kContractSuccess;
 }
 

@@ -5,6 +5,7 @@
 #include "transport/transport_utils.h"
 #include "dht/dht_key.h"
 #include "network/network_utils.h"
+#include "contract/contract_manager.h"
 #include "bft/bft_utils.h"
 #include "bft/basic_bft/transaction/proto/tx.pb.h"
 
@@ -155,6 +156,19 @@ void TxProto::CreateTxBlock(
             }
         }
         tx.set_to_add(tx_vec[i]->add_to_acc_addr);
+
+        // execute contract
+        if (!tx_vec[i]->smart_contract_addr.empty()) {
+            if (contract::ContractManager::Instance()->Execute(
+                    tx_vec[i]->smart_contract_addr,
+                    tx_vec[i]->from_acc_addr,
+                    tx_vec[i]->to_acc_addr,
+                    tx_vec[i]->lego_count,
+                    tx_vec[i]->bft_type,
+                    tx_vec[i]->attr_map) != contract::kContractSuccess) {
+                continue;
+            }
+        }
 
         if (!tx_vec[i]->attr_map.empty()) {
             for (auto iter = tx_vec[i]->attr_map.begin();

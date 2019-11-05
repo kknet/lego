@@ -1,15 +1,18 @@
 #pragma once
 
+#include <unordered_map>
+#include <mutex>
+
 #include "contract/contract_interface.h"
 
 namespace lego {
 
 namespace contract {
 
-class VpnLogin : public ContractInterface {
+class VpnSvrBandwidth : public ContractInterface {
 public:
-    VpnLogin() {}
-    virtual ~VpnLogin() {}
+    VpnSvrBandwidth() {}
+    virtual ~VpnSvrBandwidth() {}
     virtual int InitWithAttr(
             const std::string& from,
             const std::string& to,
@@ -24,8 +27,11 @@ public:
             uint32_t type,
             std::map<std::string, std::string>& attr_map);
 
-protected:
-    DISALLOW_COPY_AND_ASSIGN(VpnLogin);
+private:
+    std::unordered_map<std::string, uint32_t> bandwidth_map_;
+    std::mutex bandwidth_map_mutex_;
+
+    DISALLOW_COPY_AND_ASSIGN(VpnSvrBandwidth);
 };
 
 }  // namespace contract

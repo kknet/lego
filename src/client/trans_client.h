@@ -9,7 +9,12 @@ namespace client {
 class TransactionClient {
 public:
     static TransactionClient* Instance();
-    int Transaction(const std::string& to, uint64_t amount, std::string& gid);
+    int Transaction(
+            const std::string& to,
+            uint64_t amount,
+            const std::map<std::string, std::string>& attrs,
+            uint32_t type,
+            std::string& gid);
 
 private:
     TransactionClient() {};

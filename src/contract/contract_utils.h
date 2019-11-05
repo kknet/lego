@@ -10,12 +10,14 @@
 
 namespace lego {
 
-namespace contact {
+namespace contract {
 
 enum ContractErrorCode {
     kContractSuccess = 0,
     kContractError = 1,
 };
+
+static const std::string kContractVpnBandwidthProveAddr = "contract_vpn_bandwith_prove";
 
 }  // namespace contact
 
