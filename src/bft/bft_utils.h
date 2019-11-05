@@ -61,7 +61,7 @@
 #define LEGO_BFT_DEBUG_FOR_CONSENSUS(pre, bft_ptr)
 #define LEGO_BFT_DEBUG_FOR_CONSENSUS_AND_MESSAGE(pre, bft_ptr, message) \
     do { \
-        BFT_DEBUG("[CONSENSUS]%s: [hash: %llu][id: %u][hop: %d][broad: %d]" \
+        BFT_ERROR("[CONSENSUS]%s: [hash: %llu][id: %u][hop: %d][broad: %d]" \
                 "[gid: %s][status: %d(%s)][item_cnt: %d]" \
                 "[pool_index: %d][network_id: %d]" \
                 "[rand_num: %llu][l_pc_agree: %d][l_c_aggree: %d]" \
