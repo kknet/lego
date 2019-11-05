@@ -902,6 +902,7 @@ std::string VpnClient::PayForVPN(const std::string& to, uint64_t amount) {
             to_addr,
             amount,
             type,
+            "",
             attrs,
             msg);
     network::Route::Instance()->Send(msg);

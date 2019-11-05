@@ -12,6 +12,7 @@ public:
     int Transaction(
             const std::string& to,
             uint64_t amount,
+            const std::string& contract_addr,
             const std::map<std::string, std::string>& attrs,
             uint32_t type,
             std::string& gid);

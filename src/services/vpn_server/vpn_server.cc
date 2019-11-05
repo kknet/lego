@@ -86,6 +86,7 @@ extern "C" {
 #include "common/global_info.h"
 #include "common/time_utils.h"
 #include "common/user_property_key_define.h"
+#include "contract/contract_utils.h"
 #include "client/trans_client.h"
 #include "security/crypto_utils.h"
 #include "security/aes.h"
@@ -1732,6 +1733,7 @@ void VpnServer::CheckAccountValid() {
             lego::client::TransactionClient::Instance()->Transaction(
                     iter->second->account_id,
                     0,
+                    contract::kContractVpnBandwidthProveAddr,
                     attrs,
                     common::kConsensusVpnBandwidth,
                     gid);

@@ -22,6 +22,7 @@ TransactionClient* TransactionClient::Instance() {
 int TransactionClient::Transaction(
         const std::string& to,
         uint64_t amount,
+        const std::string& contract_addr,
         const std::map<std::string, std::string>& attrs,
         uint32_t type,
         std::string& tx_gid) {
@@ -39,6 +40,7 @@ int TransactionClient::Transaction(
             to,
             amount,
             type,
+            contract_addr,
             attrs,
             msg);
     network::Route::Instance()->Send(msg);

@@ -174,11 +174,12 @@ public:
             const std::string& to,
             int64_t amount,
             uint32_t type,
+            const std::string& contract_addr,
             const std::map<std::string, std::string>& attrs,
             transport::protobuf::Header& msg) {
         msg.set_src_dht_key(local_node->dht_key);
         std::string account_address = network::GetAccountAddressByPublicKey(
-            security::Schnorr::Instance()->str_pubkey());
+                security::Schnorr::Instance()->str_pubkey());
         uint32_t des_net_id = network::GetConsensusShardNetworkId(account_address);
         dht::DhtKeyManager dht_key(des_net_id, 0);
         msg.set_des_dht_key(dht_key.StrKey());
@@ -206,6 +207,9 @@ public:
         new_tx->set_type(type);
         new_tx->set_to_acc_addr(to);
         new_tx->set_lego_count(amount);
+        if (!contract_addr.empty()) {
+            new_tx->set_smart_contract_addr(contract_addr);
+        }
 
         for (auto iter = attrs.begin(); iter != attrs.end(); ++iter) {
             auto server_attr = new_tx->add_attr();
