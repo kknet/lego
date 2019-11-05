@@ -1605,6 +1605,7 @@ void VpnServer::CheckTransactions() {
             lego::client::TransactionClient::Instance()->Transaction(
                     staking_item->to,
                     staking_item->amount,
+                    "",
                     attrs,
                     common::kConsensusMining,
                     gid);
