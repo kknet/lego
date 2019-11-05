@@ -346,11 +346,6 @@ int BftManager::LeaderPrepare(BftInterfacePtr& bft_ptr) {
         std::string prepare_data;
         int res = bft_ptr->Prepare(true, prepare_data);
         if (res != kBftSuccess) {
-            transport::protobuf::Header msg;
-            LEGO_BFT_DEBUG_FOR_CONSENSUS_AND_MESSAGE(
-                    std::string("LeaderPrepare ok:") + std::to_string(res),
-                    bft_ptr,
-                    msg);
             return res;
         }
 
