@@ -1,6 +1,7 @@
 #include "bft/basic_bft/transaction/tx_bft.h"
 
 #include "common/global_info.h"
+#include "contract/contract_manager.h"
 #include "block/account_manager.h"
 #include "network/network_utils.h"
 #include "bft/bft_utils.h"
@@ -231,6 +232,27 @@ int TxBft::CheckTxInfo(
     if (local_tx_info->to_acc_addr != tx_info.to()) {
         BFT_ERROR("local tx  to not equal to leader to account!");
         return kBftLeaderInfoInvalid;
+    }
+
+    if (local_tx_info->smart_contract_addr != tx_info.smart_contract_addr()) {
+        BFT_ERROR("local tx smart_contract_addr[%s] not equal to leader to account [%s]!",
+                local_tx_info->smart_contract_addr.c_str(),
+                tx_info.smart_contract_addr().c_str());
+        return kBftLeaderInfoInvalid;
+    }
+
+    if (!local_tx_info->smart_contract_addr.empty()) {
+        if (contract::ContractManager::Instance()->Execute(
+                local_tx_info->smart_contract_addr,
+                local_tx_info->from_acc_addr,
+                local_tx_info->to_acc_addr,
+                local_tx_info->lego_count,
+                local_tx_info->bft_type,
+                local_tx_info->attr_map) != contract::kContractSuccess) {
+            BFT_ERROR("local tx execute smart_contract_addr[%s] failed!",
+                    local_tx_info->smart_contract_addr.c_str());
+            return kBftLeaderInfoInvalid;
+        }
     }
 
     if (local_tx_info->attr_map.size() != tx_info.attr_size()) {

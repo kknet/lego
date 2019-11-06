@@ -24,6 +24,7 @@ message TxInfo {
     optional uint32 type = 14;
     repeated AccountAttributes attr = 15;
     optional bytes smart_contract_addr = 16;
+    optional uint32 status = 17;
 }
 
 message TxBlock {
