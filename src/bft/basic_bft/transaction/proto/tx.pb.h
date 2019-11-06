@@ -512,6 +512,13 @@ class TxInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   ::google::protobuf::uint32 type() const;
   void set_type(::google::protobuf::uint32 value);
 
+  // optional uint32 status = 17;
+  bool has_status() const;
+  void clear_status();
+  static const int kStatusFieldNumber = 17;
+  ::google::protobuf::uint32 status() const;
+  void set_status(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:lego.bft.protobuf.TxInfo)
  private:
   void set_has_version();
@@ -544,6 +551,8 @@ class TxInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   void clear_has_type();
   void set_has_smart_contract_addr();
   void clear_has_smart_contract_addr();
+  void set_has_status();
+  void clear_has_status();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
@@ -564,6 +573,7 @@ class TxInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   ::google::protobuf::uint64 balance_;
   ::google::protobuf::uint32 netwok_id_;
   ::google::protobuf::uint32 type_;
+  ::google::protobuf::uint32 status_;
   friend struct ::protobuf_tx_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
@@ -3089,6 +3099,30 @@ inline void TxInfo::set_allocated_smart_contract_addr(::std::string* smart_contr
   }
   smart_contract_addr_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), smart_contract_addr);
   // @@protoc_insertion_point(field_set_allocated:lego.bft.protobuf.TxInfo.smart_contract_addr)
+}
+
+// optional uint32 status = 17;
+inline bool TxInfo::has_status() const {
+  return (_has_bits_[0] & 0x00008000u) != 0;
+}
+inline void TxInfo::set_has_status() {
+  _has_bits_[0] |= 0x00008000u;
+}
+inline void TxInfo::clear_has_status() {
+  _has_bits_[0] &= ~0x00008000u;
+}
+inline void TxInfo::clear_status() {
+  status_ = 0u;
+  clear_has_status();
+}
+inline ::google::protobuf::uint32 TxInfo::status() const {
+  // @@protoc_insertion_point(field_get:lego.bft.protobuf.TxInfo.status)
+  return status_;
+}
+inline void TxInfo::set_status(::google::protobuf::uint32 value) {
+  set_has_status();
+  status_ = value;
+  // @@protoc_insertion_point(field_set:lego.bft.protobuf.TxInfo.status)
 }
 
 // -------------------------------------------------------------------
