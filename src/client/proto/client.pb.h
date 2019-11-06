@@ -442,6 +442,21 @@ class NewTx : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
   ::std::string* release_to_acc_addr();
   void set_allocated_to_acc_addr(::std::string* to_acc_addr);
 
+  // optional bytes smart_contract_addr = 9;
+  bool has_smart_contract_addr() const;
+  void clear_smart_contract_addr();
+  static const int kSmartContractAddrFieldNumber = 9;
+  const ::std::string& smart_contract_addr() const;
+  void set_smart_contract_addr(const ::std::string& value);
+  #if LANG_CXX11
+  void set_smart_contract_addr(::std::string&& value);
+  #endif
+  void set_smart_contract_addr(const char* value);
+  void set_smart_contract_addr(const void* value, size_t size);
+  ::std::string* mutable_smart_contract_addr();
+  ::std::string* release_smart_contract_addr();
+  void set_allocated_smart_contract_addr(::std::string* smart_contract_addr);
+
   // optional uint64 lego_count = 6;
   bool has_lego_count() const;
   void clear_lego_count();
@@ -472,6 +487,8 @@ class NewTx : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
   void clear_has_lego_count();
   void set_has_type();
   void clear_has_type();
+  void set_has_smart_contract_addr();
+  void clear_has_smart_contract_addr();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
@@ -482,6 +499,7 @@ class NewTx : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
   ::google::protobuf::internal::ArenaStringPtr from_pubkey_;
   ::google::protobuf::internal::ArenaStringPtr from_sign_;
   ::google::protobuf::internal::ArenaStringPtr to_acc_addr_;
+  ::google::protobuf::internal::ArenaStringPtr smart_contract_addr_;
   ::google::protobuf::uint64 lego_count_;
   ::google::protobuf::uint32 type_;
   friend struct ::protobuf_client_2eproto::TableStruct;
@@ -3456,13 +3474,13 @@ inline void NewTx::set_allocated_to_acc_addr(::std::string* to_acc_addr) {
 
 // optional uint64 lego_count = 6;
 inline bool NewTx::has_lego_count() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
+  return (_has_bits_[0] & 0x00000040u) != 0;
 }
 inline void NewTx::set_has_lego_count() {
-  _has_bits_[0] |= 0x00000020u;
+  _has_bits_[0] |= 0x00000040u;
 }
 inline void NewTx::clear_has_lego_count() {
-  _has_bits_[0] &= ~0x00000020u;
+  _has_bits_[0] &= ~0x00000040u;
 }
 inline void NewTx::clear_lego_count() {
   lego_count_ = GOOGLE_ULONGLONG(0);
@@ -3480,13 +3498,13 @@ inline void NewTx::set_lego_count(::google::protobuf::uint64 value) {
 
 // optional uint32 type = 7;
 inline bool NewTx::has_type() const {
-  return (_has_bits_[0] & 0x00000040u) != 0;
+  return (_has_bits_[0] & 0x00000080u) != 0;
 }
 inline void NewTx::set_has_type() {
-  _has_bits_[0] |= 0x00000040u;
+  _has_bits_[0] |= 0x00000080u;
 }
 inline void NewTx::clear_has_type() {
-  _has_bits_[0] &= ~0x00000040u;
+  _has_bits_[0] &= ~0x00000080u;
 }
 inline void NewTx::clear_type() {
   type_ = 0u;
@@ -3530,6 +3548,72 @@ inline const ::google::protobuf::RepeatedPtrField< ::lego::client::protobuf::Acc
 NewTx::attr() const {
   // @@protoc_insertion_point(field_list:lego.client.protobuf.NewTx.attr)
   return attr_;
+}
+
+// optional bytes smart_contract_addr = 9;
+inline bool NewTx::has_smart_contract_addr() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void NewTx::set_has_smart_contract_addr() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void NewTx::clear_has_smart_contract_addr() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void NewTx::clear_smart_contract_addr() {
+  smart_contract_addr_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_smart_contract_addr();
+}
+inline const ::std::string& NewTx::smart_contract_addr() const {
+  // @@protoc_insertion_point(field_get:lego.client.protobuf.NewTx.smart_contract_addr)
+  return smart_contract_addr_.GetNoArena();
+}
+inline void NewTx::set_smart_contract_addr(const ::std::string& value) {
+  set_has_smart_contract_addr();
+  smart_contract_addr_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.client.protobuf.NewTx.smart_contract_addr)
+}
+#if LANG_CXX11
+inline void NewTx::set_smart_contract_addr(::std::string&& value) {
+  set_has_smart_contract_addr();
+  smart_contract_addr_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.client.protobuf.NewTx.smart_contract_addr)
+}
+#endif
+inline void NewTx::set_smart_contract_addr(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_smart_contract_addr();
+  smart_contract_addr_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.client.protobuf.NewTx.smart_contract_addr)
+}
+inline void NewTx::set_smart_contract_addr(const void* value, size_t size) {
+  set_has_smart_contract_addr();
+  smart_contract_addr_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.client.protobuf.NewTx.smart_contract_addr)
+}
+inline ::std::string* NewTx::mutable_smart_contract_addr() {
+  set_has_smart_contract_addr();
+  // @@protoc_insertion_point(field_mutable:lego.client.protobuf.NewTx.smart_contract_addr)
+  return smart_contract_addr_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* NewTx::release_smart_contract_addr() {
+  // @@protoc_insertion_point(field_release:lego.client.protobuf.NewTx.smart_contract_addr)
+  if (!has_smart_contract_addr()) {
+    return NULL;
+  }
+  clear_has_smart_contract_addr();
+  return smart_contract_addr_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void NewTx::set_allocated_smart_contract_addr(::std::string* smart_contract_addr) {
+  if (smart_contract_addr != NULL) {
+    set_has_smart_contract_addr();
+  } else {
+    clear_has_smart_contract_addr();
+  }
+  smart_contract_addr_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), smart_contract_addr);
+  // @@protoc_insertion_point(field_set_allocated:lego.client.protobuf.NewTx.smart_contract_addr)
 }
 
 // -------------------------------------------------------------------
