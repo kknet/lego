@@ -18,6 +18,7 @@ public:
             const std::string& to,
             uint64_t amount,
             uint32_t type,
+            bool is_from,
             const std::map<std::string, std::string>& attr_map);
 
     virtual int Execute(
@@ -25,6 +26,7 @@ public:
             const std::string& to,
             uint64_t amount,
             uint32_t type,
+            bool is_from,
             std::map<std::string, std::string>& attr_map);
 
 private:

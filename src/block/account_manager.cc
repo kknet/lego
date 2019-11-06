@@ -65,6 +65,24 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
             SetPool(bptr);
             std::string tx_gid = common::GetTxDbKey(false, tx_list[i].gid());
             db::Db::Instance()->Put(tx_gid, block_item.hash());
+
+            // just call smart contract but these attr is not 'to' signed, don't add to 'to'
+            std::map<std::string, std::string> attr_map;
+            for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
+                // every attr just check last block
+                attr_map[tx_list[i].attr(i).key()] = tx_list[i].attr(i).value();
+            }
+
+            if (!tx_list[i].smart_contract_addr().empty()) {
+                contract::ContractManager::Instance()->InitWithAttr(
+                        tx_list[i].smart_contract_addr(),
+                        tx_list[i].from(),
+                        tx_list[i].to(),
+                        tx_list[i].amount(),
+                        tx_list[i].type(),
+                        false,
+                        attr_map);
+            }
         } else {
             if (CheckNetworkIdValid(tx_list[i].from()) != kBlockSuccess) {
                 continue;
@@ -96,6 +114,7 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
                         tx_list[i].to(),
                         tx_list[i].amount(),
                         tx_list[i].type(),
+                        true,
                         attr_map);
             }
             AddAccount(acc_ptr);

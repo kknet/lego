@@ -14,6 +14,7 @@ int VpnSvrBandwidth::InitWithAttr(
         const std::string& to,
         uint64_t amount,
         uint32_t type,
+        bool is_from,
         const std::map<std::string, std::string>& attr_map) {
     std::string now_day_timestamp = std::to_string(common::TimeUtils::TimestampDays());
     std::string attr_key = common::kIncreaseVpnBandwidth + "_" + to + "_" + now_day_timestamp;
@@ -34,6 +35,7 @@ int VpnSvrBandwidth::Execute(
         const std::string& to,
         uint64_t amount,
         uint32_t type,
+        bool is_from,
         std::map<std::string, std::string>& attr_map) {
     auto iter = attr_map.find(common::kIncreaseVpnBandwidth);
     if (iter != attr_map.end()) {

@@ -26,6 +26,7 @@ int ContractManager::InitWithAttr(
         const std::string& to,
         uint64_t amount,
         uint32_t type,
+        bool is_from,
         const std::map<std::string, std::string>& attr_map) {
     ContractInterfacePtr contract_ptr = nullptr;
     {
@@ -37,7 +38,7 @@ int ContractManager::InitWithAttr(
     }
 
     if (contract_ptr != nullptr) {
-        return contract_ptr->InitWithAttr(from, to, amount, type, attr_map);
+        return contract_ptr->InitWithAttr(from, to, amount, type, is_from, attr_map);
     }
     return kContractError;
 }
@@ -48,6 +49,7 @@ int ContractManager::Execute(
         const std::string& to,
         uint64_t amount,
         uint32_t type,
+        bool is_from,
         std::map<std::string, std::string>& attr_map) {
     ContractInterfacePtr contract_ptr = nullptr;
     {
@@ -59,7 +61,7 @@ int ContractManager::Execute(
     }
 
     if (contract_ptr != nullptr) {
-        return contract_ptr->Execute(from, to, amount, type, attr_map);
+        return contract_ptr->Execute(from, to, amount, type, is_from, attr_map);
     }
     return kContractError;
 }

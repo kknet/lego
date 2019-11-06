@@ -438,7 +438,6 @@ void NetworkInit::TestStartBft() {
 
 void NetworkInit::CreateNewElectBlock() {
     // for test
-	std::cout << "create ec block: " << common::GlobalInfo::Instance()->config_local_ip() << std::endl;
     if (common::GlobalInfo::Instance()->config_local_ip() != "172.18.216.70") {
         return;
     }
@@ -463,7 +462,6 @@ void NetworkInit::CreateNewElectBlock() {
     test_new_elect_tick_.CutOff(
             kTestNewElectPeriod,
             std::bind(&NetworkInit::CreateNewElectBlock, this));
-	std::cout << "create ec block success:  " << common::GlobalInfo::Instance()->config_local_ip() << std::endl;
 }
 
 int NetworkInit::SetPriAndPubKey(const std::string&) {

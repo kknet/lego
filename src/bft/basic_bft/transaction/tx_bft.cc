@@ -248,6 +248,7 @@ int TxBft::CheckTxInfo(
                 local_tx_info->to_acc_addr,
                 local_tx_info->lego_count,
                 local_tx_info->bft_type,
+                !(tx_info.to_add()),
                 local_tx_info->attr_map) != contract::kContractSuccess) {
             BFT_ERROR("local tx execute smart_contract_addr[%s] failed!",
                     local_tx_info->smart_contract_addr.c_str());

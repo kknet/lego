@@ -12,6 +12,7 @@ int VpnLogin::InitWithAttr(
         const std::string& to,
         uint64_t amount,
         uint32_t type,
+        bool is_from,
         const std::map<std::string, std::string>& attr_map) {
     return kContractSuccess;
 }
@@ -21,6 +22,7 @@ int VpnLogin::Execute(
         const std::string& to,
         uint64_t amount,
         uint32_t type,
+        bool is_from,
         std::map<std::string, std::string>& attr_map) {
     return kContractSuccess;
 }
