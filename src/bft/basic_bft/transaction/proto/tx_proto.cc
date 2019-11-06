@@ -165,6 +165,7 @@ void TxProto::CreateTxBlock(
                     tx_vec[i]->to_acc_addr,
                     tx_vec[i]->lego_count,
                     tx_vec[i]->bft_type,
+                    !(tx_vec[i]->add_to_acc_addr),
                     tx_vec[i]->attr_map) != contract::kContractSuccess) {
                 continue;
             }
