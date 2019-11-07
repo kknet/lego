@@ -49,10 +49,10 @@ int VpnSvrBandwidth::GetAttrWithKey(const std::string& key, std::string& value) 
     std::lock_guard<std::mutex> guard(bandwidth_all_map_mutex_);
     auto all_iter = bandwidth_all_map_.find(key);
     if (all_iter == bandwidth_all_map_.end()) {
-        value = "0";
-    } else {
-        value = std::to_string(all_iter->second);
-    }
+        return kContractError;
+    } 
+
+    value = std::to_string(all_iter->second);
     return kContractSuccess;
 }
 

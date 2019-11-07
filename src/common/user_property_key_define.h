@@ -18,7 +18,7 @@ enum ConsensusType {
 
 static const std::string kVpnLoginAttrKey = "vpn_login";
 static const std::string kUserPayForVpn = "user_pay_for_vpn";
-static const std::string kIncreaseVpnBandwidth = "increase_vpn_bandwidth";
+static const std::string kIncreaseVpnBandwidth = "kIncreaseVpnBandwidth";
 static const uint32_t kFreeToUseVpnBandwidth = 200 * 1024 * 1024;
 
 }  // namespace  common

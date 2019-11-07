@@ -1581,6 +1581,7 @@ void VpnServer::HandleMessage(transport::protobuf::Header& header) {
             return;
         }
 
+        std::cout << " 1 " << std::endl;
         if (contract_msg.has_get_attr_res()) {
             dht::BaseDhtPtr dht_ptr = nullptr;
             uint32_t netid = dht::DhtKeyManager::DhtKeyGetNetId(header.des_dht_key());
@@ -1599,6 +1600,9 @@ void VpnServer::HandleMessage(transport::protobuf::Header& header) {
                 return;
             }
 
+            std::cout << " 2 " << common::Encode::HexEncode(header.des_dht_key())
+                << ":" << common::Encode::HexEncode(dht_ptr->local_node()->dht_key)
+                << std::endl;
             if (header.des_dht_key() == dht_ptr->local_node()->dht_key) {
                 HandleClientBandwidthResponse(header, contract_msg);
                 return;
@@ -1684,9 +1688,11 @@ void VpnServer::HandleClientBandwidthResponse(
     std::string key = client_bw_res.attr_key();
     common::Split key_split(key.c_str(), '_', key.size());
     if (key_split.Count() != 3) {
+        std::cout << "invalid key: " << key << std::endl;
         return;
     }
 
+    std::cout << " 3 " << std::endl;
     uint32_t used = 0;
     try {
         used = common::StringUtil::ToUint32(client_bw_res.attr_value());
@@ -1694,6 +1700,7 @@ void VpnServer::HandleClientBandwidthResponse(
         return;
     }
 
+    std::cout << " 4 " << std::endl;
     std::string account_id = common::Encode::HexDecode(key_split[1]);
     std::lock_guard<std::mutex> guard(account_map_mutex_);
     auto iter = account_map_.find(account_id);
