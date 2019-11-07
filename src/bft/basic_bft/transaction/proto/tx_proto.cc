@@ -91,7 +91,7 @@ void TxProto::CreateTxRequest(
 
 void TxProto::CreateTxBlock(
         uint32_t pool_idx,
-        const std::vector<TxItemPtr>& tx_vec,
+        std::vector<TxItemPtr>& tx_vec,
         bft::protobuf::LeaderTxPrepare& bft_msg) {
     protobuf::Block& block_item = *(bft_msg.mutable_block());
     auto tx_block = block_item.mutable_tx_block();
@@ -160,13 +160,7 @@ void TxProto::CreateTxBlock(
         // execute contract
         if (!tx_vec[i]->smart_contract_addr.empty()) {
             if (contract::ContractManager::Instance()->Execute(
-                    tx_vec[i]->smart_contract_addr,
-                    tx_vec[i]->from_acc_addr,
-                    tx_vec[i]->to_acc_addr,
-                    tx_vec[i]->lego_count,
-                    tx_vec[i]->bft_type,
-                    !(tx_vec[i]->add_to_acc_addr),
-                    tx_vec[i]->attr_map) != contract::kContractSuccess) {
+                    tx_vec[i]) != contract::kContractSuccess) {
                 continue;
             }
         }

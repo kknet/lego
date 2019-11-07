@@ -243,13 +243,7 @@ int TxBft::CheckTxInfo(
 
     if (!local_tx_info->smart_contract_addr.empty()) {
         if (contract::ContractManager::Instance()->Execute(
-                local_tx_info->smart_contract_addr,
-                local_tx_info->from_acc_addr,
-                local_tx_info->to_acc_addr,
-                local_tx_info->lego_count,
-                local_tx_info->bft_type,
-                !(tx_info.to_add()),
-                local_tx_info->attr_map) != contract::kContractSuccess) {
+                local_tx_info) != contract::kContractSuccess) {
             BFT_ERROR("local tx execute smart_contract_addr[%s] failed!",
                     local_tx_info->smart_contract_addr.c_str());
             return kBftLeaderInfoInvalid;
