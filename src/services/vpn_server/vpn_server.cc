@@ -1575,13 +1575,11 @@ void VpnServer::HandleMessage(transport::protobuf::Header& header) {
 
 
     if (header.type() == common::kContractMessage) {
-        std::cout << "receive contract res message." << std::endl;
         contract::protobuf::ContractMessage contract_msg;
         if (!contract_msg.ParseFromString(header.data())) {
             return;
         }
 
-        std::cout << " 1 " << std::endl;
         if (contract_msg.has_get_attr_res()) {
             dht::BaseDhtPtr dht_ptr = nullptr;
             uint32_t netid = dht::DhtKeyManager::DhtKeyGetNetId(header.des_dht_key());
@@ -1600,9 +1598,6 @@ void VpnServer::HandleMessage(transport::protobuf::Header& header) {
                 return;
             }
 
-            std::cout << " 2 " << common::Encode::HexEncode(header.des_dht_key())
-                << ":" << common::Encode::HexEncode(dht_ptr->local_node()->dht_key)
-                << std::endl;
             if (header.des_dht_key() == dht_ptr->local_node()->dht_key) {
                 HandleClientBandwidthResponse(header, contract_msg);
                 return;
@@ -1688,11 +1683,9 @@ void VpnServer::HandleClientBandwidthResponse(
     std::string key = client_bw_res.attr_key();
     common::Split key_split(key.c_str(), '_', key.size());
     if (key_split.Count() != 3) {
-        std::cout << "invalid key: " << key << std::endl;
         return;
     }
 
-    std::cout << " 3 " << std::endl;
     uint32_t used = 0;
     try {
         used = common::StringUtil::ToUint32(client_bw_res.attr_value());
@@ -1700,16 +1693,15 @@ void VpnServer::HandleClientBandwidthResponse(
         return;
     }
 
-    std::cout << " 4 " << std::endl;
     std::string account_id = common::Encode::HexDecode(key_split[1]);
     std::lock_guard<std::mutex> guard(account_map_mutex_);
     auto iter = account_map_.find(account_id);
     if (iter == account_map_.end()) {
         return;
     }
-    iter->second->today_used_bandwidth = used;
-    std::cout << "receive account: " << key_split[1] << " bandwidth." << std::endl;
 
+    iter->second->today_used_bandwidth = used;
+    std::cout << "receive account: " << key_split[1] << ", bandwidth: " << iter->second->today_used_bandwidth << std::endl;
 }
 
 void VpnServer::HandleVpnLoginResponse(
@@ -1824,7 +1816,7 @@ void VpnServer::CheckAccountValid() {
             continue;
         }
 
-        if ((iter->second->up_bandwidth + iter->second->down_bandwidth) >= (10 * 1024 * 1024)) {
+        if ((iter->second->up_bandwidth + iter->second->down_bandwidth) >= (50 * 1024 * 1024)) {
             std::string gid;
             uint32_t band = iter->second->up_bandwidth + iter->second->down_bandwidth;
             std::string now_day_timestamp = std::to_string(common::TimeUtils::TimestampDays());
@@ -1854,7 +1846,6 @@ void VpnServer::CheckAccountValid() {
                     iter->second->account_id,
                     iter->second->vpn_pay_for_height);
             SendGetAccountAttrUsedBandwidth(iter->second->account_id);
-            std::cout << "send get login block and pay for vpn block." << std::endl;
             iter->second->join_time = (std::chrono::steady_clock::now() +
                 std::chrono::microseconds(kWaitingLogin));
         }
