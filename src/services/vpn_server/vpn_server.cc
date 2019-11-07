@@ -1799,8 +1799,11 @@ void VpnServer::CheckAccountValid() {
                     std::chrono::microseconds(kWaitingLogin);
             account_map_[account_info->account_id] = account_info;
             std::string gid;
+            std::string now_day_timestamp = std::to_string(common::TimeUtils::TimestampDays());
+            std::string attr_key = (common::kIncreaseVpnBandwidth + "_" +
+                common::Encode::HexEncode(account_info->account_id) + "_" + now_day_timestamp);
             std::map<std::string, std::string> attrs{
-                {common::kIncreaseVpnBandwidth, std::to_string(10 * 1024 * 1024)}
+                {attr_key, std::to_string(10 * 1024 * 1024)}
             };
             lego::client::TransactionClient::Instance()->Transaction(
                     account_info->account_id,
@@ -1824,8 +1827,11 @@ void VpnServer::CheckAccountValid() {
         if ((iter->second->up_bandwidth + iter->second->down_bandwidth) >= (10 * 1024 * 1024)) {
             std::string gid;
             uint32_t band = iter->second->up_bandwidth + iter->second->down_bandwidth;
+            std::string now_day_timestamp = std::to_string(common::TimeUtils::TimestampDays());
+            std::string attr_key = (common::kIncreaseVpnBandwidth + "_" +
+                    common::Encode::HexEncode(iter->second->account_id) + "_" + now_day_timestamp);
             std::map<std::string, std::string> attrs{
-                {common::kIncreaseVpnBandwidth, std::to_string(band)}
+                {attr_key, std::to_string(band)}
             };
             lego::client::TransactionClient::Instance()->Transaction(
                     iter->second->account_id,
