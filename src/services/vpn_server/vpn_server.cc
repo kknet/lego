@@ -1700,6 +1700,8 @@ void VpnServer::HandleClientBandwidthResponse(
         return;
     }
     iter->second->today_used_bandwidth = used;
+    std::cout << "receive account: " << key_split[1] << " bandwidth." << std::endl;
+
 }
 
 void VpnServer::HandleVpnLoginResponse(
@@ -1799,6 +1801,7 @@ void VpnServer::CheckAccountValid() {
                     attrs,
                     common::kConsensusVpnBandwidth,
                     gid);
+            std::cout << "send account: " << common::Encode::HexEncode(account_info->account_id) << " init bandwidth." << std::endl;
         }
     }
 

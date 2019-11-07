@@ -242,6 +242,7 @@ int TxBft::CheckTxInfo(
     }
 
     if (!local_tx_info->smart_contract_addr.empty()) {
+        std::cout << "execute smart contract: " << local_tx_info->smart_contract_addr << std::endl;
         if (contract::ContractManager::Instance()->Execute(
                 local_tx_info) != contract::kContractSuccess) {
             BFT_ERROR("local tx execute smart_contract_addr[%s] failed!",

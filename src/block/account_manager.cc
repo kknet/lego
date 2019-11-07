@@ -74,6 +74,8 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
             }
 
             if (!tx_list[i].smart_contract_addr().empty()) {
+                std::cout << "to init smart contract: " << tx_list[i].smart_contract_addr() << std::endl;
+
                 contract::ContractManager::Instance()->InitWithAttr(
                         block_item.height(),
                         tx_list[i]);
@@ -103,6 +105,7 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
             }
 
             if (!tx_list[i].smart_contract_addr().empty()) {
+                std::cout << "from init smart contract: " << tx_list[i].smart_contract_addr() << std::endl;
                 contract::ContractManager::Instance()->InitWithAttr(
                         block_item.height(),
                         tx_list[i]);

@@ -159,6 +159,7 @@ void TxProto::CreateTxBlock(
 
         // execute contract
         if (!tx_vec[i]->smart_contract_addr.empty()) {
+            std::cout << "leader execute smart contract: " << tx_vec[i]->smart_contract_addr << std::endl;
             if (contract::ContractManager::Instance()->Execute(
                     tx_vec[i]) != contract::kContractSuccess) {
                 continue;
