@@ -135,7 +135,7 @@ int TxBft::BackupCheckPrepare(std::string& bft_str) {
                     acc_balance_map[tx_info.to()] += tx_info.amount();
                 }
 
-                if (acc_balance_map[tx_info.to()] != tx_info.balance()) {
+                if (acc_balance_map[tx_info.to()] != static_cast<int64_t>(tx_info.balance())) {
                     BFT_ERROR("bft::protobuf::TxBft kBftAccountBalanceError failed!");
                     return kBftAccountBalanceError;
                 }
@@ -166,7 +166,7 @@ int TxBft::BackupCheckPrepare(std::string& bft_str) {
                     acc_balance_map[tx_info.from()] -= static_cast<int64_t>(tx_info.amount());
                 }
 
-                if (acc_balance_map[tx_info.from()] != tx_info.balance()) {
+                if (acc_balance_map[tx_info.from()] != static_cast<int64_t>(tx_info.balance())) {
                     BFT_ERROR("bft::protobuf::TxBft kBftAccountBalanceError failed!");
                     return kBftAccountBalanceError;
                 }
@@ -250,7 +250,7 @@ int TxBft::CheckTxInfo(
         }
     }
 
-    if (local_tx_info->attr_map.size() != tx_info.attr_size()) {
+    if (local_tx_info->attr_map.size() != static_cast<uint32_t>(tx_info.attr_size())) {
         BFT_ERROR("local tx attrs not equal to leader attrs[%d][%d]!",
                 local_tx_info->attr_map.size(), tx_info.attr_size());
         return kBftLeaderInfoInvalid;
