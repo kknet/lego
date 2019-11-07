@@ -137,7 +137,7 @@ int ShadowsocksProxy::InitTcpRelay() {
         return kProxyError;
     }
 
-    int res = vpn::VpnRoute::Instance()->Init();
+    res = vpn::VpnRoute::Instance()->Init();
     if (res != vpnroute::kVpnRouteSuccess) {
         return kProxyError;
     }
