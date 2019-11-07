@@ -1599,7 +1599,7 @@ void VpnServer::HandleMessage(transport::protobuf::Header& header) {
             }
 
             if (header.des_dht_key() == dht_ptr->local_node()->dht_key) {
-                HandleVpnLoginResponse(header, block_msg);
+                HandleClientBandwidthResponse(header, contract_msg);
                 return;
             }
             dht_ptr->SendToClosestNode(header);
