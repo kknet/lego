@@ -1730,7 +1730,7 @@ void VpnServer::HandleClientBandwidthResponse(
 
     iter->second->today_used_bandwidth = used;
     if (iter->second->today_used_bandwidth >= kMaxBandwidthFreeUse) {
-        iter->second->login_valid = false;
+        iter->second->client_status = common::kBandwidthFreeToUseExceeded;
         account_map_.erase(iter);
     }
 
