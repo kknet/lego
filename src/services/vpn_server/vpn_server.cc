@@ -1575,6 +1575,7 @@ void VpnServer::HandleMessage(transport::protobuf::Header& header) {
 
 
     if (header.type() == common::kContractMessage) {
+        std::cout << "receive contract res message." << std::endl;
         contract::protobuf::ContractMessage contract_msg;
         if (!contract_msg.ParseFromString(header.data())) {
             return;
