@@ -62,8 +62,8 @@ void ContractManager::HandleGetContractAttrRequest(
         return;
     }
 
-    protobuf::ContractMessage contract_msg;
-    auto attr_res = contract_msg.mutable_get_attr_res();
+    protobuf::ContractMessage contract_msg_res;
+    auto attr_res = contract_msg_res.mutable_get_attr_res();
     attr_res->set_smart_contract_addr(contract_msg.get_attr_req().smart_contract_addr());
     attr_res->set_attr_key(contract_msg.get_attr_req().attr_key());
     attr_res->set_attr_value(attr_value);
@@ -75,7 +75,7 @@ void ContractManager::HandleGetContractAttrRequest(
     contract::ContractProto::CreateGetAttrResponse(
             dht_ptr->local_node(),
             header,
-            contract_msg.SerializeAsString(),
+            contract_msg_res.SerializeAsString(),
             msg);
     network::Route::Instance()->Send(msg);
 }
