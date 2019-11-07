@@ -78,15 +78,6 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
         return kProxyError;
     }
 
-    std::string gid;
-    std::map<std::string, std::string> attrs;
-    lego::client::TransactionClient::Instance()->Transaction(
-            "",
-            0,
-            "",
-            attrs,
-            common::kConsensusCreateAcount,
-            gid);
     if (security::EcdhCreateKey::Instance()->Init() != security::kSecuritySuccess) {
         PROXY_ERROR("init ecdh create secret key failed!");
         return kProxyError;
@@ -123,6 +114,15 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
     }
 
     std::string gid;
+    std::map<std::string, std::string> attrs;
+    lego::client::TransactionClient::Instance()->Transaction(
+            "",
+            0,
+            "",
+            attrs,
+            common::kConsensusCreateAcount,
+            gid);
+    // check account address valid
     inited_ = true;
     cmd_.Run();
     transport_->Stop();
