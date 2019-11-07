@@ -655,7 +655,8 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             }
             lego::vpn::VpnServer::Instance()->bandwidth_queue().push(acc_item);
         } else {
-            if (!iter->second->login_valid) {
+            if (iter->second->client_status != common::kValid) {
+                // send back with status
                 return;
             }
 
@@ -679,6 +680,16 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     } else {
         client_ptr = server->client_ptr;
         if (client_ptr == nullptr) {
+            return;
+        }
+
+        auto iter = server->svr_item->account_bindwidth_map.find(client_ptr->account);
+        if (iter == server->svr_item->account_bindwidth_map.end()) {
+            return;
+        }
+
+        if (iter->second->client_status != common::kValid) {
+            // send back with status
             return;
         }
     }
@@ -1778,37 +1789,37 @@ void VpnServer::HandleVpnLoginResponse(
         }
     }
 
-    if (login_svr_id != common::GlobalInfo::Instance()->id()) {
-        ++iter->second->invalid_times;
-        if (iter->second->invalid_times > 5) {
-            iter->second->login_valid = false;
-            if ((iter->second->up_bandwidth + iter->second->down_bandwidth) >=
-                    kConnectInitBandwidth) {
-                SendClientUseBandwidth(
-                    iter->second->account_id,
-                    iter->second->up_bandwidth + iter->second->down_bandwidth);
-            }
-            account_map_.erase(iter);
-        }
-        return;
-    }
-
-    uint32_t day_pay_for_vpn = common::StringUtil::ToUint32(day_pay_timestamp);
-    uint32_t now_day_timestamp = common::TimeUtils::TimestampDays();
-    if (now_day_timestamp > (day_pay_for_vpn + 30)) {
-        ++iter->second->invalid_times;
-        if (iter->second->invalid_times > 5) {
-            iter->second->login_valid = false;
-            if ((iter->second->up_bandwidth + iter->second->down_bandwidth) >=
-                kConnectInitBandwidth) {
-                SendClientUseBandwidth(
-                        iter->second->account_id,
-                        iter->second->up_bandwidth + iter->second->down_bandwidth);
-            }
-            account_map_.erase(iter);
-        }
-        return;
-    }
+//     if (login_svr_id != common::GlobalInfo::Instance()->id()) {
+//         ++iter->second->invalid_times;
+//         if (iter->second->invalid_times > 5) {
+//             iter->second->login_valid = false;
+//             if ((iter->second->up_bandwidth + iter->second->down_bandwidth) >=
+//                     kConnectInitBandwidth) {
+//                 SendClientUseBandwidth(
+//                     iter->second->account_id,
+//                     iter->second->up_bandwidth + iter->second->down_bandwidth);
+//             }
+//             account_map_.erase(iter);
+//         }
+//         return;
+//     }
+// 
+//     uint32_t day_pay_for_vpn = common::StringUtil::ToUint32(day_pay_timestamp);
+//     uint32_t now_day_timestamp = common::TimeUtils::TimestampDays();
+//     if (now_day_timestamp > (day_pay_for_vpn + 30)) {
+//         ++iter->second->invalid_times;
+//         if (iter->second->invalid_times > 5) {
+//             iter->second->login_valid = false;
+//             if ((iter->second->up_bandwidth + iter->second->down_bandwidth) >=
+//                 kConnectInitBandwidth) {
+//                 SendClientUseBandwidth(
+//                         iter->second->account_id,
+//                         iter->second->up_bandwidth + iter->second->down_bandwidth);
+//             }
+//             account_map_.erase(iter);
+//         }
+//         return;
+//     }
     iter->second->invalid_times = 0;
 }
 

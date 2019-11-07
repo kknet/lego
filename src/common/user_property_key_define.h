@@ -16,6 +16,14 @@ enum ConsensusType {
     kConsensusVpnBandwidth = 6,
 };
 
+enum ClientStatus {
+    kValid = 0,
+    kBandwidthFreeToUseExceeded = 1,
+    kPayForExpired = 2,
+    kServerOverLoaded = 3,
+    kLoginByOtherTerminal = 4,
+};
+
 static const std::string kVpnLoginAttrKey = "vpn_login";
 static const std::string kUserPayForVpn = "user_pay_for_vpn";
 static const std::string kIncreaseVpnBandwidth = "kIncreaseVpnBandwidth";
