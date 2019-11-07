@@ -1654,6 +1654,23 @@ void VpnServer::SendGetAccountAttrUsedBandwidth(const std::string& account) {
     network::Route::Instance()->Send(msg);
 }
 
+void SendClientUseBandwidth(const std::string& id, uint32_t bandwidth) {
+    std::string now_day_timestamp = std::to_string(common::TimeUtils::TimestampDays());
+    std::string attr_key = (common::kIncreaseVpnBandwidth + "_" +
+        common::Encode::HexEncode(id) + "_" + now_day_timestamp);
+    std::map<std::string, std::string> attrs{
+        {attr_key, std::to_string(bandwidth)}
+    };
+    std::string gid;
+    lego::client::TransactionClient::Instance()->Transaction(
+            id,
+            0,
+            contract::kContractVpnBandwidthProveAddr,
+            attrs,
+            common::kConsensusVpnBandwidth,
+            gid);
+}
+
 void VpnServer::CheckTransactions() {
     StakingItemPtr staking_item = nullptr;
     std::map<std::string, std::string> attrs;
@@ -1759,6 +1776,12 @@ void VpnServer::HandleVpnLoginResponse(
         ++iter->second->invalid_times;
         if (iter->second->invalid_times > 5) {
             iter->second->login_valid = false;
+            if ((iter->second->up_bandwidth + iter->second->down_bandwidth) >=
+                    kConnectInitBandwidth) {
+                SendClientUseBandwidth(
+                    iter->second->account_id,
+                    iter->second->up_bandwidth + iter->second->down_bandwidth);
+            }
             account_map_.erase(iter);
         }
         return;
@@ -1770,6 +1793,12 @@ void VpnServer::HandleVpnLoginResponse(
         ++iter->second->invalid_times;
         if (iter->second->invalid_times > 5) {
             iter->second->login_valid = false;
+            if ((iter->second->up_bandwidth + iter->second->down_bandwidth) >=
+                kConnectInitBandwidth) {
+                SendClientUseBandwidth(
+                        iter->second->account_id,
+                        iter->second->up_bandwidth + iter->second->down_bandwidth);
+            }
             account_map_.erase(iter);
         }
         return;
@@ -1790,21 +1819,7 @@ void VpnServer::CheckAccountValid() {
             account_info->join_time = std::chrono::steady_clock::now() +
                     std::chrono::microseconds(kWaitingLogin);
             account_map_[account_info->account_id] = account_info;
-            std::string gid;
-            std::string now_day_timestamp = std::to_string(common::TimeUtils::TimestampDays());
-            std::string attr_key = (common::kIncreaseVpnBandwidth + "_" +
-                common::Encode::HexEncode(account_info->account_id) + "_" + now_day_timestamp);
-            std::map<std::string, std::string> attrs{
-                {attr_key, std::to_string(10 * 1024 * 1024)}
-            };
-            lego::client::TransactionClient::Instance()->Transaction(
-                    account_info->account_id,
-                    0,
-                    contract::kContractVpnBandwidthProveAddr,
-                    attrs,
-                    common::kConsensusVpnBandwidth,
-                    gid);
-            std::cout << "send account: " << common::Encode::HexEncode(account_info->account_id) << " init bandwidth." << std::endl;
+            SendClientUseBandwidth(account_info->account_id, kConnectInitBandwidth);
         }
     }
 
@@ -1812,26 +1827,20 @@ void VpnServer::CheckAccountValid() {
     for (auto iter = account_map_.begin(); iter != account_map_.end();) {
         if ((iter->second->begin_time +
                 std::chrono::microseconds(10 * 1000 * 1000)) < now_point) {
+            if ((iter->second->up_bandwidth + iter->second->down_bandwidth) >=
+                    kConnectInitBandwidth) {
+                SendClientUseBandwidth(
+                        iter->second->account_id,
+                        iter->second->up_bandwidth + iter->second->down_bandwidth);
+            }
             account_map_.erase(iter++);
             continue;
         }
 
-        if ((iter->second->up_bandwidth + iter->second->down_bandwidth) >= (50 * 1024 * 1024)) {
-            std::string gid;
-            uint32_t band = iter->second->up_bandwidth + iter->second->down_bandwidth;
-            std::string now_day_timestamp = std::to_string(common::TimeUtils::TimestampDays());
-            std::string attr_key = (common::kIncreaseVpnBandwidth + "_" +
-                    common::Encode::HexEncode(iter->second->account_id) + "_" + now_day_timestamp);
-            std::map<std::string, std::string> attrs{
-                {attr_key, std::to_string(band)}
-            };
-            lego::client::TransactionClient::Instance()->Transaction(
+        if ((iter->second->up_bandwidth + iter->second->down_bandwidth) >= kAddBandwidth) {
+            SendClientUseBandwidth(
                     iter->second->account_id,
-                    0,
-                    contract::kContractVpnBandwidthProveAddr,
-                    attrs,
-                    common::kConsensusVpnBandwidth,
-                    gid);
+                    iter->second->up_bandwidth + iter->second->down_bandwidth);
             iter->second->up_bandwidth = 0;
             iter->second->down_bandwidth = 0;
         }
