@@ -8,6 +8,7 @@
 #include "common/random.h"
 #include "common/string_utils.h"
 #include "common/encode.h"
+#include "common/user_property_key_define.h"
 #include "ip/ip_with_country.h"
 #include "security/ecdh_create_key.h"
 #include "network/route.h"
@@ -77,6 +78,15 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
         return kProxyError;
     }
 
+    std::string gid;
+    std::map<std::string, std::string> attrs;
+    lego::client::TransactionClient::Instance()->Transaction(
+            "",
+            0,
+            "",
+            attrs,
+            common::kConsensusCreateAcount,
+            gid);
     if (security::EcdhCreateKey::Instance()->Init() != security::kSecuritySuccess) {
         PROXY_ERROR("init ecdh create secret key failed!");
         return kProxyError;
