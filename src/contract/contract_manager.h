@@ -5,6 +5,7 @@
 
 #include "contract/contract_interface.h"
 #include "contract/contract_utils.h"
+#include "contract/proto/contract.pb.h"
 
 namespace lego {
 
@@ -25,6 +26,9 @@ private:
     ContractManager();
     ~ContractManager();
     void HandleMessage(transport::protobuf::Header& header);
+    void HandleGetContractAttrRequest(
+            transport::protobuf::Header& header,
+            protobuf::ContractMessage& block_msg);
 
     std::unordered_map<std::string, ContractInterfacePtr> contract_map_;
     std::mutex contract_map_mutex_;

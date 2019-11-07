@@ -8,6 +8,7 @@
 #include "common/tick.h"
 #include "common/thread_safe_queue.h"
 #include "block/proto/block.pb.h"
+#include "contract/proto/contract.pb.h"
 #include "transport/proto/transport.pb.h"
 #include "services/vpn_server/vpn_svr_utils.h"
 #include "services/vpn_server/server.h"
@@ -21,9 +22,6 @@ public:
     static VpnServer* Instance();
     int Init();
     int ParserReceivePacket(const char* buf);
-    void HandleVpnLoginResponse(
-            transport::protobuf::Header& header,
-            block::protobuf::BlockMessage& block_msg);
     void Stop();
 
     common::ThreadSafeQueue<StakingItemPtr>& staking_queue() {
@@ -48,8 +46,15 @@ private:
             const std::string& account,
             uint64_t height);
     void HandleMessage(transport::protobuf::Header& header);
+    void HandleVpnLoginResponse(
+            transport::protobuf::Header& header,
+            block::protobuf::BlockMessage& block_msg);
+    void HandleClientBandwidthResponse(
+            transport::protobuf::Header& header,
+            contract::protobuf::ContractMessage& contract_msg);
     void RotationServer();
     void StartMoreServer();
+    void SendGetAccountAttrUsedBandwidth(const std::string& account);
 
     static const uint32_t kStakingCheckingPeriod = 10 * 1000 * 1000;
     static const uint32_t kAccountCheckPeriod = 10 * 1000 * 1000;

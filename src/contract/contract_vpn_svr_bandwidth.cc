@@ -12,7 +12,7 @@ namespace contract {
 int VpnSvrBandwidth::InitWithAttr(uint64_t block_height, const bft::protobuf::TxInfo& tx_info) {
     std::string now_day_timestamp = std::to_string(common::TimeUtils::TimestampDays());
     std::string attr_key = (common::kIncreaseVpnBandwidth + "_" +
-            tx_info.to() + "_" + now_day_timestamp);
+            common::Encode::HexEncode(tx_info.to()) + "_" + now_day_timestamp);
     std::string attr_val;
     for (int32_t i = 0; i < tx_info.attr_size(); ++i) {
         if (tx_info.attr(i).key() == attr_key) {
@@ -33,12 +33,11 @@ int VpnSvrBandwidth::InitWithAttr(uint64_t block_height, const bft::protobuf::Tx
     }
 
     if (tx_info.to_add()) {
-        std::string one_day_all = kToUseBandwidthOneDay + "_" + now_day_timestamp;
         std::lock_guard<std::mutex> guard(bandwidth_all_map_mutex_);
-        auto all_iter = bandwidth_all_map_.find(one_day_all);
+        auto all_iter = bandwidth_all_map_.find(attr_key);
         if (all_iter == bandwidth_all_map_.end()) {
             bandwidth_all_map_.clear();
-            bandwidth_all_map_[one_day_all] = bandwidth;
+            bandwidth_all_map_[attr_key] = bandwidth;
         } else {
             all_iter->second += bandwidth;
         }

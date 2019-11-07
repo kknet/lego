@@ -112,7 +112,7 @@ struct BandwidthInfo {
     }
     uint32_t up_bandwidth;
     uint32_t down_bandwidth;
-    uint32_t added_bandwidth;
+    uint32_t today_used_bandwidth;
     std::chrono::steady_clock::time_point begin_time;
     bool login_valid{ true };
     std::string account_id;

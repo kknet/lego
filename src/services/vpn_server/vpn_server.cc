@@ -85,6 +85,7 @@ extern "C" {
 #include "common/encode.h"
 #include "common/global_info.h"
 #include "common/time_utils.h"
+#include "common/split.h"
 #include "common/user_property_key_define.h"
 #include "contract/contract_utils.h"
 #include "client/trans_client.h"
@@ -98,6 +99,8 @@ extern "C" {
 #include "dht/base_dht.h"
 #include "block/proto/block.pb.h"
 #include "block/proto/block_proto.h"
+#include "contract/proto/contract.pb.h"
+#include "contract/proto/contract_proto.h"
 #include "bft/basic_bft/transaction/proto/tx.pb.h"
 #include "services/vpn_server/ev_loop_manager.h"
 
@@ -1502,6 +1505,9 @@ VpnServer::VpnServer() {
     network::Route::Instance()->RegisterMessage(
             common::kBlockMessage,
             std::bind(&VpnServer::HandleMessage, this, std::placeholders::_1));
+    network::Route::Instance()->RegisterMessage(
+            common::kContractMessage,
+            std::bind(&VpnServer::HandleMessage, this, std::placeholders::_1));
 }
 
 VpnServer::~VpnServer() {}
@@ -1535,38 +1541,69 @@ int VpnServer::Init() {
 }
 
 void VpnServer::HandleMessage(transport::protobuf::Header& header) {
-    if (header.type() != common::kBlockMessage) {
-        return;
-    }
+    if (header.type() == common::kBlockMessage) {
+        block::protobuf::BlockMessage block_msg;
+        if (!block_msg.ParseFromString(header.data())) {
+            return;
+        }
 
-    block::protobuf::BlockMessage block_msg;
-    if (!block_msg.ParseFromString(header.data())) {
-        return;
-    }
-
-    if (block_msg.has_acc_attr_res()) {
-        dht::BaseDhtPtr dht_ptr = nullptr;
-        uint32_t netid = dht::DhtKeyManager::DhtKeyGetNetId(header.des_dht_key());
-        if (netid == network::kUniversalNetworkId || netid == network::kNodeNetworkId) {
-            dht_ptr = network::UniversalManager::Instance()->GetUniversal(netid);
-        } else {
-            if (header.universal() == 0) {
+        if (block_msg.has_acc_attr_res()) {
+            dht::BaseDhtPtr dht_ptr = nullptr;
+            uint32_t netid = dht::DhtKeyManager::DhtKeyGetNetId(header.des_dht_key());
+            if (netid == network::kUniversalNetworkId || netid == network::kNodeNetworkId) {
                 dht_ptr = network::UniversalManager::Instance()->GetUniversal(netid);
             } else {
-                dht_ptr = network::DhtManager::Instance()->GetDht(netid);
+                if (header.universal() == 0) {
+                    dht_ptr = network::UniversalManager::Instance()->GetUniversal(netid);
+                } else {
+                    dht_ptr = network::DhtManager::Instance()->GetDht(netid);
+                }
             }
-        }
 
-        if (dht_ptr == nullptr) {
-            network::Route::Instance()->Send(header);
+            if (dht_ptr == nullptr) {
+                network::Route::Instance()->Send(header);
+                return;
+            }
+
+            if (header.des_dht_key() == dht_ptr->local_node()->dht_key) {
+                HandleVpnLoginResponse(header, block_msg);
+                return;
+            }
+            dht_ptr->SendToClosestNode(header);
+        }
+    }
+
+
+    if (header.type() == common::kContractMessage) {
+        contract::protobuf::ContractMessage contract_msg;
+        if (!contract_msg.ParseFromString(header.data())) {
             return;
         }
 
-        if (header.des_dht_key() == dht_ptr->local_node()->dht_key) {
-            HandleVpnLoginResponse(header, block_msg);
-            return;
+        if (contract_msg.has_get_attr_res()) {
+            dht::BaseDhtPtr dht_ptr = nullptr;
+            uint32_t netid = dht::DhtKeyManager::DhtKeyGetNetId(header.des_dht_key());
+            if (netid == network::kUniversalNetworkId || netid == network::kNodeNetworkId) {
+                dht_ptr = network::UniversalManager::Instance()->GetUniversal(netid);
+            } else {
+                if (header.universal() == 0) {
+                    dht_ptr = network::UniversalManager::Instance()->GetUniversal(netid);
+                } else {
+                    dht_ptr = network::DhtManager::Instance()->GetDht(netid);
+                }
+            }
+
+            if (dht_ptr == nullptr) {
+                network::Route::Instance()->Send(header);
+                return;
+            }
+
+            if (header.des_dht_key() == dht_ptr->local_node()->dht_key) {
+                HandleVpnLoginResponse(header, block_msg);
+                return;
+            }
+            dht_ptr->SendToClosestNode(header);
         }
-        dht_ptr->SendToClosestNode(header);
     }
 }
 
@@ -1596,6 +1633,27 @@ void VpnServer::SendGetAccountAttrLastBlock(
     network::Route::Instance()->Send(msg);
 }
 
+void VpnServer::SendGetAccountAttrUsedBandwidth(const std::string& account) {
+    auto uni_dht = lego::network::DhtManager::Instance()->GetDht(
+        lego::network::kVpnNetworkId);
+    if (uni_dht == nullptr) {
+        VPNSVR_ERROR("not found vpn server dht.");
+        return;
+    }
+
+    transport::protobuf::Header msg;
+    std::string now_day_timestamp = std::to_string(common::TimeUtils::TimestampDays());
+    std::string key = (common::kIncreaseVpnBandwidth + "_" +
+            common::Encode::HexEncode(account) + "_" + now_day_timestamp);
+    contract::ContractProto::CreateGetAttrRequest(
+            uni_dht->local_node(),
+            account,
+            contract::kContractVpnBandwidthProveAddr,
+            key,
+            msg);
+    network::Route::Instance()->Send(msg);
+}
+
 void VpnServer::CheckTransactions() {
     StakingItemPtr staking_item = nullptr;
     std::map<std::string, std::string> attrs;
@@ -1616,6 +1674,32 @@ void VpnServer::CheckTransactions() {
     staking_tick_.CutOff(
             kStakingCheckingPeriod,
             std::bind(&VpnServer::CheckTransactions, VpnServer::Instance()));
+}
+
+void VpnServer::HandleClientBandwidthResponse(
+        transport::protobuf::Header& header,
+        contract::protobuf::ContractMessage& contract_msg) {
+    auto client_bw_res = contract_msg.get_attr_res();
+    std::string key = client_bw_res.attr_key();
+    common::Split key_split(key.c_str(), '_', key.size());
+    if (key_split.Count() != 3) {
+        return;
+    }
+
+    uint32_t used = 0;
+    try {
+        used = common::StringUtil::ToUint32(client_bw_res.attr_value());
+    } catch(...) {
+        return;
+    }
+
+    std::string account_id = common::Encode::HexDecode(key_split[1]);
+    std::lock_guard<std::mutex> guard(account_map_mutex_);
+    auto iter = account_map_.find(account_id);
+    if (iter == account_map_.end()) {
+        return;
+    }
+    iter->second->today_used_bandwidth = used;
 }
 
 void VpnServer::HandleVpnLoginResponse(
@@ -1752,6 +1836,7 @@ void VpnServer::CheckAccountValid() {
                     common::kUserPayForVpn,
                     iter->second->account_id,
                     iter->second->vpn_pay_for_height);
+            SendGetAccountAttrUsedBandwidth(iter->second->account_id);
             std::cout << "send get login block and pay for vpn block." << std::endl;
             iter->second->join_time = (std::chrono::steady_clock::now() +
                 std::chrono::microseconds(kWaitingLogin));
