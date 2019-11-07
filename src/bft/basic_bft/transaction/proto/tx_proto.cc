@@ -164,6 +164,8 @@ void TxProto::CreateTxBlock(
                     tx_vec[i]) != contract::kContractSuccess) {
                 continue;
             }
+
+            tx.set_smart_contract_addr(tx_vec[i]->smart_contract_addr);
         }
 
         if (!tx_vec[i]->attr_map.empty()) {
