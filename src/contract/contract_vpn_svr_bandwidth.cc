@@ -9,26 +9,30 @@ namespace lego {
 
 namespace contract {
 
-int VpnSvrBandwidth::InitWithAttr(uint64_t block_height, bft::TxItemPtr& tx_item) {
+int VpnSvrBandwidth::InitWithAttr(uint64_t block_height, bft::protobuf::TxInfo& tx_info) {
     std::string now_day_timestamp = std::to_string(common::TimeUtils::TimestampDays());
     std::string attr_key = (common::kIncreaseVpnBandwidth + "_" +
-            tx_item->to_acc_addr + "_" + now_day_timestamp);
-    auto iter = tx_item->attr_map.find(attr_key);
-    if (iter == tx_item->attr_map.end()) {
+            tx_info.to() + "_" + now_day_timestamp);
+    std::string attr_val;
+    for (int32_t i = 0; i < tx_info.attr_size(); ++i) {
+        if (tx_info.attr(i).key() == attr_key) {
+            attr_val = tx_info.attr(i).value();
+            break;
+        }
+    }
+    
+    if (attr_val.empty()) {
         return kContractSuccess;
     }
 
     uint32_t bandwidth = 0;
     try {
-        bandwidth = common::StringUtil::ToUint32(iter->second);
+        bandwidth = common::StringUtil::ToUint32(attr_val);
     } catch (...) {
         return kContractSuccess;
     }
 
-    std::string bw_key;
-    if (tx_item->add_to_acc_addr) {
-        bw_key = (common::kIncreaseVpnBandwidth + "_" +
-                tx_item->from_acc_addr + "_" + now_day_timestamp);
+    if (tx_info.to_add()) {
         std::string one_day_all = kToUseBandwidthOneDay + "_" + now_day_timestamp;
         std::lock_guard<std::mutex> guard(bandwidth_all_map_mutex_);
         auto all_iter = bandwidth_all_map_.find(one_day_all);

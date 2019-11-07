@@ -13,7 +13,7 @@ class VpnSvrBandwidth : public ContractInterface {
 public:
     VpnSvrBandwidth() {}
     virtual ~VpnSvrBandwidth() {}
-    virtual int InitWithAttr(uint64_t block_height, bft::TxItemPtr& tx_item);
+    virtual int InitWithAttr(uint64_t block_height, bft::protobuf::TxInfo& tx_info);
     virtual int GetAttrWithKey(const std::string& key, std::string& value);
     virtual int Execute(bft::TxItemPtr& tx_item);
 

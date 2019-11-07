@@ -36,18 +36,18 @@ void ContractManager::HandleMessage(transport::protobuf::Header& header) {
     }
 }
 
-int ContractManager::InitWithAttr(uint64_t block_height, bft::TxItemPtr& tx_item) {
+int ContractManager::InitWithAttr(uint64_t block_height, bft::protobuf::TxInfo& tx_info) {
     ContractInterfacePtr contract_ptr = nullptr;
     {
         std::lock_guard<std::mutex> guard(contract_map_mutex_);
-        auto iter = contract_map_.find(tx_item->smart_contract_addr);
+        auto iter = contract_map_.find(tx_info.smart_contract_addr());
         if (iter != contract_map_.end()) {
             contract_ptr = iter->second;
         }
     }
 
     if (contract_ptr != nullptr) {
-        return contract_ptr->InitWithAttr(block_height, tx_item);
+        return contract_ptr->InitWithAttr(block_height, tx_info);
     }
     return kContractError;
 }

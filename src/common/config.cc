@@ -390,8 +390,7 @@ bool Config::InitWithContent(const std::string& content) {
 
         if (line.find(']') != std::string::npos) {
             if (!HandleFiled(line, filed)) {
-                ERROR("handle field failed[%s][%d]", line.c_str(), line.find(']'));
-                printf("handle field failed[%s][%d]\n", line.c_str(), line.find(']'));
+                ERROR("handle field failed[%s][%s]", line.c_str(), filed.c_str());
                 res = false;
                 break;
             }

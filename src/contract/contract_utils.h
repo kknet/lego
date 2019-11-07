@@ -18,7 +18,7 @@ enum ContractErrorCode {
 };
 
 static const std::string kContractVpnBandwidthProveAddr = "contract_vpn_bandwith_prove";
-static const std::string kToUseBandwidthOneDay = "to_use_bandwidth_one_day";
+static const std::string kToUseBandwidthOneDay = "to_use_bw_one_day";
 
 }  // namespace contact
 

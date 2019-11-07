@@ -75,13 +75,8 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
 
             if (!tx_list[i].smart_contract_addr().empty()) {
                 contract::ContractManager::Instance()->InitWithAttr(
-                        tx_list[i].smart_contract_addr(),
-                        tx_list[i].from(),
-                        tx_list[i].to(),
-                        tx_list[i].amount(),
-                        tx_list[i].type(),
-                        false,
-                        attr_map);
+                        block_item.height(),
+                        tx_list[i]);
             }
         } else {
             if (CheckNetworkIdValid(tx_list[i].from()) != kBlockSuccess) {
@@ -109,13 +104,8 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
 
             if (!tx_list[i].smart_contract_addr().empty()) {
                 contract::ContractManager::Instance()->InitWithAttr(
-                        tx_list[i].smart_contract_addr(),
-                        tx_list[i].from(),
-                        tx_list[i].to(),
-                        tx_list[i].amount(),
-                        tx_list[i].type(),
-                        true,
-                        attr_map);
+                        block_item.height(),
+                        tx_list[i]);
             }
             AddAccount(acc_ptr);
 
