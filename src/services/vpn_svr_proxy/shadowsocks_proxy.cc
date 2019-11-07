@@ -129,9 +129,11 @@ int ShadowsocksProxy::InitTcpRelay() {
     }
 
     vpn_route_ = std::make_shared<VpnProxyNode>(network::kVpnRouteNetworkId);
-    if (vpn_route_->Init() != network::kNetworkSuccess) {
+    int res = vpn_route_->Init();
+    if (res != dht::kDhtSuccess) {
         vpn_route_ = nullptr;
-        PROXY_ERROR("node join network [%u] failed!", network::kVpnRouteNetworkId);
+        PROXY_ERROR("node join network [%u] [%d] failed!",
+                network::kVpnRouteNetworkId, res);
         return kProxyError;
     }
 

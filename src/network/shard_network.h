@@ -126,8 +126,7 @@ int ShardNetwork<DhtType>::JoinShard() {
     }
 
     if (elect_dht_->Bootstrap(boot_nodes) != dht::kDhtSuccess) {
-        NETWORK_ERROR("join universal network failed!");
-        return kNetworkError;
+        NETWORK_ERROR("join shard network [%u] failed!", network_id_);
     }
     return kNetworkSuccess;
 }
