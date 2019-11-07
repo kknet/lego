@@ -3,6 +3,7 @@
 #include <map>
 #include <memory>
 
+#include "bft/basic_bft/transaction/tx_bft.h"
 #include "contract/contract_utils.h"
 
 namespace lego {
@@ -11,22 +12,10 @@ namespace contract {
 
 class ContractInterface {
 public:
-    virtual int InitWithAttr(
-            const std::string& from,
-            const std::string& to,
-            uint64_t amount,
-            uint32_t type,
-            bool is_from,
-            const std::map<std::string, std::string>& attr_map) = 0;
-
+    virtual int InitWithAttr(uint64_t block_height, bft::TxItemPtr& tx_item) = 0;
+    virtual int GetAttrWithKey(const std::string& key, std::string& value) = 0;
     // attr map can change, and save to block chain
-    virtual int Execute(
-            const std::string& from,
-            const std::string& to,
-            uint64_t amount,
-            uint32_t type,
-            bool is_from,
-            std::map<std::string, std::string>& attr_map) = 0;
+    virtual int Execute(bft::TxItemPtr& tx_item) = 0;
 
 protected:
     ContractInterface() {}

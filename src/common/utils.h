@@ -61,6 +61,7 @@ enum MessageType {
     kServiceMessage = 6,
     kBlockMessage = 7,
     kRelayMessage = 8,  // any not handle message will routing by root
+    kContractMessage = 9,
 
     kUdpDemoTestMessage,
     // max message type

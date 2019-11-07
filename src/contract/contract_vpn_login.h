@@ -10,21 +10,9 @@ class VpnLogin : public ContractInterface {
 public:
     VpnLogin() {}
     virtual ~VpnLogin() {}
-    virtual int InitWithAttr(
-            const std::string& from,
-            const std::string& to,
-            uint64_t amount,
-            uint32_t type,
-            bool is_from,
-            const std::map<std::string, std::string>& attr_map);
-
-    virtual int Execute(
-            const std::string& from,
-            const std::string& to,
-            uint64_t amount,
-            uint32_t type,
-            bool is_from,
-            std::map<std::string, std::string>& attr_map);
+    virtual int InitWithAttr(uint64_t block_height, bft::TxItemPtr& tx_item);
+    virtual int GetAttrWithKey(const std::string& key, std::string& value);
+    virtual int Execute(bft::TxItemPtr& tx_item);
 
 protected:
     DISALLOW_COPY_AND_ASSIGN(VpnLogin);

@@ -1,5 +1,6 @@
 #include "contract/contract_manager.h"
 
+#include "network/route.h"
 #include "contract/contract_vpn_svr_bandwidth.h"
 
 namespace lego {
@@ -11,6 +12,15 @@ ContractManager* ContractManager::Instance() {
     return &ins;
 }
 
+ContractManager::ContractManager() {
+    Init();
+    network::Route::Instance()->RegisterMessage(
+            common::kContractMessage,
+            std::bind(&ContractManager::HandleMessage, this, std::placeholders::_1));
+}
+
+ContractManager::~ContractManager() {}
+
 int ContractManager::Init() {
     auto vpn_bandwidth_ins = std::make_shared<VpnSvrBandwidth>();
     {
@@ -20,48 +30,59 @@ int ContractManager::Init() {
     return kContractSuccess;
 }
 
-int ContractManager::InitWithAttr(
-        const std::string& contract_addr,
-        const std::string& from,
-        const std::string& to,
-        uint64_t amount,
-        uint32_t type,
-        bool is_from,
-        const std::map<std::string, std::string>& attr_map) {
+void ContractManager::HandleMessage(transport::protobuf::Header& header) {
+    if (header.type() != common::kContractMessage) {
+        return;
+    }
+}
+
+int ContractManager::InitWithAttr(uint64_t block_height, bft::TxItemPtr& tx_item) {
     ContractInterfacePtr contract_ptr = nullptr;
     {
         std::lock_guard<std::mutex> guard(contract_map_mutex_);
-        auto iter = contract_map_.find(contract_addr);
+        auto iter = contract_map_.find(tx_item->smart_contract_addr);
         if (iter != contract_map_.end()) {
             contract_ptr = iter->second;
         }
     }
 
     if (contract_ptr != nullptr) {
-        return contract_ptr->InitWithAttr(from, to, amount, type, is_from, attr_map);
+        return contract_ptr->InitWithAttr(block_height, tx_item);
     }
     return kContractError;
 }
 
-int ContractManager::Execute(
-        const std::string& contract_addr,
-        const std::string& from,
-        const std::string& to,
-        uint64_t amount,
-        uint32_t type,
-        bool is_from,
-        std::map<std::string, std::string>& attr_map) {
+int ContractManager::GetAttrWithKey(
+        const std::string& smart_contract_addr,
+        const std::string& key,
+        std::string& value) {
     ContractInterfacePtr contract_ptr = nullptr;
     {
         std::lock_guard<std::mutex> guard(contract_map_mutex_);
-        auto iter = contract_map_.find(contract_addr);
+        auto iter = contract_map_.find(smart_contract_addr);
         if (iter != contract_map_.end()) {
             contract_ptr = iter->second;
         }
     }
 
     if (contract_ptr != nullptr) {
-        return contract_ptr->Execute(from, to, amount, type, is_from, attr_map);
+        return contract_ptr->GetAttrWithKey(key, value);
+    }
+    return kContractError;
+}
+
+int ContractManager::Execute(bft::TxItemPtr& tx_item) {
+    ContractInterfacePtr contract_ptr = nullptr;
+    {
+        std::lock_guard<std::mutex> guard(contract_map_mutex_);
+        auto iter = contract_map_.find(tx_item->smart_contract_addr);
+        if (iter != contract_map_.end()) {
+            contract_ptr = iter->second;
+        }
+    }
+
+    if (contract_ptr != nullptr) {
+        return contract_ptr->Execute(tx_item);
     }
     return kContractError;
 }
