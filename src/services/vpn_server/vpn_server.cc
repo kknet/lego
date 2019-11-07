@@ -132,6 +132,7 @@ static int ipv6first = 0;
 static int fast_open = 1;
 static int no_delay = 1;
 static int ret_val = 0;
+static const uint32_t kBandwidthPeriod = 120u * 1000u * 1000u;
 
 #ifdef HAVE_SETRLIMIT
 static int nofile = 0;
@@ -1735,7 +1736,7 @@ void VpnServer::HandleClientBandwidthResponse(
     }
 
     iter->second->pre_bandwidth_get_time = (std::chrono::steady_clock::now() +
-        std::chrono::microseconds(VpnServer::Instance()->kBandwidthPeriod));
+            std::chrono::microseconds(kBandwidthPeriod));
 }
 
 void VpnServer::HandleVpnLoginResponse(
