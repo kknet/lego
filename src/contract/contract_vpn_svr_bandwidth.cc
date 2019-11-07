@@ -9,7 +9,7 @@ namespace lego {
 
 namespace contract {
 
-int VpnSvrBandwidth::InitWithAttr(uint64_t block_height, bft::protobuf::TxInfo& tx_info) {
+int VpnSvrBandwidth::InitWithAttr(uint64_t block_height, const bft::protobuf::TxInfo& tx_info) {
     std::string now_day_timestamp = std::to_string(common::TimeUtils::TimestampDays());
     std::string attr_key = (common::kIncreaseVpnBandwidth + "_" +
             tx_info.to() + "_" + now_day_timestamp);

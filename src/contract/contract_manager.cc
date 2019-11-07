@@ -36,7 +36,7 @@ void ContractManager::HandleMessage(transport::protobuf::Header& header) {
     }
 }
 
-int ContractManager::InitWithAttr(uint64_t block_height, bft::protobuf::TxInfo& tx_info) {
+int ContractManager::InitWithAttr(uint64_t block_height, const bft::protobuf::TxInfo& tx_info) {
     ContractInterfacePtr contract_ptr = nullptr;
     {
         std::lock_guard<std::mutex> guard(contract_map_mutex_);
