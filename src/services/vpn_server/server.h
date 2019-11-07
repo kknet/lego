@@ -104,11 +104,21 @@ struct PeerInfo {
 };
 typedef std::shared_ptr<PeerInfo> PeerInfoPtr;
 
+enum ClientPlatform {
+    kUnknown = 0,
+    kIos = 1,
+    kAndroid = 2,
+    kMac = 3,
+    kWindows = 4,
+};
+
 struct BandwidthInfo {
     BandwidthInfo(uint32_t up, uint32_t down, const std::string& acc_id)
             : up_bandwidth(up), down_bandwidth(down), account_id(acc_id) {
         begin_time = (std::chrono::steady_clock::now() +
                 std::chrono::microseconds(kTransactionTimeout));
+        pre_bandwidth_get_time = std::chrono::steady_clock::now();
+        pre_payfor_get_time = std::chrono::steady_clock::now();
     }
     uint32_t up_bandwidth;
     uint32_t down_bandwidth;
@@ -117,9 +127,12 @@ struct BandwidthInfo {
     bool login_valid{ true };
     std::string account_id;
     std::chrono::steady_clock::time_point join_time;
+    std::chrono::steady_clock::time_point pre_bandwidth_get_time;
+    std::chrono::steady_clock::time_point pre_payfor_get_time;
     uint64_t vpn_login_height{ 0 };
     uint64_t vpn_pay_for_height{ 0 };
     uint32_t invalid_times{ 0 };
+    uint32_t client_platform{ kUnknown };
     lego::limit::TockenBucket tocken_bucket_{
             lego::common::GlobalInfo::Instance()->config_default_stream_limit() };
 };

@@ -1718,7 +1718,13 @@ void VpnServer::HandleClientBandwidthResponse(
     }
 
     iter->second->today_used_bandwidth = used;
-    std::cout << "receive account: " << key_split[1] << ", bandwidth: " << iter->second->today_used_bandwidth << std::endl;
+    if (iter->second->today_used_bandwidth >= kMaxBandwidthFreeUse) {
+        iter->second->login_valid = false;
+        account_map_.erase(iter);
+    }
+
+    iter->second->pre_bandwidth_get_time = (std::chrono::steady_clock::now() +
+        std::chrono::microseconds(kBandwidthPeriod));
 }
 
 void VpnServer::HandleVpnLoginResponse(
@@ -1845,19 +1851,17 @@ void VpnServer::CheckAccountValid() {
             iter->second->down_bandwidth = 0;
         }
 
-        if (iter->second->join_time < now_point) {
-            SendGetAccountAttrLastBlock(
-                    common::kVpnLoginAttrKey,
-                    iter->second->account_id,
-                    iter->second->vpn_login_height);
+        if (iter->second->pre_bandwidth_get_time < now_point) {
+            SendGetAccountAttrUsedBandwidth(iter->second->account_id);
+        }
+
+        if (iter->second->pre_payfor_get_time < now_point) {
             SendGetAccountAttrLastBlock(
                     common::kUserPayForVpn,
                     iter->second->account_id,
                     iter->second->vpn_pay_for_height);
-            SendGetAccountAttrUsedBandwidth(iter->second->account_id);
-            iter->second->join_time = (std::chrono::steady_clock::now() +
-                std::chrono::microseconds(kWaitingLogin));
         }
+
         ++iter;
     }
     bandwidth_tick_.CutOff(
