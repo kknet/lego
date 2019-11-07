@@ -33,11 +33,8 @@ int ContractManager::Init() {
 }
 
 void ContractManager::HandleMessage(transport::protobuf::Header& header) {
+    std::cout << "contract receive contract message." << std::endl;
     if (header.type() != common::kContractMessage) {
-        return;
-    }
-
-    if (header.type() != common::kBlockMessage) {
         return;
     }
 
