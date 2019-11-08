@@ -133,6 +133,8 @@ static int fast_open = 1;
 static int no_delay = 1;
 static int ret_val = 0;
 static const uint32_t kBandwidthPeriod = 120u * 1000u * 1000u;
+static const uint64_t kVipCheckPeriod = 180llu * 1000llu * 1000llu;
+static const uint32_t kVipPayfor = 1000u;
 
 #ifdef HAVE_SETRLIMIT
 static int nofile = 0;
@@ -1759,9 +1761,9 @@ void VpnServer::HandleVpnLoginResponse(
     }
 
     // TODO(): check block multi sign, this node must get election blocks
-
     std::string login_svr_id;
     std::string day_pay_timestamp;
+    uint64_t vip_tenons = 0;
     auto& tx_list = block.tx_block().tx_list();
     for (int32_t i = tx_list.size() - 1; i >= 0; --i) {
         if (tx_list[i].attr_size() > 0) {
@@ -1770,15 +1772,16 @@ void VpnServer::HandleVpnLoginResponse(
             }
 
             for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
-                if (tx_list[i].attr(attr_idx).key() == common::kVpnLoginAttrKey) {
-                    login_svr_id = tx_list[i].attr(attr_idx).value();
-                    iter->second->vpn_login_height = block.height();
-                    std::cout << "receive get login block: " << block.height() << std::endl;
-
-                }
+//                 if (tx_list[i].attr(attr_idx).key() == common::kVpnLoginAttrKey) {
+//                     login_svr_id = tx_list[i].attr(attr_idx).value();
+//                     iter->second->vpn_login_height = block.height();
+//                     std::cout << "receive get login block: " << block.height() << std::endl;
+// 
+//                 }
 
                 if (tx_list[i].attr(attr_idx).key() == common::kUserPayForVpn) {
                     day_pay_timestamp = tx_list[i].attr(attr_idx).value();
+                    vip_tenons = tx_list[i].amount;
                     iter->second->vpn_pay_for_height = block.height();
                     std::cout << "receive get pay for vpn block: " << block.height() << std::endl;
                 }
@@ -1805,22 +1808,25 @@ void VpnServer::HandleVpnLoginResponse(
 //         return;
 //     }
 // 
-//     uint32_t day_pay_for_vpn = common::StringUtil::ToUint32(day_pay_timestamp);
-//     uint32_t now_day_timestamp = common::TimeUtils::TimestampDays();
-//     if (now_day_timestamp > (day_pay_for_vpn + 30)) {
-//         ++iter->second->invalid_times;
-//         if (iter->second->invalid_times > 5) {
-//             iter->second->login_valid = false;
-//             if ((iter->second->up_bandwidth + iter->second->down_bandwidth) >=
-//                 kConnectInitBandwidth) {
-//                 SendClientUseBandwidth(
-//                         iter->second->account_id,
-//                         iter->second->up_bandwidth + iter->second->down_bandwidth);
-//             }
-//             account_map_.erase(iter);
-//         }
-//         return;
-//     }
+
+    iter->second->pre_payfor_get_time = (std::chrono::steady_clock::now() +
+            std::chrono::microseconds(kVipCheckPeriod));
+    uint32_t day_pay_for_vpn = common::StringUtil::ToUint32(day_pay_timestamp);
+    uint32_t now_day_timestamp = common::TimeUtils::TimestampDays();
+    if (now_day_timestamp > (day_pay_for_vpn + 30) || vip_tenons <= kVipPayfor) {
+        iter->second->vip_level = common::kNotVip;
+        if ((iter->second->up_bandwidth + iter->second->down_bandwidth) >=
+                kConnectInitBandwidth) {
+            SendClientUseBandwidth(
+                    iter->second->account_id,
+                    iter->second->up_bandwidth + iter->second->down_bandwidth);
+        }
+        account_map_.erase(iter);
+        return;
+    } else {
+        iter->second->vip_level = common::kVipLevel1;
+    }
+
     iter->second->invalid_times = 0;
 }
 

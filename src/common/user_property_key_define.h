@@ -24,6 +24,24 @@ enum ClientStatus {
     kLoginByOtherTerminal = 4,
 };
 
+
+enum ClientPlatform {
+    kUnknown = 0,
+    kIos = 1,
+    kAndroid = 2,
+    kMac = 3,
+    kWindows = 4,
+};
+
+enum VipLevel {
+    kNotVip = 0,
+    kVipLevel1 = 1,
+    kVipLevel2 = 2,
+    kVipLevel3 = 3,
+    kVipLevel4 = 4,
+    kVipLevel5 = 5,
+};
+
 static const std::string kVpnLoginAttrKey = "vpn_login";
 static const std::string kUserPayForVpn = "user_pay_for_vpn";
 static const std::string kIncreaseVpnBandwidth = "kIncreaseVpnBandwidth";

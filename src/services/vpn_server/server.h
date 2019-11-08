@@ -104,14 +104,6 @@ struct PeerInfo {
 };
 typedef std::shared_ptr<PeerInfo> PeerInfoPtr;
 
-enum ClientPlatform {
-    kUnknown = 0,
-    kIos = 1,
-    kAndroid = 2,
-    kMac = 3,
-    kWindows = 4,
-};
-
 struct BandwidthInfo {
     BandwidthInfo(uint32_t up, uint32_t down, const std::string& acc_id)
             : up_bandwidth(up), down_bandwidth(down), account_id(acc_id) {
@@ -125,6 +117,7 @@ struct BandwidthInfo {
     uint32_t today_used_bandwidth;
     std::chrono::steady_clock::time_point begin_time;
     int32_t client_status;
+    int32_t vip_level{ kNotVip };
     std::string account_id;
     std::chrono::steady_clock::time_point join_time;
     std::chrono::steady_clock::time_point pre_bandwidth_get_time;
