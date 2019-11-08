@@ -123,7 +123,6 @@ void VpnClient::HandleCheckVipResponse(
     // TODO(): check block multi sign, this node must get election blocks
     std::string login_svr_id;
     std::string day_pay_timestamp;
-    uint64_t vip_tenons = 0;
     auto& tx_list = block.tx_block().tx_list();
     for (int32_t i = tx_list.size() - 1; i >= 0; --i) {
         if (tx_list[i].attr_size() > 0) {
@@ -134,7 +133,6 @@ void VpnClient::HandleCheckVipResponse(
             for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
                 if (tx_list[i].attr(attr_idx).key() == common::kUserPayForVpn) {
                     day_pay_timestamp = tx_list[i].attr(attr_idx).value();
-                    vip_tenons = tx_list[i].amount();
                     auto paied_vip_ptr = std::make_shared<LastPaiedVipInfo>();
                     paied_vip_ptr->amount = tx_list[i].amount();
                     paied_vip_ptr->block_hash = block.hash();
@@ -696,7 +694,6 @@ void VpnClient::GetVpnNodes() {
 void VpnClient::GetNetworkNodes(
         const std::vector<std::string>& country_vec,
         uint32_t network_id) {
-    auto now_tick = std::chrono::steady_clock::now();
     for (uint32_t i = 0; i < country_vec.size(); ++i) {
         auto country = country_vec[i];
         auto uni_dht = std::dynamic_pointer_cast<network::Universal>(
