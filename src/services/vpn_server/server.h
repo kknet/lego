@@ -73,6 +73,7 @@ static const int64_t kTransactionTimeout = 600ll * 1000ll * 1000ll;  // 10 min
 struct PeerInfo {
     PeerInfo(const std::string& pub, const std::string& mtd)
             : pubkey(pub), method(mtd) {}
+
     bool init() {
         sec_num = lego::common::Random::RandomInt32();
         account = lego::network::GetAccountAddressByPublicKey(pubkey);

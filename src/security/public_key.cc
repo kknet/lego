@@ -160,7 +160,8 @@ uint32_t PublicKey::Serialize(std::string& dst) const {
 int PublicKey::Deserialize(const std::string& src) {
     std::shared_ptr<EC_POINT> result = SecurityStringTrans::Instance()->StringToEcPoint(src);
     if (result == nullptr) {
-        CRYPTO_ERROR("ECPOINTSerialize::GetNumber failed");
+        CRYPTO_ERROR("ECPOINTSerialize::GetNumber failed[%s]",
+                common::Encode::HexEncode(src).c_str());
         return -1;
     }
 
