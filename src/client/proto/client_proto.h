@@ -427,7 +427,7 @@ public:
         msg.set_type(common::kBlockMessage);
         msg.set_hop_count(0);
         msg.set_client(local_node->client_mode);
-        block::protobuf::BlockMessage block_msg;
+        client::protobuf::BlockMessage block_msg;
         auto attr_req = block_msg.mutable_acc_attr_req();
         attr_req->set_account(account);
         attr_req->set_attr_key(attr);
