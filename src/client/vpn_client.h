@@ -140,6 +140,7 @@ public:
 	std::string CheckVersion();
     std::string PayForVPN(const std::string& to, const std::string& gid, uint64_t amount);
     std::string CheckVip();
+    std::string CheckFreeBandwidth();
 
 private:
     VpnClient();
@@ -148,6 +149,7 @@ private:
     void HandleMessage(transport::protobuf::Header& header);
     void HandleBlockMessage(transport::protobuf::Header& header);
     void HandleServiceMessage(transport::protobuf::Header& header);
+    void HandleContractMessage(transport::protobuf::Header& header);
     int InitTransport();
     int SetPriAndPubKey(const std::string& prikey);
     int InitNetworkSingleton();
@@ -183,6 +185,7 @@ private:
             transport::protobuf::Header& header,
             client::protobuf::BlockMessage& block_msg);
     void SendGetBlockWithGid(const std::string& str, bool is_gid);
+    void SendGetAccountAttrUsedBandwidth();
 
     static const uint32_t kDefaultUdpSendBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kDefaultUdpRecvBufferSize = 10u * 1024u * 1024u;
@@ -216,6 +219,7 @@ private:
     std::mutex route_nodes_map_mutex_;
     LastPaiedVipInfoPtr paied_vip_info_[2];
     uint32_t paied_vip_valid_idx_{ 0 };
+    uint32_t today_used_bandwidth_{ 0 };
 
 	std::shared_ptr<common::Tick> check_tx_tick_{ nullptr };
 	std::shared_ptr<common::Tick>  vpn_nodes_tick_{ nullptr };

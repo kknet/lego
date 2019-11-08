@@ -33,6 +33,8 @@
 #include "network/dht_manager.h"
 #include "network/route.h"
 #include "network/universal.h"
+#include "contract/proto/contract_proto.h"
+#include "contract/contract_utils.h"
 #include "client/client_utils.h"
 #include "client/proto/client.pb.h"
 #include "client/proto/client_proto.h"
@@ -60,6 +62,10 @@ VpnClient::VpnClient() {
     network::Route::Instance()->RegisterMessage(
             common::kBlockMessage,
             std::bind(&VpnClient::HandleMessage, this, std::placeholders::_1));
+    network::Route::Instance()->RegisterMessage(
+            common::kContractMessage,
+            std::bind(&VpnClient::HandleMessage, this, std::placeholders::_1));
+
 	vpn_download_url_ = kClientDownloadUrl;
 	check_tx_tick_ = std::make_shared<common::Tick>();
 	vpn_nodes_tick_ = std::make_shared<common::Tick>();
@@ -90,6 +96,10 @@ void VpnClient::HandleMessage(transport::protobuf::Header& header) {
     if (header.type() == common::kBlockMessage) {
         HandleBlockMessage(header);
     }
+
+    if (header.type() == common::kContractMessage) {
+        HandleContractMessage(header);
+    }
 }
 
 void VpnClient::HandleBlockMessage(transport::protobuf::Header& header) {
@@ -108,6 +118,32 @@ void VpnClient::HandleBlockMessage(transport::protobuf::Header& header) {
 
     if (block_msg.has_acc_attr_res()) {
         HandleCheckVipResponse(header, block_msg);
+    }
+}
+
+void VpnClient::HandleContractMessage(transport::protobuf::Header& header) {
+    contract::protobuf::ContractMessage contract_msg;
+    if (!contract_msg.ParseFromString(header.data())) {
+        return;
+    }
+
+    if (contract_msg.has_get_attr_res()) {
+        auto client_bw_res = contract_msg.get_attr_res();
+        std::string key = client_bw_res.attr_key();
+        common::Split key_split(key.c_str(), '_', key.size());
+        if (key_split.Count() != 3) {
+            return;
+        }
+
+        auto today_timestamp = std::to_string(common::TimeUtils::TimestampDays());
+        if (today_timestamp != key_split[2]) {
+            return;
+        }
+
+        try {
+            today_used_bandwidth_ = common::StringUtil::ToUint32(client_bw_res.attr_value());
+        } catch (...) {
+        }
     }
 }
 
@@ -228,6 +264,33 @@ void VpnClient::HandleHeightResponse(
             local_account_height_set_.erase(local_account_height_set_.begin());
         }
     }
+}
+
+void VpnClient::SendGetAccountAttrUsedBandwidth() {
+    auto uni_dht = lego::network::DhtManager::Instance()->GetDht(
+            lego::network::kVpnNetworkId);
+    if (uni_dht == nullptr) {
+        CLIENT_ERROR("not found vpn server dht.");
+        return;
+    }
+
+    transport::protobuf::Header msg;
+    std::string now_day_timestamp = std::to_string(common::TimeUtils::TimestampDays());
+    std::string key = (common::kIncreaseVpnBandwidth + "_" +
+            common::Encode::HexEncode(common::GlobalInfo::Instance()->id()) + "_" +
+            now_day_timestamp);
+    contract::ContractProto::CreateGetAttrRequest(
+            uni_dht->local_node(),
+            common::GlobalInfo::Instance()->id(),
+            contract::kContractVpnBandwidthProveAddr,
+            key,
+            msg);
+    network::Route::Instance()->Send(msg);
+}
+
+std::string VpnClient::CheckFreeBandwidth() {
+    SendGetAccountAttrUsedBandwidth();
+    return std::to_string(today_used_bandwidth_);
 }
 
 void VpnClient::HandleServiceMessage(transport::protobuf::Header& header) {

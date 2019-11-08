@@ -30,7 +30,7 @@ public:
         msg.set_universal(false);
         msg.set_type(common::kContractMessage);
         msg.set_hop_count(0);
-        msg.set_client(false);
+        msg.set_client(local_node->client_mode);
         protobuf::ContractMessage contract_msg;
         auto attr_req = contract_msg.mutable_get_attr_req();
         attr_req->set_smart_contract_addr(smart_contract_addr);
