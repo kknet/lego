@@ -1737,6 +1737,7 @@ void VpnServer::HandleClientBandwidthResponse(
         account_map_.erase(iter);
     }
 
+    VPNSVR_ERROR("user [%s] use bandwidth [%u]", key_split[1], used);
     iter->second->pre_bandwidth_get_time = (std::chrono::steady_clock::now() +
             std::chrono::microseconds(kBandwidthPeriod));
 }
