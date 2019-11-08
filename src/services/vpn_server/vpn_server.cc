@@ -660,6 +660,8 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         } else {
             if (iter->second->client_status != common::kValid) {
                 // send back with status
+                CloseAndFreeRemote(EV_A_ remote);
+                CloseAndFreeServer(EV_A_ server);
                 return;
             }
 
@@ -693,6 +695,8 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
 
         if (iter->second->client_status != common::kValid) {
             // send back with status
+            CloseAndFreeRemote(EV_A_ remote);
+            CloseAndFreeServer(EV_A_ server);
             return;
         }
     }
