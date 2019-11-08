@@ -978,7 +978,13 @@ std::string VpnClient::Transaction(const std::string& to, uint64_t amount, std::
     if (uni_dht == nullptr) {
         return "ERROR";
     }
-    tx_gid = common::CreateGID(security::Schnorr::Instance()->str_pubkey());
+
+    if (tx_gid.size() == 32 * 2) {
+        tx_gid = common::Encode::HexDecode(tx_gid);
+    } else {
+        tx_gid = common::CreateGID(security::Schnorr::Instance()->str_pubkey());
+    }
+
     std::string to_addr;
     if (!to.empty()) {
         to_addr = common::Encode::HexDecode(to);
@@ -998,6 +1004,7 @@ std::string VpnClient::Transaction(const std::string& to, uint64_t amount, std::
             type,
             msg);
     network::Route::Instance()->Send(msg);
+    tx_gid = common::Encode::HexEncode(tx_gid);
     return "OK";
 }
 
