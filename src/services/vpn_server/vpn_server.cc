@@ -1781,7 +1781,7 @@ void VpnServer::HandleVpnLoginResponse(
 
                 if (tx_list[i].attr(attr_idx).key() == common::kUserPayForVpn) {
                     day_pay_timestamp = tx_list[i].attr(attr_idx).value();
-                    vip_tenons = tx_list[i].amount;
+                    vip_tenons = tx_list[i].amount();
                     iter->second->vpn_pay_for_height = block.height();
                     std::cout << "receive get pay for vpn block: " << block.height() << std::endl;
                 }
