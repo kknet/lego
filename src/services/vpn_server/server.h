@@ -61,6 +61,7 @@ extern "C" {
 #include "common/tick.h"
 #include "common/encode.h"
 #include "common/global_info.h"
+#include "common/user_property_key_define.h"
 #include "security/ecdh_create_key.h"
 #include "security/public_key.h"
 #include "network/network_utils.h"
