@@ -134,7 +134,7 @@ static int no_delay = 1;
 static int ret_val = 0;
 static const uint32_t kBandwidthPeriod = 120u * 1000u * 1000u;
 static const uint64_t kVipCheckPeriod = 180llu * 1000llu * 1000llu;
-static const uint32_t kVipPayfor = 1000u;
+static const uint32_t kVipPayfor = 1900u;
 
 #ifdef HAVE_SETRLIMIT
 static int nofile = 0;
@@ -1520,6 +1520,15 @@ namespace lego {
 namespace vpn {
 
 VpnServer::VpnServer() {
+    vip_committee_accounts_.insert(common::Encode::HexDecode("dc161d9ab9cd5a031d6c5de29c26247b6fde6eb36ed3963c446c1a993a088262"));
+    vip_committee_accounts_.insert(common::Encode::HexDecode("5595b040cdd20984a3ad3805e07bad73d7bf2c31e4dc4b0a34bc781f53c3dff7"));
+    vip_committee_accounts_.insert(common::Encode::HexDecode("25530e0f5a561f759a8eb8c2aeba957303a8bb53a54da913ca25e6aa00d4c365"));
+    vip_committee_accounts_.insert(common::Encode::HexDecode("9eb2f3bd5a78a1e7275142d2eaef31e90eae47908de356781c98771ef1a90cd2"));
+    vip_committee_accounts_.insert(common::Encode::HexDecode("c110df93b305ce23057590229b5dd2f966620acd50ad155d213b4c9db83c1f36"));
+    vip_committee_accounts_.insert(common::Encode::HexDecode("f64e0d4feebb5283e79a1dfee640a276420a08ce6a8fbef5572e616e24c2cf18"));
+    vip_committee_accounts_.insert(common::Encode::HexDecode("7ff017f63dc70770fcfe7b336c979c7fc6164e9653f32879e55fcead90ddf13f"));
+    vip_committee_accounts_.insert(common::Encode::HexDecode("6dce73798afdbaac6b94b79014b15dcc6806cb693cf403098d8819ac362fa237"));
+    vip_committee_accounts_.insert(common::Encode::HexDecode("b5be6f0090e4f5d40458258ed9adf843324c0327145c48b55091f33673d2d5a4"));
     network::Route::Instance()->RegisterMessage(
             common::kBlockMessage,
             std::bind(&VpnServer::HandleMessage, this, std::placeholders::_1));
@@ -1785,7 +1794,8 @@ void VpnServer::HandleVpnLoginResponse(
 // 
 //                 }
 
-                if (tx_list[i].attr(attr_idx).key() == common::kUserPayForVpn) {
+                if (tx_list[i].attr(attr_idx).key() == common::kUserPayForVpn &&
+                        VpnServer::Instance()->VipCommitteeAccountValid(tx_list[i].to())) {
                     day_pay_timestamp = tx_list[i].attr(attr_idx).value();
                     vip_tenons = tx_list[i].amount();
                     iter->second->vpn_pay_for_height = block.height();

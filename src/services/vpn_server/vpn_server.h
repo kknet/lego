@@ -36,6 +36,11 @@ public:
         return last_listen_ptr_;
     }
 
+    bool VipCommitteeAccountValid(const std::string& to) {
+        auto iter = vip_committee_accounts_.find(to);
+        return iter != vip_committee_accounts_.end();
+    }
+
 private:
     VpnServer();
     ~VpnServer();
@@ -73,6 +78,7 @@ private:
     common::Tick new_vpn_server_tick_;
     std::shared_ptr<listen_ctx_t> last_listen_ptr_{ nullptr };
     std::set<uint16_t> started_port_set_;
+    std::set<std::string> vip_committee_accounts_;
 
     DISALLOW_COPY_AND_ASSIGN(VpnServer);
 };
