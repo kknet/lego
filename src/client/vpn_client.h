@@ -36,6 +36,7 @@ namespace client {
 
 namespace protobuf {
     class Block;
+    class BlockMessage;
     typedef std::shared_ptr<Block> BlockPtr;
     class AccountHeightResponse;
     class GetTxBlockResponse;
