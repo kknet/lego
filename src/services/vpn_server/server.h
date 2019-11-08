@@ -118,7 +118,7 @@ struct BandwidthInfo {
     uint32_t down_bandwidth;
     uint32_t today_used_bandwidth;
     std::chrono::steady_clock::time_point begin_time;
-    int32_t client_status;
+    int32_t client_status{ lego::common::kValid };
     int32_t vip_level{ lego::common::kNotVip };
     std::string account_id;
     std::chrono::steady_clock::time_point join_time;
