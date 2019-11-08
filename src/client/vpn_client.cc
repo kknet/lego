@@ -602,25 +602,6 @@ void VpnClient::WriteDefaultLogConf(
     fclose(file);
 }
 
-std::string VpnClient::GetTransactionInfo(const std::string& tx_gid) {
-    auto tmp_gid = common::Encode::HexDecode(tx_gid);
-    std::lock_guard<std::mutex> guard(tx_map_mutex_);
-    auto iter = tx_map_.find(tmp_gid);
-    if (iter != tx_map_.end()) {
-        if (iter->second == nullptr) {
-            return "";
-        }
-
-        auto tmp_ptr = iter->second;
-        tx_map_.erase(iter);
-        CLIENT_ERROR("get transaction info success[%s]", tx_gid.c_str());
-        return "";
-    } else {
-        tx_map_[tmp_gid] = nullptr;
-    }
-    return "";
-}
-
 std::string VpnClient::GetVpnServerNodes(
         const std::string& country,
         uint32_t count,
@@ -1068,12 +1049,14 @@ protobuf::BlockPtr VpnClient::GetBlockWithGid(const std::string& tx_gid) {
         return tmp_ptr;
     } else {
         tx_map_[tmp_gid] = nullptr;
+        SendGetBlockWithGid(tmp_gid, true);
     }
     return nullptr;
 }
 
 protobuf::BlockPtr VpnClient::GetBlockWithHash(const std::string& block_hash) {
-    auto tmp_gid = std::string("b_") + common::Encode::HexDecode(block_hash);
+    auto dec_hash = common::Encode::HexDecode(block_hash);
+    auto tmp_gid = std::string("b_") + dec_hash;
     std::lock_guard<std::mutex> guard(tx_map_mutex_);
     auto iter = tx_map_.find(tmp_gid);
     if (iter != tx_map_.end()) {
@@ -1086,8 +1069,20 @@ protobuf::BlockPtr VpnClient::GetBlockWithHash(const std::string& block_hash) {
         return tmp_ptr;
     } else {
         tx_map_[tmp_gid] = nullptr;
+        SendGetBlockWithGid(dec_hash, false);
     }
     return nullptr;
+}
+
+void VpnClient::SendGetBlockWithGid(const std::string& str, bool is_gid) {
+    auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+            network::kUniversalNetworkId);
+    if (uni_dht == nullptr) {
+        return;
+    }
+    transport::protobuf::Header msg;
+    ClientProto::GetBlockWithTxGid(uni_dht->local_node(), str, is_gid, true, msg);
+    uni_dht->SendToClosestNode(msg);
 }
 
 void VpnClient::GetAccountHeight() {

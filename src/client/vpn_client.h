@@ -117,7 +117,6 @@ public:
             bool route,
             std::vector<VpnServerNodePtr>& nodes);
     std::string Transaction(const std::string& to, uint64_t amount, std::string& tx_gid);
-    std::string GetTransactionInfo(const std::string& tx_gid);
     protobuf::BlockPtr GetBlockWithGid(const std::string& gid);
     protobuf::BlockPtr GetBlockWithHash(const std::string& block_hash);
     int GetSocket();
@@ -183,6 +182,7 @@ private:
     void HandleCheckVipResponse(
             transport::protobuf::Header& header,
             client::protobuf::BlockMessage& block_msg);
+    void SendGetBlockWithGid(const std::string& str, bool is_gid);
 
     static const uint32_t kDefaultUdpSendBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kDefaultUdpRecvBufferSize = 10u * 1024u * 1024u;
