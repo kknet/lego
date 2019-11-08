@@ -60,7 +60,7 @@ private:
     static const uint32_t kAccountCheckPeriod = 10 * 1000 * 1000;
     static const uint32_t kConnectInitBandwidth = 10 * 1024 * 1024;
     static const uint32_t kAddBandwidth = 50 * 1024 * 1024;
-    static const uint32_t kMaxBandwidthFreeUse = 200 * 1024 * 1024;
+    static const uint32_t kMaxBandwidthFreeUse = 128 * 1024 * 1024;
 
     common::ThreadSafeQueue<StakingItemPtr> staking_queue_;
     common::ThreadSafeQueue<BandwidthInfoPtr> bandwidth_queue_;
