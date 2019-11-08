@@ -89,6 +89,19 @@ message AccountHeightResponse {
 	optional bytes type = 3;
 }
 
+message AccountAttrRequest {
+    optional bytes account = 1;
+    optional bytes attr_key = 2;
+    optional uint64 height = 3;
+}
+
+message AccountAttrResponse {
+    optional bytes account = 1;
+    optional bytes attr_key = 2;
+    optional uint64 height = 3;
+    optional bytes block = 4;
+}
+
 message BlockMessage {
 	optional GetTxBlockRequest block_req = 1;
 	optional GetTxBlockResponse block_res = 2;
