@@ -94,6 +94,8 @@ message BlockMessage {
 	optional GetTxBlockResponse block_res = 2;
 	optional AccountHeightRequest height_req = 3;
 	optional AccountHeightResponse height_res = 4;
+    optional AccountAttrRequest acc_attr_req = 5;
+	optional AccountAttrResponse acc_attr_res = 6;
 }
 
 message TxInfo {

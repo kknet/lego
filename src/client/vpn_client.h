@@ -91,6 +91,15 @@ struct TxInfo {
 };
 typedef std::shared_ptr<TxInfo> TxInfoPtr;
 
+struct LastPaiedVipInfo {
+    uint64_t height;
+    uint64_t timestamp;
+    std::string to_account;
+    uint64_t amount;
+    std::string block_hash;
+};
+typedef std::shared_ptr<LastPaiedVipInfo> LastPaiedVipInfoPtr;
+
 class VpnClient {
 public:
     static VpnClient* Instance();
@@ -122,8 +131,6 @@ public:
     int ResetTransport(const std::string& ip, uint16_t port);
     std::string GetPublicKey();
     std::string GetSecretKey(const std::string& peer_pubkey);
-    int EncryptData(char* seckey, int seclen, char* data, int data_len, char* out);
-    int DecryptData(char* seckey, int seclen, char* data, int data_len, char* out);
     std::string GetRouting(const std::string& start, const std::string& end);
     int VpnLogin(
             const std::string& svr_account,
@@ -131,7 +138,8 @@ public:
             std::string& login_gid);
     int VpnLogout();
 	std::string CheckVersion();
-    std::string PayForVPN(const std::string& to, uint64_t amount);
+    std::string PayForVPN(const std::string& to, const std::string& gid, uint64_t amount);
+    std::string CheckVip();
 
 private:
     VpnClient();
@@ -167,6 +175,13 @@ private:
 	void GetVpnVersion();
     int SetDefaultRouting();
     std::string GetDefaultRouting();
+    void SendGetAccountAttrLastBlock(
+            const std::string& attr,
+            const std::string& account,
+            uint64_t height);
+    void HandleCheckVipResponse(
+            transport::protobuf::Header& header,
+            client::protobuf::BlockMessage& block_msg);
 
     static const uint32_t kDefaultUdpSendBufferSize = 10u * 1024u * 1024u;
     static const uint32_t kDefaultUdpRecvBufferSize = 10u * 1024u * 1024u;
@@ -198,6 +213,8 @@ private:
     std::mutex vpn_nodes_map_mutex_;
     std::map<std::string, std::deque<VpnServerNodePtr>> route_nodes_map_;
     std::mutex route_nodes_map_mutex_;
+    LastPaiedVipInfoPtr paied_vip_info_[2];
+    uint32_t paied_vip_valid_idx_{ 0 };
 
 	std::shared_ptr<common::Tick> check_tx_tick_{ nullptr };
 	std::shared_ptr<common::Tick>  vpn_nodes_tick_{ nullptr };

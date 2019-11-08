@@ -65,7 +65,9 @@ VpnClient::VpnClient() {
 	vpn_nodes_tick_ = std::make_shared<common::Tick>();
 	dump_config_tick_ = std::make_shared<common::Tick>();
 	dump_bootstrap_tick_ = std::make_shared<common::Tick>();
-
+    paied_vip_info_[0] = std::make_shared<LastPaiedVipInfo>();
+    paied_vip_info_[0]->height = 0;
+    paied_vip_info_[1] = nullptr;
 }
 
 VpnClient::~VpnClient() {}
@@ -102,6 +104,54 @@ void VpnClient::HandleBlockMessage(transport::protobuf::Header& header) {
 
     if (block_msg.has_block_res()) {
         HandleBlockResponse(block_msg.block_res());
+    }
+
+    if (block_msg.has_acc_attr_res()) {
+        HandleCheckVipResponse(header, block_msg);
+    }
+}
+
+void VpnClient::HandleCheckVipResponse(
+    transport::protobuf::Header& header,
+    client::protobuf::BlockMessage& block_msg) {
+    auto& attr_res = block_msg.acc_attr_res();
+    client::protobuf::Block block;
+    if (!block.ParseFromString(attr_res.block())) {
+        return;
+    }
+
+    // TODO(): check block multi sign, this node must get election blocks
+    std::string login_svr_id;
+    std::string day_pay_timestamp;
+    uint64_t vip_tenons = 0;
+    auto& tx_list = block.tx_block().tx_list();
+    for (int32_t i = tx_list.size() - 1; i >= 0; --i) {
+        if (tx_list[i].attr_size() > 0) {
+            if (tx_list[i].from() != attr_res.account()) {
+                continue;
+            }
+
+            for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
+                if (tx_list[i].attr(attr_idx).key() == common::kUserPayForVpn) {
+                    day_pay_timestamp = tx_list[i].attr(attr_idx).value();
+                    vip_tenons = tx_list[i].amount();
+                    auto paied_vip_ptr = std::make_shared<LastPaiedVipInfo>();
+                    paied_vip_ptr->amount = tx_list[i].amount();
+                    paied_vip_ptr->block_hash = block.hash();
+                    paied_vip_ptr->height = block.height();
+                    paied_vip_ptr->timestamp = block.timestamp();
+                    paied_vip_ptr->to_account = tx_list[i].to();
+                    if (paied_vip_valid_idx_ == 0) {
+                        paied_vip_info_[1] = paied_vip_ptr;
+                        paied_vip_valid_idx_ = 1;
+                    } else {
+                        paied_vip_info_[0] = paied_vip_ptr;
+                        paied_vip_valid_idx_ = 0;
+                    }
+                    break;
+                }
+            }
+        }
     }
 }
 
@@ -506,32 +556,6 @@ std::string VpnClient::GetSecretKey(const std::string& peer_pubkey) {
     return common::Encode::HexEncode(sec_key);
 }
 
-int VpnClient::EncryptData(char* seckey, int seclen, char* data, int data_len, char* out) {
-    if (security::Aes::Encrypt(
-            data,
-            data_len,
-            seckey,
-            seclen,
-            out) != security::kSecuritySuccess) {
-        return -1;
-    }
-
-    return 0;
-}
-
-int VpnClient::DecryptData(char* seckey, int seclen, char* data, int data_len, char* out) {
-    if (security::Aes::Decrypt(
-            data,
-            data_len,
-            seckey,
-            seclen,
-            out) != security::kSecuritySuccess) {
-        return -1;
-    }
-
-    return 0;
-}
-
 bool VpnClient::SetFirstInstall() {
     first_install_ = true;
     config.Set("lego", "first_instasll", first_install_);
@@ -877,7 +901,19 @@ int VpnClient::CreateClientUniversalNetwork() {
     return kClientSuccess;
 }
 
-std::string VpnClient::PayForVPN(const std::string& to, uint64_t amount) {
+std::string VpnClient::CheckVip() {
+    SendGetAccountAttrLastBlock(
+            common::kUserPayForVpn,
+            common::GlobalInfo::Instance()->id(),
+            paied_vip_info_[paied_vip_valid_idx_]->height);
+    if (paied_vip_info_[paied_vip_valid_idx_]->height == 0) {
+        return "";
+    }
+
+    return std::to_string(paied_vip_info_[paied_vip_valid_idx_]->timestamp);
+}
+
+std::string VpnClient::PayForVPN(const std::string& to, const std::string& gid, uint64_t amount) {
     if (to.empty() || amount <= 0) {
         return "ERROR";
     }
@@ -890,6 +926,10 @@ std::string VpnClient::PayForVPN(const std::string& to, uint64_t amount) {
         return "ERROR";
     }
     auto tx_gid = common::CreateGID(security::Schnorr::Instance()->str_pubkey());
+    if (gid.size() == 32 * 2) {
+        tx_gid = common::Encode::HexDecode(gid);
+    }
+
     std::string to_addr = common::Encode::HexDecode(to);
     std::map<std::string, std::string> attrs = {
         { common::kUserPayForVpn, "" }
@@ -907,6 +947,28 @@ std::string VpnClient::PayForVPN(const std::string& to, uint64_t amount) {
             msg);
     network::Route::Instance()->Send(msg);
     return common::Encode::HexEncode(tx_gid);
+}
+
+void VpnClient::SendGetAccountAttrLastBlock(
+        const std::string& attr,
+        const std::string& account,
+        uint64_t height) {
+    uint64_t rand_num = 0;
+    auto uni_dht = lego::network::DhtManager::Instance()->GetDht(
+        lego::network::kVpnNetworkId);
+    if (uni_dht == nullptr) {
+        CLIENT_ERROR("not found vpn server dht.");
+        return;
+    }
+
+    transport::protobuf::Header msg;
+    client::ClientProto::AccountAttrRequest(
+            uni_dht->local_node(),
+            account,
+            attr,
+            height,
+            msg);
+    network::Route::Instance()->Send(msg);
 }
 
 std::string VpnClient::Transaction(const std::string& to, uint64_t amount, std::string& tx_gid) {

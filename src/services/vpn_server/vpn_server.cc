@@ -1760,10 +1760,6 @@ void VpnServer::HandleVpnLoginResponse(
         transport::protobuf::Header& header,
         block::protobuf::BlockMessage& block_msg) {
     auto& attr_res = block_msg.acc_attr_res();
-    if (attr_res.attr_key() != common::kVpnLoginAttrKey) {
-        return;
-    }
-
     std::lock_guard<std::mutex> guard(account_map_mutex_);
     auto iter = account_map_.find(attr_res.account());
     if (iter == account_map_.end()) {
