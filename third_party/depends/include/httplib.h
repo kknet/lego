@@ -1390,7 +1390,7 @@ bool read_content(Stream &strm, T &x, uint64_t payload_max_length, int &status,
       if ((len > payload_max_length) ||
           // For 32-bit platform
           (sizeof(size_t) < sizeof(uint64_t) &&
-           len > std::numeric_limits<size_t>::max())) {
+           len > (std::numeric_limits<size_t>::max)())) {
         exceed_payload_max_length = true;
         skip_content_with_length(strm, len);
         ret = false;
@@ -2136,7 +2136,6 @@ inline void Server::stop() {
 }
 
 inline bool Server::parse_request_line(const char *s, Request &req) {
-    std::cout << "line parser: " << s << std::endl;
     lego::common::Split split(s, ' ', strlen(s));
     if (split.Count() < 3) {
         return false;
@@ -2688,7 +2687,7 @@ inline bool Client::process_request(Stream &strm, Request &req, Response &res,
     }
 
     int dummy_status;
-    if (!detail::read_content(strm, res, std::numeric_limits<uint64_t>::max(),
+    if (!detail::read_content(strm, res, (std::numeric_limits<uint64_t>::max)(),
                               dummy_status, res.progress, out)) {
       return false;
     }

@@ -8523,7 +8523,7 @@ class binary_writer
                     write_number(static_cast<uint32_t>(N));
                 }
                 // LCOV_EXCL_START
-                else if (N <= (std::numeric_limits<uint64_t>::max)())
+                else if (N <= ((std::numeric_limits<uint64_t>::max))())
                 {
                     oa->write_character(to_char_type(0x7B));
                     write_number(static_cast<uint64_t>(N));
@@ -8561,7 +8561,7 @@ class binary_writer
                     write_number(static_cast<uint32_t>(N));
                 }
                 // LCOV_EXCL_START
-                else if (N <= (std::numeric_limits<uint64_t>::max)())
+                else if (N <= ((std::numeric_limits<uint64_t>::max))())
                 {
                     oa->write_character(to_char_type(0x9B));
                     write_number(static_cast<uint64_t>(N));
@@ -8600,7 +8600,7 @@ class binary_writer
                     write_number(static_cast<uint32_t>(N));
                 }
                 // LCOV_EXCL_START
-                else if (N <= (std::numeric_limits<uint64_t>::max)())
+                else if (N <= ((std::numeric_limits<uint64_t>::max))())
                 {
                     oa->write_character(to_char_type(0xBB));
                     write_number(static_cast<uint64_t>(N));
@@ -8672,7 +8672,7 @@ class binary_writer
                         oa->write_character(to_char_type(0xCE));
                         write_number(static_cast<uint32_t>(j.m_value.number_integer));
                     }
-                    else if (j.m_value.number_unsigned <= (std::numeric_limits<uint64_t>::max)())
+                    else if (j.m_value.number_unsigned <= ((std::numeric_limits<uint64_t>::max))())
                     {
                         // uint 64
                         oa->write_character(to_char_type(0xCF));
@@ -8743,7 +8743,7 @@ class binary_writer
                     oa->write_character(to_char_type(0xCE));
                     write_number(static_cast<uint32_t>(j.m_value.number_integer));
                 }
-                else if (j.m_value.number_unsigned <= (std::numeric_limits<uint64_t>::max)())
+                else if (j.m_value.number_unsigned <= ((std::numeric_limits<uint64_t>::max))())
                 {
                     // uint 64
                     oa->write_character(to_char_type(0xCF));

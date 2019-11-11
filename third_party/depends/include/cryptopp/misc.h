@@ -108,7 +108,7 @@ template<class T>
 T NumericLimitsMin()
 {
 	CRYPTOPP_ASSERT(std::numeric_limits<T>::is_specialized);
-	return (std::numeric_limits<T>::min)();
+	return ((std::numeric_limits<T>::min))();
 }
 template<class T>
 T NumericLimitsMax()
