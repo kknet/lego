@@ -1747,12 +1747,12 @@ void VpnServer::HandleClientBandwidthResponse(
     iter->second->today_used_bandwidth = used;
     if (iter->second->today_used_bandwidth >= kMaxBandwidthFreeUse) {
         iter->second->client_status = common::kBandwidthFreeToUseExceeded;
-        account_map_.erase(iter);
     } else {
-        iter->second->pre_bandwidth_get_time = (std::chrono::steady_clock::now() +
-                std::chrono::microseconds(kBandwidthPeriod));
+        iter->second->client_status = common::kValid;
     }
 
+    iter->second->pre_bandwidth_get_time = (std::chrono::steady_clock::now() +
+            std::chrono::microseconds(kBandwidthPeriod));
     VPNSVR_ERROR("user [%s] use bandwidth [%u]", key_split[1], used);
 }
 
