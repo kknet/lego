@@ -108,6 +108,7 @@ void BlockManager::HandleAttrGetRequest(
             height = iter->second;
         }
     }
+
     if (height > block_msg.acc_attr_req().height()) {
         uint32_t netid = network::GetConsensusShardNetworkId(
                 block_msg.acc_attr_req().account());
@@ -150,6 +151,23 @@ void BlockManager::HandleAttrGetRequest(
                 block_msg_res.SerializeAsString(),
                 msg);
         network::Route::Instance()->Send(msg);
+    } else {
+        protobuf::BlockMessage block_msg_res;
+        auto attr_res = block_msg_res.mutable_acc_attr_res();
+        attr_res->set_block("");
+        attr_res->set_height(height);
+        attr_res->set_attr_key(block_msg.acc_attr_req().attr_key());
+        attr_res->set_account(block_msg.acc_attr_req().account());
+        transport::protobuf::Header msg;
+        auto dht_ptr = network::UniversalManager::Instance()->GetUniversal(
+                network::kUniversalNetworkId);
+        assert(dht_ptr != nullptr);
+        BlockProto::CreateGetBlockResponse(
+                dht_ptr->local_node(),
+                header,
+                block_msg_res.SerializeAsString(),
+                msg);
+        network::Route::Instance()->Send(msg);
     }
 }
 
@@ -183,6 +201,22 @@ void BlockManager::HandleGetHeightRequest(
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end", header);
 }
 
+void BlockManager::SendBlockNotExists(transport::protobuf::Header& header) {
+    protobuf::BlockMessage block_msg_res;
+    auto block_res = block_msg_res.mutable_block_res();
+    block_res->set_block("");
+    transport::protobuf::Header msg;
+    auto dht_ptr = network::UniversalManager::Instance()->GetUniversal(
+        network::kUniversalNetworkId);
+    assert(dht_ptr != nullptr);
+    BlockProto::CreateGetBlockResponse(
+            dht_ptr->local_node(),
+            header,
+            block_msg_res.SerializeAsString(),
+            msg);
+    dht_ptr->SendToClosestNode(msg);
+}
+
 int BlockManager::HandleGetBlockRequest(
         transport::protobuf::Header& header,
         protobuf::BlockMessage& block_msg) {
@@ -199,6 +233,7 @@ int BlockManager::HandleGetBlockRequest(
         auto st = db::Db::Instance()->Get(tx_gid, &block_hash);
         if (!st.ok()) {
             LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("get block hash error", header);
+            SendBlockNotExists(header);
             return kBlockError;
         }
     } else if (block_msg.block_req().has_height()) {
@@ -215,11 +250,13 @@ int BlockManager::HandleGetBlockRequest(
         auto st = db::Db::Instance()->Get(height_db_key, &block_hash);
         if (!st.ok()) {
             LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("get block hash error", header);
+            SendBlockNotExists(header);
             return kBlockError;
         }
     }
 
     if (block_hash.empty()) {
+        SendBlockNotExists(header);
         return kBlockError;
     }
 
@@ -227,6 +264,7 @@ int BlockManager::HandleGetBlockRequest(
     auto st = db::Db::Instance()->Get(block_hash, &block_data);
     if (!st.ok()) {
         LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("get block data error", header);
+        SendBlockNotExists(header);
         return kBlockError;
     }
 

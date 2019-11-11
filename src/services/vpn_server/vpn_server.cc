@@ -1783,19 +1783,13 @@ void VpnServer::HandleVpnLoginResponse(
             }
 
             for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
-//                 if (tx_list[i].attr(attr_idx).key() == common::kVpnLoginAttrKey) {
-//                     login_svr_id = tx_list[i].attr(attr_idx).value();
-//                     iter->second->vpn_login_height = block.height();
-//                     std::cout << "receive get login block: " << block.height() << std::endl;
-// 
-//                 }
-
                 if (tx_list[i].attr(attr_idx).key() == common::kUserPayForVpn &&
-                        VpnServer::Instance()->VipCommitteeAccountValid(tx_list[i].to())) {
-                    day_pay_timestamp = tx_list[i].attr(attr_idx).value();
+                            VpnServer::Instance()->VipCommitteeAccountValid(tx_list[i].to())) {
+                    day_pay_timestamp = block.timestamp();
                     vip_tenons = tx_list[i].amount();
                     iter->second->vpn_pay_for_height = block.height();
-                    std::cout << "receive get pay for vpn block: " << block.height() << std::endl;
+                    std::cout << "receive get pay for vpn block: " << block.height()
+                            << ", timestamp: " << day_pay_timestamp << std::endl;
                 }
             }
         }
@@ -1804,22 +1798,6 @@ void VpnServer::HandleVpnLoginResponse(
             break;
         }
     }
-
-//     if (login_svr_id != common::GlobalInfo::Instance()->id()) {
-//         ++iter->second->invalid_times;
-//         if (iter->second->invalid_times > 5) {
-//             iter->second->login_valid = false;
-//             if ((iter->second->up_bandwidth + iter->second->down_bandwidth) >=
-//                     kConnectInitBandwidth) {
-//                 SendClientUseBandwidth(
-//                     iter->second->account_id,
-//                     iter->second->up_bandwidth + iter->second->down_bandwidth);
-//             }
-//             account_map_.erase(iter);
-//         }
-//         return;
-//     }
-// 
 
     iter->second->pre_payfor_get_time = (std::chrono::steady_clock::now() +
             std::chrono::microseconds(kVipCheckPeriod));

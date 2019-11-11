@@ -148,9 +148,17 @@ void VpnClient::HandleContractMessage(transport::protobuf::Header& header) {
 }
 
 void VpnClient::HandleCheckVipResponse(
-    transport::protobuf::Header& header,
-    client::protobuf::BlockMessage& block_msg) {
+        transport::protobuf::Header& header,
+        client::protobuf::BlockMessage& block_msg) {
     auto& attr_res = block_msg.acc_attr_res();
+    if (attr_res.block().empty()) {
+        if (paied_vip_info_[paied_vip_valid_idx_]->height == 0) {
+            paied_vip_info_[paied_vip_valid_idx_]->timestamp = kInvalidTimestamp;
+        }
+
+        return;
+    }
+
     client::protobuf::Block block;
     if (!block.ParseFromString(attr_res.block())) {
         return;
@@ -158,7 +166,6 @@ void VpnClient::HandleCheckVipResponse(
 
     // TODO(): check block multi sign, this node must get election blocks
     std::string login_svr_id;
-    std::string day_pay_timestamp;
     auto& tx_list = block.tx_block().tx_list();
     for (int32_t i = tx_list.size() - 1; i >= 0; --i) {
         if (tx_list[i].attr_size() > 0) {
@@ -168,7 +175,6 @@ void VpnClient::HandleCheckVipResponse(
 
             for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
                 if (tx_list[i].attr(attr_idx).key() == common::kUserPayForVpn) {
-                    day_pay_timestamp = tx_list[i].attr(attr_idx).value();
                     auto paied_vip_ptr = std::make_shared<LastPaiedVipInfo>();
                     paied_vip_ptr->amount = tx_list[i].amount();
                     paied_vip_ptr->block_hash = block.hash();
@@ -1020,7 +1026,8 @@ void VpnClient::SendGetAccountAttrLastBlock(
 std::string VpnClient::Transaction(const std::string& to, uint64_t amount, std::string& tx_gid) {
     transport::protobuf::Header msg;
     uint64_t rand_num = 0;
-    auto uni_dht = network::UniversalManager::Instance()->GetUniversal(network::kUniversalNetworkId);
+    auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+            network::kUniversalNetworkId);
     if (uni_dht == nullptr) {
         return "ERROR";
     }
@@ -1227,8 +1234,10 @@ void VpnClient::DumpNodeToConfig() {
 void VpnClient::DumpVpnNodes() {
     std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
     std::string country_list;
-    auto tp = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now());
-    auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(tp.time_since_epoch()).count();
+    auto tp = std::chrono::time_point_cast<std::chrono::milliseconds>(
+            std::chrono::system_clock::now());
+    auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
+            tp.time_since_epoch()).count();
     for (auto iter = vpn_nodes_map_.begin(); iter != vpn_nodes_map_.end(); ++iter) {
 #ifdef IOS_PLATFORM
 		if (iter->first == "CN") {

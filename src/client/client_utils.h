@@ -1,5 +1,7 @@
 #pragma once
 
+#include <limits>
+
 #include "common/utils.h"
 #include "common/log.h"
 
@@ -26,6 +28,7 @@ static const uint32_t kBftBroadcastStopTimes = 2u;
 static const uint32_t kBftHopLimit = 5u;
 static const uint32_t kBftHopToLayer = 2u;
 static const uint32_t kBftNeighborCount = 7u;
+static const int64_t kInvalidTimestamp = (std::numeric_limits<int64_t>::max)();
 static const std::string kTransactionPbftAddress("Transaction");
 
 }  // namespace client
