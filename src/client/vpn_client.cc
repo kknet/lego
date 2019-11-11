@@ -73,6 +73,7 @@ VpnClient::VpnClient() {
 	dump_bootstrap_tick_ = std::make_shared<common::Tick>();
     paied_vip_info_[0] = std::make_shared<LastPaiedVipInfo>();
     paied_vip_info_[0]->height = 0;
+    paied_vip_info_[0]->timestamp = 0;
     paied_vip_info_[1] = nullptr;
 }
 
@@ -151,8 +152,9 @@ void VpnClient::HandleCheckVipResponse(
         transport::protobuf::Header& header,
         client::protobuf::BlockMessage& block_msg) {
     auto& attr_res = block_msg.acc_attr_res();
+    CLIENT_ERROR("receive get attr[%s] block[%d] height[%llu] info.", attr_res.attr_key().c_str(), attr_res.block().empty(), paied_vip_info_[paied_vip_valid_idx_]->height);
     if (attr_res.block().empty()) {
-        if (paied_vip_info_[paied_vip_valid_idx_]->height == 0) {
+        if (paied_vip_info_[paied_vip_valid_idx_]->timestamp == 0) {
             paied_vip_info_[paied_vip_valid_idx_]->timestamp = kInvalidTimestamp;
         }
 
@@ -958,10 +960,6 @@ std::string VpnClient::CheckVip() {
             common::kUserPayForVpn,
             common::GlobalInfo::Instance()->id(),
             paied_vip_info_[paied_vip_valid_idx_]->height);
-    if (paied_vip_info_[paied_vip_valid_idx_]->height == 0) {
-        return "";
-    }
-
     return std::to_string(paied_vip_info_[paied_vip_valid_idx_]->timestamp);
 }
 
@@ -1021,6 +1019,7 @@ void VpnClient::SendGetAccountAttrLastBlock(
             height,
             msg);
     network::Route::Instance()->Send(msg);
+    CLIENT_ERROR("send out get attr[%s] info.", attr.c_str());
 }
 
 std::string VpnClient::Transaction(const std::string& to, uint64_t amount, std::string& tx_gid) {
