@@ -133,8 +133,6 @@ struct BandwidthInfo {
     }
 
     bool Valid() {
-        std::cout << "new client: " << client_platform << ", vip_level: " << vip_level << ", today_used_bandwidth: " << today_used_bandwidth << std::endl;
-
         if (client_platform != lego::common::kIos) {
             return true;
         }

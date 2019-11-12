@@ -1823,9 +1823,6 @@ void VpnServer::HandleVpnLoginResponse(
     uint64_t day_msec = 24llu * 3600llu * 1000llu;
     uint32_t day_pay_for_vpn = day_pay_timestamp / day_msec;
     uint32_t now_day_timestamp = common::TimeUtils::TimestampDays();
-    std::cout << "receive get pay for vpn block: " << block.height()
-        << ", timestamp: " << day_pay_for_vpn << ", now day timestamp: " << now_day_timestamp << std::endl;
-
     if (now_day_timestamp > (day_pay_for_vpn + 30) || vip_tenons < kVipPayfor) {
         iter->second->vip_level = common::kNotVip;
     } else {
