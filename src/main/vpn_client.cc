@@ -50,7 +50,8 @@ int main(int argc, char** argv) {
             bootstrap,
             "./conf/lego.conf",
             "./log/lego.log",
-            "./conf/log4cpp.properties");
+            "./conf/log4cpp.properties",
+            "");
     if (int_res == "ERROR") {
         std::cout << "init client failed: " << int_res << std::endl;
         return 1;
