@@ -77,7 +77,12 @@ VpnClient::VpnClient() {
     paied_vip_info_[1] = nullptr;
 }
 
-VpnClient::~VpnClient() {}
+VpnClient::~VpnClient() {
+    if (transport_ != nullptr) {
+        transport_->Stop();
+        CLIENT_ERROR("transport stopped");
+    }
+}
 
 VpnClient* VpnClient::Instance() {
     static VpnClient ins;

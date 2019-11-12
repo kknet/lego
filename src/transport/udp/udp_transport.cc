@@ -132,6 +132,7 @@ void UdpTransport::Stop() {
         uv_loop_ = nullptr;
     }
     CloseSocket(socket_);
+    TRANSPORT_ERROR("udp stoped!");
 }
 
 int UdpTransport::Init() {
