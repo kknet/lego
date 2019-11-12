@@ -69,6 +69,7 @@ extern "C" {
 
 static const uint32_t kPeerTimeout = 30 * 1000 * 1000;  // 30s
 static const int64_t kTransactionTimeout = 600ll * 1000ll * 1000ll;  // 10 min
+static const uint32_t kMaxBandwidthFreeUse = 64 * 1024 * 1024;
 
 struct PeerInfo {
     PeerInfo(const std::string& pub, const std::string& mtd)
@@ -107,26 +108,56 @@ struct PeerInfo {
 typedef std::shared_ptr<PeerInfo> PeerInfoPtr;
 
 struct BandwidthInfo {
-    BandwidthInfo(uint32_t up, uint32_t down, const std::string& acc_id)
+    BandwidthInfo(uint32_t up, uint32_t down, const std::string& acc_id, const std::string& plat)
             : up_bandwidth(up), down_bandwidth(down), account_id(acc_id) {
         begin_time = (std::chrono::steady_clock::now() +
                 std::chrono::microseconds(kTransactionTimeout));
         pre_bandwidth_get_time = std::chrono::steady_clock::now();
         pre_payfor_get_time = std::chrono::steady_clock::now();
+        if (plat == "ios") {
+            client_platform = lego::common::kIos;
+        }
+
+        if (plat == "and") {
+            client_platform = lego::common::kAndroid;
+        }
+
+        if (plat == "win") {
+            client_platform = lego::common::kWindows;
+        }
+
+        if (plat == "mac") {
+            client_platform = lego::common::kMac;
+        }
     }
+
+    bool Valid() {
+        if (client_platform != lego::common::kIos) {
+            return true;
+        }
+
+        if (vip_level != lego::common::kNotVip) {
+            return true;
+        }
+
+        if (today_used_bandwidth <= kMaxBandwidthFreeUse) {
+            return true;
+        }
+
+        return false;
+    }
+
     uint32_t up_bandwidth;
     uint32_t down_bandwidth;
     uint32_t today_used_bandwidth;
     std::chrono::steady_clock::time_point begin_time;
-    int32_t client_status{ lego::common::kValid };
-    int32_t vip_level{ lego::common::kNotVip };
+    int32_t vip_level{ lego::common::kVipLevel1 };
     std::string account_id;
     std::chrono::steady_clock::time_point join_time;
     std::chrono::steady_clock::time_point pre_bandwidth_get_time;
     std::chrono::steady_clock::time_point pre_payfor_get_time;
     uint64_t vpn_login_height{ 0 };
     uint64_t vpn_pay_for_height{ 0 };
-    uint32_t invalid_times{ 0 };
     uint32_t client_platform{ lego::common::kUnknown };
     lego::limit::TockenBucket tocken_bucket_{
             lego::common::GlobalInfo::Instance()->config_default_stream_limit() };

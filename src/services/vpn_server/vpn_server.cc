@@ -622,6 +622,8 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
 
     // Ignore any new packet if the server is stopped
     if (server->stage == STAGE_STOP) {
+        CloseAndFreeRemote(EV_A_ remote);
+        CloseAndFreeServer(EV_A_ server);
         return;
     }
 
@@ -633,16 +635,21 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         int header_offset = lego::security::kPublicKeySize * 2;
         bool valid = false;
         uint8_t method_len = *(uint8_t *)(buf->data + header_offset);
-        std::string method;
+        std::string client_platform;
         if (method_len + header_offset + 1 >= static_cast<int>(buf->len)) {
+            CloseAndFreeRemote(EV_A_ remote);
+            CloseAndFreeServer(EV_A_ server);
             return;
         }
-        method = std::string((char*)buf->data + header_offset + 1, method_len);
+
+        client_platform = std::string((char*)buf->data + header_offset + 1, method_len);
         pubkey = std::string((char*)buf->data, header_offset);
         client_ptr = lego::service::AccountWithSecret::Instance()->NewPeer(
                 common::Encode::HexDecode(pubkey),
-                method);
+                common::kDefaultEnocdeMethod);
         if (client_ptr == nullptr) {
+            CloseAndFreeRemote(EV_A_ remote);
+            CloseAndFreeServer(EV_A_ server);
             return;
         }
 
@@ -650,15 +657,18 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         auto& user_account = client_ptr->account;
         auto iter = server->svr_item->account_bindwidth_map.find(user_account);
         if (iter == server->svr_item->account_bindwidth_map.end()) {
-            auto acc_item = std::make_shared<BandwidthInfo>(r, 0, user_account);
+            auto acc_item = std::make_shared<BandwidthInfo>(r, 0, user_account, client_platform);
             server->svr_item->account_bindwidth_map[user_account] = acc_item;
             if (RemoveNotAliveAccount(now_point, server->svr_item->account_bindwidth_map)) {
                 // exceeded max user account, new join failed
+                // send back with status
+                CloseAndFreeRemote(EV_A_ remote);
+                CloseAndFreeServer(EV_A_ server);
                 return;
             }
             lego::vpn::VpnServer::Instance()->bandwidth_queue().push(acc_item);
         } else {
-            if (iter->second->client_status != common::kValid) {
+            if (!iter->second->Valid()) {
                 // send back with status
                 CloseAndFreeRemote(EV_A_ remote);
                 CloseAndFreeServer(EV_A_ server);
@@ -666,6 +676,9 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             }
 
             if (!iter->second->tocken_bucket_.UpCheckLimit(r)) {
+                // send back with status
+                CloseAndFreeRemote(EV_A_ remote);
+                CloseAndFreeServer(EV_A_ server);
                 return;
             }
 
@@ -685,15 +698,21 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     } else {
         client_ptr = server->client_ptr;
         if (client_ptr == nullptr) {
+            // send back with status
+            CloseAndFreeRemote(EV_A_ remote);
+            CloseAndFreeServer(EV_A_ server);
             return;
         }
 
         auto iter = server->svr_item->account_bindwidth_map.find(client_ptr->account);
         if (iter == server->svr_item->account_bindwidth_map.end()) {
+            // send back with status
+            CloseAndFreeRemote(EV_A_ remote);
+            CloseAndFreeServer(EV_A_ server);
             return;
         }
 
-        if (iter->second->client_status != common::kValid) {
+        if (!iter->second->Valid()) {
             // send back with status
             CloseAndFreeRemote(EV_A_ remote);
             CloseAndFreeServer(EV_A_ server);
@@ -1745,12 +1764,6 @@ void VpnServer::HandleClientBandwidthResponse(
     }
 
     iter->second->today_used_bandwidth = used;
-    if (iter->second->today_used_bandwidth >= kMaxBandwidthFreeUse) {
-        iter->second->client_status = common::kBandwidthFreeToUseExceeded;
-    } else {
-        iter->second->client_status = common::kValid;
-    }
-
     iter->second->pre_bandwidth_get_time = (std::chrono::steady_clock::now() +
             std::chrono::microseconds(kBandwidthPeriod));
     VPNSVR_ERROR("user [%s] use bandwidth [%u]", key_split[1], used);
@@ -1763,6 +1776,11 @@ void VpnServer::HandleVpnLoginResponse(
     std::lock_guard<std::mutex> guard(account_map_mutex_);
     auto iter = account_map_.find(attr_res.account());
     if (iter == account_map_.end()) {
+        return;
+    }
+
+    if (attr_res.block().empty()) {
+        iter->second->vip_level = common::kNotVip;
         return;
     }
 
@@ -1801,23 +1819,14 @@ void VpnServer::HandleVpnLoginResponse(
 
     iter->second->pre_payfor_get_time = (std::chrono::steady_clock::now() +
             std::chrono::microseconds(kVipCheckPeriod));
-    uint32_t day_pay_for_vpn = common::StringUtil::ToUint32(day_pay_timestamp);
+    uint64_t day_msec = 24llu * 3600llu * 1000llu;
+    uint32_t day_pay_for_vpn = common::StringUtil::ToUint64(day_pay_timestamp) / day_msec;
     uint32_t now_day_timestamp = common::TimeUtils::TimestampDays();
     if (now_day_timestamp > (day_pay_for_vpn + 30) || vip_tenons <= kVipPayfor) {
         iter->second->vip_level = common::kNotVip;
-        if ((iter->second->up_bandwidth + iter->second->down_bandwidth) >=
-                kConnectInitBandwidth) {
-            SendClientUseBandwidth(
-                    iter->second->account_id,
-                    iter->second->up_bandwidth + iter->second->down_bandwidth);
-        }
-        account_map_.erase(iter);
-        return;
     } else {
         iter->second->vip_level = common::kVipLevel1;
     }
-
-    iter->second->invalid_times = 0;
 }
 
 void VpnServer::CheckAccountValid() {

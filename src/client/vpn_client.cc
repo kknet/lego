@@ -55,7 +55,7 @@ static const std::string kClientDownloadUrl = (
 		"windows;1.0.3;,"
 		"mac;1.0.3;");
 
-VpnClient::VpnClient() {
+VpnClient::VpnClientc   () {
     network::Route::Instance()->RegisterMessage(
             common::kServiceMessage,
             std::bind(&VpnClient::HandleMessage, this, std::placeholders::_1));

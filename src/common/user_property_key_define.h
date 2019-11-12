@@ -45,6 +45,7 @@ enum VipLevel {
 static const std::string kVpnLoginAttrKey = "vpn_login";
 static const std::string kUserPayForVpn = "user_pay_for_vpn";
 static const std::string kIncreaseVpnBandwidth = "kIncreaseVpnBandwidth";
+static const std::string kDefaultEnocdeMethod = "aes-128-cfb";
 static const uint32_t kFreeToUseVpnBandwidth = 200 * 1024 * 1024;
 
 }  // namespace  common
