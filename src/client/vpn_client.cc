@@ -484,7 +484,8 @@ std::string VpnClient::Init(
         const std::string& bootstrap,
         const std::string& conf_path,
         const std::string& log_path,
-        const std::string& log_conf_path) {
+        const std::string& log_conf_path,
+        const std::string& c_private_key) {
     WriteDefaultLogConf(log_conf_path, log_path);
     log4cpp::PropertyConfigurator::configure(log_conf_path);
     std::string private_key;
@@ -501,6 +502,10 @@ std::string VpnClient::Init(
         } else {
             private_key = common::Encode::HexDecode(priky);
         }
+    }
+
+    if (c_private_key.size() == security::kPrivateKeySize * 2) {
+        private_key = common::Encode::HexDecode(c_private_key);
     }
 
     config.Get("lego", "first_instasll", first_install_);

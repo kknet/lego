@@ -573,7 +573,8 @@ static bool RemoveNotAliveAccount(
     }
 
     for (auto iter = account_bindwidth_map.begin(); iter != account_bindwidth_map.end();) {
-        if (iter->second->begin_time < now_point) {
+        if ((iter->second->timeout +
+                std::chrono::microseconds(600llu * 1000llu * 1000llu)) < now_point) {
             account_bindwidth_map.erase(iter++);
         } else {
             ++iter;
@@ -683,10 +684,8 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             }
 
             iter->second->up_bandwidth += r;
-            if (iter->second->begin_time < now_point) {
-                iter->second->begin_time = now_point;
-                // transaction now with bandwidth
-            }
+            iter->second->timeout = now_point;
+            // transaction now with bandwidth
         }
 
         server->client_ptr = client_ptr;
@@ -1111,7 +1110,8 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
         }
 
         iter->second->down_bandwidth += r;
-        if (iter->second->begin_time < now_point) {
+        iter->second->timeout = now_point;
+        if (iter->second->client_staking_time < now_point) {
             // transaction now with bandwidth
             uint32_t rand_band = std::rand() % iter->second->down_bandwidth;
             std::string gid;
@@ -1139,7 +1139,7 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
 
             iter->second->up_bandwidth = 0;
             iter->second->down_bandwidth = 0;
-            iter->second->begin_time = now_point + std::chrono::microseconds(kTransactionTimeout);
+            iter->second->client_staking_time = now_point + std::chrono::microseconds(kTransactionTimeout);
         }
     }
     crypto_t* tmp_crypto = server->client_ptr->crypto;
@@ -1854,8 +1854,8 @@ void VpnServer::CheckAccountValid() {
 
     auto now_point = std::chrono::steady_clock::now();
     for (auto iter = account_map_.begin(); iter != account_map_.end();) {
-        if ((iter->second->begin_time +
-                std::chrono::microseconds(10 * 1000 * 1000)) < now_point) {
+        if ((iter->second->timeout +
+                std::chrono::microseconds(600llu * 1000llu * 1000llu)) < now_point) {
             if ((iter->second->up_bandwidth + iter->second->down_bandwidth) >=
                     kConnectInitBandwidth) {
                 SendClientUseBandwidth(

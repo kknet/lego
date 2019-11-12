@@ -110,7 +110,8 @@ public:
             const std::string& bootstrap,
             const std::string& conf_path,
             const std::string& log_path,
-            const std::string& log_conf_path);
+            const std::string& log_conf_path,
+            const std::string& private_key);
     std::string GetVpnServerNodes(
             const std::string& country,
             uint32_t count,

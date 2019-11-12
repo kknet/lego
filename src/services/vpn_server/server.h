@@ -110,7 +110,8 @@ typedef std::shared_ptr<PeerInfo> PeerInfoPtr;
 struct BandwidthInfo {
     BandwidthInfo(uint32_t up, uint32_t down, const std::string& acc_id, const std::string& plat)
             : up_bandwidth(up), down_bandwidth(down), account_id(acc_id) {
-        begin_time = (std::chrono::steady_clock::now() +
+        timeout = std::chrono::steady_clock::now();
+        client_staking_time = (std::chrono::steady_clock::now() +
                 std::chrono::microseconds(kTransactionTimeout));
         pre_bandwidth_get_time = std::chrono::steady_clock::now();
         pre_payfor_get_time = std::chrono::steady_clock::now();
@@ -152,7 +153,8 @@ struct BandwidthInfo {
     uint32_t up_bandwidth;
     uint32_t down_bandwidth;
     uint32_t today_used_bandwidth;
-    std::chrono::steady_clock::time_point begin_time;
+    std::chrono::steady_clock::time_point timeout;
+    std::chrono::steady_clock::time_point client_staking_time;
     int32_t vip_level{ lego::common::kVipLevel1 };
     std::string account_id;
     std::chrono::steady_clock::time_point join_time;
