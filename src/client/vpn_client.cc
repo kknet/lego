@@ -50,8 +50,8 @@ static std::shared_ptr<ClientUniversalDht> root_dht_{ nullptr };
 static const std::string kCheckVersionAccount = common::Encode::HexDecode(
 		"e8a1ceb6b807a98a20e3aa10aa2199e47cbbed08c2540bd48aa3e1e72ba6bd99");
 static const std::string kClientDownloadUrl = (
-		"ios;1.0.3;https://www.pgyer.com/1U2f,"
-		"android;1.0.3;https://www.pgyer.com/62Dg,"
+		"ios;1.0.3;,"
+		"android;1.0.3;,"
 		"windows;1.0.3;,"
 		"mac;1.0.3;");
 
@@ -66,7 +66,7 @@ VpnClient::VpnClient() {
             common::kContractMessage,
             std::bind(&VpnClient::HandleMessage, this, std::placeholders::_1));
 
-	vpn_download_url_ = kClientDownloadUrl;
+    vpn_download_url_ = kClientDownloadUrl;
 	check_tx_tick_ = std::make_shared<common::Tick>();
 	vpn_nodes_tick_ = std::make_shared<common::Tick>();
 	dump_config_tick_ = std::make_shared<common::Tick>();

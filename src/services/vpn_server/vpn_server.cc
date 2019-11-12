@@ -1771,7 +1771,7 @@ void VpnServer::HandleClientBandwidthResponse(
 
 void VpnServer::HandleVpnLoginResponse(
         transport::protobuf::Header& header,
-        block::protobuf::BlockMessage& block_msg) {
+        block::protobuf::BlockMessage& block_msg) try {
     auto& attr_res = block_msg.acc_attr_res();
     std::lock_guard<std::mutex> guard(account_map_mutex_);
     auto iter = account_map_.find(attr_res.account());
@@ -1791,7 +1791,7 @@ void VpnServer::HandleVpnLoginResponse(
 
     // TODO(): check block multi sign, this node must get election blocks
     std::string login_svr_id;
-    std::string day_pay_timestamp;
+    uint64_t day_pay_timestamp;
     uint64_t vip_tenons = 0;
     auto& tx_list = block.tx_block().tx_list();
     for (int32_t i = tx_list.size() - 1; i >= 0; --i) {
@@ -1803,6 +1803,9 @@ void VpnServer::HandleVpnLoginResponse(
             for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
                 if (tx_list[i].attr(attr_idx).key() == common::kUserPayForVpn &&
                             VpnServer::Instance()->VipCommitteeAccountValid(tx_list[i].to())) {
+                    if (!block.has_timestamp()) {
+                        std::cout << "block has no timestamp. fuck!" << std::endl;
+                    }
                     day_pay_timestamp = block.timestamp();
                     vip_tenons = tx_list[i].amount();
                     iter->second->vpn_pay_for_height = block.height();
@@ -1820,13 +1823,15 @@ void VpnServer::HandleVpnLoginResponse(
     iter->second->pre_payfor_get_time = (std::chrono::steady_clock::now() +
             std::chrono::microseconds(kVipCheckPeriod));
     uint64_t day_msec = 24llu * 3600llu * 1000llu;
-    uint32_t day_pay_for_vpn = common::StringUtil::ToUint64(day_pay_timestamp) / day_msec;
+    uint32_t day_pay_for_vpn = day_pay_timestamp / day_msec;
     uint32_t now_day_timestamp = common::TimeUtils::TimestampDays();
     if (now_day_timestamp > (day_pay_for_vpn + 30) || vip_tenons <= kVipPayfor) {
         iter->second->vip_level = common::kNotVip;
     } else {
         iter->second->vip_level = common::kVipLevel1;
     }
+} catch (std::exception& e) {
+    std::cout << "catch error: " << e.what() << std::endl;
 }
 
 void VpnServer::CheckAccountValid() {
