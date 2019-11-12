@@ -78,9 +78,14 @@ VpnClient::VpnClient() {
 }
 
 VpnClient::~VpnClient() {
+    Destroy();
+}
+
+void VpnClient::Destroy() {
     if (transport_ != nullptr) {
         transport_->Stop();
         CLIENT_ERROR("transport stopped");
+        transport_ = nullptr;
     }
 }
 

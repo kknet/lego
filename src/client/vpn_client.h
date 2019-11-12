@@ -142,6 +142,7 @@ public:
     std::string PayForVPN(const std::string& to, const std::string& gid, uint64_t amount);
     std::string CheckVip();
     std::string CheckFreeBandwidth();
+    void Destroy();
 
 private:
     VpnClient();
