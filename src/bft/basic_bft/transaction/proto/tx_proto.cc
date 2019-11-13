@@ -110,6 +110,10 @@ void TxProto::CreateTxBlock(
         tx.set_gas_price(0);
         tx.set_gas_used(0);
         tx.set_status(kBftSuccess);
+        tx.set_to_add(tx_vec[i]->add_to_acc_addr);
+        tx.set_smart_contract_addr(tx_vec[i]->smart_contract_addr);
+        tx.set_type(tx_vec[i]->bft_type);
+
         do {
             if (tx_vec[i]->to_acc_addr.empty()) {
                 tx.set_netwok_id(network::GetConsensusShardNetworkId(tx_vec[i]->from_acc_addr));
@@ -162,10 +166,8 @@ void TxProto::CreateTxBlock(
                 }
             }
 
-            tx.set_to_add(tx_vec[i]->add_to_acc_addr);
             // execute contract
             if (!tx_vec[i]->smart_contract_addr.empty()) {
-                tx.set_smart_contract_addr(tx_vec[i]->smart_contract_addr);
                 if (contract::ContractManager::Instance()->Execute(
                         tx_vec[i]) != contract::kContractSuccess) {
                     tx.set_status(kBftExecuteContractFailed);
@@ -182,7 +184,6 @@ void TxProto::CreateTxBlock(
                 tx_attr->set_value(iter->second);
             }
         }
-        tx.set_type(tx_vec[i]->bft_type);
         auto add_tx = tx_list->Add();
         *add_tx = tx;
     }
