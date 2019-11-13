@@ -18,9 +18,16 @@ enum SyncErrorCode {
     kSyncKeyExsits = 2,
 };
 
+enum SyncPriorityType {
+    kSyncPriLowest = 0,
+    kSyncPriLow = 1,
+    kSyncNormal = 2,
+    kSyncHigh = 3,
+    kSyncHighest = 4,
+};
+
 static const uint32_t kSyncValueRetryPeriod = 3 * 1000 * 1000u;  // Persist 3s
 static const uint32_t kTimeoutCheckPeriod = 3 * 1000 * 1000u;  // Persist 3s
-static const uint32_t kMaxSyncPriority = 4u;
 static const uint32_t kMaxSyncMapCapacity = 1000000u;
 static const uint32_t kMaxSyncKeyCount = 256u;
 static const uint32_t kSyncNeighborCount = 3u;

@@ -4,6 +4,7 @@
 #include "contract/contract_manager.h"
 #include "block/account_manager.h"
 #include "network/network_utils.h"
+#include "sync/key_value_sync.h"
 #include "bft/bft_utils.h"
 #include "bft/proto/bft.pb.h"
 #include "bft/dispatch_pool.h"
@@ -193,7 +194,10 @@ int TxBft::CheckBlockInfo(const protobuf::Block& block_info) {
     }
 
     if (block_ptr->hash != block_info.tx_block().prehash()) {
-        // (TODO): add sync
+        sync::KeyValueSync::Instance()->AddSync(
+                block_info.tx_block().network_id(),
+                block_info.tx_block().prehash(),
+                sync::kSyncHighest);
         return kBftBlockPreHashError;
     }
 

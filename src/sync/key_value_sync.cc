@@ -4,6 +4,8 @@
 #include "transport/proto/transport.pb.h"
 #include "dht/base_dht.h"
 #include "network/dht_manager.h"
+#include "bft/basic_bft/transaction/proto/tx.pb.h"
+#include "block/block_manager.h"
 #include "sync/sync_utils.h"
 #include "sync/proto/sync_proto.h"
 
@@ -21,7 +23,7 @@ KeyValueSync::KeyValueSync() {}
 KeyValueSync::~KeyValueSync() {}
 
 int KeyValueSync::AddSync(uint32_t network_id, const std::string& key, uint32_t priority) {
-    assert(priority <= kMaxSyncPriority);
+    assert(priority <= kSyncHighest);
     if (db::Db::Instance()->Exist(key)) {
         return kSyncKeyExsits;
     }
@@ -50,7 +52,7 @@ void KeyValueSync::CheckSyncItem() {
     std::set<uint64_t> sended_neigbors;
     std::map<uint32_t, sync::protobuf::SyncMessage> sync_dht_map;
     bool stop = false;
-    for (uint32_t i = 0; i <= kMaxSyncPriority; ++i) {
+    for (uint32_t i = kSyncHighest; i >= kSyncPriLowest; --i) {
         std::lock_guard<std::mutex> guard(prio_sync_queue_[i].mutex);
         while (!prio_sync_queue_[i].sync_queue.empty()) {
             auto& item = prio_sync_queue_[i].sync_queue.front();
@@ -213,6 +215,15 @@ void KeyValueSync::ProcessSyncValueResponse(
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end", header);
     auto& res_map = sync_msg.sync_value_res().values();
     for (auto iter = res_map.begin(); iter != res_map.end(); ++iter) {
+        bft::protobuf::Block block_item;
+        if (block_item.ParseFromString(iter->second)) {
+            // block string
+            if (block_item.hash() == iter->first) {
+                block::BlockManager::Instance()->AddNewBlock(block_item);
+                continue;
+            }
+        }
+
         db::Db::Instance()->Put(iter->first, iter->second);
         {
             std::lock_guard<std::mutex> guard(synced_map_mutex_);

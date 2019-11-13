@@ -69,7 +69,7 @@ private:
 
     std::unordered_map<std::string, SyncItemPtr> synced_map_;
     std::mutex synced_map_mutex_;
-    PrioSyncQueue prio_sync_queue_[kMaxSyncPriority + 1];
+    PrioSyncQueue prio_sync_queue_[kSyncHighest + 1];
     common::Tick tick_;
     common::Tick sync_timeout_tick_;
 
