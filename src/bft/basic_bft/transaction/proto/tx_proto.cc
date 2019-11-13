@@ -109,63 +109,70 @@ void TxProto::CreateTxBlock(
         tx.set_gas_limit(0);
         tx.set_gas_price(0);
         tx.set_gas_used(0);
-        if (tx_vec[i]->to_acc_addr.empty()) {
-			tx.set_netwok_id(network::GetConsensusShardNetworkId(tx_vec[i]->from_acc_addr));
-            tx.set_balance(0);  // create new account address
-        } else {
-            if (tx_vec[i]->add_to_acc_addr) {
-                auto iter = acc_balance_map.find(tx_vec[i]->to_acc_addr);
-                if (iter == acc_balance_map.end()) {
-                    auto acc_info = block::AccountManager::Instance()->GetAcountInfo(
-                            tx_vec[i]->to_acc_addr);
-                    if (acc_info == nullptr) {
-                        // this should remove from tx pool
-                        continue;
-                    }
-                    acc_balance_map[tx_vec[i]->to_acc_addr] = acc_info->balance + tx_vec[i]->lego_count;
-                } else {
-                    acc_balance_map[tx_vec[i]->to_acc_addr] += tx_vec[i]->lego_count;
-                }
-                tx.set_balance(acc_balance_map[tx_vec[i]->to_acc_addr]);
+        tx.set_status(kBftSuccess);
+        do {
+            if (tx_vec[i]->to_acc_addr.empty()) {
+                tx.set_netwok_id(network::GetConsensusShardNetworkId(tx_vec[i]->from_acc_addr));
+                tx.set_balance(0);  // create new account address
             } else {
-                auto iter = acc_balance_map.find(tx_vec[i]->from_acc_addr);
-                if (iter == acc_balance_map.end()) {
-                    auto acc_info = block::AccountManager::Instance()->GetAcountInfo(
-                            tx_vec[i]->from_acc_addr);
-                    if (acc_info == nullptr) {
-                        // this should remove from tx pool
-                        continue;
+                if (tx_vec[i]->add_to_acc_addr) {
+                    auto iter = acc_balance_map.find(tx_vec[i]->to_acc_addr);
+                    if (iter == acc_balance_map.end()) {
+                        auto acc_info = block::AccountManager::Instance()->GetAcountInfo(
+                                tx_vec[i]->to_acc_addr);
+                        if (acc_info == nullptr) {
+                            // this should remove from tx pool
+                            tx.set_status(kBftAccountNotExists);
+                            break;
+                        }
+                        acc_balance_map[tx_vec[i]->to_acc_addr] = acc_info->balance + tx_vec[i]->lego_count;
+                    } else {
+                        acc_balance_map[tx_vec[i]->to_acc_addr] += tx_vec[i]->lego_count;
                     }
-
-                    if (acc_info->balance < static_cast<int64_t>(tx_vec[i]->lego_count)) {
-                        // this should remove from tx pool
-                        continue;
-                    }
-                    acc_balance_map[tx_vec[i]->from_acc_addr] = (
-                            acc_info->balance - static_cast<int64_t>(tx_vec[i]->lego_count));
+                    tx.set_balance(acc_balance_map[tx_vec[i]->to_acc_addr]);
                 } else {
-                    if (acc_balance_map[tx_vec[i]->from_acc_addr] <
-                            static_cast<int64_t>(tx_vec[i]->lego_count)) {
-                        // this should remove from tx pool
-                        continue;
+                    auto iter = acc_balance_map.find(tx_vec[i]->from_acc_addr);
+                    if (iter == acc_balance_map.end()) {
+                        auto acc_info = block::AccountManager::Instance()->GetAcountInfo(
+                                tx_vec[i]->from_acc_addr);
+                        if (acc_info == nullptr) {
+                            // this should remove from tx pool
+                            tx.set_status(kBftAccountNotExists);
+                            break;
+                        }
+
+                        if (acc_info->balance < static_cast<int64_t>(tx_vec[i]->lego_count)) {
+                            // this should remove from tx pool
+                            tx.set_status(kBftAccountBalanceError);
+                            break;
+                        }
+                        acc_balance_map[tx_vec[i]->from_acc_addr] = (
+                                acc_info->balance - static_cast<int64_t>(tx_vec[i]->lego_count));
+                    } else {
+                        if (acc_balance_map[tx_vec[i]->from_acc_addr] <
+                                static_cast<int64_t>(tx_vec[i]->lego_count)) {
+                            // this should remove from tx pool
+                            tx.set_status(kBftAccountBalanceError);
+                            break;
+                        }
+                        acc_balance_map[tx_vec[i]->from_acc_addr] -=
+                                static_cast<int64_t>(tx_vec[i]->lego_count);
                     }
-                    acc_balance_map[tx_vec[i]->from_acc_addr] -=
-                            static_cast<int64_t>(tx_vec[i]->lego_count);
+                    tx.set_balance(acc_balance_map[tx_vec[i]->from_acc_addr]);
                 }
-                tx.set_balance(acc_balance_map[tx_vec[i]->from_acc_addr]);
             }
-        }
-        tx.set_to_add(tx_vec[i]->add_to_acc_addr);
 
-        // execute contract
-        if (!tx_vec[i]->smart_contract_addr.empty()) {
-            if (contract::ContractManager::Instance()->Execute(
+            tx.set_to_add(tx_vec[i]->add_to_acc_addr);
+            // execute contract
+            if (!tx_vec[i]->smart_contract_addr.empty()) {
+                tx.set_smart_contract_addr(tx_vec[i]->smart_contract_addr);
+                if (contract::ContractManager::Instance()->Execute(
                     tx_vec[i]) != contract::kContractSuccess) {
-                continue;
+                    tx.set_status(kBftExecuteContractFailed);
+                    break;
+                }
             }
-
-            tx.set_smart_contract_addr(tx_vec[i]->smart_contract_addr);
-        }
+        } while (0);
 
         if (!tx_vec[i]->attr_map.empty()) {
             for (auto iter = tx_vec[i]->attr_map.begin();

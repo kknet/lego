@@ -26,6 +26,8 @@ public:
             bft::protobuf::LeaderTxPrepare& bft_msg);
 
 private:
+    static void CheckTxValid();
+
     DISALLOW_COPY_AND_ASSIGN(TxProto);
 };
 

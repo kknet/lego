@@ -108,6 +108,7 @@ enum BftErrorCode {
     kBftBlockPreHashError = 16,
     kBftNetwokInvalid = 17,
     kBftLeaderInfoInvalid = 18,
+    kBftExecuteContractFailed = 19,
 };
 
 enum BftStatus {

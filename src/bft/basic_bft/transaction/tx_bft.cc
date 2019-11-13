@@ -121,58 +121,69 @@ int TxBft::BackupCheckPrepare(std::string& bft_str) {
             return tmp_res;
         }
 
-        if (tx_info.has_to() && !tx_info.to().empty()) {
-            if (tx_info.to_add()) {
-                auto iter = acc_balance_map.find(tx_info.to());
-                if (iter == acc_balance_map.end()) {
-                    auto acc_info = block::AccountManager::Instance()->GetAcountInfo(tx_info.to());
-                    if (acc_info == nullptr) {
-                        // this should remove from tx pool
-                        BFT_ERROR("bft::protobuf::TxBft kBftAccountNotExists failed!");
-                        return kBftAccountNotExists;
-                    }
-                    acc_balance_map[tx_info.to()] = acc_info->balance + tx_info.amount();
-                } else {
-                    acc_balance_map[tx_info.to()] += tx_info.amount();
-                }
-
-                if (acc_balance_map[tx_info.to()] != static_cast<int64_t>(tx_info.balance())) {
-                    BFT_ERROR("bft::protobuf::TxBft kBftAccountBalanceError failed!");
-                    return kBftAccountBalanceError;
-                }
-            } else {
-                auto iter = acc_balance_map.find(tx_info.from());
-                if (iter == acc_balance_map.end()) {
-                    auto acc_info = block::AccountManager::Instance()->GetAcountInfo(tx_info.from());
-                    if (acc_info == nullptr) {
-                        // this should remove from tx pool
-                        BFT_ERROR("bft::protobuf::TxBft kBftAccountNotExists failed!");
-                        return kBftAccountNotExists;
+        do {
+            if (tx_info.has_to() && !tx_info.to().empty()) {
+                if (tx_info.to_add()) {
+                    auto iter = acc_balance_map.find(tx_info.to());
+                    if (iter == acc_balance_map.end()) {
+                        auto acc_info = block::AccountManager::Instance()->GetAcountInfo(tx_info.to());
+                        if (acc_info == nullptr) {
+                            // this should remove from tx pool
+                            if (tx_info.status() != kBftAccountNotExists) {
+                                return kBftError;
+                            }
+                            break;
+                        }
+                        acc_balance_map[tx_info.to()] = acc_info->balance + tx_info.amount();
+                    } else {
+                        acc_balance_map[tx_info.to()] += tx_info.amount();
                     }
 
-                    if (acc_info->balance < static_cast<int64_t>(tx_info.amount())) {
-                        // this should remove from tx pool
+                    if (acc_balance_map[tx_info.to()] != static_cast<int64_t>(tx_info.balance())) {
                         BFT_ERROR("bft::protobuf::TxBft kBftAccountBalanceError failed!");
                         return kBftAccountBalanceError;
                     }
-                    acc_balance_map[tx_info.from()] = (
-                            acc_info->balance - static_cast<int64_t>(tx_info.amount()));
                 } else {
-                    if (acc_balance_map[tx_info.from()] <
-                            static_cast<int64_t>(tx_info.amount())) {
-                        // this should remove from tx pool
+                    auto iter = acc_balance_map.find(tx_info.from());
+                    if (iter == acc_balance_map.end()) {
+                        auto acc_info = block::AccountManager::Instance()->GetAcountInfo(tx_info.from());
+                        if (acc_info == nullptr) {
+                            // this should remove from tx pool
+                            if (tx_info.status() != kBftAccountNotExists) {
+                                return kBftError;
+                            }
+                            break;
+                        }
+
+                        if (acc_info->balance < static_cast<int64_t>(tx_info.amount())) {
+                            // this should remove from tx pool
+                            if (tx_info.status() != kBftAccountBalanceError) {
+                                return kBftError;
+                            }
+                            break;
+                        }
+                        acc_balance_map[tx_info.from()] = (
+                                acc_info->balance - static_cast<int64_t>(tx_info.amount()));
+                    } else {
+                        if (acc_balance_map[tx_info.from()] <
+                                static_cast<int64_t>(tx_info.amount())) {
+                            // this should remove from tx pool
+                            if (tx_info.status() != kBftAccountBalanceError) {
+                                return kBftError;
+                            }
+                            break;
+                        }
+                        acc_balance_map[tx_info.from()] -= static_cast<int64_t>(tx_info.amount());
+                    }
+
+                    if (acc_balance_map[tx_info.from()] != static_cast<int64_t>(tx_info.balance())) {
                         BFT_ERROR("bft::protobuf::TxBft kBftAccountBalanceError failed!");
                         return kBftAccountBalanceError;
                     }
-                    acc_balance_map[tx_info.from()] -= static_cast<int64_t>(tx_info.amount());
-                }
-
-                if (acc_balance_map[tx_info.from()] != static_cast<int64_t>(tx_info.balance())) {
-                    BFT_ERROR("bft::protobuf::TxBft kBftAccountBalanceError failed!");
-                    return kBftAccountBalanceError;
                 }
             }
-        }
+        } while (0);
+        
         push_bft_item_vec(tx_info.gid());
     }
 
@@ -248,9 +259,9 @@ int TxBft::CheckTxInfo(
     if (!local_tx_info->smart_contract_addr.empty()) {
         if (contract::ContractManager::Instance()->Execute(
                 local_tx_info) != contract::kContractSuccess) {
-            BFT_ERROR("local tx execute smart_contract_addr[%s] failed!",
-                    local_tx_info->smart_contract_addr.c_str());
-            return kBftLeaderInfoInvalid;
+            if (tx_info.status() != kBftExecuteContractFailed) {
+                return kBftLeaderInfoInvalid;
+            }
         }
     }
 
