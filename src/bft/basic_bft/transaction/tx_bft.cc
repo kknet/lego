@@ -334,7 +334,10 @@ int TxBft::CheckTxInfo(
         BFT_ERROR("block height error:[now: %d][leader: %d]",
                 (block_ptr->height + 1),
                 block_info.height());
-        // TODO(TODO): sync block
+        sync::KeyValueSync::Instance()->AddSync(
+                block_info.tx_block().network_id(),
+                block_info.hash(),
+                sync::kSyncHighest);
         return kBftBlockHeightError;
     }
     return kBftSuccess;
