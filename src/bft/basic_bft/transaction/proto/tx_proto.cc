@@ -125,7 +125,6 @@ void TxProto::CreateTxBlock(
                         auto acc_info = block::AccountManager::Instance()->GetAcountInfo(
                                 tx_vec[i]->to_acc_addr);
                         if (acc_info == nullptr) {
-                            // this should remove from tx pool
                             tx.set_status(kBftAccountNotExists);
                             break;
                         }
@@ -140,13 +139,11 @@ void TxProto::CreateTxBlock(
                         auto acc_info = block::AccountManager::Instance()->GetAcountInfo(
                                 tx_vec[i]->from_acc_addr);
                         if (acc_info == nullptr) {
-                            // this should remove from tx pool
                             tx.set_status(kBftAccountNotExists);
                             break;
                         }
 
                         if (acc_info->balance < static_cast<int64_t>(tx_vec[i]->lego_count)) {
-                            // this should remove from tx pool
                             tx.set_status(kBftAccountBalanceError);
                             break;
                         }
@@ -155,7 +152,6 @@ void TxProto::CreateTxBlock(
                     } else {
                         if (acc_balance_map[tx_vec[i]->from_acc_addr] <
                                 static_cast<int64_t>(tx_vec[i]->lego_count)) {
-                            // this should remove from tx pool
                             tx.set_status(kBftAccountBalanceError);
                             break;
                         }
