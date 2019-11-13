@@ -226,8 +226,9 @@ int TxBft::CheckTxInfo(
             tx_info.to_add(),
             tx_info.gid());
     if (local_tx_info == nullptr) {
-        BFT_ERROR("prepare [to: %d] not has tx[%s]to[%s][%s]!",
+        BFT_ERROR("prepare [to: %d] [pool idx: %d] not has tx[%s]to[%s][%s]!",
                 tx_info.to_add(),
+                pool_index(),
                 common::Encode::HexEncode(tx_info.from()).c_str(),
                 common::Encode::HexEncode(tx_info.to()).c_str(),
                 common::Encode::HexEncode(tx_info.gid()).c_str());
