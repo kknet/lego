@@ -91,6 +91,7 @@ add_definitions(
     -DOPENSSL_ROOT_DIR=/usr/local/Cellar/openssl/1.0.2r
     -DTEST_TRANSPORT_PERFOMANCE
     -DLEGO_TRACE_MESSAGE
+    #-DARMEABI_V7A
 )
 
 add_compile_options(-fPIC)
@@ -142,6 +143,8 @@ set(LINK_ARGS
     security
     statistics
     ip
+    contract
+    limit
     common
     protobuf
     uv
@@ -174,6 +177,8 @@ set(CLIENT_LINK_ARGS
     security
     json2pb
     ip
+    limit
+    contract
     common
     protobuf
     uv
@@ -216,6 +221,8 @@ else()
     add_subdirectory(${SRC_DIR}/client client)
     add_subdirectory(${SRC_DIR}/root_congress)
     add_subdirectory(${SRC_DIR}/statistics)
+    add_subdirectory(${SRC_DIR}/limit)
+    add_subdirectory(${SRC_DIR}/contract)
 
     if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
         add_subdirectory(${SRC_DIR}/common/tests common_test)
