@@ -260,6 +260,8 @@ int TxBft::CheckTxInfo(
         if (contract::ContractManager::Instance()->Execute(
                 local_tx_info) != contract::kContractSuccess) {
             if (tx_info.status() != kBftExecuteContractFailed) {
+                BFT_ERROR("local tx status not equal to leader status[%d][%d]!",
+                        tx_info.status(), kBftExecuteContractFailed);
                 return kBftLeaderInfoInvalid;
             }
         }

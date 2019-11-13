@@ -167,7 +167,7 @@ void TxProto::CreateTxBlock(
             if (!tx_vec[i]->smart_contract_addr.empty()) {
                 tx.set_smart_contract_addr(tx_vec[i]->smart_contract_addr);
                 if (contract::ContractManager::Instance()->Execute(
-                    tx_vec[i]) != contract::kContractSuccess) {
+                        tx_vec[i]) != contract::kContractSuccess) {
                     tx.set_status(kBftExecuteContractFailed);
                     break;
                 }
