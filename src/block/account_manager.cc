@@ -70,7 +70,7 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
             std::map<std::string, std::string> attr_map;
             for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
                 // every attr just check last block
-                attr_map[tx_list[i].attr(i).key()] = tx_list[i].attr(i).value();
+                attr_map[tx_list[i].attr(attr_idx).key()] = tx_list[i].attr(attr_idx).value();
             }
 
             if (!tx_list[i].smart_contract_addr().empty()) {
@@ -97,9 +97,9 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
             std::map<std::string, std::string> attr_map;
             for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
                 // every attr just check last block
-                attr_map[tx_list[i].attr(i).key()] = tx_list[i].attr(i).value();
+                attr_map[tx_list[i].attr(attr_idx).key()] = tx_list[i].attr(attr_idx).value();
                 std::lock_guard<std::mutex> acc_guard(acc_ptr->attrs_with_height_mutex);
-                acc_ptr->attrs_with_height[tx_list[i].attr(i).key()] = block_item.height();
+                acc_ptr->attrs_with_height[tx_list[i].attr(attr_idx).key()] = block_item.height();
             }
 
             if (!tx_list[i].smart_contract_addr().empty()) {
