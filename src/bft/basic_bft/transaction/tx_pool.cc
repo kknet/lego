@@ -78,7 +78,6 @@ TxItemPtr TxPool::GetTx(bool to, const std::string& tx_gid) {
     std::lock_guard<std::mutex> guard(tx_pool_mutex_);
     auto iter = added_tx_map_.find(uni_gid);
     if (iter == added_tx_map_.end()) {
-        assert(false);
         return nullptr;
     }
 
