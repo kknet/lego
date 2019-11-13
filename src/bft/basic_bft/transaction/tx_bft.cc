@@ -334,6 +334,7 @@ int TxBft::CheckTxInfo(
         BFT_ERROR("block height error:[now: %d][leader: %d]",
                 (block_ptr->height + 1),
                 block_info.height());
+        // TODO(TODO): sync block
         return kBftBlockHeightError;
     }
     return kBftSuccess;
