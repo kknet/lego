@@ -230,7 +230,7 @@ int TxBft::CheckTxInfo(
                 tx_info.to_add(),
                 common::Encode::HexEncode(tx_info.from()).c_str(),
                 common::Encode::HexEncode(tx_info.to()).c_str(),
-                tx_info.gid().c_str());
+                common::Encode::HexEncode(tx_info.gid()).c_str());
         return kBftTxNotExists;
     }
 
