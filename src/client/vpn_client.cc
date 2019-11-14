@@ -292,6 +292,7 @@ void VpnClient::SendGetAccountAttrUsedBandwidth() {
     }
 
     transport::protobuf::Header msg;
+    uni_dht->SetFrequently(msg);
     std::string now_day_timestamp = std::to_string(common::TimeUtils::TimestampDays());
     std::string key = (common::kIncreaseVpnBandwidth + "_" +
             common::Encode::HexEncode(common::GlobalInfo::Instance()->id()) + "_" +
