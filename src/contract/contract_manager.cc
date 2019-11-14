@@ -53,8 +53,6 @@ void ContractManager::HandleMessage(transport::protobuf::Header& header) {
 void ContractManager::HandleGetContractAttrRequest(
         transport::protobuf::Header& header,
         protobuf::ContractMessage& contract_msg) {
-    CONTRACT_ERROR("received contract message request coming");
-
     std::string attr_value;
     if (GetAttrWithKey(
             contract_msg.get_attr_req().smart_contract_addr(),
@@ -79,8 +77,8 @@ void ContractManager::HandleGetContractAttrRequest(
             contract_msg_res.SerializeAsString(),
             msg);
     network::Route::Instance()->Send(msg);
-    CONTRACT_ERROR("received contract message request and sent response.[%s]: [%s]",
-            contract_msg.get_attr_req().attr_key().c_str(), attr_value.c_str());
+//     CONTRACT_ERROR("received contract message request and sent response.[%s]: [%s]",
+//             contract_msg.get_attr_req().attr_key().c_str(), attr_value.c_str());
 }
 
 int ContractManager::InitWithAttr(uint64_t block_height, const bft::protobuf::TxInfo& tx_info) {
