@@ -22,12 +22,12 @@ public:
             transport::protobuf::Header& msg) {
         msg.set_src_dht_key(local_node->dht_key);
         uint32_t des_net_id = network::GetConsensusShardNetworkId(des_account);
-        dht::DhtKeyManager dht_key(des_net_id, 0);
+        dht::DhtKeyManager dht_key(
+                des_net_id,
+                rand() % (std::numeric_limits<uint8_t>::max)());
         msg.set_des_dht_key(dht_key.StrKey());
-        msg.set_des_dht_key_hash(common::Hash::Hash64(dht_key.StrKey()));
         msg.set_priority(transport::kTransportPriorityMiddle);
         msg.set_id(common::GlobalInfo::Instance()->MessageId());
-        msg.set_universal(false);
         msg.set_type(common::kContractMessage);
         msg.set_hop_count(0);
         msg.set_client(local_node->client_mode);

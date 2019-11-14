@@ -311,7 +311,7 @@ public:
         uint32_t des_net_id = network::GetConsensusShardNetworkId(account_address);
         dht::DhtKeyManager dht_key(
                 des_net_id,
-                rand() % std::numeric_limits<uint8_t>::max());
+                rand() % (std::numeric_limits<uint8_t>::max)());
         msg.set_des_dht_key(dht_key.StrKey());
         msg.set_priority(transport::kTransportPriorityLowest);
         msg.set_id(common::GlobalInfo::Instance()->MessageId());
@@ -361,7 +361,7 @@ public:
         uint32_t des_net_id = network::GetConsensusShardNetworkId(account_address);
         dht::DhtKeyManager dht_key(
             des_net_id,
-            rand() % std::numeric_limits<uint8_t>::max());
+            rand() % (std::numeric_limits<uint8_t>::max)());
         msg.set_des_dht_key(dht_key.StrKey());
         msg.set_priority(transport::kTransportPriorityLowest);
         msg.set_id(common::GlobalInfo::Instance()->MessageId());

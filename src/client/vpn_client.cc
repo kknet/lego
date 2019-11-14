@@ -302,7 +302,7 @@ void VpnClient::SendGetAccountAttrUsedBandwidth() {
             contract::kContractVpnBandwidthProveAddr,
             key,
             msg);
-    network::Route::Instance()->Send(msg);
+    uni_dht->SendToClosestNode(msg);
 }
 
 std::string VpnClient::CheckFreeBandwidth() {
