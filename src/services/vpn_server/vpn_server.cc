@@ -1587,6 +1587,11 @@ int VpnServer::Init() {
 }
 
 void VpnServer::HandleMessage(transport::protobuf::Header& header) {
+    if (header.client()) {
+        network::Route::Instance()->Send(header);
+        return;
+    }
+
     if (header.type() == common::kBlockMessage) {
         block::protobuf::BlockMessage block_msg;
         if (!block_msg.ParseFromString(header.data())) {

@@ -72,19 +72,20 @@ void BlockManager::HandleMessage(transport::protobuf::Header& header) {
     if (block_msg.has_block_req()) {
         LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("block handle", header);
         HandleGetBlockRequest(header, block_msg);
+        return;
     }
 
     if (block_msg.has_height_req()) {
         HandleGetHeightRequest(header, block_msg);
+        return;
     }
 
     if (block_msg.has_acc_attr_req()) {
         HandleAttrGetRequest(header, block_msg);
+        return;
     }
 
-    if (block_msg.has_acc_attr_res()) {
-        std::cout << "attr response coming." << std::endl;
-    }
+    network::Route::Instance()->Send(header);
 }
 
 void BlockManager::HandleAttrGetRequest(
