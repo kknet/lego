@@ -36,7 +36,6 @@ int VpnSvrBandwidth::InitWithAttr(uint64_t block_height, const bft::protobuf::Tx
         std::lock_guard<std::mutex> guard(bandwidth_all_map_mutex_);
         auto all_iter = bandwidth_all_map_.find(attr_key);
         if (all_iter == bandwidth_all_map_.end()) {
-            bandwidth_all_map_.clear();
             bandwidth_all_map_[attr_key] = bandwidth;
         } else {
             all_iter->second += bandwidth;

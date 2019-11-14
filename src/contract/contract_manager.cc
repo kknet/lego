@@ -53,6 +53,8 @@ void ContractManager::HandleMessage(transport::protobuf::Header& header) {
 void ContractManager::HandleGetContractAttrRequest(
         transport::protobuf::Header& header,
         protobuf::ContractMessage& contract_msg) {
+    CONTRACT_ERROR("received contract message request coming");
+
     std::string attr_value;
     if (GetAttrWithKey(
             contract_msg.get_attr_req().smart_contract_addr(),

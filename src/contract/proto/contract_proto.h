@@ -27,7 +27,6 @@ public:
                 rand() % (std::numeric_limits<uint8_t>::max)());
         msg.set_des_dht_key(dht_key.StrKey());
         msg.set_priority(transport::kTransportPriorityMiddle);
-        msg.set_id(common::GlobalInfo::Instance()->MessageId());
         msg.set_type(common::kContractMessage);
         msg.set_hop_count(0);
         msg.set_client(local_node->client_mode);
