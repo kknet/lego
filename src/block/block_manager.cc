@@ -152,22 +152,22 @@ void BlockManager::HandleAttrGetRequest(
                 msg);
         network::Route::Instance()->Send(msg);
     } else {
-//         protobuf::BlockMessage block_msg_res;
-//         auto attr_res = block_msg_res.mutable_acc_attr_res();
-//         attr_res->set_block("");
-//         attr_res->set_height(height);
-//         attr_res->set_attr_key(block_msg.acc_attr_req().attr_key());
-//         attr_res->set_account(block_msg.acc_attr_req().account());
-//         transport::protobuf::Header msg;
-//         auto dht_ptr = network::UniversalManager::Instance()->GetUniversal(
-//                 network::kUniversalNetworkId);
-//         assert(dht_ptr != nullptr);
-//         BlockProto::CreateGetBlockResponse(
-//                 dht_ptr->local_node(),
-//                 header,
-//                 block_msg_res.SerializeAsString(),
-//                 msg);
-//         network::Route::Instance()->Send(msg);
+        protobuf::BlockMessage block_msg_res;
+        auto attr_res = block_msg_res.mutable_acc_attr_res();
+        attr_res->set_block("");
+        attr_res->set_height(height);
+        attr_res->set_attr_key(block_msg.acc_attr_req().attr_key());
+        attr_res->set_account(block_msg.acc_attr_req().account());
+        transport::protobuf::Header msg;
+        auto dht_ptr = network::UniversalManager::Instance()->GetUniversal(
+                network::kUniversalNetworkId);
+        assert(dht_ptr != nullptr);
+        BlockProto::CreateGetBlockResponse(
+                dht_ptr->local_node(),
+                header,
+                block_msg_res.SerializeAsString(),
+                msg);
+        network::Route::Instance()->Send(msg);
     }
 }
 
@@ -202,7 +202,6 @@ void BlockManager::HandleGetHeightRequest(
 }
 
 void BlockManager::SendBlockNotExists(transport::protobuf::Header& header) {
-    return;
     protobuf::BlockMessage block_msg_res;
     auto block_res = block_msg_res.mutable_block_res();
     block_res->set_block("");

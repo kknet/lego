@@ -74,6 +74,7 @@ void ContractManager::HandleGetContractAttrRequest(
             contract_msg_res.SerializeAsString(),
             msg);
     network::Route::Instance()->Send(msg);
+    CONTRACT_ERROR("received contract message request and sent response.");
 }
 
 int ContractManager::InitWithAttr(uint64_t block_height, const bft::protobuf::TxInfo& tx_info) {
