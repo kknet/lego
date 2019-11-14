@@ -1616,9 +1616,10 @@ void VpnServer::HandleMessage(transport::protobuf::Header& header) {
                 return;
             }
             dht_ptr->SendToClosestNode(header);
+        } else {
+            network::Route::Instance()->Send(header);
         }
     }
-
 
     if (header.type() == common::kContractMessage) {
         contract::protobuf::ContractMessage contract_msg;
@@ -1649,6 +1650,8 @@ void VpnServer::HandleMessage(transport::protobuf::Header& header) {
                 return;
             }
             dht_ptr->SendToClosestNode(header);
+        } else {
+            network::Route::Instance()->Send(header);
         }
     }
 }

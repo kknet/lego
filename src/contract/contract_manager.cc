@@ -44,7 +44,10 @@ void ContractManager::HandleMessage(transport::protobuf::Header& header) {
 
     if (contract_msg.has_get_attr_req()) {
         HandleGetContractAttrRequest(header, contract_msg);
+        return;
     }
+
+    network::Route::Instance()->Send(header);
 }
 
 void ContractManager::HandleGetContractAttrRequest(
@@ -74,7 +77,8 @@ void ContractManager::HandleGetContractAttrRequest(
             contract_msg_res.SerializeAsString(),
             msg);
     network::Route::Instance()->Send(msg);
-    CONTRACT_ERROR("received contract message request and sent response.");
+    CONTRACT_ERROR("received contract message request and sent response.[%s]: [%s]",
+            contract_msg.get_attr_req().attr_key().c_str(), attr_value.c_str());
 }
 
 int ContractManager::InitWithAttr(uint64_t block_height, const bft::protobuf::TxInfo& tx_info) {
