@@ -426,7 +426,7 @@ void NetworkInit::CreateNewTx() {
 }
 
 void NetworkInit::TestStartBft() {
-	if (common::GlobalInfo::Instance()->config_local_ip() != "178.128.146.118") {
+	if (common::GlobalInfo::Instance()->config_local_ip() != "167.71.126.186") {
 		return;
 	}
 
@@ -438,7 +438,7 @@ void NetworkInit::TestStartBft() {
 
 void NetworkInit::CreateNewElectBlock() {
     // for test
-    if (common::GlobalInfo::Instance()->config_local_ip() != "178.128.146.118") {
+    if (common::GlobalInfo::Instance()->config_local_ip() != "167.71.126.186") {
         return;
     }
 

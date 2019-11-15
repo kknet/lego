@@ -33,6 +33,7 @@ int KeyValueSync::AddSync(uint32_t network_id, const std::string& key, uint32_t 
         std::lock_guard<std::mutex> guard(prio_sync_queue_[priority].mutex);
         prio_sync_queue_[priority].sync_queue.push(item);
     }
+    SYNC_ERROR("add sync item [%d] [%s]", network_id, common::Encode::HexEncode(key).c_str());
     return kSyncSuccess;
 }
 
@@ -71,6 +72,7 @@ void KeyValueSync::CheckSyncItem() {
                 if (choose_node != 0) {
                     sended_neigbors.insert(choose_node);
                 }
+
                 sync_req->clear_keys();
                 if (sended_neigbors.size() > kSyncNeighborCount) {
                     stop = true;
@@ -151,6 +153,7 @@ uint64_t KeyValueSync::SendSyncRequest(
     transport::protobuf::Header msg;
     SyncProto::CreateSyncValueReqeust(dht->local_node(), node, sync_msg, msg);
     dht->transport()->Send(node->public_ip, node->public_port, 0, msg);
+    SYNC_ERROR("sent sync request [%s:%d] [%s]", node->public_ip.c_str(), node->public_port, common::Encode::HexEncode(key).c_str());
     return node->id_hash;
 }
 
@@ -215,10 +218,13 @@ void KeyValueSync::ProcessSyncValueResponse(
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end", header);
     auto& res_map = sync_msg.sync_value_res().values();
     for (auto iter = res_map.begin(); iter != res_map.end(); ++iter) {
+        SYNC_ERROR("recv sync response [%s]", common::Encode::HexEncode(iter->first).c_str());
+
         bft::protobuf::Block block_item;
         if (block_item.ParseFromString(iter->second)) {
             // block string
             if (block_item.hash() == iter->first) {
+
                 block::BlockManager::Instance()->AddNewBlock(block_item);
                 continue;
             }

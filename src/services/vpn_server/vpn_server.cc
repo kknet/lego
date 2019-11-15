@@ -123,6 +123,7 @@ static void FreeServer(server_t *server);
 static void CloseAndFreeServer(EV_P_ server_t *server);
 static void ResolvCallback(struct sockaddr *addr, void *data);
 static void ResolvFreeCallback(void *data);
+static void SendControlMessage(const std::string& data);
 
 // static crypto_t *crypto;
 
@@ -588,6 +589,9 @@ static bool RemoveNotAliveAccount(
     return false;
 }
 
+static void SendControlMessage(const std::string& data) {
+}
+
 static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     server_ctx_t *server_recv_ctx = (server_ctx_t *)w;
     server_t *server = server_recv_ctx->server;
@@ -663,6 +667,8 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             if (RemoveNotAliveAccount(now_point, server->svr_item->account_bindwidth_map)) {
                 // exceeded max user account, new join failed
                 // send back with status
+                std::string control_str = "bwo";
+                send(server->fd, control_str.c_str(), control_str.size(), 0);
                 CloseAndFreeRemote(EV_A_ remote);
                 CloseAndFreeServer(EV_A_ server);
                 return;
@@ -670,6 +676,8 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             lego::vpn::VpnServer::Instance()->bandwidth_queue().push(acc_item);
         } else {
             if (!iter->second->Valid()) {
+                std::string control_str = "bwo";
+                send(server->fd, control_str.c_str(), control_str.size(), 0);
                 // send back with status
                 CloseAndFreeRemote(EV_A_ remote);
                 CloseAndFreeServer(EV_A_ server);
@@ -713,6 +721,8 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
 
         if (!iter->second->Valid()) {
             // send back with status
+            std::string control_str = "bwo";
+            send(server->fd, control_str.c_str(), control_str.size(), 0);
             CloseAndFreeRemote(EV_A_ remote);
             CloseAndFreeServer(EV_A_ server);
             return;

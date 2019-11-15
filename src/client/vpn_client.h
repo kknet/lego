@@ -221,7 +221,7 @@ private:
     std::mutex route_nodes_map_mutex_;
     LastPaiedVipInfoPtr paied_vip_info_[2];
     uint32_t paied_vip_valid_idx_{ 0 };
-    uint32_t today_used_bandwidth_{ 0 };
+    int32_t today_used_bandwidth_{ -1 };
 
 	std::shared_ptr<common::Tick> check_tx_tick_{ nullptr };
 	std::shared_ptr<common::Tick>  vpn_nodes_tick_{ nullptr };
