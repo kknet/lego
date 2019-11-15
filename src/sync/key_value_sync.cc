@@ -28,12 +28,19 @@ int KeyValueSync::AddSync(uint32_t network_id, const std::string& key, uint32_t 
         return kSyncKeyExsits;
     }
 
+    std::lock_guard<std::mutex> guard(synced_map_mutex_);
+    auto tmp_iter = synced_map_.find(key);
+    if (tmp_iter != synced_map_.end()) {
+        SYNC_ERROR("added sync item [%d] [%s]", network_id, common::Encode::HexEncode(key).c_str());
+        return kSyncKeyAdded;
+    }
+
     auto item = std::make_shared<SyncItem>(network_id, key, priority);
     {
         std::lock_guard<std::mutex> guard(prio_sync_queue_[priority].mutex);
         prio_sync_queue_[priority].sync_queue.push(item);
     }
-    SYNC_ERROR("add sync item [%d] [%s]", network_id, common::Encode::HexEncode(key).c_str());
+    SYNC_ERROR("new sync item [%d] [%s]", network_id, common::Encode::HexEncode(key).c_str());
     return kSyncSuccess;
 }
 

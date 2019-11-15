@@ -16,6 +16,7 @@ enum SyncErrorCode {
     kSyncSuccess = 0,
     kSyncError = 1,
     kSyncKeyExsits = 2,
+    kSyncKeyAdded = 3,
 };
 
 enum SyncPriorityType {
