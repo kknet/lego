@@ -19,7 +19,7 @@ KeyValueSync* KeyValueSync::Instance() {
 }
 
 KeyValueSync::KeyValueSync() {
-    //Init();
+    Init();
 }
 
 KeyValueSync::~KeyValueSync() {}
@@ -77,7 +77,6 @@ void KeyValueSync::CheckSyncItem() {
                     continue;
                 }
             }
-            
 
             auto iter = sync_dht_map.find(item->network_id);
             if (iter == sync_dht_map.end()) {
@@ -152,6 +151,8 @@ uint64_t KeyValueSync::SendSyncRequest(
     if (rand_pos == 0) {
         choose_pos = readonly_dht->size() - 1;
     }
+
+    SYNC_ERROR("now choose node to send sync request.");
 
     dht::NodePtr node = nullptr;
     while (rand_pos != choose_pos) {
