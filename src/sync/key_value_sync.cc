@@ -18,7 +18,9 @@ KeyValueSync* KeyValueSync::Instance() {
     return &ins;
 }
 
-KeyValueSync::KeyValueSync() {}
+KeyValueSync::KeyValueSync() {
+    Init();
+}
 
 KeyValueSync::~KeyValueSync() {}
 
