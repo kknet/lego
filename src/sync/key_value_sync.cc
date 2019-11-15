@@ -28,11 +28,13 @@ int KeyValueSync::AddSync(uint32_t network_id, const std::string& key, uint32_t 
         return kSyncKeyExsits;
     }
 
-    std::lock_guard<std::mutex> guard(synced_map_mutex_);
-    auto tmp_iter = synced_map_.find(key);
-    if (tmp_iter != synced_map_.end()) {
-        SYNC_ERROR("added sync item [%d] [%s]", network_id, common::Encode::HexEncode(key).c_str());
-        return kSyncKeyAdded;
+    {
+        std::lock_guard<std::mutex> guard(synced_map_mutex_);
+        auto tmp_iter = synced_map_.find(key);
+        if (tmp_iter != synced_map_.end()) {
+            SYNC_ERROR("added sync item [%d] [%s]", network_id, common::Encode::HexEncode(key).c_str());
+            return kSyncKeyAdded;
+        }
     }
 
     auto item = std::make_shared<SyncItem>(network_id, key, priority);
@@ -64,6 +66,17 @@ void KeyValueSync::CheckSyncItem() {
         std::lock_guard<std::mutex> guard(prio_sync_queue_[i].mutex);
         while (!prio_sync_queue_[i].sync_queue.empty()) {
             auto& item = prio_sync_queue_[i].sync_queue.front();
+
+            {
+                std::lock_guard<std::mutex> guard(synced_map_mutex_);
+                auto tmp_iter = synced_map_.find(item->key);
+                if (tmp_iter != synced_map_.end()) {
+                    prio_sync_queue_[i].sync_queue.pop();
+                    continue;
+                }
+            }
+            
+
             auto iter = sync_dht_map.find(item->network_id);
             if (iter == sync_dht_map.end()) {
                 sync_dht_map[item->network_id] = sync::protobuf::SyncMessage();
