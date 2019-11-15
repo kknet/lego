@@ -153,7 +153,7 @@ uint64_t KeyValueSync::SendSyncRequest(
     transport::protobuf::Header msg;
     SyncProto::CreateSyncValueReqeust(dht->local_node(), node, sync_msg, msg);
     dht->transport()->Send(node->public_ip, node->public_port, 0, msg);
-    SYNC_ERROR("sent sync request [%s:%d] [%s]", node->public_ip.c_str(), node->public_port, common::Encode::HexEncode(key).c_str());
+    SYNC_ERROR("sent sync request [%s:%d]", node->public_ip.c_str(), node->public_port);
     return node->id_hash;
 }
 
