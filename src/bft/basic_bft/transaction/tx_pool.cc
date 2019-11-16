@@ -43,13 +43,20 @@ int TxPool::AddTx(TxItemPtr& tx_ptr) {
 
 void TxPool::GetTx(std::vector<TxItemPtr>& res_vec) {
     auto timestamp_now = common::TimeStampUsec();
+    auto now_time = std::chrono::steady_clock::now();
     {
         std::lock_guard<std::mutex> guard(tx_pool_mutex_);
-        for (auto iter = tx_pool_.begin(); iter != tx_pool_.end(); ++iter) {
-            if (iter->second == nullptr) {
-//                 assert(false);
+        for (auto iter = tx_pool_.begin(); iter != tx_pool_.end();) {
+            if (iter->second->timeout <= now_time) {
+                tx_pool_.erase(iter++);
                 continue;
             }
+
+            if (iter->second == nullptr) {
+                ++iter;
+                continue;
+            }
+
 
             if (iter->second->time_valid <= timestamp_now) {
                 res_vec.push_back(iter->second);
@@ -57,6 +64,8 @@ void TxPool::GetTx(std::vector<TxItemPtr>& res_vec) {
                     break;
                 }
             }
+
+            ++iter;
         }
     }
 

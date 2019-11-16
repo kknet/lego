@@ -24,16 +24,12 @@ namespace sync {
 
 struct SyncItem {
     SyncItem(uint32_t net_id, const std::string& in_key, uint32_t pri)
-            : network_id(net_id), key(in_key), priority(pri) {
-        timeout = std::chrono::steady_clock::now() +
-            std::chrono::microseconds(kSyncValueRetryPeriod);
-    }
+            : network_id(net_id), key(in_key), priority(pri) {}
 
     uint32_t network_id{ 0 };
     std::string key;
     uint32_t priority{ 0 };
     uint32_t sync_times{ 0 };
-    std::chrono::steady_clock::time_point timeout;
 };
 
 typedef std::shared_ptr<SyncItem> SyncItemPtr;

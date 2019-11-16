@@ -185,7 +185,6 @@ uint64_t KeyValueSync::SendSyncRequest(
 }
 
 void KeyValueSync::HandleMessage(transport::protobuf::Header& header) {
-    SYNC_ERROR("receive sync message ");
     assert(header.type() == common::kSyncMessage);
     protobuf::SyncMessage sync_msg;
     if (!sync_msg.ParseFromString(header.data())) {
@@ -205,7 +204,6 @@ void KeyValueSync::HandleMessage(transport::protobuf::Header& header) {
 void KeyValueSync::ProcessSyncValueRequest(
         transport::protobuf::Header& header,
         protobuf::SyncMessage& sync_msg) {
-    SYNC_ERROR("receive sync request ");
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end", header);
     assert(sync_msg.has_sync_value_req());
     auto dht = network::DhtManager::Instance()->GetDht(

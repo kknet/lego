@@ -46,6 +46,8 @@ struct TxItem {
 			// may be use shard load info
 			create_acc_network_id = network::GetConsensusShardNetworkId(in_from_acc_addr);
 		}
+
+        timeout = std::chrono::steady_clock::now() + std::chrono::microseconds(kTxPoolTimeout);
     }
 
     void add_attr(const std::string& key, const std::string& val) {
@@ -66,6 +68,7 @@ struct TxItem {
     std::map<std::string, std::string> attr_map;
     uint32_t bft_type{ common::kConsensusTransaction };
     std::string smart_contract_addr;
+    std::chrono::steady_clock::time_point timeout;
 };
 
 typedef std::shared_ptr<TxItem> TxItemPtr;
