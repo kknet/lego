@@ -38,7 +38,6 @@ int KeyValueSync::AddSync(uint32_t network_id, const std::string& key, uint32_t 
         std::lock_guard<std::mutex> guard(synced_map_mutex_);
         auto tmp_iter = synced_map_.find(key);
         if (tmp_iter != synced_map_.end()) {
-            SYNC_ERROR("added sync item [%d] [%s]", network_id, common::Encode::HexEncode(key).c_str());
             return kSyncKeyAdded;
         }
     }
@@ -72,14 +71,14 @@ void KeyValueSync::CheckSyncItem() {
     for (int32_t i = kSyncHighest; i >= kSyncPriLowest; --i) {
         std::lock_guard<std::mutex> guard(prio_sync_queue_[i].mutex);
         while (!prio_sync_queue_[i].sync_queue.empty()) {
-            auto& item = prio_sync_queue_[i].sync_queue.front();
+            SyncItemPtr item = prio_sync_queue_[i].sync_queue.front();
+            prio_sync_queue_[i].sync_queue.pop();
             auto iter = sync_dht_map.find(item->network_id);
             if (iter == sync_dht_map.end()) {
                 sync_dht_map[item->network_id] = sync::protobuf::SyncMessage();
             }
 
             if (added_key.find(item->key) != added_key.end()) {
-                prio_sync_queue_[i].sync_queue.pop();
                 continue;
             }
 
@@ -87,7 +86,6 @@ void KeyValueSync::CheckSyncItem() {
             auto sync_req = sync_dht_map[item->network_id].mutable_sync_value_req();
             sync_req->set_network_id(item->network_id);
             sync_req->add_keys(item->key);
-            prio_sync_queue_[i].sync_queue.pop();
             if (static_cast<uint32_t>(sync_req->keys_size()) > kMaxSyncKeyCount) {
                 uint64_t choose_node = SendSyncRequest(
                         item->network_id,
@@ -105,7 +103,6 @@ void KeyValueSync::CheckSyncItem() {
             }
 
             ++(item->sync_times);
-            SYNC_ERROR("sent sync request [try times:%d]", item->sync_times);
             {
                 std::lock_guard<std::mutex> tmp_guard(synced_map_mutex_);
                 if (synced_map_.find(item->key) != synced_map_.end()) {
