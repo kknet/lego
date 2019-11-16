@@ -217,13 +217,14 @@ void KeyValueSync::ProcessSyncValueRequest(
     }
     protobuf::SyncMessage res_sync_msg;
     auto sync_res = res_sync_msg.mutable_sync_value_res();
-    auto value_map = sync_res->mutable_values();
     uint32_t add_size = 0;
     for (int32_t i = 0; i < sync_msg.sync_value_req().keys_size(); ++i) {
         const std::string& key = sync_msg.sync_value_req().keys(i);
         std::string value;
         if (db::Db::Instance()->Get(key, &value).ok()) {
-            (*value_map)[key] = value;
+            auto res = sync_res->add_res();
+            res->set_key(key);
+            res->set_value(value);
             add_size += key.size() + value.size();
             if (add_size >= kSyncPacketMaxSize) {
                 break;
@@ -247,24 +248,20 @@ void KeyValueSync::ProcessSyncValueResponse(
         protobuf::SyncMessage& sync_msg) {
     assert(sync_msg.has_sync_value_res());
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end", header);
-    auto& res_map = sync_msg.sync_value_res().values();
-    for (auto iter = res_map.begin(); iter != res_map.end(); ++iter) {
+    auto& res_arr = sync_msg.sync_value_res().res();
+    for (auto iter = res_arr.begin(); iter != res_arr.end(); ++iter) {
         SYNC_ERROR("recv sync response [%s]", common::Encode::HexEncode(iter->first).c_str());
 
         bft::protobuf::Block block_item;
-        if (block_item.ParseFromString(iter->second)) {
-            // block string
-            if (block_item.hash() == iter->first) {
-
-                block::BlockManager::Instance()->AddNewBlock(block_item);
-                continue;
-            }
+        if (block_item.ParseFromString(iter->value()) && block_item.hash() == iter->key()) {
+            block::BlockManager::Instance()->AddNewBlock(block_item);
+        } else {
+            db::Db::Instance()->Put(iter->key(), iter->value());
         }
 
-        db::Db::Instance()->Put(iter->first, iter->second);
         {
             std::lock_guard<std::mutex> guard(synced_map_mutex_);
-            auto tmp_iter = synced_map_.find(iter->first);
+            auto tmp_iter = synced_map_.find(iter->key());
             if (tmp_iter != synced_map_.end()) {
                 synced_map_.erase(tmp_iter);
             }
@@ -273,7 +270,6 @@ void KeyValueSync::ProcessSyncValueResponse(
 }
 
 void KeyValueSync::CheckSyncTimeout() {
-    auto tp_now = std::chrono::steady_clock::now();
     std::lock_guard<std::mutex> guard(synced_map_mutex_);
     for (auto iter = synced_map_.begin(); iter != synced_map_.end();) {
         if (iter->second->sync_times >= kSyncMaxRetryTimes) {
