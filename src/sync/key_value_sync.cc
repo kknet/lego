@@ -67,26 +67,25 @@ void KeyValueSync::Destroy() {
 void KeyValueSync::CheckSyncItem() {
     std::set<uint64_t> sended_neigbors;
     std::map<uint32_t, sync::protobuf::SyncMessage> sync_dht_map;
+    std::set<std::string> added_key;
     bool stop = false;
     for (int32_t i = kSyncHighest; i >= kSyncPriLowest; --i) {
         std::lock_guard<std::mutex> guard(prio_sync_queue_[i].mutex);
         while (!prio_sync_queue_[i].sync_queue.empty()) {
             auto& item = prio_sync_queue_[i].sync_queue.front();
-
-            {
-                std::lock_guard<std::mutex> guard_tmp(synced_map_mutex_);
-                auto tmp_iter = synced_map_.find(item->key);
-                if (tmp_iter != synced_map_.end()) {
-                    prio_sync_queue_[i].sync_queue.pop();
-                    continue;
-                }
-            }
-
             auto iter = sync_dht_map.find(item->network_id);
             if (iter == sync_dht_map.end()) {
                 sync_dht_map[item->network_id] = sync::protobuf::SyncMessage();
             }
+
+            if (added_key.find(item->key) != added_key.end()) {
+                prio_sync_queue_[i].sync_queue.pop();
+                continue;
+            }
+
+            added_key.insert(item->key);
             auto sync_req = sync_dht_map[item->network_id].mutable_sync_value_req();
+            sync_req->set_network_id(item->network_id);
             sync_req->add_keys(item->key);
             prio_sync_queue_[i].sync_queue.pop();
             if (static_cast<uint32_t>(sync_req->keys_size()) > kMaxSyncKeyCount) {
@@ -104,11 +103,15 @@ void KeyValueSync::CheckSyncItem() {
                     break;
                 }
             }
-            item->timeout = std::chrono::steady_clock::now() +
-                    std::chrono::milliseconds(kSyncValueRetryPeriod);
+
             ++(item->sync_times);
+            SYNC_ERROR("sent sync request [try times:%d]", item->sync_times);
             {
                 std::lock_guard<std::mutex> tmp_guard(synced_map_mutex_);
+                if (synced_map_.find(item->key) != synced_map_.end()) {
+                    continue;
+                }
+
                 synced_map_.insert(std::make_pair(item->key, item));
                 if (synced_map_.size() > kSyncMaxKeyCount) {
                     stop = true;
@@ -157,8 +160,6 @@ uint64_t KeyValueSync::SendSyncRequest(
         choose_pos = readonly_dht->size() - 1;
     }
 
-    SYNC_ERROR("now choose node to send sync request.");
-
     dht::NodePtr node = nullptr;
     while (rand_pos != choose_pos) {
         auto iter = sended_neigbors.find((*readonly_dht)[rand_pos]->id_hash);
@@ -179,6 +180,7 @@ uint64_t KeyValueSync::SendSyncRequest(
     }
 
     transport::protobuf::Header msg;
+    dht->SetFrequently(msg);
     SyncProto::CreateSyncValueReqeust(dht->local_node(), node, sync_msg, msg);
     dht->transport()->Send(node->public_ip, node->public_port, 0, msg);
     SYNC_ERROR("sent sync request [%s:%d]", node->public_ip.c_str(), node->public_port);
@@ -186,6 +188,7 @@ uint64_t KeyValueSync::SendSyncRequest(
 }
 
 void KeyValueSync::HandleMessage(transport::protobuf::Header& header) {
+    SYNC_ERROR("receive sync message ");
     assert(header.type() == common::kSyncMessage);
     protobuf::SyncMessage sync_msg;
     if (!sync_msg.ParseFromString(header.data())) {
@@ -205,6 +208,7 @@ void KeyValueSync::HandleMessage(transport::protobuf::Header& header) {
 void KeyValueSync::ProcessSyncValueRequest(
         transport::protobuf::Header& header,
         protobuf::SyncMessage& sync_msg) {
+    SYNC_ERROR("receive sync request ");
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end", header);
     assert(sync_msg.has_sync_value_req());
     auto dht = network::DhtManager::Instance()->GetDht(
@@ -235,8 +239,10 @@ void KeyValueSync::ProcessSyncValueRequest(
     }
 
     transport::protobuf::Header msg;
+    dht->SetFrequently(msg);
     SyncProto::CreateSyncValueResponse(dht->local_node(), header, res_sync_msg, msg);
     dht->transport()->Send(header.from_ip(), header.from_port(), 0, msg);
+    SYNC_ERROR("send sync request ");
 }
 
 void KeyValueSync::ProcessSyncValueResponse(
@@ -273,19 +279,21 @@ void KeyValueSync::CheckSyncTimeout() {
     auto tp_now = std::chrono::steady_clock::now();
     std::lock_guard<std::mutex> guard(synced_map_mutex_);
     for (auto iter = synced_map_.begin(); iter != synced_map_.end();) {
-        if (iter->second->timeout <= tp_now) {
-            if (iter->second->sync_times >= kSyncMaxRetryTimes) {
-                synced_map_.erase(iter++);
-                continue;
-            }
+        if (iter->second->sync_times >= kSyncMaxRetryTimes) {
+            synced_map_.erase(iter++);
+            continue;
+        }
 
-            {
-                std::lock_guard<std::mutex> tmp_guard(prio_sync_queue_[iter->second->priority].mutex);
-                prio_sync_queue_[iter->second->priority].sync_queue.push(iter->second);
-            }
+        {
+            std::lock_guard<std::mutex> tmp_guard(prio_sync_queue_[iter->second->priority].mutex);
+            prio_sync_queue_[iter->second->priority].sync_queue.push(iter->second);
         }
         ++iter;
     }
+
+    sync_timeout_tick_.CutOff(
+            kTimeoutCheckPeriod,
+            std::bind(&KeyValueSync::CheckSyncTimeout, this));
 }
 
 }  // namespace sync

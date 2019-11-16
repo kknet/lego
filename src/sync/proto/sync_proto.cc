@@ -19,13 +19,6 @@ void SyncProto::CreateSyncValueReqeust(
     msg.set_client(local_node->client_mode);
     msg.set_data(sync_msg.SerializeAsString());
     msg.set_hop_count(0);
-#ifdef LEGO_TRACE_MESSAGE
-    msg.set_debug(std::string("SyncValueReqeust:") +
-            local_node->public_ip + "-" +
-            std::to_string(local_node->public_port) + ", to " +
-            des_node->public_ip + "-" + std::to_string(des_node->public_port));
-    DHT_DEBUG("begin: %s", msg.debug().c_str());
-#endif
 }
 
 void SyncProto::CreateSyncValueResponse(
@@ -41,13 +34,6 @@ void SyncProto::CreateSyncValueResponse(
     msg.set_client(local_node->client_mode);
     msg.set_data(sync_msg.SerializeAsString());
     msg.set_hop_count(0);
-#ifdef LEGO_TRACE_MESSAGE
-    msg.set_debug(std::string("SyncValueResponse:") +
-            local_node->public_ip + "-" +
-            std::to_string(local_node->public_port) + ", to " +
-            header.from_ip() + "-" + std::to_string(header.from_port()));
-    DHT_DEBUG("begin: %s", msg.debug().c_str());
-#endif
 }
 
 }  // namespace sync

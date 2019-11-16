@@ -26,7 +26,7 @@ struct SyncItem {
     SyncItem(uint32_t net_id, const std::string& in_key, uint32_t pri)
             : network_id(net_id), key(in_key), priority(pri) {
         timeout = std::chrono::steady_clock::now() +
-            std::chrono::milliseconds(kSyncValueRetryPeriod);
+            std::chrono::microseconds(kSyncValueRetryPeriod);
     }
 
     uint32_t network_id{ 0 };

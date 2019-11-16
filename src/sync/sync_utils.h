@@ -34,7 +34,7 @@ static const uint32_t kMaxSyncKeyCount = 64u;
 static const uint32_t kSyncNeighborCount = 3u;
 static const uint32_t kSyncTickPeriod = 3u * 1000u * 1000u;
 static const uint32_t kSyncPacketMaxSize = 5u * 1024u;  // 5k for test(later rudp to 1M)
-static const uint32_t kSyncMaxKeyCount = 10000u;  // 10k
+static const uint32_t kSyncMaxKeyCount = 1024u;
 static const uint32_t kSyncMaxRetryTimes = 3u;  // fail retry 3 times
 
 }  // namespace sync
