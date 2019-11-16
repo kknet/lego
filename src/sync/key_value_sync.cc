@@ -4,6 +4,7 @@
 #include "transport/proto/transport.pb.h"
 #include "dht/base_dht.h"
 #include "network/dht_manager.h"
+#include "network/route.h"
 #include "bft/basic_bft/transaction/proto/tx.pb.h"
 #include "block/block_manager.h"
 #include "sync/sync_utils.h"
@@ -19,6 +20,9 @@ KeyValueSync* KeyValueSync::Instance() {
 }
 
 KeyValueSync::KeyValueSync() {
+    network::Route::Instance()->RegisterMessage(
+            common::kSyncMessage,
+            std::bind(&KeyValueSync::HandleMessage, this, std::placeholders::_1));
     Init();
 }
 
@@ -64,13 +68,13 @@ void KeyValueSync::CheckSyncItem() {
     std::set<uint64_t> sended_neigbors;
     std::map<uint32_t, sync::protobuf::SyncMessage> sync_dht_map;
     bool stop = false;
-    for (uint32_t i = kSyncHighest; i >= kSyncPriLowest; --i) {
+    for (int32_t i = kSyncHighest; i >= kSyncPriLowest; --i) {
         std::lock_guard<std::mutex> guard(prio_sync_queue_[i].mutex);
         while (!prio_sync_queue_[i].sync_queue.empty()) {
             auto& item = prio_sync_queue_[i].sync_queue.front();
 
             {
-                std::lock_guard<std::mutex> guard(synced_map_mutex_);
+                std::lock_guard<std::mutex> guard_tmp(synced_map_mutex_);
                 auto tmp_iter = synced_map_.find(item->key);
                 if (tmp_iter != synced_map_.end()) {
                     prio_sync_queue_[i].sync_queue.pop();
@@ -129,6 +133,7 @@ void KeyValueSync::CheckSyncItem() {
             }
         }
     }
+
     tick_.CutOff(kSyncTickPeriod, std::bind(&KeyValueSync::CheckSyncItem, this));
 }
 
