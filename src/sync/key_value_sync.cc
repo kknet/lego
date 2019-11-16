@@ -250,7 +250,7 @@ void KeyValueSync::ProcessSyncValueResponse(
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end", header);
     auto& res_arr = sync_msg.sync_value_res().res();
     for (auto iter = res_arr.begin(); iter != res_arr.end(); ++iter) {
-        SYNC_ERROR("recv sync response [%s]", common::Encode::HexEncode(iter->first).c_str());
+        SYNC_ERROR("recv sync response [%s]", common::Encode::HexEncode(iter->key()).c_str());
 
         bft::protobuf::Block block_item;
         if (block_item.ParseFromString(iter->value()) && block_item.hash() == iter->key()) {
