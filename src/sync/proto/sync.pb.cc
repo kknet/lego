@@ -20,8 +20,8 @@
 // @@protoc_insertion_point(includes)
 
 namespace protobuf_sync_2eproto {
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_sync_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_SyncResItem;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_sync_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_SyncValueRequest;
-extern PROTOBUF_INTERNAL_EXPORT_protobuf_sync_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_SyncValueResponse_ValuesEntry_DoNotUse;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_sync_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_SyncValueResponse;
 }  // namespace protobuf_sync_2eproto
 namespace lego {
@@ -32,11 +32,11 @@ class SyncValueRequestDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<SyncValueRequest>
       _instance;
 } _SyncValueRequest_default_instance_;
-class SyncValueResponse_ValuesEntry_DoNotUseDefaultTypeInternal {
+class SyncResItemDefaultTypeInternal {
  public:
-  ::google::protobuf::internal::ExplicitlyConstructed<SyncValueResponse_ValuesEntry_DoNotUse>
+  ::google::protobuf::internal::ExplicitlyConstructed<SyncResItem>
       _instance;
-} _SyncValueResponse_ValuesEntry_DoNotUse_default_instance_;
+} _SyncResItem_default_instance_;
 class SyncValueResponseDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<SyncValueResponse>
@@ -65,18 +65,19 @@ static void InitDefaultsSyncValueRequest() {
 ::google::protobuf::internal::SCCInfo<0> scc_info_SyncValueRequest =
     {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsSyncValueRequest}, {}};
 
-static void InitDefaultsSyncValueResponse_ValuesEntry_DoNotUse() {
+static void InitDefaultsSyncResItem() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   {
-    void* ptr = &::lego::sync::protobuf::_SyncValueResponse_ValuesEntry_DoNotUse_default_instance_;
-    new (ptr) ::lego::sync::protobuf::SyncValueResponse_ValuesEntry_DoNotUse();
+    void* ptr = &::lego::sync::protobuf::_SyncResItem_default_instance_;
+    new (ptr) ::lego::sync::protobuf::SyncResItem();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::lego::sync::protobuf::SyncValueResponse_ValuesEntry_DoNotUse::InitAsDefaultInstance();
+  ::lego::sync::protobuf::SyncResItem::InitAsDefaultInstance();
 }
 
-::google::protobuf::internal::SCCInfo<0> scc_info_SyncValueResponse_ValuesEntry_DoNotUse =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsSyncValueResponse_ValuesEntry_DoNotUse}, {}};
+::google::protobuf::internal::SCCInfo<0> scc_info_SyncResItem =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsSyncResItem}, {}};
 
 static void InitDefaultsSyncValueResponse() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -91,7 +92,7 @@ static void InitDefaultsSyncValueResponse() {
 
 ::google::protobuf::internal::SCCInfo<1> scc_info_SyncValueResponse =
     {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsSyncValueResponse}, {
-      &protobuf_sync_2eproto::scc_info_SyncValueResponse_ValuesEntry_DoNotUse.base,}};
+      &protobuf_sync_2eproto::scc_info_SyncResItem.base,}};
 
 static void InitDefaultsSyncMessage() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -111,7 +112,7 @@ static void InitDefaultsSyncMessage() {
 
 void InitDefaults() {
   ::google::protobuf::internal::InitSCC(&scc_info_SyncValueRequest.base);
-  ::google::protobuf::internal::InitSCC(&scc_info_SyncValueResponse_ValuesEntry_DoNotUse.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_SyncResItem.base);
   ::google::protobuf::internal::InitSCC(&scc_info_SyncValueResponse.base);
   ::google::protobuf::internal::InitSCC(&scc_info_SyncMessage.base);
 }
@@ -128,13 +129,13 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::sync::protobuf::SyncValueRequest, keys_),
   0,
   ~0u,
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::sync::protobuf::SyncValueResponse_ValuesEntry_DoNotUse, _has_bits_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::sync::protobuf::SyncValueResponse_ValuesEntry_DoNotUse, _internal_metadata_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::sync::protobuf::SyncResItem, _has_bits_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::sync::protobuf::SyncResItem, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::sync::protobuf::SyncValueResponse_ValuesEntry_DoNotUse, key_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::sync::protobuf::SyncValueResponse_ValuesEntry_DoNotUse, value_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::sync::protobuf::SyncResItem, key_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::sync::protobuf::SyncResItem, value_),
   0,
   1,
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::sync::protobuf::SyncValueResponse, _has_bits_),
@@ -143,7 +144,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::sync::protobuf::SyncValueResponse, network_id_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::sync::protobuf::SyncValueResponse, values_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::sync::protobuf::SyncValueResponse, res_),
   0,
   ~0u,
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::lego::sync::protobuf::SyncMessage, _has_bits_),
@@ -158,14 +159,14 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   { 0, 7, sizeof(::lego::sync::protobuf::SyncValueRequest)},
-  { 9, 16, sizeof(::lego::sync::protobuf::SyncValueResponse_ValuesEntry_DoNotUse)},
+  { 9, 16, sizeof(::lego::sync::protobuf::SyncResItem)},
   { 18, 25, sizeof(::lego::sync::protobuf::SyncValueResponse)},
   { 27, 34, sizeof(::lego::sync::protobuf::SyncMessage)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::google::protobuf::Message*>(&::lego::sync::protobuf::_SyncValueRequest_default_instance_),
-  reinterpret_cast<const ::google::protobuf::Message*>(&::lego::sync::protobuf::_SyncValueResponse_ValuesEntry_DoNotUse_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::lego::sync::protobuf::_SyncResItem_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::lego::sync::protobuf::_SyncValueResponse_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::lego::sync::protobuf::_SyncMessage_default_instance_),
 };
@@ -193,17 +194,16 @@ void AddDescriptorsImpl() {
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
       "\n\nsync.proto\022\022lego.sync.protobuf\"4\n\020Sync"
       "ValueRequest\022\022\n\nnetwork_id\030\001 \001(\r\022\014\n\004keys"
-      "\030\002 \003(\014\"\231\001\n\021SyncValueResponse\022\022\n\nnetwork_"
-      "id\030\001 \001(\r\022A\n\006values\030\002 \003(\01321.lego.sync.pro"
-      "tobuf.SyncValueResponse.ValuesEntry\032-\n\013V"
-      "aluesEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\002"
-      "8\001\"\212\001\n\013SyncMessage\022<\n\016sync_value_req\030\001 \001"
-      "(\0132$.lego.sync.protobuf.SyncValueRequest"
-      "\022=\n\016sync_value_res\030\002 \001(\0132%.lego.sync.pro"
-      "tobuf.SyncValueResponse"
+      "\030\002 \003(\014\")\n\013SyncResItem\022\013\n\003key\030\001 \001(\014\022\r\n\005va"
+      "lue\030\002 \001(\014\"U\n\021SyncValueResponse\022\022\n\nnetwor"
+      "k_id\030\001 \001(\r\022,\n\003res\030\002 \003(\0132\037.lego.sync.prot"
+      "obuf.SyncResItem\"\212\001\n\013SyncMessage\022<\n\016sync"
+      "_value_req\030\001 \001(\0132$.lego.sync.protobuf.Sy"
+      "ncValueRequest\022=\n\016sync_value_res\030\002 \001(\0132%"
+      ".lego.sync.protobuf.SyncValueResponse"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 383);
+      descriptor, 357);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "sync.proto", &protobuf_RegisterTypes);
 }
@@ -490,18 +490,294 @@ void SyncValueRequest::InternalSwap(SyncValueRequest* other) {
 
 // ===================================================================
 
-SyncValueResponse_ValuesEntry_DoNotUse::SyncValueResponse_ValuesEntry_DoNotUse() {}
-SyncValueResponse_ValuesEntry_DoNotUse::SyncValueResponse_ValuesEntry_DoNotUse(::google::protobuf::Arena* arena) : SuperType(arena) {}
-void SyncValueResponse_ValuesEntry_DoNotUse::MergeFrom(const SyncValueResponse_ValuesEntry_DoNotUse& other) {
-  MergeFromInternal(other);
+void SyncResItem::InitAsDefaultInstance() {
 }
-::google::protobuf::Metadata SyncValueResponse_ValuesEntry_DoNotUse::GetMetadata() const {
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int SyncResItem::kKeyFieldNumber;
+const int SyncResItem::kValueFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+SyncResItem::SyncResItem()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_sync_2eproto::scc_info_SyncResItem.base);
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:lego.sync.protobuf.SyncResItem)
+}
+SyncResItem::SyncResItem(const SyncResItem& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _has_bits_(from._has_bits_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  key_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_key()) {
+    key_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.key_);
+  }
+  value_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_value()) {
+    value_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.value_);
+  }
+  // @@protoc_insertion_point(copy_constructor:lego.sync.protobuf.SyncResItem)
+}
+
+void SyncResItem::SharedCtor() {
+  key_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  value_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+SyncResItem::~SyncResItem() {
+  // @@protoc_insertion_point(destructor:lego.sync.protobuf.SyncResItem)
+  SharedDtor();
+}
+
+void SyncResItem::SharedDtor() {
+  key_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  value_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void SyncResItem::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const ::google::protobuf::Descriptor* SyncResItem::descriptor() {
   ::protobuf_sync_2eproto::protobuf_AssignDescriptorsOnce();
-  return ::protobuf_sync_2eproto::file_level_metadata[1];
+  return ::protobuf_sync_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
 }
-void SyncValueResponse_ValuesEntry_DoNotUse::MergeFrom(
-    const ::google::protobuf::Message& other) {
-  ::google::protobuf::Message::MergeFrom(other);
+
+const SyncResItem& SyncResItem::default_instance() {
+  ::google::protobuf::internal::InitSCC(&protobuf_sync_2eproto::scc_info_SyncResItem.base);
+  return *internal_default_instance();
+}
+
+
+void SyncResItem::Clear() {
+// @@protoc_insertion_point(message_clear_start:lego.sync.protobuf.SyncResItem)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 3u) {
+    if (cached_has_bits & 0x00000001u) {
+      key_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      value_.ClearNonDefaultToEmptyNoArena();
+    }
+  }
+  _has_bits_.Clear();
+  _internal_metadata_.Clear();
+}
+
+bool SyncResItem::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:lego.sync.protobuf.SyncResItem)
+  for (;;) {
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional bytes key = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_key()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bytes value = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_value()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:lego.sync.protobuf.SyncResItem)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:lego.sync.protobuf.SyncResItem)
+  return false;
+#undef DO_
+}
+
+void SyncResItem::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:lego.sync.protobuf.SyncResItem)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // optional bytes key = 1;
+  if (cached_has_bits & 0x00000001u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      1, this->key(), output);
+  }
+
+  // optional bytes value = 2;
+  if (cached_has_bits & 0x00000002u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      2, this->value(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:lego.sync.protobuf.SyncResItem)
+}
+
+::google::protobuf::uint8* SyncResItem::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:lego.sync.protobuf.SyncResItem)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // optional bytes key = 1;
+  if (cached_has_bits & 0x00000001u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        1, this->key(), target);
+  }
+
+  // optional bytes value = 2;
+  if (cached_has_bits & 0x00000002u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        2, this->value(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:lego.sync.protobuf.SyncResItem)
+  return target;
+}
+
+size_t SyncResItem::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:lego.sync.protobuf.SyncResItem)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  if (_has_bits_[0 / 32] & 3u) {
+    // optional bytes key = 1;
+    if (has_key()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->key());
+    }
+
+    // optional bytes value = 2;
+    if (has_value()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->value());
+    }
+
+  }
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void SyncResItem::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:lego.sync.protobuf.SyncResItem)
+  GOOGLE_DCHECK_NE(&from, this);
+  const SyncResItem* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const SyncResItem>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:lego.sync.protobuf.SyncResItem)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:lego.sync.protobuf.SyncResItem)
+    MergeFrom(*source);
+  }
+}
+
+void SyncResItem::MergeFrom(const SyncResItem& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:lego.sync.protobuf.SyncResItem)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 3u) {
+    if (cached_has_bits & 0x00000001u) {
+      set_has_key();
+      key_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.key_);
+    }
+    if (cached_has_bits & 0x00000002u) {
+      set_has_value();
+      value_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.value_);
+    }
+  }
+}
+
+void SyncResItem::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:lego.sync.protobuf.SyncResItem)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void SyncResItem::CopyFrom(const SyncResItem& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:lego.sync.protobuf.SyncResItem)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool SyncResItem::IsInitialized() const {
+  return true;
+}
+
+void SyncResItem::Swap(SyncResItem* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void SyncResItem::InternalSwap(SyncResItem* other) {
+  using std::swap;
+  key_.Swap(&other->key_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  value_.Swap(&other->value_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(_has_bits_[0], other->_has_bits_[0]);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+}
+
+::google::protobuf::Metadata SyncResItem::GetMetadata() const {
+  protobuf_sync_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_sync_2eproto::file_level_metadata[kIndexInFileMessages];
 }
 
 
@@ -511,7 +787,7 @@ void SyncValueResponse::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int SyncValueResponse::kNetworkIdFieldNumber;
-const int SyncValueResponse::kValuesFieldNumber;
+const int SyncValueResponse::kResFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 SyncValueResponse::SyncValueResponse()
@@ -524,9 +800,9 @@ SyncValueResponse::SyncValueResponse()
 SyncValueResponse::SyncValueResponse(const SyncValueResponse& from)
   : ::google::protobuf::Message(),
       _internal_metadata_(NULL),
-      _has_bits_(from._has_bits_) {
+      _has_bits_(from._has_bits_),
+      res_(from.res_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  values_.MergeFrom(from.values_);
   network_id_ = from.network_id_;
   // @@protoc_insertion_point(copy_constructor:lego.sync.protobuf.SyncValueResponse)
 }
@@ -563,7 +839,7 @@ void SyncValueResponse::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  values_.Clear();
+  res_.Clear();
   network_id_ = 0u;
   _has_bits_.Clear();
   _internal_metadata_.Clear();
@@ -593,27 +869,12 @@ bool SyncValueResponse::MergePartialFromCodedStream(
         break;
       }
 
-      // map<string, string> values = 2;
+      // repeated .lego.sync.protobuf.SyncResItem res = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
-          SyncValueResponse_ValuesEntry_DoNotUse::Parser< ::google::protobuf::internal::MapField<
-              SyncValueResponse_ValuesEntry_DoNotUse,
-              ::std::string, ::std::string,
-              ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-              ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-              0 >,
-            ::google::protobuf::Map< ::std::string, ::std::string > > parser(&values_);
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-              input, &parser));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-            parser.key().data(), static_cast<int>(parser.key().length()),
-            ::google::protobuf::internal::WireFormat::PARSE,
-            "lego.sync.protobuf.SyncValueResponse.ValuesEntry.key");
-          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-            parser.value().data(), static_cast<int>(parser.value().length()),
-            ::google::protobuf::internal::WireFormat::PARSE,
-            "lego.sync.protobuf.SyncValueResponse.ValuesEntry.value");
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+                input, add_res()));
         } else {
           goto handle_unusual;
         }
@@ -652,57 +913,13 @@ void SyncValueResponse::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->network_id(), output);
   }
 
-  // map<string, string> values = 2;
-  if (!this->values().empty()) {
-    typedef ::google::protobuf::Map< ::std::string, ::std::string >::const_pointer
-        ConstPtr;
-    typedef ConstPtr SortItem;
-    typedef ::google::protobuf::internal::CompareByDerefFirst<SortItem> Less;
-    struct Utf8Check {
-      static void Check(ConstPtr p) {
-        ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-          p->first.data(), static_cast<int>(p->first.length()),
-          ::google::protobuf::internal::WireFormat::SERIALIZE,
-          "lego.sync.protobuf.SyncValueResponse.ValuesEntry.key");
-        ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-          p->second.data(), static_cast<int>(p->second.length()),
-          ::google::protobuf::internal::WireFormat::SERIALIZE,
-          "lego.sync.protobuf.SyncValueResponse.ValuesEntry.value");
-      }
-    };
-
-    if (output->IsSerializationDeterministic() &&
-        this->values().size() > 1) {
-      ::std::unique_ptr<SortItem[]> items(
-          new SortItem[this->values().size()]);
-      typedef ::google::protobuf::Map< ::std::string, ::std::string >::size_type size_type;
-      size_type n = 0;
-      for (::google::protobuf::Map< ::std::string, ::std::string >::const_iterator
-          it = this->values().begin();
-          it != this->values().end(); ++it, ++n) {
-        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
-      }
-      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
-      ::std::unique_ptr<SyncValueResponse_ValuesEntry_DoNotUse> entry;
-      for (size_type i = 0; i < n; i++) {
-        entry.reset(values_.NewEntryWrapper(
-            items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second));
-        ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-            2, *entry, output);
-        Utf8Check::Check(items[static_cast<ptrdiff_t>(i)]);
-      }
-    } else {
-      ::std::unique_ptr<SyncValueResponse_ValuesEntry_DoNotUse> entry;
-      for (::google::protobuf::Map< ::std::string, ::std::string >::const_iterator
-          it = this->values().begin();
-          it != this->values().end(); ++it) {
-        entry.reset(values_.NewEntryWrapper(
-            it->first, it->second));
-        ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-            2, *entry, output);
-        Utf8Check::Check(&*it);
-      }
-    }
+  // repeated .lego.sync.protobuf.SyncResItem res = 2;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->res_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      2,
+      this->res(static_cast<int>(i)),
+      output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -725,61 +942,12 @@ void SyncValueResponse::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->network_id(), target);
   }
 
-  // map<string, string> values = 2;
-  if (!this->values().empty()) {
-    typedef ::google::protobuf::Map< ::std::string, ::std::string >::const_pointer
-        ConstPtr;
-    typedef ConstPtr SortItem;
-    typedef ::google::protobuf::internal::CompareByDerefFirst<SortItem> Less;
-    struct Utf8Check {
-      static void Check(ConstPtr p) {
-        ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-          p->first.data(), static_cast<int>(p->first.length()),
-          ::google::protobuf::internal::WireFormat::SERIALIZE,
-          "lego.sync.protobuf.SyncValueResponse.ValuesEntry.key");
-        ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-          p->second.data(), static_cast<int>(p->second.length()),
-          ::google::protobuf::internal::WireFormat::SERIALIZE,
-          "lego.sync.protobuf.SyncValueResponse.ValuesEntry.value");
-      }
-    };
-
-    if (deterministic &&
-        this->values().size() > 1) {
-      ::std::unique_ptr<SortItem[]> items(
-          new SortItem[this->values().size()]);
-      typedef ::google::protobuf::Map< ::std::string, ::std::string >::size_type size_type;
-      size_type n = 0;
-      for (::google::protobuf::Map< ::std::string, ::std::string >::const_iterator
-          it = this->values().begin();
-          it != this->values().end(); ++it, ++n) {
-        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
-      }
-      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
-      ::std::unique_ptr<SyncValueResponse_ValuesEntry_DoNotUse> entry;
-      for (size_type i = 0; i < n; i++) {
-        entry.reset(values_.NewEntryWrapper(
-            items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second));
-        target = ::google::protobuf::internal::WireFormatLite::
-                   InternalWriteMessageNoVirtualToArray(
-                       2, *entry, deterministic, target);
-;
-        Utf8Check::Check(items[static_cast<ptrdiff_t>(i)]);
-      }
-    } else {
-      ::std::unique_ptr<SyncValueResponse_ValuesEntry_DoNotUse> entry;
-      for (::google::protobuf::Map< ::std::string, ::std::string >::const_iterator
-          it = this->values().begin();
-          it != this->values().end(); ++it) {
-        entry.reset(values_.NewEntryWrapper(
-            it->first, it->second));
-        target = ::google::protobuf::internal::WireFormatLite::
-                   InternalWriteMessageNoVirtualToArray(
-                       2, *entry, deterministic, target);
-;
-        Utf8Check::Check(&*it);
-      }
-    }
+  // repeated .lego.sync.protobuf.SyncResItem res = 2;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->res_size()); i < n; i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        2, this->res(static_cast<int>(i)), deterministic, target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -799,17 +967,14 @@ size_t SyncValueResponse::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         _internal_metadata_.unknown_fields());
   }
-  // map<string, string> values = 2;
-  total_size += 1 *
-      ::google::protobuf::internal::FromIntSize(this->values_size());
+  // repeated .lego.sync.protobuf.SyncResItem res = 2;
   {
-    ::std::unique_ptr<SyncValueResponse_ValuesEntry_DoNotUse> entry;
-    for (::google::protobuf::Map< ::std::string, ::std::string >::const_iterator
-        it = this->values().begin();
-        it != this->values().end(); ++it) {
-      entry.reset(values_.NewEntryWrapper(it->first, it->second));
-      total_size += ::google::protobuf::internal::WireFormatLite::
-          MessageSizeNoVirtual(*entry);
+    unsigned int count = static_cast<unsigned int>(this->res_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          this->res(static_cast<int>(i)));
     }
   }
 
@@ -847,7 +1012,7 @@ void SyncValueResponse::MergeFrom(const SyncValueResponse& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  values_.MergeFrom(from.values_);
+  res_.MergeFrom(from.res_);
   if (from.has_network_id()) {
     set_network_id(from.network_id());
   }
@@ -877,7 +1042,7 @@ void SyncValueResponse::Swap(SyncValueResponse* other) {
 }
 void SyncValueResponse::InternalSwap(SyncValueResponse* other) {
   using std::swap;
-  values_.Swap(&other->values_);
+  CastToBase(&res_)->InternalSwap(CastToBase(&other->res_));
   swap(network_id_, other->network_id_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   _internal_metadata_.Swap(&other->_internal_metadata_);
@@ -1196,8 +1361,8 @@ namespace protobuf {
 template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::lego::sync::protobuf::SyncValueRequest* Arena::CreateMaybeMessage< ::lego::sync::protobuf::SyncValueRequest >(Arena* arena) {
   return Arena::CreateInternal< ::lego::sync::protobuf::SyncValueRequest >(arena);
 }
-template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::lego::sync::protobuf::SyncValueResponse_ValuesEntry_DoNotUse* Arena::CreateMaybeMessage< ::lego::sync::protobuf::SyncValueResponse_ValuesEntry_DoNotUse >(Arena* arena) {
-  return Arena::CreateInternal< ::lego::sync::protobuf::SyncValueResponse_ValuesEntry_DoNotUse >(arena);
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::lego::sync::protobuf::SyncResItem* Arena::CreateMaybeMessage< ::lego::sync::protobuf::SyncResItem >(Arena* arena) {
+  return Arena::CreateInternal< ::lego::sync::protobuf::SyncResItem >(arena);
 }
 template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::lego::sync::protobuf::SyncValueResponse* Arena::CreateMaybeMessage< ::lego::sync::protobuf::SyncValueResponse >(Arena* arena) {
   return Arena::CreateInternal< ::lego::sync::protobuf::SyncValueResponse >(arena);
