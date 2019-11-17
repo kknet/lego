@@ -459,6 +459,24 @@ void HttpTransport::HandleBestAddr(const httplib::Request &req, httplib::Respons
     }
 }
 
+void HttpTransport::HandleIosPay(const httplib::Request &req, httplib::Response &res) {
+    try {
+        nlohmann::json json_obj = nlohmann::json::parse(req.body);
+        auto acc_addr = common::Encode::HexDecode(json_obj["acc_addr"].get<std::string>());
+        auto acc_ptr = block::AccountManager::Instance()->GetAcountInfo(acc_addr);
+        nlohmann::json res_json;
+        res_json["tx_count"] = statis::Statistics::Instance()->all_tx_count();
+        res_json["tx_amount"] = statis::Statistics::Instance()->all_tx_amount();
+        res_json["tps"] = statis::Statistics::Instance()->tps();
+        res.set_content(res_json.dump(), "text/plain");
+        res.set_header("Access-Control-Allow-Origin", "*");
+    } catch (...) {
+        res.status = 400;
+        TRANSPORT_ERROR("HandleBestAddr by this node error.");
+        std::cout << "HandleBestAddr by this node error." << std::endl;
+    }
+}
+
 void HttpTransport::Listen() {
     http_svr_.Get("/http_message", [=](const httplib::Request& req, httplib::Response &res) {
         std::cout << "http get request size: " << req.body.size() << std::endl;
@@ -485,6 +503,9 @@ void HttpTransport::Listen() {
     });
     http_svr_.Post("/best_addr", [&](const httplib::Request &req, httplib::Response &res) {
         HandleBestAddr(req, res);
+    });
+    http_svr_.Post("/ios_pay", [&](const httplib::Request &req, httplib::Response &res) {
+        HandleIosPay(req, res);
     });
 
     http_svr_.set_error_handler([](const httplib::Request&, httplib::Response &res) {

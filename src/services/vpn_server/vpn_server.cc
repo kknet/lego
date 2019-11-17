@@ -667,8 +667,10 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             if (RemoveNotAliveAccount(now_point, server->svr_item->account_bindwidth_map)) {
                 // exceeded max user account, new join failed
                 // send back with status
-                std::string control_str = "bwo";
-                send(server->fd, control_str.c_str(), control_str.size(), 0);
+                send(
+                        server->fd,
+                        common::kServerClientOverload.c_str(),
+                        common::kServerClientOverload.size(), 0);
                 CloseAndFreeRemote(EV_A_ remote);
                 CloseAndFreeServer(EV_A_ server);
                 return;
@@ -676,8 +678,10 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             lego::vpn::VpnServer::Instance()->bandwidth_queue().push(acc_item);
         } else {
             if (!iter->second->Valid()) {
-                std::string control_str = "bwo";
-                send(server->fd, control_str.c_str(), control_str.size(), 0);
+                send(
+                        server->fd,
+                        common::kClientFreeBandwidthOver.c_str(),
+                        common::kClientFreeBandwidthOver.size(), 0);
                 // send back with status
                 CloseAndFreeRemote(EV_A_ remote);
                 CloseAndFreeServer(EV_A_ server);
@@ -721,8 +725,10 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
 
         if (!iter->second->Valid()) {
             // send back with status
-            std::string control_str = "bwo";
-            send(server->fd, control_str.c_str(), control_str.size(), 0);
+            send(
+                    server->fd,
+                    common::kClientFreeBandwidthOver.c_str(),
+                    common::kClientFreeBandwidthOver.size(), 0);
             CloseAndFreeRemote(EV_A_ remote);
             CloseAndFreeServer(EV_A_ server);
             return;
