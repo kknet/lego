@@ -1140,6 +1140,7 @@ static void AcceptCallback(EV_P_ ev_io *w, int revents) {
 
     server_t *server = NewServer(serverfd, listener);
     server->country_code = lego::ip::IpWithCountry::Instance()->GetCountryUintCode(peer_name);
+    std::cout << peer_name << " get client country code: " << (uint32_t)server->country_code << std::endl;
     ev_io_start(EV_A_ & server->recv_ctx->io);
     ev_timer_start(EV_A_ & server->recv_ctx->watcher);
 }

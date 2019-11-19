@@ -597,6 +597,28 @@ std::string VpnClient::Init(
             "," + def_conf);
 }
 
+std::string VpnClient::ResetPrivateKey(const std::string& prikey) {
+    if (prikey.size() != security::kPrivateKeySize * 2) {
+        return "ERROR";
+    }
+
+    std::string private_key = common::Encode::HexDecode(prikey);
+    if (SetPriAndPubKey(private_key) != kClientSuccess) {
+        CLIENT_ERROR("SetPriAndPubKey failed!");
+        return "ERROR";
+    }
+
+    config.Set("lego", "prikey", common::Encode::HexEncode(
+            security::Schnorr::Instance()->str_prikey()));
+    config.Set("lego", "pubkey", common::Encode::HexEncode(
+            security::Schnorr::Instance()->str_pubkey()));
+    std::string account_address = network::GetAccountAddressByPublicKey(
+            security::Schnorr::Instance()->str_pubkey());
+    common::GlobalInfo::Instance()->set_id(account_address);
+    return common::Encode::HexEncode(security::Schnorr::Instance()->str_pubkey())
+            + "," + common::Encode::HexEncode(account_address);
+}
+
 void VpnClient::InitRouteAndVpnServer() {    
 	config.Set("route", "country", std::string("AU,BR,CA,CN,DE,FR,GB,HK,ID,IN,JP,KR,NL,NZ,PT,SG,US"));
     config.Set("route", "US", std::string("04100000380000009a544ea0f2bfbf6430d7092cc446750da9f9107a26744095,e7673b77000b903197622216e234df90979a518ce5fc3cbc2ac1f13bca4711a9,0294e541207cef73721365ab004a8d03a441bbc5645742799c0d1cdbc47275f7b5,67.198.205.109,47644;041000003800000099396a8250dd53d48fc2a5b21d0b17dcd8e3e467cf5196a7,39935681a82494d2663690470ec4d12aba9118be165eb95c3d93c9569100a626,02fcdbe9f69c15ca4e0bd3c8d42db6dc3757f1bf41c0e7531234f4de36360e44e0,198.11.180.173,58757;04100000380000008e51d398627f2ab3eb4f5a26ce70a3664877f5e6a6ab71b1,03136ec9a430d22e54ac49035634a42d9330b6b40221152f072f40da6808024a,02661104d61edf0cea2542b9236918c4b7f287308aad036303cdd2133d0aa4d6e9,104.238.182.175,41629;0410000038000000b558246e977dd94683a6f60de97a26fc9eba939d2f4d5f6c,ee3a0076bdb12b9cacaca18eab7a1fc43c2c48706908b5782cb2e59f910c6899,03d58dcc073a2e5b16b535b12c583f68a7b4df037e769d57e4e54ffd9b79518a02,142.93.53.134,45255;0410000038000000a9b7e333749bfcfa22cc760ca46d4afa46608ff8b3679835,b06997ebb5c2039c95de337b93ced71e516c55fb39a405f3c4490e3fbefa1cca,0321d47913356026a7fb608f0256ffe435bc089a52995b72871705f7fb4316b598,178.128.146.118,62045;041000003800000028eec67053b3db77971001c7300a85094032092ed03605f3,de32408a4eff8fa0e28c5453bd211ea46a80cb7fd6e9cc64095574c5cdc6155c,02a1185d6084dd5d895191bd70da184500fe170975dae1270baf68079a8352cc95,98.126.31.159,38668;041000003800000057e24e525f44f8441d7582207a921d2b7162905b9abe4bfa,11fc3f2d2a9d3d2fe52fa670012df3344d704ccf0e69b9ba8f37d218d5eef7d7,032ea9f614d99db11ad4216f2eec4fa32db7580e89e4dd9deda587bef77807220e,47.252.20.241,50467;"));
