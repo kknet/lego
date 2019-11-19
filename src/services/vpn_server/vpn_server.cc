@@ -589,9 +589,6 @@ static bool RemoveNotAliveAccount(
     return false;
 }
 
-static void SendControlMessage(const std::string& data) {
-}
-
 static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     server_ctx_t *server_recv_ctx = (server_ctx_t *)w;
     server_t *server = server_recv_ctx->server;
@@ -1814,7 +1811,7 @@ void VpnServer::HandleVpnLoginResponse(
 
     // TODO(): check block multi sign, this node must get election blocks
     std::string login_svr_id;
-    uint64_t day_pay_timestamp;
+    uint64_t day_pay_timestamp = 0;
     uint64_t vip_tenons = 0;
     auto& tx_list = block.tx_block().tx_list();
     for (int32_t i = tx_list.size() - 1; i >= 0; --i) {

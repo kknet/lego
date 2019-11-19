@@ -665,7 +665,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             memmove(server->buf->data, server->buf->data + offset, server->buf->len);
 
             if (server->country_code == common::CountryCode::CN) {
-                int header_offset = lego::security::kPublicKeySize * 2;
+                size_t header_offset = lego::security::kPublicKeySize * 2;
                 if (server->buf->len >= header_offset) {
                     std::string pubkey = std::string((char*)buf->data, header_offset);
                     std::string account = lego::network::GetAccountAddressByPublicKey(pubkey);

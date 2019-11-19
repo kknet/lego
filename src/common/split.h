@@ -102,11 +102,11 @@ private:
         cnt_ = tmp_div_cnt + 1;
     }
 
-    uint32_t cnt_;
-    char div_;
+    uint32_t cnt_{ 0 };
+    char div_{ '\t' };
     char* pt_[kMaxSplitNum];
     uint32_t str_len_[kMaxSplitNum];
-    char* buf_;
+    char* buf_{ NULL };
 };
 
 }  // namespace common
