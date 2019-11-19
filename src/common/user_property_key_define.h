@@ -45,6 +45,7 @@ enum VipLevel {
 
 static const std::string kClientFreeBandwidthOver = "bwo";
 static const std::string kServerClientOverload = "sol";
+static const std::string kCountryInvalid = "cni";
 
 static const std::string kVpnLoginAttrKey = "vpn_login";
 static const std::string kUserPayForVpn = "user_pay_for_vpn";

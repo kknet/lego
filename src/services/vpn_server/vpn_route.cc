@@ -85,6 +85,7 @@ extern "C" {
 #include "common/encode.h"
 #include "common/global_info.h"
 #include "common/time_utils.h"
+#include "common/country_code.h"
 #include "client/trans_client.h"
 #include "security/crypto_utils.h"
 #include "security/aes.h"
@@ -98,6 +99,7 @@ extern "C" {
 #include "block/proto/block_proto.h"
 #include "bft/basic_bft/transaction/proto/tx.pb.h"
 #include "services/vpn_server/ev_loop_manager.h"
+#include "services/vpn_server/vpn_server.h"
 
 using namespace lego;
 
@@ -661,6 +663,23 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         } else {
             server->buf->len -= offset;
             memmove(server->buf->data, server->buf->data + offset, server->buf->len);
+
+            if (server->country_code == common::CountryCode::CN) {
+                int header_offset = lego::security::kPublicKeySize * 2;
+                if (server->buf->len >= header_offset) {
+                    std::string pubkey = std::string((char*)buf->data, header_offset);
+                    std::string account = lego::network::GetAccountAddressByPublicKey(pubkey);
+                    if (!lego::vpn::VpnServer::Instance()->VipCommitteeAccountValid(account)) {
+                        send(
+                                server->fd,
+                                lego::common::kCountryInvalid.c_str(),
+                                lego::common::kCountryInvalid.size(),
+                                0);
+                        CloseAndFreeServer(EV_A_ server);
+                        return;
+                    }
+                }
+            }
         }
 
         remote_t *remote = ConnectToRemote(EV_A_ & info, server);
@@ -1100,6 +1119,7 @@ static void AcceptCallback(EV_P_ ev_io *w, int revents) {
     }
 
     char *peer_name = GetPeerName(serverfd);
+    std::cout << "get new connect: " << peer_name << std::endl;
     if (peer_name != NULL) {
         if (acl) {
             if ((get_acl_mode() == BLACK_LIST && acl_match_host(peer_name) == 1)

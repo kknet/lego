@@ -605,7 +605,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     }
 
     ssize_t r = recv(server->fd, buf->data, SOCKET_BUF_SIZE, 0);
-
     if (r == 0) {
         // connection closed
         CloseAndFreeRemote(EV_A_ remote);

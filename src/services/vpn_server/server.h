@@ -233,6 +233,7 @@ typedef struct server {
     struct cork_dllist_item entries;
     PeerInfoPtr client_ptr;
     server_item_ptr_t svr_item;
+    uint8_t country_code;
 #ifdef USE_NFCONNTRACK_TOS
     struct dscptracker *tracker;
 #endif
