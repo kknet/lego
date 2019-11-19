@@ -86,6 +86,7 @@ extern "C" {
 #include "common/global_info.h"
 #include "common/time_utils.h"
 #include "common/country_code.h"
+#include "ip/ip_with_country.h"
 #include "client/trans_client.h"
 #include "security/crypto_utils.h"
 #include "security/aes.h"
@@ -1119,7 +1120,6 @@ static void AcceptCallback(EV_P_ ev_io *w, int revents) {
     }
 
     char *peer_name = GetPeerName(serverfd);
-    std::cout << "get new connect: " << peer_name << std::endl;
     if (peer_name != NULL) {
         if (acl) {
             if ((get_acl_mode() == BLACK_LIST && acl_match_host(peer_name) == 1)
@@ -1139,6 +1139,7 @@ static void AcceptCallback(EV_P_ ev_io *w, int revents) {
     SetNonblocking(serverfd);
 
     server_t *server = NewServer(serverfd, listener);
+    server->country_code = lego::ip::IpWithCountry::Instance()->GetCountryUintCode(peer_name);
     ev_io_start(EV_A_ & server->recv_ctx->io);
     ev_timer_start(EV_A_ & server->recv_ctx->watcher);
 }
@@ -1171,14 +1172,6 @@ static int StartTcpServer(
     ev_io_start(vpn::EvLoopManager::Instance()->loop(), &listen_ctx->io);
     return 0;
 }
-
-// static int StartUdpServer(const std::string& host, uint16_t port) {
-//     int err = init_udprelay(host.c_str(), std::to_string(port).c_str(), 1500, crypto, 60, NULL);
-//     if (err == -1) {
-//         return -1;
-//     }
-//     return 0;
-// }
 
 static void StopRoute(listen_ctx_t* listen_ctx) {
     ev_io_stop(vpn::EvLoopManager::Instance()->loop(), &listen_ctx->io);

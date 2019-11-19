@@ -552,7 +552,7 @@ std::string VpnClient::Init(
     std::string vpn_us_nodes;
     config.Get("vpn", "US", vpn_us_nodes);
     if (vpn_us_nodes.size() < 128) {
-        InitRouteAndVpnServer();
+        // InitRouteAndVpnServer();
     }
 
     std::string def_conf;
