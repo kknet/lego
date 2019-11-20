@@ -14,6 +14,7 @@
 #include "dht/dht_key.h"
 #include "network/network_utils.h"
 #include "network/dht_manager.h"
+#include "network/universal_manager.h"
 #include "network/route.h"
 #include "bft/proto/bft.pb.h"
 #include "bft/bft_utils.h"
@@ -58,6 +59,66 @@ static void SetDefaultBroadcastParam(transport::protobuf::BroadcastParam* broad_
     broad_param->set_hop_limit(kBftHopLimit);
     broad_param->set_hop_to_layer(kBftHopToLayer);
     broad_param->set_neighbor_count(kBftNeighborCount);
+}
+
+static std::string CreateWxAliPayRequest(
+        std::string& to,
+        uint64_t amount,
+        transport::protobuf::Header& msg) {
+    auto gid = common::CreateGID(security::Schnorr::Instance()->str_pubkey());
+    auto uni_dht = std::dynamic_pointer_cast<network::Universal>(
+            network::UniversalManager::Instance()->GetUniversal(
+            network::kUniversalNetworkId));
+    if (!uni_dht) {
+        return "";
+    }
+
+    msg.set_src_dht_key(uni_dht->local_node()->dht_key);
+    uint32_t des_net_id = network::GetConsensusShardNetworkId(common::GlobalInfo::Instance()->id());
+    dht::DhtKeyManager dht_key(des_net_id, 0);
+    msg.set_des_dht_key(dht_key.StrKey());
+    msg.set_priority(transport::kTransportPriorityHighest);
+    msg.set_id(common::GlobalInfo::Instance()->MessageId());
+    msg.set_type(common::kBftMessage);
+    msg.set_client(false);
+    msg.set_hop_count(0);
+    auto broad_param = msg.mutable_broadcast();
+    SetDefaultBroadcastParam(broad_param);
+    bft::protobuf::BftMessage bft_msg;
+    bft_msg.set_gid(gid);
+    bft_msg.set_rand(0);
+    bft_msg.set_status(bft::kBftInit);
+    bft_msg.set_leader(false);
+    bft_msg.set_net_id(des_net_id);
+    bft_msg.set_node_id(common::GlobalInfo::Instance()->id());
+    bft_msg.set_pubkey(security::Schnorr::Instance()->str_pubkey());
+    bft_msg.set_bft_address(bft::kTransactionPbftAddress);
+    bft::protobuf::TxBft tx_bft;
+    auto new_tx = tx_bft.mutable_new_tx();
+    new_tx->set_gid(gid);
+    new_tx->set_from_acc_addr(common::GlobalInfo::Instance()->id());
+    new_tx->set_from_pubkey(security::Schnorr::Instance()->str_pubkey());
+    new_tx->set_to_acc_addr(to);
+    new_tx->set_lego_count(amount);
+    auto tx_data = tx_bft.SerializeAsString();
+    bft_msg.set_data(tx_data);
+
+    auto hash128 = common::Hash::Hash128(tx_data);
+    security::Signature sign;
+    if (!security::Schnorr::Instance()->Sign(
+            hash128,
+            *(security::Schnorr::Instance()->prikey()),
+            *(security::Schnorr::Instance()->pubkey()),
+            sign)) {
+        TRANSPORT_ERROR("leader pre commit signature failed!");
+        return;
+    }
+    std::string sign_challenge_str;
+    std::string sign_response_str;
+    sign.Serialize(sign_challenge_str, sign_response_str);
+    bft_msg.set_sign_challenge(sign_challenge_str);
+    bft_msg.set_sign_response(sign_response_str);
+    msg.set_data(bft_msg.SerializeAsString());
 }
 
 static void CreateTxRequest(
@@ -481,21 +542,59 @@ void HttpTransport::HandleWxAliPay(const httplib::Request &req, httplib::Respons
     auto iter = req.headers.find("REMOTE_ADDR");
     if (iter == req.headers.end()) {
         res.status = 400;
+        res.set_content("", "text/plain");
+        res.set_header("Access-Control-Allow-Origin", "*");
         return;
     }
 
-    std::cout << "get client ip: " << iter->second << std::endl;
+    if (iter->second != common::GlobalInfo::Instance()->config_local_ip()) {
+        res.status = 400;
+        res.set_content("", "text/plain");
+        res.set_header("Access-Control-Allow-Origin", "*");
+        return;
+    }
+
     try {
         nlohmann::json json_obj = nlohmann::json::parse(req.body);
         auto acc_addr = common::Encode::HexDecode(json_obj["acc_addr"].get<std::string>());
+        auto real_price = json_obj["price"].get<float>();
+        std::string gid;
+        transport::protobuf::Header msg;
+        if (real_price >= 28.0f && real_price < 100.0) {
+            uint64_t amount = 2000 * static_cast<uint64_t>(real_price / 28.0f);
+            gid = CreateWxAliPayRequest(acc_addr, amount, msg);
+        }
+
+        if (real_price >= 100.0f && real_price < 200.0) {
+            uint64_t amount = 2000 * static_cast<uint64_t>(real_price / 30.0f / 0.8f);
+            gid = CreateWxAliPayRequest(acc_addr, amount, msg);
+        }
+
+        if (real_price >= 200.0f) {
+            uint64_t amount = 2000 * static_cast<uint64_t>(real_price / 30.0f / 0.6f);
+            gid = CreateWxAliPayRequest(acc_addr, amount, msg);
+        }
+
+        if (gid.empty()) {
+            res.status = 400;
+            res.set_content("", "text/plain");
+            res.set_header("Access-Control-Allow-Origin", "*");
+            return;
+        }
+
+        network::Route::Instance()->Send(msg);
+        network::Route::Instance()->SendToLocal(msg);
         nlohmann::json res_json;
         res_json["status"] = 0;
+        res_json["gid"] = gid;
         res.set_content(res_json.dump(), "text/plain");
         res.set_header("Access-Control-Allow-Origin", "*");
     } catch (...) {
         res.status = 400;
         TRANSPORT_ERROR("HandleBestAddr by this node error.");
-        std::cout << "HandleBestAddr by this node error." << std::endl;
+        std::cout << "HandleWxAliPay by this node error." << std::endl;
+        res.set_content("", "text/plain");
+        res.set_header("Access-Control-Allow-Origin", "*");
     }
 }
 
