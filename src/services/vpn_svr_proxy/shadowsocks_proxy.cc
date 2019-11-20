@@ -91,6 +91,11 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
         return kProxyError;
     }
 
+    if (InitHttpTransport() != transport::kTransportSuccess) {
+        PROXY_ERROR("init http transport failed!");
+        return kProxyError;
+    }
+
     if (InitNetworkSingleton() != kProxySuccess) {
         PROXY_ERROR("InitNetworkSingleton failed!");
         return kProxyError;
