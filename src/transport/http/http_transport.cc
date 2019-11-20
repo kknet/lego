@@ -62,10 +62,14 @@ static void SetDefaultBroadcastParam(transport::protobuf::BroadcastParam* broad_
 }
 
 static std::string CreateWxAliPayRequest(
+        std::string& gid,
         std::string& to,
         uint64_t amount,
         transport::protobuf::Header& msg) {
-    auto gid = common::CreateGID(security::Schnorr::Instance()->str_pubkey());
+    if (gid.empty()) {
+        gid = common::CreateGID(security::Schnorr::Instance()->str_pubkey());
+    }
+
     auto uni_dht = std::dynamic_pointer_cast<network::Universal>(
             network::UniversalManager::Instance()->GetUniversal(
             network::kUniversalNetworkId));
@@ -559,21 +563,21 @@ void HttpTransport::HandleWxAliPay(const httplib::Request &req, httplib::Respons
         nlohmann::json json_obj = nlohmann::json::parse(req.body);
         auto acc_addr = common::Encode::HexDecode(json_obj["acc_addr"].get<std::string>());
         auto real_price = json_obj["price"].get<float>();
-        std::string gid;
+        auto gid = common::Encode::HexDecode(json_obj["gid"].get<std::string>());
         transport::protobuf::Header msg;
         float amount = (2000.0f / 30.0f + 0.5f) * real_price;
         if (real_price > 0.0f && real_price < 100.0) {
-            gid = CreateWxAliPayRequest(acc_addr, static_cast<uint64_t>(amount), msg);
+            gid = CreateWxAliPayRequest(gid, acc_addr, static_cast<uint64_t>(amount), msg);
         }
 
         if (real_price >= 100.0f && real_price < 200.0) {
             amount = amount / 0.8f;
-            gid = CreateWxAliPayRequest(acc_addr, static_cast<uint64_t>(amount), msg);
+            gid = CreateWxAliPayRequest(gid, acc_addr, static_cast<uint64_t>(amount), msg);
         }
 
         if (real_price >= 200.0f) {
             amount = amount / 0.6f;
-            gid = CreateWxAliPayRequest(acc_addr, static_cast<uint64_t>(amount), msg);
+            gid = CreateWxAliPayRequest(gid, acc_addr, static_cast<uint64_t>(amount), msg);
         }
 
         if (gid.empty()) {
