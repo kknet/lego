@@ -32,6 +32,7 @@ private:
     void HandleStatistics(const httplib::Request &req, httplib::Response &res);
     void HandleBestAddr(const httplib::Request &req, httplib::Response &res);
     void HandleIosPay(const httplib::Request &req, httplib::Response &res);
+    void HandleWxAliPay(const httplib::Request &req, httplib::Response &res);
 
     httplib::Server http_svr_;
     std::shared_ptr<std::thread> run_thread_{ nullptr };

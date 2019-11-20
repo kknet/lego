@@ -477,6 +477,28 @@ void HttpTransport::HandleIosPay(const httplib::Request &req, httplib::Response 
     }
 }
 
+void HttpTransport::HandleWxAliPay(const httplib::Request &req, httplib::Response &res) {
+    auto iter = req.headers.find("REMOTE_ADDR");
+    if (iter == req.headers.end()) {
+        res.status = 400;
+        return;
+    }
+
+    std::cout << "get client ip: " << iter->second << std::endl;
+    try {
+        nlohmann::json json_obj = nlohmann::json::parse(req.body);
+        auto acc_addr = common::Encode::HexDecode(json_obj["acc_addr"].get<std::string>());
+        nlohmann::json res_json;
+        res_json["status"] = 0;
+        res.set_content(res_json.dump(), "text/plain");
+        res.set_header("Access-Control-Allow-Origin", "*");
+    } catch (...) {
+        res.status = 400;
+        TRANSPORT_ERROR("HandleBestAddr by this node error.");
+        std::cout << "HandleBestAddr by this node error." << std::endl;
+    }
+}
+
 void HttpTransport::Listen() {
     http_svr_.Get("/http_message", [=](const httplib::Request& req, httplib::Response &res) {
         std::cout << "http get request size: " << req.body.size() << std::endl;
@@ -507,7 +529,10 @@ void HttpTransport::Listen() {
     http_svr_.Post("/ios_pay", [&](const httplib::Request &req, httplib::Response &res) {
         HandleIosPay(req, res);
     });
+    http_svr_.Post("/wx_alipay_pay", [&](const httplib::Request &req, httplib::Response &res) {
 
+        HandleWxAliPay(req, res);
+    });
     http_svr_.set_error_handler([](const httplib::Request&, httplib::Response &res) {
         const char *fmt = "<p>Error Status: <span style='color:red;'>%d</span></p>";
         char buf[BUFSIZ];
