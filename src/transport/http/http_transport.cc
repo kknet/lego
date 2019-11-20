@@ -111,7 +111,7 @@ static std::string CreateWxAliPayRequest(
             *(security::Schnorr::Instance()->pubkey()),
             sign)) {
         TRANSPORT_ERROR("leader pre commit signature failed!");
-        return;
+        return "";
     }
     std::string sign_challenge_str;
     std::string sign_response_str;
