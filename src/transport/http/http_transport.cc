@@ -554,7 +554,7 @@ void HttpTransport::HandleWxAliPay(const httplib::Request &req, httplib::Respons
         res.set_header("Access-Control-Allow-Origin", "*");
         return;
     }
-
+    
     try {
         nlohmann::json json_obj = nlohmann::json::parse(req.body);
         auto acc_addr = common::Encode::HexDecode(json_obj["acc_addr"].get<std::string>());
@@ -587,13 +587,13 @@ void HttpTransport::HandleWxAliPay(const httplib::Request &req, httplib::Respons
         network::Route::Instance()->SendToLocal(msg);
         nlohmann::json res_json;
         res_json["status"] = 0;
-        res_json["gid"] = gid;
+        res_json["gid"] = common::Encode::HexEncode(gid);
         res.set_content(res_json.dump(), "text/plain");
         res.set_header("Access-Control-Allow-Origin", "*");
-    } catch (...) {
+    } catch (std::exception& e) {
         res.status = 400;
         TRANSPORT_ERROR("HandleBestAddr by this node error.");
-        std::cout << "HandleWxAliPay by this node error." << std::endl;
+        std::cout << "HandleWxAliPay by this node error: " << e.what() << std::endl;
         res.set_content("", "text/plain");
         res.set_header("Access-Control-Allow-Origin", "*");
     }
