@@ -561,19 +561,19 @@ void HttpTransport::HandleWxAliPay(const httplib::Request &req, httplib::Respons
         auto real_price = json_obj["price"].get<float>();
         std::string gid;
         transport::protobuf::Header msg;
-        if (real_price >= 28.0f && real_price < 100.0) {
-            uint64_t amount = 2000 * static_cast<uint64_t>(real_price / 28.0f);
-            gid = CreateWxAliPayRequest(acc_addr, amount, msg);
+        float amount = (2000.0f / 30.0f + 0.5f) * real_price;
+        if (real_price > 0.0f && real_price < 100.0) {
+            gid = CreateWxAliPayRequest(acc_addr, static_cast<uint64_t>(amount), msg);
         }
 
         if (real_price >= 100.0f && real_price < 200.0) {
-            uint64_t amount = 2000 * static_cast<uint64_t>(real_price / 30.0f / 0.8f);
-            gid = CreateWxAliPayRequest(acc_addr, amount, msg);
+            amount = amount / 0.8f;
+            gid = CreateWxAliPayRequest(acc_addr, static_cast<uint64_t>(amount), msg);
         }
 
         if (real_price >= 200.0f) {
-            uint64_t amount = 2000 * static_cast<uint64_t>(real_price / 30.0f / 0.6f);
-            gid = CreateWxAliPayRequest(acc_addr, amount, msg);
+            amount = amount / 0.6f;
+            gid = CreateWxAliPayRequest(acc_addr, static_cast<uint64_t>(amount), msg);
         }
 
         if (gid.empty()) {
