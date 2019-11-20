@@ -119,6 +119,7 @@ static std::string CreateWxAliPayRequest(
     bft_msg.set_sign_challenge(sign_challenge_str);
     bft_msg.set_sign_response(sign_response_str);
     msg.set_data(bft_msg.SerializeAsString());
+    return gid;
 }
 
 static void CreateTxRequest(
