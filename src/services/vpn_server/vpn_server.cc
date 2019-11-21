@@ -1820,6 +1820,7 @@ void VpnServer::HandleVpnLoginResponse(
     }
 
     if (attr_res.block().empty()) {
+        VPNSVR_ERROR("get empty block[%s]", common::Encode::HexEncode(attr_res.account()).c_str());
         iter->second->vip_level = common::kNotVip;
         return;
     }

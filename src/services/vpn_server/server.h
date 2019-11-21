@@ -141,6 +141,7 @@ struct BandwidthInfo {
             return true;
         }
 
+        VPNSVR_ERROR("account not valid[%d][%u][%u]", vip_level, today_used_bandwidth, kMaxBandwidthFreeUse);
         return false;
     }
 
