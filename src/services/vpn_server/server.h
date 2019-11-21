@@ -66,6 +66,7 @@ extern "C" {
 #include "security/public_key.h"
 #include "network/network_utils.h"
 #include "limit/tocken_bucket.h"
+#include "services/vpn_server/vpn_svr_utils.h"
 
 static const uint32_t kPeerTimeout = 30 * 1000 * 1000;  // 30s
 static const int64_t kTransactionTimeout = 600ll * 1000ll * 1000ll;  // 10 min
