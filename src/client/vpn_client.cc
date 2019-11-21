@@ -423,16 +423,25 @@ int64_t VpnClient::GetBalance() {
     auto tx_list = block.tx_block().tx_list();
     for (int32_t i = tx_list.size() - 1; i >= 0; --i) {
         if (tx_list[i].to().empty()) {
+            if (tx_list[i].from() != common::GlobalInfo::Instance()->id()) {
+                account_created_ = true;
+            }
             continue;
         }
 
         if (tx_list[i].to() != common::GlobalInfo::Instance()->id() &&
-            tx_list[i].from() != common::GlobalInfo::Instance()->id()) {
+                tx_list[i].from() != common::GlobalInfo::Instance()->id()) {
             continue;
         }
 
+        account_created_ = true;
         return tx_list[i].balance();
     }
+
+    if (account_created_) {
+        return 0;
+    }
+
     return -1;
 }
 
