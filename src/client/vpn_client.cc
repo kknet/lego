@@ -624,6 +624,30 @@ std::string VpnClient::ResetPrivateKey(const std::string& prikey) {
     std::string account_address = network::GetAccountAddressByPublicKey(
             security::Schnorr::Instance()->str_pubkey());
     common::GlobalInfo::Instance()->set_id(account_address);
+    
+    {
+        std::lock_guard<std::mutex> guard(hight_block_map_mutex_);
+        hight_block_map_.clear();
+        local_account_height_set_.clear();
+    }
+
+    {
+        std::lock_guard<std::mutex> guard(height_set_mutex_);
+        local_account_height_set_.clear();
+    }
+
+    {
+        std::lock_guard<std::mutex> guard(tx_map_mutex_);
+        tx_map_.clear();
+    }
+
+    today_used_bandwidth_ = -1;
+    paied_vip_info_[0] = std::make_shared<LastPaiedVipInfo>();
+    paied_vip_info_[0]->height = 0;
+    paied_vip_info_[0]->timestamp = 0;
+    paied_vip_info_[1] = nullptr;
+    paied_vip_valid_idx_ = 0;
+    check_times_ = 0;
     return common::Encode::HexEncode(security::Schnorr::Instance()->str_pubkey())
             + "," + common::Encode::HexEncode(account_address);
 }
