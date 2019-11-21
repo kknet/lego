@@ -136,6 +136,10 @@ struct BandwidthInfo {
     }
 
     bool Valid() {
+        if (vip_timestamp == -100) {
+            return true;
+        }
+
         if (IsVip()) {
             return true;
         }
@@ -159,7 +163,7 @@ struct BandwidthInfo {
     uint32_t today_used_bandwidth;
     std::chrono::steady_clock::time_point timeout;
     std::chrono::steady_clock::time_point client_staking_time;
-    int32_t vip_timestamp{ 0 };
+    int32_t vip_timestamp{ -100 };
     uint64_t vip_payed_tenon{ 0 };
     std::string account_id;
     std::chrono::steady_clock::time_point join_time;

@@ -1819,6 +1819,9 @@ void VpnServer::HandleVpnLoginResponse(
     }
 
     if (attr_res.block().empty()) {
+        if (iter->second->vip_timestamp == -100) {
+            iter->second->vip_timestamp = -99;
+        }
         return;
     }
 
