@@ -163,7 +163,10 @@ void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
             }
         }
     }
-    acc_map_[acc_ptr->account_id]->AddHeight(acc_ptr->height);
+
+    if (acc_ptr->balance > 0) {
+        acc_map_[acc_ptr->account_id]->AddHeight(acc_ptr->height);
+    }
 }
 
 TxBlockInfoPtr AccountManager::GetBlockInfo(uint32_t pool_idx) {
