@@ -123,7 +123,6 @@ static void FreeServer(server_t *server);
 static void CloseAndFreeServer(EV_P_ server_t *server);
 static void ResolvCallback(struct sockaddr *addr, void *data);
 static void ResolvFreeCallback(void *data);
-static void SendControlMessage(const std::string& data);
 
 // static crypto_t *crypto;
 

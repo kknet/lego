@@ -669,7 +669,8 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
                 size_t header_offset = lego::security::kPublicKeySize * 2;
                 if (server->buf->len >= header_offset) {
                     std::string pubkey = std::string((char*)buf->data, header_offset);
-                    std::string account = lego::network::GetAccountAddressByPublicKey(pubkey);
+                    std::string account = common::Encode::HexDecode(
+                            lego::network::GetAccountAddressByPublicKey(pubkey));
                     if (!lego::vpn::VpnServer::Instance()->ClientAccountValid(account)) {
                         send(
                                 server->fd,
