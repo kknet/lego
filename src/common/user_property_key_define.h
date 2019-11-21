@@ -49,9 +49,11 @@ static const std::string kCountryInvalid = "cni";
 
 static const std::string kVpnLoginAttrKey = "vpn_login";
 static const std::string kUserPayForVpn = "user_pay_for_vpn";
+static const std::string kSetValidVpnClientAccount = "set_valid_vpn_client_account";
 static const std::string kIncreaseVpnBandwidth = "kIncreaseVpnBandwidth";
 static const std::string kDefaultEnocdeMethod = "aes-128-cfb";
 static const uint32_t kFreeToUseVpnBandwidth = 200 * 1024 * 1024;
+static const std::string kVpnAdminAccount = "e8a1ceb6b807a98a20e3aa10aa2199e47cbbed08c2540bd48aa3e1e72ba6bd99";
 
 }  // namespace  common
 

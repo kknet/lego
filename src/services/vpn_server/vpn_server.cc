@@ -135,7 +135,7 @@ static int no_delay = 1;
 static int ret_val = 0;
 static const uint32_t kBandwidthPeriod = 120u * 1000u * 1000u;
 static const uint64_t kVipCheckPeriod = 180llu * 1000llu * 1000llu;
-static const uint32_t kVipPayfor = 1900u;
+static const uint32_t kVipPayfor = 2000u;
 
 #ifdef HAVE_SETRLIMIT
 static int nofile = 0;
@@ -1560,6 +1560,20 @@ VpnServer::VpnServer() {
     vip_committee_accounts_.insert(common::Encode::HexDecode("7ff017f63dc70770fcfe7b336c979c7fc6164e9653f32879e55fcead90ddf13f"));
     vip_committee_accounts_.insert(common::Encode::HexDecode("6dce73798afdbaac6b94b79014b15dcc6806cb693cf403098d8819ac362fa237"));
     vip_committee_accounts_.insert(common::Encode::HexDecode("b5be6f0090e4f5d40458258ed9adf843324c0327145c48b55091f33673d2d5a4"));
+    for (auto iter = vip_committee_accounts_.begin(); iter != vip_committee_accounts_.end(); ++iter) {
+        valid_client_account_.insert(*iter);
+    }
+
+    valid_client_account_.insert(common::Encode::HexDecode("b5be6f0090e4f5d40458258ed9adf843324c0327145c48b55091f33673d2d5a4"));
+    valid_client_account_.insert(common::Encode::HexDecode("ba960f8ff67202eb2fb61ef1023731d1e4d0258b5f594d47a3181f58857762d0"));
+    valid_client_account_.insert(common::Encode::HexDecode("6b9b6d3dbc8ae849b92ce86a52a5ed6ae8fe11a0ba9b4066d76147c617f0575a"));
+    valid_client_account_.insert(common::Encode::HexDecode("a1979a5af9a7b36328631be5f39e9f7c49121a85d584300bb0089e4393c1ca69"));
+    valid_client_account_.insert(common::Encode::HexDecode("91c395027c490589db3fa68fae59c85dded67b07f95bc94ef2ce47a0c01f580c"));
+    valid_client_account_.insert(common::Encode::HexDecode("f5e4110421da112fea110b6ac4d0ac21ea2069b10edd9e1cd53ce340a1b5f61e"));
+    valid_client_account_.insert(common::Encode::HexDecode("3f4621678cb66e4a5510314689547967171fa8c8b9dc104db70a961babbc0e77"));
+    valid_client_account_.insert(common::Encode::HexDecode("e887bbd4aa190114754bfc813865b3cbd7d2b57c286442ffd61dbb66b706d683"));
+    valid_client_account_.insert(common::Encode::HexDecode("dd2a148c9ab80aaa62b2ef090ab1887c45ab27e2383a21af285731327b511da6"));
+    valid_client_account_.insert(common::Encode::HexDecode("93e4ba2e5598d9c799b65d0d06582d645968873264da0afc249d80906a3fa9d4"));
     network::Route::Instance()->RegisterMessage(
             common::kBlockMessage,
             std::bind(&VpnServer::HandleMessage, this, std::placeholders::_1));
@@ -1584,6 +1598,7 @@ void VpnServer::Stop() {
 }
 
 int VpnServer::Init() {
+    admin_vpn_account_ = common::Encode::HexDecode(common::kVpnAdminAccount);
     RotationServer();
     if (listen_ctx_queue_.empty()) {
         return kVpnsvrError;
