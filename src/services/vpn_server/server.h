@@ -148,8 +148,8 @@ struct BandwidthInfo {
         return false;
     }
 
-    uint32_t up_bandwidth;
-    uint32_t down_bandwidth;
+    volatile uint32_t up_bandwidth;
+    volatile uint32_t down_bandwidth;
     uint32_t today_used_bandwidth;
     std::chrono::steady_clock::time_point timeout;
     std::chrono::steady_clock::time_point client_staking_time;
