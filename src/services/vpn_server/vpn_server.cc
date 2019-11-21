@@ -1618,8 +1618,6 @@ void VpnServer::HandleMessage(transport::protobuf::Header& header) {
     }
 
     if (header.type() == common::kBlockMessage) {
-        VPNSVR_ERROR("receive common::kBlockMessage.");
-
         block::protobuf::BlockMessage block_msg;
         if (!block_msg.ParseFromString(header.data())) {
             return;

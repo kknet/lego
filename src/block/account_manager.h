@@ -61,7 +61,7 @@ private:
     ~AccountManager();
 
     int CheckNetworkIdValid(const std::string& acc_addr);
-    void AddAccount(const AccountInfoPtr& acc_ptr);
+    void AddAccount(const AccountInfoPtr& acc_ptr, uint64_t amount);
     void SetPool(const TxBlockInfoPtr& block_ptr);
 
     std::unordered_map<std::string, AccountInfoPtr> acc_map_;

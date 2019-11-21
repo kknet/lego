@@ -54,7 +54,7 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
                     block_item.height());
             ++(acc_ptr->in_count);
             acc_ptr->in_lego = tx_list[i].amount();
-            AddAccount(acc_ptr);
+            AddAccount(acc_ptr, tx_list[i].amount());
             uint32_t pool_idx = common::GetPoolIndex(tx_list[i].to());
             auto bptr = std::make_shared<TxBlockInfo>(
                     block_item.hash(),
@@ -107,7 +107,7 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
                         block_item.height(),
                         tx_list[i]);
             }
-            AddAccount(acc_ptr);
+            AddAccount(acc_ptr, tx_list[i].amount());
 
             uint32_t pool_idx = common::GetPoolIndex(tx_list[i].from());
             auto bptr = std::make_shared<TxBlockInfo>(
@@ -124,14 +124,12 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
     return kBlockSuccess;
 }
 
-void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
+void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr, uint64_t amount) {
     std::lock_guard<std::mutex> guard(acc_map_mutex_);
     auto iter = acc_map_.find(acc_ptr->account_id);
     if (iter == acc_map_.end()) {
         acc_map_[acc_ptr->account_id] = acc_ptr;
-        if (acc_ptr->in_lego > 0 || acc_ptr->out_lego > 0 || acc_ptr->balance == 0) {
-            acc_map_[acc_ptr->account_id]->AddHeight(acc_ptr->height);
-        }
+        acc_map_[acc_ptr->account_id]->AddHeight(acc_ptr->height);
         return;
     }
 
@@ -166,7 +164,7 @@ void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
         }
     }
 
-    if (acc_ptr->in_lego > 0 || acc_ptr->out_lego > 0) {
+    if (amount > 0) {
         acc_map_[acc_ptr->account_id]->AddHeight(acc_ptr->height);
     }
 }
