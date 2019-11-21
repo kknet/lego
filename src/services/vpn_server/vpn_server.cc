@@ -134,7 +134,7 @@ static int no_delay = 1;
 static int ret_val = 0;
 static const uint32_t kBandwidthPeriod = 120u * 1000u * 1000u;
 static const uint64_t kVipCheckPeriod = 180llu * 1000llu * 1000llu;
-static const uint32_t kVpnClientTimeout = 60 * 1000 * 1000;
+static const uint32_t kVpnClientTimeout = 30 * 1000 * 1000;
 
 #ifdef HAVE_SETRLIMIT
 static int nofile = 0;
