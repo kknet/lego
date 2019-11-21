@@ -134,7 +134,6 @@ static int no_delay = 1;
 static int ret_val = 0;
 static const uint32_t kBandwidthPeriod = 120u * 1000u * 1000u;
 static const uint64_t kVipCheckPeriod = 180llu * 1000llu * 1000llu;
-static const uint32_t kVipPayfor = 2000u;
 
 #ifdef HAVE_SETRLIMIT
 static int nofile = 0;
@@ -1820,8 +1819,6 @@ void VpnServer::HandleVpnLoginResponse(
     }
 
     if (attr_res.block().empty()) {
-        VPNSVR_ERROR("get empty block[%s]", common::Encode::HexEncode(attr_res.account()).c_str());
-        iter->second->vip_level = common::kNotVip;
         return;
     }
 
@@ -1863,12 +1860,8 @@ void VpnServer::HandleVpnLoginResponse(
             std::chrono::microseconds(kVipCheckPeriod));
     uint64_t day_msec = 24llu * 3600llu * 1000llu;
     uint32_t day_pay_for_vpn = day_pay_timestamp / day_msec;
-    uint32_t now_day_timestamp = common::TimeUtils::TimestampDays();
-    if (now_day_timestamp > (day_pay_for_vpn + 30) || vip_tenons < kVipPayfor) {
-        iter->second->vip_level = common::kNotVip;
-    } else {
-        iter->second->vip_level = common::kVipLevel1;
-    }
+    iter->second->vip_timestamp = day_pay_for_vpn;
+    iter->second->vip_payed_tenon = vip_tenons;
 
     VPNSVR_ERROR("receive get vip info[%s]", common::Encode::HexEncode(iter->first).c_str());
 } catch (std::exception& e) {
@@ -1908,7 +1901,7 @@ void VpnServer::CheckAccountValid() {
         }
 
         if ((iter->second->up_bandwidth + iter->second->down_bandwidth) >= kAddBandwidth) {
-            if (iter->second->vip_level == common::kNotVip) {
+            if (!iter->second->IsVip()) {
                 SendClientUseBandwidth(
                         iter->second->account_id,
                         iter->second->up_bandwidth + iter->second->down_bandwidth);
@@ -1917,7 +1910,7 @@ void VpnServer::CheckAccountValid() {
             iter->second->down_bandwidth = 0;
         }
 
-        if (iter->second->vip_level == common::kNotVip) {
+        if (!iter->second->IsVip()) {
             SendGetAccountAttrUsedBandwidth(iter->second->account_id);
         }
 

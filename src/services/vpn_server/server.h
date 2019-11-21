@@ -62,6 +62,7 @@ extern "C" {
 #include "common/encode.h"
 #include "common/global_info.h"
 #include "common/user_property_key_define.h"
+#include "common/time_utils.h"
 #include "security/ecdh_create_key.h"
 #include "security/public_key.h"
 #include "network/network_utils.h"
@@ -71,6 +72,7 @@ extern "C" {
 static const uint32_t kPeerTimeout = 30 * 1000 * 1000;  // 30s
 static const int64_t kTransactionTimeout = 600ll * 1000ll * 1000ll;  // 10 min
 static const uint32_t kMaxBandwidthFreeUse = 64 * 1024 * 1024;
+static const uint32_t kVipPayfor = 2000u;
 
 struct PeerInfo {
     PeerInfo(const std::string& pub, const std::string& mtd)
@@ -134,15 +136,21 @@ struct BandwidthInfo {
     }
 
     bool Valid() {
-        if (vip_level != lego::common::kNotVip) {
+        if (IsVip()) {
             return true;
         }
 
         if (today_used_bandwidth <= kMaxBandwidthFreeUse) {
             return true;
         }
+        return false;
+    }
 
-        VPNSVR_ERROR("account not valid[%d][%u][%u]", vip_level, today_used_bandwidth, kMaxBandwidthFreeUse);
+    bool IsVip() {
+        uint32_t now_day_timestamp = lego::common::TimeUtils::TimestampDays();
+        if (vip_timestamp + 30 >= now_day_timestamp && vip_payed_tenon >= kVipPayfor) {
+            return true;
+        }
         return false;
     }
 
@@ -151,7 +159,8 @@ struct BandwidthInfo {
     uint32_t today_used_bandwidth;
     std::chrono::steady_clock::time_point timeout;
     std::chrono::steady_clock::time_point client_staking_time;
-    int32_t vip_level{ lego::common::kVipLevel1 };
+    int32_t vip_timestamp{ 0 };
+    uint64_t vip_payed_tenon{ 0 };
     std::string account_id;
     std::chrono::steady_clock::time_point join_time;
     std::chrono::steady_clock::time_point pre_bandwidth_get_time;
