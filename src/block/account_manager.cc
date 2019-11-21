@@ -129,7 +129,9 @@ void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
     auto iter = acc_map_.find(acc_ptr->account_id);
     if (iter == acc_map_.end()) {
         acc_map_[acc_ptr->account_id] = acc_ptr;
-        acc_map_[acc_ptr->account_id]->AddHeight(acc_ptr->height);
+        if (acc_ptr->in_lego > 0 || acc_ptr->out_lego > 0) {
+            acc_map_[acc_ptr->account_id]->AddHeight(acc_ptr->height);
+        }
         return;
     }
 
