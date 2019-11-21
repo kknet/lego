@@ -133,10 +133,6 @@ struct BandwidthInfo {
     }
 
     bool Valid() {
-        if (client_platform != lego::common::kIos) {
-            return true;
-        }
-
         if (vip_level != lego::common::kNotVip) {
             return true;
         }
