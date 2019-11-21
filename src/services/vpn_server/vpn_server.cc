@@ -134,6 +134,7 @@ static int no_delay = 1;
 static int ret_val = 0;
 static const uint32_t kBandwidthPeriod = 120u * 1000u * 1000u;
 static const uint64_t kVipCheckPeriod = 180llu * 1000llu * 1000llu;
+static const uint32_t kVpnClientTimeout = 60 * 1000 * 1000;
 
 #ifdef HAVE_SETRLIMIT
 static int nofile = 0;
@@ -572,8 +573,7 @@ static bool RemoveNotAliveAccount(
     }
 
     for (auto iter = account_bindwidth_map.begin(); iter != account_bindwidth_map.end();) {
-        if ((iter->second->timeout +
-                std::chrono::microseconds(600llu * 1000llu * 1000llu)) < now_point) {
+        if ((iter->second->timeout + std::chrono::microseconds(kVpnClientTimeout)) < now_point) {
             account_bindwidth_map.erase(iter++);
         } else {
             ++iter;
@@ -1652,7 +1652,6 @@ void VpnServer::HandleMessage(transport::protobuf::Header& header) {
     }
 
     if (header.type() == common::kContractMessage) {
-        VPNSVR_ERROR("receive common::kContractMessage.");
         contract::protobuf::ContractMessage contract_msg;
         if (!contract_msg.ParseFromString(header.data())) {
             return;
@@ -1711,7 +1710,6 @@ void VpnServer::SendGetAccountAttrLastBlock(
             height,
             msg);
     network::Route::Instance()->Send(msg);
-    VPNSVR_ERROR("send get vip info[%s]", common::Encode::HexEncode(account).c_str());
 }
 
 void VpnServer::SendGetAccountAttrUsedBandwidth(const std::string& account) {
@@ -1734,7 +1732,6 @@ void VpnServer::SendGetAccountAttrUsedBandwidth(const std::string& account) {
             key,
             msg);
     network::Route::Instance()->Send(msg);
-    VPNSVR_ERROR("send get use bandwidth: %s", key.c_str());
 }
 
 void SendClientUseBandwidth(const std::string& id, uint32_t bandwidth) {
@@ -1781,7 +1778,6 @@ void VpnServer::HandleClientBandwidthResponse(
         contract::protobuf::ContractMessage& contract_msg) {
     auto client_bw_res = contract_msg.get_attr_res();
     std::string key = client_bw_res.attr_key();
-    VPNSVR_ERROR("get response use bandwidth: %s", key.c_str());
     common::Split key_split(key.c_str(), '_', key.size());
     if (key_split.Count() != 3) {
         return;
@@ -1804,7 +1800,6 @@ void VpnServer::HandleClientBandwidthResponse(
     iter->second->today_used_bandwidth = used;
     iter->second->pre_bandwidth_get_time = (std::chrono::steady_clock::now() +
             std::chrono::microseconds(kBandwidthPeriod));
-    VPNSVR_ERROR("user [%s] use bandwidth [%u]", key_split[1], used);
 }
 
 void VpnServer::HandleVpnLoginResponse(
@@ -1864,8 +1859,6 @@ void VpnServer::HandleVpnLoginResponse(
     uint32_t day_pay_for_vpn = day_pay_timestamp / day_msec;
     iter->second->vip_timestamp = day_pay_for_vpn;
     iter->second->vip_payed_tenon = vip_tenons;
-
-    VPNSVR_ERROR("receive get vip info[%s]", common::Encode::HexEncode(iter->first).c_str());
 } catch (std::exception& e) {
     VPNSVR_ERROR("receive get vip info catched error[%s]", e.what());
     std::cout << "catch error: " << e.what() << std::endl;
@@ -1890,8 +1883,7 @@ void VpnServer::CheckAccountValid() {
 
     auto now_point = std::chrono::steady_clock::now();
     for (auto iter = account_map_.begin(); iter != account_map_.end();) {
-        if ((iter->second->timeout +
-                std::chrono::microseconds(600llu * 1000llu * 1000llu)) < now_point) {
+        if ((iter->second->timeout + std::chrono::microseconds(kVpnClientTimeout)) < now_point) {
             if ((iter->second->up_bandwidth + iter->second->down_bandwidth) >=
                     kConnectInitBandwidth) {
                 SendClientUseBandwidth(
