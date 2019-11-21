@@ -1868,6 +1868,7 @@ void VpnServer::HandleVpnLoginResponse(
 
     VPNSVR_ERROR("receive get vip info[%s]", common::Encode::HexEncode(iter->first).c_str());
 } catch (std::exception& e) {
+    VPNSVR_ERROR("receive get vip info catched error[%s]", e.what());
     std::cout << "catch error: " << e.what() << std::endl;
 }
 
