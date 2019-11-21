@@ -1711,6 +1711,7 @@ void VpnServer::SendGetAccountAttrLastBlock(
             height,
             msg);
     network::Route::Instance()->Send(msg);
+    VPNSVR_ERROR("send get vip info[%s]", common::Encode::HexEncode(account).c_str());
 }
 
 void VpnServer::SendGetAccountAttrUsedBandwidth(const std::string& account) {
@@ -1864,6 +1865,8 @@ void VpnServer::HandleVpnLoginResponse(
     } else {
         iter->second->vip_level = common::kVipLevel1;
     }
+
+    VPNSVR_ERROR("receive get vip info[%s]", common::Encode::HexEncode(iter->first).c_str());
 } catch (std::exception& e) {
     std::cout << "catch error: " << e.what() << std::endl;
 }
@@ -1913,13 +1916,10 @@ void VpnServer::CheckAccountValid() {
             SendGetAccountAttrUsedBandwidth(iter->second->account_id);
         }
 
-        if (iter->second->pre_payfor_get_time < now_point) {
-            SendGetAccountAttrLastBlock(
-                    common::kUserPayForVpn,
-                    iter->second->account_id,
-                    iter->second->vpn_pay_for_height);
-        }
-
+        SendGetAccountAttrLastBlock(
+                common::kUserPayForVpn,
+                iter->second->account_id,
+                iter->second->vpn_pay_for_height);
         ++iter;
     }
     bandwidth_tick_.CutOff(
