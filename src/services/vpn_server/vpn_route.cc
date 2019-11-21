@@ -668,12 +668,11 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             if (server->country_code == common::CountryCode::CN) {
                 size_t header_offset = lego::security::kPublicKeySize * 2;
                 if (server->buf->len >= header_offset) {
-                    std::string pubkey = std::string((char*)buf->data, header_offset);
-                    std::string account = common::Encode::HexDecode(
-                            lego::network::GetAccountAddressByPublicKey(pubkey));
+                    std::string pubkey = common::Encode::HexDecode(
+                            std::string((char*)buf->data, header_offset));
+                    std::string account = lego::network::GetAccountAddressByPublicKey(pubkey);
                     if (!lego::vpn::VpnServer::Instance()->ClientAccountValid(account)) {
-                        send(
-                                server->fd,
+                        send(server->fd,
                                 lego::common::kCountryInvalid.c_str(),
                                 lego::common::kCountryInvalid.size(),
                                 0);
