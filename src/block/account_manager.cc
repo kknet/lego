@@ -164,7 +164,7 @@ void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
         }
     }
 
-    if (acc_ptr->balance > 0) {
+    if (acc_ptr->in_lego > 0 || acc_ptr->out_lego > 0) {
         acc_map_[acc_ptr->account_id]->AddHeight(acc_ptr->height);
     }
 }
