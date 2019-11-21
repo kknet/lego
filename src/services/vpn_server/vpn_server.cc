@@ -1732,6 +1732,7 @@ void VpnServer::SendGetAccountAttrUsedBandwidth(const std::string& account) {
             key,
             msg);
     network::Route::Instance()->Send(msg);
+    VPNSVR_ERROR("send get use bandwidth: %s", key.c_str());
 }
 
 void SendClientUseBandwidth(const std::string& id, uint32_t bandwidth) {
@@ -1778,6 +1779,7 @@ void VpnServer::HandleClientBandwidthResponse(
         contract::protobuf::ContractMessage& contract_msg) {
     auto client_bw_res = contract_msg.get_attr_res();
     std::string key = client_bw_res.attr_key();
+    VPNSVR_ERROR("get response use bandwidth: %s", key.c_str());
     common::Split key_split(key.c_str(), '_', key.size());
     if (key_split.Count() != 3) {
         return;
@@ -1907,7 +1909,7 @@ void VpnServer::CheckAccountValid() {
             iter->second->down_bandwidth = 0;
         }
 
-        if (iter->second->pre_bandwidth_get_time < now_point) {
+        if (iter->second->vip_level == common::kNotVip) {
             SendGetAccountAttrUsedBandwidth(iter->second->account_id);
         }
 
