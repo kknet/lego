@@ -228,6 +228,7 @@ private:
 	std::shared_ptr<common::Tick>  dump_config_tick_{ nullptr };
 	std::shared_ptr<common::Tick>  dump_bootstrap_tick_{ nullptr };
     bool account_created_{ false };
+    std::set<std::string> vpn_committee_accounts_;
 };
 
 }  // namespace client

@@ -75,6 +75,16 @@ VpnClient::VpnClient() {
     paied_vip_info_[0]->height = 0;
     paied_vip_info_[0]->timestamp = 0;
     paied_vip_info_[1] = nullptr;
+
+    vpn_committee_accounts_.insert(common::Encode::HexDecode("dc161d9ab9cd5a031d6c5de29c26247b6fde6eb36ed3963c446c1a993a088262"));
+    vpn_committee_accounts_.insert(common::Encode::HexDecode("5595b040cdd20984a3ad3805e07bad73d7bf2c31e4dc4b0a34bc781f53c3dff7"));
+    vpn_committee_accounts_.insert(common::Encode::HexDecode("25530e0f5a561f759a8eb8c2aeba957303a8bb53a54da913ca25e6aa00d4c365"));
+    vpn_committee_accounts_.insert(common::Encode::HexDecode("9eb2f3bd5a78a1e7275142d2eaef31e90eae47908de356781c98771ef1a90cd2"));
+    vpn_committee_accounts_.insert(common::Encode::HexDecode("c110df93b305ce23057590229b5dd2f966620acd50ad155d213b4c9db83c1f36"));
+    vpn_committee_accounts_.insert(common::Encode::HexDecode("f64e0d4feebb5283e79a1dfee640a276420a08ce6a8fbef5572e616e24c2cf18"));
+    vpn_committee_accounts_.insert(common::Encode::HexDecode("7ff017f63dc70770fcfe7b336c979c7fc6164e9653f32879e55fcead90ddf13f"));
+    vpn_committee_accounts_.insert(common::Encode::HexDecode("6dce73798afdbaac6b94b79014b15dcc6806cb693cf403098d8819ac362fa237"));
+    vpn_committee_accounts_.insert(common::Encode::HexDecode("b5be6f0090e4f5d40458258ed9adf843324c0327145c48b55091f33673d2d5a4"));
 }
 
 VpnClient::~VpnClient() {
@@ -185,7 +195,9 @@ void VpnClient::HandleCheckVipResponse(
             }
 
             for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
-                if (tx_list[i].attr(attr_idx).key() == common::kUserPayForVpn) {
+                auto iter = vpn_committee_accounts_.find(tx_list[i].to());
+                if (tx_list[i].attr(attr_idx).key() == common::kUserPayForVpn &&
+                        iter != vpn_committee_accounts_.end()) {
                     auto paied_vip_ptr = std::make_shared<LastPaiedVipInfo>();
                     paied_vip_ptr->amount = tx_list[i].amount();
                     paied_vip_ptr->block_hash = block.hash();
