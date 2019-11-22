@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ip/cidr.h"
 
 #include <cstdlib>

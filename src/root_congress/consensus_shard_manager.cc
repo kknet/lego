@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "root_congress/consensus_shard_manager.h"
 
 namespace lego {

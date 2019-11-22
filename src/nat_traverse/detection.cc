@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "nat_traverse/detection.h"
 
 #include "common/global_info.h"

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "services/vpn_svr_proxy/proxy_dht.h"
 
 #include "common/global_info.h"

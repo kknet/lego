@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "election/elect_dht.h"
 
 namespace lego {

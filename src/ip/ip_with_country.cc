@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ip/ip_with_country.h"
 
 #include "common/split.h"

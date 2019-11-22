@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "bft/basic_bft/transaction/tx_pool.h"
 
 #include <cassert>

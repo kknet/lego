@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "services/vpn_svr_proxy/shadowsocks_proxy.h"
 
 #include <unistd.h>

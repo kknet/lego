@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "bft/proto/bft_proto.h"
 
 #include "common/global_info.h"

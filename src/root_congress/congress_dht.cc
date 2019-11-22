@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "root_congress/congress_dht.h"
 
 namespace lego {

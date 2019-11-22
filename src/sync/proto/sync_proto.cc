@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "sync/proto/sync_proto.h"
 
 #include "common/global_info.h"

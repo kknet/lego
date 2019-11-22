@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "services/vpn_server/vpn_server.h"
 
 #ifdef __cplusplus

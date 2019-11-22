@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "db/db.h"
 
 #include <iostream>

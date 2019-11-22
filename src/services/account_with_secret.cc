@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "services/account_with_secret.h"
 
 namespace lego {

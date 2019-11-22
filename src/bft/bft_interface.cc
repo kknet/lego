@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "bft/bft_interface.h"
 
 #include "common/encode.h"

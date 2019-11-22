@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "bft/dispatch_pool.h"
 
 #include "bft/bft_utils.h"

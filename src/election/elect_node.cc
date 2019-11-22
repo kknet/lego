@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "election/elect_node.h"
 
 #include "common/global_info.h"

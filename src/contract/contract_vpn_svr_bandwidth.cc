@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "contract/contract_vpn_svr_bandwidth.h"
 
 #include "common/time_utils.h"

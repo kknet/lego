@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "statistics/statistics.h"
 
 #include "common/encode.h"

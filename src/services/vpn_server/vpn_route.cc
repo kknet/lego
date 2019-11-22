@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "services/vpn_server/vpn_route.h"
 #include "common/string_utils.h"
 

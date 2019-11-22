@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "contract/contract_manager.h"
 
 #include "network/route.h"

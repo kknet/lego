@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "block/account_manager.h"
 
 #include "common/encode.h"

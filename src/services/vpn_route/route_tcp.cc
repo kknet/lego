@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "services/vpn_route/route_tcp.h"
 
 namespace lego {

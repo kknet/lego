@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "bft/bft_manager.h"
 
 #include <cassert>

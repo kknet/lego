@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "election/proto/elect_proto.h"
 
 #include <limits>

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "bft/basic_bft/transaction/tx_bft.h"
 
 #include "common/global_info.h"

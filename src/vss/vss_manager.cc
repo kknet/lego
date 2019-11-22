@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "vss/vss_manager.h"
 
 namespace lego {

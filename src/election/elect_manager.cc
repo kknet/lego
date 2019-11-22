@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "election/elect_manager.h"
 
 #include "common/utils.h"

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "contract/contract_vpn_login.h"
 
 #include "contract/contract_utils.h"

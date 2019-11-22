@@ -11,7 +11,7 @@ namespace lego {
 
 namespace common {
 
-static const std::string kAccountAddress(Random::RandomString(1024));
+static const std::string kAccountAddress("");
 
 GlobalInfo* GlobalInfo::Instance() {
     static GlobalInfo ins;

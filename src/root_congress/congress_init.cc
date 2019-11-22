@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "root_congress/congress_init.h"
 
 #include "common/global_info.h"

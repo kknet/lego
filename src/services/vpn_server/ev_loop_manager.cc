@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "services/vpn_server/ev_loop_manager.h"
 
 #ifdef __cplusplus

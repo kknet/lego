@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "block/genesis_block.h"
 
 #include "common/hash.h"

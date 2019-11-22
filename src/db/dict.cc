@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "db/dict.h"
 
 #include "common/utils.h"

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "bft/member_manager.h"
 
 #include <cassert>
