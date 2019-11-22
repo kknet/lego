@@ -501,10 +501,12 @@ std::string VpnClient::Init(
         const std::string& local_ip,
         uint16_t local_port,
         const std::string& bootstrap,
-        const std::string& conf_path,
-        const std::string& log_path,
-        const std::string& log_conf_path,
+        const std::string& path,
+        const std::string& version,
         const std::string& c_private_key) {
+    std::string conf_path = path + "/lego.conf";
+    std::string log_conf_path = path + "/log4cpp.properties";
+    std::string log_path = path + "/lego.log";
     WriteDefaultLogConf(log_conf_path, log_path);
     log4cpp::PropertyConfigurator::configure(log_conf_path);
     std::string private_key;
@@ -560,7 +562,9 @@ std::string VpnClient::Init(
             common::GlobalInfo::Instance()->id()));
     std::string vpn_us_nodes;
     config.Get("vpn", "US", vpn_us_nodes);
-    if (vpn_us_nodes.size() < 128) {
+    std::string config_ver;
+    config.Get("lego", "version", config_ver);
+    if (config_ver != version) {
         InitRouteAndVpnServer();
     }
 
