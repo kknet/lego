@@ -609,10 +609,10 @@ std::string VpnClient::Init(
     check_tx_tick_->CutOff(1000 * 1000, std::bind(&VpnClient::CheckTxExists, this));
     vpn_nodes_tick_->CutOff(1000 * 1000, std::bind(&VpnClient::GetVpnNodes, this));
     dump_config_tick_->CutOff(
-            60ull * 1000ull * 1000ull,
+            10ull * 1000ull * 1000ull,
             std::bind(&VpnClient::DumpNodeToConfig, this));
     dump_bootstrap_tick_->CutOff(
-            60ull * 1000ull * 1000ull,
+            10ull * 1000ull * 1000ull,
             std::bind(&VpnClient::DumpBootstrapNodes, this));
 
     return (common::global_code_to_country_map[common::GlobalInfo::Instance()->country()] +
@@ -1312,7 +1312,7 @@ void VpnClient::DumpNodeToConfig() {
     DumpRouteNodes();
     config.DumpConfig(config_path_);
     dump_config_tick_->CutOff(
-            60ull * 1000ull * 1000ull,
+            10ull * 1000ull * 1000ull,
             std::bind(&VpnClient::DumpNodeToConfig, this));
 }
 
@@ -1552,7 +1552,7 @@ void VpnClient::DumpBootstrapNodes() {
     }
 
     dump_bootstrap_tick_->CutOff(
-            60ull * 1000ull * 1000ull,
+            10ull * 1000ull * 1000ull,
             std::bind(&VpnClient::DumpBootstrapNodes, this));
 }
 
