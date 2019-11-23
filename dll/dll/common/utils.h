@@ -4,7 +4,6 @@
 #include <string.h>
 #include <time.h>
 
-
 #include <string>
 #include <chrono>
 
@@ -53,32 +52,25 @@ namespace lego {
 namespace common {
 
 enum MessageType {
-	kDhtMessage = 0,
-	kNatMessage = 1,
-	kNetworkMessage = 2,
-	kSyncMessage = 3,
-	kBftMessage = 4,
-	kElectMessage = 5,
-	kServiceMessage = 6,
-	kBlockMessage = 7,
-	kRelayMessage = 8,  // any not handle message will routing by root
+    kDhtMessage = 0,
+    kNatMessage = 1,
+    kNetworkMessage = 2,
+    kSyncMessage = 3,
+    kBftMessage = 4,
+    kElectMessage = 5,
+    kServiceMessage = 6,
+    kBlockMessage = 7,
+    kRelayMessage = 8,  // any not handle message will routing by root
+    kContractMessage = 9,
 
-	kUdpDemoTestMessage,
-	// max message type
-	kLegoMaxMessageTypeCount,
+    kUdpDemoTestMessage,
+    // max message type
+    kLegoMaxMessageTypeCount,
 };
 
 enum CommonErrorCode {
-	kCommonSuccess = 0,
-	kCommonError = 1,
-};
-
-enum ConsensusType {
-	kConsensusTransaction = 0,
-	kConsensusCreateAcount = 1,
-	kConsensusMining = 2,
-	kConsensusLogin = 3,
-	kConsensusKeyValue = 4,
+    kCommonSuccess = 0,
+    kCommonError = 1,
 };
 
 enum GetHeightBlockType {
@@ -89,7 +81,6 @@ enum GetHeightBlockType {
 static const uint32_t kImmutablePoolSize = 64u;
 static const uint32_t kInvalidPoolIndex = kImmutablePoolSize + 1;
 static const uint32_t kTestForNetworkId = 4u;
-static const std::string kVpnLoginAttrKey = "vpn_login";
 extern volatile bool global_stop;
 static const uint16_t kDefaultVpnPort = 9033;
 static const uint16_t kDefaultRoutePort = 9034;
@@ -119,21 +110,20 @@ inline static std::string GetHeightDbKey(
 }
 
 inline static std::string TimestampToDatetime(time_t timestamp) {
-    return "";
-    /*
     struct tm* p = localtime(&timestamp);
     char time_str[64];
     memset(time_str, 0, sizeof(time_str));
     strftime(time_str, sizeof(time_str), "%Y-%m-%d %H:%M:%S", p);
-    return time_str;*/
+    return time_str;
 }
 
 inline static std::string MicTimestampToDatetime(int64_t timestamp) {
+#ifndef _WIN32
     int64_t milli = timestamp + (int64_t)(8 * 60 * 60 * 1000);
     auto mTime = std::chrono::milliseconds(milli);
     auto tp = std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds>(mTime);
     auto tt = std::chrono::system_clock::to_time_t(tp);
-    std::tm* now = _gmtime64(&tt);
+    std::tm* now = std::gmtime(&tt);
     char time_str[64];
     snprintf(time_str, sizeof(time_str), "%4d%02d%02d %02d:%02d:%02d",
             now->tm_year + 1900,
@@ -143,6 +133,9 @@ inline static std::string MicTimestampToDatetime(int64_t timestamp) {
             now->tm_min,
             now->tm_sec);
     return time_str;
+#else
+    return "";
+#endif
 }
 
 uint64_t TimeStampMsec();

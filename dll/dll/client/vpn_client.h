@@ -36,6 +36,7 @@ namespace client {
 
 namespace protobuf {
     class Block;
+    class BlockMessage;
     typedef std::shared_ptr<Block> BlockPtr;
     class AccountHeightResponse;
     class GetTxBlockResponse;
@@ -91,6 +92,15 @@ struct TxInfo {
 };
 typedef std::shared_ptr<TxInfo> TxInfoPtr;
 
+struct LastPaiedVipInfo {
+    uint64_t height;
+    uint64_t timestamp;
+    std::string to_account;
+    uint64_t amount;
+    std::string block_hash;
+};
+typedef std::shared_ptr<LastPaiedVipInfo> LastPaiedVipInfoPtr;
+
 class VpnClient {
 public:
     static VpnClient* Instance();
@@ -98,16 +108,15 @@ public:
             const std::string& local_ip,
             uint16_t local_port,
             const std::string& bootstrap,
-            const std::string& conf_path,
-            const std::string& log_path,
-            const std::string& log_conf_path);
+            const std::string& path,
+            const std::string& version,
+            const std::string& private_key);
     std::string GetVpnServerNodes(
             const std::string& country,
             uint32_t count,
             bool route,
             std::vector<VpnServerNodePtr>& nodes);
     std::string Transaction(const std::string& to, uint64_t amount, std::string& tx_gid);
-    std::string GetTransactionInfo(const std::string& tx_gid);
     protobuf::BlockPtr GetBlockWithGid(const std::string& gid);
     protobuf::BlockPtr GetBlockWithHash(const std::string& block_hash);
     int GetSocket();
@@ -122,8 +131,6 @@ public:
     int ResetTransport(const std::string& ip, uint16_t port);
     std::string GetPublicKey();
     std::string GetSecretKey(const std::string& peer_pubkey);
-    int EncryptData(char* seckey, int seclen, char* data, int data_len, char* out);
-    int DecryptData(char* seckey, int seclen, char* data, int data_len, char* out);
     std::string GetRouting(const std::string& start, const std::string& end);
     int VpnLogin(
             const std::string& svr_account,
@@ -131,6 +138,11 @@ public:
             std::string& login_gid);
     int VpnLogout();
 	std::string CheckVersion();
+    std::string PayForVPN(const std::string& to, const std::string& gid, uint64_t amount);
+    std::string CheckVip();
+    std::string CheckFreeBandwidth();
+    void Destroy();
+    std::string ResetPrivateKey(const std::string& prikey);
 
 private:
     VpnClient();
@@ -139,6 +151,7 @@ private:
     void HandleMessage(transport::protobuf::Header& header);
     void HandleBlockMessage(transport::protobuf::Header& header);
     void HandleServiceMessage(transport::protobuf::Header& header);
+    void HandleContractMessage(transport::protobuf::Header& header);
     int InitTransport();
     int SetPriAndPubKey(const std::string& prikey);
     int InitNetworkSingleton();
@@ -166,9 +179,18 @@ private:
 	void GetVpnVersion();
     int SetDefaultRouting();
     std::string GetDefaultRouting();
+    void SendGetAccountAttrLastBlock(
+            const std::string& attr,
+            const std::string& account,
+            uint64_t height);
+    void HandleCheckVipResponse(
+            transport::protobuf::Header& header,
+            client::protobuf::BlockMessage& block_msg);
+    void SendGetBlockWithGid(const std::string& str, bool is_gid);
+    void SendGetAccountAttrUsedBandwidth();
 
-    static const uint32_t kDefaultUdpSendBufferSize = 10u * 1024u * 1024u;
-    static const uint32_t kDefaultUdpRecvBufferSize = 10u * 1024u * 1024u;
+    static const uint32_t kDefaultUdpSendBufferSize = 2u * 1024u * 1024u;
+    static const uint32_t kDefaultUdpRecvBufferSize = 2u * 1024u * 1024u;
     static const uint32_t kTestCreateAccountPeriod = 100u * 1000u;
     static const int64_t kTestNewElectPeriod = 10ll * 1000ll * 1000ll;
     static const uint32_t kCheckTxPeriod = 1000 * 1000;
@@ -197,11 +219,16 @@ private:
     std::mutex vpn_nodes_map_mutex_;
     std::map<std::string, std::deque<VpnServerNodePtr>> route_nodes_map_;
     std::mutex route_nodes_map_mutex_;
+    LastPaiedVipInfoPtr paied_vip_info_[2];
+    uint32_t paied_vip_valid_idx_{ 0 };
+    int32_t today_used_bandwidth_{ -1 };
 
 	std::shared_ptr<common::Tick> check_tx_tick_{ nullptr };
 	std::shared_ptr<common::Tick>  vpn_nodes_tick_{ nullptr };
 	std::shared_ptr<common::Tick>  dump_config_tick_{ nullptr };
 	std::shared_ptr<common::Tick>  dump_bootstrap_tick_{ nullptr };
+    bool account_created_{ false };
+    std::set<std::string> vpn_committee_accounts_;
 };
 
 }  // namespace client

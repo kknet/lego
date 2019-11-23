@@ -34,6 +34,7 @@ private:
     void HandleAttrGetRequest(
             transport::protobuf::Header& header,
             protobuf::BlockMessage& block_msg);
+    void SendBlockNotExists(transport::protobuf::Header& header);
 
     DISALLOW_COPY_AND_ASSIGN(BlockManager);
 };

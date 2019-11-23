@@ -23,6 +23,8 @@ message TxInfo {
 	optional uint32 netwok_id = 13;
     optional uint32 type = 14;
     repeated AccountAttributes attr = 15;
+    optional bytes smart_contract_addr = 16;
+    optional uint32 status = 17;
 }
 
 message TxBlock {
@@ -82,6 +84,7 @@ message NewTx {
 	optional uint64 lego_count = 6;
 	optional uint32 type = 7;
     repeated AccountAttributes attr = 8;
+    optional bytes smart_contract_addr = 9;
 }
 
 message ToAccountTx {

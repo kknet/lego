@@ -9,8 +9,6 @@
 #endif
 
 #include "common/random.h"
-#undef min
-#undef max
 
 namespace lego {
 

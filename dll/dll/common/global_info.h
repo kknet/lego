@@ -56,6 +56,10 @@ public:
         return config_local_port_;
     }
 
+    int32_t config_default_stream_limit() {
+        return stream_default_limit_;
+    }
+
     void set_config_local_ip(const std::string& ip) {
         config_local_ip_ = ip;
     }
@@ -123,6 +127,7 @@ private:
 	uint32_t network_id_{ 0 };
 	std::mutex network_id_set_mutex_;
 	uint32_t consensus_shard_count_{ 0 };
+    int32_t stream_default_limit_{ 262144 };
 
     DISALLOW_COPY_AND_ASSIGN(GlobalInfo);
 };

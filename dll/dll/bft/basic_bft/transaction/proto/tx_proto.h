@@ -22,10 +22,12 @@ public:
             transport::protobuf::Header& msg);
     static void CreateTxBlock(
             uint32_t pool_idx,
-            const std::vector<TxItemPtr>& tx_vec,
+            std::vector<TxItemPtr>& tx_vec,
             bft::protobuf::LeaderTxPrepare& bft_msg);
 
 private:
+    static void CheckTxValid();
+
     DISALLOW_COPY_AND_ASSIGN(TxProto);
 };
 

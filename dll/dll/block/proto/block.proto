@@ -20,6 +20,8 @@ message AccountHeightRequest {
 
 message AccountHeightResponse {
 	repeated uint64 heights = 1;
+	optional bytes account_addr = 2;
+	optional bytes type = 3;
 }
 
 message AccountAttrRequest {
@@ -32,7 +34,7 @@ message AccountAttrResponse {
     optional bytes account = 1;
     optional bytes attr_key = 2;
     optional uint64 height = 3;
-    optional bytes block = 4
+    optional bytes block = 4;
 }
 
 message BlockMessage {

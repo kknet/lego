@@ -205,7 +205,15 @@
     <ClInclude Include="common\tick.h" />
     <ClInclude Include="common\tick\thread_pool.h" />
     <ClInclude Include="common\time_utils.h" />
+    <ClInclude Include="common\user_property_key_define.h" />
     <ClInclude Include="common\utils.h" />
+    <ClInclude Include="contract\contract_interface.h" />
+    <ClInclude Include="contract\contract_manager.h" />
+    <ClInclude Include="contract\contract_utils.h" />
+    <ClInclude Include="contract\contract_vpn_login.h" />
+    <ClInclude Include="contract\contract_vpn_svr_bandwidth.h" />
+    <ClInclude Include="contract\proto\contract.pb.h" />
+    <ClInclude Include="contract\proto\contract_proto.h" />
     <ClInclude Include="db\db.h" />
     <ClInclude Include="db\db_utils.h" />
     <ClInclude Include="db\dict.h" />
@@ -265,6 +273,10 @@
     <ClInclude Include="statistics\statistics.h" />
     <ClInclude Include="statistics\statis_utils.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="sync\key_value_sync.h" />
+    <ClInclude Include="sync\proto\sync.pb.h" />
+    <ClInclude Include="sync\proto\sync_proto.h" />
+    <ClInclude Include="sync\sync_utils.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="transport\client_relay.h" />
     <ClInclude Include="transport\endpoint.h" />
@@ -324,6 +336,10 @@
     <ClCompile Include="common\tick\thread_pool.cc" />
     <ClCompile Include="common\tick\tick.cc" />
     <ClCompile Include="common\utils.cc" />
+    <ClCompile Include="contract\contract_manager.cc" />
+    <ClCompile Include="contract\contract_vpn_login.cpp" />
+    <ClCompile Include="contract\contract_vpn_svr_bandwidth.cc" />
+    <ClCompile Include="contract\proto\contract.pb.cc" />
     <ClCompile Include="db\db.cc" />
     <ClCompile Include="db\dict.cc" />
     <ClCompile Include="dht\base_dht.cc" />
@@ -376,6 +392,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="sync\key_value_sync.cc" />
+    <ClCompile Include="sync\proto\sync.pb.cc" />
+    <ClCompile Include="sync\proto\sync_proto.cc" />
     <ClCompile Include="transport\client_relay.cc" />
     <ClCompile Include="transport\endpoint.cc" />
     <ClCompile Include="transport\http\http_transport.cc" />

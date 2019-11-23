@@ -1,0 +1,23 @@
+syntax = "proto2";
+
+package lego.sync.protobuf;
+
+message SyncValueRequest {
+	optional uint32 network_id = 1;
+	repeated bytes keys = 2;
+}
+
+message SyncResItem {
+    optional bytes key = 1;
+    optional bytes value = 2;
+}
+
+message SyncValueResponse {
+	optional uint32 network_id = 1;
+	repeated SyncResItem res = 2;
+}
+
+message SyncMessage {
+	optional SyncValueRequest sync_value_req = 1;
+	optional SyncValueResponse sync_value_res = 2;
+}

@@ -399,6 +399,42 @@
     <ClInclude Include="client\vpn_client.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="contract\contract_interface.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="contract\contract_manager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="contract\contract_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="contract\contract_vpn_login.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="contract\contract_vpn_svr_bandwidth.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="contract\proto\contract.pb.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="contract\proto\contract_proto.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="common\user_property_key_define.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sync\proto\sync.pb.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sync\proto\sync_proto.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sync\key_value_sync.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sync\sync_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -693,6 +729,27 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="client\vpn_client.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="contract\contract_manager.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="contract\contract_vpn_login.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="contract\contract_vpn_svr_bandwidth.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="contract\proto\contract.pb.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="sync\proto\sync.pb.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="sync\proto\sync_proto.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="sync\key_value_sync.cc">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,5 +1,4 @@
 #include "stdafx.h"
-
 #include "client/client_universal_dht.h"
 #include "client/vpn_client.h"
 
@@ -34,6 +33,8 @@
 #include "network/dht_manager.h"
 #include "network/route.h"
 #include "network/universal.h"
+#include "contract/proto/contract_proto.h"
+#include "contract/contract_utils.h"
 #include "client/client_utils.h"
 #include "client/proto/client.pb.h"
 #include "client/proto/client_proto.h"
@@ -49,8 +50,8 @@ static std::shared_ptr<ClientUniversalDht> root_dht_{ nullptr };
 static const std::string kCheckVersionAccount = common::Encode::HexDecode(
 		"e8a1ceb6b807a98a20e3aa10aa2199e47cbbed08c2540bd48aa3e1e72ba6bd99");
 static const std::string kClientDownloadUrl = (
-		"ios;1.0.3;https://www.pgyer.com/1U2f,"
-		"android;1.0.3;https://www.pgyer.com/62Dg,"
+		"ios;1.0.3;,"
+		"android;1.0.3;,"
 		"windows;1.0.3;,"
 		"mac;1.0.3;");
 
@@ -61,15 +62,42 @@ VpnClient::VpnClient() {
     network::Route::Instance()->RegisterMessage(
             common::kBlockMessage,
             std::bind(&VpnClient::HandleMessage, this, std::placeholders::_1));
-	vpn_download_url_ = kClientDownloadUrl;
+    network::Route::Instance()->RegisterMessage(
+            common::kContractMessage,
+            std::bind(&VpnClient::HandleMessage, this, std::placeholders::_1));
+
+    vpn_download_url_ = kClientDownloadUrl;
 	check_tx_tick_ = std::make_shared<common::Tick>();
 	vpn_nodes_tick_ = std::make_shared<common::Tick>();
 	dump_config_tick_ = std::make_shared<common::Tick>();
 	dump_bootstrap_tick_ = std::make_shared<common::Tick>();
+    paied_vip_info_[0] = std::make_shared<LastPaiedVipInfo>();
+    paied_vip_info_[0]->height = 0;
+    paied_vip_info_[0]->timestamp = 0;
+    paied_vip_info_[1] = nullptr;
 
+    vpn_committee_accounts_.insert(common::Encode::HexDecode("dc161d9ab9cd5a031d6c5de29c26247b6fde6eb36ed3963c446c1a993a088262"));
+    vpn_committee_accounts_.insert(common::Encode::HexDecode("5595b040cdd20984a3ad3805e07bad73d7bf2c31e4dc4b0a34bc781f53c3dff7"));
+    vpn_committee_accounts_.insert(common::Encode::HexDecode("25530e0f5a561f759a8eb8c2aeba957303a8bb53a54da913ca25e6aa00d4c365"));
+    vpn_committee_accounts_.insert(common::Encode::HexDecode("9eb2f3bd5a78a1e7275142d2eaef31e90eae47908de356781c98771ef1a90cd2"));
+    vpn_committee_accounts_.insert(common::Encode::HexDecode("c110df93b305ce23057590229b5dd2f966620acd50ad155d213b4c9db83c1f36"));
+    vpn_committee_accounts_.insert(common::Encode::HexDecode("f64e0d4feebb5283e79a1dfee640a276420a08ce6a8fbef5572e616e24c2cf18"));
+    vpn_committee_accounts_.insert(common::Encode::HexDecode("7ff017f63dc70770fcfe7b336c979c7fc6164e9653f32879e55fcead90ddf13f"));
+    vpn_committee_accounts_.insert(common::Encode::HexDecode("6dce73798afdbaac6b94b79014b15dcc6806cb693cf403098d8819ac362fa237"));
+    vpn_committee_accounts_.insert(common::Encode::HexDecode("b5be6f0090e4f5d40458258ed9adf843324c0327145c48b55091f33673d2d5a4"));
 }
 
-VpnClient::~VpnClient() {}
+VpnClient::~VpnClient() {
+    Destroy();
+}
+
+void VpnClient::Destroy() {
+    if (transport_ != nullptr) {
+        transport_->Stop();
+        CLIENT_ERROR("transport stopped");
+        transport_ = nullptr;
+    }
+}
 
 VpnClient* VpnClient::Instance() {
     static VpnClient ins;
@@ -89,6 +117,10 @@ void VpnClient::HandleMessage(transport::protobuf::Header& header) {
     if (header.type() == common::kBlockMessage) {
         HandleBlockMessage(header);
     }
+
+    if (header.type() == common::kContractMessage) {
+        HandleContractMessage(header);
+    }
 }
 
 void VpnClient::HandleBlockMessage(transport::protobuf::Header& header) {
@@ -103,6 +135,86 @@ void VpnClient::HandleBlockMessage(transport::protobuf::Header& header) {
 
     if (block_msg.has_block_res()) {
         HandleBlockResponse(block_msg.block_res());
+    }
+
+    if (block_msg.has_acc_attr_res()) {
+        HandleCheckVipResponse(header, block_msg);
+    }
+}
+
+void VpnClient::HandleContractMessage(transport::protobuf::Header& header) {
+    contract::protobuf::ContractMessage contract_msg;
+    if (!contract_msg.ParseFromString(header.data())) {
+        return;
+    }
+
+    if (contract_msg.has_get_attr_res()) {
+        auto client_bw_res = contract_msg.get_attr_res();
+        std::string key = client_bw_res.attr_key();
+        common::Split key_split(key.c_str(), '_', key.size());
+        if (key_split.Count() != 3) {
+            return;
+        }
+
+        auto today_timestamp = std::to_string(common::TimeUtils::TimestampDays());
+        if (today_timestamp != key_split[2]) {
+            return;
+        }
+
+        try {
+            today_used_bandwidth_ = common::StringUtil::ToUint32(client_bw_res.attr_value());
+        } catch (...) {
+        }
+    }
+}
+
+void VpnClient::HandleCheckVipResponse(
+        transport::protobuf::Header& header,
+        client::protobuf::BlockMessage& block_msg) {
+    if (paied_vip_info_[paied_vip_valid_idx_]->timestamp == 0) {
+        paied_vip_info_[paied_vip_valid_idx_]->timestamp = kInvalidTimestamp;
+    }
+
+    auto& attr_res = block_msg.acc_attr_res();
+    if (attr_res.block().empty()) {
+        return;
+    }
+
+    client::protobuf::Block block;
+    if (!block.ParseFromString(attr_res.block())) {
+        return;
+    }
+
+    // TODO(): check block multi sign, this node must get election blocks
+    std::string login_svr_id;
+    auto& tx_list = block.tx_block().tx_list();
+    for (int32_t i = tx_list.size() - 1; i >= 0; --i) {
+        if (tx_list[i].attr_size() > 0) {
+            if (tx_list[i].from() != attr_res.account()) {
+                continue;
+            }
+
+            for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
+                auto iter = vpn_committee_accounts_.find(tx_list[i].to());
+                if (tx_list[i].attr(attr_idx).key() == common::kUserPayForVpn &&
+                        iter != vpn_committee_accounts_.end()) {
+                    auto paied_vip_ptr = std::make_shared<LastPaiedVipInfo>();
+                    paied_vip_ptr->amount = tx_list[i].amount();
+                    paied_vip_ptr->block_hash = block.hash();
+                    paied_vip_ptr->height = block.height();
+                    paied_vip_ptr->timestamp = block.timestamp();
+                    paied_vip_ptr->to_account = tx_list[i].to();
+                    if (paied_vip_valid_idx_ == 0) {
+                        paied_vip_info_[1] = paied_vip_ptr;
+                        paied_vip_valid_idx_ = 1;
+                    } else {
+                        paied_vip_info_[0] = paied_vip_ptr;
+                        paied_vip_valid_idx_ = 0;
+                    }
+                    break;
+                }
+            }
+        }
     }
 }
 
@@ -181,6 +293,34 @@ void VpnClient::HandleHeightResponse(
             local_account_height_set_.erase(local_account_height_set_.begin());
         }
     }
+}
+
+void VpnClient::SendGetAccountAttrUsedBandwidth() {
+    auto uni_dht = lego::network::DhtManager::Instance()->GetDht(
+            lego::network::kVpnNetworkId);
+    if (uni_dht == nullptr) {
+        CLIENT_ERROR("not found vpn server dht.");
+        return;
+    }
+
+    transport::protobuf::Header msg;
+    uni_dht->SetFrequently(msg);
+    std::string now_day_timestamp = std::to_string(common::TimeUtils::TimestampDays());
+    std::string key = (common::kIncreaseVpnBandwidth + "_" +
+            common::Encode::HexEncode(common::GlobalInfo::Instance()->id()) + "_" +
+            now_day_timestamp);
+    contract::ContractProto::CreateGetAttrRequest(
+            uni_dht->local_node(),
+            common::GlobalInfo::Instance()->id(),
+            contract::kContractVpnBandwidthProveAddr,
+            key,
+            msg);
+    uni_dht->SendToClosestNode(msg);
+}
+
+std::string VpnClient::CheckFreeBandwidth() {
+    SendGetAccountAttrUsedBandwidth();
+    return std::to_string(today_used_bandwidth_);
 }
 
 void VpnClient::HandleServiceMessage(transport::protobuf::Header& header) {
@@ -295,16 +435,25 @@ int64_t VpnClient::GetBalance() {
     auto tx_list = block.tx_block().tx_list();
     for (int32_t i = tx_list.size() - 1; i >= 0; --i) {
         if (tx_list[i].to().empty()) {
+            if (tx_list[i].from() == common::GlobalInfo::Instance()->id()) {
+                account_created_ = true;
+            }
             continue;
         }
 
         if (tx_list[i].to() != common::GlobalInfo::Instance()->id() &&
-            tx_list[i].from() != common::GlobalInfo::Instance()->id()) {
+                tx_list[i].from() != common::GlobalInfo::Instance()->id()) {
             continue;
         }
 
+        account_created_ = true;
         return tx_list[i].balance();
     }
+
+    if (account_created_) {
+        return 0;
+    }
+
     return -1;
 }
 
@@ -364,9 +513,12 @@ std::string VpnClient::Init(
         const std::string& local_ip,
         uint16_t local_port,
         const std::string& bootstrap,
-        const std::string& conf_path,
-        const std::string& log_path,
-        const std::string& log_conf_path) {
+        const std::string& path,
+        const std::string& version,
+        const std::string& c_private_key) {
+    std::string conf_path = path + "/lego.conf";
+    std::string log_conf_path = path + "/log4cpp.properties";
+    std::string log_path = path + "/lego.log";
     WriteDefaultLogConf(log_conf_path, log_path);
     log4cpp::PropertyConfigurator::configure(log_conf_path);
     std::string private_key;
@@ -383,6 +535,10 @@ std::string VpnClient::Init(
         } else {
             private_key = common::Encode::HexDecode(priky);
         }
+    }
+
+    if (c_private_key.size() == security::kPrivateKeySize * 2) {
+        private_key = common::Encode::HexDecode(c_private_key);
     }
 
     config.Get("lego", "first_instasll", first_install_);
@@ -418,9 +574,12 @@ std::string VpnClient::Init(
             common::GlobalInfo::Instance()->id()));
     std::string vpn_us_nodes;
     config.Get("vpn", "US", vpn_us_nodes);
-    if (vpn_us_nodes.size() < 128) {
+    std::string config_ver;
+    config.Get("lego", "version", config_ver);
+    if (config_ver != version || vpn_us_nodes.empty()) {
         InitRouteAndVpnServer();
     }
+    config.Set("lego", "version", version);
 
     std::string def_conf;
     config.Get("route", "def_routing", def_conf);
@@ -464,31 +623,83 @@ std::string VpnClient::Init(
             "," + def_conf);
 }
 
-void VpnClient::InitRouteAndVpnServer() {    
-	config.Set("route", "country", std::string("AU,BR,CA,CN,DE,FR,GB,HK,ID,IN,JP,KR,NL,NZ,PT,SG,US"));
-    config.Set("route", "US", std::string("0410000038000000b003e4aa1f9e0c023363b95b7ddaea8eda9231aaefcb44d2,45f82bb181f5df52f862a4145f6738c80431d149a9f159de1986a9ff911754a0,0255bef707a29dac0f8ab974f953f50f5c1edcc18f0c3f341f9e290940110679dc,98.126.31.159,51765;"));
-    config.Set("route", "SG", std::string("0410000086000000beea322a62cf3685dc9424210506ace6cb330629e8fec5d0,88bf7ebf6c378dd4162d824a6f769683b3cca077a580d9b009cf04653c9cf5d6,02db5169ceb32fa90899c9aa2e5eed0f06aa262fa2f6a6b3603d04742cd84835d2,47.88.223.66,56459;"));
-    config.Set("route", "IN", std::string("04100000740000009f1354ef6fc9624a72671b32d1ddacdafd28deb4a0d4777b,a2837130b3e1a652c8e75cedb80bca3a62115bf702bea7360e118d6dfb8e922c,033e70c258240dd45f8c7f2a8a027764863f7a50558bf88ba182161d8753abebe8,149.129.147.55,63068;"));
-    config.Set("route", "GB", std::string("04100000ed000000e21fafeef8e24b8137707a5b3d8574655758a03ebba11c7b,99e81f84cb4498b04986e8fab4fa4e70b7adaab396815b44c3cb2eb065520bf9,0291a4212e40b97e06082ff0689b2b01a1258b15305e70d43bfd731e20804051a8,8.208.14.63,40535;"));
-    config.Set("route", "CN", std::string("041000001a0000006818f2be83d3b3f769b851faccb507d88c61b5463392d9d7,d8a257aae5d9252d7777fa4810a0851d91be63e6ff841b6216e11c3f9485378c,0328f7304e186bd1624155e8c0d8ab54a2a8fba6a3d41762a47fbf1e9e10f72972,120.77.2.117,53301;041000001a00000023b167ff2bc4fa5765c345b4addbe0ff8b1abe5d0af010eb,6737effbd804e0a55d933df04014d1799a7fbd09c1ff7746d14695f4655e440d,035acb6ec65d1bd35224d3d64d4cd278fcbf80e4886522872b13b9de658b59e2cc,47.105.87.61,61446;041000001a00000005fe9d923c3742c249a9e6343b4a3bb2cae2b20fec6336da,9e0775fe90eda8295d9059e595a96c4016605fd360aa163c4b47231e0d1eea7d,02845ded25aa2a9cf29830e2fa49941067728653543a1a62f55f13fe966471a9cb,121.199.11.177,53641;"));
-    config.Set("route", "CA", std::string("0410000035000000f708d24b98a4a5cb5309ce143f591a82259c455dc6fbc862,ddc05dcf7db3b81faba8d1e7c983b38cd4a732738281beac1fc4d64c55564b5c,03cb980f2e5b5ba8e9d2f4c15fb2330ea84f59d256051f3b4ad8aae5969df4e995,138.197.174.37,54589;0410000035000000e048012dc1ff1ea0a6458a5614b8133e6b39adb6b536d932,92c903b2dbd0c65af4bb6188db1dd7cad3e182baa6451f06c67648e19f524c05,0348e04787912a878d0e5da49846ce933d6c932b4f573f716223faf45e10c2249b,138.197.162.219,58070;0410000035000000eabc8c1fdfd76fd0f1a64926a384214e82f0be21e61ecec1,dd06b30248d0720e3aaaf048018edd15bc744409aed82fc7d9bdacddd204a009,030499fff02cb8d97fab6b241a1dd99b76ead836bf6606d51bab5ebcfb5dd962ae,138.197.174.57,54384;"));
-	config.Set("vpn", "country", std::string("AU,BR,CA,CN,DE,FR,GB,HK,ID,IN,JP,KR,NL,NZ,PT,SG,US"));
-    config.Set("vpn", "US", std::string("0310000038000000b003e4aa1f9e0c023363b95b7ddaea8eda9231aaefcb44d2,45f82bb181f5df52f862a4145f6738c80431d149a9f159de1986a9ff911754a0,0255bef707a29dac0f8ab974f953f50f5c1edcc18f0c3f341f9e290940110679dc,98.126.31.159,18182,1572062883888;"));
-    config.Set("vpn", "IN", std::string("03100000740000000656aa99d71fce7cb351ff4942ffa409f81eea456bd9ed17,13b41ed8488e75070ec1f58cfafd35b842959b1e523a9168c63a1efd10f050ef,020013493f20263cac6d31c5b12cb789475122add77eaaee0dfa0d57a30fe5c5c8,139.59.85.218,20858,1572320241293;03100000740000009f1354ef6fc9624a72671b32d1ddacdafd28deb4a0d4777b,250d158e61be90483254bcf14bd9d3084c1be60db6bc02601c30efb1aa454d99,033e70c258240dd45f8c7f2a8a027764863f7a50558bf88ba182161d8753abebe8,149.129.147.55,24395,1572320241293;"));
-    config.Set("vpn", "GB", std::string("03100000ed00000002d2c69b310d0fd54b9a60d7b82110bf2cc9bcf7ab629b51,76b404671a03cc8670ad0957a6d139330b333dd2cd62662dd2a52a01df73c441,03454758672dd15f3f1a02d3c9ebc9eb6b473a78187657de62e9dce6673895ba65,142.93.35.17,34979,1572320241293;03100000ed00000003610bc5563217d147cec1d384f733026124cd9856e8a386,b4d862d875d2a6b30563cb2c056897bdc85deb9008402578b74090e88f3a1097,02f83c5a74090cae7e89703f5feda11d609e035fa1caacbb438aed1380c12c8180,178.62.84.137,31491,1572320241293;03100000ed000000e21fafeef8e24b8137707a5b3d8574655758a03ebba11c7b,e7ec8d3786e7fd4637b75dfec4ce8da5dc08db1e98f351c869ed5302469901fe,0291a4212e40b97e06082ff0689b2b01a1258b15305e70d43bfd731e20804051a8,8.208.14.63,14759,1572320241293;"));
-    config.Set("vpn", "CN", std::string("031000001a00000023b167ff2bc4fa5765c345b4addbe0ff8b1abe5d0af010eb,954d8d94f3b96f8af46c1f900191d44c1561c626597e1183899c77667ddb10e5,035acb6ec65d1bd35224d3d64d4cd278fcbf80e4886522872b13b9de658b59e2cc,47.105.87.61,30877,1572320241293;031000001a00000005fe9d923c3742c249a9e6343b4a3bb2cae2b20fec6336da,e7476ed28513674eaa46638c1a034692f723098b8ffe62daeb99bb679ac87561,02845ded25aa2a9cf29830e2fa49941067728653543a1a62f55f13fe966471a9cb,121.199.11.177,28420,1572320241293;031000001a0000006818f2be83d3b3f769b851faccb507d88c61b5463392d9d7,bae7f4219fa97f60e52145d0741641b02538372250ec19b832c4ab52dd966bac,0328f7304e186bd1624155e8c0d8ab54a2a8fba6a3d41762a47fbf1e9e10f72972,120.77.2.117,21358,1572320241293;031000001a00000054c370f0693a265e7735c2adeef37dbbee9d4e121159a0b9,06788d6a42f8b4bf33c36171c32b9b800c3dac3ba8316c182bd17b90d0f16b5d,036326e57fab040b3319318f29f0a9038e1cf977d9fb906ffbb0559705808457be,122.112.234.133,31441,1572320241293;031000001a000000da64fc6ab8000a7dd8cd2abc987df2e7657c54d9fae7e8e9,df2ede6677969dddb582c33784e7c5afc6852ad100d37c222d5228b7419fdebd,039ba9f79fe35b09de63aa80238770600e0d8829df778a4fe71c8128a61df0deb8,47.108.85.32,20659,1572320241293;"));
-    config.Set("vpn", "SG", std::string("031000008600000009b33c1a61a26e71293eefad1e76f17c0574830a5eeb27b4,934d8c94c3cb23fbb51b0446b21132ec28e52a460adc7af8e032ad880d2654c3,0304c6d02c26cd35bedfd81b9d37093806a882ba8d91db5893c63834d4406a9e45,165.22.105.132,13837,1572320241293;0310000086000000c848831d59bc84a194b0af0b798681960389f381a66d01ac,365a4a3d8c4580e8a1bb2a88865461beffeafe925303d756d91d6fcd931ccecc,02c568482bd9f25971c3fb741bf64c403238c41e761cda2e7a31ddd4cfc124b05e,165.22.105.214,29536,1572320241293;0310000086000000beea322a62cf3685dc9424210506ace6cb330629e8fec5d0,e118fa60921f74793a1738910fdbb96d5d5ebee5ebe82e23c478356555d26d3a,02db5169ceb32fa90899c9aa2e5eed0f06aa262fa2f6a6b3603d04742cd84835d2,47.88.223.66,29572,1572320241293;"));
+std::string VpnClient::ResetPrivateKey(const std::string& prikey) {
+    if (prikey.size() != security::kPrivateKeySize * 2) {
+        return "ERROR";
+    }
+
+    std::string private_key = common::Encode::HexDecode(prikey);
+    if (SetPriAndPubKey(private_key) != kClientSuccess) {
+        CLIENT_ERROR("SetPriAndPubKey failed!");
+        return "ERROR";
+    }
+
+    config.Set("lego", "prikey", common::Encode::HexEncode(
+            security::Schnorr::Instance()->str_prikey()));
+    config.Set("lego", "pubkey", common::Encode::HexEncode(
+            security::Schnorr::Instance()->str_pubkey()));
+    std::string account_address = network::GetAccountAddressByPublicKey(
+            security::Schnorr::Instance()->str_pubkey());
+    common::GlobalInfo::Instance()->set_id(account_address);
+    
+    {
+        std::lock_guard<std::mutex> guard(hight_block_map_mutex_);
+        hight_block_map_.clear();
+        local_account_height_set_.clear();
+    }
+
+    {
+        std::lock_guard<std::mutex> guard(height_set_mutex_);
+        local_account_height_set_.clear();
+    }
+
+    {
+        std::lock_guard<std::mutex> guard(tx_map_mutex_);
+        tx_map_.clear();
+    }
+
+    today_used_bandwidth_ = -1;
+    paied_vip_info_[0] = std::make_shared<LastPaiedVipInfo>();
+    paied_vip_info_[0]->height = 0;
+    paied_vip_info_[0]->timestamp = 0;
+    paied_vip_info_[1] = nullptr;
+    paied_vip_valid_idx_ = 0;
+    check_times_ = 0;
+    return common::Encode::HexEncode(security::Schnorr::Instance()->str_pubkey())
+            + "," + common::Encode::HexEncode(account_address);
+}
+
+void VpnClient::InitRouteAndVpnServer() {
+    config.Set("route", "country", std::string("AU,BR,CA,CN,DE,FR,GB,HK,ID,IN,JP,KR,NL,NZ,PT,SG,US"));
+    config.Set("route", "US", std::string("04100000380000009e9050cb3c85f4d62fcd668cd2969a243b83b7d04b521422,d0046302830a22ebde67bcc4ce5e6b7ec66e4d9e0bdf6c7c8b3530859dbb71e3,03388f3ae01d80d26de935b01a23997af3966152a00651308df272fbe52ba06c8b,206.189.239.148,38010;04100000380000000df531c30626aa87da5b26e7f5817c69d8b0682a8075458b,4db1b910771d304a86ed196cfb219286994784ce95f19457b7a2426ea4fc79cf,039b6142e43af168b8b5c5df6037fade0f59d71fd3cdda18c2442dea8d9b6ab7d1,165.227.60.177,40704;0410000038000000718b3753a01d2169698b719b5854b70f9da45e1f4e6c4a9e,5c64d2ba07b6807e45d3cb92ef787bc6ecf7a3e64509993f55abe40566737fce,0376fbd2f833fc6ed594c70ab0d01587e5febe296c91aab8453e88fdd053bebd4e,206.189.226.23,55257;04100000380000000a62e457e88c8c82c57828dd34ce33ec7dec537408a9fa3b,16e05cf0ee01eae93ac6a9e8a44838da9bf5f2deefd3505ea8b73a222c47f87f,0262fde278fc014c1362672cb4e82dd9e10d1c18ca3ff43785cfc5f5fb3c7b4f43,206.189.233.88,44166;04100000380000008257e05528c8b59ca930163b330c108b9e8cc89b2527ea37,69492a49125e951904bf6625ec0f2e64ad456cd566dc6e20470c7282296599ee,03fb050aca99c818f33c3d55c2d9aa09d1e6ccd2fdbeb892aab496e30d235b5d45,165.227.18.179,62324;"));
+    config.Set("route", "SG", std::string("0410000086000000099a92ca3de3e50780827bc0e70e7fbf899d90de3c660512,250087a41b61dc71ccb156dd4d5c3971c41b24001f6ec6a806bd293679cf850f,03f9c4072dd7396402f6d4f1b92c26615addd02c9d9b9be7bad9314eca4ea98bda,206.189.151.124,56711;"));
+    config.Set("route", "NL", std::string(""));
+    config.Set("route", "JP", std::string(""));
+    config.Set("route", "IN", std::string("0410000074000000d4b147faf9850a5422bc1fca2ea78cc32ac6e5b411033028,fce5d1e55e7d91ad08e59d6a866ab5ef9fb297717169c9b15b3caea68355e6f4,0312cbc7511bf2dffafefe43affcb954e263ce128ec68d5c807bf8c25c1d89d70c,139.59.47.229,60905;0410000074000000ccf3cb1b51f67c53f1d0aeb5ea004e3291c01781043dfb82,67d8ec0489e29e0e5911358a5e91ee80ba4ebb2b2013668ca4c700d96e834048,035073a98fbd938a0e73fa2489aff409bfff7e8e991fabe412ae0b497ca39c9778,139.59.91.63,40802;"));
+    config.Set("route", "GB", std::string("04100000ed000000a9c6fe998ff96e49fe71ac113f5ec373b3566a8802590ae1,66f61a8e0354ba1170dc34b27d52158dfec595180bac8a9984236d00721151bf,036b0b56e1dd54ac18363bfc84240a9a070f80cd9cbaf694812bd543a13e33ac67,178.128.174.110,47830;"));
+    config.Set("route", "FR", std::string(""));
+    config.Set("route", "DE", std::string("04100000e80000008e81c74ef2d99688bedfa65573563d47e490e61dab8213b5,438a5204d566c839bfa25d62ef123e984aa560143d1920d9093eaa02f734101f,03c0a245f8d1cc4aaf42890ff9bb78c0b95dda6e75cf89bd74e3a41dcaf79f29e4,46.101.152.5,38849;"));
+    config.Set("route", "CN", std::string("041000001a0000005755b1bf32b1ac636cc6a2400c1f3008a65ba5f6c354bd45,edc41b9e92c78b8e7b26d98a2e86d1c3987ee0836387810e5796b0f8bb3f681c,03015eb47cb04576d2f9ff2062f84545a4095542035195e47b5fdfd9e87fc71ebf,39.107.46.245,58894;041000001a0000006962f09cbb1073fd625d09bbfe4f6e8f7dfd5748d615169a,b63d240114cb182b514a418074c0d294c77b2d50d648bb9e54ef73ccc6f5363d,03636108068e7f0699eec2ea13a6d692308adaced331595e47ee27227f87e3b2eb,39.97.224.47,38502;041000001a0000001978b6a26f7555b16b6f6468b7b7fb4972c0a71364c5e41f,d9c85d1a0821812aa2c71c0815939348a1dfaefcf6fabaa615268ccd94d2289a,03f915fd2a4549e9d87230b6772ea1f9f5fe1be5eb3720d65b6a3035dd70e70f8e,39.105.125.37,58873;"));
+    config.Set("route", "CA", std::string(""));
+    config.Set("route", "AU", std::string(""));
+    config.Set("vpn", "country", std::string("AU,BR,CA,CN,DE,FR,GB,HK,ID,IN,JP,KR,NL,NZ,PT,SG,US"));
+    config.Set("vpn", "US", std::string("03100000380000009e9050cb3c85f4d62fcd668cd2969a243b83b7d04b521422,d0046302830a22ebde67bcc4ce5e6b7ec66e4d9e0bdf6c7c8b3530859dbb71e3,03388f3ae01d80d26de935b01a23997af3966152a00651308df272fbe52ba06c8b,206.189.239.148,17291,1574332441322;03100000380000000df531c30626aa87da5b26e7f5817c69d8b0682a8075458b,4db1b910771d304a86ed196cfb219286994784ce95f19457b7a2426ea4fc79cf,039b6142e43af168b8b5c5df6037fade0f59d71fd3cdda18c2442dea8d9b6ab7d1,165.227.60.177,13341,1574332441322;03100000380000000a62e457e88c8c82c57828dd34ce33ec7dec537408a9fa3b,16e05cf0ee01eae93ac6a9e8a44838da9bf5f2deefd3505ea8b73a222c47f87f,0262fde278fc014c1362672cb4e82dd9e10d1c18ca3ff43785cfc5f5fb3c7b4f43,206.189.233.88,25016,1574332441322;0310000038000000718b3753a01d2169698b719b5854b70f9da45e1f4e6c4a9e,5c64d2ba07b6807e45d3cb92ef787bc6ecf7a3e64509993f55abe40566737fce,0376fbd2f833fc6ed594c70ab0d01587e5febe296c91aab8453e88fdd053bebd4e,206.189.226.23,21875,1574332441322;03100000380000008257e05528c8b59ca930163b330c108b9e8cc89b2527ea37,69492a49125e951904bf6625ec0f2e64ad456cd566dc6e20470c7282296599ee,03fb050aca99c818f33c3d55c2d9aa09d1e6ccd2fdbeb892aab496e30d235b5d45,165.227.18.179,13335,1574332441322;"));
+    config.Set("vpn", "IN", std::string("0310000074000000d4b147faf9850a5422bc1fca2ea78cc32ac6e5b411033028,fce5d1e55e7d91ad08e59d6a866ab5ef9fb297717169c9b15b3caea68355e6f4,0312cbc7511bf2dffafefe43affcb954e263ce128ec68d5c807bf8c25c1d89d70c,139.59.47.229,11069,1574332441322;0310000074000000ccf3cb1b51f67c53f1d0aeb5ea004e3291c01781043dfb82,67d8ec0489e29e0e5911358a5e91ee80ba4ebb2b2013668ca4c700d96e834048,035073a98fbd938a0e73fa2489aff409bfff7e8e991fabe412ae0b497ca39c9778,139.59.91.63,21093,1574332441322;"));
+    config.Set("vpn", "GB", std::string("03100000ed000000a9c6fe998ff96e49fe71ac113f5ec373b3566a8802590ae1,66f61a8e0354ba1170dc34b27d52158dfec595180bac8a9984236d00721151bf,036b0b56e1dd54ac18363bfc84240a9a070f80cd9cbaf694812bd543a13e33ac67,178.128.174.110,25058,1574332441322;"));
+    config.Set("vpn", "CN", std::string("031000001a0000005755b1bf32b1ac636cc6a2400c1f3008a65ba5f6c354bd45,edc41b9e92c78b8e7b26d98a2e86d1c3987ee0836387810e5796b0f8bb3f681c,03015eb47cb04576d2f9ff2062f84545a4095542035195e47b5fdfd9e87fc71ebf,39.107.46.245,31025,1574332441322;031000001a0000006962f09cbb1073fd625d09bbfe4f6e8f7dfd5748d615169a,b63d240114cb182b514a418074c0d294c77b2d50d648bb9e54ef73ccc6f5363d,03636108068e7f0699eec2ea13a6d692308adaced331595e47ee27227f87e3b2eb,39.97.224.47,14976,1574332441322;031000001a0000001978b6a26f7555b16b6f6468b7b7fb4972c0a71364c5e41f,d9c85d1a0821812aa2c71c0815939348a1dfaefcf6fabaa615268ccd94d2289a,03f915fd2a4549e9d87230b6772ea1f9f5fe1be5eb3720d65b6a3035dd70e70f8e,39.105.125.37,15888,1574332441322;"));
+    config.Set("vpn", "SG", std::string("0310000086000000099a92ca3de3e50780827bc0e70e7fbf899d90de3c660512,250087a41b61dc71ccb156dd4d5c3971c41b24001f6ec6a806bd293679cf850f,03f9c4072dd7396402f6d4f1b92c26615addd02c9d9b9be7bad9314eca4ea98bda,206.189.151.124,20902,1574332441322;"));
     config.Set("vpn", "BR", std::string(""));
-    config.Set("vpn", "CA", std::string("0310000035000000e048012dc1ff1ea0a6458a5614b8133e6b39adb6b536d932,92c903b2dbd0c65af4bb6188db1dd7cad3e182baa6451f06c67648e19f524c05,0348e04787912a878d0e5da49846ce933d6c932b4f573f716223faf45e10c2249b,138.197.162.219,20157,1572490333219;0310000035000000eabc8c1fdfd76fd0f1a64926a384214e82f0be21e61ecec1,dd06b30248d0720e3aaaf048018edd15bc744409aed82fc7d9bdacddd204a009,030499fff02cb8d97fab6b241a1dd99b76ead836bf6606d51bab5ebcfb5dd962ae,138.197.174.57,17151,1572490333219;0310000035000000f708d24b98a4a5cb5309ce143f591a82259c455dc6fbc862,ddc05dcf7db3b81faba8d1e7c983b38cd4a732738281beac1fc4d64c55564b5c,03cb980f2e5b5ba8e9d2f4c15fb2330ea84f59d256051f3b4ad8aae5969df4e995,138.197.174.37,16287,1572490333219;"));
-    config.Set("vpn", "DE", std::string(""));
+    config.Set("vpn", "CA", std::string(""));
+    config.Set("vpn", "DE", std::string("03100000e80000008e81c74ef2d99688bedfa65573563d47e490e61dab8213b5,438a5204d566c839bfa25d62ef123e984aa560143d1920d9093eaa02f734101f,03c0a245f8d1cc4aaf42890ff9bb78c0b95dda6e75cf89bd74e3a41dcaf79f29e4,46.101.152.5,14059,1574332441322;"));
     config.Set("vpn", "FR", std::string(""));
     config.Set("vpn", "HK", std::string(""));
     config.Set("vpn", "ID", std::string(""));
-    config.Set("vpn", "JP", std::string("")); 
+    config.Set("vpn", "JP", std::string(""));
     config.Set("vpn", "KR", std::string(""));
     config.Set("vpn", "NL", std::string(""));
     config.Set("vpn", "NZ", std::string(""));
     config.Set("vpn", "PT", std::string(""));
+    config.Set("vpn", "AU", std::string(""));
 }
 
 std::string VpnClient::GetPublicKey() {
@@ -505,32 +716,6 @@ std::string VpnClient::GetSecretKey(const std::string& peer_pubkey) {
     }
 
     return common::Encode::HexEncode(sec_key);
-}
-
-int VpnClient::EncryptData(char* seckey, int seclen, char* data, int data_len, char* out) {
-    if (security::Aes::Encrypt(
-            data,
-            data_len,
-            seckey,
-            seclen,
-            out) != security::kSecuritySuccess) {
-        return -1;
-    }
-
-    return 0;
-}
-
-int VpnClient::DecryptData(char* seckey, int seclen, char* data, int data_len, char* out) {
-    if (security::Aes::Decrypt(
-            data,
-            data_len,
-            seckey,
-            seclen,
-            out) != security::kSecuritySuccess) {
-        return -1;
-    }
-
-    return 0;
 }
 
 bool VpnClient::SetFirstInstall() {
@@ -579,25 +764,6 @@ void VpnClient::WriteDefaultLogConf(
         "log4cpp.appender.programLog.layout.ConversionPattern = %d [%p] %m%n\n");
     fwrite(log_str.c_str(), log_str.size(), 1, file);
     fclose(file);
-}
-
-std::string VpnClient::GetTransactionInfo(const std::string& tx_gid) {
-    auto tmp_gid = common::Encode::HexDecode(tx_gid);
-    std::lock_guard<std::mutex> guard(tx_map_mutex_);
-    auto iter = tx_map_.find(tmp_gid);
-    if (iter != tx_map_.end()) {
-        if (iter->second == nullptr) {
-            return "";
-        }
-
-        auto tmp_ptr = iter->second;
-        tx_map_.erase(iter);
-        CLIENT_ERROR("get transaction info success[%s]", tx_gid.c_str());
-        return "";
-    } else {
-        tx_map_[tmp_gid] = nullptr;
-    }
-    return "";
 }
 
 std::string VpnClient::GetVpnServerNodes(
@@ -673,7 +839,6 @@ void VpnClient::GetVpnNodes() {
 void VpnClient::GetNetworkNodes(
         const std::vector<std::string>& country_vec,
         uint32_t network_id) {
-    auto now_tick = std::chrono::steady_clock::now();
     for (uint32_t i = 0; i < country_vec.size(); ++i) {
         auto country = country_vec[i];
         auto uni_dht = std::dynamic_pointer_cast<network::Universal>(
@@ -732,7 +897,6 @@ void VpnClient::GetNetworkNodes(
                     common::Encode::HexEncode(network::GetAccountAddressByPublicKey(tmp_node->pubkey_str)),
                     true);
             if (node_netid == network::kVpnNetworkId) {
-                CLIENT_ERROR("get vpn node: %s:%d", node_ptr->ip.c_str(), node_ptr->svr_port);
                 std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
                 auto sub_iter = vpn_nodes_map_.find(country);
                 if (sub_iter != vpn_nodes_map_.end()) {
@@ -878,14 +1042,87 @@ int VpnClient::CreateClientUniversalNetwork() {
     return kClientSuccess;
 }
 
-std::string VpnClient::Transaction(const std::string& to, uint64_t amount, std::string& tx_gid) {
+std::string VpnClient::CheckVip() {
+    SendGetAccountAttrLastBlock(
+            common::kUserPayForVpn,
+            common::GlobalInfo::Instance()->id(),
+            paied_vip_info_[paied_vip_valid_idx_]->height);
+    return std::to_string(paied_vip_info_[paied_vip_valid_idx_]->timestamp);
+}
+
+std::string VpnClient::PayForVPN(const std::string& to, const std::string& gid, uint64_t amount) {
+    if (to.empty() || amount <= 0) {
+        return "ERROR";
+    }
+
     transport::protobuf::Header msg;
     uint64_t rand_num = 0;
-    auto uni_dht = network::UniversalManager::Instance()->GetUniversal(network::kUniversalNetworkId);
+    auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+            network::kUniversalNetworkId);
     if (uni_dht == nullptr) {
         return "ERROR";
     }
-    tx_gid = common::CreateGID(security::Schnorr::Instance()->str_pubkey());
+    auto tx_gid = common::CreateGID(security::Schnorr::Instance()->str_pubkey());
+    if (gid.size() == 32 * 2) {
+        tx_gid = common::Encode::HexDecode(gid);
+    }
+
+    std::string to_addr = common::Encode::HexDecode(to);
+    std::map<std::string, std::string> attrs = {
+        { common::kUserPayForVpn, "" }
+    };
+
+    uint32_t type = common::kConsensusPayForCommonVpn;
+    ClientProto::CreateTransactionWithAttr(
+            uni_dht->local_node(),
+            tx_gid,
+            to_addr,
+            amount,
+            type,
+            "",
+            attrs,
+            msg);
+    network::Route::Instance()->Send(msg);
+    return common::Encode::HexEncode(tx_gid);
+}
+
+void VpnClient::SendGetAccountAttrLastBlock(
+        const std::string& attr,
+        const std::string& account,
+        uint64_t height) {
+    uint64_t rand_num = 0;
+    auto uni_dht = lego::network::DhtManager::Instance()->GetDht(
+        lego::network::kVpnNetworkId);
+    if (uni_dht == nullptr) {
+        CLIENT_ERROR("not found vpn server dht.");
+        return;
+    }
+
+    transport::protobuf::Header msg;
+    client::ClientProto::AccountAttrRequest(
+            uni_dht->local_node(),
+            account,
+            attr,
+            height,
+            msg);
+    network::Route::Instance()->Send(msg);
+}
+
+std::string VpnClient::Transaction(const std::string& to, uint64_t amount, std::string& tx_gid) {
+    transport::protobuf::Header msg;
+    uint64_t rand_num = 0;
+    auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+            network::kUniversalNetworkId);
+    if (uni_dht == nullptr) {
+        return "ERROR";
+    }
+
+    if (tx_gid.size() == 32 * 2) {
+        tx_gid = common::Encode::HexDecode(tx_gid);
+    } else {
+        tx_gid = common::CreateGID(security::Schnorr::Instance()->str_pubkey());
+    }
+
     std::string to_addr;
     if (!to.empty()) {
         to_addr = common::Encode::HexDecode(to);
@@ -905,6 +1142,7 @@ std::string VpnClient::Transaction(const std::string& to, uint64_t amount, std::
             type,
             msg);
     network::Route::Instance()->Send(msg);
+    tx_gid = common::Encode::HexEncode(tx_gid);
     return "OK";
 }
 
@@ -971,12 +1209,14 @@ protobuf::BlockPtr VpnClient::GetBlockWithGid(const std::string& tx_gid) {
         return tmp_ptr;
     } else {
         tx_map_[tmp_gid] = nullptr;
+        SendGetBlockWithGid(tmp_gid, true);
     }
     return nullptr;
 }
 
 protobuf::BlockPtr VpnClient::GetBlockWithHash(const std::string& block_hash) {
-    auto tmp_gid = std::string("b_") + common::Encode::HexDecode(block_hash);
+    auto dec_hash = common::Encode::HexDecode(block_hash);
+    auto tmp_gid = std::string("b_") + dec_hash;
     std::lock_guard<std::mutex> guard(tx_map_mutex_);
     auto iter = tx_map_.find(tmp_gid);
     if (iter != tx_map_.end()) {
@@ -989,8 +1229,20 @@ protobuf::BlockPtr VpnClient::GetBlockWithHash(const std::string& block_hash) {
         return tmp_ptr;
     } else {
         tx_map_[tmp_gid] = nullptr;
+        SendGetBlockWithGid(dec_hash, false);
     }
     return nullptr;
+}
+
+void VpnClient::SendGetBlockWithGid(const std::string& str, bool is_gid) {
+    auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+            network::kUniversalNetworkId);
+    if (uni_dht == nullptr) {
+        return;
+    }
+    transport::protobuf::Header msg;
+    ClientProto::GetBlockWithTxGid(uni_dht->local_node(), str, is_gid, true, msg);
+    uni_dht->SendToClosestNode(msg);
 }
 
 void VpnClient::GetAccountHeight() {
@@ -1067,8 +1319,10 @@ void VpnClient::DumpNodeToConfig() {
 void VpnClient::DumpVpnNodes() {
     std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
     std::string country_list;
-    auto tp = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now());
-    auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(tp.time_since_epoch()).count();
+    auto tp = std::chrono::time_point_cast<std::chrono::milliseconds>(
+            std::chrono::system_clock::now());
+    auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
+            tp.time_since_epoch()).count();
     for (auto iter = vpn_nodes_map_.begin(); iter != vpn_nodes_map_.end(); ++iter) {
 #ifdef IOS_PLATFORM
 		if (iter->first == "CN") {

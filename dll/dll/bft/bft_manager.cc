@@ -346,11 +346,6 @@ int BftManager::LeaderPrepare(BftInterfacePtr& bft_ptr) {
             bft_ptr->rand_num())) {
         std::string prepare_data;
         int res = bft_ptr->Prepare(true, prepare_data);
-        LEGO_BFT_DEBUG_FOR_CONSENSUS_AND_MESSAGE(
-                std::string("LeaderPrepare ok:") + std::to_string(res),
-                bft_ptr,
-                msg);
-
         if (res != kBftSuccess) {
             return res;
         }
@@ -371,9 +366,9 @@ int BftManager::LeaderPrepare(BftInterfacePtr& bft_ptr) {
             return kBftError;
         }
         bft_ptr->LeaderPrecommitOk(member_idx, true, bft_ptr->secret());
-        transport::protobuf::Header msg;
         auto dht_ptr = network::DhtManager::Instance()->GetDht(bft_ptr->network_id());
         auto local_node = dht_ptr->local_node();
+        transport::protobuf::Header msg;
         BftProto::LeaderCreatePrepare(
                 local_node,
                 prepare_data,
@@ -398,7 +393,7 @@ int BftManager::BackupPrepare(
     auto& data = *(header.mutable_data());
     if (bft_ptr->Prepare(false, data) != kBftSuccess) {
         BFT_ERROR("bft backup prepare failed!");
-        std::string rand_num_str = std::to_string(rand() % std::numeric_limits<int>::max());
+        std::string rand_num_str = std::to_string(rand() % (std::numeric_limits<int>::max)());
         BftProto::BackupCreatePrepare(
                 header,
                 bft_msg,
@@ -519,7 +514,7 @@ int BftManager::BackupPrecommit(
     auto& data = *(header.mutable_data());
     if (bft_ptr->PreCommit(false, data) != kBftSuccess) {
         BFT_ERROR("bft backup pre-commit failed!");
-        std::string rand_num_str = std::to_string(rand() % std::numeric_limits<int>::max());
+        std::string rand_num_str = std::to_string(rand() % (std::numeric_limits<int>::max)());
         BftProto::BackupCreatePreCommit(
                 header,
                 bft_msg,

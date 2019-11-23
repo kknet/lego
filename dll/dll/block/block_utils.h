@@ -5,6 +5,8 @@
 #include <mutex>
 #include <queue>
 #include <unordered_map>
+#include <vector>
+#include <functional>
 
 #include "common/utils.h"
 #include "common/log.h"
@@ -25,6 +27,11 @@ enum BlockErrorCode {
     kBlockDbDataInvalid = 3,
 };
 
+typedef std::priority_queue<
+		uint64_t,
+		std::vector<uint64_t>,
+		std::greater<uint64_t>> HeightPriorityQueue;
+
 static const uint32_t kAccountHeightMaxSize = 128u;
 struct AccountInfo {
     AccountInfo(const std::string& acc, int64_t b, uint64_t h)
@@ -37,7 +44,7 @@ struct AccountInfo {
     std::atomic<uint64_t> out_lego{ 0 };
     std::atomic<uint64_t> in_lego{ 0 };
     uint32_t new_height{ 0 };
-    std::priority_queue<uint64_t> height_pri_queue;
+	HeightPriorityQueue height_pri_queue;
     std::mutex height_pri_queue_mutex;
     std::unordered_map<std::string, uint64_t> attrs_with_height;
     std::mutex attrs_with_height_mutex;
@@ -50,7 +57,7 @@ struct AccountInfo {
         }
     }
 
-    std::priority_queue<uint64_t> get_height_pri_queue() {
+	HeightPriorityQueue get_height_pri_queue() {
         std::lock_guard<std::mutex> guard(height_pri_queue_mutex);
         return height_pri_queue;
     }

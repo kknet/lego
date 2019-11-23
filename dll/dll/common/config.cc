@@ -1,5 +1,4 @@
 #include "stdafx.h"
-
 #include "common/config.h"
 
 #include <iostream>
@@ -11,7 +10,7 @@
 #include "common/encode.h"
 #include "security/aes.h"
 
-//#define ENCODE_CONFIG_CONTENT
+#define ENCODE_CONFIG_CONTENT
 
 namespace lego {
 
@@ -292,32 +291,28 @@ bool Config::DumpConfig(const std::string& conf) {
             std::string kv = key_iter->first + "=" + key_iter->second + "\n";
             content += kv;
         }
-
-        if (!res) {
-            break;
-        }
     }
     
-    auto left_size = content.size() % 32;
-    if (left_size != 0) {
-        content += std::string('#', 32 - left_size);
-    }
-
-    char* out = new char[content.size()];
-    int enc_res = security::Aes::Encrypt(
-            (char*)content.c_str(),
-            content.size(),
-            (char*)kConfigEncKey.c_str(),
-            kConfigEncKey.size(),
-            out);
-    if (enc_res != security::kSecuritySuccess) {
-        printf("encrypt config content error.");
-        delete []out;
-        return false;
-    }
-    std::string tmp_content(out, content.size());
-    delete []out;
-    std::string dec_code_con = common::Encode::HexEncode(tmp_content);
+//     auto left_size = content.size() % 32;
+//     if (left_size != 0) {
+//         content += std::string('#', 32 - left_size);
+//     }
+// 
+//     char* out = new char[content.size()];
+//     int enc_res = security::Aes::Encrypt(
+//             (char*)content.c_str(),
+//             content.size(),
+//             (char*)kConfigEncKey.c_str(),
+//             kConfigEncKey.size(),
+//             out);
+//     if (enc_res != security::kSecuritySuccess) {
+//         printf("encrypt config content error.");
+//         delete []out;
+//         return false;
+//     }
+//     std::string tmp_content(out, content.size());
+//     delete []out;
+    std::string dec_code_con = common::Encode::HexEncode(content);
 
     FILE* fd = fopen(conf.c_str(), "w");
     if (fd == NULL) {
@@ -391,8 +386,7 @@ bool Config::InitWithContent(const std::string& content) {
 
         if (line.find(']') != std::string::npos) {
             if (!HandleFiled(line, filed)) {
-                ERROR("handle field failed[%s][%d]", line.c_str(), line.find(']'));
-                printf("handle field failed[%s][%d]\n", line.c_str(), line.find(']'));
+                ERROR("handle field failed[%s][%s]", line.c_str(), filed.c_str());
                 res = false;
                 break;
             }
@@ -458,21 +452,21 @@ bool Config::Init(const std::string& conf) {
 
     std::string content(buffer, file_size);
     std::string dec_code_con = common::Encode::HexDecode(content);
-    char* out = new char[dec_code_con.size()];
-    int dec_res = security::Aes::Decrypt(
-            (char*)dec_code_con.c_str(),
-            dec_code_con.size(),
-            (char*)kConfigEncKey.c_str(),
-            kConfigEncKey.size(),
-            out);
-    std::string tmp_content(out, dec_code_con.size());
-    delete[]out;
+//     char* out = new char[dec_code_con.size()];
+//     int dec_res = security::Aes::Decrypt(
+//             (char*)dec_code_con.c_str(),
+//             dec_code_con.size(),
+//             (char*)kConfigEncKey.c_str(),
+//             kConfigEncKey.size(),
+//             out);
+//     std::string tmp_content(out, dec_code_con.size());
+//     delete[]out;
     delete[]buffer;
     fclose(fd);
-    if (dec_res != security::kSecuritySuccess) {
-        return false;
-    }
-    return InitWithContent(tmp_content);
+//     if (dec_res != security::kSecuritySuccess) {
+//         return false;
+//     }
+    return InitWithContent(dec_code_con);
 #endif
 
     bool res = true;
@@ -641,6 +635,7 @@ bool Config::HandleKeyValue(const std::string& filed, const std::string& key_val
 #endif
     }
     StringUtil::Trim(value);
+    ERROR("get value [%s][%s][%s]", filed.c_str(), key.c_str(), value.c_str());
     return AddKey(filed, key, value);
 }
 

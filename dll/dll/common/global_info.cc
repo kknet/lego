@@ -62,6 +62,8 @@ int GlobalInfo::Init(const common::Config& config) {
         return kCommonError;
     }
     set_id(account_id);
+
+    config.Get("lego", "stream_limit", stream_default_limit_);
     return kCommonSuccess;
 }
 

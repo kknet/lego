@@ -30,6 +30,11 @@ int TxPool::AddTx(TxItemPtr& tx_ptr) {
                 common::Encode::HexEncode(uni_gid).c_str());
         return kBftTxAdded;
     }
+
+    BFT_ERROR("tx gid[%d][%s][%d] now added!",
+            tx_ptr->add_to_acc_addr,
+            common::Encode::HexEncode(uni_gid).c_str(),
+            pool_index_);
     uint64_t tx_index = pool_index_gen_.fetch_add(1);
     added_tx_map_.insert(std::make_pair(uni_gid, tx_index));
     tx_pool_[tx_index] = tx_ptr;
@@ -39,13 +44,20 @@ int TxPool::AddTx(TxItemPtr& tx_ptr) {
 
 void TxPool::GetTx(std::vector<TxItemPtr>& res_vec) {
     auto timestamp_now = common::TimeStampUsec();
+    auto now_time = std::chrono::steady_clock::now();
     {
         std::lock_guard<std::mutex> guard(tx_pool_mutex_);
-        for (auto iter = tx_pool_.begin(); iter != tx_pool_.end(); ++iter) {
-            if (iter->second == nullptr) {
-//                 assert(false);
+        for (auto iter = tx_pool_.begin(); iter != tx_pool_.end();) {
+            if (iter->second->timeout <= now_time) {
+                tx_pool_.erase(iter++);
                 continue;
             }
+
+            if (iter->second == nullptr) {
+                ++iter;
+                continue;
+            }
+
 
             if (iter->second->time_valid <= timestamp_now) {
                 res_vec.push_back(iter->second);
@@ -53,6 +65,8 @@ void TxPool::GetTx(std::vector<TxItemPtr>& res_vec) {
                     break;
                 }
             }
+
+            ++iter;
         }
     }
 
@@ -78,6 +92,10 @@ TxItemPtr TxPool::GetTx(bool to, const std::string& tx_gid) {
     }
     std::lock_guard<std::mutex> guard(tx_pool_mutex_);
     auto iter = added_tx_map_.find(uni_gid);
+    if (iter == added_tx_map_.end()) {
+        return nullptr;
+    }
+
     auto item_iter = tx_pool_.find(iter->second);
     if (item_iter != tx_pool_.end()) {
         return item_iter->second;

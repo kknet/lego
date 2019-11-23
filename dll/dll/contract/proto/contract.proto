@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package lego.contract.protobuf;
+
+message GetAttrByKeyReq {
+	optional bytes smart_contract_addr = 1;
+	optional bytes attr_key = 2;
+}
+
+message GetAttrByKeyRes {
+	optional bytes smart_contract_addr = 1;
+	optional bytes attr_key = 2;
+	optional bytes attr_value = 3;
+}
+
+message ContractMessage {
+	optional GetAttrByKeyReq get_attr_req = 1;
+	optional GetAttrByKeyRes get_attr_res = 2;
+}

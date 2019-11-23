@@ -2,8 +2,10 @@
 #include "bft/basic_bft/transaction/tx_bft.h"
 
 #include "common/global_info.h"
+#include "contract/contract_manager.h"
 #include "block/account_manager.h"
 #include "network/network_utils.h"
+#include "sync/key_value_sync.h"
 #include "bft/bft_utils.h"
 #include "bft/proto/bft.pb.h"
 #include "bft/dispatch_pool.h"
@@ -120,58 +122,65 @@ int TxBft::BackupCheckPrepare(std::string& bft_str) {
             return tmp_res;
         }
 
-        if (tx_info.has_to() && !tx_info.to().empty()) {
-            if (tx_info.to_add()) {
-                auto iter = acc_balance_map.find(tx_info.to());
-                if (iter == acc_balance_map.end()) {
-                    auto acc_info = block::AccountManager::Instance()->GetAcountInfo(tx_info.to());
-                    if (acc_info == nullptr) {
-                        // this should remove from tx pool
-                        BFT_ERROR("bft::protobuf::TxBft kBftAccountNotExists failed!");
-                        return kBftAccountNotExists;
-                    }
-                    acc_balance_map[tx_info.to()] = acc_info->balance + tx_info.amount();
-                } else {
-                    acc_balance_map[tx_info.to()] += tx_info.amount();
-                }
-
-                if (acc_balance_map[tx_info.to()] != tx_info.balance()) {
-                    BFT_ERROR("bft::protobuf::TxBft kBftAccountBalanceError failed!");
-                    return kBftAccountBalanceError;
-                }
-            } else {
-                auto iter = acc_balance_map.find(tx_info.from());
-                if (iter == acc_balance_map.end()) {
-                    auto acc_info = block::AccountManager::Instance()->GetAcountInfo(tx_info.from());
-                    if (acc_info == nullptr) {
-                        // this should remove from tx pool
-                        BFT_ERROR("bft::protobuf::TxBft kBftAccountNotExists failed!");
-                        return kBftAccountNotExists;
+        do {
+            if (tx_info.has_to() && !tx_info.to().empty()) {
+                if (tx_info.to_add()) {
+                    auto iter = acc_balance_map.find(tx_info.to());
+                    if (iter == acc_balance_map.end()) {
+                        auto acc_info = block::AccountManager::Instance()->GetAcountInfo(tx_info.to());
+                        if (acc_info == nullptr) {
+                            if (tx_info.status() != kBftAccountNotExists) {
+                                return kBftError;
+                            }
+                            break;
+                        }
+                        acc_balance_map[tx_info.to()] = acc_info->balance + tx_info.amount();
+                    } else {
+                        acc_balance_map[tx_info.to()] += tx_info.amount();
                     }
 
-                    if (acc_info->balance < static_cast<int64_t>(tx_info.amount())) {
-                        // this should remove from tx pool
+                    if (acc_balance_map[tx_info.to()] != static_cast<int64_t>(tx_info.balance())) {
                         BFT_ERROR("bft::protobuf::TxBft kBftAccountBalanceError failed!");
                         return kBftAccountBalanceError;
                     }
-                    acc_balance_map[tx_info.from()] = (
-                            acc_info->balance - static_cast<int64_t>(tx_info.amount()));
                 } else {
-                    if (acc_balance_map[tx_info.from()] <
-                            static_cast<int64_t>(tx_info.amount())) {
-                        // this should remove from tx pool
+                    auto iter = acc_balance_map.find(tx_info.from());
+                    if (iter == acc_balance_map.end()) {
+                        auto acc_info = block::AccountManager::Instance()->GetAcountInfo(tx_info.from());
+                        if (acc_info == nullptr) {
+                            if (tx_info.status() != kBftAccountNotExists) {
+                                return kBftError;
+                            }
+                            break;
+                        }
+
+                        if (acc_info->balance < static_cast<int64_t>(tx_info.amount())) {
+                            if (tx_info.status() != kBftAccountBalanceError) {
+                                return kBftError;
+                            }
+                            break;
+                        }
+                        acc_balance_map[tx_info.from()] = (
+                                acc_info->balance - static_cast<int64_t>(tx_info.amount()));
+                    } else {
+                        if (acc_balance_map[tx_info.from()] <
+                                static_cast<int64_t>(tx_info.amount())) {
+                            if (tx_info.status() != kBftAccountBalanceError) {
+                                return kBftError;
+                            }
+                            break;
+                        }
+                        acc_balance_map[tx_info.from()] -= static_cast<int64_t>(tx_info.amount());
+                    }
+
+                    if (acc_balance_map[tx_info.from()] != static_cast<int64_t>(tx_info.balance())) {
                         BFT_ERROR("bft::protobuf::TxBft kBftAccountBalanceError failed!");
                         return kBftAccountBalanceError;
                     }
-                    acc_balance_map[tx_info.from()] -= static_cast<int64_t>(tx_info.amount());
-                }
-
-                if (acc_balance_map[tx_info.from()] != tx_info.balance()) {
-                    BFT_ERROR("bft::protobuf::TxBft kBftAccountBalanceError failed!");
-                    return kBftAccountBalanceError;
                 }
             }
-        }
+        } while (0);
+        
         push_bft_item_vec(tx_info.gid());
     }
 
@@ -193,7 +202,10 @@ int TxBft::CheckBlockInfo(const protobuf::Block& block_info) {
     }
 
     if (block_ptr->hash != block_info.tx_block().prehash()) {
-        // (TODO): add sync
+        sync::KeyValueSync::Instance()->AddSync(
+                block_info.tx_block().network_id(),
+                block_info.tx_block().prehash(),
+                sync::kSyncHighest);
         return kBftBlockPreHashError;
     }
 
@@ -211,10 +223,12 @@ int TxBft::CheckTxInfo(
             tx_info.to_add(),
             tx_info.gid());
     if (local_tx_info == nullptr) {
-        BFT_ERROR("prepare not has tx[%s]to[%s][%s]!",
+        BFT_ERROR("prepare [to: %d] [pool idx: %d] not has tx[%s]to[%s][%s]!",
+                tx_info.to_add(),
+                pool_index(),
                 common::Encode::HexEncode(tx_info.from()).c_str(),
                 common::Encode::HexEncode(tx_info.to()).c_str(),
-                tx_info.gid().c_str());
+                common::Encode::HexEncode(tx_info.gid()).c_str());
         return kBftTxNotExists;
     }
 
@@ -234,7 +248,25 @@ int TxBft::CheckTxInfo(
         return kBftLeaderInfoInvalid;
     }
 
-    if (local_tx_info->attr_map.size() != tx_info.attr_size()) {
+    if (local_tx_info->smart_contract_addr != tx_info.smart_contract_addr()) {
+        BFT_ERROR("local tx smart_contract_addr[%s] not equal to leader to account [%s]!",
+                local_tx_info->smart_contract_addr.c_str(),
+                tx_info.smart_contract_addr().c_str());
+        return kBftLeaderInfoInvalid;
+    }
+
+    if (!local_tx_info->smart_contract_addr.empty()) {
+        if (contract::ContractManager::Instance()->Execute(
+                local_tx_info) != contract::kContractSuccess) {
+            if (tx_info.status() != kBftExecuteContractFailed) {
+                BFT_ERROR("local tx status not equal to leader status[%d][%d]!",
+                        tx_info.status(), kBftExecuteContractFailed);
+                return kBftLeaderInfoInvalid;
+            }
+        }
+    }
+
+    if (local_tx_info->attr_map.size() != static_cast<uint32_t>(tx_info.attr_size())) {
         BFT_ERROR("local tx attrs not equal to leader attrs[%d][%d]!",
                 local_tx_info->attr_map.size(), tx_info.attr_size());
         return kBftLeaderInfoInvalid;
@@ -301,6 +333,10 @@ int TxBft::CheckTxInfo(
         BFT_ERROR("block height error:[now: %d][leader: %d]",
                 (block_ptr->height + 1),
                 block_info.height());
+        sync::KeyValueSync::Instance()->AddSync(
+                block_info.tx_block().network_id(),
+                block_info.hash(),
+                sync::kSyncHighest);
         return kBftBlockHeightError;
     }
     return kBftSuccess;

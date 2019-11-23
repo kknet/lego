@@ -16,6 +16,7 @@ message NewTx {
 	optional uint64 lego_count = 6;
 	optional uint32 type = 7;
     repeated AccountAttributes attr = 8;
+    optional bytes smart_contract_addr = 9;
 }
 
 message TxBft {
@@ -88,11 +89,26 @@ message AccountHeightResponse {
 	optional bytes type = 3;
 }
 
+message AccountAttrRequest {
+    optional bytes account = 1;
+    optional bytes attr_key = 2;
+    optional uint64 height = 3;
+}
+
+message AccountAttrResponse {
+    optional bytes account = 1;
+    optional bytes attr_key = 2;
+    optional uint64 height = 3;
+    optional bytes block = 4;
+}
+
 message BlockMessage {
 	optional GetTxBlockRequest block_req = 1;
 	optional GetTxBlockResponse block_res = 2;
 	optional AccountHeightRequest height_req = 3;
 	optional AccountHeightResponse height_res = 4;
+    optional AccountAttrRequest acc_attr_req = 5;
+	optional AccountAttrResponse acc_attr_res = 6;
 }
 
 message TxInfo {

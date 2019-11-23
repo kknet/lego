@@ -4,7 +4,6 @@
 #include "client/vpn_client.h"
 
 // caller keep thread safe
-static char res_data[20480] = { 0 };
 
 char* init_network(
         const char* local_ip,
@@ -20,9 +19,11 @@ char* init_network(
             conf_path,
             log_path,
             log_conf_path);
+    static char res_data[20480] = { 0 };
     if (res.size() >= sizeof(res_data) - 1) {
         return (char*)("ERROR");
     }
+
     memcpy(res_data, res.c_str(), res.size());
     res_data[res.size()] = '\0';
     return (char*)res_data;
@@ -54,6 +55,7 @@ char* get_vpn_nodes(
             vpn_svr += ",";
         }
     }
+    static char res_data[20480] = { 0 };
     if (vpn_svr.size() >= sizeof(res_data) - 1) {
         return (char*)("ERROR");
     }
@@ -68,6 +70,7 @@ int get_socket() {
 
 char* transactions(uint32_t begin, uint32_t len) {
     std::string res = lego::client::VpnClient::Instance()->Transactions(begin, len);
+    static char res_data[20480] = { 0 };
     if (res.size() >= sizeof(res_data) - 1) {
         return (char*)("ERROR");
     }
@@ -90,6 +93,7 @@ int reset_transport(const std::string& ip, uint16_t port) {
 
 char* get_public_key() {
     std::string res = lego::client::VpnClient::Instance()->GetPublicKey();
+    static char res_data[20480] = { 0 };
     if (res.size() >= sizeof(res_data) - 1) {
         return (char*)("ERROR");
     }
@@ -104,6 +108,7 @@ char* vpn_login(
     std::vector<std::string> route_vec;
     std::string res;
     lego::client::VpnClient::Instance()->VpnLogin(svr_account, route_vec, res);
+    static char res_data[20480] = { 0 };
     if (res.size() >= sizeof(res_data) - 1) {
         return (char*)("ERROR");
     }
@@ -127,10 +132,44 @@ void create_account() {
 
 char* check_version() {
 	std::string res = lego::client::VpnClient::Instance()->CheckVersion();
-	if (res.size() >= sizeof(res_data) - 1) {
+    static char res_data[20480] = { 0 };
+    if (res.size() >= sizeof(res_data) - 1) {
 		return (char*)("ERROR");
 	}
 	memcpy(res_data, res.c_str(), res.size());
 	res_data[res.size()] = '\0';
 	return (char*)res_data;
+}
+
+char* reset_private_key(const char* pri_key) {
+    std::string res = lego::client::VpnClient::Instance()->ResetPrivateKey(pri_key);
+    static char res_data[20480] = { 0 };
+    if (res.size() >= sizeof(res_data) - 1) {
+        return (char*)("ERROR");
+    }
+    memcpy(res_data, res.c_str(), res.size());
+    res_data[res.size()] = '\0';
+    return (char*)res_data;
+}
+
+char* check_vip() {
+    std::string res = lego::client::VpnClient::Instance()->CheckVip();
+    static char res_data[20480] = { 0 };
+    if (res.size() >= sizeof(res_data) - 1) {
+        return (char*)("ERROR");
+    }
+    memcpy(res_data, res.c_str(), res.size());
+    res_data[res.size()] = '\0';
+    return (char*)res_data;
+}
+
+char* pay_for_vpn(const char* acc, const char* gid, int64_t amount) {
+    std::string res = lego::client::VpnClient::Instance()->PayForVPN(acc, gid, amount);
+    static char res_data[20480] = { 0 };
+    if (res.size() >= sizeof(res_data) - 1) {
+        return (char*)("ERROR");
+    }
+    memcpy(res_data, res.c_str(), res.size());
+    res_data[res.size()] = '\0';
+    return (char*)res_data;
 }

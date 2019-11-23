@@ -6,9 +6,6 @@
 #include "common/log.h"
 #include "common/hash.h"
 
-#undef min
-#undef max
-
 #define BFT_DEBUG(fmt, ...) DEBUG("[bft]" fmt, ## __VA_ARGS__)
 #define BFT_INFO(fmt, ...) INFO("[bft]" fmt, ## __VA_ARGS__)
 #define BFT_WARN(fmt, ...) WARN("[bft]" fmt, ## __VA_ARGS__)
@@ -88,6 +85,7 @@ enum BftErrorCode {
     kBftBlockPreHashError = 16,
     kBftNetwokInvalid = 17,
     kBftLeaderInfoInvalid = 18,
+    kBftExecuteContractFailed = 19,
 };
 
 enum BftStatus {
@@ -112,7 +110,7 @@ enum BftLeaderCheckStatus {
     kBftReChallenge = 4,
 };
 
-static const uint32_t kBftOneConsensusMaxCount = 48u;  // every consensus
+static const uint32_t kBftOneConsensusMaxCount = 32u;  // every consensus
 static const uint32_t kBftOneConsensusMinCount = 1u;
 // bft will delay 500ms for all node ready
 static const uint32_t kBftStartDeltaTime = 500u * 1000u;
@@ -125,11 +123,13 @@ static const uint32_t kBftHopToLayer = 2u;
 static const uint32_t kBftNeighborCount = 7u;
 static const uint32_t kBftLeaderBitmapSize = 640u;
 static const uint32_t kBftTimeout = 6u * 1000u * 1000u;  // bft timeout 6s
+static const uint32_t kTxPoolTimeout = 30u * 1000u * 1000u;  // tx pool timeout 15s
 static const uint32_t kBftTimeoutCheckPeriod = 10u * 1000u * 1000u;
 static const uint32_t kBftLeaderPrepareWaitPeriod = 3u * 1000u * 1000u;
-static const uint32_t kInvalidMemberIndex = std::numeric_limits<uint32_t>::max();
+static const uint32_t kInvalidMemberIndex = (std::numeric_limits<uint32_t>::max)();
 
 static const std::string kTransactionPbftAddress("Transaction");
+static const std::string kVpnSubscriptionDeduction("vpn_subscription_deduction");
 
 inline static std::string StatusToString(uint32_t status) {
     switch (status) {

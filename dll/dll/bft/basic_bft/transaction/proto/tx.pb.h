@@ -435,6 +435,21 @@ class TxInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   ::std::string* release_to();
   void set_allocated_to(::std::string* to);
 
+  // optional bytes smart_contract_addr = 16;
+  bool has_smart_contract_addr() const;
+  void clear_smart_contract_addr();
+  static const int kSmartContractAddrFieldNumber = 16;
+  const ::std::string& smart_contract_addr() const;
+  void set_smart_contract_addr(const ::std::string& value);
+  #if LANG_CXX11
+  void set_smart_contract_addr(::std::string&& value);
+  #endif
+  void set_smart_contract_addr(const char* value);
+  void set_smart_contract_addr(const void* value, size_t size);
+  ::std::string* mutable_smart_contract_addr();
+  ::std::string* release_smart_contract_addr();
+  void set_allocated_smart_contract_addr(::std::string* smart_contract_addr);
+
   // optional uint32 version = 1;
   bool has_version() const;
   void clear_version();
@@ -498,6 +513,13 @@ class TxInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   ::google::protobuf::uint32 type() const;
   void set_type(::google::protobuf::uint32 value);
 
+  // optional uint32 status = 17;
+  bool has_status() const;
+  void clear_status();
+  static const int kStatusFieldNumber = 17;
+  ::google::protobuf::uint32 status() const;
+  void set_status(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:lego.bft.protobuf.TxInfo)
  private:
   void set_has_version();
@@ -528,6 +550,10 @@ class TxInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   void clear_has_netwok_id();
   void set_has_type();
   void clear_has_type();
+  void set_has_smart_contract_addr();
+  void clear_has_smart_contract_addr();
+  void set_has_status();
+  void clear_has_status();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
@@ -538,6 +564,7 @@ class TxInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   ::google::protobuf::internal::ArenaStringPtr from_pubkey_;
   ::google::protobuf::internal::ArenaStringPtr from_sign_;
   ::google::protobuf::internal::ArenaStringPtr to_;
+  ::google::protobuf::internal::ArenaStringPtr smart_contract_addr_;
   ::google::protobuf::uint32 version_;
   bool to_add_;
   ::google::protobuf::uint64 amount_;
@@ -547,6 +574,7 @@ class TxInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   ::google::protobuf::uint64 balance_;
   ::google::protobuf::uint32 netwok_id_;
   ::google::protobuf::uint32 type_;
+  ::google::protobuf::uint32 status_;
   friend struct ::protobuf_tx_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
@@ -1895,6 +1923,21 @@ class NewTx : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
   ::std::string* release_to_acc_addr();
   void set_allocated_to_acc_addr(::std::string* to_acc_addr);
 
+  // optional bytes smart_contract_addr = 9;
+  bool has_smart_contract_addr() const;
+  void clear_smart_contract_addr();
+  static const int kSmartContractAddrFieldNumber = 9;
+  const ::std::string& smart_contract_addr() const;
+  void set_smart_contract_addr(const ::std::string& value);
+  #if LANG_CXX11
+  void set_smart_contract_addr(::std::string&& value);
+  #endif
+  void set_smart_contract_addr(const char* value);
+  void set_smart_contract_addr(const void* value, size_t size);
+  ::std::string* mutable_smart_contract_addr();
+  ::std::string* release_smart_contract_addr();
+  void set_allocated_smart_contract_addr(::std::string* smart_contract_addr);
+
   // optional uint64 lego_count = 6;
   bool has_lego_count() const;
   void clear_lego_count();
@@ -1925,6 +1968,8 @@ class NewTx : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
   void clear_has_lego_count();
   void set_has_type();
   void clear_has_type();
+  void set_has_smart_contract_addr();
+  void clear_has_smart_contract_addr();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
@@ -1935,6 +1980,7 @@ class NewTx : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
   ::google::protobuf::internal::ArenaStringPtr from_pubkey_;
   ::google::protobuf::internal::ArenaStringPtr from_sign_;
   ::google::protobuf::internal::ArenaStringPtr to_acc_addr_;
+  ::google::protobuf::internal::ArenaStringPtr smart_contract_addr_;
   ::google::protobuf::uint64 lego_count_;
   ::google::protobuf::uint32 type_;
   friend struct ::protobuf_tx_2eproto::TableStruct;
@@ -2416,13 +2462,13 @@ inline void AccountAttributes::set_allocated_value(::std::string* value) {
 
 // optional uint32 version = 1;
 inline bool TxInfo::has_version() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
+  return (_has_bits_[0] & 0x00000040u) != 0;
 }
 inline void TxInfo::set_has_version() {
-  _has_bits_[0] |= 0x00000020u;
+  _has_bits_[0] |= 0x00000040u;
 }
 inline void TxInfo::clear_has_version() {
-  _has_bits_[0] &= ~0x00000020u;
+  _has_bits_[0] &= ~0x00000040u;
 }
 inline void TxInfo::clear_version() {
   version_ = 0u;
@@ -2770,13 +2816,13 @@ inline void TxInfo::set_allocated_to(::std::string* to) {
 
 // optional uint64 amount = 7;
 inline bool TxInfo::has_amount() const {
-  return (_has_bits_[0] & 0x00000080u) != 0;
+  return (_has_bits_[0] & 0x00000100u) != 0;
 }
 inline void TxInfo::set_has_amount() {
-  _has_bits_[0] |= 0x00000080u;
+  _has_bits_[0] |= 0x00000100u;
 }
 inline void TxInfo::clear_has_amount() {
-  _has_bits_[0] &= ~0x00000080u;
+  _has_bits_[0] &= ~0x00000100u;
 }
 inline void TxInfo::clear_amount() {
   amount_ = GOOGLE_ULONGLONG(0);
@@ -2794,13 +2840,13 @@ inline void TxInfo::set_amount(::google::protobuf::uint64 value) {
 
 // optional uint64 gas_limit = 8;
 inline bool TxInfo::has_gas_limit() const {
-  return (_has_bits_[0] & 0x00000100u) != 0;
+  return (_has_bits_[0] & 0x00000200u) != 0;
 }
 inline void TxInfo::set_has_gas_limit() {
-  _has_bits_[0] |= 0x00000100u;
+  _has_bits_[0] |= 0x00000200u;
 }
 inline void TxInfo::clear_has_gas_limit() {
-  _has_bits_[0] &= ~0x00000100u;
+  _has_bits_[0] &= ~0x00000200u;
 }
 inline void TxInfo::clear_gas_limit() {
   gas_limit_ = GOOGLE_ULONGLONG(0);
@@ -2818,13 +2864,13 @@ inline void TxInfo::set_gas_limit(::google::protobuf::uint64 value) {
 
 // optional uint64 gas_used = 9;
 inline bool TxInfo::has_gas_used() const {
-  return (_has_bits_[0] & 0x00000200u) != 0;
+  return (_has_bits_[0] & 0x00000400u) != 0;
 }
 inline void TxInfo::set_has_gas_used() {
-  _has_bits_[0] |= 0x00000200u;
+  _has_bits_[0] |= 0x00000400u;
 }
 inline void TxInfo::clear_has_gas_used() {
-  _has_bits_[0] &= ~0x00000200u;
+  _has_bits_[0] &= ~0x00000400u;
 }
 inline void TxInfo::clear_gas_used() {
   gas_used_ = GOOGLE_ULONGLONG(0);
@@ -2842,13 +2888,13 @@ inline void TxInfo::set_gas_used(::google::protobuf::uint64 value) {
 
 // optional uint64 gas_price = 10;
 inline bool TxInfo::has_gas_price() const {
-  return (_has_bits_[0] & 0x00000400u) != 0;
+  return (_has_bits_[0] & 0x00000800u) != 0;
 }
 inline void TxInfo::set_has_gas_price() {
-  _has_bits_[0] |= 0x00000400u;
+  _has_bits_[0] |= 0x00000800u;
 }
 inline void TxInfo::clear_has_gas_price() {
-  _has_bits_[0] &= ~0x00000400u;
+  _has_bits_[0] &= ~0x00000800u;
 }
 inline void TxInfo::clear_gas_price() {
   gas_price_ = GOOGLE_ULONGLONG(0);
@@ -2866,13 +2912,13 @@ inline void TxInfo::set_gas_price(::google::protobuf::uint64 value) {
 
 // optional uint64 balance = 11;
 inline bool TxInfo::has_balance() const {
-  return (_has_bits_[0] & 0x00000800u) != 0;
+  return (_has_bits_[0] & 0x00001000u) != 0;
 }
 inline void TxInfo::set_has_balance() {
-  _has_bits_[0] |= 0x00000800u;
+  _has_bits_[0] |= 0x00001000u;
 }
 inline void TxInfo::clear_has_balance() {
-  _has_bits_[0] &= ~0x00000800u;
+  _has_bits_[0] &= ~0x00001000u;
 }
 inline void TxInfo::clear_balance() {
   balance_ = GOOGLE_ULONGLONG(0);
@@ -2890,13 +2936,13 @@ inline void TxInfo::set_balance(::google::protobuf::uint64 value) {
 
 // optional bool to_add = 12;
 inline bool TxInfo::has_to_add() const {
-  return (_has_bits_[0] & 0x00000040u) != 0;
+  return (_has_bits_[0] & 0x00000080u) != 0;
 }
 inline void TxInfo::set_has_to_add() {
-  _has_bits_[0] |= 0x00000040u;
+  _has_bits_[0] |= 0x00000080u;
 }
 inline void TxInfo::clear_has_to_add() {
-  _has_bits_[0] &= ~0x00000040u;
+  _has_bits_[0] &= ~0x00000080u;
 }
 inline void TxInfo::clear_to_add() {
   to_add_ = false;
@@ -2914,13 +2960,13 @@ inline void TxInfo::set_to_add(bool value) {
 
 // optional uint32 netwok_id = 13;
 inline bool TxInfo::has_netwok_id() const {
-  return (_has_bits_[0] & 0x00001000u) != 0;
+  return (_has_bits_[0] & 0x00002000u) != 0;
 }
 inline void TxInfo::set_has_netwok_id() {
-  _has_bits_[0] |= 0x00001000u;
+  _has_bits_[0] |= 0x00002000u;
 }
 inline void TxInfo::clear_has_netwok_id() {
-  _has_bits_[0] &= ~0x00001000u;
+  _has_bits_[0] &= ~0x00002000u;
 }
 inline void TxInfo::clear_netwok_id() {
   netwok_id_ = 0u;
@@ -2938,13 +2984,13 @@ inline void TxInfo::set_netwok_id(::google::protobuf::uint32 value) {
 
 // optional uint32 type = 14;
 inline bool TxInfo::has_type() const {
-  return (_has_bits_[0] & 0x00002000u) != 0;
+  return (_has_bits_[0] & 0x00004000u) != 0;
 }
 inline void TxInfo::set_has_type() {
-  _has_bits_[0] |= 0x00002000u;
+  _has_bits_[0] |= 0x00004000u;
 }
 inline void TxInfo::clear_has_type() {
-  _has_bits_[0] &= ~0x00002000u;
+  _has_bits_[0] &= ~0x00004000u;
 }
 inline void TxInfo::clear_type() {
   type_ = 0u;
@@ -2988,6 +3034,96 @@ inline const ::google::protobuf::RepeatedPtrField< ::lego::bft::protobuf::Accoun
 TxInfo::attr() const {
   // @@protoc_insertion_point(field_list:lego.bft.protobuf.TxInfo.attr)
   return attr_;
+}
+
+// optional bytes smart_contract_addr = 16;
+inline bool TxInfo::has_smart_contract_addr() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void TxInfo::set_has_smart_contract_addr() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void TxInfo::clear_has_smart_contract_addr() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void TxInfo::clear_smart_contract_addr() {
+  smart_contract_addr_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_smart_contract_addr();
+}
+inline const ::std::string& TxInfo::smart_contract_addr() const {
+  // @@protoc_insertion_point(field_get:lego.bft.protobuf.TxInfo.smart_contract_addr)
+  return smart_contract_addr_.GetNoArena();
+}
+inline void TxInfo::set_smart_contract_addr(const ::std::string& value) {
+  set_has_smart_contract_addr();
+  smart_contract_addr_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.bft.protobuf.TxInfo.smart_contract_addr)
+}
+#if LANG_CXX11
+inline void TxInfo::set_smart_contract_addr(::std::string&& value) {
+  set_has_smart_contract_addr();
+  smart_contract_addr_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.bft.protobuf.TxInfo.smart_contract_addr)
+}
+#endif
+inline void TxInfo::set_smart_contract_addr(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_smart_contract_addr();
+  smart_contract_addr_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.bft.protobuf.TxInfo.smart_contract_addr)
+}
+inline void TxInfo::set_smart_contract_addr(const void* value, size_t size) {
+  set_has_smart_contract_addr();
+  smart_contract_addr_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.bft.protobuf.TxInfo.smart_contract_addr)
+}
+inline ::std::string* TxInfo::mutable_smart_contract_addr() {
+  set_has_smart_contract_addr();
+  // @@protoc_insertion_point(field_mutable:lego.bft.protobuf.TxInfo.smart_contract_addr)
+  return smart_contract_addr_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* TxInfo::release_smart_contract_addr() {
+  // @@protoc_insertion_point(field_release:lego.bft.protobuf.TxInfo.smart_contract_addr)
+  if (!has_smart_contract_addr()) {
+    return NULL;
+  }
+  clear_has_smart_contract_addr();
+  return smart_contract_addr_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void TxInfo::set_allocated_smart_contract_addr(::std::string* smart_contract_addr) {
+  if (smart_contract_addr != NULL) {
+    set_has_smart_contract_addr();
+  } else {
+    clear_has_smart_contract_addr();
+  }
+  smart_contract_addr_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), smart_contract_addr);
+  // @@protoc_insertion_point(field_set_allocated:lego.bft.protobuf.TxInfo.smart_contract_addr)
+}
+
+// optional uint32 status = 17;
+inline bool TxInfo::has_status() const {
+  return (_has_bits_[0] & 0x00008000u) != 0;
+}
+inline void TxInfo::set_has_status() {
+  _has_bits_[0] |= 0x00008000u;
+}
+inline void TxInfo::clear_has_status() {
+  _has_bits_[0] &= ~0x00008000u;
+}
+inline void TxInfo::clear_status() {
+  status_ = 0u;
+  clear_has_status();
+}
+inline ::google::protobuf::uint32 TxInfo::status() const {
+  // @@protoc_insertion_point(field_get:lego.bft.protobuf.TxInfo.status)
+  return status_;
+}
+inline void TxInfo::set_status(::google::protobuf::uint32 value) {
+  set_has_status();
+  status_ = value;
+  // @@protoc_insertion_point(field_set:lego.bft.protobuf.TxInfo.status)
 }
 
 // -------------------------------------------------------------------
@@ -4398,13 +4534,13 @@ inline void NewTx::set_allocated_to_acc_addr(::std::string* to_acc_addr) {
 
 // optional uint64 lego_count = 6;
 inline bool NewTx::has_lego_count() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
+  return (_has_bits_[0] & 0x00000040u) != 0;
 }
 inline void NewTx::set_has_lego_count() {
-  _has_bits_[0] |= 0x00000020u;
+  _has_bits_[0] |= 0x00000040u;
 }
 inline void NewTx::clear_has_lego_count() {
-  _has_bits_[0] &= ~0x00000020u;
+  _has_bits_[0] &= ~0x00000040u;
 }
 inline void NewTx::clear_lego_count() {
   lego_count_ = GOOGLE_ULONGLONG(0);
@@ -4422,13 +4558,13 @@ inline void NewTx::set_lego_count(::google::protobuf::uint64 value) {
 
 // optional uint32 type = 7;
 inline bool NewTx::has_type() const {
-  return (_has_bits_[0] & 0x00000040u) != 0;
+  return (_has_bits_[0] & 0x00000080u) != 0;
 }
 inline void NewTx::set_has_type() {
-  _has_bits_[0] |= 0x00000040u;
+  _has_bits_[0] |= 0x00000080u;
 }
 inline void NewTx::clear_has_type() {
-  _has_bits_[0] &= ~0x00000040u;
+  _has_bits_[0] &= ~0x00000080u;
 }
 inline void NewTx::clear_type() {
   type_ = 0u;
@@ -4472,6 +4608,72 @@ inline const ::google::protobuf::RepeatedPtrField< ::lego::bft::protobuf::Accoun
 NewTx::attr() const {
   // @@protoc_insertion_point(field_list:lego.bft.protobuf.NewTx.attr)
   return attr_;
+}
+
+// optional bytes smart_contract_addr = 9;
+inline bool NewTx::has_smart_contract_addr() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void NewTx::set_has_smart_contract_addr() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void NewTx::clear_has_smart_contract_addr() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void NewTx::clear_smart_contract_addr() {
+  smart_contract_addr_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_smart_contract_addr();
+}
+inline const ::std::string& NewTx::smart_contract_addr() const {
+  // @@protoc_insertion_point(field_get:lego.bft.protobuf.NewTx.smart_contract_addr)
+  return smart_contract_addr_.GetNoArena();
+}
+inline void NewTx::set_smart_contract_addr(const ::std::string& value) {
+  set_has_smart_contract_addr();
+  smart_contract_addr_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.bft.protobuf.NewTx.smart_contract_addr)
+}
+#if LANG_CXX11
+inline void NewTx::set_smart_contract_addr(::std::string&& value) {
+  set_has_smart_contract_addr();
+  smart_contract_addr_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.bft.protobuf.NewTx.smart_contract_addr)
+}
+#endif
+inline void NewTx::set_smart_contract_addr(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_smart_contract_addr();
+  smart_contract_addr_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.bft.protobuf.NewTx.smart_contract_addr)
+}
+inline void NewTx::set_smart_contract_addr(const void* value, size_t size) {
+  set_has_smart_contract_addr();
+  smart_contract_addr_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.bft.protobuf.NewTx.smart_contract_addr)
+}
+inline ::std::string* NewTx::mutable_smart_contract_addr() {
+  set_has_smart_contract_addr();
+  // @@protoc_insertion_point(field_mutable:lego.bft.protobuf.NewTx.smart_contract_addr)
+  return smart_contract_addr_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* NewTx::release_smart_contract_addr() {
+  // @@protoc_insertion_point(field_release:lego.bft.protobuf.NewTx.smart_contract_addr)
+  if (!has_smart_contract_addr()) {
+    return NULL;
+  }
+  clear_has_smart_contract_addr();
+  return smart_contract_addr_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void NewTx::set_allocated_smart_contract_addr(::std::string* smart_contract_addr) {
+  if (smart_contract_addr != NULL) {
+    set_has_smart_contract_addr();
+  } else {
+    clear_has_smart_contract_addr();
+  }
+  smart_contract_addr_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), smart_contract_addr);
+  // @@protoc_insertion_point(field_set_allocated:lego.bft.protobuf.NewTx.smart_contract_addr)
 }
 
 // -------------------------------------------------------------------

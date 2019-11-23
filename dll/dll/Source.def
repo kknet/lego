@@ -11,3 +11,6 @@ vpn_login;
 use_cmd;
 create_account;
 check_version;
+reset_private_key;
+check_vip;
+pay_for_vpn;

@@ -3,6 +3,7 @@
 
 #include "common/encode.h"
 #include "statistics/statistics.h"
+#include "contract/contract_manager.h"
 #include "db/db.h"
 
 namespace lego {
@@ -54,7 +55,7 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
                     block_item.height());
             ++(acc_ptr->in_count);
             acc_ptr->in_lego = tx_list[i].amount();
-            AddAccount(acc_ptr);
+            AddAccount(acc_ptr, tx_list[i].amount());
             uint32_t pool_idx = common::GetPoolIndex(tx_list[i].to());
             auto bptr = std::make_shared<TxBlockInfo>(
                     block_item.hash(),
@@ -65,6 +66,19 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
             SetPool(bptr);
             std::string tx_gid = common::GetTxDbKey(false, tx_list[i].gid());
             db::Db::Instance()->Put(tx_gid, block_item.hash());
+
+            // just call smart contract but these attr is not 'to' signed, don't add to 'to'
+            std::map<std::string, std::string> attr_map;
+            for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
+                // every attr just check last block
+                attr_map[tx_list[i].attr(attr_idx).key()] = tx_list[i].attr(attr_idx).value();
+            }
+
+            if (!tx_list[i].smart_contract_addr().empty()) {
+                contract::ContractManager::Instance()->InitWithAttr(
+                        block_item.height(),
+                        tx_list[i]);
+            }
         } else {
             if (CheckNetworkIdValid(tx_list[i].from()) != kBlockSuccess) {
                 continue;
@@ -81,15 +95,20 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
             }
 
             // now just sender can modify attrs
+            std::map<std::string, std::string> attr_map;
             for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
                 // every attr just check last block
+                attr_map[tx_list[i].attr(attr_idx).key()] = tx_list[i].attr(attr_idx).value();
                 std::lock_guard<std::mutex> acc_guard(acc_ptr->attrs_with_height_mutex);
-                acc_ptr->attrs_with_height[tx_list[i].attr(i).key()] = block_item.height();
-                std::cout << "add account attr: " << tx_list[i].attr(i).key() << ", value: "
-                        << common::Encode::HexEncode(tx_list[i].attr(i).value())
-                        << ", height: " << block_item.height() << std::endl;
+                acc_ptr->attrs_with_height[tx_list[i].attr(attr_idx).key()] = block_item.height();
             }
-            AddAccount(acc_ptr);
+
+            if (!tx_list[i].smart_contract_addr().empty()) {
+                contract::ContractManager::Instance()->InitWithAttr(
+                        block_item.height(),
+                        tx_list[i]);
+            }
+            AddAccount(acc_ptr, tx_list[i].amount());
 
             uint32_t pool_idx = common::GetPoolIndex(tx_list[i].from());
             auto bptr = std::make_shared<TxBlockInfo>(
@@ -106,7 +125,7 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
     return kBlockSuccess;
 }
 
-void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
+void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr, uint64_t amount) {
     std::lock_guard<std::mutex> guard(acc_map_mutex_);
     auto iter = acc_map_.find(acc_ptr->account_id);
     if (iter == acc_map_.end()) {
@@ -123,7 +142,7 @@ void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
         acc_ptr->height_pri_queue = acc_map_[acc_ptr->account_id]->get_height_pri_queue();
         std::lock_guard<std::mutex> tmp_guard(acc_map_[acc_ptr->account_id]->attrs_with_height_mutex);
         for (auto sub_iter = acc_map_[acc_ptr->account_id]->attrs_with_height.begin();
-            sub_iter != acc_map_[acc_ptr->account_id]->attrs_with_height.end(); ++sub_iter) {
+                sub_iter != acc_map_[acc_ptr->account_id]->attrs_with_height.end(); ++sub_iter) {
             auto e_iter = acc_ptr->attrs_with_height.find(sub_iter->first);
             if (e_iter == acc_ptr->attrs_with_height.end()) {
                 acc_ptr->attrs_with_height[sub_iter->first] = sub_iter->second;
@@ -138,14 +157,17 @@ void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr) {
         acc_map_[acc_ptr->account_id]->new_height = acc_ptr->new_height;
         std::lock_guard<std::mutex> tmp_guard(acc_map_[acc_ptr->account_id]->attrs_with_height_mutex);
         for (auto sub_iter = acc_ptr->attrs_with_height.begin();
-            sub_iter != acc_ptr->attrs_with_height.end(); ++sub_iter) {
+                sub_iter != acc_ptr->attrs_with_height.end(); ++sub_iter) {
             auto e_iter = acc_map_[acc_ptr->account_id]->attrs_with_height.find(sub_iter->first);
             if (e_iter == acc_map_[acc_ptr->account_id]->attrs_with_height.end()) {
                 acc_map_[acc_ptr->account_id]->attrs_with_height[sub_iter->first] = sub_iter->second;
             }
         }
     }
-    acc_map_[acc_ptr->account_id]->AddHeight(acc_ptr->height);
+
+    if (amount > 0) {
+        acc_map_[acc_ptr->account_id]->AddHeight(acc_ptr->height);
+    }
 }
 
 TxBlockInfoPtr AccountManager::GetBlockInfo(uint32_t pool_idx) {

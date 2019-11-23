@@ -6,6 +6,7 @@
 #include "transport/transport_utils.h"
 #include "dht/dht_key.h"
 #include "network/network_utils.h"
+#include "contract/contract_manager.h"
 #include "bft/bft_utils.h"
 #include "bft/basic_bft/transaction/proto/tx.pb.h"
 
@@ -16,7 +17,7 @@ namespace bft {
 void TxProto::SetDefaultBroadcastParam(
         transport::protobuf::BroadcastParam* broad_param) {
     broad_param->set_layer_left(0);
-    broad_param->set_layer_right(std::numeric_limits<uint64_t>::max());
+    broad_param->set_layer_right(((std::numeric_limits<uint64_t>::max))());
     broad_param->set_ign_bloomfilter_hop(kBftBroadcastIgnBloomfilterHop);
     broad_param->set_stop_times(kBftBroadcastStopTimes);
     broad_param->set_hop_limit(kBftHopLimit);
@@ -91,7 +92,7 @@ void TxProto::CreateTxRequest(
 
 void TxProto::CreateTxBlock(
         uint32_t pool_idx,
-        const std::vector<TxItemPtr>& tx_vec,
+        std::vector<TxItemPtr>& tx_vec,
         bft::protobuf::LeaderTxPrepare& bft_msg) {
     protobuf::Block& block_item = *(bft_msg.mutable_block());
     auto tx_block = block_item.mutable_tx_block();
@@ -109,53 +110,69 @@ void TxProto::CreateTxBlock(
         tx.set_gas_limit(0);
         tx.set_gas_price(0);
         tx.set_gas_used(0);
-        if (tx_vec[i]->to_acc_addr.empty()) {
-			tx.set_netwok_id(network::GetConsensusShardNetworkId(tx_vec[i]->from_acc_addr));
-            tx.set_balance(0);  // create new account address
-        } else {
-            if (tx_vec[i]->add_to_acc_addr) {
-                auto iter = acc_balance_map.find(tx_vec[i]->to_acc_addr);
-                if (iter == acc_balance_map.end()) {
-                    auto acc_info = block::AccountManager::Instance()->GetAcountInfo(
-                            tx_vec[i]->to_acc_addr);
-                    if (acc_info == nullptr) {
-                        // this should remove from tx pool
-                        continue;
-                    }
-                    acc_balance_map[tx_vec[i]->to_acc_addr] = acc_info->balance + tx_vec[i]->lego_count;
-                } else {
-                    acc_balance_map[tx_vec[i]->to_acc_addr] += tx_vec[i]->lego_count;
-                }
-                tx.set_balance(acc_balance_map[tx_vec[i]->to_acc_addr]);
-            } else {
-                auto iter = acc_balance_map.find(tx_vec[i]->from_acc_addr);
-                if (iter == acc_balance_map.end()) {
-                    auto acc_info = block::AccountManager::Instance()->GetAcountInfo(
-                            tx_vec[i]->from_acc_addr);
-                    if (acc_info == nullptr) {
-                        // this should remove from tx pool
-                        continue;
-                    }
-
-                    if (acc_info->balance < static_cast<int64_t>(tx_vec[i]->lego_count)) {
-                        // this should remove from tx pool
-                        continue;
-                    }
-                    acc_balance_map[tx_vec[i]->from_acc_addr] = (
-                            acc_info->balance - static_cast<int64_t>(tx_vec[i]->lego_count));
-                } else {
-                    if (acc_balance_map[tx_vec[i]->from_acc_addr] <
-                            static_cast<int64_t>(tx_vec[i]->lego_count)) {
-                        // this should remove from tx pool
-                        continue;
-                    }
-                    acc_balance_map[tx_vec[i]->from_acc_addr] -=
-                            static_cast<int64_t>(tx_vec[i]->lego_count);
-                }
-                tx.set_balance(acc_balance_map[tx_vec[i]->from_acc_addr]);
-            }
-        }
+        tx.set_status(kBftSuccess);
         tx.set_to_add(tx_vec[i]->add_to_acc_addr);
+        tx.set_smart_contract_addr(tx_vec[i]->smart_contract_addr);
+        tx.set_type(tx_vec[i]->bft_type);
+
+        do {
+            if (tx_vec[i]->to_acc_addr.empty()) {
+                tx.set_netwok_id(network::GetConsensusShardNetworkId(tx_vec[i]->from_acc_addr));
+                tx.set_balance(0);  // create new account address
+            } else {
+                if (tx_vec[i]->add_to_acc_addr) {
+                    auto iter = acc_balance_map.find(tx_vec[i]->to_acc_addr);
+                    if (iter == acc_balance_map.end()) {
+                        auto acc_info = block::AccountManager::Instance()->GetAcountInfo(
+                                tx_vec[i]->to_acc_addr);
+                        if (acc_info == nullptr) {
+                            tx.set_status(kBftAccountNotExists);
+                            break;
+                        }
+                        acc_balance_map[tx_vec[i]->to_acc_addr] = acc_info->balance + tx_vec[i]->lego_count;
+                    } else {
+                        acc_balance_map[tx_vec[i]->to_acc_addr] += tx_vec[i]->lego_count;
+                    }
+                    tx.set_balance(acc_balance_map[tx_vec[i]->to_acc_addr]);
+                } else {
+                    auto iter = acc_balance_map.find(tx_vec[i]->from_acc_addr);
+                    if (iter == acc_balance_map.end()) {
+                        auto acc_info = block::AccountManager::Instance()->GetAcountInfo(
+                                tx_vec[i]->from_acc_addr);
+                        if (acc_info == nullptr) {
+                            tx.set_status(kBftAccountNotExists);
+                            break;
+                        }
+
+                        if (acc_info->balance < static_cast<int64_t>(tx_vec[i]->lego_count)) {
+                            tx.set_status(kBftAccountBalanceError);
+                            break;
+                        }
+                        acc_balance_map[tx_vec[i]->from_acc_addr] = (
+                                acc_info->balance - static_cast<int64_t>(tx_vec[i]->lego_count));
+                    } else {
+                        if (acc_balance_map[tx_vec[i]->from_acc_addr] <
+                                static_cast<int64_t>(tx_vec[i]->lego_count)) {
+                            tx.set_status(kBftAccountBalanceError);
+                            break;
+                        }
+                        acc_balance_map[tx_vec[i]->from_acc_addr] -=
+                                static_cast<int64_t>(tx_vec[i]->lego_count);
+                    }
+                    tx.set_balance(acc_balance_map[tx_vec[i]->from_acc_addr]);
+                }
+            }
+
+            // execute contract
+            if (!tx_vec[i]->smart_contract_addr.empty()) {
+                if (contract::ContractManager::Instance()->Execute(
+                        tx_vec[i]) != contract::kContractSuccess) {
+                    tx.set_status(kBftExecuteContractFailed);
+                    break;
+                }
+            }
+        } while (0);
+
         if (!tx_vec[i]->attr_map.empty()) {
             for (auto iter = tx_vec[i]->attr_map.begin();
                     iter != tx_vec[i]->attr_map.end(); ++iter) {
@@ -164,7 +181,6 @@ void TxProto::CreateTxBlock(
                 tx_attr->set_value(iter->second);
             }
         }
-        tx.set_type(tx_vec[i]->bft_type);
         auto add_tx = tx_list->Add();
         *add_tx = tx;
     }

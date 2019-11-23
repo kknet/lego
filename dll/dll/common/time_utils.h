@@ -29,6 +29,12 @@ public:
     }
 
     static uint32_t TimestampDays() {
+//         auto t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+//         tm* tm_t = std::localtime(&t);
+//         std::string day_str = common::StringUtil::Format(
+//             "%d%d%d", tm_t->tm_year, tm_t->tm_mon, tm_t->tm_mday);
+//         return common::StringUtil::ToUint32(day_str);
+
         uint32_t hours = std::chrono::duration_cast<std::chrono::hours>(
             std::chrono::system_clock::now().time_since_epoch()).count();
         return hours / 24;
