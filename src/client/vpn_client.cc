@@ -171,12 +171,12 @@ void VpnClient::HandleContractMessage(transport::protobuf::Header& header) {
 void VpnClient::HandleCheckVipResponse(
         transport::protobuf::Header& header,
         client::protobuf::BlockMessage& block_msg) {
+    if (paied_vip_info_[paied_vip_valid_idx_]->timestamp == 0) {
+        paied_vip_info_[paied_vip_valid_idx_]->timestamp = kInvalidTimestamp;
+    }
+
     auto& attr_res = block_msg.acc_attr_res();
     if (attr_res.block().empty()) {
-        if (paied_vip_info_[paied_vip_valid_idx_]->timestamp == 0) {
-            paied_vip_info_[paied_vip_valid_idx_]->timestamp = kInvalidTimestamp;
-        }
-
         return;
     }
 
@@ -576,9 +576,10 @@ std::string VpnClient::Init(
     config.Get("vpn", "US", vpn_us_nodes);
     std::string config_ver;
     config.Get("lego", "version", config_ver);
-    if (config_ver != version) {
+    if (config_ver != version || vpn_us_nodes.empty()) {
         InitRouteAndVpnServer();
     }
+    config.Set("lego", "version", version);
 
     std::string def_conf;
     config.Get("route", "def_routing", def_conf);
