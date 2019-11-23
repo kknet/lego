@@ -1,0 +1,3538 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\common\utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\tick\thread_pool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\tick.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\random.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\encode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\hash.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\xxHash\tests\bench\benchfn.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\xxHash\tests\bench\benchHash.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\xxHash\tests\bench\bhDisplay.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\xxHash\tests\bench\hashes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\xxHash\tests\bench\timefn.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\xxHash\xxh3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\xxHash\xxhash.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\log.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\config.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\string_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\bloom_filter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\split.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\parse_args.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\db\db.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\db\dict.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\db\db_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\transport\transport.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\transport\proto\transport.pb.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\aes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\asn1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\asn1_mac.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\asn1t.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\bio.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\blowfish.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\bn.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\buffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\camellia.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\cast.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\cmac.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\cms.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\comp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\conf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\conf_api.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\crypto.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\des.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\des_old.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\dh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\dsa.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\dso.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\dtls1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\e_os2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\ebcdic.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\ec.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\ecdh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\ecdsa.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\engine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\err.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\evp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\hmac.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\idea.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\krb5_asn.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\kssl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\lhash.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\md4.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\md5.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\mdc2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\modes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\obj_mac.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\objects.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\ocsp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\opensslconf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\opensslv.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\ossl_typ.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\pem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\pem2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\pkcs7.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\pkcs12.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\pqueue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\rand.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\rc2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\rc4.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\ripemd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\rsa.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\safestack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\seed.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\sha.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\srp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\srtp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\ssl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\ssl2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\ssl3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\ssl23.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\stack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\symhacks.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\tls1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\ts.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\txt_db.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\ui.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\ui_compat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\whrlpool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\x509.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\x509_vfy.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\openssl\x509v3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\xxHash\xxh3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\xxHash\xxhash.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\threading\BoostThreads.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\threading\DummyThreads.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\threading\MSThreads.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\threading\OmniThreads.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\threading\PThreads.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\threading\Threading.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\AbortAppender.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\Appender.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\AppendersFactory.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\AppenderSkeleton.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\BasicConfigurator.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\BasicLayout.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\BufferingAppender.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\Category.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\CategoryStream.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\config.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\config-MinGW32.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\config-openvms.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\Configurator.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\config-win32.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\config-win32-stlport-boost.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\convenience.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\DailyRollingFileAppender.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\Export.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\FactoryParams.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\FileAppender.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\Filter.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\FixedContextCategory.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\GenerationalFileAppender.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\HierarchyMaintainer.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\IdsaAppender.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\Layout.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\LayoutAppender.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\LayoutsFactory.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\LevelEvaluator.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\LoggingEvent.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\Manipulator.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\NDC.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\NTEventLogAppender.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\OstreamAppender.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\PassThroughLayout.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\PatternLayout.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\Portability.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\Priority.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\PropertyConfigurator.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\RemoteSyslogAppender.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\RollingFileAppender.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\SimpleConfigurator.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\SimpleLayout.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\SmtpAppender.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\StringQueueAppender.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\SyslogAppender.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\TimeStamp.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\TriggeringEventEvaluator.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\TriggeringEventEvaluatorFactory.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\log4cpp\Win32DebugAppender.hh">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\transport\udp\udp_transport.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ares.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\uv\uv\aix.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\uv\uv\android-ifaddrs.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\uv\uv\bsd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\uv\uv\darwin.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\uv\uv\errno.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\uv\uv\linux.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\uv\uv\os390.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\uv\uv\posix.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\uv\uv\stdint-msvc2008.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\uv\uv\sunos.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\uv\uv\threadpool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\uv\uv\tree.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\uv\uv\unix.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\uv\uv\version.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\uv\uv\win.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\uv\uv.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\transport\transport_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\dht\node.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\dht\base_dht.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\dht\dht_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\dht\proto\dht.pb.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\dht\proto\dht_proto.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\global_info.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\dht\dht_key.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\dht\dht_function.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nat_traverse\detection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nat_traverse\proto\nat.pb.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nat_traverse\proto\nat_proto.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nat_traverse\nat_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\universal.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\network_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\dht_manager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\universal_manager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\proto\network.pb.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\route.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\broadcast\broadcast.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\broadcast\filter_broadcast.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\broadcast\broadcast_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sync\key_value_sync.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sync\sync_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sync\proto\sync.pb.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sync\proto\sync_proto.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\election\elect_dht.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\election\elect_manager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\election\elect_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\bootstrap.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\state_lock.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\proto\network_proto.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\init\network_init.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\init\init_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\init\command.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\country_code.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bft\member_manager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bft\bft_interface.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bft\bft_manager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bft\bft_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bft\proto\bft.pb.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bft\proto\bft_proto.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\election\proto\elect.pb.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\election\proto\elect_proto.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bft\basic_bft\transaction\proto\tx_proto.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bft\basic_bft\transaction\tx_pool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bft\basic_bft\transaction\tx_pool_manager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bft\basic_bft\transaction\tx_bft.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bft\basic_bft\transaction\proto\tx.pb.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bft\dispatch_pool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\security\challenge.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\security\commit_point.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\security\commit_point_hash.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\security\commit_secret.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\security\crypto_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\security\curve.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\security\multi_sign.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\security\private_key.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\security\public_key.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\security\response.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\security\schnorr.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\security\sha256.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\security\signature.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vss\vss_manager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\security\security_string_trans.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\bitmap.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\block\block_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\block\account_manager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\block\block_manager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\block\genesis_block.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\3way.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\adler32.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\adv_simd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\aes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\aes_armv4.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\algebra.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\algparam.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\arc4.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\argnames.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\aria.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\asn.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\authenc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\base32.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\base64.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\basecode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\bench.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\blake2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\blowfish.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\blumshub.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\camellia.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\cast.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\cbcmac.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\ccm.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\chacha.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\cham.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\channels.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\cmac.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\config.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\cpu.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\crc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\cryptlib.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\darn.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\default.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\des.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\dh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\dh2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\dll.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\dmac.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\donna.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\donna_32.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\donna_64.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\donna_sse.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\drbg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\dsa.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\eax.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\ec2n.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\eccrypto.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\ecp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\ecpoint.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\elgamal.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\emsa2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\eprecomp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\esign.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\factory.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\fhmqv.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\files.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\filters.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\fips140.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\fltrimpl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\gcm.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\gf2_32.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\gf2n.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\gf256.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\gfpcrypt.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\gost.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\gzip.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\hashfwd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\hc128.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\hc256.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\hex.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\hight.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\hkdf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\hmac.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\hmqv.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\hrtimer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\ida.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\idea.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\integer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\iterhash.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\kalyna.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\keccak.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\keccakc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\lea.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\lubyrack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\luc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\mars.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\md2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\md4.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\md5.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\mdc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\mersenne.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\misc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\modarith.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\modes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\modexppc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\mqueue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\mqv.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\naclite.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\nbtheory.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\nr.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\oaep.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\oids.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\osrng.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\ossig.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\padlkrng.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\panama.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\pch.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\pkcspad.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\poly1305.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\polynomi.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\ppc_simd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\pssr.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\pubkey.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\pwdbased.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\queue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\rabbit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\rabin.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\randpool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\rc2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\rc5.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\rc6.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\rdrand.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\rijndael.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\ripemd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\rng.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\rsa.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\rw.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\safer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\salsa.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\scrypt.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\seal.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\secblock.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\seckey.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\seed.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\serpent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\serpentp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\sha.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\sha3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\shacal2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\shark.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\simeck.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\simon.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\simple.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\siphash.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\skipjack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\sm3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\sm4.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\smartptr.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\sosemanuk.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\speck.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\square.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\stdcpp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\strciphr.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\tea.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\threefish.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\tiger.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\trap.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\trunhash.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\ttmac.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\tweetnacl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\twofish.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\validate.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\vmac.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\wake.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\whrlpool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\words.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\xed25519.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\xtr.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\xtrcrypt.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\zdeflate.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\zinflate.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\cryptopp\zlib.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\client\client_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\transport\synchro_wait.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\transport\message_filter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\transport\multi_thread.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\transport\processor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\transport\client_relay.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\security\rsa_encrypt.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\security\ecdh_create_key.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\user\Desktop\vpn.pb.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\services\vpn_svr_proxy\proxy_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\services\vpn_svr_proxy\proxy_dht.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\services\proto\service.pb.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\services\vpn_svr_proxy\shadowsocks_proxy.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\security\aes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\services\proto\service_proto.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\shard_network.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\client\proto\client.pb.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\client\client_universal_dht.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\client\proto\client_proto.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\block\proto\block.pb.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\block\proto\block_proto.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\client\vpn_client.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\httplib.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\transport\http\http_transport.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\nan\nan.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\nan\nan_callbacks.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\nan\nan_callbacks_12_inl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\nan\nan_callbacks_pre_12_inl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\nan\nan_converters.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\nan\nan_converters_43_inl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\nan\nan_converters_pre_43_inl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\nan\nan_define_own_property_helper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\nan\nan_implementation_12_inl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\nan\nan_implementation_pre_12_inl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\nan\nan_json.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\nan\nan_maybe_43_inl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\nan\nan_maybe_pre_43_inl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\nan\nan_new.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\nan\nan_object_wrap.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\nan\nan_persistent_12_inl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\nan\nan_persistent_pre_12_inl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\nan\nan_private.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\nan\nan_string_bytes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\nan\nan_typedarray_contents.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\nan\nan_weak.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\contrib\lax_der_parsing.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\contrib\lax_der_privatekey_parsing.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\include\secp256k1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\include\secp256k1_ecdh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\include\secp256k1_recovery.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\java\org_bitcoin_NativeSecp256k1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\java\org_bitcoin_Secp256k1Context.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\modules\ecdh\main_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\modules\ecdh\tests_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\modules\recovery\main_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\modules\recovery\tests_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\basic-config.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\bench.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\ecdsa.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\ecdsa_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\eckey.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\eckey_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\ecmult.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\ecmult_const.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\ecmult_const_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\ecmult_gen.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\ecmult_gen_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\ecmult_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\field.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\field_5x52.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\field_5x52_asm_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\field_5x52_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\field_5x52_int128_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\field_10x26.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\field_10x26_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\field_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\group.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\group_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\hash.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\hash_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\num.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\num_gmp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\num_gmp_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\num_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\scalar.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\scalar_4x64.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\scalar_4x64_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\scalar_8x32.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\scalar_8x32_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\scalar_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\scalar_low.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\scalar_low_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\scratch.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\scratch_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\testrand.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\testrand_impl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\util.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\ecdh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\ecdsa.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\messages.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\privatekey.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\publickey.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\signature.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="js-sdk-sdk\node_modules\secp256k1\src\util.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\json\allocator.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\json\assertions.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\json\autolink.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\json\config.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\json\forwards.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\json\jfeatures.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\json\json.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\json\json.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\json\reader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\json\value.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\json\version.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\json\writer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\root_congress\congress_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\root_congress\consensus_shard_manager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\election\elect_node.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\root_congress\congress_dht.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\root_congress\congress_init.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\transport\rudp\rudp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\kcp\ikcp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\transport\endpoint.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\transport\rudp\session_manager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\statistics\statis_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\statistics\statistics.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ip\ip_with_country.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ip\ip_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ip\cidr.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\Crashlytics.framework\Versions\A\Headers\Crashlytics.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowsocksX\Configuration.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowsocksX\Profile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowsocksX\ProfileManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowsocksX\SWBAppDelegate.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowsocksX\SWBApplication.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowsocksX\SWBConfigWindowController.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowsocksX\SWBQRCodeWindowController.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\encrypt.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\libev\config.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\libev\ev++.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\libev\ev.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\libev\event.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\libev\ev_vars.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\libev\ev_wrap.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\local.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\ProxySettingsTableViewController.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\QRCodeViewController.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\ShadowsocksRunner.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\SimpleTableViewSource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\socks5.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBAboutController.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBAppDelegate.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBNetworkActivityIndicatorManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBNewTabButton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBPage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBPageManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBSmallCloseButton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBSmallCloseButtonHighlightView.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBTab.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBTabBarView.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBTabView.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBViewController.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBWebView.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBWebViewContainer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\ShadowWeb\table.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\aztec\decoder\ZXAztecDecoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\aztec\detector\ZXAztecDetector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\aztec\encoder\ZXAztecCode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\aztec\encoder\ZXAztecEncoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\aztec\ZXAztecDetectorResult.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\aztec\ZXAztecReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\aztec\ZXAztecWriter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXAbstractDoCoMoResultParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXAddressBookAUResultParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXAddressBookDoCoMoResultParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXAddressBookParsedResult.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXBizcardResultParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXBookmarkDoCoMoResultParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXCalendarParsedResult.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXEmailAddressParsedResult.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXEmailAddressResultParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXEmailDoCoMoResultParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXExpandedProductParsedResult.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXExpandedProductResultParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXGeoParsedResult.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXGeoResultParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXISBNParsedResult.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXISBNResultParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXParsedResult.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXParsedResultType.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXProductParsedResult.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXProductResultParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXResultParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXSMSMMSResultParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXSMSParsedResult.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXSMSTOMMSTOResultParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXSMTPResultParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXTelParsedResult.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXTelResultParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXTextParsedResult.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXURIParsedResult.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXURIResultParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXURLTOResultParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXVCardResultParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXVEventResultParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXWifiParsedResult.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\result\ZXWifiResultParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\ZXCapture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\ZXCaptureDelegate.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\ZXCaptureView.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\ZXCGImageLuminanceSource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\ZXImage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\client\ZXView.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\common\detector\ZXMathUtils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\common\detector\ZXMonochromeRectangleDetector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\common\detector\ZXWhiteRectangleDetector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\common\reedsolomon\ZXGenericGF.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\common\reedsolomon\ZXGenericGFPoly.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\common\reedsolomon\ZXReedSolomonDecoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\common\reedsolomon\ZXReedSolomonEncoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\common\ZXBitArray.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\common\ZXBitMatrix.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\common\ZXBitSource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\common\ZXCharacterSetECI.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\common\ZXDecoderResult.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\common\ZXDefaultGridSampler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\common\ZXDetectorResult.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\common\ZXECI.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\common\ZXGlobalHistogramBinarizer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\common\ZXGridSampler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\common\ZXHybridBinarizer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\common\ZXPerspectiveTransform.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\common\ZXStringUtils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\datamatrix\decoder\ZXDataMatrixBitMatrixParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\datamatrix\decoder\ZXDataMatrixDataBlock.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\datamatrix\decoder\ZXDataMatrixDecodedBitStreamParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\datamatrix\decoder\ZXDataMatrixDecoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\datamatrix\decoder\ZXDataMatrixVersion.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\datamatrix\detector\ZXDataMatrixDetector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\datamatrix\encoder\ZXASCIIEncoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\datamatrix\encoder\ZXBase256Encoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\datamatrix\encoder\ZXC40Encoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\datamatrix\encoder\ZXDataMatrixEncoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\datamatrix\encoder\ZXDataMatrixErrorCorrection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\datamatrix\encoder\ZXDataMatrixSymbolInfo144.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\datamatrix\encoder\ZXDefaultPlacement.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\datamatrix\encoder\ZXEdifactEncoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\datamatrix\encoder\ZXEncoderContext.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\datamatrix\encoder\ZXHighLevelEncoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\datamatrix\encoder\ZXSymbolInfo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\datamatrix\encoder\ZXSymbolShapeHint.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\datamatrix\encoder\ZXTextEncoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\datamatrix\encoder\ZXX12Encoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\datamatrix\ZXDataMatrixReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\datamatrix\ZXDataMatrixWriter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\maxicode\decoder\ZXMaxiCodeBitMatrixParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\maxicode\decoder\ZXMaxiCodeDecodedBitStreamParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\maxicode\decoder\ZXMaxiCodeDecoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\maxicode\ZXMaxiCodeReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\multi\qrcode\detector\ZXMultiDetector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\multi\qrcode\detector\ZXMultiFinderPatternFinder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\multi\qrcode\ZXQRCodeMultiReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\multi\ZXByQuadrantReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\multi\ZXGenericMultipleBarcodeReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\multi\ZXMultipleBarcodeReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\decoders\ZXAbstractExpandedDecoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\decoders\ZXAI013103decoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\decoders\ZXAI01320xDecoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\decoders\ZXAI01392xDecoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\decoders\ZXAI01393xDecoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\decoders\ZXAI013x0x1xDecoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\decoders\ZXAI013x0xDecoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\decoders\ZXAI01AndOtherAIs.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\decoders\ZXAI01decoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\decoders\ZXAI01weightDecoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\decoders\ZXAnyAIDecoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\decoders\ZXBlockParsedResult.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\decoders\ZXCurrentParsingState.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\decoders\ZXDecodedChar.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\decoders\ZXDecodedInformation.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\decoders\ZXDecodedNumeric.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\decoders\ZXDecodedObject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\decoders\ZXFieldParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\decoders\ZXGeneralAppIdDecoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\ZXBitArrayBuilder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\ZXExpandedPair.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\ZXExpandedRow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\expanded\ZXRSSExpandedReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\ZXAbstractRSSReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\ZXDataCharacter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\ZXPair.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\ZXRSS14Reader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\ZXRSSFinderPattern.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\rss\ZXRSSUtils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXCodaBarReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXCodaBarWriter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXCode128Reader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXCode128Writer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXCode39Reader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXCode39Writer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXCode93Reader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXEAN13Reader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXEAN13Writer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXEAN8Reader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXEAN8Writer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXEANManufacturerOrgSupport.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXITFReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXITFWriter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXMultiFormatOneDReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXMultiFormatUPCEANReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXOneDimensionalCodeWriter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXOneDReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXUPCAReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXUPCAWriter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXUPCEANExtension2Support.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXUPCEANExtension5Support.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXUPCEANExtensionSupport.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXUPCEANReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXUPCEANWriter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\oned\ZXUPCEReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\decoder\ec\ZXModulusGF.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\decoder\ec\ZXModulusPoly.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\decoder\ec\ZXPDF417ECErrorCorrection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\decoder\ZXPDF417BarcodeMetadata.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\decoder\ZXPDF417BarcodeValue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\decoder\ZXPDF417BoundingBox.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\decoder\ZXPDF417Codeword.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\decoder\ZXPDF417CodewordDecoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\decoder\ZXPDF417DecodedBitStreamParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\decoder\ZXPDF417DetectionResult.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\decoder\ZXPDF417DetectionResultColumn.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\decoder\ZXPDF417DetectionResultRowIndicatorColumn.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\decoder\ZXPDF417ScanningDecoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\detector\ZXPDF417Detector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\detector\ZXPDF417DetectorResult.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\encoder\ZXBarcodeMatrix.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\encoder\ZXBarcodeRow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\encoder\ZXCompaction.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\encoder\ZXDimensions.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\encoder\ZXPDF417.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\encoder\ZXPDF417ErrorCorrection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\encoder\ZXPDF417HighLevelEncoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\ZXPDF417Common.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\ZXPDF417Reader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\ZXPDF417ResultMetadata.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\pdf417\ZXPDF417Writer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\decoder\ZXDataMask.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\decoder\ZXErrorCorrectionLevel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\decoder\ZXFormatInformation.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\decoder\ZXMode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\decoder\ZXQRCodeBitMatrixParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\decoder\ZXQRCodeDataBlock.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\decoder\ZXQRCodeDecodedBitStreamParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\decoder\ZXQRCodeDecoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\decoder\ZXQRCodeVersion.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\detector\ZXAlignmentPattern.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\detector\ZXAlignmentPatternFinder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\detector\ZXFinderPatternFinder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\detector\ZXFinderPatternInfo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\detector\ZXQRCodeDetector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\detector\ZXQRCodeFinderPattern.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\encoder\ZXBlockPair.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\encoder\ZXByteMatrix.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\encoder\ZXEncoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\encoder\ZXMaskUtil.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\encoder\ZXMatrixUtil.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\encoder\ZXQRCode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\ZXQRCodeReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\qrcode\ZXQRCodeWriter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\ZXBarcodeFormat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\ZXBinarizer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\ZXBinaryBitmap.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\ZXDecodeHints.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\ZXDimension.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\ZXEncodeHints.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\ZXErrors.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\ZXingObjC.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\ZXInvertedLuminanceSource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\ZXLuminanceSource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\ZXMultiFormatReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\ZXMultiFormatWriter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\ZXPlanarYUVLuminanceSource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\ZXReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\ZXResult.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\ZXResultMetadataType.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\ZXResultPoint.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\ZXResultPointCallback.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\ZXRGBLuminanceSource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-iOS-2.6.3\zxing-objc\ZXingObjC\ZXWriter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\services\vpn_route\vpn_route_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\client\trans_client.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\acl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\aead.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\base64.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\cache.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\common.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\crypto.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\http.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\jconf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\json.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\local.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\manager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\netutils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\plugin.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\ppbloom.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\protocol.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\redir.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\resolv.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\rule.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\server.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\shadowsocks.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\socks5.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\stream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\tls.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\tunnel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\udprelay.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\uthash.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowsocks-libev\src\winsock.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\services\vpn_server\vpn_svr_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\services\vpn_server\vpn_server.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\acl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\aead.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\base64.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\cache.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\common.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\crypto.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\http.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\jconf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\json.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\local.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\manager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\netutils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\plugin.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\ppbloom.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\protocol.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\redir.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\resolv.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\rule.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\shadowsocks.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\socks5.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\stream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\tls.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\tunnel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\udprelay.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\uthash.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\depends\include\ssr\winsock.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\services\vpn_route\route_tcp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\services\account_with_secret.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\services\vpn_server\server.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\thread_safe_queue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\services\vpn_server\socks_server.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\services\vpn_server\vpn_route.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\client\client_dht.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\time_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\limites\limit_interface.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\limites\limit_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\limites\tocken_bucket.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\services\vpn_server\ev_loop_manager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\acl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\aead.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\base64.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\cache.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\common.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\crypto.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\http.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\jconf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\json.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\local.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\manager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\netutils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\plugin.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\ppbloom.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\protocol.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\redir.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\resolv.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\rule.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\server.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\shadowsocks.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\socks5.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\stream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\tls.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\tunnel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\udprelay.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\uthash.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tenon-vpn-xng-local-server\src\winsock.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\limit\limit_interface.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\limit\limit_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\limit\tocken_bucket.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\user_property_key_define.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\contract\contract_vpn_login.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\contract\contract_utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\contract\contract_interface.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\contract\contract_manager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\contract\contract_vpn_svr_bandwidth.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\contract\proto\contract.pb.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\contract\proto\contract_proto.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\common\tick\thread_pool.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\utils.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\tick\tick.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\tests\test_tick.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\random.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\encode.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\hash.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\xxHash\tests\bench\benchfn.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\xxHash\tests\bench\benchHash.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\xxHash\tests\bench\bhDisplay.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\xxHash\tests\bench\main.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\xxHash\tests\bench\timefn.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\xxHash\xxhash.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\xxHash\xxhsum.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\config.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\string_utils.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\bloom_filter.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\parse_args.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\tests\test_main.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\main.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\tests\test_bloom_filter.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\tests\test_config.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\tests\test_encode.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\tests\test_hash.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\tests\test_parse_args.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\tests\test_random.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\tests\test_split.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\tests\test_string_utils.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\tests\test_utils.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\db\db.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\db\dict.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\db\tests\test_db.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\db\tests\test_dict.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\transport\proto\transport.pb.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\transport\udp\udp_transport.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\transport\demo\server.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dht\base_dht.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dht\proto\dht.pb.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\global_info.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dht\dht_key.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dht\dht_function.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nat_traverse\detection.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dht\proto\dht_proto.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\dht_manager.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\universal.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\universal_manager.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\route.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\broadcast\filter_broadcast.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\broadcast\broadcast.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sync\key_value_sync.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sync\proto\sync_proto.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\broadcast\tests\test_filter_broadcast.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\election\elect_dht.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\election\elect_manager.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\bootstrap.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\state_lock.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\proto\network_proto.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\init\network_init.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\init\command.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bft\member_manager.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bft\bft_manager.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bft\proto\bft_proto.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\election\proto\elect_proto.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bft\basic_bft\transaction\proto\tx_proto.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bft\basic_bft\transaction\tx_pool.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bft\basic_bft\transaction\tx_pool_manager.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bft\basic_bft\transaction\tx_bft.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bft\dispatch_pool.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\security\tests\test_main.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\security\tests\test_multi_sign.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\security\challenge.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\security\commit_point.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\security\commit_point_hash.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\security\commit_secret.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\security\crypto_utils.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\security\multi_sign.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\security\private_key.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\security\public_key.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\security\response.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\security\schnorr.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\security\signature.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bft\bft_interface.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vss\vss_manager.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\security\security_string_trans.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\bitmap.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\tests\test_bitmap.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\block\account_manager.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\block\block_manager.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\block\genesis_block.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\client\vpn_client.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\transport\message_filter.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\transport\multi_thread.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\transport\processor.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\transport\synchro_wait.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\transport\client_relay.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\security\rsa_encrypt.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\security\ecdh_create_key.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\services\vpn_svr_proxy\proxy_dht.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\services\vpn_svr_proxy\shadowsocks_proxy.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\services\tests\test_shadowsocks_proxy.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\services\tests\test_main.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\security\aes.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\vpn_proxy.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\vpn_client.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\client\client_universal_dht.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\block\proto\block.pb.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\transport\http\http_transport.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\contrib\lax_der_parsing.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\contrib\lax_der_privatekey_parsing.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\java\org_bitcoin_NativeSecp256k1.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\java\org_bitcoin_Secp256k1Context.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\bench_ecdh.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\bench_ecmult.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\bench_internal.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\bench_recover.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\bench_sign.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\bench_verify.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\gen_context.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\secp256k1.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\tests.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="js-sdk-sdk\node_modules\secp256k1\src\secp256k1-src\src\tests_exhaustive.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="js-sdk-sdk\node_modules\secp256k1\src\addon.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="js-sdk-sdk\node_modules\secp256k1\src\ecdh.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="js-sdk-sdk\node_modules\secp256k1\src\ecdsa.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="js-sdk-sdk\node_modules\secp256k1\src\privatekey.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="js-sdk-sdk\node_modules\secp256k1\src\publickey.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="js-sdk-sdk\node_modules\secp256k1\src\signature.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\election\elect_node.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\election\proto\elect.pb.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\root_congress\congress_dht.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\root_congress\consensus_shard_manager.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\root_congress\congress_init.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\transport\rudp\rudp.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\kcp\ikcp.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\transport\rudp\session_manager.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\statistics\statistics.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ip\ip_with_country.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ip\cidr.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ip\tests\test_cidr.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-iOS-2.6.3\ShadowWeb\encrypt.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-iOS-2.6.3\ShadowWeb\libev\ev.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-iOS-2.6.3\ShadowWeb\libev\event.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-iOS-2.6.3\ShadowWeb\libev\ev_kqueue.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-iOS-2.6.3\ShadowWeb\libev\ev_poll.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-iOS-2.6.3\ShadowWeb\libev\ev_port.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-iOS-2.6.3\ShadowWeb\libev\ev_select.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-iOS-2.6.3\ShadowWeb\libev\ev_win32.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\client\trans_client.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\acl.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\aead.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\android.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\base64.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\cache.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\crypto.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\http.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\jconf.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\json.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\local.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\manager.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\netutils.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\plugin.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\ppbloom.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\redir.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\resolv.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\rule.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\server.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\stream.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\tls.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\tunnel.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\udprelay.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\utils.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowsocks-libev\src\winsock.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\services\vpn_server\vpn_server.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\services\tests\tcp_echo_client.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\services\vpn_route\route_tcp.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\services\account_with_secret.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\tests\test_thread_safe_queue.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="net-speeder\net_speeder.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\services\vpn_server\vpn_route.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\services\vpn_server\ev_loop_manager.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\acl.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\aead.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\android.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\base64.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\cache.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\crypto.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\http.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\jconf.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\json.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\local.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\manager.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\netutils.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\plugin.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\ppbloom.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\redir.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\resolv.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\rule.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\server.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\stream.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\tls.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\tunnel.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\udprelay.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\utils.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tenon-vpn-xng-local-server\src\winsock.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\limit\tocken_bucket.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bft\basic_bft\transaction\proto\tx.pb.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\transport\endpoint.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\contract\contract_vpn_svr_bandwidth.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\contract\contract_manager.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\contract\proto\contract.pb.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\contract\contract_vpn_login.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\transport\proto\transport.proto" />
+    <None Include="src\dht\proto\dht.proto" />
+    <None Include="src\nat_traverse\proto\nat.proto" />
+    <None Include="src\network\proto\network.proto" />
+    <None Include="src\sync\proto\sync.proto" />
+    <None Include="src\bft\proto\bft.proto" />
+    <None Include="src\election\proto\elect.proto" />
+    <None Include="src\bft\basic_bft\transaction\proto\tx.proto" />
+    <None Include="src\services\proto\service.proto" />
+    <None Include="src\client\proto\client.proto" />
+    <None Include="src\block\proto\block.proto" />
+    <None Include="js-sdk-sdk\node_modules\ajv\lib\dot\coerce.def">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="js-sdk-sdk\node_modules\ajv\lib\dot\defaults.def">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="js-sdk-sdk\node_modules\ajv\lib\dot\definitions.def">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="js-sdk-sdk\node_modules\ajv\lib\dot\errors.def">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="js-sdk-sdk\node_modules\ajv\lib\dot\missing.def">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="js-sdk-sdk\node_modules\base32\test\index.html" />
+    <None Include="js-sdk-sdk\node_modules\blake2b-wasm\example.html" />
+    <None Include="js-sdk-sdk\node_modules\ByteBuffer\ByteBuffer.html" />
+    <None Include="js-sdk-sdk\node_modules\jsbn\example.html" />
+    <None Include="js-sdk-sdk\node_modules\uri-js\tests\test-es5.html" />
+    <None Include="js-sdk-sdk\node_modules\uri-js\tests\test-es5-min.html" />
+    <None Include="js-sdk-sdk\index.html" />
+    <None Include="js-sdk-sdk\bundle.js" />
+    <None Include="js-sdk-sdk\main.js" />
+    <None Include="js-sdk-sdk\package-lock.json" />
+    <None Include="js-sdk-sdk\rpc\http_handler.js" />
+    <None Include="js-sdk-sdk\rpc\protocol.js" />
+    <None Include="js-sdk-sdk\rpc\request_result_definition.js" />
+    <None Include="js-sdk-sdk\rpc\rpc_signatrue.js" />
+    <None Include="js-sdk-sdk\rpc\trans_base.js" />
+    <None Include="js-sdk-sdk\model\global_defination.js" />
+    <None Include="js-sdk-sdk\model\top_chain_types.js" />
+    <None Include="js-sdk-sdk\model\user_info.js" />
+    <None Include="js-sdk-sdk\model\xtransaction.js" />
+    <None Include="js-sdk-sdk\impl\api_method_impl.js" />
+    <None Include="js-sdk-sdk\impl\task_info.js" />
+    <None Include="js-sdk-sdk\impl\xaction_param.js" />
+    <None Include="js-sdk-sdk\base\crypto_util.js" />
+    <None Include="js-sdk-sdk\base\ecdsa.js" />
+    <None Include="js-sdk-sdk\base\inherit.js" />
+    <None Include="js-sdk-sdk\base\string_util.js" />
+    <None Include="js-sdk-sdk\proto\client.proto" />
+    <None Include="js-sdk-sdk\proto\client_pb.js" />
+    <None Include="js-sdk-sdk\proto\client_proto.js" />
+    <None Include="js-sdk-sdk\proto\http_req.js" />
+    <None Include="block_server\app.js" />
+    <None Include="block_server\package.json" />
+    <None Include="block_server\package-lock.json" />
+    <None Include="block_server\views\index.html" />
+    <None Include="block_server\views\transaction.html" />
+    <None Include="block_server\views\statistics.html" />
+    <None Include="block_server\views\best_addr.html" />
+    <None Include="block_server\views\api.html" />
+    <None Include="block_server\views\error.html" />
+    <None Include="block_server\views\layout.html" />
+    <None Include="block_brower\proto\client.proto" />
+    <None Include="block_brower\proto\client_pb.js" />
+    <None Include="block_brower\proto\client_proto.js" />
+    <None Include="block_brower\proto\http_req.js" />
+    <None Include="block_brower\bundle.js" />
+    <None Include="block_brower\index.html" />
+    <None Include="block_brower\main.js" />
+    <None Include="block_brower\package-lock.json" />
+    <None Include="block_brower\README.md" />
+    <None Include="block_brower\test" />
+    <None Include="yunwei\cp.sh" />
+    <None Include="yunwei\cmd.sh" />
+    <None Include="src\ip\conf\geolite.conf" />
+    <None Include="C:\Users\actantion\Desktop\geo_country.conf" />
+    <None Include="src\ip\conf\geo_country.conf" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowsocksX\Configuration.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowsocksX\main.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowsocksX\Profile.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowsocksX\ProfileManager.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowsocksX\qrcode.htm" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowsocksX\qrcode.min.js" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowsocksX\QRCodeWindow.xib" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowsocksX\ShadowsocksX-Info.plist" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowsocksX\ShadowsocksX-Prefix.pch" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowsocksX\SWBAppDelegate.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowsocksX\SWBApplication.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowsocksX\SWBConfigWindowController.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowsocksX\SWBQRCodeWindowController.m" />
+    <None Include="shadowsocks-iOS-2.6.3\shadowsocks_sysconf\main.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowWeb\local.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowWeb\main.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowWeb\ProxySettingsTableViewController.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowWeb\QRCodeViewController.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowWeb\ShadowsocksRunner.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowWeb\SimpleTableViewSource.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBAboutController.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBAppDelegate.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBNetworkActivityIndicatorManager.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBNewTabButton.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBPage.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBPageManager.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBSmallCloseButton.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBSmallCloseButtonHighlightView.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBTab.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBTabBarView.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBTabView.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBViewController.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBWebView.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowWeb\SWBWebViewContainer.m" />
+    <None Include="shadowsocks-iOS-2.6.3\ShadowWeb\table.m" />
+    <None Include="C:\Users\actantion\Desktop\tcp_nanqinlang-1.3.2.sh" />
+    <None Include="bbr\tcp_nanqinlang-1.3.2.sh" />
+    <None Include="yunwei\init_env.sh" />
+    <None Include="yunwei\start_node.sh" />
+    <None Include="yunwei\tcp_nanqinlang-1.3.2.sh" />
+    <None Include="src\contract\proto\contract.proto" />
+  </ItemGroup>
+</Project>
