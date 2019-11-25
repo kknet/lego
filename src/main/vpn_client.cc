@@ -18,9 +18,8 @@ int main(int argc, char** argv) {
             "0.0.0.0",
             7991,
             "id:134.209.184.49:7896",
-            "./conf/lego.conf",
-            "./log/lego.log",
-            "./conf/log4cpp.properties",
+            "./conf/",
+            "3.0.0",
             "");
     if (int_res == "ERROR") {
         std::cout << "init client failed: " << int_res << std::endl;
@@ -48,9 +47,8 @@ int main(int argc, char** argv) {
             local_ip,
             local_port,
             bootstrap,
-            "./conf/lego.conf",
-            "./log/lego.log",
-            "./conf/log4cpp.properties",
+            "./conf/",
+            "3.0.0",
             "");
     if (int_res == "ERROR") {
         std::cout << "init client failed: " << int_res << std::endl;
