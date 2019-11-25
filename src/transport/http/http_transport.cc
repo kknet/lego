@@ -549,6 +549,7 @@ void HttpTransport::HandleWxAliPay(const httplib::Request &req, httplib::Respons
         res.status = 400;
         res.set_content("", "text/plain");
         res.set_header("Access-Control-Allow-Origin", "*");
+        TRANSPORT_ERROR("can't find remote addr from req.headers.");
         return;
     }
 
@@ -556,16 +557,21 @@ void HttpTransport::HandleWxAliPay(const httplib::Request &req, httplib::Respons
         res.status = 400;
         res.set_content("", "text/plain");
         res.set_header("Access-Control-Allow-Origin", "*");
+        TRANSPORT_ERROR("remote addr [%s] local [%s] invalid.",
+                iter->second.c_str(),
+                common::GlobalInfo::Instance()->config_local_ip().c_str());
         return;
     }
     
     try {
         nlohmann::json json_obj = nlohmann::json::parse(req.body);
-        auto acc_addr = common::Encode::HexDecode(json_obj["acc_addr"].get<std::string>());
+        auto hex_addr = json_obj["acc_addr"].get<std::string>();
+        auto acc_addr = common::Encode::HexDecode(hex_addr);
         auto real_price = json_obj["price"].get<float>();
         auto gid = common::Encode::HexDecode(json_obj["gid"].get<std::string>());
         transport::protobuf::Header msg;
         float amount = (2000.0f / 30.0f + 0.5f) * real_price;
+        TRANSPORT_ERROR("handle transport is empty[%s][%f].", hex_addr.c_str(), amount);
         if (real_price > 0.0f && real_price < 100.0) {
             gid = CreateWxAliPayRequest(gid, acc_addr, static_cast<uint64_t>(amount), msg);
         }
@@ -584,6 +590,7 @@ void HttpTransport::HandleWxAliPay(const httplib::Request &req, httplib::Respons
             res.status = 400;
             res.set_content("", "text/plain");
             res.set_header("Access-Control-Allow-Origin", "*");
+            TRANSPORT_ERROR("send transport gid is empty[%s].", hex_addr.c_str());
             return;
         }
 
@@ -634,7 +641,6 @@ void HttpTransport::Listen() {
         HandleIosPay(req, res);
     });
     http_svr_.Post("/wx_alipay_pay", [&](const httplib::Request &req, httplib::Response &res) {
-
         HandleWxAliPay(req, res);
     });
     http_svr_.set_error_handler([](const httplib::Request&, httplib::Response &res) {
