@@ -1054,7 +1054,8 @@ std::string VpnClient::CheckVip() {
             common::kUserPayForVpn,
             common::GlobalInfo::Instance()->id(),
             paied_vip_info_[paied_vip_valid_idx_]->height);
-    return std::to_string(paied_vip_info_[paied_vip_valid_idx_]->timestamp);
+    return (std::to_string(paied_vip_info_[paied_vip_valid_idx_]->timestamp) +
+            "," + std::to_string(paied_vip_info_[paied_vip_valid_idx_]->amount));
 }
 
 std::string VpnClient::PayForVPN(const std::string& to, const std::string& gid, uint64_t amount) {
