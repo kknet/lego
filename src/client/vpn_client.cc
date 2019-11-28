@@ -74,6 +74,7 @@ VpnClient::VpnClient() {
     paied_vip_info_[0] = std::make_shared<LastPaiedVipInfo>();
     paied_vip_info_[0]->height = 0;
     paied_vip_info_[0]->timestamp = 0;
+    paied_vip_info_[0]->amount = 0;
     paied_vip_info_[1] = nullptr;
 
     vpn_committee_accounts_.insert(common::Encode::HexDecode("dc161d9ab9cd5a031d6c5de29c26247b6fde6eb36ed3963c446c1a993a088262"));
