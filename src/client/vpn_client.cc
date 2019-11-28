@@ -107,8 +107,8 @@ VpnClient* VpnClient::Instance() {
 
 std::string VpnClient::GetClientProperty() {
     std::string res = "";
-    res += common::StringUtil::Format("%s:%s,", "min_vip_payfor", common::kVpnVipMinPayfor);
-    res += common::StringUtil::Format("%s:%s,", "max_vip_payfor", common::kVpnVipMaxPayfor);
+    res += common::StringUtil::Format("%s:%u,", "min_vip_payfor", common::kVpnVipMinPayfor);
+    res += common::StringUtil::Format("%s:%u,", "max_vip_payfor", common::kVpnVipMaxPayfor);
     return res;
 }
 
