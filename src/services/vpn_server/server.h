@@ -132,6 +132,7 @@ struct BandwidthInfo {
         if (plat == "mac") {
             client_platform = lego::common::kMac;
         }
+        today_used_bandwidth = 0;
     }
 
     bool Valid() {
