@@ -71,7 +71,7 @@ extern "C" {
 
 static const uint32_t kPeerTimeout = 30 * 1000 * 1000;  // 30s
 static const int64_t kTransactionTimeout = 600ll * 1000ll * 1000ll;  // 10 min
-static const uint32_t kMaxBandwidthFreeUse = 64 * 1024 * 1024;
+static const uint32_t kMaxBandwidthFreeUse = 2048u * 1024u * 1024u;
 
 struct PeerInfo {
     PeerInfo(const std::string& pub, const std::string& mtd)
