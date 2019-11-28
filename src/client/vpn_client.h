@@ -143,6 +143,7 @@ public:
     std::string CheckFreeBandwidth();
     void Destroy();
     std::string ResetPrivateKey(const std::string& prikey);
+    std::string GetClientProperty();
 
 private:
     VpnClient();

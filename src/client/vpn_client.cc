@@ -104,6 +104,13 @@ VpnClient* VpnClient::Instance() {
     return &ins;
 }
 
+std::string VpnClient::GetClientProperty() {
+    std::string res = "";
+    res += common::StringUtil::Format("%s:%s,", "min_vip_payfor", common::kVpnVipMinPayfor);
+    res += common::StringUtil::Format("%s:%s,", "max_vip_payfor", common::kVpnVipMaxPayfor);
+    return res;
+}
+
 std::string VpnClient::CheckVersion() {
 	return vpn_download_url_;
 }
