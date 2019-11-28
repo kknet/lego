@@ -1891,6 +1891,7 @@ void VpnServer::CheckAccountValid() {
                         iter->second->account_id,
                         iter->second->up_bandwidth + iter->second->down_bandwidth);
             }
+            iter->second->today_used_bandwidth = 0;
             account_map_.erase(iter++);
             continue;
         }

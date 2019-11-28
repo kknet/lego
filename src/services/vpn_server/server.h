@@ -152,7 +152,7 @@ struct BandwidthInfo {
     bool IsVip() {
         uint32_t now_day_timestamp = lego::common::TimeUtils::TimestampDays();
         int32_t vip_days = vip_payed_tenon / lego::common::kVpnVipMinPayfor;
-        if (vip_days > 0 && vip_timestamp + vip_days + 1 >= now_day_timestamp) {
+        if (vip_days > 0 && ((vip_timestamp + vip_days + 1) >= now_day_timestamp)) {
             return true;
         }
         return false;
