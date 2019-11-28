@@ -1,11 +1,19 @@
 #pragma once
 
+#include <mutex>
+#include <unordered_map>
+
 #include "transport/transport.h"
 #include "httplib.h"
 
 namespace lego {
 
 namespace transport {
+
+enum TransactionType {
+    kBuyWithWxAliPay = 0,
+    kSharedStaking = 1,
+};
 
 class HttpTransport : public Transport {
 public:
@@ -32,10 +40,12 @@ private:
     void HandleStatistics(const httplib::Request &req, httplib::Response &res);
     void HandleBestAddr(const httplib::Request &req, httplib::Response &res);
     void HandleIosPay(const httplib::Request &req, httplib::Response &res);
-    void HandleWxAliPay(const httplib::Request &req, httplib::Response &res);
+    void HandleWxAliPay(const httplib::Request &req, httplib::Response &res, int type);
 
     httplib::Server http_svr_;
     std::shared_ptr<std::thread> run_thread_{ nullptr };
+    std::unordered_map<std::string, uint32_t> shared_staking_map_;
+    std::mutex shared_staking_map_mutex_;
 
     DISALLOW_COPY_AND_ASSIGN(HttpTransport);
 };

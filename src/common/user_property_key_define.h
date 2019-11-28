@@ -56,6 +56,7 @@ static const std::string kVpnAdminAccount = "e8a1ceb6b807a98a20e3aa10aa2199e47cb
 
 static const uint32_t kVpnVipMinPayfor = 66u;
 static const uint32_t kVpnVipMaxPayfor = 2000u;
+static const uint32_t kVpnShareStakingPrice = 1u;
 
 }  // namespace  common
 

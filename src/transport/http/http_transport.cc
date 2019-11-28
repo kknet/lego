@@ -6,6 +6,7 @@
 #include "common/global_info.h"
 #include "common/encode.h"
 #include "common/hash.h"
+#include "common/user_property_key_define.h"
 #include "statistics/statistics.h"
 #include "db/db.h"
 #include "security/schnorr.h"
@@ -543,24 +544,26 @@ void HttpTransport::HandleIosPay(const httplib::Request &req, httplib::Response 
     }
 }
 
-void HttpTransport::HandleWxAliPay(const httplib::Request &req, httplib::Response &res) {
-    auto iter = req.headers.find("REMOTE_ADDR");
-    if (iter == req.headers.end()) {
-        res.status = 400;
-        res.set_content("", "text/plain");
-        res.set_header("Access-Control-Allow-Origin", "*");
-        TRANSPORT_ERROR("can't find remote addr from req.headers.");
-        return;
-    }
+void HttpTransport::HandleWxAliPay(const httplib::Request &req, httplib::Response &res, int type) {
+    if (type == kBuyWithWxAliPay) {
+        auto iter = req.headers.find("REMOTE_ADDR");
+        if (iter == req.headers.end()) {
+            res.status = 400;
+            res.set_content("", "text/plain");
+            res.set_header("Access-Control-Allow-Origin", "*");
+            TRANSPORT_ERROR("can't find remote addr from req.headers.");
+            return;
+        }
 
-    if (iter->second != common::GlobalInfo::Instance()->config_local_ip()) {
-        res.status = 400;
-        res.set_content("", "text/plain");
-        res.set_header("Access-Control-Allow-Origin", "*");
-        TRANSPORT_ERROR("remote addr [%s] local [%s] invalid.",
+        if (iter->second != common::GlobalInfo::Instance()->config_local_ip()) {
+            res.status = 400;
+            res.set_content("", "text/plain");
+            res.set_header("Access-Control-Allow-Origin", "*");
+            TRANSPORT_ERROR("remote addr [%s] local [%s] invalid.",
                 iter->second.c_str(),
                 common::GlobalInfo::Instance()->config_local_ip().c_str());
-        return;
+            return;
+        }
     }
     
     try {
@@ -571,6 +574,23 @@ void HttpTransport::HandleWxAliPay(const httplib::Request &req, httplib::Respons
         auto gid = common::Encode::HexDecode(json_obj["gid"].get<std::string>());
         transport::protobuf::Header msg;
         float amount = (2000.0f / 30.0f + 0.5f) * real_price;
+        if (type == kSharedStaking) {
+            std::lock_guard<std::mutex> guard(shared_staking_map_mutex_);
+            auto iter = shared_staking_map_.find(acc_addr);
+            if (iter == shared_staking_map_.end()) {
+                shared_staking_map_[acc_addr] = 1;
+            } else {
+                if (iter->second >= 10) {
+                    return;
+                }
+                ++(iter->second);
+            }
+
+            if (static_cast<int>(real_price) != common::kVpnShareStakingPrice) {
+                return;
+            }
+        }
+
         TRANSPORT_ERROR("handle transport now[%s][%f].", hex_addr.c_str(), amount);
         if (real_price > 0.0f && real_price < 100.0) {
             gid = CreateWxAliPayRequest(gid, acc_addr, static_cast<uint64_t>(amount), msg);
@@ -641,7 +661,10 @@ void HttpTransport::Listen() {
         HandleIosPay(req, res);
     });
     http_svr_.Post("/wx_alipay_pay", [&](const httplib::Request &req, httplib::Response &res) {
-        HandleWxAliPay(req, res);
+        HandleWxAliPay(req, res, kBuyWithWxAliPay);
+    });
+    http_svr_.Post("/shared_staking", [&](const httplib::Request &req, httplib::Response &res) {
+        HandleWxAliPay(req, res, kSharedStaking);
     });
     http_svr_.set_error_handler([](const httplib::Request&, httplib::Response &res) {
         const char *fmt = "<p>Error Status: <span style='color:red;'>%d</span></p>";
