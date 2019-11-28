@@ -571,7 +571,7 @@ void HttpTransport::HandleWxAliPay(const httplib::Request &req, httplib::Respons
         auto gid = common::Encode::HexDecode(json_obj["gid"].get<std::string>());
         transport::protobuf::Header msg;
         float amount = (2000.0f / 30.0f + 0.5f) * real_price;
-        TRANSPORT_ERROR("handle transport is empty[%s][%f].", hex_addr.c_str(), amount);
+        TRANSPORT_ERROR("handle transport now[%s][%f].", hex_addr.c_str(), amount);
         if (real_price > 0.0f && real_price < 100.0) {
             gid = CreateWxAliPayRequest(gid, acc_addr, static_cast<uint64_t>(amount), msg);
         }
