@@ -545,25 +545,23 @@ void HttpTransport::HandleIosPay(const httplib::Request &req, httplib::Response 
 }
 
 void HttpTransport::HandleWxAliPay(const httplib::Request &req, httplib::Response &res, int type) {
-    if (type == kBuyWithWxAliPay) {
-        auto iter = req.headers.find("REMOTE_ADDR");
-        if (iter == req.headers.end()) {
-            res.status = 400;
-            res.set_content("", "text/plain");
-            res.set_header("Access-Control-Allow-Origin", "*");
-            TRANSPORT_ERROR("can't find remote addr from req.headers.");
-            return;
-        }
+    auto iter = req.headers.find("REMOTE_ADDR");
+    if (iter == req.headers.end()) {
+        res.status = 400;
+        res.set_content("", "text/plain");
+        res.set_header("Access-Control-Allow-Origin", "*");
+        TRANSPORT_ERROR("can't find remote addr from req.headers.");
+        return;
+    }
 
-        if (iter->second != common::GlobalInfo::Instance()->config_local_ip()) {
-            res.status = 400;
-            res.set_content("", "text/plain");
-            res.set_header("Access-Control-Allow-Origin", "*");
-            TRANSPORT_ERROR("remote addr [%s] local [%s] invalid.",
-                iter->second.c_str(),
-                common::GlobalInfo::Instance()->config_local_ip().c_str());
-            return;
-        }
+    if (iter->second != common::GlobalInfo::Instance()->config_local_ip()) {
+        res.status = 400;
+        res.set_content("", "text/plain");
+        res.set_header("Access-Control-Allow-Origin", "*");
+        TRANSPORT_ERROR("remote addr [%s] local [%s] invalid.",
+            iter->second.c_str(),
+            common::GlobalInfo::Instance()->config_local_ip().c_str());
+        return;
     }
     
     try {
