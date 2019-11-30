@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "contract/contract_vpn_svr_bandwidth.h"
+#include "contract/contract_pay_for_vpn.h"
 
 #include "common/time_utils.h"
 #include "common/string_utils.h"
@@ -10,7 +10,7 @@ namespace lego {
 
 namespace contract {
 
-int VpnSvrBandwidth::InitWithAttr(
+int PayforVpn::InitWithAttr(
         const bft::protobuf::Block& block_item,
         const bft::protobuf::TxInfo& tx_info) {
     std::string now_day_timestamp = std::to_string(common::TimeUtils::TimestampDays());
@@ -47,7 +47,7 @@ int VpnSvrBandwidth::InitWithAttr(
     return kContractSuccess;
 }
 
-int VpnSvrBandwidth::GetAttrWithKey(const std::string& key, std::string& value) {
+int PayforVpn::GetAttrWithKey(const std::string& key, std::string& value) {
     std::lock_guard<std::mutex> guard(bandwidth_all_map_mutex_);
     auto all_iter = bandwidth_all_map_.find(key);
     if (all_iter == bandwidth_all_map_.end()) {
@@ -58,7 +58,7 @@ int VpnSvrBandwidth::GetAttrWithKey(const std::string& key, std::string& value) 
     return kContractSuccess;
 }
 
-int VpnSvrBandwidth::Execute(bft::TxItemPtr& tx_item) {
+int PayforVpn::Execute(bft::TxItemPtr& tx_item) {
     return kContractSuccess;
 }
 

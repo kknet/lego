@@ -9,10 +9,10 @@ namespace lego {
 
 namespace contract {
 
-class VpnSvrBandwidth : public ContractInterface {
+class PayforVpn : public ContractInterface {
 public:
-    VpnSvrBandwidth() {}
-    virtual ~VpnSvrBandwidth() {}
+    PayforVpn() {}
+    virtual ~PayforVpn() {}
     virtual int InitWithAttr(
             const bft::protobuf::Block& block_item,
             const bft::protobuf::TxInfo& tx_info);
@@ -23,7 +23,7 @@ private:
     std::unordered_map<std::string, uint32_t> bandwidth_all_map_;
     std::mutex bandwidth_all_map_mutex_;
 
-    DISALLOW_COPY_AND_ASSIGN(VpnSvrBandwidth);
+    DISALLOW_COPY_AND_ASSIGN(PayforVpn);
 };
 
 }  // namespace contract

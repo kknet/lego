@@ -76,7 +76,7 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
 
             if (!tx_list[i].smart_contract_addr().empty()) {
                 contract::ContractManager::Instance()->InitWithAttr(
-                        block_item.height(),
+                        block_item,
                         tx_list[i]);
             }
         } else {
@@ -105,7 +105,7 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
 
             if (!tx_list[i].smart_contract_addr().empty()) {
                 contract::ContractManager::Instance()->InitWithAttr(
-                        block_item.height(),
+                        block_item,
                         tx_list[i]);
             }
             AddAccount(acc_ptr, tx_list[i].amount());

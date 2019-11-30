@@ -7,7 +7,9 @@ namespace lego {
 
 namespace contract {
 
-int VpnLogin::InitWithAttr(uint64_t block_height, const bft::protobuf::TxInfo& tx_info) {
+int VpnLogin::InitWithAttr(
+        const bft::protobuf::Block& block_item,
+        const bft::protobuf::TxInfo& tx_info) {
     return kContractSuccess;
 }
 

@@ -15,7 +15,9 @@ class ContractManager {
 public:
     static ContractManager* Instance();
     int Init();
-    int InitWithAttr(uint64_t block_height, const bft::protobuf::TxInfo& tx_info);
+    int InitWithAttr(
+            const bft::protobuf::Block& block_item,
+            const bft::protobuf::TxInfo& tx_info);
     int GetAttrWithKey(
             const std::string& smart_contract_addr,
             const std::string& key,

@@ -82,7 +82,9 @@ void ContractManager::HandleGetContractAttrRequest(
 //             contract_msg.get_attr_req().attr_key().c_str(), attr_value.c_str());
 }
 
-int ContractManager::InitWithAttr(uint64_t block_height, const bft::protobuf::TxInfo& tx_info) {
+int ContractManager::InitWithAttr(
+        const bft::protobuf::Block& block_item,
+        const bft::protobuf::TxInfo& tx_info) {
     ContractInterfacePtr contract_ptr = nullptr;
     {
         std::lock_guard<std::mutex> guard(contract_map_mutex_);
@@ -93,7 +95,7 @@ int ContractManager::InitWithAttr(uint64_t block_height, const bft::protobuf::Tx
     }
 
     if (contract_ptr != nullptr) {
-        return contract_ptr->InitWithAttr(block_height, tx_info);
+        return contract_ptr->InitWithAttr(block_item, tx_info);
     }
     return kContractError;
 }

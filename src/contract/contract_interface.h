@@ -12,7 +12,9 @@ namespace contract {
 
 class ContractInterface {
 public:
-    virtual int InitWithAttr(uint64_t block_height, const bft::protobuf::TxInfo& tx_info) = 0;
+    virtual int InitWithAttr(
+            const bft::protobuf::Block& block_item,
+            const bft::protobuf::TxInfo& tx_info) = 0;
     virtual int GetAttrWithKey(const std::string& key, std::string& value) = 0;
     // attr map can change, and save to block chain
     virtual int Execute(bft::TxItemPtr& tx_item) = 0;
