@@ -36,7 +36,7 @@ int PayforVpn::InitWithAttr(
         payfor_all_map_[tx_info.from()] = pay_info;
     } else {
         if (all_iter->second.height > block_item.height()) {
-            return;
+            return kContractSuccess;
         }
         all_iter->second.day_timestamp = pay_day_timestamp;
         all_iter->second.amount = tx_info.amount();
