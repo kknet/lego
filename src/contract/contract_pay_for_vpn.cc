@@ -13,52 +13,68 @@ namespace contract {
 int PayforVpn::InitWithAttr(
         const bft::protobuf::Block& block_item,
         const bft::protobuf::TxInfo& tx_info) {
-    std::string now_day_timestamp = std::to_string(common::TimeUtils::TimestampDays());
-    std::string attr_key = (common::kIncreaseVpnBandwidth + "_" +
-            common::Encode::HexEncode(tx_info.to()) + "_" + now_day_timestamp);
-    std::string attr_val;
-    for (int32_t i = 0; i < tx_info.attr_size(); ++i) {
-        if (tx_info.attr(i).key() == attr_key) {
-            attr_val = tx_info.attr(i).value();
-            break;
-        }
-    }
-    
-    if (attr_val.empty()) {
-        return kContractSuccess;
-    }
-
-    uint32_t bandwidth = 0;
-    try {
-        bandwidth = common::StringUtil::ToUint32(attr_val);
-    } catch (...) {
+    if (tx_info.type() != common::kConsensusPayForCommonVpn) {
         return kContractSuccess;
     }
 
     if (tx_info.to_add()) {
-        std::lock_guard<std::mutex> guard(bandwidth_all_map_mutex_);
-        auto all_iter = bandwidth_all_map_.find(attr_key);
-        if (all_iter == bandwidth_all_map_.end()) {
-            bandwidth_all_map_[attr_key] = bandwidth;
-        } else {
-            all_iter->second += bandwidth;
+        return kContractSuccess;
+    }
+
+    uint64_t day_msec = 24llu * 3600llu * 1000llu;
+    uint64_t pay_day_timestamp = block_item.timestamp() / day_msec;
+    
+    std::lock_guard<std::mutex> guard(payfor_all_map_mutex_);
+    auto all_iter = payfor_all_map_.find(tx_info.from());
+    if (all_iter == payfor_all_map_.end()) {
+        PayInfo pay_info;
+        pay_info.day_timestamp = pay_day_timestamp;
+        pay_info.amount = tx_info.amount();
+        pay_info.height = block_item.height();
+        uint64_t use_day = tx_info.amount() / common::kVpnVipMinPayfor;
+        pay_info.end_day_timestamp = pay_day_timestamp + use_day;
+        payfor_all_map_[tx_info.from()] = pay_info;
+    } else {
+        if (all_iter->second.height > block_item.height()) {
+            return;
         }
+        all_iter->second.day_timestamp = pay_day_timestamp;
+        all_iter->second.amount = tx_info.amount();
+        all_iter->second.height = block_item.height();
+        uint64_t use_day = tx_info.amount() / common::kVpnVipMinPayfor;
+        all_iter->second.end_day_timestamp = pay_day_timestamp + use_day;
     }
     return kContractSuccess;
 }
 
 int PayforVpn::GetAttrWithKey(const std::string& key, std::string& value) {
-    std::lock_guard<std::mutex> guard(bandwidth_all_map_mutex_);
-    auto all_iter = bandwidth_all_map_.find(key);
-    if (all_iter == bandwidth_all_map_.end()) {
-        return kContractError;
-    } 
-
-    value = std::to_string(all_iter->second);
     return kContractSuccess;
 }
 
 int PayforVpn::Execute(bft::TxItemPtr& tx_item) {
+    if (tx_item->bft_type != common::kConsensusPayForCommonVpn) {
+        return kContractError;
+    }
+
+    if (tx_item->add_to_acc_addr) {
+        return kContractSuccess;
+    }
+
+    std::lock_guard<std::mutex> guard(payfor_all_map_mutex_);
+    auto all_iter = payfor_all_map_.find(tx_item->from_acc_addr);
+    if (all_iter == payfor_all_map_.end()) {
+        return kContractSuccess;
+    }
+
+    auto now_day_timestamp = common::TimeUtils::TimestampDays();
+    if (all_iter->second.end_day_timestamp > now_day_timestamp) {
+        CONTRACT_ERROR("user[%s] vpn pay for[%s] prev paied not end.[%llu] now[%llu]",
+                common::Encode::HexEncode(tx_item->from_acc_addr).c_str(),
+                common::Encode::HexEncode(tx_item->to_acc_addr).c_str(),
+                all_iter->second.end_day_timestamp,
+                now_day_timestamp);
+        return kContractError;
+    }
     return kContractSuccess;
 }
 

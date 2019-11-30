@@ -20,8 +20,14 @@ public:
     virtual int Execute(bft::TxItemPtr& tx_item);
 
 private:
-    std::unordered_map<std::string, uint32_t> bandwidth_all_map_;
-    std::mutex bandwidth_all_map_mutex_;
+    struct PayInfo {
+        uint64_t day_timestamp;
+        uint64_t amount;
+        uint64_t height;
+        uint64_t end_day_timestamp;
+    };
+    std::unordered_map<std::string, PayInfo> payfor_all_map_;
+    std::mutex payfor_all_map_mutex_;
 
     DISALLOW_COPY_AND_ASSIGN(PayforVpn);
 };
