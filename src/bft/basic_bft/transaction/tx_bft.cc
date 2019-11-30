@@ -123,7 +123,7 @@ int TxBft::BackupCheckPrepare(std::string& bft_str) {
         }
 
         do {
-            if (!tx_info.smart_contract_addr.empty()) {
+            if (!tx_info.smart_contract_addr().empty()) {
                 auto local_tx_info = DispatchPool::Instance()->GetTx(
                         pool_index(),
                         tx_info.to_add(),
