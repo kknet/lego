@@ -123,6 +123,32 @@ int TxBft::BackupCheckPrepare(std::string& bft_str) {
         }
 
         do {
+            if (!tx_info.smart_contract_addr.empty()) {
+                auto local_tx_info = DispatchPool::Instance()->GetTx(
+                        pool_index(),
+                        tx_info.to_add(),
+                        tx_info.gid());
+                if (local_tx_info == nullptr) {
+                    BFT_ERROR("prepare [to: %d] [pool idx: %d] not has tx[%s]to[%s][%s]!",
+                        tx_info.to_add(),
+                        pool_index(),
+                        common::Encode::HexEncode(tx_info.from()).c_str(),
+                        common::Encode::HexEncode(tx_info.to()).c_str(),
+                        common::Encode::HexEncode(tx_info.gid()).c_str());
+                    return kBftTxNotExists;
+                }
+
+                if (contract::ContractManager::Instance()->Execute(
+                        local_tx_info) != contract::kContractSuccess) {
+                    if (tx_info.status() != kBftExecuteContractFailed) {
+                        BFT_ERROR("local tx status not equal to leader status[%d][%d]!",
+                            tx_info.status(), kBftExecuteContractFailed);
+                        return kBftLeaderInfoInvalid;
+                    }
+                    break;
+                }
+            }
+
             if (tx_info.has_to() && !tx_info.to().empty()) {
                 if (tx_info.to_add()) {
                     auto iter = acc_balance_map.find(tx_info.to());
@@ -253,17 +279,6 @@ int TxBft::CheckTxInfo(
                 local_tx_info->smart_contract_addr.c_str(),
                 tx_info.smart_contract_addr().c_str());
         return kBftLeaderInfoInvalid;
-    }
-
-    if (!local_tx_info->smart_contract_addr.empty()) {
-        if (contract::ContractManager::Instance()->Execute(
-                local_tx_info) != contract::kContractSuccess) {
-            if (tx_info.status() != kBftExecuteContractFailed) {
-                BFT_ERROR("local tx status not equal to leader status[%d][%d]!",
-                        tx_info.status(), kBftExecuteContractFailed);
-                return kBftLeaderInfoInvalid;
-            }
-        }
     }
 
     if (local_tx_info->attr_map.size() != static_cast<uint32_t>(tx_info.attr_size())) {

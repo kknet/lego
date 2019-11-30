@@ -116,6 +116,15 @@ void TxProto::CreateTxBlock(
         tx.set_type(tx_vec[i]->bft_type);
 
         do {
+            // execute contract
+            if (!tx_vec[i]->smart_contract_addr.empty()) {
+                if (contract::ContractManager::Instance()->Execute(
+                    tx_vec[i]) != contract::kContractSuccess) {
+                    tx.set_status(kBftExecuteContractFailed);
+                    break;
+                }
+            }
+
             if (tx_vec[i]->to_acc_addr.empty()) {
                 tx.set_netwok_id(network::GetConsensusShardNetworkId(tx_vec[i]->from_acc_addr));
                 tx.set_balance(0);  // create new account address
@@ -160,15 +169,6 @@ void TxProto::CreateTxBlock(
                                 static_cast<int64_t>(tx_vec[i]->lego_count);
                     }
                     tx.set_balance(acc_balance_map[tx_vec[i]->from_acc_addr]);
-                }
-            }
-
-            // execute contract
-            if (!tx_vec[i]->smart_contract_addr.empty()) {
-                if (contract::ContractManager::Instance()->Execute(
-                        tx_vec[i]) != contract::kContractSuccess) {
-                    tx.set_status(kBftExecuteContractFailed);
-                    break;
                 }
             }
         } while (0);
