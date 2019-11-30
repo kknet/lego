@@ -1088,7 +1088,7 @@ std::string VpnClient::PayForVPN(const std::string& to, const std::string& gid, 
             to_addr,
             amount,
             type,
-            "",
+            contract::kContractVpnPayfor,
             attrs,
             msg);
     network::Route::Instance()->Send(msg);
