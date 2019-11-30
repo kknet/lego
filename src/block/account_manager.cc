@@ -44,6 +44,10 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
     
     statis::Statistics::Instance()->inc_tx_count(tx_list.size());
     for (int32_t i = 0; i < tx_list.size(); ++i) {
+        if (tx_list[i].status() != bft::kBftSuccess) {
+            continue;
+        }
+
         if (tx_list[i].to_add()) {
             statis::Statistics::Instance()->inc_tx_amount(tx_list[i].amount());
             if (CheckNetworkIdValid(tx_list[i].to()) != kBlockSuccess) {

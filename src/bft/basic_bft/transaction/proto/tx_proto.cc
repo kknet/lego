@@ -114,15 +114,17 @@ void TxProto::CreateTxBlock(
         tx.set_to_add(tx_vec[i]->add_to_acc_addr);
         tx.set_smart_contract_addr(tx_vec[i]->smart_contract_addr);
         tx.set_type(tx_vec[i]->bft_type);
+        // execute contract
+        if (!tx_vec[i]->smart_contract_addr.empty()) {
+            if (contract::ContractManager::Instance()->Execute(
+                tx_vec[i]) != contract::kContractSuccess) {
+                tx.set_status(kBftExecuteContractFailed);
+            }
+        }
 
         do {
-            // execute contract
-            if (!tx_vec[i]->smart_contract_addr.empty()) {
-                if (contract::ContractManager::Instance()->Execute(
-                    tx_vec[i]) != contract::kContractSuccess) {
-                    tx.set_status(kBftExecuteContractFailed);
-                    break;
-                }
+            if (tx.status() != kBftSuccess) {
+                break;
             }
 
             if (tx_vec[i]->to_acc_addr.empty()) {
