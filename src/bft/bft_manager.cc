@@ -665,20 +665,29 @@ void BftManager::LeaderBroadcastToAcc(const std::shared_ptr<bft::protobuf::Block
         }
     }
 
+    auto dht_ptr = network::UniversalManager::Instance()->GetUniversal(
+        network::kUniversalNetworkId);
+    if (!dht_ptr) {
+        assert(false);
+        return;
+    }
+
+    auto local_node = dht_ptr->local_node();
     for (auto iter = broadcast_nets.begin(); iter != broadcast_nets.end(); ++iter) {
         transport::protobuf::Header msg;
-        auto dht_ptr = network::UniversalManager::Instance()->GetUniversal(
-                network::kUniversalNetworkId);
-        if (!dht_ptr) {
-            assert(false);
-            continue;
-        }
-
-        auto local_node = dht_ptr->local_node();
         BftProto::CreateLeaderBroadcastToAccount(local_node, *iter, block_ptr, msg);
         network::Route::Instance()->Send(msg);
         network::Route::Instance()->SendToLocal(msg);
     }
+
+    transport::protobuf::Header msg;
+    BftProto::CreateLeaderBroadcastToAccount(
+            local_node,
+            network::kConsensusSubscription,
+            block_ptr,
+            msg);
+    network::Route::Instance()->Send(msg);
+
 }
 
 void BftManager::CheckTimeout() {

@@ -666,22 +666,22 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             server->buf->len -= offset;
             memmove(server->buf->data, server->buf->data + offset, server->buf->len);
 
-            if (server->country_code == common::CountryCode::CN) {
-                size_t header_offset = lego::security::kPublicKeySize * 2;
-                if (server->buf->len >= header_offset) {
-                    std::string pubkey = common::Encode::HexDecode(
-                            std::string((char*)buf->data, header_offset));
-                    std::string account = lego::network::GetAccountAddressByPublicKey(pubkey);
-                    if (!lego::vpn::VpnServer::Instance()->ClientAccountValid(account)) {
-                        send(server->fd,
-                                lego::common::kCountryInvalid.c_str(),
-                                lego::common::kCountryInvalid.size(),
-                                0);
-                        CloseAndFreeServer(EV_A_ server);
-                        return;
-                    }
-                }
-            }
+//             if (server->country_code == common::CountryCode::CN) {
+//                 size_t header_offset = lego::security::kPublicKeySize * 2;
+//                 if (server->buf->len >= header_offset) {
+//                     std::string pubkey = common::Encode::HexDecode(
+//                             std::string((char*)buf->data, header_offset));
+//                     std::string account = lego::network::GetAccountAddressByPublicKey(pubkey);
+//                     if (!lego::vpn::VpnServer::Instance()->ClientAccountValid(account)) {
+//                         send(server->fd,
+//                                 lego::common::kCountryInvalid.c_str(),
+//                                 lego::common::kCountryInvalid.size(),
+//                                 0);
+//                         CloseAndFreeServer(EV_A_ server);
+//                         return;
+//                     }
+//                 }
+//             }
         }
 
         remote_t *remote = ConnectToRemote(EV_A_ & info, server);

@@ -184,7 +184,7 @@ private:
             const std::string& attr,
             const std::string& account,
             uint64_t height);
-    void HandleCheckVipResponse(
+    void HandleGetAttrResponse(
             transport::protobuf::Header& header,
             client::protobuf::BlockMessage& block_msg);
     void SendGetBlockWithGid(const std::string& str, bool is_gid);

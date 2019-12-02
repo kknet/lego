@@ -146,7 +146,7 @@ void VpnClient::HandleBlockMessage(transport::protobuf::Header& header) {
     }
 
     if (block_msg.has_acc_attr_res()) {
-        HandleCheckVipResponse(header, block_msg);
+        HandleGetAttrResponse(header, block_msg);
     }
 }
 
@@ -176,7 +176,7 @@ void VpnClient::HandleContractMessage(transport::protobuf::Header& header) {
     }
 }
 
-void VpnClient::HandleCheckVipResponse(
+void VpnClient::HandleGetAttrResponse(
         transport::protobuf::Header& header,
         client::protobuf::BlockMessage& block_msg) {
     if (paied_vip_info_[paied_vip_valid_idx_]->timestamp == 0) {

@@ -71,7 +71,8 @@ bool TxPoolManager::TxValid(TxItemPtr& tx_ptr) {
             return false;
         }
 
-        if (acc_info->balance < static_cast<int64_t>(tx_ptr->lego_count)) {
+        if (!(tx_ptr->add_to_acc_addr) &&
+                (acc_info->balance < static_cast<int64_t>(tx_ptr->lego_count))) {
             BFT_ERROR("tx invalid. balance error[%ll][%llu]",
 					acc_info->balance,
 					tx_ptr->lego_count);
