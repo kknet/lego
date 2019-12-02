@@ -49,6 +49,7 @@ static const std::string kCountryInvalid = "cni";
 
 static const std::string kVpnLoginAttrKey = "vpn_login";
 static const std::string kUserPayForVpn = "user_pay_for_vpn";
+static const std::string kCheckVpnVersion = "tenon_vpn_url";
 static const std::string kSetValidVpnClientAccount = "set_valid_vpn_client_account";
 static const std::string kIncreaseVpnBandwidth = "kIncreaseVpnBandwidth";
 static const std::string kDefaultEnocdeMethod = "aes-128-cfb";

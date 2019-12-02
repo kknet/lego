@@ -212,7 +212,7 @@ private:
     std::map<uint64_t, std::string> hight_block_map_;
     std::mutex hight_block_map_mutex_;
 	std::set<uint64_t> local_account_height_set_;
-	uint64_t vpn_version_last_height_;
+    uint64_t vpn_version_last_height_{ 0 };
 	std::string vpn_download_url_;
     std::mutex height_set_mutex_;
     uint32_t check_times_{ 0 };
