@@ -28,6 +28,8 @@ void SubsConsensus::HandleMessage(transport::protobuf::Header& header) {
     if (header.type() != common::kSubscriptionMessage) {
         return;
     }
+
+    std::cout << "receive consensus block message." << std::endl;
 }
 
 SubsConsensus* SubsConsensus::Instance() {

@@ -44,15 +44,20 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
     
     statis::Statistics::Instance()->inc_tx_count(tx_list.size());
     for (int32_t i = 0; i < tx_list.size(); ++i) {
+        statis::Statistics::Instance()->inc_tx_amount(tx_list[i].amount());
         if (tx_list[i].status() != bft::kBftSuccess) {
             continue;
         }
 
         if (tx_list[i].to_add()) {
-            statis::Statistics::Instance()->inc_tx_amount(tx_list[i].amount());
+            continue;
+        }
+
+        {
             if (CheckNetworkIdValid(tx_list[i].to()) != kBlockSuccess) {
                 continue;
             }
+
             auto acc_ptr = std::make_shared<AccountInfo>(
                     tx_list[i].to(),
                     tx_list[i].balance(),
@@ -83,10 +88,13 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
                         block_item,
                         tx_list[i]);
             }
-        } else {
+        } 
+        
+        {
             if (CheckNetworkIdValid(tx_list[i].from()) != kBlockSuccess) {
                 continue;
             }
+
             auto acc_ptr = std::make_shared<AccountInfo>(
                     tx_list[i].from(),
                     tx_list[i].balance(),
