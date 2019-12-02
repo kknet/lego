@@ -46,6 +46,7 @@ public:
     static void CreateLeaderBroadcastToAccount(
             const dht::NodePtr& local_node,
             uint32_t net_id,
+            uint32_t message_type,
             const std::shared_ptr<bft::protobuf::Block>& block_ptr,
             transport::protobuf::Header& msg);
 

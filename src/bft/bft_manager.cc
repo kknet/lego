@@ -675,7 +675,12 @@ void BftManager::LeaderBroadcastToAcc(const std::shared_ptr<bft::protobuf::Block
     auto local_node = dht_ptr->local_node();
     for (auto iter = broadcast_nets.begin(); iter != broadcast_nets.end(); ++iter) {
         transport::protobuf::Header msg;
-        BftProto::CreateLeaderBroadcastToAccount(local_node, *iter, block_ptr, msg);
+        BftProto::CreateLeaderBroadcastToAccount(
+                local_node,
+                *iter,
+                common::kBftMessage,
+                block_ptr,
+                msg);
         network::Route::Instance()->Send(msg);
         network::Route::Instance()->SendToLocal(msg);
     }
@@ -684,6 +689,7 @@ void BftManager::LeaderBroadcastToAcc(const std::shared_ptr<bft::protobuf::Block
     BftProto::CreateLeaderBroadcastToAccount(
             local_node,
             network::kConsensusSubscription,
+            common::kSubscriptionMessage,
             block_ptr,
             msg);
     network::Route::Instance()->Send(msg);

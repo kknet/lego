@@ -285,6 +285,7 @@ void BftProto::LeaderCreateCommit(
 void BftProto::CreateLeaderBroadcastToAccount(
         const dht::NodePtr& local_node,
         uint32_t net_id,
+        uint32_t message_type,
         const std::shared_ptr<bft::protobuf::Block>& block_ptr,
         transport::protobuf::Header& msg) {
     msg.set_src_dht_key(local_node->dht_key);
@@ -292,7 +293,7 @@ void BftProto::CreateLeaderBroadcastToAccount(
     msg.set_des_dht_key(dht_key.StrKey());
     msg.set_priority(transport::kTransportPriorityHighest);
     msg.set_id(common::GlobalInfo::Instance()->MessageId());
-    msg.set_type(common::kBftMessage);
+    msg.set_type(message_type);
     msg.set_client(false);
     msg.set_hop_count(0);
     auto broad_param = msg.mutable_broadcast();
