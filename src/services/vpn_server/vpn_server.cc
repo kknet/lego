@@ -1897,11 +1897,9 @@ void VpnServer::CheckAccountValid() {
         }
 
         if ((iter->second->up_bandwidth + iter->second->down_bandwidth) >= kAddBandwidth) {
-            if (!iter->second->IsVip()) {
-                SendClientUseBandwidth(
-                        iter->second->account_id,
-                        iter->second->up_bandwidth + iter->second->down_bandwidth);
-            }
+            SendClientUseBandwidth(
+                    iter->second->account_id,
+                    iter->second->up_bandwidth + iter->second->down_bandwidth);
             iter->second->up_bandwidth = 0;
             iter->second->down_bandwidth = 0;
         }

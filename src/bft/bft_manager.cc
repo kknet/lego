@@ -667,7 +667,8 @@ void BftManager::LeaderBroadcastToAcc(const std::shared_ptr<bft::protobuf::Block
 
     for (auto iter = broadcast_nets.begin(); iter != broadcast_nets.end(); ++iter) {
         transport::protobuf::Header msg;
-        auto dht_ptr = network::UniversalManager::Instance()->GetUniversal(network::kUniversalNetworkId);
+        auto dht_ptr = network::UniversalManager::Instance()->GetUniversal(
+                network::kUniversalNetworkId);
         if (!dht_ptr) {
             assert(false);
             continue;

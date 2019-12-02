@@ -59,14 +59,14 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
 
     if (InitConfigWithArgs(argc, argv) != kProxySuccess) {
         PROXY_ERROR("init config with args failed!");
-        return kProxySuccess;
+        return kProxyError;
     }
 
     if (ip::IpWithCountry::Instance()->Init(
             "./conf/geolite.conf",
             "./conf/geo_country.conf") != ip::kIpSuccess) {
         PROXY_ERROR("init ip config with args failed!");
-        return kProxySuccess;
+        return kProxyError;
     }
 
     if (common::GlobalInfo::Instance()->Init(conf_) != common::kCommonSuccess) {
