@@ -5,7 +5,7 @@ aux_source_directory(./tick tick_src)
 add_library(common STATIC ${common_src} ${tick_src})
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    target_link_libraries(common PRIVATE uuid ssl crypto log4cpp xxhash)
+    target_link_libraries(common PRIVATE client ip uuid ssl crypto log4cpp xxhash)
     if (XENABLE_CODE_COVERAGE)
         target_link_libraries(common PRIVATE gcov)
     endif()

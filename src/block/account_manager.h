@@ -63,7 +63,6 @@ private:
     int CheckNetworkIdValid(const std::string& acc_addr);
     void AddAccount(const AccountInfoPtr& acc_ptr, uint64_t amount);
     void SetPool(const TxBlockInfoPtr& block_ptr);
-    bool StatusValid(const bft::protobuf::TxInfo& tx_info);
 
     std::unordered_map<std::string, AccountInfoPtr> acc_map_;
     std::mutex acc_map_mutex_;

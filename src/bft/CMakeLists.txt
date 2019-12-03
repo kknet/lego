@@ -7,7 +7,7 @@ aux_source_directory(./basic_bft/transaction/proto transaction_proto_src)
 add_library(bft STATIC ${bft_src} ${proto_src} ${transaction_src} ${transaction_proto_src})
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    target_link_libraries(bft PRIVATE election network broadcast dht transport common uv protobuf log4cpp )
+    target_link_libraries(bft PRIVATE election vss block network broadcast dht transport common security uv protobuf log4cpp )
     if (XENABLE_CODE_COVERAGE)
         target_link_libraries(bft PRIVATE gcov)
     endif()

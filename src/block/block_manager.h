@@ -42,3 +42,4 @@ private:
 }  // namespace block
 
 }  // namespace lego
+

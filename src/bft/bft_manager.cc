@@ -191,25 +191,18 @@ void BftManager::HandleToAccountTxBlock(
         return;
     }
 
-    if (block::BlockManager::Instance()->AddNewBlock(
-            tx_bft.to_tx().block()) != block::kBlockSuccess) {
-        BFT_ERROR("backup add block to db failed!");
-        return;
-    }
-
     auto& tx_list = *(tx_bft.mutable_to_tx()->mutable_block()->mutable_tx_block()->mutable_tx_list());
     if (tx_list.empty()) {
         BFT_ERROR("to has no transaction info!");
         return;
     }
-
-    std::cout << "receive to account bft block." << std::endl;
     // check aggsign
     for (int32_t i = 0; i < tx_list.size(); ++i) {
-        if (tx_list[i].to().empty()) {
+        if (tx_list[i].to().empty() || tx_list[i].to_add()) {
             LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("not to", header);
             continue;
         }
+        tx_list[i].set_to_add(true);
 
         // (TODO): check is this network
         if (network::GetConsensusShardNetworkId(tx_list[i].to()) != 4) {
@@ -217,29 +210,21 @@ void BftManager::HandleToAccountTxBlock(
             continue;
         }
 
-        std::string height_db_key = common::GetHeightDbKey(
-                network::GetConsensusShardNetworkId(tx_list[i].to()),
-                common::GetPoolIndex(tx_list[i].to()),
-                tx_bft.to_tx().block().height());
-        db::Db::Instance()->Put(height_db_key, tx_bft.to_tx().block().hash());
-//         return;
-// 
-// 
-//         if (DispatchPool::Instance()->Dispatch(tx_list[i]) != kBftSuccess) {
-//             BFT_ERROR("dispatch pool failed!");
-//             LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("dispatch error", header);
-//         }
-// 
-//         if (!mem_manager_->IsLeader(4, common::GlobalInfo::Instance()->id(), 0)) {
-//             LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("dispatch error", header);
-//             continue;
-//         }
-// 
-//         int res = StartBft(kTransactionPbftAddress, "", 4, 0);
-//         if (res != kBftSuccess) {
-//             LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("to leader start bft failed.", header);
-//         }
-//         LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("to leader start bft succ", header);
+        if (DispatchPool::Instance()->Dispatch(tx_list[i]) != kBftSuccess) {
+            BFT_ERROR("dispatch pool failed!");
+            LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("dispatch error", header);
+        }
+
+        if (!mem_manager_->IsLeader(4, common::GlobalInfo::Instance()->id(), 0)) {
+            LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("dispatch error", header);
+            continue;
+        }
+
+        int res = StartBft(kTransactionPbftAddress, "", 4, 0);
+        if (res != kBftSuccess) {
+            LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("to leader start bft failed.", header);
+        }
+        LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("to leader start bft succ", header);
     }
 }
 
@@ -651,7 +636,7 @@ int BftManager::BackupCommit(
     }
 
     if (block::BlockManager::Instance()->AddNewBlock(
-        *(bft_ptr->prpare_block())) != block::kBlockSuccess) {
+            *(bft_ptr->prpare_block())) != block::kBlockSuccess) {
         BFT_ERROR("backup add block to db failed!");
         return kBftError;
     }

@@ -63,7 +63,6 @@ enum MessageType {
     kRelayMessage = 8,  // any not handle message will routing by root
     kContractMessage = 9,
     kSubscriptionMessage = 10,
-
     kUdpDemoTestMessage,
     // max message type
     kLegoMaxMessageTypeCount,
@@ -135,7 +134,21 @@ inline static std::string MicTimestampToDatetime(int64_t timestamp) {
             now->tm_sec);
     return time_str;
 #else
-    return "";
+    int64_t milli = timestamp + (int64_t)(8 * 60 * 60 * 1000);
+    auto mTime = std::chrono::milliseconds(milli);
+    auto tp = std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds>(mTime);
+    __time64_t tt = std::chrono::system_clock::to_time_t(tp);
+    struct tm  now;
+    _localtime64_s(&now, &tt);
+    char time_str[64];
+    snprintf(time_str, sizeof(time_str), "%4d%02d%02d %02d:%02d:%02d",
+            now.tm_year + 1900,
+            now.tm_mon + 1,
+            now.tm_mday,
+            now.tm_hour,
+            now.tm_min,
+            now.tm_sec);
+    return time_str;
 #endif
 }
 
@@ -154,3 +167,4 @@ uint16_t GetVpnRoutePort(const std::string& dht_key, uint32_t timestamp_days);
 }  // namespace common
 
 }  // namespace lego
+
