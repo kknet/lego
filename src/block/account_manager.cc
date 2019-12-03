@@ -35,6 +35,18 @@ AccountInfoPtr AccountManager::GetAcountInfo(const std::string& acc_id) {
     return nullptr;
 }
 
+bool AccountManager::StatusValid(const bft::protobuf::TxInfo& tx_info) {
+    if (!tx_info.has_status()) {
+        return true;
+    }
+
+    if (tx_info.status() == bft::kBftSuccess) {
+        return true;
+    }
+
+    return false;
+}
+
 int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
     const auto& tx_list = block_item.tx_block().tx_list();
     if (tx_list.empty()) {
@@ -53,44 +65,7 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
             continue;
         }
 
-        {
-            if (CheckNetworkIdValid(tx_list[i].to()) != kBlockSuccess) {
-                continue;
-            }
-
-            auto acc_ptr = std::make_shared<AccountInfo>(
-                    tx_list[i].to(),
-                    tx_list[i].balance(),
-                    block_item.height());
-            ++(acc_ptr->in_count);
-            acc_ptr->in_lego = tx_list[i].amount();
-            AddAccount(acc_ptr, tx_list[i].amount());
-            uint32_t pool_idx = common::GetPoolIndex(tx_list[i].to());
-            auto bptr = std::make_shared<TxBlockInfo>(
-                    block_item.hash(),
-                    block_item.height(),
-                    block_item.tx_block().network_id(),
-                    block_item.tx_block().network_id(),
-                    pool_idx);
-            SetPool(bptr);
-            std::string tx_gid = common::GetTxDbKey(false, tx_list[i].gid());
-            db::Db::Instance()->Put(tx_gid, block_item.hash());
-
-            // just call smart contract but these attr is not 'to' signed, don't add to 'to'
-            std::map<std::string, std::string> attr_map;
-            for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
-                // every attr just check last block
-                attr_map[tx_list[i].attr(attr_idx).key()] = tx_list[i].attr(attr_idx).value();
-            }
-
-            if (!tx_list[i].smart_contract_addr().empty()) {
-                contract::ContractManager::Instance()->InitWithAttr(
-                        block_item,
-                        tx_list[i]);
-            }
-        } 
-        
-        {
+        if (StatusValid(tx_list[i])) {
             if (CheckNetworkIdValid(tx_list[i].from()) != kBlockSuccess) {
                 continue;
             }
@@ -132,6 +107,43 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
             SetPool(bptr);
             std::string tx_gid = common::GetTxDbKey(true, tx_list[i].gid());
             db::Db::Instance()->Put(tx_gid, block_item.hash());
+        }
+
+        if (!tx_list[i].to().empty() && StatusValid(tx_list[i])) {
+            if (CheckNetworkIdValid(tx_list[i].to()) != kBlockSuccess) {
+                continue;
+            }
+
+            auto acc_ptr = std::make_shared<AccountInfo>(
+                    tx_list[i].to(),
+                    tx_list[i].balance(),
+                    block_item.height());
+            ++(acc_ptr->in_count);
+            acc_ptr->in_lego = tx_list[i].amount();
+            AddAccount(acc_ptr, tx_list[i].amount());
+            uint32_t pool_idx = common::GetPoolIndex(tx_list[i].to());
+            auto bptr = std::make_shared<TxBlockInfo>(
+                    block_item.hash(),
+                    block_item.height(),
+                    block_item.tx_block().network_id(),
+                    block_item.tx_block().network_id(),
+                    pool_idx);
+            SetPool(bptr);
+            std::string tx_gid = common::GetTxDbKey(false, tx_list[i].gid());
+            db::Db::Instance()->Put(tx_gid, block_item.hash());
+
+            // just call smart contract but these attr is not 'to' signed, don't add to 'to'
+            std::map<std::string, std::string> attr_map;
+            for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
+                // every attr just check last block
+                attr_map[tx_list[i].attr(attr_idx).key()] = tx_list[i].attr(attr_idx).value();
+            }
+
+            if (!tx_list[i].smart_contract_addr().empty()) {
+                contract::ContractManager::Instance()->InitWithAttr(
+                        block_item,
+                        tx_list[i]);
+            }
         }
     }
     return kBlockSuccess;
