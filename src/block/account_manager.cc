@@ -58,6 +58,7 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
     for (int32_t i = 0; i < tx_list.size(); ++i) {
         statis::Statistics::Instance()->inc_tx_amount(tx_list[i].amount());
         if (tx_list[i].status() != bft::kBftSuccess) {
+            std::cout << "invalid status: " << tx_list[i].status() << std::endl;
             continue;
         }
 
