@@ -65,7 +65,7 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
             continue;
         }
 
-        if (StatusValid(tx_list[i])) {
+        {
             if (CheckNetworkIdValid(tx_list[i].from()) != kBlockSuccess) {
                 continue;
             }
@@ -109,7 +109,7 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
             db::Db::Instance()->Put(tx_gid, block_item.hash());
         }
 
-        if (!tx_list[i].to().empty() && StatusValid(tx_list[i])) {
+        if (!tx_list[i].to().empty()) {
             if (CheckNetworkIdValid(tx_list[i].to()) != kBlockSuccess) {
                 continue;
             }
@@ -153,6 +153,7 @@ void AccountManager::AddAccount(const AccountInfoPtr& acc_ptr, uint64_t amount) 
     std::lock_guard<std::mutex> guard(acc_map_mutex_);
     auto iter = acc_map_.find(acc_ptr->account_id);
     if (iter == acc_map_.end()) {
+        std::cout << "new account: " << common::Encode::HexEncode(acc_ptr->account_id) << std::endl;
         acc_map_[acc_ptr->account_id] = acc_ptr;
         acc_map_[acc_ptr->account_id]->AddHeight(acc_ptr->height);
         return;
