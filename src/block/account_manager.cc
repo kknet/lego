@@ -61,10 +61,6 @@ int AccountManager::AddBlockItem(const bft::protobuf::Block& block_item) {
             continue;
         }
 
-        if (tx_list[i].to_add()) {
-            continue;
-        }
-
         {
             if (CheckNetworkIdValid(tx_list[i].from()) != kBlockSuccess) {
                 continue;
