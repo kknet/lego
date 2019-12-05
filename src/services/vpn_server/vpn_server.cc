@@ -1721,6 +1721,7 @@ void SendClientUseBandwidth(const std::string& id, uint32_t bandwidth) {
             attrs,
             common::kConsensusVpnBandwidth,
             gid);
+    VPNSVR_ERROR("sent use bandwidth [%s] [%u]", common::Encode::HexEncode(id).c_str(), bandwidth);
 }
 
 void VpnServer::CheckTransactions() {
