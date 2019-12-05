@@ -1123,36 +1123,6 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
 
         iter->second->down_bandwidth += r;
         iter->second->timeout = now_point;
-        if (iter->second->client_staking_time < now_point) {
-            // transaction now with bandwidth
-            uint32_t rand_band = std::rand() % iter->second->down_bandwidth;
-            std::string gid;
-            uint32_t rand_coin = 0;
-            if (rand_band > 0u && rand_band <= 50u * 1024u * 1024u) {
-                rand_coin = std::rand() % 2;
-            }
-
-            if (rand_band > 50u * 1024u * 1024u && rand_band <= 100u * 1024u * 1024u) {
-                rand_coin = std::rand() % 3;
-            }
-
-            if (rand_band > 100u * 1024u * 1024u && rand_band <= 500u * 1024u * 1024u) {
-                rand_coin = std::rand() % 5;
-            }
-
-            if (rand_band > 500u * 1024u * 1024u) {
-                rand_coin = std::rand() % 7;
-            }
-
-            if (rand_coin > 0) {
-                lego::vpn::VpnServer::Instance()->staking_queue().push(
-                        std::make_shared<StakingItem>(user_account, rand_coin));
-            }
-
-            iter->second->up_bandwidth = 0;
-            iter->second->down_bandwidth = 0;
-            iter->second->client_staking_time = now_point + std::chrono::microseconds(kTransactionTimeout);
-        }
     }
     crypto_t* tmp_crypto = server->client_ptr->crypto;
     if (tmp_crypto == NULL) {
@@ -1901,6 +1871,35 @@ void VpnServer::CheckAccountValid() {
             SendClientUseBandwidth(
                     iter->second->account_id,
                     iter->second->up_bandwidth + iter->second->down_bandwidth);
+
+            if (iter->second->client_staking_time < now_point) {
+                // transaction now with bandwidth
+                uint32_t rand_band = std::rand() % iter->second->down_bandwidth;
+                std::string gid;
+                uint32_t rand_coin = 0;
+                if (rand_band > 0u && rand_band <= 50u * 1024u * 1024u) {
+                    rand_coin = std::rand() % 2;
+                }
+
+                if (rand_band > 50u * 1024u * 1024u && rand_band <= 100u * 1024u * 1024u) {
+                    rand_coin = std::rand() % 3;
+                }
+
+                if (rand_band > 100u * 1024u * 1024u && rand_band <= 500u * 1024u * 1024u) {
+                    rand_coin = std::rand() % 5;
+                }
+
+                if (rand_band > 500u * 1024u * 1024u) {
+                    rand_coin = std::rand() % 7;
+                }
+
+                if (rand_coin > 0) {
+                    lego::vpn::VpnServer::Instance()->staking_queue().push(
+                        std::make_shared<StakingItem>(iter->second->account_id, rand_coin));
+                }
+
+                iter->second->client_staking_time = now_point + std::chrono::microseconds(kTransactionTimeout);
+            }
             iter->second->up_bandwidth = 0;
             iter->second->down_bandwidth = 0;
         }
