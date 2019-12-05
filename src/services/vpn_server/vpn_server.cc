@@ -693,6 +693,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             iter->second->up_bandwidth += r;
             iter->second->timeout = now_point;
             // transaction now with bandwidth
+            lego::vpn::VpnServer::Instance()->bandwidth_queue().push(iter->second);
         }
 
         server->client_ptr = client_ptr;
