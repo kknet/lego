@@ -671,7 +671,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
                 return;
             }
             lego::vpn::VpnServer::Instance()->bandwidth_queue().push(acc_item);
-            VPNSVR_ERROR("new client coming [%s]", common::Encode::HexEncode(user_account).c_str());
         } else {
             if (!iter->second->Valid()) {
                 send(
@@ -692,10 +691,11 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             }
 
             iter->second->up_bandwidth += r;
-            iter->second->timeout = now_point;
             // transaction now with bandwidth
-            lego::vpn::VpnServer::Instance()->bandwidth_queue().push(iter->second);
-            VPNSVR_ERROR("new client exists coming [%s]", common::Encode::HexEncode(user_account).c_str());
+            if (iter->second->timeout + std::chrono::microseconds(kVpnClientTimeout) < now_point) {
+                lego::vpn::VpnServer::Instance()->bandwidth_queue().push(iter->second);
+            }
+            iter->second->timeout = now_point;
         }
 
         server->client_ptr = client_ptr;
@@ -1813,9 +1813,6 @@ void VpnServer::HandleVpnLoginResponse(
             for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
                 if (tx_list[i].attr(attr_idx).key() == common::kUserPayForVpn &&
                             VpnServer::Instance()->VipCommitteeAccountValid(tx_list[i].to())) {
-                    if (!block.has_timestamp()) {
-                        std::cout << "block has no timestamp. fuck!" << std::endl;
-                    }
                     day_pay_timestamp = block.timestamp();
                     vip_tenons = tx_list[i].amount();
                     iter->second->vpn_pay_for_height = block.height();
@@ -1858,7 +1855,7 @@ void VpnServer::CheckAccountValid() {
 
     auto now_point = std::chrono::steady_clock::now();
     for (auto iter = account_map_.begin(); iter != account_map_.end();) {
-        if ((iter->second->timeout + std::chrono::microseconds(kVpnClientTimeout)) < now_point) {
+        if ((iter->second->timeout + std::chrono::microseconds(kVpnClientTimeout + 10)) < now_point) {
             if ((iter->second->up_bandwidth + iter->second->down_bandwidth) >=
                     kConnectInitBandwidth) {
                 SendClientUseBandwidth(
