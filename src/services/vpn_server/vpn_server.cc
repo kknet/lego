@@ -671,6 +671,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
                 return;
             }
             lego::vpn::VpnServer::Instance()->bandwidth_queue().push(acc_item);
+            VPNSVR_ERROR("new client coming [%s]", common::Encode::HexEncode(user_account).c_str());
         } else {
             if (!iter->second->Valid()) {
                 send(
@@ -694,6 +695,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             iter->second->timeout = now_point;
             // transaction now with bandwidth
             lego::vpn::VpnServer::Instance()->bandwidth_queue().push(iter->second);
+            VPNSVR_ERROR("new client exists coming [%s]", common::Encode::HexEncode(user_account).c_str());
         }
 
         server->client_ptr = client_ptr;
