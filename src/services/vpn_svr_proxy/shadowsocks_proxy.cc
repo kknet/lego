@@ -14,6 +14,7 @@
 #include "security/ecdh_create_key.h"
 #include "network/route.h"
 #include "client/trans_client.h"
+#include "sync/key_value_sync.h"
 #include "services/vpn_server/vpn_server.h"
 #include "services/vpn_svr_proxy/proxy_utils.h"
 #include "services/vpn_route/route_tcp.h"
@@ -87,6 +88,7 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
     network::DhtManager::Instance();
     network::UniversalManager::Instance();
     network::Route::Instance();
+    sync::KeyValueSync::Instance();
     if (InitTransport() != kProxySuccess) {
         PROXY_ERROR("init transport failed!");
         return kProxyError;
