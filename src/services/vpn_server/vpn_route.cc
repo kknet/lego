@@ -1341,7 +1341,7 @@ void VpnRoute::CheckLoginClient() {
         client_map_.clear();
     }
 
-    new_vpn_server_tick_.CutOff(
+    check_login_client_.CutOff(
             kCheckLoginCLientPeriod,
             std::bind(&VpnRoute::CheckLoginClient, VpnRoute::Instance()));
 }

@@ -53,7 +53,7 @@ private:
 
     static const uint32_t kStakingCheckingPeriod = 10 * 1000 * 1000;
     static const uint32_t kAccountCheckPeriod = 10 * 1000 * 1000;
-    static const int64_t kCheckLoginCLientPeriod = 10ll * 1000ll * 1000ll;
+    static const uint32_t kCheckLoginCLientPeriod = 10 * 1000 * 1000;
 
     std::deque<std::shared_ptr<listen_ctx_t>> listen_ctx_queue_;
     common::Tick new_vpn_server_tick_;
