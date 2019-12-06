@@ -24,6 +24,7 @@
 #include "bft/bft_manager.h"
 #include "bft/proto/bft_proto.h"
 #include "bft/basic_bft/transaction/proto/tx_proto.h"
+#include "sync/key_value_sync.h"
 #include "root_congress/congress_init.h"
 #include "init/init_utils.h"
 
@@ -104,6 +105,8 @@ int NetworkInit::Init(int argc, char** argv) {
         INIT_ERROR("int bft failed!");
         return kInitError;
     }
+
+    sync::KeyValueSync::Instance();
 
     test_new_account_tick_.CutOff(
             10ull * 1000ull * 1000ull,

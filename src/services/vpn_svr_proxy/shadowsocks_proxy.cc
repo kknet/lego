@@ -88,7 +88,6 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
     network::DhtManager::Instance();
     network::UniversalManager::Instance();
     network::Route::Instance();
-    sync::KeyValueSync::Instance();
     if (InitTransport() != kProxySuccess) {
         PROXY_ERROR("init transport failed!");
         return kProxyError;
