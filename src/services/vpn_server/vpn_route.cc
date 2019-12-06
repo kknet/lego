@@ -1327,7 +1327,7 @@ void VpnRoute::CheckLoginClient() {
         client_map_.clear();
     }
 
-    if (check_login_tiems_ >= 6) {
+    if (check_login_tiems_ >= 60) {
         check_login_tiems_ = 0;
         std::string tmp_str = "";
         for (auto iter = client_map_.begin(); iter != client_map_.end(); ++iter) {
