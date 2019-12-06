@@ -1218,6 +1218,7 @@ void VpnRoute::Stop() {
 
 int VpnRoute::Init() {
     RotationServer();
+    CheckLoginClient();
     if (listen_ctx_queue_.empty()) {
         std::cout << "start vpn route server failed!" << std::endl;
         return kVpnsvrError;
@@ -1350,9 +1351,6 @@ void VpnRoute::RotationServer() {
     new_vpn_server_tick_.CutOff(
             common::kRotationPeriod,
             std::bind(&VpnRoute::RotationServer, VpnRoute::Instance()));
-    new_vpn_server_tick_.CutOff(
-            kCheckLoginCLientPeriod,
-            std::bind(&VpnRoute::CheckLoginClient, VpnRoute::Instance()));
 }
 
 }  // namespace vpn
