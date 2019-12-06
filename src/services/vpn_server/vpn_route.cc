@@ -89,6 +89,7 @@ extern "C" {
 #include "common/country_code.h"
 #include "ip/ip_with_country.h"
 #include "client/trans_client.h"
+#include "contract/contract_utils.h"
 #include "security/crypto_utils.h"
 #include "security/aes.h"
 #include "services/account_with_secret.h"
@@ -1141,9 +1142,13 @@ static void AcceptCallback(EV_P_ ev_io *w, int revents) {
 
     server_t *server = NewServer(serverfd, listener);
     server->country_code = lego::ip::IpWithCountry::Instance()->GetCountryUintCode(peer_name);
-    std::cout << peer_name << " get client country code: " << (uint32_t)server->country_code << std::endl;
     ev_io_start(EV_A_ & server->recv_ctx->io);
     ev_timer_start(EV_A_ & server->recv_ctx->watcher);
+
+    auto login_item = std::make_shared<lego::vpn::LoginCountryItem>();
+    login_item->country = (uint32_t)server->country_code;
+    login_item->count = 0;
+    lego::vpn::VpnRoute::Instance()->login_country_queue().push(login_item);
 }
 
 static int StartTcpServer(
@@ -1192,7 +1197,9 @@ namespace lego {
 
 namespace vpn {
 
-VpnRoute::VpnRoute() {}
+VpnRoute::VpnRoute() {
+    now_day_timestamp_ = common::TimeUtils::TimestampDays();
+}
 
 VpnRoute::~VpnRoute() {}
 
@@ -1263,11 +1270,89 @@ void VpnRoute::StartMoreServer() {
     }
 }
 
+void VpnRoute::SendNewClientLogin(const std::string& val) {
+    std::string now_day_timestamp = std::to_string(common::TimeUtils::TimestampDays());
+    auto uni_dht = network::UniversalManager::Instance()->GetUniversal(
+        network::kUniversalNetworkId);
+    if (uni_dht == nullptr) {
+        return;
+    }
+
+    std::string tmp_key = common::kVpnClientLoginAttr + now_day_timestamp;
+    std::map<std::string, std::string> attrs{
+        {tmp_key, val},
+    };
+
+    std::string gid;
+    lego::client::TransactionClient::Instance()->Transaction(
+            common::Encode::HexDecode(common::kVpnLoginManageAccount),
+            0,
+            contract::kVpnClientLoginManager,
+            attrs,
+            common::kConsensusKeyValue,
+            gid);
+}
+
+void VpnRoute::CheckLoginClient() {
+    LoginCountryItemPtr login_client = nullptr;
+    while (login_country_queue_.pop(&login_client)) {
+        if (login_client != nullptr) {
+            auto iter = client_map_.find(login_client->country);
+            if (iter != client_map_.end()) {
+                ++(iter->second->count);
+                continue;
+            }
+
+            login_client->count = 1;
+            client_map_[login_client->country] = login_client;
+        }
+    }
+
+    ++check_login_tiems_;
+    auto now_day_timestamp = common::TimeUtils::TimestampDays();
+    if (now_day_timestamp_ != now_day_timestamp) {
+        std::string tmp_str = "";
+        for (auto iter = client_map_.begin(); iter != client_map_.end(); ++iter) {
+            tmp_str += (std::to_string(iter->first) + ":" +
+                std::to_string(iter->second->count) + ",");
+        }
+
+        if (!tmp_str.empty()) {
+            SendNewClientLogin(tmp_str);
+        }
+
+        now_day_timestamp_ = now_day_timestamp;
+        check_login_tiems_ = 0;
+        client_map_.clear();
+    }
+
+    if (check_login_tiems_ >= 6) {
+        check_login_tiems_ = 0;
+        std::string tmp_str = "";
+        for (auto iter = client_map_.begin(); iter != client_map_.end(); ++iter) {
+            tmp_str += (std::to_string(iter->first) + ":" +
+                std::to_string(iter->second->count) + ",");
+        }
+
+        if (!tmp_str.empty()) {
+            SendNewClientLogin(tmp_str);
+        }
+        client_map_.clear();
+    }
+
+    new_vpn_server_tick_.CutOff(
+            kCheckLoginCLientPeriod,
+            std::bind(&VpnRoute::CheckLoginClient, VpnRoute::Instance()));
+}
+
 void VpnRoute::RotationServer() {
     StartMoreServer();
     new_vpn_server_tick_.CutOff(
             common::kRotationPeriod,
             std::bind(&VpnRoute::RotationServer, VpnRoute::Instance()));
+    new_vpn_server_tick_.CutOff(
+            kCheckLoginCLientPeriod,
+            std::bind(&VpnRoute::CheckLoginClient, VpnRoute::Instance()));
 }
 
 }  // namespace vpn

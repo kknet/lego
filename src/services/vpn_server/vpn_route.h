@@ -16,6 +16,12 @@ namespace lego {
 
 namespace vpn {
 
+struct LoginCountryItem {
+    uint32_t country;
+    uint32_t count;
+};
+typedef std::shared_ptr<LoginCountryItem> LoginCountryItemPtr;
+
 class VpnRoute {
 public:
     static VpnRoute* Instance();
@@ -33,20 +39,32 @@ public:
         return default_ctx_;
     }
 
+    common::ThreadSafeQueue<LoginCountryItemPtr>& login_country_queue() {
+        return login_country_queue_;
+    }
+
 private:
     VpnRoute();
     ~VpnRoute();
     void RotationServer();
     void StartMoreServer();
+    void CheckLoginClient();
+    void SendNewClientLogin(const std::string& val);
 
     static const uint32_t kStakingCheckingPeriod = 10 * 1000 * 1000;
     static const uint32_t kAccountCheckPeriod = 10 * 1000 * 1000;
+    static const int64_t kCheckLoginCLientPeriod = 10ll * 1000ll * 1000ll;
 
     std::deque<std::shared_ptr<listen_ctx_t>> listen_ctx_queue_;
     common::Tick new_vpn_server_tick_;
     std::shared_ptr<listen_ctx_t> default_ctx_{ nullptr };
     std::shared_ptr<listen_ctx_t> last_listen_ptr_{ nullptr };
     std::set<uint16_t> started_port_set_;
+    common::ThreadSafeQueue<LoginCountryItemPtr> login_country_queue_;
+    common::Tick check_login_client_;
+    uint32_t now_day_timestamp_{ 0 };
+    std::unordered_map<uint32_t, LoginCountryItemPtr> client_map_;
+    uint32_t check_login_tiems_{ 0 };
 
     DISALLOW_COPY_AND_ASSIGN(VpnRoute);
 };

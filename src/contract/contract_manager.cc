@@ -5,6 +5,7 @@
 #include "network/universal_manager.h"
 #include "contract/contract_vpn_svr_bandwidth.h"
 #include "contract/contract_pay_for_vpn.h"
+#include "contract/contract_vpn_client_login.h"
 #include "contract/proto/contract_proto.h"
 
 namespace lego {
@@ -28,10 +29,12 @@ ContractManager::~ContractManager() {}
 int ContractManager::Init() {
     auto vpn_bandwidth_ins = std::make_shared<VpnSvrBandwidth>();
     auto vpn_payfor_ins = std::make_shared<PayforVpn>();
+    auto vpn_client_login = std::make_shared<VpnClientLogin>();
     {
         std::lock_guard<std::mutex> guard(contract_map_mutex_); 
         contract_map_[kContractVpnPayfor] = vpn_payfor_ins;
         contract_map_[kContractVpnBandwidthProveAddr] = vpn_bandwidth_ins;
+        contract_map_[kVpnClientLoginManager] = vpn_client_login;
     }
     return kContractSuccess;
 }

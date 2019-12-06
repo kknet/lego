@@ -20,6 +20,7 @@ enum ContractErrorCode {
 static const std::string kContractVpnBandwidthProveAddr = "contract_vpn_bandwith_prove";
 static const std::string kContractVpnPayfor = "contract_vpn_payfor";
 static const std::string kToUseBandwidthOneDay = "to_use_bw_one_day";
+static const std::string kVpnClientLoginManager = "kVpnClientLoginManager";
 
 }  // namespace contact
 
