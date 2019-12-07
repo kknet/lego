@@ -237,7 +237,29 @@ public:
         sign.Serialize(sign_challenge_str, sign_response_str);
         bft_msg.set_sign_challenge(sign_challenge_str);
         bft_msg.set_sign_response(sign_response_str);
-        msg.set_data(bft_msg.SerializeAsString());
+
+        std::string s_data = bft_msg.SerializeAsString();
+        msg.set_data(s_data);
+
+        {
+            client::protobuf::BftMessage tmp_bft_msg;
+            if (!tmp_bft_msg.ParseFromString(s_data)) {
+                CLIENT_ERROR("protobuf::BftMessage ParseFromString failed!");
+                exit(0);
+            }
+            auto pubkey = security::PublicKey(tmp_bft_msg.pubkey());
+            auto sign = security::Signature(tmp_bft_msg.sign_challenge(), tmp_bft_msg.sign_response());
+            auto sha128 = common::Hash::Hash128(tmp_bft_msg.data());
+            if (!security::Schnorr::Instance()->Verify(sha128, sign, pubkey)) {
+                CLIENT_ERROR("verify signature failed!");
+                exit(0);
+            }
+            CLIENT_ERROR("verify signature success[pubkey: %s][sha: %s][data: %s]!",
+                    common::Encode::HexEncode(tmp_bft_msg.pubkey()).c_str(),
+                    common::Encode::HexEncode(sha128).c_str(),
+                    common::Encode::HexEncode(tmp_bft_msg.data()).c_str());
+        }
+
     }
 
 	static void CreateClientNewVersion(

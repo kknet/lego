@@ -1053,7 +1053,7 @@ std::string VpnClient::PayForVPN(const std::string& to, const std::string& gid, 
 
     std::string to_addr = common::Encode::HexDecode(to);
     std::map<std::string, std::string> attrs = {
-        { common::kUserPayForVpn, "" }
+        { common::kUserPayForVpn, "reserve" }
     };
 
     uint32_t type = common::kConsensusPayForCommonVpn;

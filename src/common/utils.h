@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <time.h>
+#include <arpa/inet.h>
 
 #include <string>
 #include <chrono>
@@ -150,6 +151,26 @@ inline static std::string MicTimestampToDatetime(int64_t timestamp) {
             now.tm_sec);
     return time_str;
 #endif
+}
+
+inline bool IsBigEndian() {
+    unsigned short v = 0x0102;
+    unsigned char *p = (unsigned char *)&v;
+
+    if (*p == 0x01) {
+        return true;
+    }
+
+    return false;
+}
+
+inline uint64_t SwapEndian(uint64_t val) {
+    uint32_t low = val & 0xffffffff;
+    uint32_t high = (val >> 32) & 0xffffffff;
+
+    uint64_t swap_val = htonl(low);
+    swap_val = (swap_val << 32) | htonl(high);
+    return swap_val;
 }
 
 uint64_t TimeStampMsec();

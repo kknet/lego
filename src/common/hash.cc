@@ -5,6 +5,7 @@
 
 #include "common/log.h"
 #include "common/encode.h"
+#include "common/utils.h"
 #include "xxHash/xxhash.h"
 #include "security/sha256.h"
 
@@ -12,6 +13,8 @@ namespace lego {
 
 namespace common {
 
+#pragma pack(push) 
+#pragma pack(1)
 union Hash128Union {
     Hash128Union() {
         memset(str, 0, sizeof(str));
@@ -50,6 +53,7 @@ union Hash256Union {
     } u256;
     char str[32];
 };
+#pragma pack(pop)
 
 uint32_t Hash::Hash32(const std::string& str) {
     return XXH32(str.c_str(), str.size(), kHashSeedU32);

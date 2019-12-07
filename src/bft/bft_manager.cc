@@ -729,7 +729,12 @@ int BftManager::VerifySignatureWithBftMessage(const bft::protobuf::BftMessage& b
     auto sign = security::Signature(bft_msg.sign_challenge(), bft_msg.sign_response());
     auto sha128 = common::Hash::Hash128(bft_msg.data());
     if (!security::Schnorr::Instance()->Verify(sha128, sign, pubkey)) {
-        BFT_ERROR("check signature error!");
+        BFT_ERROR("check signature error![pubkey: %s][hash: %s][data: %s][challen: %s][res: %s]",
+                common::Encode::HexEncode(bft_msg.pubkey()).c_str(),
+                common::Encode::HexEncode(sha128).c_str(),
+                common::Encode::HexEncode(bft_msg.data()).c_str(),
+                common::Encode::HexEncode(bft_msg.sign_challenge()).c_str(),
+                common::Encode::HexEncode(bft_msg.sign_response()).c_str());
         return kBftError;
     }
     return kBftSuccess;
