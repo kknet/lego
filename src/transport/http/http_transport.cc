@@ -9,6 +9,7 @@
 #include "common/user_property_key_define.h"
 #include "common/time_utils.h"
 #include "common/string_utils.h"
+#include "common/country_code.h"
 #include "contract/contract_manager.h"
 #include "statistics/statistics.h"
 #include "db/db.h"
@@ -688,7 +689,7 @@ std::string HttpTransport::GetCountryLoad(int32_t pre_days) try {
         CountryItem item = country_queue.top();
         country_queue.pop();
         if (count < 16) {
-            res_str += std::to_string(item.country) + ":" + std::to_string(item.count) + ",";
+            res_str += common::global_code_to_country_english_map[item.country] + ":" + std::to_string(item.count) + ",";
         } else {
             other += item.count;
         }
