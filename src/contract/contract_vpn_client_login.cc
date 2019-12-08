@@ -21,7 +21,7 @@ int VpnClientLogin::InitWithAttr(
     std::string attr_key;
     std::string attr_val;
     for (int32_t i = 0; i < tx_info.attr_size(); ++i) {
-        if (tx_info.attr(i).key().empty()) {
+        if (!tx_info.attr(i).key().empty()) {
             attr_key = tx_info.attr(i).key();
             attr_val = tx_info.attr(i).value();
             break;

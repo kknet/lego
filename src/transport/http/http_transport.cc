@@ -645,7 +645,7 @@ std::string HttpTransport::GetCountryLoad(int32_t pre_days) try {
                 attr_key,
                 attr_val);
         common::Split splits(attr_val.c_str(), ',', attr_val.size());
-        for (int32_t i = 0; i < splits.Count(); ++i) {
+        for (uint32_t i = 0; i < splits.Count(); ++i) {
             common::Split tmp_split(splits[i], ':', splits.SubLen(i));
             if (tmp_split.Count() != 2) {
                 continue;
@@ -697,7 +697,7 @@ std::string HttpTransport::GetCountryLoad(int32_t pre_days) try {
     res_str += std::to_string(-1) + ":" + std::to_string(other) + ",";
     return res_str;
 } catch (...) {
-    return "";
+    return "error";
 }
 
 void HttpTransport::HandleGetCountryLoad(
@@ -715,10 +715,10 @@ void HttpTransport::HandleGetCountryLoad(
         res_json["val"] = val_str;
         res.set_content(res_json.dump(), "text/plain");
         res.set_header("Access-Control-Allow-Origin", "*");
-    } catch (...) {
+    } catch (std::exception& e) {
         res.status = 400;
-        TRANSPORT_ERROR("HandleBestAddr by this node error.");
-        std::cout << "HandleBestAddr by this node error." << std::endl;
+        TRANSPORT_ERROR("HandleGetCountryLoad by this node error.");
+        std::cout << "HandleGetCountryLoad by this node error." << e.what() << std::endl;
     }
 }
 
