@@ -7,6 +7,9 @@
 #include "common/encode.h"
 #include "common/hash.h"
 #include "common/user_property_key_define.h"
+#include "common/time_utils.h"
+#include "common/string_utils.h"
+#include "contract/contract_manager.h"
 #include "statistics/statistics.h"
 #include "db/db.h"
 #include "security/schnorr.h"
@@ -628,6 +631,97 @@ void HttpTransport::HandleWxAliPay(const httplib::Request &req, httplib::Respons
     }
 }
 
+std::string HttpTransport::GetCountryLoad(int32_t pre_days) try {
+    std::map<int32_t, int32_t> res_map;
+    for (int i = 0; i < pre_days; ++i) {
+        std::string now_day_timestamp = std::to_string(common::TimeUtils::TimestampDays() - i);
+        if (pre_days == 100) {
+            now_day_timestamp = std::to_string(common::TimeUtils::TimestampDays() - 1);
+        }
+        std::string attr_key = common::kVpnClientLoginAttr + now_day_timestamp;
+        std::string attr_val;
+        contract::ContractManager::Instance()->GetAttrWithKey(
+                contract::kVpnClientLoginManager,
+                attr_key,
+                attr_val);
+        common::Split splits(attr_val.c_str(), ',', attr_val.size());
+        for (int32_t i = 0; i < splits.Count(); ++i) {
+            common::Split tmp_split(splits[i], ':', splits.SubLen(i));
+            if (tmp_split.Count() != 2) {
+                continue;
+            }
+
+            int32_t key = common::StringUtil::ToInt32(tmp_split[0]);
+            int32_t val = common::StringUtil::ToInt32(tmp_split[1]);
+            auto iter = res_map.find(key);
+            if (iter == res_map.end()) {
+                res_map[key] = val;
+                continue;
+            }
+
+            iter->second += val;
+        }
+
+        if (pre_days == 100) {
+            break;
+        }
+    }
+
+    struct CountryItem {
+        int32_t country;
+        int32_t count;
+        bool operator < (const CountryItem& x) const {
+            return this->count < x.count;
+        }
+        CountryItem(int32_t cty, int32_t cnt) : country(cty), count(cnt) {}
+    };
+
+    std::priority_queue<CountryItem> country_queue;
+    for (auto iter = res_map.begin(); iter != res_map.end(); ++iter) {
+        country_queue.push(CountryItem(iter->first, iter->second));
+    }
+
+    std::string res_str;
+    int count = 0;
+    int32_t other = 0;
+    while (!country_queue.empty()) {
+        CountryItem item = country_queue.top();
+        country_queue.pop();
+        if (count < 16) {
+            res_str += std::to_string(item.country) + ":" + std::to_string(item.count) + ",";
+        } else {
+            other += item.count;
+        }
+    }
+
+    res_str += std::to_string(-1) + ":" + std::to_string(other) + ",";
+    return res_str;
+} catch (...) {
+    return "";
+}
+
+void HttpTransport::HandleGetCountryLoad(
+        const httplib::Request &req,
+        httplib::Response &res) {
+    try {
+        nlohmann::json json_obj = nlohmann::json::parse(req.body);
+        auto type = json_obj["type"].get<int32_t>();
+        std::string val_str = GetCountryLoad(type);
+        if (val_str.empty()) {
+            return;
+        }
+
+        nlohmann::json res_json;
+        res_json["val"] = val_str;
+        res.set_content(res_json.dump(), "text/plain");
+        res.set_header("Access-Control-Allow-Origin", "*");
+    } catch (...) {
+        res.status = 400;
+        TRANSPORT_ERROR("HandleBestAddr by this node error.");
+        std::cout << "HandleBestAddr by this node error." << std::endl;
+    }
+}
+
 void HttpTransport::Listen() {
     http_svr_.Get("/http_message", [=](const httplib::Request& req, httplib::Response &res) {
         std::cout << "http get request size: " << req.body.size() << std::endl;
@@ -663,6 +757,9 @@ void HttpTransport::Listen() {
     });
     http_svr_.Post("/shared_staking", [&](const httplib::Request &req, httplib::Response &res) {
         HandleWxAliPay(req, res, kSharedStaking);
+    });
+    http_svr_.Post("/get_country_load", [&](const httplib::Request &req, httplib::Response &res) {
+        HandleGetCountryLoad(req, res);
     });
     http_svr_.set_error_handler([](const httplib::Request&, httplib::Response &res) {
         const char *fmt = "<p>Error Status: <span style='color:red;'>%d</span></p>";
