@@ -723,6 +723,25 @@ void HttpTransport::HandleGetCountryLoad(
     }
 }
 
+void HttpTransport::HandleGetDayAlive(const httplib::Request &req, httplib::Response &res) {
+    try {
+        std::string val_str;
+        contract::ContractManager::Instance()->GetAttrWithKey(
+                contract::kContractVpnBandwidthProveAddr,
+                common::kActiveUser,
+                val_str);
+        nlohmann::json res_json;
+        res_json["val"] = val_str;
+        res.set_content(res_json.dump(), "text/plain");
+        res.set_header("Access-Control-Allow-Origin", "*");
+    } catch (std::exception& e) {
+        res.status = 400;
+        TRANSPORT_ERROR("HandleGetCountryLoad by this node error.");
+        std::cout << "HandleGetCountryLoad by this node error." << e.what() << std::endl;
+    }
+}
+
+
 void HttpTransport::Listen() {
     http_svr_.Get("/http_message", [=](const httplib::Request& req, httplib::Response &res) {
         std::cout << "http get request size: " << req.body.size() << std::endl;
@@ -761,6 +780,9 @@ void HttpTransport::Listen() {
     });
     http_svr_.Post("/get_country_load", [&](const httplib::Request &req, httplib::Response &res) {
         HandleGetCountryLoad(req, res);
+    });
+    http_svr_.Post("/get_day_actives", [&](const httplib::Request &req, httplib::Response &res) {
+        HandleGetDayAlive(req, res);
     });
     http_svr_.set_error_handler([](const httplib::Request&, httplib::Response &res) {
         const char *fmt = "<p>Error Status: <span style='color:red;'>%d</span></p>";

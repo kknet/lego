@@ -43,6 +43,7 @@ private:
     void HandleWxAliPay(const httplib::Request &req, httplib::Response &res, int type);
     void HandleGetCountryLoad(const httplib::Request &req, httplib::Response &res);
     std::string GetCountryLoad(int32_t type);
+    void HandleGetDayAlive(const httplib::Request &req, httplib::Response &res);
 
     httplib::Server http_svr_;
     std::shared_ptr<std::thread> run_thread_{ nullptr };
