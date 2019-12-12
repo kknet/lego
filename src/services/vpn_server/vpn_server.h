@@ -51,6 +51,9 @@ public:
             const std::string& attr,
             const std::string& account,
             uint64_t height);
+    std::unordered_map<std::string, BandwidthInfoPtr>& account_bindwidth_map() {
+        return account_bindwidth_map_;
+    }
 
 private:
     VpnServer();
@@ -89,6 +92,9 @@ private:
     std::unordered_set<std::string> valid_client_account_;
     std::mutex valid_client_account_mutex_;
     std::string admin_vpn_account_;
+
+    // just vpn server, thread safe
+    std::unordered_map<std::string, BandwidthInfoPtr> account_bindwidth_map_;
 
     DISALLOW_COPY_AND_ASSIGN(VpnServer);
 };

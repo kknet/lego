@@ -573,6 +573,63 @@ void SetTosFromConnmark(remote_t *remote, server_t *server) {
 
 #endif
 
+static bool RemoveNotAliveAccount(
+        const std::chrono::steady_clock::time_point& now_point,
+        std::unordered_map<std::string, BandwidthInfoPtr>& account_bindwidth_map) {
+    for (auto iter = account_bindwidth_map.begin(); iter != account_bindwidth_map.end();) {
+        if ((iter->second->timeout + std::chrono::microseconds()) < now_point) {
+            account_bindwidth_map.erase(iter++);
+        } else {
+            ++iter;
+        }
+    }
+
+    if (account_bindwidth_map.size() > kMaxConnectAccount) {
+        return true;
+    }
+
+    return false;
+}
+
+static bool CheckClientValid(
+        server_t *server,
+        remote_t *remote,
+        const std::string& user_account) {
+    auto& account_map = lego::vpn::VpnRoute::Instance()->account_bindwidth_map();
+    auto iter = account_map.find(user_account);
+    auto now_point = std::chrono::steady_clock::now();
+    if (iter == account_map.end()) {
+        auto acc_item = std::make_shared<BandwidthInfo>(0, 0, user_account, "");
+        account_map[user_account] = acc_item;
+        if (RemoveNotAliveAccount(now_point, account_map)) {
+            // exceeded max user account, new join failed
+            // send back with status
+            send(
+                    server->fd,
+                    common::kServerClientOverload.c_str(),
+                    common::kServerClientOverload.size(), 0);
+            CloseAndFreeRemote(EV_A_ remote);
+            CloseAndFreeServer(EV_A_ server);
+            return false;
+        }
+        lego::vpn::VpnServer::Instance()->bandwidth_queue().push(acc_item);
+    } else {
+        if (!iter->second->ValidRoute()) {
+            send(
+                    server->fd,
+                    common::kClientIsNotVip.c_str(),
+                    common::kClientIsNotVip.size(), 0);
+            // send back with status
+            CloseAndFreeRemote(EV_A_ remote);
+            CloseAndFreeServer(EV_A_ server);
+            return false;
+        }
+        iter->second->timeout = now_point;
+    }
+
+    return true;
+}
+
 static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     server_ctx_t *server_recv_ctx = (server_ctx_t *)w;
     server_t *server = server_recv_ctx->server;
@@ -608,6 +665,16 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
 
     buf->len = r;
     if (server->stage == STAGE_STREAM) {
+        if (server->client_id.empty()) {
+            CloseAndFreeRemote(EV_A_ remote);
+            CloseAndFreeServer(EV_A_ server);
+            return;
+        }
+
+        if (!CheckClientValid(server, remote, server->client_id)) {
+            return;
+        }
+
         int s = send(remote->fd, remote->buf->data, remote->buf->len, 0);
         if (s == -1) {
             if (errno == EAGAIN || errno == EWOULDBLOCK) {
@@ -663,26 +730,20 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             ReportAddr(server->fd, "invalid request length");
             StopServer(EV_A_ server);
             return;
-        } else {
-            server->buf->len -= offset;
-            memmove(server->buf->data, server->buf->data + offset, server->buf->len);
+        }
 
-//             if (server->country_code == common::CountryCode::CN) {
-//                 size_t header_offset = lego::security::kPublicKeySize * 2;
-//                 if (server->buf->len >= header_offset) {
-//                     std::string pubkey = common::Encode::HexDecode(
-//                             std::string((char*)buf->data, header_offset));
-//                     std::string account = lego::network::GetAccountAddressByPublicKey(pubkey);
-//                     if (!lego::vpn::VpnServer::Instance()->ClientAccountValid(account)) {
-//                         send(server->fd,
-//                                 lego::common::kCountryInvalid.c_str(),
-//                                 lego::common::kCountryInvalid.size(),
-//                                 0);
-//                         CloseAndFreeServer(EV_A_ server);
-//                         return;
-//                     }
-//                 }
-//             }
+        server->buf->len -= offset;
+        memmove(server->buf->data, server->buf->data + offset, server->buf->len);
+
+        size_t header_offset = lego::security::kPublicKeySize * 2;
+        if (server->buf->len >= header_offset) {
+            std::string pubkey = common::Encode::HexDecode(
+                    std::string((char*)buf->data, header_offset));
+            std::string user_account = lego::network::GetAccountAddressByPublicKey(pubkey);
+            server->client_id = user_account;
+            if (!CheckClientValid(server, remote, user_account)) {
+                return;
+            }
         }
 
         remote_t *remote = ConnectToRemote(EV_A_ & info, server);
@@ -1245,6 +1306,11 @@ int VpnRoute::Init(uint32_t vip_level) {
         default:
             break;
     }
+
+    check_route_queue_.CutOff(
+            kCheckRouteQueuePeriod,
+            std::bind(&VpnRoute::CheckRouteQueue, VpnRoute::Instance()));
+
     return kVpnsvrSuccess;
 }
 
@@ -1372,6 +1438,94 @@ void VpnRoute::RotationServer() {
     new_vpn_server_tick_.CutOff(
             common::kRotationPeriod,
             std::bind(&VpnRoute::RotationServer, VpnRoute::Instance()));
+}
+
+void VpnRoute::CheckRouteQueue() {
+    std::lock_guard<std::mutex> guard(vip_check_account_map_mutex_);
+    BandwidthInfoPtr account_info = nullptr;
+    while (route_bandwidth_queue_.pop(&account_info)) {
+        if (account_info != nullptr) {
+            auto iter = vip_check_account_map_.find(account_info->account_id);
+            if (iter != vip_check_account_map_.end()) {
+                continue;
+            }
+
+            account_info->join_time = std::chrono::steady_clock::now() +
+                    std::chrono::microseconds(kClientKeepaliveTime);
+            vip_check_account_map_[account_info->account_id] = account_info;
+        }
+    }
+
+    for (auto iter = vip_check_account_map_.begin();
+            iter != vip_check_account_map_.end(); ++iter) {
+        if (!iter->second->IsVip()) {
+            VpnServer::Instance()->SendGetAccountAttrLastBlock(
+                    common::kUserPayForVpn,
+                    iter->second->account_id,
+                    iter->second->vpn_pay_for_height);
+        }
+    }
+
+    check_route_queue_.CutOff(
+            kCheckRouteQueuePeriod,
+            std::bind(&VpnRoute::CheckRouteQueue, VpnRoute::Instance()));
+}
+
+void VpnRoute::HandleVpnResponse(
+        transport::protobuf::Header& header,
+        block::protobuf::BlockMessage& block_msg) try {
+    auto& attr_res = block_msg.acc_attr_res();
+    std::lock_guard<std::mutex> guard(vip_check_account_map_mutex_);
+    auto iter = vip_check_account_map_.find(attr_res.account());
+    if (iter == vip_check_account_map_.end()) {
+        return;
+    }
+
+    if (attr_res.block().empty()) {
+        if (iter->second->vip_timestamp == -100) {
+            iter->second->vip_timestamp = -99;
+        }
+        return;
+    }
+
+    bft::protobuf::Block block;
+    if (!block.ParseFromString(attr_res.block())) {
+        return;
+    }
+
+    // TODO(): check block multi sign, this node must get election blocks
+    std::string login_svr_id;
+    uint64_t day_pay_timestamp = 0;
+    uint64_t vip_tenons = 0;
+    auto& tx_list = block.tx_block().tx_list();
+    for (int32_t i = tx_list.size() - 1; i >= 0; --i) {
+        if (tx_list[i].attr_size() > 0) {
+            if (tx_list[i].from() != attr_res.account()) {
+                continue;
+            }
+
+            for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
+                if (tx_list[i].attr(attr_idx).key() == common::kUserPayForVpn &&
+                            VpnServer::Instance()->VipCommitteeAccountValid(tx_list[i].to())) {
+                    day_pay_timestamp = block.timestamp();
+                    vip_tenons = tx_list[i].amount();
+                    iter->second->vpn_pay_for_height = block.height();
+                }
+            }
+        }
+
+        if (!login_svr_id.empty()) {
+            break;
+        }
+    }
+
+    uint64_t day_msec = 24llu * 3600llu * 1000llu;
+    uint32_t day_pay_for_vpn = day_pay_timestamp / day_msec;
+    iter->second->vip_timestamp = day_pay_for_vpn;
+    iter->second->vip_payed_tenon = vip_tenons;
+} catch (std::exception& e) {
+    VPNSVR_ERROR("receive get vip info catched error[%s]", e.what());
+    std::cout << "catch error: " << e.what() << std::endl;
 }
 
 }  // namespace vpn

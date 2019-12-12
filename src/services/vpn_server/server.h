@@ -150,6 +150,19 @@ struct BandwidthInfo {
         return false;
     }
 
+    bool ValidRoute() {
+        if (vip_timestamp == -100) {
+            return true;
+        }
+
+        if (IsVip()) {
+            return true;
+        }
+
+        return false;
+    }
+
+
     bool IsVip() {
         uint32_t now_day_timestamp = lego::common::TimeUtils::TimestampDays();
         int32_t vip_days = vip_payed_tenon / lego::common::kVpnVipMinPayfor;
@@ -187,7 +200,6 @@ typedef std::shared_ptr<StakingItem> StakingItemPtr;
 
 typedef struct server_item {
     struct cork_dllist connections;
-    std::unordered_map<std::string, BandwidthInfoPtr> account_bindwidth_map;
 } server_item_t;
 typedef std::shared_ptr<server_item_t> server_item_ptr_t;
 
@@ -249,6 +261,7 @@ typedef struct server {
 #ifdef USE_NFCONNTRACK_TOS
     struct dscptracker *tracker;
 #endif
+    std::string client_id;
 } server_t;
 
 typedef struct query {

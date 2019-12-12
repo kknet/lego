@@ -569,10 +569,6 @@ void SetTosFromConnmark(remote_t *remote, server_t *server) {
 static bool RemoveNotAliveAccount(
         const std::chrono::steady_clock::time_point& now_point,
         std::unordered_map<std::string, BandwidthInfoPtr>& account_bindwidth_map) {
-    if (account_bindwidth_map.size() <= kMaxConnectAccount) {
-        return false;
-    }
-
     for (auto iter = account_bindwidth_map.begin(); iter != account_bindwidth_map.end();) {
         if ((iter->second->timeout + std::chrono::microseconds(kVpnClientTimeout)) < now_point) {
             account_bindwidth_map.erase(iter++);
@@ -655,11 +651,12 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
 
         auto now_point = std::chrono::steady_clock::now();
         auto& user_account = client_ptr->account;
-        auto iter = server->svr_item->account_bindwidth_map.find(user_account);
-        if (iter == server->svr_item->account_bindwidth_map.end()) {
+        auto& account_map = lego::vpn::VpnServer::Instance()->account_bindwidth_map();
+        auto iter = account_map.find(user_account);
+        if (iter == account_map.end()) {
             auto acc_item = std::make_shared<BandwidthInfo>(r, 0, user_account, client_platform);
-            server->svr_item->account_bindwidth_map[user_account] = acc_item;
-            if (RemoveNotAliveAccount(now_point, server->svr_item->account_bindwidth_map)) {
+            account_map[user_account] = acc_item;
+            if (RemoveNotAliveAccount(now_point, account_map)) {
                 // exceeded max user account, new join failed
                 // send back with status
                 send(
@@ -713,8 +710,9 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             return;
         }
 
-        auto iter = server->svr_item->account_bindwidth_map.find(client_ptr->account);
-        if (iter == server->svr_item->account_bindwidth_map.end()) {
+        auto& account_map = lego::vpn::VpnServer::Instance()->account_bindwidth_map();
+        auto iter = account_map.find(client_ptr->account);
+        if (iter == account_map.end()) {
             // send back with status
             CloseAndFreeRemote(EV_A_ remote);
             CloseAndFreeServer(EV_A_ server);
@@ -723,10 +721,10 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
 
         if (!iter->second->Valid()) {
             // send back with status
-            send(
-                    server->fd,
+            send(server->fd,
                     common::kClientFreeBandwidthOver.c_str(),
-                    common::kClientFreeBandwidthOver.size(), 0);
+                    common::kClientFreeBandwidthOver.size(),
+                    0);
             CloseAndFreeRemote(EV_A_ remote);
             CloseAndFreeServer(EV_A_ server);
             return;
@@ -1114,8 +1112,9 @@ static void RemoteRecvCallback(EV_P_ ev_io *w, int revents) {
 
     auto now_point = std::chrono::steady_clock::now();
     auto& user_account = server->client_ptr->account;
-    auto iter = server->svr_item->account_bindwidth_map.find(user_account);
-    if (iter == server->svr_item->account_bindwidth_map.end()) {
+    auto& account_map = lego::vpn::VpnServer::Instance()->account_bindwidth_map();
+    auto iter = account_map.find(user_account);
+    if (iter == account_map.end()) {
 		std::cout << "account not found." << std::endl;
         return;
     } else {
