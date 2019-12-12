@@ -348,6 +348,14 @@ int NetworkInit::ResetConfig(common::ParserArgs& parser_arg) {
         }
     }
 
+    int vpn_vip_level = 0;
+    if (parser_arg.Get("V", vpn_vip_level) == common::kParseSuccess) {
+        if (!conf_.Set("lego", "vpn_vip_level", vpn_vip_level)) {
+            INIT_ERROR("set config failed [node][vpn_vip_level][%d]", vpn_vip_level);
+            return kInitError;
+        }
+    }
+
     std::string log_path;
     if (parser_arg.Get("L", log_path) != common::kParseSuccess) {
         log_path = "log/lego.log";
@@ -374,6 +382,7 @@ int NetworkInit::ParseParams(int argc, char** argv, common::ParserArgs& parser_a
     parser_arg.AddArgType('v', "version", common::kNoValue);
     parser_arg.AddArgType('L', "log_path", common::kMaybeValue);
     parser_arg.AddArgType('i', "id", common::kMaybeValue);
+    parser_arg.AddArgType('V', "vpn_vip_level", common::kMaybeValue);
 
     std::string tmp_params = "";
     for (int i = 1; i < argc; i++) {
