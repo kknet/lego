@@ -211,6 +211,16 @@ void VpnClient::HandleGetAttrResponse(
                     paied_vip_ptr->block_hash = block.hash();
                     paied_vip_ptr->height = block.height();
                     paied_vip_ptr->timestamp = block.timestamp();
+
+                    long day_msec = 3600 * 1000 * 24;
+                    long days_timestamp = paied_vip_ptr->timestamp / day_msec;
+                    long days_cur = common::TimeUtils::TimestampDays();
+                    long vip_days = paied_vip_ptr->amount / common::kVpnVipMinPayfor;
+                    if (days_timestamp + vip_days > days_cur) {
+                        vpn_vip_level_ = common::kVipLevel1;
+                        vpn_route_network_id_ = network::kVpnRouteVipLevel1NetworkId;
+                    }
+
                     paied_vip_ptr->to_account = tx_list[i].to();
                     if (paied_vip_valid_idx_ == 0) {
                         paied_vip_info_[1] = paied_vip_ptr;
@@ -582,6 +592,7 @@ std::string VpnClient::Init(
         return "ERROR";
     }
     
+    vpn_route_network_id_ = network::kVpnRouteNetworkId;
     check_tx_tick_->CutOff(1000 * 1000, std::bind(&VpnClient::CheckTxExists, this));
     vpn_nodes_tick_->CutOff(1000 * 1000, std::bind(&VpnClient::GetVpnNodes, this));
     dump_config_tick_->CutOff(
@@ -808,7 +819,7 @@ void VpnClient::GetVpnNodes() {
         }
     }
 
-    GetNetworkNodes(country_vec, network::kVpnRouteNetworkId);
+    GetNetworkNodes(country_vec, vpn_route_network_id_);
     vpn_nodes_tick_->CutOff(kGetVpnNodesPeriod, std::bind(&VpnClient::GetVpnNodes, this));
 }
 
@@ -847,7 +858,7 @@ void VpnClient::GetNetworkNodes(
                 vpn_svr_port = common::GetVpnServerPort(
                         tmp_node->dht_key,
                         common::TimeUtils::TimestampDays());
-            } else if (node_netid == network::kVpnRouteNetworkId) {
+            } else if (node_netid == vpn_route_network_id_) {
                 vpn_route_port = common::GetVpnRoutePort(
                         tmp_node->dht_key,
                         common::TimeUtils::TimestampDays());
@@ -891,7 +902,7 @@ void VpnClient::GetNetworkNodes(
                 }
             }
 
-            if (node_netid == network::kVpnRouteNetworkId) {
+            if (node_netid == vpn_route_network_id_) {
                 std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
                 auto sub_iter = route_nodes_map_.find(country);
                 if (sub_iter != route_nodes_map_.end()) {
@@ -1375,7 +1386,7 @@ void VpnClient::ReadRouteNodesFromConf() {
 
             auto dht_key = common::Encode::HexDecode(item_split[0]);
             auto dht_netid = dht::DhtKeyManager::DhtKeyGetNetId(dht_key);
-            if (dht_netid != network::kVpnRouteNetworkId) {
+            if (dht_netid != vpn_route_network_id_) {
                 continue;
             }
 

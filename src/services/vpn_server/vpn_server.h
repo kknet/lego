@@ -47,15 +47,17 @@ public:
         return iter != valid_client_account_.end();
     }
 
+    void SendGetAccountAttrLastBlock(
+            const std::string& attr,
+            const std::string& account,
+            uint64_t height);
+
 private:
     VpnServer();
     ~VpnServer();
     void CheckTransactions();
     void CheckAccountValid();
-    void SendGetAccountAttrLastBlock(
-            const std::string& attr,
-            const std::string& account,
-            uint64_t height);
+
     void HandleMessage(transport::protobuf::Header& header);
     void HandleVpnLoginResponse(
             transport::protobuf::Header& header,

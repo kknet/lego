@@ -104,7 +104,9 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
     }
 
     conf_.Get("lego", "vpn_route_port", vpn_route_port_);
-    if (InitTcpRelay() != kProxySuccess) {
+    uint32_t vpn_vip_level = 0;
+    conf_.Get("lego", "vpn_vip_level", vpn_vip_level);
+    if (InitTcpRelay(vpn_vip_level) != kProxySuccess) {
         PROXY_ERROR("init tcp relay failed!");
         return kProxyError;
     }
@@ -140,21 +142,41 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
     return kProxySuccess;
 }
 
-int ShadowsocksProxy::InitTcpRelay() {
+int ShadowsocksProxy::InitTcpRelay(uint32_t vip_level) {
     if (vpn_route_port_ == 0) {
         return kProxySuccess;
     }
 
-    vpn_route_ = std::make_shared<VpnProxyNode>(network::kVpnRouteNetworkId);
+    uint32_t route_network_id = network::kVpnRouteNetworkId;
+    switch (vip_level) {
+        case 1:
+            route_network_id = network::kVpnRouteVipLevel1NetworkId;
+            break;
+        case 2:
+            route_network_id = network::kVpnRouteVipLevel2NetworkId;
+            break;
+        case 3:
+            route_network_id = network::kVpnRouteVipLevel3NetworkId;
+            break;
+        case 4:
+            route_network_id = network::kVpnRouteVipLevel4NetworkId;
+            break;
+        case 5:
+            route_network_id = network::kVpnRouteVipLevel5NetworkId;
+            break;
+        default:
+            break;
+    }
+
+    vpn_route_ = std::make_shared<VpnProxyNode>(route_network_id);
     int res = vpn_route_->Init();
     if (res != dht::kDhtSuccess) {
         vpn_route_ = nullptr;
-        PROXY_ERROR("node join network [%u] [%d] failed!",
-                network::kVpnRouteNetworkId, res);
+        PROXY_ERROR("node join network [%u] [%d] failed!", route_network_id, res);
         return kProxyError;
     }
 
-    res = vpn::VpnRoute::Instance()->Init();
+    res = vpn::VpnRoute::Instance()->Init(vip_level);
     if (res != vpnroute::kVpnRouteSuccess) {
         return kProxyError;
     }

@@ -44,6 +44,11 @@ enum ServiceNetworkType {
     kVpnNetworkId = kServiceShardBeginNetworkId,
     kVpnRouteNetworkId,
     kConsensusSubscription,
+    kVpnRouteVipLevel1NetworkId,
+    kVpnRouteVipLevel2NetworkId,
+    kVpnRouteVipLevel3NetworkId,
+    kVpnRouteVipLevel4NetworkId,
+    kVpnRouteVipLevel5NetworkId,
 };
 
 inline static uint32_t GetConsensusShardNetworkId(const std::string& account_address) {

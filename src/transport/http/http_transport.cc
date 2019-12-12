@@ -695,7 +695,7 @@ std::string HttpTransport::GetCountryLoad(int32_t pre_days) try {
         }
     }
 
-    res_str += std::to_string(-1) + ":" + std::to_string(other) + ",";
+    res_str += "other:" + std::to_string(other) + ",";
     return res_str;
 } catch (...) {
     return "error";

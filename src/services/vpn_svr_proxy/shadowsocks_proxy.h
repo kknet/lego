@@ -24,7 +24,7 @@ private:
 
     void HandleMessage(transport::protobuf::Header& header);
     int StartShadowsocks();
-    int InitTcpRelay();
+    int InitTcpRelay(uint32_t vip_level);
 
     static const uint32_t kMaxShadowsocksCount = 3u;
     static const int64_t kShowdowsocksShiftPeriod = 3600ll * 1000ll * 1000ll;

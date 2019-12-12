@@ -25,7 +25,7 @@ typedef std::shared_ptr<LoginCountryItem> LoginCountryItemPtr;
 class VpnRoute {
 public:
     static VpnRoute* Instance();
-    int Init();
+    int Init(uint32_t vip_level);
     void Stop();
 
     std::shared_ptr<listen_ctx_t> last_listen_ptr() {
@@ -41,6 +41,10 @@ public:
 
     common::ThreadSafeQueue<LoginCountryItemPtr>& login_country_queue() {
         return login_country_queue_;
+    }
+
+    common::ThreadSafeQueue<BandwidthInfoPtr>& server_get_client_queue() {
+        return server_get_client_queue_;
     }
 
 private:
@@ -61,10 +65,15 @@ private:
     std::shared_ptr<listen_ctx_t> last_listen_ptr_{ nullptr };
     std::set<uint16_t> started_port_set_;
     common::ThreadSafeQueue<LoginCountryItemPtr> login_country_queue_;
+    common::ThreadSafeQueue<BandwidthInfoPtr> server_get_client_queue_;
     common::Tick check_login_client_;
     uint32_t now_day_timestamp_{ 0 };
     std::unordered_map<uint32_t, LoginCountryItemPtr> client_map_;
     uint32_t check_login_tiems_{ 0 };
+    std::unordered_map<std::string, BandwidthInfoPtr> vip_check_account_map_;
+    std::mutex vip_check_account_map_mutex_;
+    uint32_t this_node_vip_level_{ common::kNotVip };
+    uint32_t this_node_route_network_id_{ network::kVpnRouteNetworkId };
 
     DISALLOW_COPY_AND_ASSIGN(VpnRoute);
 };

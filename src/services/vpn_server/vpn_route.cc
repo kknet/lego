@@ -1216,7 +1216,7 @@ void VpnRoute::Stop() {
     }
 }
 
-int VpnRoute::Init() {
+int VpnRoute::Init(uint32_t vip_level) {
     RotationServer();
     CheckLoginClient();
     if (listen_ctx_queue_.empty()) {
@@ -1224,11 +1224,32 @@ int VpnRoute::Init() {
         return kVpnsvrError;
     }
 
+    this_node_vip_level_ = vip_level;
+    this_node_route_network_id_ = network::kVpnRouteNetworkId;
+    switch (vip_level) {
+        case 1:
+            this_node_route_network_id_ = network::kVpnRouteVipLevel1NetworkId;
+            break;
+        case 2:
+            this_node_route_network_id_ = network::kVpnRouteVipLevel2NetworkId;
+            break;
+        case 3:
+            this_node_route_network_id_ = network::kVpnRouteVipLevel3NetworkId;
+            break;
+        case 4:
+            this_node_route_network_id_ = network::kVpnRouteVipLevel4NetworkId;
+            break;
+        case 5:
+            this_node_route_network_id_ = network::kVpnRouteVipLevel5NetworkId;
+            break;
+        default:
+            break;
+    }
     return kVpnsvrSuccess;
 }
 
 void VpnRoute::StartMoreServer() {
-    auto vpn_svr_dht = network::DhtManager::Instance()->GetDht(network::kVpnRouteNetworkId);
+    auto vpn_svr_dht = network::DhtManager::Instance()->GetDht(this_node_route_network_id_);
     if (vpn_svr_dht == nullptr) {
         return;
     }
@@ -1248,7 +1269,7 @@ void VpnRoute::StartMoreServer() {
     if (valid_port.empty()) {
         return;
     }
-
+  
     for (uint32_t i = 0; i < valid_port.size(); ++i) {
         std::shared_ptr<listen_ctx_t> listen_ctx_ptr = std::make_shared<listen_ctx_t>();
         if (StartTcpServer(
