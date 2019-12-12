@@ -592,6 +592,7 @@ static bool RemoveNotAliveAccount(
 }
 
 static bool CheckClientValid(
+        EV_P_
         server_t *server,
         remote_t *remote,
         const std::string& user_account) {
@@ -671,7 +672,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             return;
         }
 
-        if (!CheckClientValid(server, remote, server->client_id)) {
+        if (!CheckClientValid(EV_A_ server, remote, server->client_id)) {
             return;
         }
 
@@ -741,7 +742,7 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
                     std::string((char*)buf->data, header_offset));
             std::string user_account = lego::network::GetAccountAddressByPublicKey(pubkey);
             server->client_id = user_account;
-            if (!CheckClientValid(server, remote, user_account)) {
+            if (!CheckClientValid(EV_A_ server, remote, user_account)) {
                 return;
             }
         }
