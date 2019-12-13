@@ -217,8 +217,19 @@ void VpnClient::HandleGetAttrResponse(
                     long days_cur = common::TimeUtils::TimestampDays();
                     long vip_days = paied_vip_ptr->amount / common::kVpnVipMinPayfor;
                     if (days_timestamp + vip_days > days_cur) {
-                        vpn_vip_level_ = common::kVipLevel1;
-                        vpn_route_network_id_ = network::kVpnRouteVipLevel1NetworkId;
+                        if (vpn_route_network_id_ != network::kVpnRouteVipLevel1NetworkId) {
+                            vpn_vip_level_ = common::kVipLevel1;
+                            vpn_route_network_id_ = network::kVpnRouteVipLevel1NetworkId;
+                            std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
+                            route_nodes_map_.clear();
+                        }
+                    } else {
+                        if (vpn_route_network_id_ != network::kVpnRouteNetworkId) {
+                            vpn_vip_level_ = common::kNotVip;
+                            vpn_route_network_id_ = network::kVpnRouteNetworkId;
+                            std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
+                            route_nodes_map_.clear();
+                        }
                     }
 
                     paied_vip_ptr->to_account = tx_list[i].to();

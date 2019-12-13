@@ -737,7 +737,6 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             std::string pubkey = common::Encode::HexDecode(
                     std::string((char*)buf->data, header_offset));
             std::string user_account = lego::network::GetAccountAddressByPublicKey(pubkey);
-            std::cout << "set client id: " << common::Encode::HexEncode(user_account) << std::endl;
             memcpy(server->client_id, user_account.c_str(), sizeof(server->client_id));
             if (!CheckClientValid(EV_A_ server, remote, user_account)) {
                 return;
