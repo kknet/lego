@@ -174,9 +174,16 @@ private:
     void DumpRouteNodes();
     void ReadVpnNodesFromConf();
     void ReadRouteNodesFromConf();
+
+    void VipDumpVpnNodes();
+    void VipDumpRouteNodes();
+    void VipReadVpnNodesFromConf();
+    void VipReadRouteNodesFromConf();
+
     void DumpBootstrapNodes();
     void GetNetworkNodes(const std::vector<std::string>& country_vec, uint32_t network_id);
     void InitRouteAndVpnServer();
+    void VipInitRouteAndVpnServer();
 	void GetVpnVersion();
     int SetDefaultRouting();
     std::string GetDefaultRouting();
@@ -220,6 +227,13 @@ private:
     std::mutex vpn_nodes_map_mutex_;
     std::map<std::string, std::deque<VpnServerNodePtr>> route_nodes_map_;
     std::mutex route_nodes_map_mutex_;
+
+    std::map<std::string, std::deque<VpnServerNodePtr>> vip_vpn_nodes_map_;
+    std::mutex vip_vpn_nodes_map_mutex_;
+    std::map<std::string, std::deque<VpnServerNodePtr>> vip_route_nodes_map_;
+    std::mutex vip_route_nodes_map_mutex_;
+
+
     LastPaiedVipInfoPtr paied_vip_info_[2];
     uint32_t paied_vip_valid_idx_{ 0 };
     int32_t today_used_bandwidth_{ -1 };
