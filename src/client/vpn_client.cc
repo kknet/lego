@@ -570,8 +570,8 @@ std::string VpnClient::Init(
     std::string config_ver;
     config.Get("lego", "version", config_ver);
     if (config_ver != version || vpn_us_nodes.empty()) {
-        // InitRouteAndVpnServer();
-        // VipInitRouteAndVpnServer();
+        InitRouteAndVpnServer();
+        VipInitRouteAndVpnServer();
     }
     config.Set("lego", "version", version);
 
@@ -701,35 +701,35 @@ void VpnClient::InitRouteAndVpnServer() {
 
 void VpnClient::VipInitRouteAndVpnServer() {
     config.Set("vip_route", "country", std::string("AU,BR,CA,CN,DE,FR,GB,HK,ID,IN,JP,KR,NL,NZ,PT,SG,US"));
-    config.Set("vip_route", "US", std::string("04100000380000009e9050cb3c85f4d62fcd668cd2969a243b83b7d04b521422,d0046302830a22ebde67bcc4ce5e6b7ec66e4d9e0bdf6c7c8b3530859dbb71e3,03388f3ae01d80d26de935b01a23997af3966152a00651308df272fbe52ba06c8b,206.189.239.148,38010;04100000380000000df531c30626aa87da5b26e7f5817c69d8b0682a8075458b,4db1b910771d304a86ed196cfb219286994784ce95f19457b7a2426ea4fc79cf,039b6142e43af168b8b5c5df6037fade0f59d71fd3cdda18c2442dea8d9b6ab7d1,165.227.60.177,40704;0410000038000000718b3753a01d2169698b719b5854b70f9da45e1f4e6c4a9e,5c64d2ba07b6807e45d3cb92ef787bc6ecf7a3e64509993f55abe40566737fce,0376fbd2f833fc6ed594c70ab0d01587e5febe296c91aab8453e88fdd053bebd4e,206.189.226.23,55257;04100000380000000a62e457e88c8c82c57828dd34ce33ec7dec537408a9fa3b,16e05cf0ee01eae93ac6a9e8a44838da9bf5f2deefd3505ea8b73a222c47f87f,0262fde278fc014c1362672cb4e82dd9e10d1c18ca3ff43785cfc5f5fb3c7b4f43,206.189.233.88,44166;04100000380000008257e05528c8b59ca930163b330c108b9e8cc89b2527ea37,69492a49125e951904bf6625ec0f2e64ad456cd566dc6e20470c7282296599ee,03fb050aca99c818f33c3d55c2d9aa09d1e6ccd2fdbeb892aab496e30d235b5d45,165.227.18.179,62324;"));
-    config.Set("vip_route", "SG", std::string("0410000086000000099a92ca3de3e50780827bc0e70e7fbf899d90de3c660512,250087a41b61dc71ccb156dd4d5c3971c41b24001f6ec6a806bd293679cf850f,03f9c4072dd7396402f6d4f1b92c26615addd02c9d9b9be7bad9314eca4ea98bda,206.189.151.124,56711;"));
-    config.Set("vip_route", "NL", std::string("04100000ec00000013076c371bc975446596d4f064a33b600b24c79a21098bff,94592abd2063ba23ceb41ea01397259cddacac3280502526f88a52612cf9c978,039e488541ff2d4781e558a96e225a347768e65418e730356a9854fe49c561390a,128.199.38.94,55485;"));
-    config.Set("vip_route", "JP", std::string("041000001b000000b91880d520f13711f783f93035eb9e73d029c3c3c9553e08,0cfcc7a42a5723cbe085a0d1b448eba29c05b90b14a2cf719d7260a14d8e36fa,02d6057c520fb505738af943b2410c446a4e1256ae19e09fd2b69272ec0c3e463e,108.160.139.82,46880;041000001b000000276711c17b8169fba9e349874982e36430c776511c57c631,965fd695e6faff7011d231e3465ab51c61a72b36fe4b074b3d557d8cb9a05d53,024db28ab49ce136dfa1d92edf05ffc7e1afb7f565675aadba26792626c86160ba,108.61.180.240,57728;"));
-    config.Set("vip_route", "IN", std::string("0410000074000000d4b147faf9850a5422bc1fca2ea78cc32ac6e5b411033028,fce5d1e55e7d91ad08e59d6a866ab5ef9fb297717169c9b15b3caea68355e6f4,0312cbc7511bf2dffafefe43affcb954e263ce128ec68d5c807bf8c25c1d89d70c,139.59.47.229,60905;0410000074000000ccf3cb1b51f67c53f1d0aeb5ea004e3291c01781043dfb82,67d8ec0489e29e0e5911358a5e91ee80ba4ebb2b2013668ca4c700d96e834048,035073a98fbd938a0e73fa2489aff409bfff7e8e991fabe412ae0b497ca39c9778,139.59.91.63,40802;"));
-    config.Set("vip_route", "GB", std::string("04100000ed000000a9c6fe998ff96e49fe71ac113f5ec373b3566a8802590ae1,66f61a8e0354ba1170dc34b27d52158dfec595180bac8a9984236d00721151bf,036b0b56e1dd54ac18363bfc84240a9a070f80cd9cbaf694812bd543a13e33ac67,178.128.174.110,47830;"));
-    config.Set("vip_route", "FR", std::string("04100000e700000042fe1dea14bb55ce7ed1107accf18e11b5e19d497d2bbb60,91596dca0891fd27ee2e0f854a544ba979ff34eae58c9c84130f132dcd523b97,02d7f8de2cea81465cc85afc30b718c6c28fdbf188f171abe9454672773e85b082,95.179.214.34,50236;04100000e70000002a85cb6d66bccd49c1a6450890f92389348bd5d822fe4b12,4e8691eb4c157a363201051cd9f3d86121ae6485ae82a3fdce52a9f0a01fe056,028780f5be80747974211fe70bfaeef8d9ce6aae986fc48ea3b5e410c45298f5dc,199.247.10.81,48750;"));
-    config.Set("vip_route", "DE", std::string("04100000e80000008e81c74ef2d99688bedfa65573563d47e490e61dab8213b5,438a5204d566c839bfa25d62ef123e984aa560143d1920d9093eaa02f734101f,03c0a245f8d1cc4aaf42890ff9bb78c0b95dda6e75cf89bd74e3a41dcaf79f29e4,46.101.152.5,38849;"));
-    config.Set("vip_route", "CN", std::string("041000001a0000001ddb1195fc56cbad225d9d51eb7c2517a2267ae9b08ef960,1589b6a2dad22399bbca7d7c09373c38dab65fa03b8ca13054079ba199752d14,02897ecc1aba8418a7d567500219cb0599d17f2a853900506d450650d14242fa4a,121.201.1.186,63204;041000001a0000007a94a9652d4855dde8f6691bef9b501ab93bb952163fa2b1,21e53275e47b108d8aa1136899d1401b948fe648190b7b9e83980a1d7b208b0e,03802d069aa3b07a049d96a05276c33d1e5dfd492586fb02c985110759a1091a32,121.201.10.101,57221;041000001a000000e4443e4a8e767a6da1512b84d1463ea788f6b781f6ecf298,78e58ac9ebe50ef9122db7c43d4bd67b494a3760b2fb49bee48675ebb475b1aa,02e6ed440ed210af3c5e54f30b0f98247949edf4be3c3c9d0402057f9fb0691132,121.201.102.126,63036;"));
-    config.Set("vip_route", "CA", std::string("04100000350000001a69255b01f48c67d906497f997316f1e926011a6a6aca7c,98f0e09ec1385d6f43a812f1e594e126b631f7a7caa21f82e8ed2aac6c858f0b,0203133f775cb24c22cec7bfe88666b3fbefff51adb3c7e3d43ee246e38f6d7cb5,138.197.130.242,59646;"));
-    config.Set("vip_route", "AU", std::string("041000004b0000009912f3e55918f1ba3ef5faa85f68aef825d5ded5f6705e42,236edfdbf5e559c5ac9a73220efc44979b130b322612beb70d1d4c1a8989dc40,03025b283885b2f13021403019b672572c4311fb7b9e193ca25652d6a22aad289d,139.180.164.77,58380;"));
+    config.Set("vip_route", "US", std::string(""));
+    config.Set("vip_route", "SG", std::string(""));
+    config.Set("vip_route", "NL", std::string(""));
+    config.Set("vip_route", "JP", std::string(""));
+    config.Set("vip_route", "IN", std::string(""));
+    config.Set("vip_route", "GB", std::string(""));
+    config.Set("vip_route", "FR", std::string(""));
+    config.Set("vip_route", "DE", std::string(""));
+    config.Set("vip_route", "CN", std::string("061000001a000000756133ed94e21fea36ea551abf729742c8c7c7fd6819b9e0,75277b6e6082da89364f31d0d6f037ac0497a27e2cca4dc09ca2ccceec6671d8,033d857e4873af0b49cab7b8748669c74603edebc6e1a54b59a6ea73f1566b81a5,103.205.4.77,50374;061000001a00000056eeb6165fd62f0203f0d1d80a3a4d4facd4606c4bdf943d,d989c87ec34b1610aaab7a193598832bebb579b9872fea23d27e34d48ec69c3b,03d227d8cd351a902e877f25fc69c455742f16c2f43975e9a01c7d7611b2226dc3,222.186.170.72,58960;061000001a00000041542f3db7adf33b7af893e24f8bf486289cfbaf69b240ba,66810084512ca74bb8f3bab23a3da18c02f453e3ca646b2a8d5c47de53cebf9b,0259d40d5c26a49bd1329653e218a440846d35bda5e7ded46e7a317e2f5756a14e,103.205.5.217,62941;"));
+    config.Set("vip_route", "CA", std::string(""));
+    config.Set("vip_route", "AU", std::string(""));
     config.Set("vip_vpn", "country", std::string("AU,BR,CA,CN,DE,FR,GB,HK,ID,IN,JP,KR,NL,NZ,PT,SG,US"));
-    config.Set("vip_vpn", "US", std::string("03100000380000009e9050cb3c85f4d62fcd668cd2969a243b83b7d04b521422,d0046302830a22ebde67bcc4ce5e6b7ec66e4d9e0bdf6c7c8b3530859dbb71e3,03388f3ae01d80d26de935b01a23997af3966152a00651308df272fbe52ba06c8b,206.189.239.148,17291,1574332441322;03100000380000000df531c30626aa87da5b26e7f5817c69d8b0682a8075458b,4db1b910771d304a86ed196cfb219286994784ce95f19457b7a2426ea4fc79cf,039b6142e43af168b8b5c5df6037fade0f59d71fd3cdda18c2442dea8d9b6ab7d1,165.227.60.177,13341,1574332441322;03100000380000000a62e457e88c8c82c57828dd34ce33ec7dec537408a9fa3b,16e05cf0ee01eae93ac6a9e8a44838da9bf5f2deefd3505ea8b73a222c47f87f,0262fde278fc014c1362672cb4e82dd9e10d1c18ca3ff43785cfc5f5fb3c7b4f43,206.189.233.88,25016,1574332441322;0310000038000000718b3753a01d2169698b719b5854b70f9da45e1f4e6c4a9e,5c64d2ba07b6807e45d3cb92ef787bc6ecf7a3e64509993f55abe40566737fce,0376fbd2f833fc6ed594c70ab0d01587e5febe296c91aab8453e88fdd053bebd4e,206.189.226.23,21875,1574332441322;03100000380000008257e05528c8b59ca930163b330c108b9e8cc89b2527ea37,69492a49125e951904bf6625ec0f2e64ad456cd566dc6e20470c7282296599ee,03fb050aca99c818f33c3d55c2d9aa09d1e6ccd2fdbeb892aab496e30d235b5d45,165.227.18.179,13335,1574332441322;"));
-    config.Set("vip_vpn", "IN", std::string("0310000074000000d4b147faf9850a5422bc1fca2ea78cc32ac6e5b411033028,fce5d1e55e7d91ad08e59d6a866ab5ef9fb297717169c9b15b3caea68355e6f4,0312cbc7511bf2dffafefe43affcb954e263ce128ec68d5c807bf8c25c1d89d70c,139.59.47.229,11069,1574332441322;0310000074000000ccf3cb1b51f67c53f1d0aeb5ea004e3291c01781043dfb82,67d8ec0489e29e0e5911358a5e91ee80ba4ebb2b2013668ca4c700d96e834048,035073a98fbd938a0e73fa2489aff409bfff7e8e991fabe412ae0b497ca39c9778,139.59.91.63,21093,1574332441322;"));
-    config.Set("vip_vpn", "GB", std::string("03100000ed000000a9c6fe998ff96e49fe71ac113f5ec373b3566a8802590ae1,66f61a8e0354ba1170dc34b27d52158dfec595180bac8a9984236d00721151bf,036b0b56e1dd54ac18363bfc84240a9a070f80cd9cbaf694812bd543a13e33ac67,178.128.174.110,25058,1574332441322;"));
-    config.Set("vip_vpn", "CN", std::string("031000001a000000e4443e4a8e767a6da1512b84d1463ea788f6b781f6ecf298,78e58ac9ebe50ef9122db7c43d4bd67b494a3760b2fb49bee48675ebb475b1aa,02e6ed440ed210af3c5e54f30b0f98247949edf4be3c3c9d0402057f9fb0691132,121.201.102.126,12444,1574515883015;031000001a0000001ddb1195fc56cbad225d9d51eb7c2517a2267ae9b08ef960,1589b6a2dad22399bbca7d7c09373c38dab65fa03b8ca13054079ba199752d14,02897ecc1aba8418a7d567500219cb0599d17f2a853900506d450650d14242fa4a,121.201.1.186,24035,1574515883015;031000001a0000007a94a9652d4855dde8f6691bef9b501ab93bb952163fa2b1,21e53275e47b108d8aa1136899d1401b948fe648190b7b9e83980a1d7b208b0e,03802d069aa3b07a049d96a05276c33d1e5dfd492586fb02c985110759a1091a32,121.201.10.101,29693,1574515883015;"));
-    config.Set("vip_vpn", "SG", std::string("0310000086000000099a92ca3de3e50780827bc0e70e7fbf899d90de3c660512,250087a41b61dc71ccb156dd4d5c3971c41b24001f6ec6a806bd293679cf850f,03f9c4072dd7396402f6d4f1b92c26615addd02c9d9b9be7bad9314eca4ea98bda,206.189.151.124,20902,1574332441322;"));
+    config.Set("vip_vpn", "US", std::string(""));
+    config.Set("vip_vpn", "IN", std::string(""));
+    config.Set("vip_vpn", "GB", std::string(""));
+    config.Set("vip_vpn", "CN", std::string(""));
+    config.Set("vip_vpn", "SG", std::string(""));
     config.Set("vip_vpn", "BR", std::string(""));
-    config.Set("vip_vpn", "CA", std::string("03100000350000001a69255b01f48c67d906497f997316f1e926011a6a6aca7c,98f0e09ec1385d6f43a812f1e594e126b631f7a7caa21f82e8ed2aac6c858f0b,0203133f775cb24c22cec7bfe88666b3fbefff51adb3c7e3d43ee246e38f6d7cb5,138.197.130.242,22895,1574664354874;"));
-    config.Set("vip_vpn", "DE", std::string("03100000e80000008e81c74ef2d99688bedfa65573563d47e490e61dab8213b5,438a5204d566c839bfa25d62ef123e984aa560143d1920d9093eaa02f734101f,03c0a245f8d1cc4aaf42890ff9bb78c0b95dda6e75cf89bd74e3a41dcaf79f29e4,46.101.152.5,14059,1574332441322;"));
-    config.Set("vip_vpn", "FR", std::string("03100000e700000042fe1dea14bb55ce7ed1107accf18e11b5e19d497d2bbb60,91596dca0891fd27ee2e0f854a544ba979ff34eae58c9c84130f132dcd523b97,02d7f8de2cea81465cc85afc30b718c6c28fdbf188f171abe9454672773e85b082,95.179.214.34,18995,1574664354874;03100000e70000002a85cb6d66bccd49c1a6450890f92389348bd5d822fe4b12,4e8691eb4c157a363201051cd9f3d86121ae6485ae82a3fdce52a9f0a01fe056,028780f5be80747974211fe70bfaeef8d9ce6aae986fc48ea3b5e410c45298f5dc,199.247.10.81,28597,1574664354874;"));
-    config.Set("vip_vpn", "HK", std::string("031000001f00000040bc88c284ff28a7a8a986f7ad9f58cc7161ff6f4e3c57cb,55db78e13b9321836a50109aeabf61792a328b15ed644dab4558e715fb53c41c,030f08b29703d1e7ab8b5fbb98277e90bf4e1b9d6be2ae3f3eac1c2254c2e94686,91.193.103.66,15419,1574664354874;"));
+    config.Set("vip_vpn", "CA", std::string(""));
+    config.Set("vip_vpn", "DE", std::string(""));
+    config.Set("vip_vpn", "FR", std::string(""));
+    config.Set("vip_vpn", "HK", std::string(""));
     config.Set("vip_vpn", "ID", std::string(""));
-    config.Set("vip_vpn", "JP", std::string("031000001b000000b91880d520f13711f783f93035eb9e73d029c3c3c9553e08,0cfcc7a42a5723cbe085a0d1b448eba29c05b90b14a2cf719d7260a14d8e36fa,02d6057c520fb505738af943b2410c446a4e1256ae19e09fd2b69272ec0c3e463e,108.160.139.82,11846,1574664354874;031000001b000000276711c17b8169fba9e349874982e36430c776511c57c631,965fd695e6faff7011d231e3465ab51c61a72b36fe4b074b3d557d8cb9a05d53,024db28ab49ce136dfa1d92edf05ffc7e1afb7f565675aadba26792626c86160ba,108.61.180.240,25000,1574664354874;"));
+    config.Set("vip_vpn", "JP", std::string(""));
     config.Set("vip_vpn", "KR", std::string(""));
-    config.Set("vip_vpn", "NL", std::string("03100000ec00000013076c371bc975446596d4f064a33b600b24c79a21098bff,94592abd2063ba23ceb41ea01397259cddacac3280502526f88a52612cf9c978,039e488541ff2d4781e558a96e225a347768e65418e730356a9854fe49c561390a,128.199.38.94,19422,1574664354874;"));
+    config.Set("vip_vpn", "NL", std::string(""));
     config.Set("vip_vpn", "NZ", std::string(""));
     config.Set("vip_vpn", "PT", std::string(""));
-    config.Set("vip_vpn", "AU", std::string("03100000ec00000013076c371bc975446596d4f064a33b600b24c79a21098bff,94592abd2063ba23ceb41ea01397259cddacac3280502526f88a52612cf9c978,039e488541ff2d4781e558a96e225a347768e65418e730356a9854fe49c561390a,128.199.38.94,19422,1574664354874;"));
+    config.Set("vip_vpn", "AU", std::string(""));
 }
 
 
@@ -821,8 +821,29 @@ std::string VpnClient::GetVpnServerNodes(
             }
             return "OK";
         }
-    } else {
-        if (vpn_vip_level_ == common::kNotVip) {
+    }
+    else {
+        if (vpn_vip_level_ != common::kNotVip) {
+            std::lock_guard<std::mutex> guard(vip_route_nodes_map_mutex_);
+            auto iter = vip_route_nodes_map_.find(country);
+            if (iter == vip_route_nodes_map_.end()) {
+                vip_route_nodes_map_[country] = std::deque<VpnServerNodePtr>();
+            }
+            else {
+                for (auto qiter = iter->second.begin(); qiter != iter->second.end(); ++qiter) {
+                    (*qiter)->route_port = common::GetVpnRoutePort(
+                        common::Encode::HexDecode((*qiter)->dht_key),
+                        common::TimeUtils::TimestampDays());
+                    nodes.push_back(*qiter);
+                }
+
+                if (!nodes.empty()) {
+                    return "OK";
+                }
+            }
+        }
+
+        {
             std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
             auto iter = route_nodes_map_.find(country);
             if (iter == route_nodes_map_.end()) {
@@ -835,28 +856,9 @@ std::string VpnClient::GetVpnServerNodes(
                     nodes.push_back(*qiter);
                 }
 
-                if (nodes.empty()) {
-                    return "get vpn nodes failed!";
+                if (!nodes.empty()) {
+                    return "OK";
                 }
-                return "OK";
-            }
-        } else {
-            std::lock_guard<std::mutex> guard(vip_route_nodes_map_mutex_);
-            auto iter = vip_route_nodes_map_.find(country);
-            if (iter == vip_route_nodes_map_.end()) {
-                vip_route_nodes_map_[country] = std::deque<VpnServerNodePtr>();
-            } else {
-                for (auto qiter = iter->second.begin(); qiter != iter->second.end(); ++qiter) {
-                    (*qiter)->route_port = common::GetVpnRoutePort(
-                            common::Encode::HexDecode((*qiter)->dht_key),
-                            common::TimeUtils::TimestampDays());
-                    nodes.push_back(*qiter);
-                }
-
-                if (nodes.empty()) {
-                    return "get vpn nodes failed!";
-                }
-                return "OK";
             }
         }
     }
