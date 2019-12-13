@@ -261,7 +261,7 @@ typedef struct server {
 #ifdef USE_NFCONNTRACK_TOS
     struct dscptracker *tracker;
 #endif
-    std::string client_id;
+    char client_id[32];
 } server_t;
 
 typedef struct query {

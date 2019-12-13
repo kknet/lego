@@ -667,13 +667,8 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
 
     buf->len = r;
     if (server->stage == STAGE_STREAM) {
-        if (server->client_id.empty()) {
-            CloseAndFreeRemote(EV_A_ remote);
-            CloseAndFreeServer(EV_A_ server);
-            return;
-        }
-
-        if (!CheckClientValid(EV_A_ server, remote, server->client_id)) {
+        std::string tmp_client_id = std::string(server->client_id, sizeof(server->client_id));
+        if (!CheckClientValid(EV_A_ server, remote, tmp_client_id)) {
             return;
         }
 
@@ -742,7 +737,8 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
             std::string pubkey = common::Encode::HexDecode(
                     std::string((char*)buf->data, header_offset));
             std::string user_account = lego::network::GetAccountAddressByPublicKey(pubkey);
-            server->client_id = user_account;
+            std::cout << "set client id: " << common::Encode::HexEncode(user_account) << std::endl;
+            memcpy(server->client_id, user_account.c_str(), sizeof(server->client_id));
             if (!CheckClientValid(EV_A_ server, remote, user_account)) {
                 return;
             }
