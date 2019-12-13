@@ -822,7 +822,7 @@ std::string VpnClient::GetVpnServerNodes(
             return "OK";
         }
     } else {
-        if (vpn_vip_level_ != common::kNotVip) {
+        if (vpn_vip_level_ == common::kNotVip) {
             std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
             auto iter = route_nodes_map_.find(country);
             if (iter == route_nodes_map_.end()) {
