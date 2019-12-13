@@ -130,6 +130,7 @@ static int ipv6first = 0;
 static int fast_open = 1;
 static int no_delay = 1;
 static int ret_val = 0;
+static const int64_t kClientKeepaliveTime = 30ll * 1000ll * 1000ll;
 
 #ifdef HAVE_SETRLIMIT
 static int nofile = 0;

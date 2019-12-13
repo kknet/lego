@@ -68,7 +68,6 @@ private:
     static const uint32_t kStakingCheckingPeriod = 10 * 1000 * 1000;
     static const uint32_t kAccountCheckPeriod = 10 * 1000 * 1000;
     static const uint32_t kCheckLoginCLientPeriod = 10 * 1000 * 1000;
-    static const int64_t kClientKeepaliveTime = 30ll * 1000ll * 1000ll;
     static const int64_t kCheckServerQueuePeriod = 3ll * 1000ll * 1000ll;
     static const int64_t kCheckRouteQueuePeriod = 3ll * 1000ll * 1000ll;
 

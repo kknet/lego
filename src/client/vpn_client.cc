@@ -563,7 +563,7 @@ std::string VpnClient::Init(
     std::string config_ver;
     config.Get("lego", "version", config_ver);
     if (config_ver != version || vpn_us_nodes.empty()) {
-        InitRouteAndVpnServer();
+        // InitRouteAndVpnServer();
     }
     config.Set("lego", "version", version);
 
