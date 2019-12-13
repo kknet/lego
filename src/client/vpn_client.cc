@@ -827,8 +827,7 @@ std::string VpnClient::GetVpnServerNodes(
             auto iter = route_nodes_map_.find(country);
             if (iter == route_nodes_map_.end()) {
                 route_nodes_map_[country] = std::deque<VpnServerNodePtr>();
-            }
-            else {
+            } else {
                 for (auto qiter = iter->second.begin(); qiter != iter->second.end(); ++qiter) {
                     (*qiter)->route_port = common::GetVpnRoutePort(
                             common::Encode::HexDecode((*qiter)->dht_key),
@@ -981,7 +980,7 @@ void VpnClient::GetNetworkNodes(
                 }
             }
 
-            if (node_netid == network::kVpnNetworkId) {
+            if (node_netid == network::kVpnRouteNetworkId) {
                 std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
                 auto sub_iter = route_nodes_map_.find(country);
                 if (sub_iter != route_nodes_map_.end()) {
