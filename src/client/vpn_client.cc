@@ -821,15 +821,13 @@ std::string VpnClient::GetVpnServerNodes(
             }
             return "OK";
         }
-    }
-    else {
+    } else {
         if (vpn_vip_level_ != common::kNotVip) {
             std::lock_guard<std::mutex> guard(vip_route_nodes_map_mutex_);
             auto iter = vip_route_nodes_map_.find(country);
             if (iter == vip_route_nodes_map_.end()) {
                 vip_route_nodes_map_[country] = std::deque<VpnServerNodePtr>();
-            }
-            else {
+            } else {
                 for (auto qiter = iter->second.begin(); qiter != iter->second.end(); ++qiter) {
                     (*qiter)->route_port = common::GetVpnRoutePort(
                         common::Encode::HexDecode((*qiter)->dht_key),
