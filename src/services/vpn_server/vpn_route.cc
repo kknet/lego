@@ -1279,13 +1279,6 @@ void VpnRoute::Stop() {
 }
 
 int VpnRoute::Init(uint32_t vip_level) {
-    RotationServer();
-    CheckLoginClient();
-    if (listen_ctx_queue_.empty()) {
-        std::cout << "start vpn route server failed!" << std::endl;
-        return kVpnsvrError;
-    }
-
     this_node_vip_level_ = vip_level;
     this_node_route_network_id_ = network::kVpnRouteNetworkId;
     switch (vip_level) {
@@ -1306,6 +1299,13 @@ int VpnRoute::Init(uint32_t vip_level) {
             break;
         default:
             break;
+    }
+
+    RotationServer();
+    CheckLoginClient();
+    if (listen_ctx_queue_.empty()) {
+        std::cout << "start vpn route server failed!" << std::endl;
+        return kVpnsvrError;
     }
 
     check_route_queue_.CutOff(
