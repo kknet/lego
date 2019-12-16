@@ -567,9 +567,11 @@ std::string VpnClient::Init(
             common::GlobalInfo::Instance()->id()));
     std::string vpn_us_nodes;
     config.Get("vpn", "US", vpn_us_nodes);
+    std::string route_us_nodes;
+    config.Get("route", "US", route_us_nodes);
     std::string config_ver;
     config.Get("lego", "version", config_ver);
-    if (config_ver != version || vpn_us_nodes.empty()) {
+    if (config_ver != version || vpn_us_nodes.empty() || route_us_nodes.empty()) {
         InitRouteAndVpnServer();
         VipInitRouteAndVpnServer();
     }
