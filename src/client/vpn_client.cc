@@ -586,6 +586,7 @@ std::string VpnClient::Init(
         CLIENT_ERROR("init ecdh create secret key failed!");
         return "ERROR";
     }
+
     ReadVpnNodesFromConf();
     ReadRouteNodesFromConf();
     VipReadVpnNodesFromConf();
@@ -1477,11 +1478,6 @@ void VpnClient::VipDumpRouteNodes() {
     std::lock_guard<std::mutex> guard(vip_route_nodes_map_mutex_);
     std::string country_list;
     for (auto iter = vip_route_nodes_map_.begin(); iter != vip_route_nodes_map_.end(); ++iter) {
-#ifdef IOS_PLATFORM
-		if (iter->first == "CN") {
-			continue;
-		}
-#endif
         std::string conf_str;
         for (auto qiter = iter->second.rbegin(); qiter != iter->second.rend(); ++qiter) {
             std::string tmp_str;
@@ -1502,9 +1498,11 @@ void VpnClient::ReadRouteNodesFromConf() {
     std::string country_list;
     config.Get("route", "country", country_list);
     if (country_list.empty()) {
+        CLIENT_ERROR("read route nodes from conf failed country list empty.");
         return;
     }
 
+    CLIENT_ERROR("read route nodes from conf country list [%s]", country_list.c_str());
     common::Split country_split(country_list.c_str(), ',', country_list.size());
     for (uint32_t i = 0; i < country_split.Count(); ++i) {
         if (country_split.SubLen(i) <= 1) {
@@ -1517,6 +1515,7 @@ void VpnClient::ReadRouteNodesFromConf() {
             continue;
         }
 
+        CLIENT_ERROR("read route nodes from conf country list[%s] [%s]", country_split[i], route_nodes.c_str());
         common::Split node_list(route_nodes.c_str(), ';', route_nodes.size());
         for (uint32_t node_idx = 0; node_idx < node_list.Count(); ++node_idx) {
             if (node_list.SubLen(node_idx) <= 10) {
@@ -1530,7 +1529,7 @@ void VpnClient::ReadRouteNodesFromConf() {
 
             auto dht_key = common::Encode::HexDecode(item_split[0]);
             auto dht_netid = dht::DhtKeyManager::DhtKeyGetNetId(dht_key);
-            if (dht_netid != vpn_route_network_id_) {
+            if (dht_netid != network::kVpnRouteNetworkId) {
                 continue;
             }
 
@@ -1551,6 +1550,8 @@ void VpnClient::ReadRouteNodesFromConf() {
                     common::Encode::HexEncode(network::GetAccountAddressByPublicKey(
                             common::Encode::HexDecode(item_split[2]))),
                     false);
+            CLIENT_ERROR("new route node [%s][%s].", country_split[i], item_split[3]);
+
             std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
             auto iter = route_nodes_map_.find(country_split[i]);
             if (iter == route_nodes_map_.end()) {
@@ -1574,6 +1575,8 @@ void VpnClient::ReadRouteNodesFromConf() {
             }
         }
     }
+
+
 }
 
 void VpnClient::ReadVpnNodesFromConf() {
@@ -1685,7 +1688,7 @@ void VpnClient::VipReadRouteNodesFromConf() {
 
             auto dht_key = common::Encode::HexDecode(item_split[0]);
             auto dht_netid = dht::DhtKeyManager::DhtKeyGetNetId(dht_key);
-            if (dht_netid != vpn_route_network_id_) {
+            if (dht_netid != network::kVpnRouteVipLevel1NetworkId) {
                 continue;
             }
 
