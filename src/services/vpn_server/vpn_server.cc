@@ -125,6 +125,9 @@ static void CloseAndFreeServer(EV_P_ server_t *server);
 static void ResolvCallback(struct sockaddr *addr, void *data);
 static void ResolvFreeCallback(void *data);
 
+volatile uint64_t BandwidthInfo::free_bandwidth_max = 2048llu * 1024llu * 1024llu;
+volatile uint64_t BandwidthInfo::vip_bandwidth_max = 10llu * 1024llu * 1024llu * 1024llu;
+
 // static crypto_t *crypto;
 
 static int acl = 0;

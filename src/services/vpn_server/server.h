@@ -110,6 +110,8 @@ struct PeerInfo {
 typedef std::shared_ptr<PeerInfo> PeerInfoPtr;
 
 struct BandwidthInfo {
+    static volatile uint64_t free_bandwidth_max;
+    static volatile uint64_t vip_bandwidth_max;
     BandwidthInfo(uint32_t up, uint32_t down, const std::string& acc_id, const std::string& plat)
             : up_bandwidth(up), down_bandwidth(down), account_id(acc_id) {
         timeout = std::chrono::steady_clock::now();
@@ -141,10 +143,13 @@ struct BandwidthInfo {
         }
 
         if (IsVip()) {
-            return true;
+            if (today_used_bandwidth <= BandwidthInfo::vip_bandwidth_max) {
+                return true;
+            }
+            return false;
         }
 
-        if (today_used_bandwidth <= kMaxBandwidthFreeUse) {
+        if (today_used_bandwidth <= BandwidthInfo::free_bandwidth_max) {
             return true;
         }
         return false;
@@ -174,7 +179,7 @@ struct BandwidthInfo {
 
     volatile uint32_t up_bandwidth;
     volatile uint32_t down_bandwidth;
-    uint32_t today_used_bandwidth;
+    uint64_t today_used_bandwidth;
     std::chrono::steady_clock::time_point timeout;
     std::chrono::steady_clock::time_point client_staking_time;
     int32_t vip_timestamp{ -100 };
