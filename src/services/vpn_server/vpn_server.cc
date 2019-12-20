@@ -1756,9 +1756,9 @@ void VpnServer::HandleClientBandwidthResponse(
         return;
     }
 
-    uint32_t used = 0;
+    uint64_t used = 0;
     try {
-        used = common::StringUtil::ToUint32(client_bw_res.attr_value());
+        used = common::StringUtil::ToUint64(client_bw_res.attr_value());
     } catch(...) {
         return;
     }

@@ -20,7 +20,7 @@ public:
     virtual int Execute(bft::TxItemPtr& tx_item);
 
 private:
-    std::unordered_map<std::string, uint32_t> bandwidth_all_map_;
+    std::unordered_map<std::string, uint64_t> bandwidth_all_map_;
     std::mutex bandwidth_all_map_mutex_;
     std::unordered_map<uint32_t, std::unordered_set<std::string>> day_alives_;
     std::mutex day_alives_mutex_;
