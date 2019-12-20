@@ -204,7 +204,6 @@ void Command::AddBaseCommands() {
 
     });
     AddCommand("ab", [this](const std::vector<std::string>& args) {
-        std::string to;
         if (args.size() < 2) {
             return;
         }
