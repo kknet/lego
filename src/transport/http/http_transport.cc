@@ -292,6 +292,8 @@ void HttpTransport::HandleGetTransaction(const httplib::Request &req, httplib::R
         res.set_header("Access-Control-Allow-Origin", "*");
     } catch (...) {
         res.status = 400;
+        res.set_content("", "text/plain");
+        res.set_header("Access-Control-Allow-Origin", "*");
         TRANSPORT_ERROR("account_balance by this node error.");
         std::cout << "account_balance by this node error." << std::endl;
     }

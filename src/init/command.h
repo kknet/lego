@@ -35,6 +35,7 @@ private:
     void TxPeriod();
 	void VpnHeartbeat(const std::string& dht_key);
 	void CreateNewVpnVersion(const std::string& download_url);
+    void SendClientUseBandwidth(const std::string& id, uint32_t bandwidth);
 
 	static const uint32_t kTransportTestPeriod = 1000 * 1000;
     std::map<std::string, CommandFunction> cmd_map_;

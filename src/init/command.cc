@@ -10,6 +10,7 @@
 #include "common/encode.h"
 #include "common/global_info.h"
 #include "common/country_code.h"
+#include "common/time_utils.h"
 #include "dht/base_dht.h"
 #include "dht/dht_key.h"
 #include "network/dht_manager.h"
@@ -17,7 +18,9 @@
 #include "network/route.h"
 #include "bft/bft_manager.h"
 #include "init/init_utils.h"
+#include "contract/contract_utils.h"
 #include "client/vpn_client.h"
+#include "client/trans_client.h"
 #include "client/proto/client.pb.h"
 #include "client/proto/client_proto.h"
 #include "ip/ip_with_country.h"
@@ -199,6 +202,16 @@ void Command::AddBaseCommands() {
 //                 10, 10, common::Encode::HexDecode(args[0]));
 //         lego::vpn::VpnServer::Instance()->bandwidth_queue().push(acc_item);
 
+    });
+    AddCommand("ab", [this](const std::vector<std::string>& args) {
+        std::string to;
+        if (args.size() < 2) {
+            return;
+        }
+
+        std::string to = args[0];
+        uint32_t amount = common::StringUtil::ToUint32(args[1]);
+        SendClientUseBandwidth(to, amount);
     });
     AddCommand("tx", [this](const std::vector<std::string>& args) {
         std::string tx_gid;
@@ -400,6 +413,23 @@ void Command::Help() {
     std::cout << "\t-o [country]         country code" << std::endl;
     std::cout << "\t-n [network]         network id" << std::endl;
     std::cout << "\t-L [log]             log path" << std::endl;
+}
+
+void Command::SendClientUseBandwidth(const std::string& id, uint32_t bandwidth) {
+    std::string now_day_timestamp = std::to_string(common::TimeUtils::TimestampDays());
+    std::string attr_key = (common::kIncreaseVpnBandwidth + "_" +
+        common::Encode::HexEncode(id) + "_" + now_day_timestamp);
+    std::map<std::string, std::string> attrs{
+        {attr_key, std::to_string(bandwidth)}
+    };
+    std::string gid;
+    client::TransactionClient::Instance()->Transaction(
+            id,
+            0,
+            contract::kContractVpnBandwidthProveAddr,
+            attrs,
+            common::kConsensusVpnBandwidth,
+            gid);
 }
 
 }  // namespace init
