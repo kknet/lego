@@ -208,7 +208,7 @@ void Command::AddBaseCommands() {
             return;
         }
 
-        std::string to = args[0];
+        std::string to = common::Encode::HexDecode(args[0]);
         uint32_t amount = common::StringUtil::ToUint32(args[1]);
         SendClientUseBandwidth(to, amount);
     });
