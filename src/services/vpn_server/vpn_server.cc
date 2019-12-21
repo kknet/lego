@@ -1827,7 +1827,7 @@ void VpnServer::HandleVpnLoginResponse(
                         vpn_version_last_height_ = block.height();
                         auto str = tx_list[i].attr(attr_idx).value();
                         common::Split splits(str.c_str(), ',', str.size());
-                        for (int32_t split_idx = 0; split_idx < splits.Count(); ++split_idx) {
+                        for (uint32_t split_idx = 0; split_idx < splits.Count(); ++split_idx) {
                             common::Split tmp_split(splits[split_idx], ';', splits.SubLen(split_idx));
                             if (tmp_split.Count() >= 2) {
                                 if (memcmp(tmp_split[0], "free_max_bw", strlen("free_max_bw")) == 0) {
