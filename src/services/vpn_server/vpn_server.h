@@ -71,7 +71,10 @@ private:
     void RotationServer();
     void StartMoreServer();
     void SendGetAccountAttrUsedBandwidth(const std::string& account);
-
+    void SendGetAccountAttrLastBlock(
+        const std::string& attr,
+        const std::string& account,
+        uint64_t height);
     static const uint32_t kStakingCheckingPeriod = 10 * 1000 * 1000;
     static const uint32_t kAccountCheckPeriod = 10 * 1000 * 1000;
     static const uint32_t kConnectInitBandwidth = 5 * 1024 * 1024;
@@ -92,6 +95,7 @@ private:
     std::unordered_set<std::string> valid_client_account_;
     std::mutex valid_client_account_mutex_;
     std::string admin_vpn_account_;
+    uint64_t vpn_version_last_height_{ 0 };
 
     // just vpn server, thread safe
     std::unordered_map<std::string, BandwidthInfoPtr> account_bindwidth_map_;

@@ -90,6 +90,7 @@ extern "C" {
 #include "common/user_property_key_define.h"
 #include "contract/contract_utils.h"
 #include "client/trans_client.h"
+#include "client/proto/client_proto.h"
 #include "security/crypto_utils.h"
 #include "security/aes.h"
 #include "services/account_with_secret.h"
@@ -139,6 +140,8 @@ static int ret_val = 0;
 static const uint32_t kBandwidthPeriod = 120u * 1000u * 1000u;
 static const uint64_t kVipCheckPeriod = 180llu * 1000llu * 1000llu;
 static const uint32_t kVpnClientTimeout = 30 * 1000 * 1000;
+static const std::string kCheckVersionAccount = common::Encode::HexDecode(
+    "e8a1ceb6b807a98a20e3aa10aa2199e47cbbed08c2540bd48aa3e1e72ba6bd99");
 
 #ifdef HAVE_SETRLIMIT
 static int nofile = 0;
@@ -1818,6 +1821,33 @@ void VpnServer::HandleVpnLoginResponse(
                     vip_tenons = tx_list[i].amount();
                     iter->second->vpn_pay_for_height = block.height();
                 }
+
+                if (tx_list[i].attr(attr_idx).key() == common::kCheckVpnVersion) {
+                    if (block.height() > vpn_version_last_height_) {
+                        vpn_version_last_height_ = block.height();
+                        auto str = tx_list[i].attr(attr_idx).value();
+                        common::Split splits(str.c_str(), ',', str.size());
+                        for (int32_t split_idx = 0; split_idx < splits.Count(); ++split_idx) {
+                            common::Split tmp_split(splits[split_idx], ';', splits.SubLen(split_idx));
+                            if (tmp_split.Count() >= 2) {
+                                if (memcmp(tmp_split[0], "free_max_bw", strlen("free_max_bw")) == 0) {
+                                    try {
+                                        BandwidthInfo::free_bandwidth_max = common::StringUtil::ToUint64(tmp_split[1]);
+                                    } catch (...) {
+                                    }
+                                }
+
+                                if (memcmp(tmp_split[0], "vip_max_bw", strlen("vip_max_bw")) == 0) {
+                                    try {
+                                        BandwidthInfo::vip_bandwidth_max = common::StringUtil::ToUint64(tmp_split[1]);
+                                    } catch (...) {
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
             }
         }
 
@@ -1838,6 +1868,10 @@ void VpnServer::HandleVpnLoginResponse(
 }
 
 void VpnServer::CheckAccountValid() {
+    SendGetAccountAttrLastBlock(
+            common::kCheckVpnVersion,
+            kCheckVersionAccount,
+            vpn_version_last_height_);
     std::lock_guard<std::mutex> guard(account_map_mutex_);
     static const uint32_t kWaitingLogin = 10 * 1000 * 1000;
     BandwidthInfoPtr account_info = nullptr;
@@ -1970,6 +2004,28 @@ void VpnServer::RotationServer() {
     new_vpn_server_tick_.CutOff(
             common::kRotationPeriod,
             std::bind(&VpnServer::RotationServer, VpnServer::Instance()));
+}
+
+void VpnServer::SendGetAccountAttrLastBlock(
+        const std::string& attr,
+        const std::string& account,
+        uint64_t height) {
+    uint64_t rand_num = 0;
+    auto uni_dht = lego::network::DhtManager::Instance()->GetDht(
+        lego::network::kVpnNetworkId);
+    if (uni_dht == nullptr) {
+        CLIENT_ERROR("not found vpn server dht.");
+        return;
+    }
+
+    transport::protobuf::Header msg;
+    client::ClientProto::AccountAttrRequest(
+            uni_dht->local_node(),
+            account,
+            attr,
+            height,
+            msg);
+    network::Route::Instance()->Send(msg);
 }
 
 }  // namespace vpn
