@@ -71,10 +71,6 @@ private:
     void RotationServer();
     void StartMoreServer();
     void SendGetAccountAttrUsedBandwidth(const std::string& account);
-    void SendGetAccountAttrLastBlock(
-        const std::string& attr,
-        const std::string& account,
-        uint64_t height);
     static const uint32_t kStakingCheckingPeriod = 10 * 1000 * 1000;
     static const uint32_t kAccountCheckPeriod = 10 * 1000 * 1000;
     static const uint32_t kConnectInitBandwidth = 5 * 1024 * 1024;
