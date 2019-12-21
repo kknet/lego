@@ -2006,28 +2006,6 @@ void VpnServer::RotationServer() {
             std::bind(&VpnServer::RotationServer, VpnServer::Instance()));
 }
 
-void VpnServer::SendGetAccountAttrLastBlock(
-        const std::string& attr,
-        const std::string& account,
-        uint64_t height) {
-    uint64_t rand_num = 0;
-    auto uni_dht = lego::network::DhtManager::Instance()->GetDht(
-        lego::network::kVpnNetworkId);
-    if (uni_dht == nullptr) {
-        CLIENT_ERROR("not found vpn server dht.");
-        return;
-    }
-
-    transport::protobuf::Header msg;
-    client::ClientProto::AccountAttrRequest(
-            uni_dht->local_node(),
-            account,
-            attr,
-            height,
-            msg);
-    network::Route::Instance()->Send(msg);
-}
-
 }  // namespace vpn
 
 }  // namespace lego
