@@ -1811,10 +1811,6 @@ void VpnServer::HandleVpnLoginResponse(
     auto& tx_list = block.tx_block().tx_list();
     for (int32_t i = tx_list.size() - 1; i >= 0; --i) {
         if (tx_list[i].attr_size() > 0) {
-            if (tx_list[i].from() != attr_res.account()) {
-                continue;
-            }
-
             for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
                 if (tx_list[i].attr(attr_idx).key() == common::kUserPayForVpn &&
                         VpnServer::Instance()->VipCommitteeAccountValid(tx_list[i].to()) &&
