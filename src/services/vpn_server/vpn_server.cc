@@ -1785,17 +1785,18 @@ void VpnServer::HandleVpnLoginResponse(
         transport::protobuf::Header& header,
         block::protobuf::BlockMessage& block_msg) try {
     auto& attr_res = block_msg.acc_attr_res();
-    std::lock_guard<std::mutex> guard(account_map_mutex_);
-    auto iter = account_map_.find(attr_res.account());
-    if (iter == account_map_.end()) {
-        return;
-    }
-
-    if (attr_res.block().empty()) {
-        if (iter->second->vip_timestamp == -100) {
-            iter->second->vip_timestamp = -99;
+    BandwidthInfoPtr bw_item_ptr = nullptr;
+    {
+        std::lock_guard<std::mutex> guard(account_map_mutex_);
+        auto iter = account_map_.find(attr_res.account());
+        if (iter != account_map_.end()) {
+            bw_item_ptr = iter->second;
         }
-        return;
+    }
+    if (attr_res.block().empty() && bw_item_ptr != nullptr) {
+        if (bw_item_ptr->vip_timestamp == -100) {
+            bw_item_ptr->vip_timestamp = -99;
+        }
     }
 
     bft::protobuf::Block block;
@@ -1816,10 +1817,11 @@ void VpnServer::HandleVpnLoginResponse(
 
             for (int32_t attr_idx = 0; attr_idx < tx_list[i].attr_size(); ++attr_idx) {
                 if (tx_list[i].attr(attr_idx).key() == common::kUserPayForVpn &&
-                            VpnServer::Instance()->VipCommitteeAccountValid(tx_list[i].to())) {
+                        VpnServer::Instance()->VipCommitteeAccountValid(tx_list[i].to()) &&
+                        bw_item_ptr != nullptr) {
                     day_pay_timestamp = block.timestamp();
                     vip_tenons = tx_list[i].amount();
-                    iter->second->vpn_pay_for_height = block.height();
+                    bw_item_ptr->vpn_pay_for_height = block.height();
                 }
 
                 if (tx_list[i].attr(attr_idx).key() == common::kCheckVpnVersion) {
@@ -1856,12 +1858,16 @@ void VpnServer::HandleVpnLoginResponse(
         }
     }
 
-    iter->second->pre_payfor_get_time = (std::chrono::steady_clock::now() +
+    if (day_pay_timestamp == 0 || bw_item_ptr == nullptr) {
+        return;
+    }
+
+    bw_item_ptr->pre_payfor_get_time = (std::chrono::steady_clock::now() +
             std::chrono::microseconds(kVipCheckPeriod));
     uint64_t day_msec = 24llu * 3600llu * 1000llu;
     uint32_t day_pay_for_vpn = day_pay_timestamp / day_msec;
-    iter->second->vip_timestamp = day_pay_for_vpn;
-    iter->second->vip_payed_tenon = vip_tenons;
+    bw_item_ptr->vip_timestamp = day_pay_for_vpn;
+    bw_item_ptr->vip_payed_tenon = vip_tenons;
 } catch (std::exception& e) {
     VPNSVR_ERROR("receive get vip info catched error[%s]", e.what());
     std::cout << "catch error: " << e.what() << std::endl;
