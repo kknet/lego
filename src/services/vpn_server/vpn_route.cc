@@ -667,10 +667,10 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
 
     buf->len = r;
     if (server->stage == STAGE_STREAM) {
-        std::string tmp_client_id = std::string(server->client_id, sizeof(server->client_id));
-        if (!CheckClientValid(EV_A_ server, remote, tmp_client_id)) {
-            return;
-        }
+//         std::string tmp_client_id = std::string(server->client_id, sizeof(server->client_id));
+//         if (!CheckClientValid(EV_A_ server, remote, tmp_client_id)) {
+//             return;
+//         }
 
         int s = send(remote->fd, remote->buf->data, remote->buf->len, 0);
         if (s == -1) {
