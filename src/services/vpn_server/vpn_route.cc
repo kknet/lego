@@ -591,46 +591,46 @@ static bool RemoveNotAliveAccount(
 
     return false;
 }
-
-static bool CheckClientValid(
-        EV_P_
-        server_t *server,
-        remote_t *remote,
-        const std::string& user_account) {
-    auto& account_map = lego::vpn::VpnRoute::Instance()->account_bindwidth_map();
-    auto iter = account_map.find(user_account);
-    auto now_point = std::chrono::steady_clock::now();
-    if (iter == account_map.end()) {
-        auto acc_item = std::make_shared<BandwidthInfo>(0, 0, user_account, "");
-        account_map[user_account] = acc_item;
-        if (RemoveNotAliveAccount(now_point, account_map)) {
-            // exceeded max user account, new join failed
-            // send back with status
-            send(
-                    server->fd,
-                    common::kServerClientOverload.c_str(),
-                    common::kServerClientOverload.size(), 0);
-            CloseAndFreeRemote(EV_A_ remote);
-            CloseAndFreeServer(EV_A_ server);
-            return false;
-        }
-        lego::vpn::VpnServer::Instance()->bandwidth_queue().push(acc_item);
-    } else {
-        if (!iter->second->ValidRoute()) {
-            send(
-                    server->fd,
-                    common::kClientIsNotVip.c_str(),
-                    common::kClientIsNotVip.size(), 0);
-            // send back with status
-            CloseAndFreeRemote(EV_A_ remote);
-            CloseAndFreeServer(EV_A_ server);
-            return false;
-        }
-        iter->second->timeout = now_point;
-    }
-
-    return true;
-}
+// 
+// static bool CheckClientValid(
+//         EV_P_
+//         server_t *server,
+//         remote_t *remote,
+//         const std::string& user_account) {
+//     auto& account_map = lego::vpn::VpnRoute::Instance()->account_bindwidth_map();
+//     auto iter = account_map.find(user_account);
+//     auto now_point = std::chrono::steady_clock::now();
+//     if (iter == account_map.end()) {
+//         auto acc_item = std::make_shared<BandwidthInfo>(0, 0, user_account, "");
+//         account_map[user_account] = acc_item;
+//         if (RemoveNotAliveAccount(now_point, account_map)) {
+//             // exceeded max user account, new join failed
+//             // send back with status
+//             send(
+//                     server->fd,
+//                     common::kServerClientOverload.c_str(),
+//                     common::kServerClientOverload.size(), 0);
+//             CloseAndFreeRemote(EV_A_ remote);
+//             CloseAndFreeServer(EV_A_ server);
+//             return false;
+//         }
+//         lego::vpn::VpnServer::Instance()->bandwidth_queue().push(acc_item);
+//     } else {
+//         if (!iter->second->ValidRoute()) {
+//             send(
+//                     server->fd,
+//                     common::kClientIsNotVip.c_str(),
+//                     common::kClientIsNotVip.size(), 0);
+//             // send back with status
+//             CloseAndFreeRemote(EV_A_ remote);
+//             CloseAndFreeServer(EV_A_ server);
+//             return false;
+//         }
+//         iter->second->timeout = now_point;
+//     }
+// 
+//     return true;
+// }
 
 static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
     server_ctx_t *server_recv_ctx = (server_ctx_t *)w;
@@ -732,16 +732,16 @@ static void ServerRecvCallback(EV_P_ ev_io *w, int revents) {
         server->buf->len -= offset;
         memmove(server->buf->data, server->buf->data + offset, server->buf->len);
 
-        size_t header_offset = lego::security::kPublicKeySize * 2;
-        if (server->buf->len >= header_offset) {
-            std::string pubkey = common::Encode::HexDecode(
-                    std::string((char*)buf->data, header_offset));
-            std::string user_account = lego::network::GetAccountAddressByPublicKey(pubkey);
-            memcpy(server->client_id, user_account.c_str(), sizeof(server->client_id));
-            if (!CheckClientValid(EV_A_ server, remote, user_account)) {
-                return;
-            }
-        }
+//         size_t header_offset = lego::security::kPublicKeySize * 2;
+//         if (server->buf->len >= header_offset) {
+//             std::string pubkey = common::Encode::HexDecode(
+//                     std::string((char*)buf->data, header_offset));
+//             std::string user_account = lego::network::GetAccountAddressByPublicKey(pubkey);
+//             memcpy(server->client_id, user_account.c_str(), sizeof(server->client_id));
+//             if (!CheckClientValid(EV_A_ server, remote, user_account)) {
+//                 return;
+//             }
+//         }
 
         remote_t *remote = ConnectToRemote(EV_A_ & info, server);
         if (remote == NULL) {
@@ -1275,27 +1275,27 @@ void VpnRoute::Stop() {
 }
 
 int VpnRoute::Init(uint32_t vip_level) {
-    this_node_vip_level_ = vip_level;
-    this_node_route_network_id_ = network::kVpnRouteNetworkId;
-    switch (vip_level) {
-        case 1:
-            this_node_route_network_id_ = network::kVpnRouteVipLevel1NetworkId;
-            break;
-        case 2:
-            this_node_route_network_id_ = network::kVpnRouteVipLevel2NetworkId;
-            break;
-        case 3:
-            this_node_route_network_id_ = network::kVpnRouteVipLevel3NetworkId;
-            break;
-        case 4:
-            this_node_route_network_id_ = network::kVpnRouteVipLevel4NetworkId;
-            break;
-        case 5:
-            this_node_route_network_id_ = network::kVpnRouteVipLevel5NetworkId;
-            break;
-        default:
-            break;
-    }
+//     this_node_vip_level_ = vip_level;
+//     this_node_route_network_id_ = network::kVpnRouteNetworkId;
+//     switch (vip_level) {
+//         case 1:
+//             this_node_route_network_id_ = network::kVpnRouteVipLevel1NetworkId;
+//             break;
+//         case 2:
+//             this_node_route_network_id_ = network::kVpnRouteVipLevel2NetworkId;
+//             break;
+//         case 3:
+//             this_node_route_network_id_ = network::kVpnRouteVipLevel3NetworkId;
+//             break;
+//         case 4:
+//             this_node_route_network_id_ = network::kVpnRouteVipLevel4NetworkId;
+//             break;
+//         case 5:
+//             this_node_route_network_id_ = network::kVpnRouteVipLevel5NetworkId;
+//             break;
+//         default:
+//             break;
+//     }
 
     RotationServer();
     CheckLoginClient();
@@ -1304,9 +1304,9 @@ int VpnRoute::Init(uint32_t vip_level) {
         return kVpnsvrError;
     }
 
-    check_route_queue_.CutOff(
-            kCheckRouteQueuePeriod,
-            std::bind(&VpnRoute::CheckRouteQueue, VpnRoute::Instance()));
+//     check_route_queue_.CutOff(
+//             kCheckRouteQueuePeriod,
+//             std::bind(&VpnRoute::CheckRouteQueue, VpnRoute::Instance()));
 
     return kVpnsvrSuccess;
 }
