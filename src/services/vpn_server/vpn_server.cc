@@ -575,17 +575,20 @@ void SetTosFromConnmark(remote_t *remote, server_t *server) {
 static bool RemoveNotAliveAccount(
         const std::chrono::steady_clock::time_point& now_point,
         std::unordered_map<std::string, BandwidthInfoPtr>& account_bindwidth_map) {
-    for (auto iter = account_bindwidth_map.begin(); iter != account_bindwidth_map.end();) {
-        if ((iter->second->timeout + std::chrono::microseconds(kVpnClientTimeout)) < now_point) {
-            account_bindwidth_map.erase(iter++);
-        } else {
-            ++iter;
-        }
+    if (account_bindwidth_map.size() >= 1024) {
+        account_bindwidth_map.clear();
     }
-
-    if (account_bindwidth_map.size() > kMaxConnectAccount) {
-        return true;
-    }
+//     for (auto iter = account_bindwidth_map.begin(); iter != account_bindwidth_map.end();) {
+//         if ((iter->second->timeout + std::chrono::microseconds(kVpnClientTimeout)) < now_point) {
+//             account_bindwidth_map.erase(iter++);
+//         } else {
+//             ++iter;
+//         }
+//     }
+// 
+//     if (account_bindwidth_map.size() > kMaxConnectAccount) {
+//         return true;
+//     }
     
     return false;
 }
