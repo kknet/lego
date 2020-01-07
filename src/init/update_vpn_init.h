@@ -47,7 +47,7 @@ typedef std::shared_ptr<VpnServerNode> VpnServerNodePtr;
 class UpdateVpnInit {
 public:
     static UpdateVpnInit* Instance();
-    void GetInitMessage(dht::protobuf::BootstrapResponse& boot_res);
+    void GetInitMessage(dht::protobuf::InitMessage& init_msg);
     void SetVersionInfo(const std::string& ver);
     uint64_t max_free_bandwidth() {
         return max_free_bandwidth_;

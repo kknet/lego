@@ -71,9 +71,8 @@ void DhtProto::CreateBootstrapResponse(
     bootstrap_res->set_public_port(header.from_port());
 
     if (get_init_msg > 0) {
-        bootstrap_res->set_version_info(init::UpdateVpnInit::Instance()->GetVersion());
-        bootstrap_res->set_route_nodes(init::UpdateVpnInit::Instance()->GetRouteServerNodes());
-        bootstrap_res->set_vpn_nodes(init::UpdateVpnInit::Instance()->GetVpnServerNodes());
+        auto& boot_init_msg = *(bootstrap_res->mutable_init_message());
+        init::UpdateVpnInit::Instance()->GetInitMessage(boot_init_msg);
     }
 
 	auto node_country = ip::IpWithCountry::Instance()->GetCountryUintCode(header.from_ip());

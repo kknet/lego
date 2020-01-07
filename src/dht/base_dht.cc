@@ -386,25 +386,21 @@ void BaseDht::ProcessBootstrapRequest(
 void BaseDht::ProcessBootstrapResponse(
         transport::protobuf::Header& header,
         protobuf::DhtMessage& dht_msg) {
-    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end", header);
     if (!CheckDestination(header.des_dht_key(), false)) {
         DHT_WARN("bootstrap request destination error[%s][%s]!",
             common::Encode::HexEncode(header.des_dht_key()).c_str(),
             common::Encode::HexEncode(local_node_->dht_key).c_str());
         return;
     }
-    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("1 end", header);
 
     if (!dht_msg.has_bootstrap_res()) {
         return;
     }
 
-    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("1 1 end", header);
     if (!header.has_pubkey() || header.pubkey().empty()) {
         assert(false);
         return;
     }
-    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("2 end", header);
     // check sign
 
     auto pubkey_ptr = std::make_shared<security::PublicKey>(header.pubkey());
@@ -418,7 +414,6 @@ void BaseDht::ProcessBootstrapResponse(
             dht_msg.bootstrap_res().local_ip(),
             static_cast<uint16_t>(dht_msg.bootstrap_res().local_port()),
             pubkey_ptr);
-    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("3 end", header);
     std::lock_guard<std::mutex> guard(join_res_mutex_);
     if (joined_) {
         Join(node);

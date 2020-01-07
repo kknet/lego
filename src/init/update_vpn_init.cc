@@ -45,8 +45,8 @@ bool UpdateVpnInit::InitSuccess() {
     return !vpn_nodes_map_.empty() && !ver_buf_[valid_idx_].empty();
 }
 
-void UpdateVpnInit::GetInitMessage(dht::protobuf::BootstrapResponse& boot_res) {
-    boot_res.set_version_info(GetVersion());
+void UpdateVpnInit::GetInitMessage(dht::protobuf::InitMessage& init_msg) {
+    init_msg.set_version_info(GetVersion());
     {
         std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
         for (auto iter = vpn_nodes_map_.begin(); iter != vpn_nodes_map_.end(); ++iter) {
@@ -69,7 +69,7 @@ void UpdateVpnInit::GetInitMessage(dht::protobuf::BootstrapResponse& boot_res) {
                 if (i >= kMaxGetVpnNodesNum) {
                     break;
                 }
-                auto new_node = boot_res.add_vpn_nodes();
+                auto new_node = init_msg.add_vpn_nodes();
                 new_node->set_country(iter->first);
                 new_node->set_ip(tmp_vec[pos_vec[i]]->ip);
                 new_node->set_dhkey(tmp_vec[pos_vec[i]]->dht_key);
@@ -100,7 +100,7 @@ void UpdateVpnInit::GetInitMessage(dht::protobuf::BootstrapResponse& boot_res) {
                 if (i >= kMaxGetVpnNodesNum) {
                     break;
                 }
-                auto new_node = boot_res.add_route_nodes();
+                auto new_node = init_msg.add_route_nodes();
                 new_node->set_country(iter->first);
                 new_node->set_ip(tmp_vec[pos_vec[i]]->ip);
                 new_node->set_dhkey(tmp_vec[pos_vec[i]]->dht_key);
