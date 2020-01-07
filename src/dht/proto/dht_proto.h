@@ -21,6 +21,7 @@ public:
             const NodePtr& des_node,
             transport::protobuf::Header& msg);
     static void CreateBootstrapResponse(
+            int32_t get_init_msg,
             const NodePtr& local_node,
             const transport::protobuf::Header& header,
             transport::protobuf::Header& msg);

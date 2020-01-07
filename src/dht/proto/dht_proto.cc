@@ -3,6 +3,7 @@
 
 #include "security/schnorr.h"
 #include "ip/ip_with_country.h"
+#include "init/update_vpn_init.h"
 #include "dht/dht_key.h"
 
 namespace lego {
@@ -35,16 +36,10 @@ void DhtProto::CreateBootstrapRequest(
     bootstrap_req->set_node_id(common::GlobalInfo::Instance()->id());
     bootstrap_req->set_nat_type(local_node->nat_type);
     msg.set_data(dht_msg.SerializeAsString());
-#ifdef LEGO_TRACE_MESSAGE
-    msg.set_debug(std::string("bootstrap req:") + 
-        local_node->public_ip + "-" +
-        std::to_string(local_node->public_port) + ", to " +
-        des_node->public_ip + "-" + std::to_string(des_node->public_port));
-    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("begin: ", msg);
-#endif
 }
 
 void DhtProto::CreateBootstrapResponse(
+        int32_t get_init_msg,
         const NodePtr& local_node,
         const transport::protobuf::Header& header,
         transport::protobuf::Header& msg) {
@@ -75,6 +70,12 @@ void DhtProto::CreateBootstrapResponse(
     bootstrap_res->set_public_ip(header.from_ip());
     bootstrap_res->set_public_port(header.from_port());
 
+    if (get_init_msg > 0) {
+        bootstrap_res->set_version_info(init::UpdateVpnInit::Instance()->GetVersion());
+        bootstrap_res->set_route_nodes(init::UpdateVpnInit::Instance()->GetRouteServerNodes());
+        bootstrap_res->set_vpn_nodes(init::UpdateVpnInit::Instance()->GetVpnServerNodes());
+    }
+
 	auto node_country = ip::IpWithCountry::Instance()->GetCountryUintCode(header.from_ip());
 	if (node_country != ip::kInvalidCountryCode) {
 		bootstrap_res->set_country_code(node_country);
@@ -83,13 +84,6 @@ void DhtProto::CreateBootstrapResponse(
 	}
 
     msg.set_data(res_dht_msg.SerializeAsString());
-#ifdef LEGO_TRACE_MESSAGE
-    msg.set_debug(std::string("bootstrap res:") + 
-        local_node->public_ip + "-" +
-        std::to_string(local_node->public_port) + ", to " +
-        header.from_ip() + "-" + std::to_string(header.from_port()));
-    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("begin: ", msg);
-#endif
 }
 
 void DhtProto::CreateRefreshNeighborsRequest(
@@ -125,14 +119,6 @@ void DhtProto::CreateRefreshNeighborsRequest(
     refresh_nei_req->set_des_dht_key(local_node->dht_key);
     refresh_nei_req->set_count(dht.size() + 1);
     msg.set_data(dht_msg.SerializeAsString());
-#ifdef LEGO_TRACE_MESSAGE
-    auto debug_info = (std::string("RefreshNeighborsRequest:") +
-        local_node->public_ip + std::string("-") +
-        std::to_string(local_node->public_port) + std::string(", to ") +
-        des_node->public_ip + std::string("-") + std::to_string(des_node->public_port));
-    msg.set_debug(debug_info);
-    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("begin: ", msg);
-#endif
 }
 
 void DhtProto::CreateRefreshNeighborsResponse(
@@ -177,14 +163,6 @@ void DhtProto::CreateRefreshNeighborsResponse(
         proto_node->set_dht_key(nodes[i]->dht_key);
     }
     msg.set_data(dht_msg.SerializeAsString());
-#ifdef LEGO_TRACE_MESSAGE
-    msg.set_debug(std::string("RefreshNeighborsResponse:") +
-        local_node->public_ip + "-" +
-        std::to_string(local_node->public_port) + ", to " +
-        header.from_ip() + "-" + std::to_string(header.from_port()) + "," +
-        std::to_string(nodes.size()));
-    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("begin: ", msg);
-#endif
 }
 
 void DhtProto::CreateHeatbeatRequest(
@@ -202,13 +180,6 @@ void DhtProto::CreateHeatbeatRequest(
     auto heartbeat_req = dht_msg.mutable_heartbeat_req();
     heartbeat_req->set_dht_key_hash(local_node->dht_key_hash);
     msg.set_data(dht_msg.SerializeAsString());
-#ifdef LEGO_TRACE_MESSAGE
-    msg.set_debug(std::string("HeartbeatRequest:") +
-        local_node->public_ip + "-" +
-        std::to_string(local_node->public_port) + ", to " +
-        des_node->public_ip + "-" + std::to_string(des_node->public_port));
-    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("begin: ", msg);
-#endif
 }
 
 void DhtProto::CreateHeatbeatResponse(
@@ -235,13 +206,6 @@ void DhtProto::CreateHeatbeatResponse(
     auto heartbeat_res = dht_msg.mutable_heartbeat_res();
     heartbeat_res->set_dht_key_hash(local_node->dht_key_hash);
     msg.set_data(dht_msg.SerializeAsString());
-#ifdef LEGO_TRACE_MESSAGE
-    msg.set_debug(std::string("HeartbeatResponse:") +
-        local_node->public_ip + "-" +
-        std::to_string(local_node->public_port) + ", to " +
-        header.from_ip() + "-" + std::to_string(header.from_port()));
-    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("begin: ", msg);
-#endif
 }
 
 void DhtProto::CreateConnectRequest(
@@ -271,13 +235,6 @@ void DhtProto::CreateConnectRequest(
     connect_req->set_dht_key(local_node->dht_key);
     connect_req->set_direct(direct);
     msg.set_data(dht_msg.SerializeAsString());
-#ifdef LEGO_TRACE_MESSAGE
-    msg.set_debug(std::string("ConnectRequest:") +
-        local_node->public_ip + "-" +
-        std::to_string(local_node->public_port) + ", to " +
-        common::Encode::HexEncode(des_node->dht_key));
-    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("begin: ", msg);
-#endif
 }
 
 }  // namespace dht

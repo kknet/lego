@@ -334,14 +334,6 @@ void BaseDht::DhtDispatchMessage(
 void BaseDht::ProcessBootstrapRequest(
         transport::protobuf::Header& header,
         protobuf::DhtMessage& dht_msg) {
-    LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("end", header);
-//     if (!CheckDestination(header.des_dht_key(), false)) {
-//         DHT_WARN("bootstrap request destination error[%s][%s]!",
-//                 common::Encode::HexEncode(header.des_dht_key()).c_str(),
-//                 common::Encode::HexEncode(local_node_->dht_key).c_str());
-//         return;
-//     }
-
     if (!dht_msg.has_bootstrap_req()) {
         DHT_WARN("dht message has no bootstrap request.");
         return;
@@ -349,7 +341,11 @@ void BaseDht::ProcessBootstrapRequest(
 
     transport::protobuf::Header msg;
     SetFrequently(msg);
-    DhtProto::CreateBootstrapResponse(local_node_, header, msg);
+    DhtProto::CreateBootstrapResponse(
+            dht_msg.bootstrap_req().get_init_msg(),
+            local_node_,
+            header,
+            msg);
     transport::MultiThreadHandler::Instance()->transport()->Send(
             header.from_ip(), header.from_port(), 0, msg);
 
