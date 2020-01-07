@@ -26,7 +26,7 @@ UpdateVpnInit::UpdateVpnInit() {
         common::Split country_split(cns.c_str(), ',', cns.size());
         std::lock_guard<std::mutex> guard(country_vec_mutex_);
         country_vec_.clear();
-        for (int cnt_idx = 0; cnt_idx < country_split.Count(); ++cnt_idx) {
+        for (uint32_t cnt_idx = 0; cnt_idx < country_split.Count(); ++cnt_idx) {
             if (country_split.SubLen(cnt_idx) == 2) {
                 country_vec_.push_back(country_split[cnt_idx]);
             }
@@ -64,7 +64,7 @@ std::string UpdateVpnInit::GetVpnServerNodes() {
         }
 
         std::string node_str;
-        for (int i = 0; i < pos_vec.size(); ++i) {
+        for (uint32_t i = 0; i < pos_vec.size(); ++i) {
             if (i >= 4) {
                 break;
             }
@@ -99,7 +99,7 @@ std::string UpdateVpnInit::GetRouteServerNodes() {
         }
 
         std::string node_str;
-        for (int i = 0; i < pos_vec.size(); ++i) {
+        for (uint32_t i = 0; i < pos_vec.size(); ++i) {
             if (i >= 4) {
                 break;
             }
@@ -138,7 +138,7 @@ void UpdateVpnInit::SetVersionInfo(const std::string& ver) {
                 common::Split country_split(tmp_split[1], '1', tmp_split.SubLen(1));
                 std::lock_guard<std::mutex> guard(country_vec_mutex_);
                 country_vec_.clear();
-                for (int cnt_idx = 0; cnt_idx < country_split.Count(); ++cnt_idx) {
+                for (uint32_t cnt_idx = 0; cnt_idx < country_split.Count(); ++cnt_idx) {
                     if (country_split.SubLen(cnt_idx) == 2) {
                         country_vec_.push_back(country_split[cnt_idx]);
                     }
