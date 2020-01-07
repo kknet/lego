@@ -142,13 +142,13 @@ struct BandwidthInfo {
         }
 
         if (IsVip()) {
-            if (today_used_bandwidth <= init::UpdateVpnInit::Instance()->max_vip_bandwidth()) {
+            if (today_used_bandwidth <= lego::init::UpdateVpnInit::Instance()->max_vip_bandwidth()) {
                 return true;
             }
             return false;
         }
 
-        if (today_used_bandwidth <= init::UpdateVpnInit::Instance()->max_free_bandwidth()) {
+        if (today_used_bandwidth <= lego::init::UpdateVpnInit::Instance()->max_free_bandwidth()) {
             return true;
         }
         return false;
