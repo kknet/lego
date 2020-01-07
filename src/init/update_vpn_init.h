@@ -62,9 +62,7 @@ public:
     }
 
     bool InitSuccess();
-    void BootstrapInit(
-            const std::string& ver,
-            const dht::protobuf::BootstrapResponse& boot_res);
+    void BootstrapInit(const dht::protobuf::InitMessage& init_msg);
 
 private:
     UpdateVpnInit();

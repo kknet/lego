@@ -20,6 +20,7 @@
 #include "dht/proto/dht_proto.h"
 #include "dht/dht_function.h"
 #include "dht/dht_key.h"
+#include "init/update_vpn_init.h"
 #include "network/network_utils.h"
 
 namespace lego {
@@ -415,6 +416,11 @@ void BaseDht::ProcessBootstrapResponse(
             static_cast<uint16_t>(dht_msg.bootstrap_res().local_port()),
             pubkey_ptr);
     std::lock_guard<std::mutex> guard(join_res_mutex_);
+    if (dht_msg.bootstrap_res().has_init_message() &&
+            !dht_msg.bootstrap_res().init_message().version_info().empty()) {
+        init::UpdateVpnInit::Instance()->BootstrapInit(dht_msg.bootstrap_res().init_message());
+    }
+
     if (joined_) {
         Join(node);
         return;

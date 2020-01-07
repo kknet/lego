@@ -241,10 +241,16 @@ void UpdateVpnInit::GetNetworkNodes(
 }
 
 // for client
-void UpdateVpnInit::BootstrapInit(
-        const std::string& ver,
-        const dht::protobuf::BootstrapResponse& boot_res) {
+void UpdateVpnInit::BootstrapInit(const dht::protobuf::InitMessage& init_info) {
+    for (int32_t i = 0; i < init_info.vpn_nodes_size(); ++i) {
+        HandleNodes(false, init_info.vpn_nodes(i));
+    }
 
+    for (int32_t i = 0; i < init_info.route_nodes_size(); ++i) {
+        HandleNodes(true, init_info.route_nodes(i));
+    }
+
+    SetVersionInfo(init_info.version_info());
 }
 
 void UpdateVpnInit::HandleNodes(bool is_route, const dht::protobuf::VpnNodeInfo& vpn_node) {
