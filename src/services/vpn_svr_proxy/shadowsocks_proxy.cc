@@ -117,6 +117,19 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
         return kProxyError;
     }
 
+    for (int i = 0; i < 7; ++i) {
+        if (init::UpdateVpnInit::Instance()->InitSuccess()) {
+            break;
+        }
+
+        std::this_thread::sleep_for(std::chrono::microseconds(1000 * 1000));
+    }
+
+    if (!init::UpdateVpnInit::Instance()->InitSuccess()) {
+        PROXY_ERROR("init::UpdateVpnInit::Instance()->InitSuccess failed!");
+        return kProxyError;
+    }
+
     if (InitCommand() != kProxySuccess) {
         PROXY_ERROR("InitNetworkSingleton failed!");
         return kProxyError;

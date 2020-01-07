@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
     lego::common::Config conf;
     std::cout << "init config now." << std::endl;
     if (!conf.Init("./conf/lego.conf")) {
-        return 1;
+        return 1;         
     }
     std::cout << "init config success." << std::endl;
     std::string local_ip;

@@ -104,6 +104,7 @@ extern "C" {
 #include "contract/proto/contract.pb.h"
 #include "contract/proto/contract_proto.h"
 #include "bft/basic_bft/transaction/proto/tx.pb.h"
+#include "init/update_vpn_init.h"
 #include "services/vpn_server/ev_loop_manager.h"
 
 using namespace lego;
@@ -125,11 +126,6 @@ static void FreeServer(server_t *server);
 static void CloseAndFreeServer(EV_P_ server_t *server);
 static void ResolvCallback(struct sockaddr *addr, void *data);
 static void ResolvFreeCallback(void *data);
-
-volatile uint64_t BandwidthInfo::free_bandwidth_max = 2048llu * 1024llu * 1024llu;
-volatile uint64_t BandwidthInfo::vip_bandwidth_max = 10llu * 1024llu * 1024llu * 1024llu;
-
-// static crypto_t *crypto;
 
 static int acl = 0;
 static int mode = TCP_ONLY;
@@ -1579,6 +1575,7 @@ void VpnServer::Stop() {
 
 int VpnServer::Init() {
     admin_vpn_account_ = common::Encode::HexDecode(common::kVpnAdminAccount);
+    CheckVersion();
     RotationServer();
     if (listen_ctx_queue_.empty()) {
         return kVpnsvrError;
@@ -1827,27 +1824,8 @@ void VpnServer::HandleVpnLoginResponse(
                     if (block.height() > vpn_version_last_height_) {
                         vpn_version_last_height_ = block.height();
                         auto str = tx_list[i].attr(attr_idx).value();
-                        common::Split splits(str.c_str(), ',', str.size());
-                        for (uint32_t split_idx = 0; split_idx < splits.Count(); ++split_idx) {
-                            common::Split tmp_split(splits[split_idx], ';', splits.SubLen(split_idx));
-                            if (tmp_split.Count() >= 2) {
-                                if (memcmp(tmp_split[0], "free_max_bw", strlen("free_max_bw")) == 0) {
-                                    try {
-                                        BandwidthInfo::free_bandwidth_max = common::StringUtil::ToUint64(tmp_split[1]);
-                                    } catch (...) {
-                                    }
-                                }
-
-                                if (memcmp(tmp_split[0], "vip_max_bw", strlen("vip_max_bw")) == 0) {
-                                    try {
-                                        BandwidthInfo::vip_bandwidth_max = common::StringUtil::ToUint64(tmp_split[1]);
-                                    } catch (...) {
-                                    }
-                                }
-                            }
-                        }
+                        init::UpdateVpnInit::Instance()->SetVersionInfo(str);
                     }
-
                 }
             }
         }
@@ -1872,11 +1850,23 @@ void VpnServer::HandleVpnLoginResponse(
     std::cout << "catch error: " << e.what() << std::endl;
 }
 
-void VpnServer::CheckAccountValid() {
+void VpnServer::CheckVersion() {
     SendGetAccountAttrLastBlock(
             common::kCheckVpnVersion,
             kCheckVersionAccount,
             vpn_version_last_height_);
+    if (init::UpdateVpnInit::Instance()->GetVersion().empty()) {
+        check_ver_tick_.CutOff(
+            1000 * 1000,
+            std::bind(&VpnServer::CheckVersion, VpnServer::Instance()));
+    } else {
+        check_ver_tick_.CutOff(
+            10 * 1000 * 1000,
+            std::bind(&VpnServer::CheckVersion, VpnServer::Instance()));
+    }
+}
+
+void VpnServer::CheckAccountValid() {
     std::lock_guard<std::mutex> guard(account_map_mutex_);
     static const uint32_t kWaitingLogin = 10 * 1000 * 1000;
     BandwidthInfoPtr account_info = nullptr;

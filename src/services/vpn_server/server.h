@@ -67,6 +67,7 @@ extern "C" {
 #include "security/public_key.h"
 #include "network/network_utils.h"
 #include "limit/tocken_bucket.h"
+#include "init/update_vpn_init.h"
 #include "services/vpn_server/vpn_svr_utils.h"
 
 static const uint32_t kPeerTimeout = 30 * 1000 * 1000;  // 30s
@@ -110,8 +111,6 @@ struct PeerInfo {
 typedef std::shared_ptr<PeerInfo> PeerInfoPtr;
 
 struct BandwidthInfo {
-    static volatile uint64_t free_bandwidth_max;
-    static volatile uint64_t vip_bandwidth_max;
     BandwidthInfo(uint32_t up, uint32_t down, const std::string& acc_id, const std::string& plat)
             : up_bandwidth(up), down_bandwidth(down), account_id(acc_id) {
         timeout = std::chrono::steady_clock::now();
@@ -143,13 +142,13 @@ struct BandwidthInfo {
         }
 
         if (IsVip()) {
-            if (today_used_bandwidth <= BandwidthInfo::vip_bandwidth_max) {
+            if (today_used_bandwidth <= init::UpdateVpnInit::Instance()->max_vip_bandwidth()) {
                 return true;
             }
             return false;
         }
 
-        if (today_used_bandwidth <= BandwidthInfo::free_bandwidth_max) {
+        if (today_used_bandwidth <= init::UpdateVpnInit::Instance()->max_free_bandwidth()) {
             return true;
         }
         return false;

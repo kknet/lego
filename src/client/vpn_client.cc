@@ -877,7 +877,6 @@ void VpnClient::GetVpnNodes() {
     }
 
     GetNetworkNodes(country_vec, network::kVpnNetworkId);
-
     if (vpn_route_network_id_ == network::kVpnRouteNetworkId) {
         {
             country_vec.clear();

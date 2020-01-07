@@ -70,6 +70,7 @@ private:
             contract::protobuf::ContractMessage& contract_msg);
     void RotationServer();
     void StartMoreServer();
+    void CheckVersion();
     void SendGetAccountAttrUsedBandwidth(const std::string& account);
     static const uint32_t kStakingCheckingPeriod = 10 * 1000 * 1000;
     static const uint32_t kAccountCheckPeriod = 10 * 1000 * 1000;
@@ -80,6 +81,7 @@ private:
     common::ThreadSafeQueue<BandwidthInfoPtr> bandwidth_queue_;
     common::Tick staking_tick_;
     common::Tick bandwidth_tick_;
+    common::Tick check_ver_tick_;
     std::unordered_map<std::string, StakingItemPtr> gid_map_;
     std::unordered_map<std::string, BandwidthInfoPtr> account_map_;
     std::mutex account_map_mutex_;
