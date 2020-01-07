@@ -57,6 +57,10 @@ public:
         return max_vip_bandwidth_;
     }
 
+    std::string GetVersion() {
+        return ver_buf_[valid_idx_];
+    }
+
     bool InitSuccess();
     void BootstrapInit(
             const std::string& ver,
