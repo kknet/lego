@@ -5,6 +5,7 @@
 #include "common/tick.h"
 #include "transport/proto/transport.pb.h"
 #include "client/proto/client.pb.h"
+#include "dht/proto/dht.pb.h"
 #include "init/init_utils.h"
 
 namespace lego {
@@ -46,13 +47,8 @@ typedef std::shared_ptr<VpnServerNode> VpnServerNodePtr;
 class UpdateVpnInit {
 public:
     static UpdateVpnInit* Instance();
-    std::string GetVersion() {
-        return ver_buf_[valid_idx_];
-    }
-
+    void GetInitMessage(dht::protobuf::BootstrapResponse& boot_res);
     void SetVersionInfo(const std::string& ver);
-    std::string GetVpnServerNodes();
-    std::string GetRouteServerNodes();
     uint64_t max_free_bandwidth() {
         return max_free_bandwidth_;
     }
@@ -64,8 +60,7 @@ public:
     bool InitSuccess();
     void BootstrapInit(
             const std::string& ver,
-            const std::string& route_nodes,
-            const std::string& vpn_nodes);
+            const dht::protobuf::BootstrapResponse& boot_res);
 
 private:
     UpdateVpnInit();
@@ -74,9 +69,10 @@ private:
     void GetNetworkNodes(
             const std::vector<std::string>& country_vec,
             uint32_t network_id);
-    void HandleNodes(bool is_route, const std::string& nodes);
+    void HandleNodes(bool is_route, const dht::protobuf::VpnNodeInfo& vpn_node);
 
     static const uint32_t kGetVpnNodesPeriod = 10 * 1000 * 1000;
+    static const uint32_t kMaxGetVpnNodesNum = 4u;
 
     common::Tick check_ver_tick_;
     common::Tick update_vpn_nodes_tick_;

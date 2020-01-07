@@ -45,74 +45,69 @@ bool UpdateVpnInit::InitSuccess() {
     return !vpn_nodes_map_.empty() && !ver_buf_[valid_idx_].empty();
 }
 
-std::string UpdateVpnInit::GetVpnServerNodes() {
-    std::string res;
-    std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
-    for (auto iter = vpn_nodes_map_.begin(); iter != vpn_nodes_map_.end(); ++iter) {
-        std::string tmp_str = iter->first + ":";
-        std::vector<std::string> tmp_vec;
-        std::vector<int> pos_vec;
-        int idx = 0;
-        auto tmp_queue = iter->second;
-        while (!tmp_queue.empty()) {
-            auto node = tmp_queue.front();
-            std::string node_str = node->ip + "_" + node->dht_key + "_" + node->pubkey;
-            tmp_vec.push_back(node_str);
-            pos_vec.push_back(idx++);
-        }
-
-        if (pos_vec.size() > 4) {
-            std::random_shuffle(pos_vec.begin(), pos_vec.end());
-        }
-
-        std::string node_str;
-        for (uint32_t i = 0; i < pos_vec.size(); ++i) {
-            if (i >= 4) {
-                break;
+void UpdateVpnInit::GetInitMessage(dht::protobuf::BootstrapResponse& boot_res) {
+    boot_res.set_version_info(GetVersion());
+    {
+        std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
+        for (auto iter = vpn_nodes_map_.begin(); iter != vpn_nodes_map_.end(); ++iter) {
+            std::vector<init::VpnServerNodePtr> tmp_vec;
+            std::vector<int> pos_vec;
+            int idx = 0;
+            auto tmp_queue = iter->second;
+            while (!tmp_queue.empty()) {
+                tmp_vec.push_back(tmp_queue.front());
+                pos_vec.push_back(idx++);
+                tmp_queue.pop_front();
             }
 
-            node_str += tmp_vec[pos_vec[i]] + "-";
-        }
-
-        tmp_str += node_str;
-        res += tmp_str + ",";
-    }
-    return res;
-}
-
-std::string UpdateVpnInit::GetRouteServerNodes() {
-    std::string res;
-    std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
-    for (auto iter = route_nodes_map_.begin(); iter != route_nodes_map_.end(); ++iter) {
-        std::string tmp_str = iter->first + ":";
-        std::vector<std::string> tmp_vec;
-        std::vector<int> pos_vec;
-        int idx = 0;
-        auto tmp_queue = iter->second;
-        while (!tmp_queue.empty()) {
-            auto node = tmp_queue.front();
-            std::string node_str = node->ip + "_" + node->dht_key + "_" + node->pubkey;
-            tmp_vec.push_back(node_str);
-            pos_vec.push_back(idx++);
-        }
-
-        if (pos_vec.size() > 4) {
-            std::random_shuffle(pos_vec.begin(), pos_vec.end());
-        }
-
-        std::string node_str;
-        for (uint32_t i = 0; i < pos_vec.size(); ++i) {
-            if (i >= 4) {
-                break;
+            if (pos_vec.size() > kMaxGetVpnNodesNum) {
+                std::random_shuffle(pos_vec.begin(), pos_vec.end());
             }
 
-            node_str += tmp_vec[pos_vec[i]] + "-";
+            std::string node_str;
+            for (uint32_t i = 0; i < pos_vec.size(); ++i) {
+                if (i >= kMaxGetVpnNodesNum) {
+                    break;
+                }
+                auto new_node = boot_res.add_vpn_nodes();
+                new_node->set_country(iter->first);
+                new_node->set_ip(tmp_vec[pos_vec[i]]->ip);
+                new_node->set_dhkey(tmp_vec[pos_vec[i]]->dht_key);
+                new_node->set_pubkey(tmp_vec[pos_vec[i]]->pubkey);
+            }
         }
-
-        tmp_str += node_str;
-        res += tmp_str + ",";
     }
-    return res;
+    
+    {
+        std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
+        for (auto iter = route_nodes_map_.begin(); iter != route_nodes_map_.end(); ++iter) {
+            std::vector<init::VpnServerNodePtr> tmp_vec;
+            std::vector<int> pos_vec;
+            int idx = 0;
+            auto tmp_queue = iter->second;
+            while (!tmp_queue.empty()) {
+                tmp_vec.push_back(tmp_queue.front());
+                pos_vec.push_back(idx++);
+                tmp_queue.pop_front();
+            }
+
+            if (pos_vec.size() > kMaxGetVpnNodesNum) {
+                std::random_shuffle(pos_vec.begin(), pos_vec.end());
+            }
+
+            std::string node_str;
+            for (uint32_t i = 0; i < pos_vec.size(); ++i) {
+                if (i >= kMaxGetVpnNodesNum) {
+                    break;
+                }
+                auto new_node = boot_res.add_route_nodes();
+                new_node->set_country(iter->first);
+                new_node->set_ip(tmp_vec[pos_vec[i]]->ip);
+                new_node->set_dhkey(tmp_vec[pos_vec[i]]->dht_key);
+                new_node->set_pubkey(tmp_vec[pos_vec[i]]->pubkey);
+            }
+        }
+    }
 }
 
 void UpdateVpnInit::SetVersionInfo(const std::string& ver) {
@@ -248,103 +243,82 @@ void UpdateVpnInit::GetNetworkNodes(
 // for client
 void UpdateVpnInit::BootstrapInit(
         const std::string& ver,
-        const std::string& route_nodes,
-        const std::string& vpn_nodes) {
+        const dht::protobuf::BootstrapResponse& boot_res) {
 
 }
 
-void UpdateVpnInit::HandleNodes(bool is_route, const std::string& nodes) {
-    for (auto iter = dht_nodes.begin(); iter != dht_nodes.end(); ++iter) {
-        auto& tmp_node = *iter;
-        uint16_t vpn_svr_port = 0;
-        uint16_t vpn_route_port = 0;
-        uint32_t node_netid = dht::DhtKeyManager::DhtKeyGetNetId(tmp_node->dht_key);
-        if (!is_route) {
-            vpn_svr_port = common::GetVpnServerPort(
-                tmp_node->dht_key,
+void UpdateVpnInit::HandleNodes(bool is_route, const dht::protobuf::VpnNodeInfo& vpn_node) {
+    uint16_t vpn_svr_port = 0;
+    uint16_t vpn_route_port = 0;
+    uint32_t node_netid = dht::DhtKeyManager::DhtKeyGetNetId(vpn_node.dhkey());
+    if (!is_route) {
+        vpn_svr_port = common::GetVpnServerPort(
+                vpn_node.dhkey(),
                 common::TimeUtils::TimestampDays());
-        } else {
-            vpn_route_port = common::GetVpnRoutePort(
-                tmp_node->dht_key,
+    } else {
+        vpn_route_port = common::GetVpnRoutePort(
+                vpn_node.dhkey(),
                 common::TimeUtils::TimestampDays());
-        }
+    }
 
-        // ecdh encrypt vpn password
-        std::string sec_key;
-        auto res = security::EcdhCreateKey::Instance()->CreateKey(
-            *(tmp_node->pubkey_ptr),
-            sec_key);
-        if (res != security::kSecuritySuccess) {
-            INIT_ERROR("create sec key failed!");
-            continue;;
-        }
+    // ecdh encrypt vpn password
+    security::PublicKey pubkey;
+    if (pubkey.Deserialize(vpn_node.pubkey()) != 0) {
+        return;
+    }
 
-        auto node_ptr = std::make_shared<VpnServerNode>(
-            tmp_node->public_ip,
+    std::string sec_key;
+    auto res = security::EcdhCreateKey::Instance()->CreateKey(pubkey, sec_key);
+    if (res != security::kSecuritySuccess) {
+        INIT_ERROR("create sec key failed!");
+        return;
+    }
+
+    auto node_ptr = std::make_shared<VpnServerNode>(
+            vpn_node.ip(),
             vpn_svr_port,
             vpn_route_port,
             common::Encode::HexEncode(sec_key),
-            common::Encode::HexEncode(tmp_node->dht_key),
-            common::Encode::HexEncode(tmp_node->pubkey_str),
-            common::Encode::HexEncode(network::GetAccountAddressByPublicKey(tmp_node->pubkey_str)),
+            common::Encode::HexEncode(vpn_node.dhkey()),
+            common::Encode::HexEncode(vpn_node.pubkey()),
+            common::Encode::HexEncode(network::GetAccountAddressByPublicKey(vpn_node.pubkey())),
             true);
-        if (node_netid == network::kVpnNetworkId) {
-            std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
-            auto sub_iter = vpn_nodes_map_.find(country);
-            if (sub_iter != vpn_nodes_map_.end()) {
-                auto e_iter = std::find_if(
-                    sub_iter->second.begin(),
-                    sub_iter->second.end(),
-                    [node_ptr](const VpnServerNodePtr& ptr) {
-                    return node_ptr->ip == ptr->ip && node_ptr->svr_port == ptr->svr_port;
-                });
-                if (e_iter == sub_iter->second.end()) {
-                    sub_iter->second.push_back(node_ptr);
-                    if (sub_iter->second.size() > 16) {
-                        sub_iter->second.pop_front();
-                    }
+    if (is_route) {
+        std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
+        auto sub_iter = vpn_nodes_map_.find(vpn_node.country());
+        if (sub_iter != vpn_nodes_map_.end()) {
+            auto e_iter = std::find_if(
+                sub_iter->second.begin(),
+                sub_iter->second.end(),
+                [node_ptr](const VpnServerNodePtr& ptr) {
+                return node_ptr->ip == ptr->ip && node_ptr->svr_port == ptr->svr_port;
+            });
+            if (e_iter == sub_iter->second.end()) {
+                sub_iter->second.push_back(node_ptr);
+                if (sub_iter->second.size() > 16) {
+                    sub_iter->second.pop_front();
                 }
             }
         }
-
-        if (node_netid == network::kVpnRouteNetworkId) {
-            std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
-            auto sub_iter = route_nodes_map_.find(country);
-            if (sub_iter != route_nodes_map_.end()) {
-                auto e_iter = std::find_if(
-                    sub_iter->second.begin(),
-                    sub_iter->second.end(),
-                    [node_ptr](const VpnServerNodePtr& ptr) {
-                    return node_ptr->dht_key == ptr->dht_key;
-                });
-                if (e_iter == sub_iter->second.end()) {
-                    sub_iter->second.push_back(node_ptr);
-                    if (sub_iter->second.size() > 16) {
-                        sub_iter->second.pop_front();
-                    }
-                }
-            }
-        }
-
-        if (node_netid == network::kVpnRouteVipLevel1NetworkId) {
-            std::lock_guard<std::mutex> guard(vip_route_nodes_map_mutex_);
-            auto sub_iter = vip_route_nodes_map_.find(country);
-            if (sub_iter != vip_route_nodes_map_.end()) {
-                auto e_iter = std::find_if(
-                    sub_iter->second.begin(),
-                    sub_iter->second.end(),
-                    [node_ptr](const VpnServerNodePtr& ptr) {
-                    return node_ptr->dht_key == ptr->dht_key;
-                });
-                if (e_iter == sub_iter->second.end()) {
-                    sub_iter->second.push_back(node_ptr);
-                    if (sub_iter->second.size() > 16) {
-                        sub_iter->second.pop_front();
-                    }
+    } else {
+        std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
+        auto sub_iter = route_nodes_map_.find(vpn_node.country());
+        if (sub_iter != route_nodes_map_.end()) {
+            auto e_iter = std::find_if(
+                sub_iter->second.begin(),
+                sub_iter->second.end(),
+                [node_ptr](const VpnServerNodePtr& ptr) {
+                return node_ptr->dht_key == ptr->dht_key;
+            });
+            if (e_iter == sub_iter->second.end()) {
+                sub_iter->second.push_back(node_ptr);
+                if (sub_iter->second.size() > 16) {
+                    sub_iter->second.pop_front();
                 }
             }
         }
     }
+
 }
 
 }  // namespace init
