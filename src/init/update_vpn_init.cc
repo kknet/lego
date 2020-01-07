@@ -7,6 +7,8 @@
 #include "common/split.h"
 #include "common/string_utils.h"
 #include "dht/dht_key.h"
+#include "security/public_key.h"
+#include "security/ecdh_create_key.h"
 #include "network/network_utils.h"
 #include "network/universal.h"
 #include "network/universal_manager.h"
@@ -236,6 +238,108 @@ void UpdateVpnInit::GetNetworkNodes(
                         if (sub_iter->second.size() > 256) {
                             sub_iter->second.pop_front();
                         }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// for client
+void UpdateVpnInit::BootstrapInit(
+        const std::string& ver,
+        const std::string& route_nodes,
+        const std::string& vpn_nodes) {
+
+}
+
+void UpdateVpnInit::HandleNodes(bool is_route, const std::string& nodes) {
+    for (auto iter = dht_nodes.begin(); iter != dht_nodes.end(); ++iter) {
+        auto& tmp_node = *iter;
+        uint16_t vpn_svr_port = 0;
+        uint16_t vpn_route_port = 0;
+        uint32_t node_netid = dht::DhtKeyManager::DhtKeyGetNetId(tmp_node->dht_key);
+        if (!is_route) {
+            vpn_svr_port = common::GetVpnServerPort(
+                tmp_node->dht_key,
+                common::TimeUtils::TimestampDays());
+        } else {
+            vpn_route_port = common::GetVpnRoutePort(
+                tmp_node->dht_key,
+                common::TimeUtils::TimestampDays());
+        }
+
+        // ecdh encrypt vpn password
+        std::string sec_key;
+        auto res = security::EcdhCreateKey::Instance()->CreateKey(
+            *(tmp_node->pubkey_ptr),
+            sec_key);
+        if (res != security::kSecuritySuccess) {
+            INIT_ERROR("create sec key failed!");
+            continue;;
+        }
+
+        auto node_ptr = std::make_shared<VpnServerNode>(
+            tmp_node->public_ip,
+            vpn_svr_port,
+            vpn_route_port,
+            common::Encode::HexEncode(sec_key),
+            common::Encode::HexEncode(tmp_node->dht_key),
+            common::Encode::HexEncode(tmp_node->pubkey_str),
+            common::Encode::HexEncode(network::GetAccountAddressByPublicKey(tmp_node->pubkey_str)),
+            true);
+        if (node_netid == network::kVpnNetworkId) {
+            std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
+            auto sub_iter = vpn_nodes_map_.find(country);
+            if (sub_iter != vpn_nodes_map_.end()) {
+                auto e_iter = std::find_if(
+                    sub_iter->second.begin(),
+                    sub_iter->second.end(),
+                    [node_ptr](const VpnServerNodePtr& ptr) {
+                    return node_ptr->ip == ptr->ip && node_ptr->svr_port == ptr->svr_port;
+                });
+                if (e_iter == sub_iter->second.end()) {
+                    sub_iter->second.push_back(node_ptr);
+                    if (sub_iter->second.size() > 16) {
+                        sub_iter->second.pop_front();
+                    }
+                }
+            }
+        }
+
+        if (node_netid == network::kVpnRouteNetworkId) {
+            std::lock_guard<std::mutex> guard(route_nodes_map_mutex_);
+            auto sub_iter = route_nodes_map_.find(country);
+            if (sub_iter != route_nodes_map_.end()) {
+                auto e_iter = std::find_if(
+                    sub_iter->second.begin(),
+                    sub_iter->second.end(),
+                    [node_ptr](const VpnServerNodePtr& ptr) {
+                    return node_ptr->dht_key == ptr->dht_key;
+                });
+                if (e_iter == sub_iter->second.end()) {
+                    sub_iter->second.push_back(node_ptr);
+                    if (sub_iter->second.size() > 16) {
+                        sub_iter->second.pop_front();
+                    }
+                }
+            }
+        }
+
+        if (node_netid == network::kVpnRouteVipLevel1NetworkId) {
+            std::lock_guard<std::mutex> guard(vip_route_nodes_map_mutex_);
+            auto sub_iter = vip_route_nodes_map_.find(country);
+            if (sub_iter != vip_route_nodes_map_.end()) {
+                auto e_iter = std::find_if(
+                    sub_iter->second.begin(),
+                    sub_iter->second.end(),
+                    [node_ptr](const VpnServerNodePtr& ptr) {
+                    return node_ptr->dht_key == ptr->dht_key;
+                });
+                if (e_iter == sub_iter->second.end()) {
+                    sub_iter->second.push_back(node_ptr);
+                    if (sub_iter->second.size() > 16) {
+                        sub_iter->second.pop_front();
                     }
                 }
             }

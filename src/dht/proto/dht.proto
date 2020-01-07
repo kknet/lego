@@ -10,6 +10,12 @@ message BootstrapRequest {
 	optional int32 get_init_msg = 5;
 }
 
+message VpnNodeInfo {
+    optional bytes ip = 1;
+    optional bytes dhkey = 2;
+    optional bytes pubkey = 3;
+}
+
 message BootstrapResponse {
 	optional bytes node_id = 1;
 	optional int32 nat_type = 2;
@@ -19,8 +25,8 @@ message BootstrapResponse {
 	optional int32 public_port = 6;
 	optional int32 country_code = 7;
 	optional bytes version_info = 8;
-	optional bytes route_nodes = 9;
-	optional bytes vpn_nodes = 10;
+	repeated VpnNodeInfo route_nodes = 9;
+	repeated VpnNodeInfo vpn_nodes = 10;
 }
 
 message RefreshNeighborsRequest {

@@ -62,6 +62,10 @@ public:
     }
 
     bool InitSuccess();
+    void BootstrapInit(
+            const std::string& ver,
+            const std::string& route_nodes,
+            const std::string& vpn_nodes);
 
 private:
     UpdateVpnInit();
@@ -70,6 +74,7 @@ private:
     void GetNetworkNodes(
             const std::vector<std::string>& country_vec,
             uint32_t network_id);
+    void HandleNodes(bool is_route, const std::string& nodes);
 
     static const uint32_t kGetVpnNodesPeriod = 10 * 1000 * 1000;
 
