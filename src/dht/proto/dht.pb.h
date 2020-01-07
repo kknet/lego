@@ -38,7 +38,7 @@ namespace protobuf_dht_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[10];
+  static const ::google::protobuf::internal::ParseTable schema[11];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -66,6 +66,9 @@ extern HeartbeatRequestDefaultTypeInternal _HeartbeatRequest_default_instance_;
 class HeartbeatResponse;
 class HeartbeatResponseDefaultTypeInternal;
 extern HeartbeatResponseDefaultTypeInternal _HeartbeatResponse_default_instance_;
+class InitMessage;
+class InitMessageDefaultTypeInternal;
+extern InitMessageDefaultTypeInternal _InitMessage_default_instance_;
 class NodeInfo;
 class NodeInfoDefaultTypeInternal;
 extern NodeInfoDefaultTypeInternal _NodeInfo_default_instance_;
@@ -89,6 +92,7 @@ template<> ::lego::dht::protobuf::ConnectReqeust* Arena::CreateMaybeMessage<::le
 template<> ::lego::dht::protobuf::DhtMessage* Arena::CreateMaybeMessage<::lego::dht::protobuf::DhtMessage>(Arena*);
 template<> ::lego::dht::protobuf::HeartbeatRequest* Arena::CreateMaybeMessage<::lego::dht::protobuf::HeartbeatRequest>(Arena*);
 template<> ::lego::dht::protobuf::HeartbeatResponse* Arena::CreateMaybeMessage<::lego::dht::protobuf::HeartbeatResponse>(Arena*);
+template<> ::lego::dht::protobuf::InitMessage* Arena::CreateMaybeMessage<::lego::dht::protobuf::InitMessage>(Arena*);
 template<> ::lego::dht::protobuf::NodeInfo* Arena::CreateMaybeMessage<::lego::dht::protobuf::NodeInfo>(Arena*);
 template<> ::lego::dht::protobuf::RefreshNeighborsRequest* Arena::CreateMaybeMessage<::lego::dht::protobuf::RefreshNeighborsRequest>(Arena*);
 template<> ::lego::dht::protobuf::RefreshNeighborsResponse* Arena::CreateMaybeMessage<::lego::dht::protobuf::RefreshNeighborsResponse>(Arena*);
@@ -447,6 +451,154 @@ class VpnNodeInfo : public ::google::protobuf::Message /* @@protoc_insertion_poi
 };
 // -------------------------------------------------------------------
 
+class InitMessage : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:lego.dht.protobuf.InitMessage) */ {
+ public:
+  InitMessage();
+  virtual ~InitMessage();
+
+  InitMessage(const InitMessage& from);
+
+  inline InitMessage& operator=(const InitMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  InitMessage(InitMessage&& from) noexcept
+    : InitMessage() {
+    *this = ::std::move(from);
+  }
+
+  inline InitMessage& operator=(InitMessage&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const InitMessage& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const InitMessage* internal_default_instance() {
+    return reinterpret_cast<const InitMessage*>(
+               &_InitMessage_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  void Swap(InitMessage* other);
+  friend void swap(InitMessage& a, InitMessage& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline InitMessage* New() const final {
+    return CreateMaybeMessage<InitMessage>(NULL);
+  }
+
+  InitMessage* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<InitMessage>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const InitMessage& from);
+  void MergeFrom(const InitMessage& from);
+  void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(InitMessage* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .lego.dht.protobuf.VpnNodeInfo route_nodes = 2;
+  int route_nodes_size() const;
+  void clear_route_nodes();
+  static const int kRouteNodesFieldNumber = 2;
+  ::lego::dht::protobuf::VpnNodeInfo* mutable_route_nodes(int index);
+  ::google::protobuf::RepeatedPtrField< ::lego::dht::protobuf::VpnNodeInfo >*
+      mutable_route_nodes();
+  const ::lego::dht::protobuf::VpnNodeInfo& route_nodes(int index) const;
+  ::lego::dht::protobuf::VpnNodeInfo* add_route_nodes();
+  const ::google::protobuf::RepeatedPtrField< ::lego::dht::protobuf::VpnNodeInfo >&
+      route_nodes() const;
+
+  // repeated .lego.dht.protobuf.VpnNodeInfo vpn_nodes = 3;
+  int vpn_nodes_size() const;
+  void clear_vpn_nodes();
+  static const int kVpnNodesFieldNumber = 3;
+  ::lego::dht::protobuf::VpnNodeInfo* mutable_vpn_nodes(int index);
+  ::google::protobuf::RepeatedPtrField< ::lego::dht::protobuf::VpnNodeInfo >*
+      mutable_vpn_nodes();
+  const ::lego::dht::protobuf::VpnNodeInfo& vpn_nodes(int index) const;
+  ::lego::dht::protobuf::VpnNodeInfo* add_vpn_nodes();
+  const ::google::protobuf::RepeatedPtrField< ::lego::dht::protobuf::VpnNodeInfo >&
+      vpn_nodes() const;
+
+  // optional bytes version_info = 1;
+  bool has_version_info() const;
+  void clear_version_info();
+  static const int kVersionInfoFieldNumber = 1;
+  const ::std::string& version_info() const;
+  void set_version_info(const ::std::string& value);
+  #if LANG_CXX11
+  void set_version_info(::std::string&& value);
+  #endif
+  void set_version_info(const char* value);
+  void set_version_info(const void* value, size_t size);
+  ::std::string* mutable_version_info();
+  ::std::string* release_version_info();
+  void set_allocated_version_info(::std::string* version_info);
+
+  // @@protoc_insertion_point(class_scope:lego.dht.protobuf.InitMessage)
+ private:
+  void set_has_version_info();
+  void clear_has_version_info();
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::HasBits<1> _has_bits_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::lego::dht::protobuf::VpnNodeInfo > route_nodes_;
+  ::google::protobuf::RepeatedPtrField< ::lego::dht::protobuf::VpnNodeInfo > vpn_nodes_;
+  ::google::protobuf::internal::ArenaStringPtr version_info_;
+  friend struct ::protobuf_dht_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class BootstrapResponse : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:lego.dht.protobuf.BootstrapResponse) */ {
  public:
   BootstrapResponse();
@@ -489,7 +641,7 @@ class BootstrapResponse : public ::google::protobuf::Message /* @@protoc_inserti
                &_BootstrapResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    3;
 
   void Swap(BootstrapResponse* other);
   friend void swap(BootstrapResponse& a, BootstrapResponse& b) {
@@ -541,30 +693,6 @@ class BootstrapResponse : public ::google::protobuf::Message /* @@protoc_inserti
 
   // accessors -------------------------------------------------------
 
-  // repeated .lego.dht.protobuf.VpnNodeInfo route_nodes = 9;
-  int route_nodes_size() const;
-  void clear_route_nodes();
-  static const int kRouteNodesFieldNumber = 9;
-  ::lego::dht::protobuf::VpnNodeInfo* mutable_route_nodes(int index);
-  ::google::protobuf::RepeatedPtrField< ::lego::dht::protobuf::VpnNodeInfo >*
-      mutable_route_nodes();
-  const ::lego::dht::protobuf::VpnNodeInfo& route_nodes(int index) const;
-  ::lego::dht::protobuf::VpnNodeInfo* add_route_nodes();
-  const ::google::protobuf::RepeatedPtrField< ::lego::dht::protobuf::VpnNodeInfo >&
-      route_nodes() const;
-
-  // repeated .lego.dht.protobuf.VpnNodeInfo vpn_nodes = 10;
-  int vpn_nodes_size() const;
-  void clear_vpn_nodes();
-  static const int kVpnNodesFieldNumber = 10;
-  ::lego::dht::protobuf::VpnNodeInfo* mutable_vpn_nodes(int index);
-  ::google::protobuf::RepeatedPtrField< ::lego::dht::protobuf::VpnNodeInfo >*
-      mutable_vpn_nodes();
-  const ::lego::dht::protobuf::VpnNodeInfo& vpn_nodes(int index) const;
-  ::lego::dht::protobuf::VpnNodeInfo* add_vpn_nodes();
-  const ::google::protobuf::RepeatedPtrField< ::lego::dht::protobuf::VpnNodeInfo >&
-      vpn_nodes() const;
-
   // optional bytes node_id = 1;
   bool has_node_id() const;
   void clear_node_id();
@@ -610,20 +738,17 @@ class BootstrapResponse : public ::google::protobuf::Message /* @@protoc_inserti
   ::std::string* release_public_ip();
   void set_allocated_public_ip(::std::string* public_ip);
 
-  // optional bytes version_info = 8;
-  bool has_version_info() const;
-  void clear_version_info();
-  static const int kVersionInfoFieldNumber = 8;
-  const ::std::string& version_info() const;
-  void set_version_info(const ::std::string& value);
-  #if LANG_CXX11
-  void set_version_info(::std::string&& value);
-  #endif
-  void set_version_info(const char* value);
-  void set_version_info(const void* value, size_t size);
-  ::std::string* mutable_version_info();
-  ::std::string* release_version_info();
-  void set_allocated_version_info(::std::string* version_info);
+  // optional .lego.dht.protobuf.InitMessage init_message = 8;
+  bool has_init_message() const;
+  void clear_init_message();
+  static const int kInitMessageFieldNumber = 8;
+  private:
+  const ::lego::dht::protobuf::InitMessage& _internal_init_message() const;
+  public:
+  const ::lego::dht::protobuf::InitMessage& init_message() const;
+  ::lego::dht::protobuf::InitMessage* release_init_message();
+  ::lego::dht::protobuf::InitMessage* mutable_init_message();
+  void set_allocated_init_message(::lego::dht::protobuf::InitMessage* init_message);
 
   // optional int32 nat_type = 2;
   bool has_nat_type() const;
@@ -669,18 +794,16 @@ class BootstrapResponse : public ::google::protobuf::Message /* @@protoc_inserti
   void clear_has_public_port();
   void set_has_country_code();
   void clear_has_country_code();
-  void set_has_version_info();
-  void clear_has_version_info();
+  void set_has_init_message();
+  void clear_has_init_message();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
-  ::google::protobuf::RepeatedPtrField< ::lego::dht::protobuf::VpnNodeInfo > route_nodes_;
-  ::google::protobuf::RepeatedPtrField< ::lego::dht::protobuf::VpnNodeInfo > vpn_nodes_;
   ::google::protobuf::internal::ArenaStringPtr node_id_;
   ::google::protobuf::internal::ArenaStringPtr local_ip_;
   ::google::protobuf::internal::ArenaStringPtr public_ip_;
-  ::google::protobuf::internal::ArenaStringPtr version_info_;
+  ::lego::dht::protobuf::InitMessage* init_message_;
   ::google::protobuf::int32 nat_type_;
   ::google::protobuf::int32 local_port_;
   ::google::protobuf::int32 public_port_;
@@ -731,7 +854,7 @@ class RefreshNeighborsRequest : public ::google::protobuf::Message /* @@protoc_i
                &_RefreshNeighborsRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    4;
 
   void Swap(RefreshNeighborsRequest* other);
   friend void swap(RefreshNeighborsRequest& a, RefreshNeighborsRequest& b) {
@@ -876,7 +999,7 @@ class NodeInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(
                &_NodeInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    5;
 
   void Swap(NodeInfo* other);
   friend void swap(NodeInfo& a, NodeInfo& b) {
@@ -1082,7 +1205,7 @@ class RefreshNeighborsResponse : public ::google::protobuf::Message /* @@protoc_
                &_RefreshNeighborsResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    6;
 
   void Swap(RefreshNeighborsResponse* other);
   friend void swap(RefreshNeighborsResponse& a, RefreshNeighborsResponse& b) {
@@ -1199,7 +1322,7 @@ class HeartbeatRequest : public ::google::protobuf::Message /* @@protoc_insertio
                &_HeartbeatRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    7;
 
   void Swap(HeartbeatRequest* other);
   friend void swap(HeartbeatRequest& a, HeartbeatRequest& b) {
@@ -1313,7 +1436,7 @@ class HeartbeatResponse : public ::google::protobuf::Message /* @@protoc_inserti
                &_HeartbeatResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    8;
 
   void Swap(HeartbeatResponse* other);
   friend void swap(HeartbeatResponse& a, HeartbeatResponse& b) {
@@ -1427,7 +1550,7 @@ class ConnectReqeust : public ::google::protobuf::Message /* @@protoc_insertion_
                &_ConnectReqeust_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    9;
 
   void Swap(ConnectReqeust* other);
   friend void swap(ConnectReqeust& a, ConnectReqeust& b) {
@@ -1643,7 +1766,7 @@ class DhtMessage : public ::google::protobuf::Message /* @@protoc_insertion_poin
                &_DhtMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    10;
 
   void Swap(DhtMessage* other);
   friend void swap(DhtMessage& a, DhtMessage& b) {
@@ -2293,6 +2416,136 @@ inline void VpnNodeInfo::set_allocated_country(::std::string* country) {
 
 // -------------------------------------------------------------------
 
+// InitMessage
+
+// optional bytes version_info = 1;
+inline bool InitMessage::has_version_info() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void InitMessage::set_has_version_info() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void InitMessage::clear_has_version_info() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void InitMessage::clear_version_info() {
+  version_info_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_version_info();
+}
+inline const ::std::string& InitMessage::version_info() const {
+  // @@protoc_insertion_point(field_get:lego.dht.protobuf.InitMessage.version_info)
+  return version_info_.GetNoArena();
+}
+inline void InitMessage::set_version_info(const ::std::string& value) {
+  set_has_version_info();
+  version_info_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:lego.dht.protobuf.InitMessage.version_info)
+}
+#if LANG_CXX11
+inline void InitMessage::set_version_info(::std::string&& value) {
+  set_has_version_info();
+  version_info_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:lego.dht.protobuf.InitMessage.version_info)
+}
+#endif
+inline void InitMessage::set_version_info(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_version_info();
+  version_info_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:lego.dht.protobuf.InitMessage.version_info)
+}
+inline void InitMessage::set_version_info(const void* value, size_t size) {
+  set_has_version_info();
+  version_info_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:lego.dht.protobuf.InitMessage.version_info)
+}
+inline ::std::string* InitMessage::mutable_version_info() {
+  set_has_version_info();
+  // @@protoc_insertion_point(field_mutable:lego.dht.protobuf.InitMessage.version_info)
+  return version_info_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* InitMessage::release_version_info() {
+  // @@protoc_insertion_point(field_release:lego.dht.protobuf.InitMessage.version_info)
+  if (!has_version_info()) {
+    return NULL;
+  }
+  clear_has_version_info();
+  return version_info_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void InitMessage::set_allocated_version_info(::std::string* version_info) {
+  if (version_info != NULL) {
+    set_has_version_info();
+  } else {
+    clear_has_version_info();
+  }
+  version_info_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), version_info);
+  // @@protoc_insertion_point(field_set_allocated:lego.dht.protobuf.InitMessage.version_info)
+}
+
+// repeated .lego.dht.protobuf.VpnNodeInfo route_nodes = 2;
+inline int InitMessage::route_nodes_size() const {
+  return route_nodes_.size();
+}
+inline void InitMessage::clear_route_nodes() {
+  route_nodes_.Clear();
+}
+inline ::lego::dht::protobuf::VpnNodeInfo* InitMessage::mutable_route_nodes(int index) {
+  // @@protoc_insertion_point(field_mutable:lego.dht.protobuf.InitMessage.route_nodes)
+  return route_nodes_.Mutable(index);
+}
+inline ::google::protobuf::RepeatedPtrField< ::lego::dht::protobuf::VpnNodeInfo >*
+InitMessage::mutable_route_nodes() {
+  // @@protoc_insertion_point(field_mutable_list:lego.dht.protobuf.InitMessage.route_nodes)
+  return &route_nodes_;
+}
+inline const ::lego::dht::protobuf::VpnNodeInfo& InitMessage::route_nodes(int index) const {
+  // @@protoc_insertion_point(field_get:lego.dht.protobuf.InitMessage.route_nodes)
+  return route_nodes_.Get(index);
+}
+inline ::lego::dht::protobuf::VpnNodeInfo* InitMessage::add_route_nodes() {
+  // @@protoc_insertion_point(field_add:lego.dht.protobuf.InitMessage.route_nodes)
+  return route_nodes_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::lego::dht::protobuf::VpnNodeInfo >&
+InitMessage::route_nodes() const {
+  // @@protoc_insertion_point(field_list:lego.dht.protobuf.InitMessage.route_nodes)
+  return route_nodes_;
+}
+
+// repeated .lego.dht.protobuf.VpnNodeInfo vpn_nodes = 3;
+inline int InitMessage::vpn_nodes_size() const {
+  return vpn_nodes_.size();
+}
+inline void InitMessage::clear_vpn_nodes() {
+  vpn_nodes_.Clear();
+}
+inline ::lego::dht::protobuf::VpnNodeInfo* InitMessage::mutable_vpn_nodes(int index) {
+  // @@protoc_insertion_point(field_mutable:lego.dht.protobuf.InitMessage.vpn_nodes)
+  return vpn_nodes_.Mutable(index);
+}
+inline ::google::protobuf::RepeatedPtrField< ::lego::dht::protobuf::VpnNodeInfo >*
+InitMessage::mutable_vpn_nodes() {
+  // @@protoc_insertion_point(field_mutable_list:lego.dht.protobuf.InitMessage.vpn_nodes)
+  return &vpn_nodes_;
+}
+inline const ::lego::dht::protobuf::VpnNodeInfo& InitMessage::vpn_nodes(int index) const {
+  // @@protoc_insertion_point(field_get:lego.dht.protobuf.InitMessage.vpn_nodes)
+  return vpn_nodes_.Get(index);
+}
+inline ::lego::dht::protobuf::VpnNodeInfo* InitMessage::add_vpn_nodes() {
+  // @@protoc_insertion_point(field_add:lego.dht.protobuf.InitMessage.vpn_nodes)
+  return vpn_nodes_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::lego::dht::protobuf::VpnNodeInfo >&
+InitMessage::vpn_nodes() const {
+  // @@protoc_insertion_point(field_list:lego.dht.protobuf.InitMessage.vpn_nodes)
+  return vpn_nodes_;
+}
+
+// -------------------------------------------------------------------
+
 // BootstrapResponse
 
 // optional bytes node_id = 1;
@@ -2589,130 +2842,62 @@ inline void BootstrapResponse::set_country_code(::google::protobuf::int32 value)
   // @@protoc_insertion_point(field_set:lego.dht.protobuf.BootstrapResponse.country_code)
 }
 
-// optional bytes version_info = 8;
-inline bool BootstrapResponse::has_version_info() const {
+// optional .lego.dht.protobuf.InitMessage init_message = 8;
+inline bool BootstrapResponse::has_init_message() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void BootstrapResponse::set_has_version_info() {
+inline void BootstrapResponse::set_has_init_message() {
   _has_bits_[0] |= 0x00000008u;
 }
-inline void BootstrapResponse::clear_has_version_info() {
+inline void BootstrapResponse::clear_has_init_message() {
   _has_bits_[0] &= ~0x00000008u;
 }
-inline void BootstrapResponse::clear_version_info() {
-  version_info_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  clear_has_version_info();
+inline void BootstrapResponse::clear_init_message() {
+  if (init_message_ != NULL) init_message_->Clear();
+  clear_has_init_message();
 }
-inline const ::std::string& BootstrapResponse::version_info() const {
-  // @@protoc_insertion_point(field_get:lego.dht.protobuf.BootstrapResponse.version_info)
-  return version_info_.GetNoArena();
+inline const ::lego::dht::protobuf::InitMessage& BootstrapResponse::_internal_init_message() const {
+  return *init_message_;
 }
-inline void BootstrapResponse::set_version_info(const ::std::string& value) {
-  set_has_version_info();
-  version_info_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:lego.dht.protobuf.BootstrapResponse.version_info)
+inline const ::lego::dht::protobuf::InitMessage& BootstrapResponse::init_message() const {
+  const ::lego::dht::protobuf::InitMessage* p = init_message_;
+  // @@protoc_insertion_point(field_get:lego.dht.protobuf.BootstrapResponse.init_message)
+  return p != NULL ? *p : *reinterpret_cast<const ::lego::dht::protobuf::InitMessage*>(
+      &::lego::dht::protobuf::_InitMessage_default_instance_);
 }
-#if LANG_CXX11
-inline void BootstrapResponse::set_version_info(::std::string&& value) {
-  set_has_version_info();
-  version_info_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:lego.dht.protobuf.BootstrapResponse.version_info)
+inline ::lego::dht::protobuf::InitMessage* BootstrapResponse::release_init_message() {
+  // @@protoc_insertion_point(field_release:lego.dht.protobuf.BootstrapResponse.init_message)
+  clear_has_init_message();
+  ::lego::dht::protobuf::InitMessage* temp = init_message_;
+  init_message_ = NULL;
+  return temp;
 }
-#endif
-inline void BootstrapResponse::set_version_info(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  set_has_version_info();
-  version_info_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:lego.dht.protobuf.BootstrapResponse.version_info)
-}
-inline void BootstrapResponse::set_version_info(const void* value, size_t size) {
-  set_has_version_info();
-  version_info_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:lego.dht.protobuf.BootstrapResponse.version_info)
-}
-inline ::std::string* BootstrapResponse::mutable_version_info() {
-  set_has_version_info();
-  // @@protoc_insertion_point(field_mutable:lego.dht.protobuf.BootstrapResponse.version_info)
-  return version_info_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* BootstrapResponse::release_version_info() {
-  // @@protoc_insertion_point(field_release:lego.dht.protobuf.BootstrapResponse.version_info)
-  if (!has_version_info()) {
-    return NULL;
+inline ::lego::dht::protobuf::InitMessage* BootstrapResponse::mutable_init_message() {
+  set_has_init_message();
+  if (init_message_ == NULL) {
+    auto* p = CreateMaybeMessage<::lego::dht::protobuf::InitMessage>(GetArenaNoVirtual());
+    init_message_ = p;
   }
-  clear_has_version_info();
-  return version_info_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:lego.dht.protobuf.BootstrapResponse.init_message)
+  return init_message_;
 }
-inline void BootstrapResponse::set_allocated_version_info(::std::string* version_info) {
-  if (version_info != NULL) {
-    set_has_version_info();
+inline void BootstrapResponse::set_allocated_init_message(::lego::dht::protobuf::InitMessage* init_message) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete init_message_;
+  }
+  if (init_message) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      init_message = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, init_message, submessage_arena);
+    }
+    set_has_init_message();
   } else {
-    clear_has_version_info();
+    clear_has_init_message();
   }
-  version_info_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), version_info);
-  // @@protoc_insertion_point(field_set_allocated:lego.dht.protobuf.BootstrapResponse.version_info)
-}
-
-// repeated .lego.dht.protobuf.VpnNodeInfo route_nodes = 9;
-inline int BootstrapResponse::route_nodes_size() const {
-  return route_nodes_.size();
-}
-inline void BootstrapResponse::clear_route_nodes() {
-  route_nodes_.Clear();
-}
-inline ::lego::dht::protobuf::VpnNodeInfo* BootstrapResponse::mutable_route_nodes(int index) {
-  // @@protoc_insertion_point(field_mutable:lego.dht.protobuf.BootstrapResponse.route_nodes)
-  return route_nodes_.Mutable(index);
-}
-inline ::google::protobuf::RepeatedPtrField< ::lego::dht::protobuf::VpnNodeInfo >*
-BootstrapResponse::mutable_route_nodes() {
-  // @@protoc_insertion_point(field_mutable_list:lego.dht.protobuf.BootstrapResponse.route_nodes)
-  return &route_nodes_;
-}
-inline const ::lego::dht::protobuf::VpnNodeInfo& BootstrapResponse::route_nodes(int index) const {
-  // @@protoc_insertion_point(field_get:lego.dht.protobuf.BootstrapResponse.route_nodes)
-  return route_nodes_.Get(index);
-}
-inline ::lego::dht::protobuf::VpnNodeInfo* BootstrapResponse::add_route_nodes() {
-  // @@protoc_insertion_point(field_add:lego.dht.protobuf.BootstrapResponse.route_nodes)
-  return route_nodes_.Add();
-}
-inline const ::google::protobuf::RepeatedPtrField< ::lego::dht::protobuf::VpnNodeInfo >&
-BootstrapResponse::route_nodes() const {
-  // @@protoc_insertion_point(field_list:lego.dht.protobuf.BootstrapResponse.route_nodes)
-  return route_nodes_;
-}
-
-// repeated .lego.dht.protobuf.VpnNodeInfo vpn_nodes = 10;
-inline int BootstrapResponse::vpn_nodes_size() const {
-  return vpn_nodes_.size();
-}
-inline void BootstrapResponse::clear_vpn_nodes() {
-  vpn_nodes_.Clear();
-}
-inline ::lego::dht::protobuf::VpnNodeInfo* BootstrapResponse::mutable_vpn_nodes(int index) {
-  // @@protoc_insertion_point(field_mutable:lego.dht.protobuf.BootstrapResponse.vpn_nodes)
-  return vpn_nodes_.Mutable(index);
-}
-inline ::google::protobuf::RepeatedPtrField< ::lego::dht::protobuf::VpnNodeInfo >*
-BootstrapResponse::mutable_vpn_nodes() {
-  // @@protoc_insertion_point(field_mutable_list:lego.dht.protobuf.BootstrapResponse.vpn_nodes)
-  return &vpn_nodes_;
-}
-inline const ::lego::dht::protobuf::VpnNodeInfo& BootstrapResponse::vpn_nodes(int index) const {
-  // @@protoc_insertion_point(field_get:lego.dht.protobuf.BootstrapResponse.vpn_nodes)
-  return vpn_nodes_.Get(index);
-}
-inline ::lego::dht::protobuf::VpnNodeInfo* BootstrapResponse::add_vpn_nodes() {
-  // @@protoc_insertion_point(field_add:lego.dht.protobuf.BootstrapResponse.vpn_nodes)
-  return vpn_nodes_.Add();
-}
-inline const ::google::protobuf::RepeatedPtrField< ::lego::dht::protobuf::VpnNodeInfo >&
-BootstrapResponse::vpn_nodes() const {
-  // @@protoc_insertion_point(field_list:lego.dht.protobuf.BootstrapResponse.vpn_nodes)
-  return vpn_nodes_;
+  init_message_ = init_message;
+  // @@protoc_insertion_point(field_set_allocated:lego.dht.protobuf.BootstrapResponse.init_message)
 }
 
 // -------------------------------------------------------------------
@@ -4046,6 +4231,8 @@ inline void DhtMessage::set_allocated_heartbeat_res(::lego::dht::protobuf::Heart
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
