@@ -101,7 +101,9 @@ int UniversalManager::CreateNetwork(
         boot_nodes = Bootstrap::Instance()->node_bootstrap();
     }
 
-    if (dht_ptr->Bootstrap(boot_nodes) != dht::kDhtSuccess) {
+    int32_t get_init_msg = 0;
+    config.Get("lego", "get_init_msg", get_init_msg);
+    if (dht_ptr->Bootstrap(boot_nodes, get_init_msg) != dht::kDhtSuccess) {
         UnRegisterUniversal(network_id);
         NETWORK_ERROR("bootstrap universal network failed!");
         return kNetworkError;

@@ -1071,12 +1071,15 @@ int VpnClient::InitNetworkSingleton() {
         return kClientError;
     }
 
+    config.Set("lego", "get_init_msg", 1);
     if (network::UniversalManager::Instance()->CreateUniversalNetwork(
             config,
             transport_) != network::kNetworkSuccess) {
         CLIENT_ERROR("create universal network failed!");
         return kClientError;
     }
+
+    config.Set("lego", "get_init_msg", 0);
     return CreateClientUniversalNetwork();
 }
 
