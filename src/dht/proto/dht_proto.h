@@ -19,6 +19,7 @@ public:
     static void CreateBootstrapRequest(
             const NodePtr& local_node,
             const NodePtr& des_node,
+            int32_t get_init_msg,
             transport::protobuf::Header& msg);
     static void CreateBootstrapResponse(
             int32_t get_init_msg,

@@ -174,12 +174,12 @@ void BaseDht::SetFrequently(transport::protobuf::Header& message) {
     }
 }
 
-int BaseDht::Bootstrap(const std::vector<NodePtr>& boot_nodes) {
+int BaseDht::Bootstrap(const std::vector<NodePtr>& boot_nodes, int32_t get_init_msg) {
     assert(!boot_nodes.empty());
     for (uint32_t i = 0; i < boot_nodes.size(); ++i) {
         transport::protobuf::Header msg;
         SetFrequently(msg);
-        DhtProto::CreateBootstrapRequest(local_node_, boot_nodes[i], msg);
+        DhtProto::CreateBootstrapRequest(local_node_, boot_nodes[i], get_init_msg, msg);
         if (transport::MultiThreadHandler::Instance()->transport()->Send(
                 boot_nodes[i]->public_ip,
                 boot_nodes[i]->public_port,

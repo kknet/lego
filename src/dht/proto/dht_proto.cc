@@ -18,6 +18,7 @@ void DhtProto::SetFreqMessage(BaseDhtPtr& dht, transport::protobuf::Header& msg)
 void DhtProto::CreateBootstrapRequest(
         const NodePtr& local_node,
         const NodePtr& des_node,
+        int32_t get_init_msg,
         transport::protobuf::Header& msg) {
     msg.set_src_dht_key(local_node->dht_key);
     msg.set_des_dht_key(des_node->dht_key);
@@ -35,6 +36,7 @@ void DhtProto::CreateBootstrapRequest(
     bootstrap_req->set_local_port(local_node->local_port);
     bootstrap_req->set_node_id(common::GlobalInfo::Instance()->id());
     bootstrap_req->set_nat_type(local_node->nat_type);
+    bootstrap_req->set_get_init_msg(get_init_msg);
     msg.set_data(dht_msg.SerializeAsString());
 }
 

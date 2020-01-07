@@ -32,7 +32,7 @@ public:
     virtual int Destroy();
     virtual int Join(NodePtr& node);
     virtual int Drop(NodePtr& node);
-    virtual int Bootstrap(const std::vector<NodePtr>& boot_nodes);
+    virtual int Bootstrap(const std::vector<NodePtr>& boot_nodes, int32_t get_init_msg = 0);
     virtual void HandleMessage(transport::protobuf::Header& msg);
     virtual bool CheckDestination(const std::string& des_dht_key, bool closest);
     virtual void SetFrequently(transport::protobuf::Header& msg);
