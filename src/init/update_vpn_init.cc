@@ -46,7 +46,7 @@ bool UpdateVpnInit::InitSuccess() {
 }
 
 void UpdateVpnInit::GetInitMessage(dht::protobuf::InitMessage& init_msg) {
-    init_msg.set_version_info(GetVersion());
+    init_msg.set_version_info(ver_buf_[valid_idx_]);
     {
         std::lock_guard<std::mutex> guard(vpn_nodes_map_mutex_);
         for (auto iter = vpn_nodes_map_.begin(); iter != vpn_nodes_map_.end(); ++iter) {
