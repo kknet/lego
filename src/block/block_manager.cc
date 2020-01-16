@@ -329,17 +329,17 @@ int BlockManager::LoadAllTx(
             return kBlockDbNotExists;
         }
 
-        bft::protobuf::Block block_item;
-        if (!block_item.ParseFromString(block_str) || !block_item.has_tx_block()) {
-            BLOCK_ERROR("protobuf::Block ParseFromString failed!");
-            return kBlockDbDataInvalid;
-        }
-
-        AccountManager::Instance()->AddBlockItem(block_item);
-        tmp_str = block_item.tx_block().prehash();
-        if (tmp_str.empty()) {
-            break;
-        }
+//         bft::protobuf::Block block_item;
+//         if (!block_item.ParseFromString(block_str) || !block_item.has_tx_block()) {
+//             BLOCK_ERROR("protobuf::Block ParseFromString failed!");
+//             return kBlockDbDataInvalid;
+//         }
+// 
+//         AccountManager::Instance()->AddBlockItem(block_item);
+//         tmp_str = block_item.tx_block().prehash();
+//         if (tmp_str.empty()) {
+//             break;
+//         }
 
         auto e_time = common::TimeStampMsec();
         ++i;
