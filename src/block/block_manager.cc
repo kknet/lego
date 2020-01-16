@@ -337,9 +337,9 @@ int BlockManager::LoadAllTx(
         tmp_str = block_item.tx_block().prehash();
 
 //         AccountManager::Instance()->AddBlockItem(block_item);
-//         if (tmp_str.empty()) {
-//             break;
-//         }
+        if (tmp_str.empty()) {
+            break;
+        }
 
         auto e_time = common::TimeStampMsec();
         ++i;

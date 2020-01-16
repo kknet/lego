@@ -50,11 +50,6 @@ int NetworkInit::Init(int argc, char** argv) {
         return kInitError;
     }
 
-    if (InitBlock(conf_) != kInitSuccess) {
-        INIT_ERROR("init block failed!");
-        return kInitError;
-    }
-
     if (ip::IpWithCountry::Instance()->Init(
             "./conf/geolite.conf",
             "./conf/geo_country.conf") != ip::kIpSuccess) {
@@ -79,6 +74,10 @@ int NetworkInit::Init(int argc, char** argv) {
         return kInitError;
     }
 
+    if (InitBlock(conf_) != kInitSuccess) {
+        INIT_ERROR("init block failed!");
+        return kInitError;
+    }
     std::cout << "block init use time: " << (common::TimeStampMsec() - b_time) << std::endl;
 
     if (InitTransport() != kInitSuccess) {
