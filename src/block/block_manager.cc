@@ -360,8 +360,8 @@ int BlockManager::LoadAllTx(
         */
     }
 
-    std::cout << "load all success" << std::endl;
-    exit(0);
+    std::cout << "load all success" << i << std::endl;
+//     exit(0);
     return kBlockSuccess;
 }
 
