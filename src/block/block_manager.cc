@@ -329,11 +329,11 @@ int BlockManager::LoadAllTx(
             return kBlockDbNotExists;
         }
 
-//         bft::protobuf::Block block_item;
-//         if (!block_item.ParseFromString(block_str) || !block_item.has_tx_block()) {
-//             BLOCK_ERROR("protobuf::Block ParseFromString failed!");
-//             return kBlockDbDataInvalid;
-//         }
+        bft::protobuf::Block block_item;
+        if (!block_item.ParseFromString(block_str) || !block_item.has_tx_block()) {
+            BLOCK_ERROR("protobuf::Block ParseFromString failed!");
+            return kBlockDbDataInvalid;
+        }
 // 
 //         AccountManager::Instance()->AddBlockItem(block_item);
 //         tmp_str = block_item.tx_block().prehash();
@@ -357,6 +357,8 @@ int BlockManager::LoadAllTx(
         std::cout << "add height key: " << height_db_key << std::endl;
         */
     }
+
+    exit(0);
     return kBlockSuccess;
 }
 
