@@ -294,6 +294,7 @@ int BlockManager::LoadTxBlocks(const common::Config& conf) {
         return kBlockError;
     }
 
+    std::cout << "start load all tx." << std::endl;
     for (uint32_t i = 0; i < common::kImmutablePoolSize; ++i) {
         std::string key = GetLastBlockHash(common::kTestForNetworkId, i);
         std::string last_block_hash;
@@ -319,8 +320,8 @@ int BlockManager::LoadAllTx(
     auto b_time = common::TimeStampMsec();
     auto a_b_time = common::TimeStampMsec();
     int i = 0;
+    std::string block_str;
     while (true) {
-        std::string block_str;
         auto st = db::Db::Instance()->Get(tmp_str, &block_str);
         if (!st.ok()) {
             BLOCK_ERROR("load block from db failed[%s]",

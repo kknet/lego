@@ -534,6 +534,7 @@ int NetworkInit::InitBlock(const common::Config& conf) {
         return kInitError;
     }
 
+    std::cout << "init db ok." << std::endl;
     common::Config tmp_conf = conf;
     if (block::BlockManager::Instance()->Init(tmp_conf) != block::kBlockSuccess) {
         INIT_ERROR("init block manager failed!");
