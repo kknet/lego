@@ -43,6 +43,7 @@ NetworkInit::~NetworkInit() {
 }
 
 int NetworkInit::Init(int argc, char** argv) {
+    auto b_time = common::TimeStampMsec();
     std::lock_guard<std::mutex> guard(init_mutex_);
     if (inited_) {
         INIT_ERROR("network inited!");
@@ -56,6 +57,7 @@ int NetworkInit::Init(int argc, char** argv) {
         return kInitError;
     }
 
+    std::cout << "init ip country use time: " << (common::TimeStampMsec() - b_time) << std::endl;
     if (InitConfigWithArgs(argc, argv) != kInitSuccess) {
         INIT_ERROR("init config with args failed!");
         return kInitError;
@@ -66,6 +68,7 @@ int NetworkInit::Init(int argc, char** argv) {
         return kInitError;
     }
 
+    std::cout << "global init use time: " << (common::TimeStampMsec() - b_time) << std::endl;
     if (SetPriAndPubKey("") != kInitSuccess) {
         INIT_ERROR("set node private and public key failed!");
         return kInitError;
@@ -75,6 +78,8 @@ int NetworkInit::Init(int argc, char** argv) {
         INIT_ERROR("init block failed!");
         return kInitError;
     }
+
+    std::cout << "block init use time: " << (common::TimeStampMsec() - b_time) << std::endl;
 
     if (InitTransport() != kInitSuccess) {
         INIT_ERROR("init transport failed!");
@@ -86,26 +91,32 @@ int NetworkInit::Init(int argc, char** argv) {
         return kInitError;
     }
 
+    std::cout << "transport init use time: " << (common::TimeStampMsec() - b_time) << std::endl;
+
     if (InitNetworkSingleton() != kInitSuccess) {
         INIT_ERROR("InitNetworkSingleton failed!");
         return kInitError;
     }
+    std::cout << "network init use time: " << (common::TimeStampMsec() - b_time) << std::endl;
 
     if (InitCommand() != kInitSuccess) {
         INIT_ERROR("InitNetworkSingleton failed!");
         return kInitError;
     }
 
+    std::cout << "command init use time: " << (common::TimeStampMsec() - b_time) << std::endl;
     if (CreateConfitNetwork() != kInitSuccess) {
         INIT_ERROR("CreateConfitNetwork failed!");
         return kInitError;
     }
 
+    std::cout << "conf net init use time: " << (common::TimeStampMsec() - b_time) << std::endl;
     if (InitBft() != kInitSuccess) {
         INIT_ERROR("int bft failed!");
         return kInitError;
     }
 
+    std::cout << "bft init use time: " << (common::TimeStampMsec() - b_time) << std::endl;
     sync::KeyValueSync::Instance();
 
     test_new_account_tick_.CutOff(
