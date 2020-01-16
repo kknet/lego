@@ -68,14 +68,11 @@ int Route::Send(transport::protobuf::Header& message) {
 
     if (dht_ptr != nullptr) {
         if (message.has_broadcast()) {
-            LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("call broadcast", message);
             broadcast_->Broadcasting(dht_ptr, message);
         } else {
             if (message.has_to_ip() && message.has_to_port()) {
-                LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("call unicast direct", message);
                 dht_ptr->transport()->Send(message.to_ip(), message.to_port(), 0, message);
             } else {
-                LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("call unicast closest", message);
                 dht_ptr->SendToClosestNode(message);
             }
         }

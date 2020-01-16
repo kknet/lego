@@ -24,10 +24,10 @@ public:
         msg.set_id(header.id());
         msg.set_type(common::kBlockMessage);
         msg.set_universal(header.universal());
+        msg.set_client(header.client());
         if (header.client()) {
             msg.set_from_ip(header.from_ip());
             msg.set_from_port(header.from_port());
-            msg.set_client(header.client());
             msg.set_client_relayed(true);
             msg.set_client_proxy(header.client_proxy());
             msg.set_client_dht_key(header.client_dht_key());
@@ -63,6 +63,7 @@ public:
         attr_req->set_height(height);
         msg.set_data(block_msg.SerializeAsString());
     }
+
 private:
     BlockProto();
     ~BlockProto();

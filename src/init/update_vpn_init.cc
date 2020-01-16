@@ -114,7 +114,7 @@ void UpdateVpnInit::SetVersionInfo(const std::string& ver) {
     uint32_t idle_idx = (valid_idx_ + 1) % 2;
     ver_buf_[idle_idx] = ver;
     valid_idx_ = idle_idx;
-
+    std::cout << "now set version info: " << ver << std::endl;
     common::Split splits(ver.c_str(), ',', ver.size());
     for (uint32_t split_idx = 0; split_idx < splits.Count(); ++split_idx) {
         common::Split tmp_split(splits[split_idx], ';', splits.SubLen(split_idx));
@@ -175,11 +175,13 @@ void UpdateVpnInit::GetNetworkNodes(
                 (uint32_t)network_id,
                 (uint8_t)common::global_country_map[country],
                 (uint32_t)4);
+        std::cout << "get local nodes size: " << dht_nodes.size() << std::endl;
         if (dht_nodes.empty()) {
             dht_nodes = uni_dht->RemoteGetNetworkNodes(
                     (uint32_t)network_id,
                     (uint8_t)common::global_country_map[country],
                     (uint32_t)4);
+            std::cout << "get remote nodes size: " << dht_nodes.size() << std::endl;
             if (dht_nodes.empty()) {
                 continue;
             }

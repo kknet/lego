@@ -125,11 +125,6 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
         std::this_thread::sleep_for(std::chrono::microseconds(1000 * 1000));
     }
 
-    if (!init::UpdateVpnInit::Instance()->InitSuccess()) {
-        PROXY_ERROR("init::UpdateVpnInit::Instance()->InitSuccess failed!");
-        return kProxyError;
-    }
-
     if (InitCommand() != kProxySuccess) {
         PROXY_ERROR("InitNetworkSingleton failed!");
         return kProxyError;
@@ -145,6 +140,11 @@ int ShadowsocksProxy::Init(int argc, char** argv) {
             common::kConsensusCreateAcount,
             gid);
     // check account address valid
+    if (!init::UpdateVpnInit::Instance()->InitSuccess()) {
+        PROXY_ERROR("init::UpdateVpnInit::Instance()->InitSuccess failed!");
+        return kProxyError;
+    }
+
     inited_ = true;
     cmd_.Run();
     transport_->Stop();

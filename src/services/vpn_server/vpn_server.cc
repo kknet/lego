@@ -1591,7 +1591,8 @@ int VpnServer::Init() {
 }
 
 void VpnServer::HandleMessage(transport::protobuf::Header& header) {
-    if (header.client()) {
+    std::cout << "got block response message." << lego::common::Encode::HexEncode(header.des_dht_key()) << ":" << header.client() << ":" << header.type() << ":" << common::kBlockMessage << std::endl;
+    if (header.has_client() && header.client()) {
         network::Route::Instance()->Send(header);
         return;
     }
@@ -1608,7 +1609,7 @@ void VpnServer::HandleMessage(transport::protobuf::Header& header) {
             if (netid == network::kUniversalNetworkId || netid == network::kNodeNetworkId) {
                 dht_ptr = network::UniversalManager::Instance()->GetUniversal(netid);
             } else {
-                if (header.universal() == 0) {
+                if (header.universal()) {
                     dht_ptr = network::UniversalManager::Instance()->GetUniversal(netid);
                 } else {
                     dht_ptr = network::DhtManager::Instance()->GetDht(netid);
@@ -1673,7 +1674,6 @@ void VpnServer::SendGetAccountAttrLastBlock(
         const std::string& attr,
         const std::string& account,
         uint64_t height) {
-    uint64_t rand_num = 0;
     auto uni_dht = lego::network::DhtManager::Instance()->GetDht(
             lego::network::kVpnNetworkId);
     if (uni_dht == nullptr) {
@@ -1682,6 +1682,7 @@ void VpnServer::SendGetAccountAttrLastBlock(
     }
 
     transport::protobuf::Header msg;
+    uni_dht->SetFrequently(msg);
     block::BlockProto::AccountAttrRequest(
             uni_dht->local_node(),
             account,
@@ -1784,6 +1785,7 @@ void VpnServer::HandleClientBandwidthResponse(
 void VpnServer::HandleVpnLoginResponse(
         transport::protobuf::Header& header,
         block::protobuf::BlockMessage& block_msg) try {
+    std::cout << "got attr block info." << std::endl;
     auto& attr_res = block_msg.acc_attr_res();
     BandwidthInfoPtr bw_item_ptr = nullptr;
     {
@@ -1821,6 +1823,7 @@ void VpnServer::HandleVpnLoginResponse(
                 }
 
                 if (tx_list[i].attr(attr_idx).key() == common::kCheckVpnVersion) {
+                    std::cout << "get version block now." << std::endl;
                     if (block.height() > vpn_version_last_height_) {
                         vpn_version_last_height_ = block.height();
                         auto str = tx_list[i].attr(attr_idx).value();
@@ -1855,6 +1858,7 @@ void VpnServer::CheckVersion() {
             common::kCheckVpnVersion,
             kCheckVersionAccount,
             vpn_version_last_height_);
+    std::cout << "sent get version info." << std::endl;
     if (init::UpdateVpnInit::Instance()->GetVersion().empty()) {
         check_ver_tick_.CutOff(
             1000 * 1000,

@@ -253,13 +253,19 @@ void BaseDht::SendToClosestNode(transport::protobuf::Header& message) {
     }
     LEGO_NETWORK_DEBUG_FOR_PROTOMESSAGE("send to closest node", message);
     assert(node->dht_key_hash != local_node_->dht_key_hash);
-//     if (message.type() == common::kContractMessage) {
-//         DHT_ERROR("send contract message to [%s:%d] des[%s], next[%s]",
-//                 node->public_ip.c_str(),
-//                 node->public_port,
-//                 common::Encode::HexEncode(node->dht_key).c_str(),
-//                 common::Encode::HexEncode(message.des_dht_key()).c_str());
-//     }
+    if (message.type() == common::kBlockMessage) {
+        DHT_ERROR("send contract message to [%s:%d] des[%s], next[%s]",
+                node->public_ip.c_str(),
+                node->public_port,
+                common::Encode::HexEncode(node->dht_key).c_str(),
+                common::Encode::HexEncode(message.des_dht_key()).c_str());
+        printf("send block message to [%s:%d] des[%s], next[%s]\n",
+            node->public_ip.c_str(),
+            node->public_port,
+            common::Encode::HexEncode(node->dht_key).c_str(),
+            common::Encode::HexEncode(message.des_dht_key()).c_str());
+
+    }
     transport::MultiThreadHandler::Instance()->transport()->Send(
             node->public_ip, node->public_port, 0, message);
 }

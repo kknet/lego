@@ -145,7 +145,7 @@ void BlockManager::HandleAttrGetRequest(
         attr_res->set_account(block_msg.acc_attr_req().account());
         transport::protobuf::Header msg;
         auto dht_ptr = network::UniversalManager::Instance()->GetUniversal(
-            network::kUniversalNetworkId);
+                network::kUniversalNetworkId);
         assert(dht_ptr != nullptr);
         BlockProto::CreateGetBlockResponse(
                 dht_ptr->local_node(),
