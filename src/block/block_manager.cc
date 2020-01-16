@@ -334,12 +334,12 @@ int BlockManager::LoadAllTx(
             BLOCK_ERROR("protobuf::Block ParseFromString failed!");
             return kBlockDbDataInvalid;
         }
-// 
-//         AccountManager::Instance()->AddBlockItem(block_item);
-//         tmp_str = block_item.tx_block().prehash();
-//         if (tmp_str.empty()) {
-//             break;
-//         }
+
+        AccountManager::Instance()->AddBlockItem(block_item);
+        tmp_str = block_item.tx_block().prehash();
+        if (tmp_str.empty()) {
+            break;
+        }
 
         auto e_time = common::TimeStampMsec();
         ++i;

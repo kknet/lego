@@ -44,9 +44,14 @@ NetworkInit::~NetworkInit() {
 
 int NetworkInit::Init(int argc, char** argv) {
     auto b_time = common::TimeStampMsec();
-    std::lock_guard<std::mutex> guard(init_mutex_);
+    // std::lock_guard<std::mutex> guard(init_mutex_);
     if (inited_) {
         INIT_ERROR("network inited!");
+        return kInitError;
+    }
+
+    if (InitBlock(conf_) != kInitSuccess) {
+        INIT_ERROR("init block failed!");
         return kInitError;
     }
 
@@ -71,11 +76,6 @@ int NetworkInit::Init(int argc, char** argv) {
     std::cout << "global init use time: " << (common::TimeStampMsec() - b_time) << std::endl;
     if (SetPriAndPubKey("") != kInitSuccess) {
         INIT_ERROR("set node private and public key failed!");
-        return kInitError;
-    }
-
-    if (InitBlock(conf_) != kInitSuccess) {
-        INIT_ERROR("init block failed!");
         return kInitError;
     }
 
