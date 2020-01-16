@@ -316,6 +316,9 @@ int BlockManager::LoadAllTx(
         uint32_t netid,
         uint32_t pool_index) {
     std::string tmp_str = frist_hash;
+    auto b_time = common::TimeStampMsec();
+    auto a_b_time = common::TimeStampMsec();
+    int i = 0;
     while (true) {
         std::string block_str;
         auto st = db::Db::Instance()->Get(tmp_str, &block_str);
@@ -336,6 +339,13 @@ int BlockManager::LoadAllTx(
         tmp_str = block_item.tx_block().prehash();
         if (tmp_str.empty()) {
             break;
+        }
+
+        auto e_time = common::TimeStampMsec();
+        ++i;
+        if (e_time - b_time > 10000) {
+            b_time = e_time;
+            std::cout << "load " << i << " use time: " << (e_time - a_b_time) << std::endl;
         }
         /*
         // for test just put
