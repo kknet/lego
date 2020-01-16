@@ -321,6 +321,7 @@ int BlockManager::LoadAllTx(
     auto a_b_time = common::TimeStampMsec();
     int i = 0;
     std::string block_str;
+    std::cout << "load all tx now." << pool_index << std::endl;
     while (true) {
         auto st = db::Db::Instance()->Get(tmp_str, &block_str);
         if (!st.ok()) {
@@ -359,6 +360,7 @@ int BlockManager::LoadAllTx(
         */
     }
 
+    std::cout << "load all success" << std::endl;
     exit(0);
     return kBlockSuccess;
 }
