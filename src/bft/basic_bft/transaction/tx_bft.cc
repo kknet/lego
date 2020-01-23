@@ -217,7 +217,8 @@ int TxBft::BackupCheckPrepare(std::string& bft_str) {
 
 int TxBft::CheckBlockInfo(const protobuf::Block& block_info) {
     // check hash
-    auto hash256 = common::Hash::Hash256(block_info.tx_block().SerializeAsString());
+    auto src_str = block_info.tx_block().SerializeAsString();
+    auto hash256 = common::Hash::Hash256(src_str);
     if (hash256 != block_info.hash()) {
         return kBftBlockHashError;
     }

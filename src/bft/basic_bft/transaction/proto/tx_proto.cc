@@ -199,7 +199,8 @@ void TxProto::CreateTxBlock(
     tx_block->set_tx_hash("");
     tx_block->set_tx_root_hash("");
     tx_block->set_network_id(4);
-    auto sha256 = common::Hash::Hash256(tx_block->SerializeAsString());
+    auto l_str = tx_block->SerializeAsString();
+    auto sha256 = common::Hash::Hash256(l_str);
     block_item.set_hash(sha256);
     block_item.set_height(block_ptr->height + 1);
 	block_item.set_timestamp(common::TimeStampMsec());

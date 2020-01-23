@@ -336,19 +336,13 @@ int BlockManager::LoadAllTx(
             BLOCK_ERROR("protobuf::Block ParseFromString failed!");
             return kBlockDbDataInvalid;
         }
-        tmp_str = block_item.tx_block().prehash();
 
-//         AccountManager::Instance()->AddBlockItem(block_item);
+        tmp_str = block_item.tx_block().prehash();
+        AccountManager::Instance()->AddBlockItem(block_item);
         if (tmp_str.empty()) {
             break;
         }
 
-        auto e_time = common::TimeStampMsec();
-        ++i;
-        if (e_time - b_time > 10000) {
-            b_time = e_time;
-            std::cout << "load " << i << " use time: " << (e_time - a_b_time) << std::endl;
-        }
         /*
         // for test just put
         std::string height_db_key = common::GetHeightDbKey(
@@ -360,8 +354,6 @@ int BlockManager::LoadAllTx(
         */
     }
 
-    std::cout << "load all success" << i << std::endl;
-//     exit(0);
     return kBlockSuccess;
 }
 
